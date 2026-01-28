@@ -1,11 +1,11 @@
 {
-    "name": "dechen_study",
-    "short_name": "dechen_study",
+    "name": "Dechen Study",
+    "short_name": "Dechen Study",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FAF8F3",
+    "theme_color": "#8B7355",
+    "description": "A text study app with daily sections",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
