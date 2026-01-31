@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import '../../models/study_models.dart';
 import '../../services/study_service.dart';
 
@@ -108,7 +107,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          
+
           // Instructions
           Text(
             'Which chapter is this section from?',
@@ -148,13 +147,14 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
           ),
           const SizedBox(height: 16),
-          
+
           Wrap(
             spacing: 12,
             runSpacing: 12,
             children: _chapters.map((chapter) {
               final isSelected = _selectedChapter == chapter.number;
-              final isCorrect = _showAnswer && chapter.number == _currentSection!.chapterNumber;
+              final isCorrect = _showAnswer &&
+                  chapter.number == _currentSection!.chapterNumber;
               final isWrong = _showAnswer && isSelected && !isCorrect;
 
               return ChoiceChip(
@@ -176,9 +176,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 side: BorderSide(
                   color: isCorrect
                       ? Colors.green
-                      : (isWrong
-                          ? Colors.red
-                          : const Color(0xFFD4C4B0)),
+                      : (isWrong ? Colors.red : const Color(0xFFD4C4B0)),
                 ),
               );
             }).toList(),

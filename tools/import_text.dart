@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -7,9 +6,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 //
 // # Chapter 1: Introduction
 // Section text here...
-// 
+//
 // ---
-// 
+//
 // Second section text here...
 //
 // # Chapter 2: The Path
@@ -27,7 +26,7 @@ void main() async {
   // Read the text file
   print('Enter the path to your text file:');
   final filePath = stdin.readLineSync();
-  
+
   if (filePath == null || filePath.isEmpty) {
     print('No file path provided');
     return;
@@ -40,14 +39,14 @@ void main() async {
   }
 
   final content = await file.readAsString();
-  
+
   // Parse the content
   final chapters = parseTextFile(content);
-  
+
   print('\nFound ${chapters.length} chapters');
   print('Ready to upload? (y/n)');
   final confirm = stdin.readLineSync();
-  
+
   if (confirm?.toLowerCase() != 'y') {
     print('Upload cancelled');
     return;
@@ -57,9 +56,9 @@ void main() async {
   try {
     for (var i = 0; i < chapters.length; i++) {
       final chapter = chapters[i];
-      
+
       print('Uploading Chapter ${chapter['number']}: ${chapter['title']}');
-      
+
       // Insert chapter
       final chapterResponse = await supabase
           .from('chapters')
@@ -69,9 +68,9 @@ void main() async {
           })
           .select()
           .single();
-      
+
       final chapterId = chapterResponse['id'];
-      
+
       // Insert sections
       final sections = chapter['sections'] as List<String>;
       for (var j = 0; j < sections.length; j++) {
@@ -81,10 +80,10 @@ void main() async {
           'order_index': j,
         });
       }
-      
+
       print('  ✓ Uploaded ${sections.length} sections');
     }
-    
+
     print('\n✅ Successfully uploaded all content!');
   } catch (error) {
     print('\n❌ Error uploading: $error');
@@ -93,14 +92,14 @@ void main() async {
 
 List<Map<String, dynamic>> parseTextFile(String content) {
   final chapters = <Map<String, dynamic>>[];
-  
+
   // Split by chapter headers (lines starting with #)
   final lines = content.split('\n');
-  
+
   Map<String, dynamic>? currentChapter;
   List<String> currentSections = [];
   StringBuffer currentSection = StringBuffer();
-  
+
   for (var line in lines) {
     if (line.trim().startsWith('#')) {
       // Save previous chapter
@@ -109,14 +108,14 @@ List<Map<String, dynamic>> parseTextFile(String content) {
         currentChapter['sections'] = currentSections;
         chapters.add(currentChapter);
       }
-      
+
       // Start new chapter
       final headerText = line.replaceFirst('#', '').trim();
       final parts = headerText.split(':');
-      
+
       int chapterNumber = chapters.length + 1;
       String title = headerText;
-      
+
       if (parts.length > 1) {
         // Try to extract number from "Chapter 1" format
         final numberMatch = RegExp(r'\d+').firstMatch(parts[0]);
@@ -125,7 +124,7 @@ List<Map<String, dynamic>> parseTextFile(String content) {
         }
         title = parts.sublist(1).join(':').trim();
       }
-      
+
       currentChapter = {
         'number': chapterNumber,
         'title': title,
@@ -145,7 +144,7 @@ List<Map<String, dynamic>> parseTextFile(String content) {
       }
     }
   }
-  
+
   // Save last chapter
   if (currentChapter != null) {
     if (currentSection.isNotEmpty) {
@@ -154,6 +153,6 @@ List<Map<String, dynamic>> parseTextFile(String content) {
     currentChapter['sections'] = currentSections;
     chapters.add(currentChapter);
   }
-  
+
   return chapters;
 }
