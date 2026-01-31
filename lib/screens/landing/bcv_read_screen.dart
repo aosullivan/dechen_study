@@ -25,6 +25,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Object? _error;
   final Map<int, GlobalKey> _chapterKeys = {};
   GlobalKey? _scrollToVerseKey;
+  /// Verse to highlight (set when arriving from Daily); cleared on reload so highlight does not persist.
+  int? _highlightVerseIndex;
 
   @override
   void initState() {
@@ -39,6 +41,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     setState(() {
       _loading = true;
       _error = null;
+      _highlightVerseIndex = null; // Clear highlight on reload
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -48,6 +51,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _chapters = chapters;
           _verses = verses;
           _loading = false;
+          if (widget.scrollToVerseIndex != null) {
+            _highlightVerseIndex = widget.scrollToVerseIndex;
+          }
           for (final c in chapters) {
             _chapterKeys[c.number] = GlobalKey();
           }
@@ -211,7 +217,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 final isTargetVerse = widget.scrollToVerseIndex != null &&
                     widget.scrollToVerseIndex == globalIndex &&
                     _scrollToVerseKey != null;
-                final verseWidget = Padding(
+                final shouldHighlight = _highlightVerseIndex != null && _highlightVerseIndex == globalIndex;
+                Widget verseWidget = Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: Text(
                     verse,
@@ -223,6 +230,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                         ),
                   ),
                 );
+                if (shouldHighlight) {
+                  verseWidget = Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEADCC4).withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: const Color(0xFF8B7355).withValues(alpha: 0.4),
+                        width: 1,
+                      ),
+                    ),
+                    child: verseWidget,
+                  );
+                }
                 if (isTargetVerse) {
                   return KeyedSubtree(
                     key: _scrollToVerseKey,
