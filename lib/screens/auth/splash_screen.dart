@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants.dart';
 import 'login_screen.dart';
-import '../home/home_screen.dart';
+import '../landing/landing_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,12 +23,20 @@ class _SplashScreenState extends State<SplashScreen> {
     
     if (!mounted) return;
 
+    // In debug mode, skip login and go straight to landing (for local dev)
+    if (kDebugMode) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const LandingScreen()),
+      );
+      return;
+    }
+
     try {
       final session = supabase.auth.currentSession;
       if (session != null) {
         if (!mounted) return;
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomeScreen()),
+          MaterialPageRoute(builder: (_) => const LandingScreen()),
         );
       } else {
         if (!mounted) return;
