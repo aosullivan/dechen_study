@@ -176,7 +176,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _commentaryEntryForSelected = null;
         _commentaryExpanded = false;
         _scrollToVerseIndexAfterTap = globalIndex;
-        if (_scrollToVerseKey == null) _scrollToVerseKey = GlobalKey();
+        _scrollToVerseKey ??= GlobalKey();
       });
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
@@ -202,7 +202,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _commentaryEntryForSelected = entry;
       _commentaryExpanded = false;
       _scrollToVerseIndexAfterTap = firstInSection;
-      if (_scrollToVerseKey == null) _scrollToVerseKey = GlobalKey();
+      _scrollToVerseKey ??= GlobalKey();
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
