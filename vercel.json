@@ -1,0 +1,7 @@
+{
+  "buildCommand": "bash scripts/build-flutter-vercel.sh",
+  "outputDirectory": "build/web",
+  "installCommand": "bash scripts/install-flutter-vercel.sh",
+  "framework": null,
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
