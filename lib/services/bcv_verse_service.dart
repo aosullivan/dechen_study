@@ -23,6 +23,7 @@ class BcvVerseService {
 
   List<String>? _verses;
   List<String?>? _captions;
+  List<String?>? _refs;
   List<BcvChapter>? _chapters;
   static const String _assetPath = 'texts/bcv-root';
 
@@ -36,6 +37,7 @@ class BcvVerseService {
     final blocks = content.split(RegExp(r'\n\s*\n'));
     final verses = <String>[];
     final captions = <String?>[];
+    final refs = <String?>[];
     final chapterStarts = <({int number, String title, int startIndex})>[];
     for (final block in blocks) {
       final trimmed = block.trim();
@@ -53,9 +55,11 @@ class BcvVerseService {
       }
       verses.add(trimmed);
       captions.add(_extractCaption(trimmed));
+      refs.add(_extractRef(trimmed));
     }
     _verses = verses;
     _captions = captions;
+    _refs = refs;
     _chapters = _buildChapters(chapterStarts, verses.length);
   }
 
@@ -86,6 +90,12 @@ class BcvVerseService {
     return 'Chapter $c, Verse $v';
   }
 
+  String? _extractRef(String block) {
+    final match = _verseRef.allMatches(block).lastOrNull;
+    if (match == null) return null;
+    return '${match.group(1)}.${match.group(2)}';
+  }
+
   /// Returns a random verse text. Loads and parses asset on first call.
   Future<String> getRandomVerse() async {
     await _ensureLoaded();
@@ -99,6 +109,27 @@ class BcvVerseService {
   String? getVerseCaption(int index) {
     if (_captions == null || index < 0 || index >= _captions!.length) return null;
     return _captions![index];
+  }
+
+  /// Returns the verse ref at [index] (e.g. "1.5"), or null if the verse has no [c.v] marker.
+  String? getVerseRef(int index) {
+    if (_refs == null || index < 0 || index >= _refs!.length) return null;
+    return _refs![index];
+  }
+
+  /// Returns the first verse index whose ref equals [ref] (e.g. "1.5"), or null.
+  int? getIndexForRef(String ref) {
+    if (_refs == null) return null;
+    for (var i = 0; i < _refs!.length; i++) {
+      if (_refs![i] == ref) return i;
+    }
+    return null;
+  }
+
+  /// Returns the verse text at [index], or null if out of range.
+  String? getVerseAt(int index) {
+    if (_verses == null || index < 0 || index >= _verses!.length) return null;
+    return _verses![index];
   }
 
   /// Returns chapters (title and verse index ranges). Loads and parses asset on first call.

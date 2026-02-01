@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
+import '../../services/commentary_service.dart';
 
 /// Read screen for Bodhicaryavatara: sidebar with chapter list, main area with full text.
 /// Optional [scrollToVerseIndex] scrolls to the exact verse after first frame.
@@ -25,8 +26,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Object? _error;
   final Map<int, GlobalKey> _chapterKeys = {};
   GlobalKey? _scrollToVerseKey;
-  /// Verse to highlight (set when arriving from Daily); cleared on reload so highlight does not persist.
-  int? _highlightVerseIndex;
+  /// Verses to highlight (set when arriving from Daily or when user taps a verse); cleared on reload.
+  Set<int> _highlightVerseIndices = {};
+  /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
+  CommentaryEntry? _commentaryEntryForSelected;
+  final _commentaryService = CommentaryService.instance;
 
   @override
   void initState() {
@@ -41,7 +45,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     setState(() {
       _loading = true;
       _error = null;
-      _highlightVerseIndex = null; // Clear highlight on reload
+      _highlightVerseIndices = {};
+      _commentaryEntryForSelected = null;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -52,7 +57,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _verses = verses;
           _loading = false;
           if (widget.scrollToVerseIndex != null) {
-            _highlightVerseIndex = widget.scrollToVerseIndex;
+            _highlightVerseIndices = {widget.scrollToVerseIndex!};
           }
           for (final c in chapters) {
             _chapterKeys[c.number] = GlobalKey();
@@ -85,6 +90,173 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _scrollToVerseKey!.currentContext!,
       alignment: 0.2,
       duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  /// Consecutive verse indices from _highlightVerseIndices, for one continuous highlight per run.
+  List<List<int>> _getHighlightRuns() {
+    if (_highlightVerseIndices.isEmpty) return [];
+    final sorted = _highlightVerseIndices.toList()..sort();
+    final runs = <List<int>>[];
+    var current = [sorted.first];
+    for (var i = 1; i < sorted.length; i++) {
+      if (sorted[i] == current.last + 1) {
+        current.add(sorted[i]);
+      } else {
+        runs.add(current);
+        current = [sorted[i]];
+      }
+    }
+    runs.add(current);
+    return runs;
+  }
+
+  Future<void> _onVerseTap(int globalIndex) async {
+    // If clicking a verse that's already highlighted, clear selection
+    if (_highlightVerseIndices.contains(globalIndex)) {
+      setState(() {
+        _highlightVerseIndices = {};
+        _commentaryEntryForSelected = null;
+      });
+      return;
+    }
+    
+    // Get the verse ref and load commentary
+    final ref = _verseService.getVerseRef(globalIndex);
+    if (ref == null) return;
+    
+    final entry = await _commentaryService.getCommentaryForRef(ref);
+    if (!mounted) return;
+    
+    // If this verse has no commentary, just highlight it alone
+    if (entry == null) {
+      setState(() {
+        _highlightVerseIndices = {globalIndex};
+        _commentaryEntryForSelected = null;
+      });
+      return;
+    }
+    
+    // Find all verse indices in the commentary block
+    final verseIndicesInBlock = <int>{};
+    for (final verseRef in entry.refsInBlock) {
+      final idx = _verseService.getIndexForRef(verseRef);
+      if (idx != null) {
+        verseIndicesInBlock.add(idx);
+      }
+    }
+    
+    setState(() {
+      _highlightVerseIndices = verseIndicesInBlock;
+      _commentaryEntryForSelected = entry;
+    });
+  }
+
+  /// Strip verse ref lines and verse text from commentary body so we show verses once at top.
+  String _commentaryOnly(CommentaryEntry entry) {
+    String body = entry.commentaryText;
+    for (final ref in entry.refsInBlock) {
+      // Remove line that is just the ref (e.g. "2.60")
+      body = body.replaceAll(RegExp('^${RegExp.escape(ref)}\\s*\$', multiLine: true), '');
+      final verseText = _verseService.getIndexForRef(ref) != null
+          ? _verseService.getVerseAt(_verseService.getIndexForRef(ref)!)
+          : null;
+      if (verseText != null && verseText.isNotEmpty) {
+        // Remove the verse text block (may be multiple lines)
+        body = body.replaceAll(verseText, '');
+      }
+    }
+    // Collapse multiple newlines and trim
+    return body.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim();
+  }
+
+  void _showCommentaryBottomSheet() {
+    final entry = _commentaryEntryForSelected;
+    if (entry == null) return;
+    final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
+          fontFamily: 'Crimson Text',
+          fontSize: 18,
+          height: 1.8,
+          color: const Color(0xFF2C2416),
+        );
+    final headingStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontFamily: 'Lora',
+          color: const Color(0xFF8B7355),
+        );
+    final commentaryOnly = _commentaryOnly(entry);
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.3,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => Container(
+          padding: const EdgeInsets.all(24),
+          child: ListView(
+            controller: scrollController,
+            children: [
+              if (entry.refsInBlock.length == 1) ...[
+                Text(
+                  'Verse ${entry.refsInBlock.single}',
+                  style: headingStyle,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  _verseService.getIndexForRef(entry.refsInBlock.single) != null
+                      ? (_verseService.getVerseAt(
+                          _verseService.getIndexForRef(entry.refsInBlock.single)!,
+                        ) ?? '')
+                      : '',
+                  style: verseStyle,
+                ),
+              ] else ...[
+                Text(
+                  'Verses ${entry.refsInBlock.join(", ")}',
+                  style: headingStyle,
+                ),
+                const SizedBox(height: 12),
+                ...entry.refsInBlock.map((ref) {
+                  final idx = _verseService.getIndexForRef(ref);
+                  final text = idx != null ? _verseService.getVerseAt(idx) : null;
+                  if (text == null) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Verse $ref',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                fontFamily: 'Lora',
+                                color: const Color(0xFF8B7355),
+                              ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(text, style: verseStyle),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+              const SizedBox(height: 20),
+              Text('Commentary', style: headingStyle),
+              const SizedBox(height: 12),
+              Text(
+                commentaryOnly,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontFamily: 'Crimson Text',
+                      fontSize: 18,
+                      height: 1.8,
+                      color: const Color(0xFF2C2416),
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -210,48 +382,126 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     ),
               ),
               const SizedBox(height: 24),
-              ...verseTexts.asMap().entries.map((entry) {
-                final localIndex = entry.key;
-                final verse = entry.value;
-                final globalIndex = ch.startVerseIndex + localIndex;
-                final isTargetVerse = widget.scrollToVerseIndex != null &&
-                    widget.scrollToVerseIndex == globalIndex &&
-                    _scrollToVerseKey != null;
-                final shouldHighlight = _highlightVerseIndex != null && _highlightVerseIndex == globalIndex;
-                Widget verseWidget = Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    verse,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontFamily: 'Crimson Text',
-                          fontSize: 18,
-                          height: 1.8,
-                          color: const Color(0xFF2C2416),
-                        ),
+              ...() {
+                final runs = _getHighlightRuns();
+                final usedInRun = <int>{};
+                final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontFamily: 'Crimson Text',
+                      fontSize: 18,
+                      height: 1.8,
+                      color: const Color(0xFF2C2416),
+                    );
+                final highlightDecoration = BoxDecoration(
+                  color: const Color(0xFFEADCC4).withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: const Color(0xFF8B7355).withValues(alpha: 0.4),
+                    width: 1,
                   ),
                 );
-                if (shouldHighlight) {
-                  verseWidget = Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEADCC4).withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: const Color(0xFF8B7355).withValues(alpha: 0.4),
-                        width: 1,
+
+                Widget buildSingleVerse(int gIdx, String verseText) {
+                  final isTargetVerse = widget.scrollToVerseIndex != null &&
+                      widget.scrollToVerseIndex == gIdx &&
+                      _scrollToVerseKey != null;
+                  Widget w = Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Text(verseText, style: verseStyle),
+                  );
+                  if (_highlightVerseIndices.contains(gIdx)) {
+                    w = Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: highlightDecoration,
+                      child: w,
+                    );
+                  }
+                  w = GestureDetector(
+                    onTap: () => _onVerseTap(gIdx),
+                    behavior: HitTestBehavior.opaque,
+                    child: w,
+                  );
+                  if (isTargetVerse) {
+                    w = KeyedSubtree(key: _scrollToVerseKey, child: w);
+                  }
+                  return w;
+                }
+
+                final children = <Widget>[];
+                List<int>? runContaining(int idx) {
+                  for (final r in runs) {
+                    if (r.contains(idx)) return r;
+                  }
+                  return null;
+                }
+
+                for (final entry in verseTexts.asMap().entries) {
+                  final localIndex = entry.key;
+                  final verse = entry.value;
+                  final globalIndex = ch.startVerseIndex + localIndex;
+                  if (usedInRun.contains(globalIndex)) continue;
+                  final run = runContaining(globalIndex);
+                  if (run != null && run.first == globalIndex) {
+                    for (final idx in run) {
+                      usedInRun.add(idx);
+                    }
+                    final runVerseWidgets = run.map((idx) {
+                      final text = idx < _verses.length ? _verses[idx] : '';
+                      final isTargetVerse = widget.scrollToVerseIndex != null &&
+                          widget.scrollToVerseIndex == idx &&
+                          _scrollToVerseKey != null;
+                      Widget w = Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Text(text, style: verseStyle),
+                      );
+                      w = GestureDetector(
+                        onTap: () => _onVerseTap(idx),
+                        behavior: HitTestBehavior.opaque,
+                        child: w,
+                      );
+                      if (isTargetVerse) {
+                        w = KeyedSubtree(key: _scrollToVerseKey, child: w);
+                      }
+                      return w;
+                    }).toList();
+                    final highlightBlock = Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: highlightDecoration,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: runVerseWidgets,
                       ),
-                    ),
-                    child: verseWidget,
-                  );
+                    );
+                    final hasCommentary = _commentaryEntryForSelected != null;
+                    children.add(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          highlightBlock,
+                          if (hasCommentary) ...[
+                            const SizedBox(height: 8),
+                            TextButton.icon(
+                              onPressed: _showCommentaryBottomSheet,
+                              icon: const Icon(Icons.menu_book, size: 18, color: Color(0xFF8B7355)),
+                              label: const Text(
+                                'Commentary',
+                                style: TextStyle(
+                                  fontFamily: 'Lora',
+                                  color: Color(0xFF8B7355),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 8),
+                        ],
+                      ),
+                    );
+                  } else {
+                    children.add(buildSingleVerse(globalIndex, verse));
+                  }
                 }
-                if (isTargetVerse) {
-                  return KeyedSubtree(
-                    key: _scrollToVerseKey,
-                    child: verseWidget,
-                  );
-                }
-                return verseWidget;
-              }),
+                return children;
+              }(),
               const SizedBox(height: 32),
             ],
           );

@@ -61,6 +61,8 @@ flutter:
   assets:
     - .env
     - texts/bcv-root
+    - texts/commentary.txt
+    - texts/verse_commentary_mapping.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
