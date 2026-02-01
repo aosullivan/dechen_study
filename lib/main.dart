@@ -32,11 +32,17 @@ class MyApp extends StatelessWidget {
       title: 'Dechen Study',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
+        useMaterial3: false,
         fontFamily: 'Lora',
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF8B7355), // Warm brown
-          brightness: Brightness.light,
+        colorScheme: ColorScheme.light(
+          primary: const Color(0xFF8B7355), // Warm brown
+          onPrimary: const Color(0xFFFAF8F5),
+          secondary: const Color(0xFF6B5B45),
+          onSecondary: const Color(0xFFFAF8F5),
+          surface: const Color(0xFFFAF8F5),
+          onSurface: const Color(0xFF2C2416),
+          error: const Color(0xFFB00020),
+          onError: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFFFAF8F5), // Warm off-white
         textTheme: const TextTheme(
@@ -97,7 +103,8 @@ class MyApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             borderSide: const BorderSide(color: Color(0xFF8B7355), width: 2),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         ),
       ),
       home: const SplashScreen(),

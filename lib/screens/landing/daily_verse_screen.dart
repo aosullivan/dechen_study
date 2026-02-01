@@ -91,10 +91,14 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     final last = _sectionRefs.last;
     final cFirst = first.split('.').firstOrNull ?? '';
     final cLast = last.split('.').firstOrNull ?? '';
-    if (cFirst == cLast) {
-      return 'Chapter $cFirst, Verses ${_sectionRefs.map((r) => r.split('.').last).join('–')}';
+    if (cFirst != cLast) return 'Verses ${_sectionRefs.join(', ')}';
+    final verseNums = _sectionRefs.map((r) => int.tryParse(r.split('.').lastOrNull ?? '') ?? 0).toList();
+    final contiguous = verseNums.length > 1 &&
+        (verseNums.last - verseNums.first + 1) == verseNums.length;
+    if (contiguous) {
+      return 'Chapter $cFirst, Verses ${verseNums.first}–${verseNums.last}';
     }
-    return 'Verses ${_sectionRefs.join(', ')}';
+    return 'Chapter $cFirst, Verses ${_sectionRefs.map((r) => r.split('.').last).join(', ')}';
   }
 
   @override

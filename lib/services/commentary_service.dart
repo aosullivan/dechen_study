@@ -22,6 +22,19 @@ class CommentaryService {
   /// Matches [c.v] and captures c.v as group 1 (with dot).
   static final RegExp _refInBrackets = RegExp(r'\[(\d+\.\d+)\]');
 
+  /// Sort verse refs by chapter then verse (e.g. 6.27 before 6.31).
+  static int _compareRefs(String a, String b) {
+    final ap = a.split('.');
+    final bp = b.split('.');
+    if (ap.length != 2 || bp.length != 2) return a.compareTo(b);
+    final ac = int.tryParse(ap[0]) ?? 0;
+    final av = int.tryParse(ap[1]) ?? 0;
+    final bc = int.tryParse(bp[0]) ?? 0;
+    final bv = int.tryParse(bp[1]) ?? 0;
+    if (ac != bc) return ac.compareTo(bc);
+    return av.compareTo(bv);
+  }
+
   Map<String, List<String>>? _refToRefsInBlock;
   Map<String, String>? _refToCommentary;
   List<CommentaryEntry>? _allSections;
@@ -51,7 +64,8 @@ class CommentaryService {
         i++;
         continue;
       }
-      final refsDeduped = refs.toSet().toList();
+      final refsDeduped = refs.toSet().toList()
+        ..sort(_compareRefs);
       final bodyLines = <String>[];
       i++;
       while (i < lines.length) {

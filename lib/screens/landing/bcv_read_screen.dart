@@ -30,11 +30,28 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Object? _error;
   final Map<int, GlobalKey> _chapterKeys = {};
   GlobalKey? _scrollToVerseKey;
+  /// When set (after tapping a verse), scroll to this verse on next frame then clear.
+  int? _scrollToVerseIndexAfterTap;
   /// Verses to highlight (set when arriving from Daily or when user taps a verse); cleared on reload.
   Set<int> _highlightVerseIndices = {};
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
+  /// When true, show commentary inline below the verses (instead of modal).
+  bool _commentaryExpanded = false;
   final _commentaryService = CommentaryService.instance;
+
+  /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
+  int? get _scrollTargetVerseIndex {
+    if (_scrollToVerseIndexAfterTap != null) return _scrollToVerseIndexAfterTap;
+    if (_highlightVerseIndices.isNotEmpty) {
+      return _highlightVerseIndices.reduce((a, b) => a < b ? a : b);
+    }
+    if (widget.scrollToVerseIndex != null) return widget.scrollToVerseIndex;
+    if (widget.highlightSectionIndices != null && widget.highlightSectionIndices!.isNotEmpty) {
+      return widget.highlightSectionIndices!.reduce((a, b) => a < b ? a : b);
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -51,6 +68,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _error = null;
       _highlightVerseIndices = {};
       _commentaryEntryForSelected = null;
+      _commentaryExpanded = false;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -139,6 +157,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       setState(() {
         _highlightVerseIndices = {};
         _commentaryEntryForSelected = null;
+        _commentaryExpanded = false;
       });
       return;
     }
@@ -150,11 +169,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final entry = await _commentaryService.getCommentaryForRef(ref);
     if (!mounted) return;
     
-    // If this verse has no commentary, just highlight it alone
+    // If this verse has no commentary, just highlight it alone and hide any open commentary
     if (entry == null) {
       setState(() {
         _highlightVerseIndices = {globalIndex};
         _commentaryEntryForSelected = null;
+        _commentaryExpanded = false;
+        _scrollToVerseIndexAfterTap = globalIndex;
+        if (_scrollToVerseKey == null) _scrollToVerseKey = GlobalKey();
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _scrollToVerseWidget();
+        setState(() => _scrollToVerseIndexAfterTap = null);
       });
       return;
     }
@@ -167,10 +194,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         verseIndicesInBlock.add(idx);
       }
     }
+    final firstInSection = verseIndicesInBlock.reduce((a, b) => a < b ? a : b);
     
+    // Switch to new section: highlight only the new section, hide previous commentary (one open at a time)
     setState(() {
       _highlightVerseIndices = verseIndicesInBlock;
       _commentaryEntryForSelected = entry;
+      _commentaryExpanded = false;
+      _scrollToVerseIndexAfterTap = firstInSection;
+      if (_scrollToVerseKey == null) _scrollToVerseKey = GlobalKey();
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _scrollToVerseWidget();
+      setState(() => _scrollToVerseIndexAfterTap = null);
     });
   }
 
@@ -192,9 +229,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return body.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim();
   }
 
-  void _showCommentaryBottomSheet() {
-    final entry = _commentaryEntryForSelected;
-    if (entry == null) return;
+  void _toggleCommentaryExpanded() {
+    setState(() {
+      _commentaryExpanded = !_commentaryExpanded;
+    });
+  }
+
+  /// Inline commentary panel (inserted below verses in the main scroll). Visually distinct from root text.
+  /// Uses a muted sage/green-grey palette (Dechen-style) and is indented like a subsection.
+  static const Color _commentaryBg = Color(0xFFEDF0E8);
+  static const Color _commentaryBorder = Color(0xFFA3B09A);
+  static const Color _commentaryHeader = Color(0xFF7A8B72);
+
+  Widget _buildInlineCommentaryPanel(CommentaryEntry entry) {
     final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontFamily: 'Crimson Text',
           fontSize: 18,
@@ -203,80 +250,120 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         );
     final headingStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
           fontFamily: 'Lora',
-          color: const Color(0xFF8B7355),
+          color: _commentaryHeader,
         );
     final commentaryOnly = _commentaryOnly(entry);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.3,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(24),
-          child: ListView(
-            controller: scrollController,
-            children: [
-              if (entry.refsInBlock.length == 1) ...[
-                Text(
-                  'Verse ${entry.refsInBlock.single}',
-                  style: headingStyle,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _verseService.getIndexForRef(entry.refsInBlock.single) != null
-                      ? (_verseService.getVerseAt(
-                          _verseService.getIndexForRef(entry.refsInBlock.single)!,
-                        ) ?? '')
-                      : '',
-                  style: verseStyle,
-                ),
-              ] else ...[
-                Text(
-                  'Verses ${entry.refsInBlock.join(", ")}',
-                  style: headingStyle,
-                ),
-                const SizedBox(height: 12),
-                ...entry.refsInBlock.map((ref) {
-                  final idx = _verseService.getIndexForRef(ref);
-                  final text = idx != null ? _verseService.getVerseAt(idx) : null;
-                  if (text == null) return const SizedBox.shrink();
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Verse $ref',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontFamily: 'Lora',
-                                color: const Color(0xFF8B7355),
-                              ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(text, style: verseStyle),
-                      ],
-                    ),
-                  );
-                }),
-              ],
-              const SizedBox(height: 20),
-              Text('Commentary', style: headingStyle),
-              const SizedBox(height: 12),
-              Text(
-                commentaryOnly,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontFamily: 'Crimson Text',
-                      fontSize: 18,
-                      height: 1.8,
-                      color: const Color(0xFF2C2416),
-                    ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 24, top: 8, bottom: 16, right: 0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: _commentaryBg,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: _commentaryBorder, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: _commentaryBorder.withValues(alpha: 0.15),
+              blurRadius: 6,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header: "Commentary" label + close
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: _commentaryHeader.withValues(alpha: 0.15),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
               ),
-            ],
+            child: Row(
+              children: [
+                Icon(Icons.menu_book, size: 20, color: _commentaryHeader),
+                const SizedBox(width: 8),
+                Text(
+                  'Commentary',
+                  style: headingStyle?.copyWith(fontSize: 16),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: _toggleCommentaryExpanded,
+                  style: TextButton.styleFrom(
+                    foregroundColor: _commentaryHeader,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Text('Close'),
+                ),
+              ],
+            ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (entry.refsInBlock.length == 1) ...[
+                  Text(
+                    'Verse ${entry.refsInBlock.single}',
+                    style: headingStyle,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    _verseService.getIndexForRef(entry.refsInBlock.single) != null
+                        ? (_verseService.getVerseAt(
+                            _verseService.getIndexForRef(entry.refsInBlock.single)!,
+                          ) ?? '')
+                        : '',
+                    style: verseStyle,
+                  ),
+                ] else ...[
+                  Text(
+                    'Verses ${entry.refsInBlock.join(", ")}',
+                    style: headingStyle,
+                  ),
+                  const SizedBox(height: 12),
+                  ...entry.refsInBlock.map((ref) {
+                    final idx = _verseService.getIndexForRef(ref);
+                    final text = idx != null ? _verseService.getVerseAt(idx) : null;
+                    if (text == null) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Verse $ref',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontFamily: 'Lora',
+                                  color: _commentaryHeader,
+                                ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(text, style: verseStyle),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
+                const SizedBox(height: 20),
+                Text('Commentary', style: headingStyle),
+                const SizedBox(height: 12),
+                Text(
+                  commentaryOnly,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontFamily: 'Crimson Text',
+                        fontSize: 18,
+                        height: 1.8,
+                        color: const Color(0xFF2C2416),
+                      ),
+                ),
+              ],
+            ),
+          ),
+        ],
         ),
       ),
     );
@@ -423,8 +510,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 );
 
                 Widget buildSingleVerse(int gIdx, String verseText) {
-                  final isTargetVerse = widget.scrollToVerseIndex != null &&
-                      widget.scrollToVerseIndex == gIdx &&
+                  final isTargetVerse = _scrollTargetVerseIndex != null &&
+                      _scrollTargetVerseIndex == gIdx &&
                       _scrollToVerseKey != null;
                   Widget w = Padding(
                     padding: const EdgeInsets.only(bottom: 20),
@@ -468,8 +555,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     }
                     final runVerseWidgets = run.map((idx) {
                       final text = idx < _verses.length ? _verses[idx] : '';
-                      final isTargetVerse = widget.scrollToVerseIndex != null &&
-                          widget.scrollToVerseIndex == idx &&
+                      final isTargetVerse = _scrollTargetVerseIndex != null &&
+                          _scrollTargetVerseIndex == idx &&
                           _scrollToVerseKey != null;
                       Widget w = Padding(
                         padding: const EdgeInsets.only(bottom: 20),
@@ -494,6 +581,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                       ),
                     );
                     final hasCommentary = _commentaryEntryForSelected != null;
+                    final entry = _commentaryEntryForSelected;
                     children.add(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -502,17 +590,24 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                           if (hasCommentary) ...[
                             const SizedBox(height: 8),
                             TextButton.icon(
-                              onPressed: _showCommentaryBottomSheet,
-                              icon: const Icon(Icons.menu_book, size: 18, color: Color(0xFF8B7355)),
-                              label: const Text(
-                                'Commentary',
-                                style: TextStyle(
+                              onPressed: _toggleCommentaryExpanded,
+                              icon: Icon(
+                                _commentaryExpanded ? Icons.expand_less : Icons.menu_book,
+                                size: 18,
+                                color: const Color(0xFF8B7355),
+                              ),
+                              label: Text(
+                                _commentaryExpanded ? 'Hide commentary' : 'Commentary',
+                                style: const TextStyle(
                                   fontFamily: 'Lora',
                                   color: Color(0xFF8B7355),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
+                            if (_commentaryExpanded && entry != null) ...[
+                              _buildInlineCommentaryPanel(entry),
+                            ],
                           ],
                           const SizedBox(height: 8),
                         ],
