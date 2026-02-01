@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/services.dart';
 
 /// One commentary block: the list of verse refs it covers and the commentary text.
@@ -23,6 +24,7 @@ class CommentaryService {
 
   Map<String, List<String>>? _refToRefsInBlock;
   Map<String, String>? _refToCommentary;
+  List<CommentaryEntry>? _allSections;
 
   Future<void> _ensureLoaded() async {
     if (_refToRefsInBlock != null) return;
@@ -32,12 +34,14 @@ class CommentaryService {
     } catch (_) {
       _refToRefsInBlock = {};
       _refToCommentary = {};
+      _allSections = [];
     }
   }
 
   void _parse(String content) {
     final refToRefsInBlock = <String, List<String>>{};
     final refToCommentary = <String, String>{};
+    final allSections = <CommentaryEntry>[];
     final lines = content.split('\n');
     var i = 0;
     while (i < lines.length) {
@@ -57,6 +61,8 @@ class CommentaryService {
         i++;
       }
       final commentaryText = bodyLines.join('\n').trim();
+      final entry = CommentaryEntry(refsInBlock: refsDeduped, commentaryText: commentaryText);
+      allSections.add(entry);
       for (final ref in refsDeduped) {
         refToRefsInBlock[ref] = refsDeduped;
         refToCommentary[ref] = commentaryText;
@@ -64,6 +70,7 @@ class CommentaryService {
     }
     _refToRefsInBlock = refToRefsInBlock;
     _refToCommentary = refToCommentary;
+    _allSections = allSections;
   }
 
   /// Returns the commentary for [ref] (e.g. "1.5"), or null if none.
@@ -73,5 +80,13 @@ class CommentaryService {
     final text = _refToCommentary?[ref];
     if (refs == null || text == null || text.isEmpty) return null;
     return CommentaryEntry(refsInBlock: refs, commentaryText: text);
+  }
+
+  /// Returns a random commentary section (block of one or more verses). Null if none.
+  Future<CommentaryEntry?> getRandomSection() async {
+    await _ensureLoaded();
+    final sections = _allSections;
+    if (sections == null || sections.isEmpty) return null;
+    return sections[Random().nextInt(sections.length)];
   }
 }

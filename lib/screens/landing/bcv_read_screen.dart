@@ -4,14 +4,18 @@ import '../../services/commentary_service.dart';
 
 /// Read screen for Bodhicaryavatara: sidebar with chapter list, main area with full text.
 /// Optional [scrollToVerseIndex] scrolls to the exact verse after first frame.
+/// Optional [highlightSectionIndices] highlights all verses in that section (e.g. from Daily).
 class BcvReadScreen extends StatefulWidget {
   const BcvReadScreen({
     super.key,
     this.scrollToVerseIndex,
+    this.highlightSectionIndices,
     this.title = 'Bodhicaryavatara',
   });
 
   final int? scrollToVerseIndex;
+  /// When provided (e.g. from Daily "Full text"), these verses are highlighted as one section.
+  final Set<int>? highlightSectionIndices;
   final String title;
 
   @override
@@ -35,7 +39,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.scrollToVerseIndex != null) {
+    if (widget.scrollToVerseIndex != null || (widget.highlightSectionIndices?.isNotEmpty ?? false)) {
       _scrollToVerseKey = GlobalKey();
     }
     _load();
@@ -56,7 +60,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _chapters = chapters;
           _verses = verses;
           _loading = false;
-          if (widget.scrollToVerseIndex != null) {
+          if (widget.highlightSectionIndices != null && widget.highlightSectionIndices!.isNotEmpty) {
+            _highlightVerseIndices = Set<int>.from(widget.highlightSectionIndices!);
+          } else if (widget.scrollToVerseIndex != null) {
             _highlightVerseIndices = {widget.scrollToVerseIndex!};
           }
           for (final c in chapters) {
@@ -65,6 +71,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         });
         if (widget.scrollToVerseIndex != null && _scrollToVerseKey != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToVerseWidget());
+        }
+        if (widget.highlightSectionIndices != null && _highlightVerseIndices.isNotEmpty) {
+          _loadCommentaryForHighlightedSection();
         }
       }
     } catch (e) {
@@ -91,6 +100,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       alignment: 0.2,
       duration: const Duration(milliseconds: 300),
     );
+  }
+
+  /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
+  Future<void> _loadCommentaryForHighlightedSection() async {
+    if (_highlightVerseIndices.isEmpty) return;
+    final firstIndex = _highlightVerseIndices.reduce((a, b) => a < b ? a : b);
+    final ref = _verseService.getVerseRef(firstIndex);
+    if (ref == null) return;
+    final entry = await _commentaryService.getCommentaryForRef(ref);
+    if (!mounted) return;
+    setState(() {
+      _commentaryEntryForSelected = entry;
+    });
   }
 
   /// Consecutive verse indices from _highlightVerseIndices, for one continuous highlight per run.
