@@ -21,6 +21,11 @@ jobs:
     
     - name: Install dependencies
       run: flutter pub get
+
+    - name: Create .env for build
+      run: |
+        echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
+        echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
     
     - name: Analyze code
       run: flutter analyze

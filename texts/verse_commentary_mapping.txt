@@ -68,7 +68,7 @@ The purpose of discarding pride: out of the pride of thinking of oneself as lear
 2.	The author’s own understanding is the primary goal - 2d-3b
 3.	In dependence upon that, there is benefit for others - 3cd
 3. The literal meaning of each section
-[1.1]
+[1.1ab]
 1. The literal meaning of homage and praise:
 1.1
 To the Sugatas, the dharmakāya they have mastered, and their sons, 
@@ -85,6 +85,7 @@ This is the jewel of the Buddha.
 ‘And their sons’ [250] refers to the bodhisattva saṅgha. They are born from the lineage of the Sugatas and are their heirs. Śrāvakas, though they are also born from that lineage, are not their heirs, i.e. not their sons. If the sons of the wheel-turning universal emperors do not possess the marks [of an emperor], they are not heirs to the lineage, i.e. are not sons, as explained in the Sutra Requested by Kāśyapa. 
 To ‘prostrate’ to them means making homage and praise to the sources of refuge of the Mahāyāna family—the Three Jewels. 
 ‘And to all who are worthy of prostration’: the Mahāyānist not only takes refuge in these sources of refuge but also makes prostrations to others who are worthy of prostration. This includes śrāvakas, pratyekabuddhas, khenpos, ācāryas and so forth who, while they are not sources of refuge, are worthy of prostration because of their eminent qualities.
+[1.1cd]
 2. The literal meaning of the commitment to compose:
 1.	Setting out the subject matter to be elaborated
 2.	Abandoning personal invention 
@@ -116,7 +117,7 @@ So I do not expect this to benefit others.
 Objection: ‘The composition of this śāstra is not of benefit for the understanding of others because, since it has not fully purified you, it cannot ripen others. It is not of benefit for your own understanding either, because your understanding is already complete, so you have no need of it.’
 Response: it is not expected to benefit others. In which case, is the benefit of others neglected? No, because there is no possibility of it benefitting others. Why not? Because, regarding the meaning, nothing said here has not been said before, i.e. it will not create any understanding that was previously lacking and because, regarding the words, they are neither eloquent nor erudite, i.e. they will not create any understanding in the manner of beautiful poetics, such as the Condensed Succession of Lives by Virācārya [Aśvaghoṣa].
 Therefore, there is no possibility of it benefitting others, so there is nothing to be done. [252] In that case, what is the purpose of composing it?
-[1.3]
+[1.3ab]
 2. The author’s own understanding is the primary goal
 I composed it only to develop my own understanding.
 
@@ -124,6 +125,7 @@ I composed it only to develop my own understanding.
 Because of developing virtue like this, 
 The power of my faith will increase for a little while.
 Why compose this? Because it will increase the power of faith. What circumstances bring that about? A virtuous act such as composing this śāstra will bring it about, as well as other similar virtues, such as hearing it. How long will that last? A little while. What causes it? The development of virtue, i.e. the habituation of one’s mind to virtue. In that case, is the benefit of others disregarded? Will the bodhisattva conduct be impaired? When their benefit is not possible, there is no work to be done for the benefit of others, but when it is possible to do something, the benefit of others should not be disregarded.
+[1.3cd]
 3. Yet, in dependence upon that, there is benefit for others
 But if others, similar in fortune to me, 
 Should see it, that is also of benefit.
@@ -202,7 +204,7 @@ The Individual Person
 There are two subsections:
 1.	The bodily basis: the difficulty of acquiring the freedoms and endowments
 2.	The mental basis: meritorious intelligence
-[1.4]
+[1.4ab]
 1. The bodily basis: the difficulty of acquiring the freedoms and endowments
 1.4
 It is extremely difficult to acquire the freedoms and endowments
@@ -210,6 +212,7 @@ Which make this human birth meaningful.
 If I fail to benefit from it now,
 How will I get a chance like this again?
 There are three sections:
+[1.4cd]
 1.	Their nature 
 2.	Difficult to acquire
 3.	The extent of the benefits it brings
@@ -230,7 +233,7 @@ It is said to be ‘extremely difficult’ because it is even more difficult tha
 3. The extent of the benefits it brings
 Whilst it may be difficult to acquire, since it is only of slight benefit, why acquire it? A ‘human birth’ is ‘meaningful’ because it is the basis for attaining higher rebirths and definitive goodness. 
 The last two lines of verse 4 indicate that if, having attained it, one did not take hold of the roots of its benefit, then its goodness would subsequently reoccur only very rarely. 
-[1.5]
+[1.5ab]
 2. The mental basis: meritorious intelligence
 1.5
 Just as lightning flashes for an instant 
@@ -238,6 +241,7 @@ Through the dark, black clouds of the night,
 Likewise, only rarely, merit and intelligence arise 
 Fleetingly in the world through the power of the Buddhas.
 There are five common thoughts:
+[1.5cd]
 1.	The cause of entering the white dharma in general—the faith of conviction 
 2.	The cause of entering this teaching2—the faith of clarity 
 3.	The cause of entering the arising of certainty [258]—the faith of longing
@@ -276,22 +280,24 @@ The generation of bodhicitta has two main subsections:
 1. It overcomes all nonvirtue
 1.	The nature of nonvirtue
 2.	How bodhicitta overcomes nonvirtue
-[1.6]
+[1.6ab]
 1. The nature of nonvirtue
 1.6
 In this way, virtue is constantly weak and feeble,
 And the extremely great power of nonvirtue is unbearable.
 The first line indicates the weakness of the power of the antidote. ‘The extremely great power of nonvirtue’ indicates the great power of that which is to be abandoned. ‘Unbearable’ indicates the result of this—suffering. One’s nonvirtues are not dominated by virtues; rather, one’s virtues are dominated by nonvirtues. 
+[1.6cd]
 2. How bodhicitta overcomes nonvirtue
 What virtue, if not perfect bodhicitta,
 Could possibly overcome it?
 There is no virtue other than bodhicitta that possesses the power conducive to liberation which overcomes such nonvirtue.
-[1.7]
+[1.7ab]
 2. It benefits oneself
 1.7
 The mighty sages, who have known it for many aeons,
 Have seen that only bodhicitta has this power.
 Since they have meditated on it throughout innumerable aeons, the Buddhas, who perceive what is beneficial and what is not beneficial, acknowledge that bodhicitta is of the supreme benefit.
+[1.7cd]
 3. It has the power to benefit others
 With bodhicitta, limitless multitudes
 Will easily attain the supreme bliss.
@@ -352,12 +358,13 @@ Even those who have committed the extremely evil acts
 Will instantly be freed by relying on it.
 Why then would conscientious people not rely on this?
 One will be freed from the intense suffering that results from the extremely evil inexpiable acts after just a moment of experiencing it. Although the acts are not purified, temporarily the resultant ripening of the sufferings does not occur, until finally they are discarded. For whom? For whomever relies upon bodhicitta. In what way? Like passing great terrors guarded by a warrior, until the final destination is reached, temporarily one will not be harmed.
-[1.14]
+[1.14ab]
 5. It consumes the inevitable results of nonvirtuous actions, like the fire at the end of time
 1.14
 Like the fire at the end of time, great evils
 Are totally consumed by it.
 Bodhicitta consumes the great inexpiable evil deeds and they are gone forever. How long does it take? An instant. What is it like? It is like the fire at the end of time, i.e. the world-destroying fire at the end of the aeon.
+[1.14cd]
 6. Other specific examples
 Its benefits are limitless,
 As Lord Maitreya explained to Sudhana.
@@ -561,7 +568,7 @@ Always gives the unsurpassed happiness
 Of the Sugatas to countless sentient beings throughout time, 
 The ultimate perfection of their wishes?
 Even the giving of food is praised with the words, ‘That was a virtuous deed.’ If one wonders why the bodhisattva is superior, it is because the former has an inferior number of beings: a few; inferior time: one moment; inferior substance: mere food; inferior conduct: with contempt; and inferior benefit: satisfying for half a day, while the bodhisattva is superior in always practising vast giving for great fields of countless sentient beings; for a superior time: throughout time; with a superior substance: the unsurpassed bliss of the Sugatas; and a superior benefit: the ultimate perfection of their wishes.
-[1.34] [1.35]
+[1.34-1.35ab]
 5. Explaining how it is particularly powerful
 1.34
 If one should develop a malevolent intention
@@ -574,11 +581,12 @@ Having explained bodhicitta as a particularly powerful field of nonvirtue, next 
 1.35
 Nevertheless, if one’s attitude is good,
 The results will be even greater.
+[1.35cd]
 4. Summarizing the benefits of self
 The sons of the conquerors, with great seriousness,
 Never perform nonvirtue and their virtues continuously increase.
 With great dedication, they never perform nonvirtue [270] even at the cost of their lives. Rather, their virtues continuously increase. 
-[1.36]
+[1.36ab]
 5. Summarizing the benefits of others
 1.36
 I bow down before
@@ -587,6 +595,7 @@ And I take refuge in those sources of happiness
 Who bring happiness even to those who harm them.
 Bringing happiness even to those who harm them means, out of compassion, they bestow happiness on those who do them harm. It does not mean the happiness arises as a result of the harms committed, for that would contradict the earlier assertion in verse 34.
 
+[1.36cd]
 1. Gzung ba’i cho ga—later this section is styled more generally as ‘Generating bodhicitta in one’s stream of being’.
 2. To kill one’s father, mother, or an arhat, to maliciously shed the blood of a Buddha, or to cause a schism in the saṅgha.
 3. H94, p. 248b
@@ -759,11 +768,12 @@ To the supreme objects of worship, the lords of sages, I offer
 Delightful flowers such as mandaras, lotuses
 And utpalas, all sweet-smelling and
 Wonderfully laid out in garlands,
-[2.16]
+[2.16ab]
 5. Incense
 2.16
 And I offer clouds of permeating incense, enchanting to the mind,
 From the finest incense sticks,
+[2.16cd]
 6. Food
 And I offer many kinds of 
 Ambrosial foods and drinks.
@@ -842,7 +852,7 @@ And to the stupas,
 And I prostrate to preceptors, ācāryas,
 And the supreme practitioners.
 The ‘bases of bodhicitta’ means forms of the Buddha-body which are extraordinary supports of generating bodhicitta. Some commentaries say it means the bodhisattva pitakas. 
-[2.26]
+[2.26ab]
 2. Taking refuge
 The first line indicates the particular time and the following three indicate the particular field and type of refuge:
 2.26
@@ -851,6 +861,7 @@ I take refuge in the Buddha,
 And likewise in the dharma,
 And in the assembly of bodhisattvas.
 Taking refuge can be summarized in seven points:
+[2.26cd]
 1.	Classifications
 2.	Explaining their distinguishing characteristics 
 3.	Nature 
@@ -1247,11 +1258,12 @@ Of all beings in the lower realms,
 And places those who are suffering in happiness,
 I gladly rejoice.
 The first two lines are rejoicing in the cause: virtue which alleviates the sufferings of the lower realms. It is this virtue which creates the higher realms. The next line is rejoicing in the result of that: those who are suffering are placed in happiness—the happiness of saṃsāra, which is like the happiness of scratching an itch.
-[3.2]
+[3.2ab]
 2. Rejoicing in the outcome of liberation, which leads to enlightenment
 3.2
 In the gathering of virtue
 Which causes enlightenment, I rejoice.
+[3.2cd]
 2. Rejoicing in the virtue of śrāvakas
 In the complete liberation 
 From the suffering of saṃsāric birth, I rejoice.
@@ -1648,7 +1660,7 @@ The training in bodhicitta, which is the cooperating condition, can be explained
 The general cause of practice, concern, has two parts:
 1.	Briefly [v1]
 2.	Extensively [v2-48]
-[4.1]
+[4.1ab]
 1. Briefly
 4.1 
 Having firmly grasped bodhicitta 
@@ -1656,6 +1668,7 @@ In this way, a conqueror’s son
 Should never neglect it,
 But instead strive never to violate the training. 
 This verse indicates that one should maintain bodhicitta, i.e. that one should endeavour to prevent one’s initial enthusiasm to keep the vow from dissipating. The second two lines indicate that one should take care to train by endeavouring in the training. How should one train? One should abandon downfalls and resembling non-downfalls and one should adopt the non-downfalls and resembling downfalls. 
+[4.1cd]
 1. Downfalls and non-downfalls
 Downfalls comprise the five root downfalls of kings, the five of ministers and the eight of beginners, etc.1 Non-downfalls are the abandonment of those. 
 2. Resembling downfalls and resembling non-downfalls
@@ -2014,12 +2027,13 @@ The four characteristics of harm to the body here are:
 3. Developing pride
 1.	Meaning
 2.	Example
-[4.36]
+[4.36ab]
 1. Meaning
 4.36
 Therefore, as long I have not with certainty
 Vanquished this enemy, I will never stop persevering.
 For how long should one persevere? For as long as this enemy has not been vanquished, i.e. until the defilements have been abandoned. 
+[4.36cd]
 2. Example
 Growing angry upon some slight, fleeting injury, 
 The proud and haughty will not sleep until their enemy has been vanquished.
@@ -2085,11 +2099,12 @@ The first two lines indicate the scope of the vow to benefit others. The remaini
 1. Not stopping until the defilements have been abandoned
 But now I should never turn back from
 Vanquishing the defilements. 
-[4.43]
+[4.43ab]
 2. Dedication in this
 4.43
 I will be fixated on this,
 One should have attachment to applying the antidotes.
+[4.43cd]
 3. Relying on antidotes to one’s own impatience
 And full of resentment, wage war
 One should regard the defilements with enmity, i.e. oppose them.
@@ -2115,21 +2130,23 @@ Even at the cost of one’s life, [301] one should not be obedient to the defile
 2.	The related meaning
 3.	The nature of the antidotes which bring about abandonment
 4.	The essential characteristic of their not returning
-[4.45]
+[4.45ab]
 1. Presenting an example of expulsion
 4.45
 Though ordinary enemies may be driven from our homelands,
 They resettle elsewhere,
 And return when they have recovered their power,
 After expelling ordinary enemies, they may return again and again.
+[4.45cd]
 2. The related meaning
 But the nature of the enemy defilements is not like this.
 When one abandons the seeds of the defilements, they never arise again.
-[4.46]
+[4.46ab]
 3. The nature of the antidotes which bring about abandonment
 4.46
 These pathetic defilements, cast out by the eye of wisdom,
 The defilements are pathetic, or miserable, i.e. they have little power against being cast out by their antidote, the eye of wisdom.
+[4.46cd]
 4. The essential characteristic of their not returning
 And extirpated from my mind, where can they go?
 Where can they settle to hurt me again?
@@ -2143,7 +2160,7 @@ Nor in anything else, yet, wherever they are, they harm all beings.
 They are like illusions. So, giving up this heartfelt fear, I will cultivate the perseverance to achieve wisdom.
 Why should I be tormented in places like the hells for no reason?
 The first two lines indicate their having no external support. The first part of the third line indicates their basis not being real. The second part of the third line indicates the characteristics of striving in the antidotes. The last line indicates the fault of not striving in this.
-[4.48]
+[4.48ab]
 4. Concluding summary of concern for training
 4.48
 Having considered this, I will strive
@@ -2151,6 +2168,7 @@ To fulfil the training as it has been explained.
 If he doesn’t listen to the doctor’s instructions,
 How can the patient be cured by the medicine?
 The first two lines indicate that one should endeavour consistently with the training. The second two lines give an example of the faults of not endeavouring.
+[4.48cd]
 1. These are given in the Ākāśagarbha Sutra and quoted in full by Śāntideva in the Śikṣā-samuccaya. See The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 63-68.
 2. Bzlog pa, c.f. cho ga ’jam pos bzlogs in Lhopa Rinchen Pal (p. 102).
 3. Nyes pa sbom po, i.e. not a downfall but nevertheless an extremely negative action.
@@ -2189,11 +2207,12 @@ C.f. Lhopa Rinchen Pal (p. 88): ‘Although one may have promised to do somethin
 3.	Establishing the reverse pervasion
 4.	When one guards the mind, dangers subside
 5.	Condensed meaning
-[5.1]
+[5.1ab]
 1. Showing this in a forward pervasion
 5.1
 Those who want to guard the training
 Must always carefully guard their minds.
+[5.1cd]
 2. Showing the reverse pervasion
 If one fails to guard the mind,
 It is impossible to guard the training.
@@ -2348,12 +2367,13 @@ The ‘lord of dharmas’ means ultimate truth. It is also the ‘secret of mind
 4.	The reason it makes sense to guard it
 5.	Properly guarding it
 6.	Conclusion to take great care in mindfulness
-[5.18]
+[5.18ab]
 1. General explanation
 5.18
 Therefore, my mind
 Should be skilfully held and guarded.
 ‘Holding skilfully’ [305] means holding a virtuous intent with mindfulness. ‘Guarding skilfully’ means not failing to act with clear comprehension.
+[5.18cd]
 2. Everything is accomplished by it
 Without the discipline of guarding the mind,
 What is the point of many other disciplines?
@@ -2453,12 +2473,13 @@ Alternatively, concerning these last two verses, since their meaning is in accor
 1.	Expressing the main point
 2.	Showing its cause [307]
 3.	How to definitively generate clear comprehension through mindfulness
-[5.29]
+[5.29ab]
 1. Expressing the main point
 5.29
 Consequently, I should never let mindfulness stray
 Past the gateway of mind.
 Mindfulness should never stray. From what? The ‘gateway of mind’, i.e. the intention to rely on the antidotes. Why not? Because of its being ‘consequential’, i.e. because of mindfulness being the root of training. 
+[5.29cd]
 2. Showing its cause
 1.	Keeping in mind the faults of its loss
 2.	Relying on the conditions which prevent its loss
@@ -2582,12 +2603,13 @@ The first verse indicates placing the untethered mind’s attention on virtue an
 4.	The qualities of behaving in this way
 5.	The faults of not doing do
 6.	Concluding summary
-[5.42]
+[5.42ab]
 1. Times when there is a dispensation on bodily conduct
 5.42
 If, due to some danger or celebration,
 This is not possible, I can relax.
 When necessary, one can to some extent relax the gaze, etc.
+[5.42cd]
 2. Referencing a scriptural source for that
 It is taught in this regard that
 At times of giving, moral conduct can be overlooked.
@@ -2601,11 +2623,12 @@ With my mind committed like this,
 It will be accomplished in due course.
 ‘Why should one overlook a more important practice—moral conduct—to practise giving?’
 Whatever is most important, that is what should be practised. In this context, once something has been undertaken, it becomes more important.
-[5.44]
+[5.44ab]
 4. The qualities of behaving in this way
 5.44
 I will carry out everything to completion in this way,
 Having completed those tasks which were already begun, subsequently one can accomplish other things.
+[5.44cd]
 5. The faults of not doing so
 Or nothing else will get done either.
 If one begins something else before the previous tasks are completed, one will not accomplish anything.
@@ -2852,11 +2875,12 @@ The unsolicited and beneficial words of others
 That admonish or advise me,
 I will always be the pupil of everyone.
 This means treating detractors respectfully.
-[5.75]
+[5.75ab]
 2. How to respond to those who expressing the truth
 5.75
 For all that is well-said,
 I should call it virtuous.
+[5.75cd]
 3. How to respond to those who are creating merit
 When I see something meritorious being done,
 I will praise it and take delight in it.
@@ -2908,12 +2932,13 @@ I will look at them directly and with a gentle regard.
 2.	Fields
 3.	Application
 4.	Specific types
-[5.81]
+[5.81ab]
 1. Intention
 5.81
 Always motivated by aspiration 
 Or antidotes,
 ‘Aspiration’ means increasing one’s resolve. ‘Antidotes’ are the mental antidotes of not being greedy, avoiding negative actions, not being angry, having energy, being undistracted and recognizing the illusory nature of greed, etc.13
+[5.81cd]
 2. Fields
 There will be great virtue
 In the fields of good qualities, help and suffering.
@@ -3094,13 +3119,14 @@ One ‘indirectly’ benefits beings by dedicating one’s gathering of vows and
 1.	The spiritual friend 
 2.	One should rely upon him
 3.	Consideration of reliance upon application
-[5.102]
+[5.102ab]
 1. The spiritual friend
 5.102
 The spiritual friend is
 Learned in the Mahāyāna
 And has mastered the discipline of the bodhisattvas.
 He is learned in that the trainings he has received are undamaged and is skilled in the means of restoring them if they are damaged. He keeps the bodhisattva vow and bestows it on others, his students.
+[5.102cd]
 2. One should rely upon him
 I should never discard him, even at the cost of my life.
 This is like Sadaprarudita.20
@@ -3148,7 +3174,7 @@ The conditions of body and mind.
 This alone encapsulates
 The key point of maintaining clear comprehension.
 Practising that which one has seen, training in protecting the minds of others and training in examining one’s own delusions are indicated in v107ab, v107cd and verse 108, respectively.
-[5.109]
+[5.109ab]
 5. Applying the key point
 5.109
 I should put this into practice,
@@ -3156,6 +3182,7 @@ For what use are mere words?
 Are sicknesses cured
 Just by reading about the treatment?
 That application will bring the result, that mere words will not bring the result and an example of that are indicated in the first, second and final two lines, respectively.
+[5.109cd]
 1. H232, p. 129b
 2. The ‘women’ here are explained by other commentators including Prajñākaramati (W21708, p. 104) and Thokme Zangpo (W1KG1795, p. 64) to be denizens of the Śālmari (or Śālmali) hell, who entice one into tortures, manifesting as the result of sexual misconduct. Lhopa Rinchen Pal (p. 95) glosses the point as ‘one’s own nonvirtues are the appearances of mind’ and gives a quote from the same sutra: 
 ‘One’s mind is an enemy, a great enemy. There is no enemy other than the mind. Just like a stick on fire will burn itself, one’s own mind is burned by mind itself.’
@@ -3523,13 +3550,14 @@ But it does not deliberately think,
 ‘I will arise now’, and then arise,
 The primal substance itself cannot have the deliberate thought or premeditated intention, ‘I will produce the manifestations’, because it is material. Thus, the contrary pervader is supported.15
 ‘The primal substance is not the creator; the manifestations are the creator.’
-[6.28]
+[6.28ab]
 2. Refuting the manifestations as creator
 6.28
 And if that which has not arisen does not exist,
 What in that moment wants to create itself?
 [327] The state in which the manifestations have not arisen is the logical subject. ‘What wants to create itself’ indicates that there is no mind to think ‘I want to create myself’. ‘If it does not exist’ indicates [the reason]: because it has no nature before it has arisen.
 ‘The individual consciousness is the creator.’
+[6.28cd]
 3. Refuting the individual consciousness as creator
 1.	It is contradictory to a creator
 2.	Refuting its connection to temporary objects and experiences
@@ -3683,7 +3711,7 @@ If someone harms himself but benefits oneself, one would not feel anger towards 
 1.	Abandoning the objection that it is illogical to say others benefit oneself
 2.	Abandoning the objection that it is illogical to say one harms others
 3.	Refuting instigating harm 
-[6.50]
+[6.50ab]
 1. Abandoning the objection that it is illogical to say others benefit oneself
 ‘Since they will be going to a rebirth in the lower realms through me, I am supporting the nonvirtues of others. I cannot both support their nonvirtues and purify my own nonvirtues. Therefore, if I am not purifying my own nonvirtues, how can you say that their nonvirtues benefit me by supporting the purification of my own nonvirtues?’ 
 6.50
@@ -3692,6 +3720,7 @@ I will not go to the hells.
 Although the nonvirtues of others are conditional upon oneself, one’s own nonvirtues will be purified and one will not be reborn in hell because of this. 
 ‘Why will I not be reborn in the hells when I am the condition for their nonvirtues?’ [330] 
 Because of having the right attitude, i.e. patience. Therefore, when one’s own nonvirtues are purified, it is established that others are the beneficial supports of that.
+[6.50cd]
 2. Abandoning the objection that it is illogical to say one harms others
 ‘Since others are helping me purify my nonvirtues, they will not be reborn in the hells. Thus, I am not sending them to the hells, so it is contradictory to say that I am harming them.’
 But if I only look after myself,
@@ -4225,13 +4254,14 @@ Just as we respect the Teacher [Buddha] because he is the basis of merit, so we 
 3.	Therefore, they are equal as objects of respect
 4.	Abandoning an objection
 5.	Summary
-[6.112]
+[6.112ab]
 1. Brief scriptural presentation
 6.112
 Therefore, as the Sage has taught, 
 The field of sentient beings is a Buddha field.
 Sentient beings are a field of patience, compassion, etc. and Buddhas are a field of respect, offerings, etc. If one wonders where the Sage taught this, it is in the Dharmasaṃgīti: 
 Sentient beings are the bodhisattva’s Buddha field, the Buddha field in which the qualities of a Buddha will be attained. To practise otherwise is wrong. One should think of them accordingly.22
+[6.112cd]
 2. Establishing the fact of that
 Many have practised respect for them and,
 In that way, completely crossed over.
@@ -4264,12 +4294,13 @@ It is taught that there is greater merit in venerating someone who is practising
 1.	The same result 
 2.	Different qualities
 3.	Summarizing the fact that sentient beings are an excellent field [of merit] 
-[6.116]
+[6.116ab]
 1. The same result
 6.116
 It is in respect of their producing the Buddha qualities
 Therefore, that we hold them equal,
 The position we hold is that sentient beings and Buddhas are equal. In what respect? In respect of their both being fields from which the conditions for establishing the Buddha qualities are created. Therefore, they are equal in this regard.
+[6.116cd]
 2. Different qualities
 But none is equal to the Buddha, 
 Who has limitless oceans of qualities.
@@ -4446,19 +4477,21 @@ The first two lines indicate the principal result. The second two lines indicate
 2.	The nature of effort [v2a]
 3.	Abandoning opposing factors [v2b-30]
 4.	Fully developing effort [v31-76]
-[7.1]
+[7.1a]
 1. Developing enthusiasm for effort
 7.1
 With such patience, I should undertake effort,
 For there is enlightenment in effort.
+[7.1bcd]
 Just as there is no movement without wind,
 So there is no merit without effort.
 The first two lines are presented from the perspective of effort as the indirect cause of enlightenment, while the second two lines are presented from the alternative perspective, i.e. as the direct cause of merit.
-[7.2]
+[7.2a]
 2. The nature of effort
 7.2
 What is effort? Joy in virtue.
 ‘What is effort?’ indicates the definiendum. ‘Virtue’ is its essential characteristic, which excludes nonvirtue and [343] mundane joy. ‘Joy’ is the manifest characteristic. 
+[7.2bcd]
 [ Image: 7.1.jp2 ]
 3. Abandoning opposing factors
 1.	Summarizing the opposing factors
@@ -4514,11 +4547,12 @@ The Lord of Death is now looking for you.
 How can you enjoy food?
 How can you enjoy sleep?
 There is no other path to escape death, so how can one remain inactive?
-[7.7]
+[7.7ab]
 4. Impossible to hold back time
 7.7
 Since death is approaching fast,
 How will I be able to accumulate merit?
+[7.7cd]
 5. The time of death is too late [344]
 At that time, even if I did abandon laziness,
 It would be too late. What would be the point?
@@ -4833,11 +4867,12 @@ And pour molten copper, liquefied by ferocious furnaces, down their throats.
 As one hundred chunks of flesh are gouged from them with red hot swords and knives,
 The nonvirtuous will fall upon the fiercely blazing iron ground.
 The first line indicates one’s body; the second indicates the internal experience; the third indicates the external experience; the last line indicates the place.
-[7.46]
+[7.46ab]
 4. Conclusion
 7.46
 Therefore, I should be motivated to virtue,
 And develop enthusiasm for it.
+[7.46cd]
 [ Image: 7.3.jp2 ]
 2. The power of steadfastness
 1.	Stable preparation 
@@ -4872,7 +4907,7 @@ The fault of undertaking and then stopping is that one becomes habituated to sto
 2.	Pride in actions
 3.	Pride in ability
 4.	Pride in overcoming the defilements
-[7.49]
+[7.49ab]
 1. Brief overview
 7.49
 I should take pride in three things:
@@ -4880,6 +4915,7 @@ Actions, defilements and ability.
 •	Considering antidotal actions as the best, to engender the thought, [350] ‘There is nobody other than someone like me who can properly engage such actions’ is pride in actions. 
 •	Considering the defilements as weak, to think, ‘I can control such things’ is pride in overcoming the defilements.
 •	Considering oneself as superior, to engender the thought, ‘Nobody else can abandon faults and accomplish good qualities’ is pride in ability.
+[7.49cd]
 2. Pride in actions
 1.	Briefly
 2.	Extensively
@@ -4919,20 +4955,22 @@ A crow acts as if it were an eagle.
 Similarly, when I am weakened,
 Even a small downfall will harm me.
 Just as when a snake is weakened, it is attacked by scavengers, so when antidotes are weak, the downfalls are heavy.
-[7.53]
+[7.53ab]
 2. The cause of that arising
 7.53
 When I am discouraged, I give up,
 So how will I ever be liberated from destitution?
 Since out of discouragement one does not try, one takes no pride in one’s ability and so one is not liberated from destitution.
+[7.53cd]
 3. The greatness of that pride
 The proud, generating exertion, 
 Can handle difficulties, even great ones.
-[7.54]
+[7.54ab]
 4. Striving to rely on that
 7.54
 Therefore, with a steady mind,
 I will overcome all downfalls,
+[7.54cd]
 5. If one does not strive, one’s vows will be broken
 For if I am defeated by the defilements,
 My wish to conquer the three realms would be a joke.
@@ -5044,12 +5082,13 @@ Plunging into a lake.
 4. The power of rest
 1.	Temporary rest
 2.	Finishing rest
-[7.67]
+[7.67ab]
 1. Temporary rest
 7.67
 If, after some time, my strength declines,
 I should leave it so I can return to it later.
 The first line indicates the circumstance. The second line indicates the necessity and the manner of resting.
+[7.67cd]
 2. Finishing rest
 When I have completed something properly, 
 I should leave it, wanting to get on with the next thing.
@@ -5205,12 +5244,13 @@ To another impermanent person?
 He will not see his loved one again
 For thousands of lifetimes.
 Although the impermanent self has attachment to another impermanent self, it cannot attain the object of its desire.
-[8.6]
+[8.6ab]
 2. One is disturbed when one does not see the desired person 
 8.6
 I am unhappy when I don’t see them
 And my mind will not settle.
 When one cannot see the person to whom one is attached, one’s mind is disturbed with unhappiness.
+[8.6cd]
 3. One’s misery knows no end
 Yet, even when I see them, I am not satisfied,
 But just as tormented by craving as before.
@@ -5221,11 +5261,12 @@ If one is attached to sentient beings,
 Reality is obscured,
 Renunciation is forgotten,
 And one ends up suffering in misery.
-[8.8]
+[8.8ab]
 5. Freedom and opportunity are wasted
 8.8
 Thinking solely of them,
 This life passes by without any meaning.
+[8.8cd]
 2. The faults of the desired object
 1.	They destroy great benefits
 2.	They lead one to lower rebirths
@@ -5828,11 +5869,12 @@ Compared to the objects of desire.
 1.	Explanation
 2.	No opposing conditions
 3.	Supporting conditions
-[8.85]
+[8.85ab]
 1. Explanation
 8.85
 Disillusioned with the objects of desire,
 I will develop joy in solitude.
+[8.85cd]
 2. No opposing conditions
 In peaceful forests,
 With no conflict or defilements,
@@ -6066,12 +6108,13 @@ It is an ocean of joy.
 Is that not enough?
 What use is it wanting my own liberation?
 For someone accomplishing the benefit of others, that is enough. Mere individual liberation is not a cause of joy.
-[8.109]
+[8.109ab]
 3. Pacifying one’s own arrogance
 8.109
 In this respect, though I am benefitting others,
 I will do it without conceit or thinking it is a big deal.
 Without the conception that they are other, one will not develop the arrogance of thinking, ‘I am benefitting others’.
+[8.109cd]
 4. Disregarding the results
 By taking joy solely in their benefit,
 I will not expect the ripening of any results.
@@ -6145,12 +6188,13 @@ The idea of self for this selfless body,
 Why should habituation not create
 The same idea about sentient beings?
 Though body and mind are distinct, they can be grasped as self through habituation. Similarly, though the streams of being of others are distinct, if one becomes habituated, it is possible to grasp them as self.
-[8.116]
+[8.116ab]
 2. Pacifying arrogance
 8.116
 Though I might benefit others in this way,
 I will not have conceit or think it is a big deal,
 Just as one does not have a conceited attitude when benefitting oneself, similarly, when others are grasped as self, one should not have a conceited attitude in carrying out their benefit.
+[8.116cd]
 3. Disregarding the results
 Like not expecting a reward
 After eating my own food.
@@ -6305,11 +6349,12 @@ The first verse establishes the forward pervasion that self-grasping is the basi
 3.	Specific intention
 4.	Stopping incorrect application distinct from the correct application
 5.	Establishing the correct application
-[8.136]
+[8.136ab]
 1. The purpose of exchanging
 8.136
 Because it will, in this way, pacify harm to myself
 And pacify the sufferings of others,
+[8.136cd]
 2. Nature
 I will give myself up for others,
 And embrace others as I did the self.
@@ -6406,11 +6451,12 @@ When he keeps them for himself?
 ‘If you have compassion, why do you not help me (the inferior one taken as self)? Why do you instead criticize me?’
 Because he (one’s own stream of being taken as other) has all the good qualities.
 ‘What good to me (the inferior one taken as self) are qualities which don’t help me?’ In other words, his (one’s own stream of being taken as other) qualities are useless.
-[8.146]
+[8.146ab]
 4. Having sympathy for those beings who are destined for rebirth in the lower realms
 8.146
 He has no compassion for beings
 Living precariously at the mouth of the lower realms.
+[8.146cd]
 5. Abandoning conceit and giving up aggression towards the learned
 Conceited in how his own qualities compare to others,
 He wants to outrival the learned.
@@ -6609,13 +6655,14 @@ Having been given such advice, one should maintain control over the mind. If you
 3.	The practice of abandonment
 4.	The fault of not abandoning 
 5.	Contemplating the faults of that
-[8.169]
+[8.169ab]
 1. Recalling the meaningless actions of the past
 8.169
 Though you have destroyed me,
 That is in the past. That time is over.
 Now I have seen you, 
 In the past, self-grasping (‘you’) has led one to destruction in places such as the hells, but now that time is over, for now one can see the faults of such destruction.
+[8.169cd]
 2. Not giving away any control
 …where can you go?
 I am going to completely crush your arrogance. 
@@ -6786,12 +6833,13 @@ Upon the perfect object.
 1. Explaining that wisdom is the principal
 1.	The reason wisdom is the principal 
 2.	Advice to strive in this
-[9.1]
+[9.1ab]
 1. The reason wisdom is the principal 
 9.1
 All of these factors were taught
 By the Sage for the sake of wisdom.
 The other five perfections, or five aspects of skilful means, have now been presented. They are called here ‘factors’, i.e. causes of wisdom, since wisdom develops by meditating on the first five perfections. Or, whilst wisdom is the antidote to saṃsāra and the defilements, the other perfections act as helpers. ‘For the sake of wisdom’ means in order to develop it. [379]
+[9.1cd]
 2. Advice to strive in this
 Therefore, those who wish to pacify sufferings
 Should develop wisdom.
@@ -6812,11 +6860,12 @@ Since only wisdom can overcome attachment to existence, the root of suffering, i
 1.	Basis of the distinction
 2.	Meaning of the distinction
 3.	Ascertaining the number
-[9.2]
+[9.2ab]
 4.	Definitions
 9.2
 Relative and ultimate: 
 These are asserted as the two truths. 
+[9.2cd]
 1. Basis of the distinction
 The basis is mere cognoscibility. Since the ultimate is how cognizables really are and the relative is how they seem to be, both are pervaded by mere cognoscibility.
 2. Meaning of the distinction 
@@ -6895,7 +6944,7 @@ Verses 3-5 are correctly explained this way:
 We can see two types of people: 
 Yogins and ordinary people.
 Yogins are those who accept the textual tradition sealed by the words of the Sugata. Ordinary people are tīrthikas, who assert the doctrine of self, and other ordinary people. [384]
-[9.4]
+[9.4ab]
 2. The graduations of refuter 
 Ordinary, worldly people
 Are opposed by worldly yogins.
@@ -6927,6 +6976,7 @@ Not establishing any side as existent,
 Nonexistent, or both,
 Although they may try,
 It is not possible to be disputed in any way.20
+[9.4cd]
 3. Abandoning objections about these graduations
 1.	Abandoning the objection that practice is meaningless
 2.	Abandoning the objection that there are no distinctions in understanding 
@@ -6940,7 +6990,7 @@ For example, like destroying illusory demons,
 One should work with apparitions for the sake of liberation.21
 There are similar teachings in the Mahāyānasūtrālaṃkāra. 
 Is it not a contradiction for an appearance to be untrue? There is no contradiction, for the appearances are like illusions, i.e. examples accepted by both [proponent and objector]. 
-[9.5]
+[9.5ab]
 2. Abandoning the objection that there are no distinctions in understanding
 ‘It follows that since they have not abandoned the conceptual thought which has appearances, even the higher yogins are not different to worldly ones.’
 There is a difference:
@@ -6950,6 +7000,7 @@ And discriminate them as reality,
 Not as illusion-like. Therefore, on this,
 Yogins and worldly people are in dispute. 
 Worldly people see existent objects with a non-comprehending cognition. Those who have such conceptual discrimination [387] conceptualize reality without understanding it as illusion-like. Yogins are distinct from this because they have such illusion-like understanding. Therefore, yogins and worldly people are in dispute, since the worldly cling to reality while yogins inferentially refute truly existent objects. 
+[9.5cd]
 2. Abandoning objections by those who cling to reality 
 Most of the Tibetan Geshes, such as Geshe [Ngok] Lotsawa, explain this in two sections:
 1.	Abandoning objections from the relative perspective 
@@ -7051,7 +7102,7 @@ However, whether illusory or real [393], the arising of different effects from u
 9.13
 But nowhere is there a single condition
 With the ability to create them all.
-[9.14] [9.15] [9.14] [9.15] [9.15]
+[9.14] [9.15]
 4. Abandoning the objection that it contradicts the presentation of the distinction between saṃsāra and nirvāṇa 
 ‘The ultimate is nirvāṇa.
 Saṃsāra is relative truth. In this way,
@@ -7121,7 +7172,7 @@ The False Representationalist denies the illusions exist. Since, for them, menta
 1.	Presenting the objection in brief 
 2.	Establishing pervasion though scriptures 
 3.	Settling that with reasoning 
-[9.17]
+[9.17ab]
 1. Presenting the objection in brief 
 ‘They exist as if they were external,
 But they are representations, which are mind itself.’
@@ -7137,6 +7188,7 @@ The founding lamas have demonstrated this point with proof by svātantras. Thoug
 The Cittamātrin says, ‘The cognition of non-dual experience is aware of itself.’ From this, it follows that either the cognition is dualistic because it is aware of itself, or it follows that it is not aware of itself because of its non-duality. Both positions [mind is dualistic, mind is not aware of itself] are untenable, for they violate the Cittamātrin’s own premises. It is also not possible for the inferences to be unestablished, for both reasons [mind is aware of itself, mind is non-dual] are their own theses. 
 ‘The second pervasion33 is not established.’
 Can something be non-dual yet also self-aware? ‘Awareness’ is essentially characterized by the duality of agent and patient.34 It is pervaded by these two, like, for example, the chopping of wood with an axe. [397] If mind is non-dual, since there is no agent, the pervasion is established, just as, for example, a sword’s blade is unable to cut itself. 
+[9.17cd]
 2. Showing through the scriptures that the pervasion is established
 1.	Scriptural reference
 2.	An example of the agency of cognition
@@ -7279,7 +7331,7 @@ Could it then start to function?
 The logical subject is deluded perception, which is nonexistent. By depending on something external which is its existent basis, how can the nonexistent thing have its own function? It follows that it has no function because what is nonexistent is established as having no nature. For example, by the resting of a rabbit’s horn on a vase, it would be erroneous to say that the horn could perform functions such as piercing and so on. 
 It is untenable to say the reason40 is not established because it is accepted by both of us that the sights and sounds are nonexistent. It is untenable to say that the pervasion41 is not established, for if it were able to perform a function despite its being nonexistent, it would violate the premise [v27c] ‘saṃsāra must have an existent basis’, and its functioning would be indistinguishable from that basis. 
 ‘The nonexistent thing does not perform any function.’
-[9.29]
+[9.29ab]
 3. A counter objection
 Your mind would be unaided
 And completely solitary.
@@ -7289,6 +7341,7 @@ Being free from dualistic perception,
 All would be the Tathāgata.
 Since it is free from the impurities of dualistic appearances and the subject-object mind, it would follow that all there would be is buddhahood. 
 ‘Although mind is free from the dualistic appearance of subject and object, it has not attained buddhahood. Where is the contradiction? The pervasion42 is not established.’
+[9.29cd]
 4. Establishing the pervasion for the counter objection
 So what is achieved
 By designating it mind only?
@@ -7336,12 +7389,13 @@ The imprints of emptiness are weak.
 1.	Abandoning clinging to existence
 2.	Abandoning clinging to nonexistence
 3.	The reason for these
-[9.32]
+[9.32ab]
 1. Abandoning clinging to existence
 9.32
 By meditating on the imprints of emptiness,
 The imprints of reality will be abandoned.
 If one meditates on the general concept43 of emptiness, by the force of its opposition to clinging to existence, clinging to reality ceases.
+[9.32cd]
 2. Abandoning clinging to nonexistence
 By meditating it is nothing whatsoever, 
 That, too, will then be abandoned,
@@ -7397,12 +7451,13 @@ Long ago, when the people of a certain place were afflicted by nāgas, Samgu,46 
 1.	Presenting the objection 
 2.	Presenting the reason of scriptural citation
 3.	Establishing the pervasion of that 
-[9.38]
+[9.38ab]
 1. Presenting the objection 
 9.38
 ‘How could making offerings to
 Someone without a mind have any result?’
 ‘If the Buddha does not have any conceptual discrimination, it follows that the act of presenting offerings to him is without merit because he does not discriminate it.’
+[9.38cd]
 2. Presenting the reason of scriptural citation
 Although he does not have the discrimination of being pleased by offerings, this does not conflict with the existence of merit, just as there is merit in making offerings to his physical remains after his attainment of complete nirvāṇa, which also have no thoughts. How can this be?
 Remaining in the world and passing into nirvāṇa
@@ -7429,12 +7484,13 @@ Our position is that merit is relative, while your position is that it is ultima
 4.	Establishing them as definitive meaning 
 5.	Summarizing the meaning of this section 
 6.	Explaining extensively the criteria for establishing the Mahāyāna scriptures as Buddha’s word50
-[9.40]
+[9.40ab]
 1. Presenting the objection 
 9.40
 ‘You will be liberated by seeing truth,
 But what is the point of seeing emptiness?’
 Śrāvakas assert the Four Truths: 
+[9.40cd]
 1.	The fourfold truth of suffering: suffering, impermanence, emptiness and non-self
 2.	The fourfold truth of its origin: origin, cause, arising and conditionality
 3.	The fourfold truth of cessation: cessation, pacification, joy and renunciation
@@ -7470,7 +7526,7 @@ If you assert [b] that they are the Buddha’s word because they are accepted as
 If truth is the belief of two others, 
 The Vedas and so forth would also be true.
 In accord with this, since the Vedas and so forth are accepted by two tīrthikas, it would follow that they are also proven to be scriptural. 
-[9.43]
+[9.43ab]
 2. We have the same criteria for rejecting [texts as scriptures]
 9.43
 ‘But the Mahāyāna is disputed.’
@@ -7478,6 +7534,7 @@ Your scriptures are also in dispute—with those of the tīrthikas,
 As well as with the other [śrāvaka] scriptures.
 Therefore, you should abandon them.
 Whether or not the Mahāyāna is the Buddha’s word, if it should be rejected because it is disputed, other scriptures even among the baskets of the śrāvakas should also be rejected because they are disputed, too. How are they are disputed? For tīrthikas, there is a dispute as to whether or not they are scriptures. Furthermore, disputations exist within the different śrāvaka schools. 
+[9.43cd]
 4. Establishing [the Mahāyāna scriptures] as definitive meaning
 Objection: ‘Even if they are Buddha’s word, the Mahāyāna is of provisional meaning.’
 This is incorrect; the Mahāyāna is of definitive meaning. Conversely, the śrāvaka [vehicle] is of provisional meaning. How so?
@@ -7485,12 +7542,13 @@ This is incorrect; the Mahāyāna is of definitive meaning. Conversely, the śr�
 2.	The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned
 3.	Overcoming objections
 4.	The logical conclusion
-[9.44]
+[9.44ab]
 1. The error for the śrāvaka tradition in the monk who has abandoned defilements
 9.44
 ‘The root of the doctrine is monasticism.’
 It is difficult to be such a monk.
 There are five classifications of monk: 
+[9.44cd]
 1.	Monk in name only
 2.	Monk who has taken vows
 3.	Monk who has taken full ordination
@@ -7512,11 +7570,12 @@ Is also difficult to attain.
 1.	Objection
 2.	Response
 3.	Response to a counter objection
-[9.45]
+[9.45ab]
 1. Objection
 9.45
 ‘One is liberated by abandoning the defilements.’
 ‘By the cause—the defilements, there is the result—sufferings, from which ārya śrāvakas are liberated. Similarly by the cause—no defilements, there is the result—nirvāṇa, in which suffering has been abandoned.’ 
+[9.45cd]
 2. Response
 Then it would happen immediately,
 The moment the defilements are abandoned, the level of an arhat would be attained. It follows that suffering has been exhausted. 
@@ -7531,12 +7590,13 @@ Although for them, the sufferings which are directly established in the skandhas
 1.	Presenting the objection
 2.	The existence of craving itself
 3.	The existence of its cause, sensation [414]
-[9.46]
+[9.46ab]
 1. Presenting the objection
 9.46 
 ‘That is only temporary,
 For there is no direct cause—craving.’ 
 ‘Without the causes of future lives—craving and clinging—there are no sufferings of future rebirths and no clinging.’
+[9.46cd]
 2. The existence of craving itself 
 Why do you say they have no craving? 
 ‘Because they have no defilements.’
@@ -7544,12 +7604,13 @@ Although they have no defilements, they have craving which is without defilement
 They do have craving, though it is without defilements,
 For don’t they still have fundamental delusion? 
 They may have no defilements due to not grasping the self of the individual but, through the imprints of unawareness, they still grasp the self of dharmas. Therefore, they are still subject to nescience. Without the craving of attachment to the self among the skandhas, they have no defilements, but they still have the craving of direct attachment to mere dharmas. Thus, they still have the condition for the attainment of a mind-made body in future lives. 
-[9.47]
+[9.47ab]
 3. The existence of its cause, sensation 
 9.47
 By the condition of sensation, there is craving,
 And they still have sensation.
 If the skandhas remain because one has not abandoned their basis, then five poisons are still present and wherever they arise, it is certain that sensation exists. Therefore, craving will arise because its basis is present. 
+[9.47cd]
 4. The logical conclusion
 The objectifying mind
 For such people, still remains.
@@ -7627,7 +7688,7 @@ Should produce fear,
 But emptiness pacifies suffering,
 So why should it produce fear?
 If it is logical to be afraid of something that is a basis for suffering, such as clinging to self, or sickness, how can one be afraid of the antidote to suffering, emptiness?
-[9.56]
+[9.56ab]
 2. Having no fear
 9.56
 If there were something that was ‘I’,
@@ -7635,6 +7696,7 @@ You would be right to be afraid.
 But since there is no such thing as ‘I’,
 What is there to be afraid of?
 [ Image: Blank.JPG ]
+[9.56cd]
 3. How to engage in meditation on emptiness
 Geshe Ngok Lotsawa and others have explained this as follows: 
 1.	How to engage in meditation on the non-self of the individual [v57-77]
@@ -7686,13 +7748,14 @@ The Sāṃkhyas assert that a primal matter exists universally in all beings. Co
 1.	The consequence of its permanence
 2.	Establishing the pervasion
 3.	Abandoning objections
-[9.60]
+[9.60ab]
 1. The consequence of its permanence
 9.60
 If the cognition of sound were immutable
 The sound would always be perceived.
 The logical subject is the individual consciousness. It must experience sound as immutable because it is a sempiternal sound-perceiving cognition. This position is untenable. By directly perceiving a single sound, it cannot perceive any other sound. It is untenable to say the reason63 is not established, for that would contradict the Sāṃkhya’s own proposition that the individual consciousness is sempiternal. 
 ‘Your pervasion64 is not established. The sempiternal nature of self-awareness is not pervaded by an immutable experience of sound, for it can have a nature of mere cognition without depending upon any object. The experience of sound depends upon a sound, so when there is no sound, there is no experience, but the mere cognition nevertheless remains. Therefore, the immutable experience of sound is negated and the pervasion for your refutation of a sempiternal individual consciousness is not established.’
+[9.60cd]
 2. Establishing the pervasion
 1.	The violation of its intrinsic nature 
 2.	The absurd consequence [419]
@@ -7701,13 +7764,14 @@ The logical subject is the individual consciousness. It must experience sound as
 If there is no cognizable, how is that awareness? 
 Why call this ‘cognition?’
 The first line is a question and the second is the response. The establishment of a sound cognition depends upon there being a sound. If there is no sound, there is no sound cognition. Similarly, since the nature of a sound cognition depends upon its cognizable, without a cognizable, there is no subjective cognition. Therefore, without a perception of sound, cognition is negated. Thus, our pervasion is established.
-[9.61]
+[9.61ab]
 2. The absurd consequence
 ‘The experience of sound may depend upon a sound, but mere cognition does not. Therefore, the experience of sound is refuted, but mere cognition is not refuted. Therefore, your pervasion is not established.’
 If it were the case that the establishment of a cognition did not depend upon a cognizable, it would follow that even wood would count as cognition:
 9.61
 If cognition does not cognize,
 It would follow that even wood is a cognition.
+[9.61cd]
 3. Conclusion 
 Without a nearby cognizable,
 I would definitely call that ‘not cognizing’.
@@ -7718,7 +7782,7 @@ Cognition is the presence of a cognizor in proximity to the cognizable which qua
 3.	It is unreasonable to call it the same thing
 4.	The example is not established
 5.	Not conceivable as a singularity
-[9.62]
+[9.62ab]
 1. It is unreasonable for cognition of form to perceive sound 
 9.62
 ‘It is the same thing that cognizes form.’
@@ -7726,6 +7790,7 @@ Cognition is the presence of a cognizor in proximity to the cognizable which qua
 Either the previous cognition of sound has ceased and subsequently forms are cognized, or else the previous cognition of sound has not ceased. If the former, then although it remains the same in as much as it is designated ‘mere cognition’, its former nature in fact has ceased. This is a fault, since a sempiternal individual consciousness is unceasing. 
 Then why would it not also hear at the same time?
 If the sound has not ceased, then, at that time, since sound cognition [420] is pervaded by its cognizable and by self-awareness, when the forms are cognized, it follows that it would still be an awareness of sound because the grasping of the sound would not have ceased. 
+[9.62cd]
 2. This has the same fault that was previously explained
 If it is because no sound is nearby
 Then there is also no cognition of it.
@@ -7739,7 +7804,7 @@ How can that which has the nature
 Of sound perception perceive forms?
 It is unreasonable to designate incompatible representations as having a single nature. The establishment of a cognition of form in dependence upon a form cognizable has one nature and the establishment of a cognition of sound in dependence upon sound has another. 
 ‘An example of such a single nature that is non-contradictory is someone being established as a son in dependence upon his own father and the same person being established as a father in dependence upon having a son.’
-[9.64]
+[9.64ab]
 4. The example is not established 
 A single person might be called father and son,
 But his intrinsic nature is neither,
@@ -7748,6 +7813,7 @@ But his intrinsic nature is neither,
 Just as lightness, activity and darkness
 Are neither father nor son.
 To call a single person a father and a son is a worldly convention. Similarly, lightness, activity and darkness—the three ultimate natures [as posited by the Sāṃkhyas]—do not have the nature of either father or son.
+[9.64cd]
 5. Not conceivable as a singularity 
 Nobody has ever seen
 Visual perception with the nature of sound perception.
@@ -7769,7 +7835,7 @@ Such singularity is something unprecedented.
 3. Refuting its single nature 
 1.	Question
 2.	Answer
-[9.66]
+[9.66ab]
 1. Question 
 9.66
 ‘Its different characteristics are not real.’
@@ -7778,6 +7844,7 @@ Then describe its true nature.
 In that case, what is that nature? What kind of essential characteristics does it have? 
 ‘It is cognition itself.’
 ‘Although temporarily it is designated as a sound cognition or a form cognition, it has one nature, since these both qualify as mere cognition.’ 
+[9.66cd]
 2. Answer
 1.	The consequence that all beings are one 
 2.	The consequence that the mirror of mind and individual consciousnesses are one
@@ -7785,12 +7852,13 @@ In that case, what is that nature? What kind of essential characteristics does i
 1. The consequence that all beings are one 
 Then it would follow that all beings are one.
 If whatever is qualified by mere awareness is pervaded by a single nature, then, taking individual beings as the logical subject, it would follow that they are all one in nature because they all have mere awareness. [422] This consequence is erroneous. 
-[9.67]
+[9.67ab]
 2. The consequence that the mirror of mind and individual consciousnesses are one 
 9.67
 Sentient and insentient would also be one
 Because they are equal merely in being existent.
 If whatever shares the same qualification is pervaded by a single nature, then it would follow that the sentient—the individual consciousness, a cognizing awareness—and the insentient—primal matter and the mirror of mind66—have the same nature because they have the same qualification, being merely existent.
+[9.67cd]
 3. The general case is not established
 If the instances are delusions,
 What common basis could they have?
@@ -7807,7 +7875,7 @@ Because of its very insentience, like a vase.
 The Naiyāyikas assert that the self is insentient matter which becomes connected to an external mind,67 and in this way it is an agent. 
 The self is the logical subject. [Contradiction:] your position is that it is an agent but it follows that it is not an agent because of its being matter, which is insentient. It is not tenable to deny that either the position [the self is an agent] or the reason [the self is insentient matter] are established, for that would contradict your own premise. If the pervasion68 were not established, then such things as vases would be indistinct [from agents]. 
 ‘It owns a separate mind.69 Therefore, the pervasion is not established.’
-[9.69]
+[9.69ab]
 2. Establishing the pervasion
 Because of its possession of a mind,
 ‘Although the self is insentient matter, since it owns a separate mind, it has the sentience of premeditating intentionality.70 You have not shown a contradiction, since the pervasion is not established.’
@@ -7819,6 +7887,7 @@ If it does not change:
 Then how did it become sentient?
 ‘There was no change when its material nature was eliminated because the sempiternal self is immutable.’ 
 If the former matter was insentient then, being mutually exclusive with sentience, it is not a sentient being with intentionality. Matter is pervaded by not being an agent—a sentient being with intentionality.
+[9.69cd]
 3. Summarized meaning
 Thus, being non-cognizing and free from activity,
 Space would also be such a ‘self’.
@@ -7850,13 +7919,14 @@ That action and result have different bases
 And that a self does not have any role in this.
 The basis of action—the individual of this life who is the agent—and basis of the result—the experiences of a future life [424]—are distinct. All its actions are temporary manifestations, with a completely passive sempiternal self performing no function. If this is a fault, the same fault exists equally for both of us:
 So, is your objection here not pointless?
-[9.72]
+[9.72ab]
 3. Actual response
 9.72
 ‘The causal agent is the recipient of its result.’
 If effects were experienced by the karmic causal agents themselves, then the causal agent and the effect would have to exist at the same time, however:
 No one ever sees this happen.
 Therefore, the karmic agent is the body of the causal agent and the experiencer of the result is the body of another person and these are distinct.
+[9.72cd]
 4. Abandoning contradiction to scripture 
 ‘According to the Buddhist scriptures, the ripened results such as the result of maturation71 do not ripen for anyone other than the karmic agent.’ 
 It is just in dependence upon a single stream of being
@@ -7881,12 +7951,13 @@ You will find the self to be no more real than this.
 2. Abandoning the objection that the objects of cultivating compassion are not established
 1.	Objection [425]
 2.	Response
-[9.75]
+[9.75ab]
 1. Objection
 9.75
 ‘If sentient beings do not exist,
 For whom should we have compassion?’
 ‘If sentient beings, the objects of compassion, do not exist, it is unreasonable to cultivate compassion for them. Therefore, the Mahāyāna path is flawed.’
+[9.75cd]
 2. Response
 1.	Establishing that sentient beings are designated 
 2.	Abandoning an objection to that
@@ -7900,7 +7971,7 @@ Why accept this delusion? It is for the sake of the result, i.e. we do not aband
 2.	The mere designation is not to be abandoned
 3.	Abandoning a contradiction in our own words
 4.	Abandoning that they are the same
-[9.76]
+[9.76ab]
 1. The independence of the substantially established individual
 9.76
 ‘If there are no sentient beings, who gets the result?’
@@ -7908,11 +7979,12 @@ This is true but, nevertheless, they are accepted out of confusion.
 ‘If even sentient beings are not established, how can there be any results from benefitting them?’
 It is true that in reality there are no sentient beings, i.e. the objects to be benefitted are not pervaded by being real sentient beings. Yet, while they are illusion-like and agglomerations of many moments, it is reasonable to treat these so-called ‘sentient beings’ as objects and to fulfil their benefit.
 Objection: ‘The conception of the reality of sentient beings is to be abandoned and one must abandon grasping at designations of sentient beings because they are perceptions of mistaken conceptual thought.’ 
+[9.76cd]
 2. The mere designation is not to be abandoned
 For the sake of fully pacifying suffering,
 One should not oppose the delusion of this result.
 Since practice requires a variety of skilful methods, [426] those wise in such methods should rely upon the deluded relative. 
-[9.77]
+[9.77ab]
 3. Abandoning a contradiction in our own words
 ‘Earlier, you said, 
 Neither self nor other is right: 
@@ -7924,6 +7996,7 @@ Because clinging to self as ultimate creates pride, which causes suffering:
 9.77
 Confusion about the self increases 
 Pride, the cause of suffering.
+[9.77cd]
 4. Abandoning the objection that they are the same
 ‘The conceptual thought with appearances in which there is clinging to the existence of the designated self should be abandoned, for suffering increases as a consequence of clinging to the existence of real substance.’ 
 This kind of conceptual thought with appearances does not increase self-clinging, the cause of suffering. Why not? Because there is an antidote which destroys the seeds of clinging to self—meditating upon non-self:
@@ -8040,12 +8113,13 @@ The non-establishment of the body generally is indicated in the first two lines 
 3.	Abandoning objections
 4.	Conditionality
 5.	Connecting with the yogic activity of analysis
-[9.88]
+[9.88ab]
 1. The non-establishment of suffering as ultimate
 9.88
 If suffering exists in reality,
 Why does it not prevent joyfulness?
 ‘Suffering’ is the logical subject and ‘exists in reality’ is the reason. Since the nature of fire is to heat, [429] it cannot become cold. Similarly, beings’ minds abide in the nature of suffering, so it follows that there should not be even an instant of unadulterated happiness. But that is not the case; it is untenable, for it is contrary to direct experience. It is untenable for the reason not to be established, for it would contradict the proposition that suffering is existent. It is untenable for pervasion75 not to be established, for it would contradict valid cognition, just as fire cannot be cold. 
+[9.88cd]
 2. The non-establishment of happiness as ultimate 
 If there is happiness, why are those afflicted by pain and so forth
 Not made joyful by sweetness and so forth?
@@ -8123,12 +8197,13 @@ If both positions [intermediary or no intermediary] and their reasons [something
 2.	Establishing the reason
 3.	Establishing the pervasion80
 4.	Conclusion
-[9.94]
+[9.94ab]
 1. Stating the consequence
 9.94
 Particles do not impose upon other particles,
 Two particles are the logical subject. [Contradiction:] Although the proposition is that they are in contact, it follows that they are not in contact because [Reason:] there is no imposition of either particle, i.e. one cannot impose itself upon the other. 
 ‘This reason is not established.’
+[9.94cd]
 2. Establishing the reason
 For they are identical in having no capacity.
 Although your position is that the particles—the logical subjects—make contact, it follows that one cannot impose upon the other because it has no interior capacity.
@@ -8144,12 +8219,13 @@ How does this make any sense?
 Making contact with something partless:
 When you see it, will you show me?
 If they were in contact along their entire surfaces, they would be one. If they were in contact along a single part of their surfaces, it would contradict their being partless. 
-[9.96]
+[9.96ab]
 2. Not meeting with consciousness 
 9.96
 It is illogical to make contact with
 Consciousness, which is bodiless,
 Consciousness, the logical subject [432], cannot be in contact with anything because it is bodiless, i.e. it does not have a body. 
+[9.96cd]
 3. A composite completely refuted
 And likewise for anything composite, because it is nonexistent,
 As was analysed previously.
@@ -8186,7 +8262,7 @@ That which is seen and touched are the first and last kinds of the five sense ob
 2.	No self-experience [433]
 3.	No experiencer apart from those 
 4.	Concluding summary
-[9.100]
+[9.100ab]
 1. No experiencing mind
 Sensations are not perceived by mind,
 Because they arise simultaneously with it.
@@ -8197,6 +8273,7 @@ If the former: the logical subject is the mind at the moment of the sensation. [
 Although something from before may be remembered after, 
 That is not experiencing it.
 The previous [sensation] is the logical subject. [Contradiction:] Although the proposition is that it is experienced, it follows that it is an object of subsequent remembering, not an object of present experience because its intrinsic nature has ended. If one doubts the establishment of the pervasion,85 it would contradict valid cognition because that which is an object of present experience is pervaded by a nature which has not ended.
+[9.100cd]
 2. No self-experience
 A sensation cannot experience itself,
 This is because of the previous refutation of self-experience. 
@@ -8295,7 +8372,7 @@ Analysing the analysis
 Then there would be an infinite regress
 Because that analysis, too, would have to be analyzed.
 If the inference that all dharmas are non-arising itself required another inference, then that, too, would also require yet another conclusion and thus there would be an infinite regress.
-[9.110]
+[9.110ab]
 3. Our position does not have that fault
 9.110
 However, when the analysandum has been analyzed
@@ -8311,6 +8388,7 @@ We do not deny all relative existence, such as the analysanda of conceptual thou
 ‘In addition to that inferential reasoning of a relative existence without existence in reality, there must be a second analysis. What is it that makes this latter inferential analysis?’ Thus, the objection is that there would be an infinite regress, as presented in v109. 
 When it is directly ascertained that universally all dharmas have no intrinsic nature, that ascertainment is contrary to any individual case of an inferentially known intrinsic nature. Thus, it is ascertained a priori that no intrinsic nature is known inferentially. In other words, if it is understood that objects—the analysanda—are not established, then it is understood a priori that the analyst also has no intrinsic nature. Thus, it is not necessary to form this conclusion again with another inference, so there is no fault of an infinite regress, as presented in v110. The analysis has ‘no basis’ [v110c], i.e. the pervader is not supported. ‘It is non-arising’ [v110c] means that inferentially known existence is not ultimate. Being naturally ‘nirvāṇa’ [v110d] means that the obscurations of reality are not ultimate.91
 [ Image: Blank.JPG ]
+[9.110cd]
 4. Ceasing to grasp at true existence
 [439] This is explained by Ngok Lotsawa and others as: 
 1.	Verses 111-115: There is no reason that establishes all dharmas as having inherent nature [v111-115]
@@ -8408,7 +8486,7 @@ Concerning an arising from both self and other, it is refuted implicitly by the 
 2.	Differences of effect in relation to cause 
 3.	Differences of cause in relation to cause
 4.	Differences of power in relation to cause
-[9.116]
+[9.116ab]
 1. General explanation
 9.116
 Ordinary people can directly see
@@ -8419,18 +8497,20 @@ The rising of the sun, the movement of water downstream,
 The pattern of a peacock’s feather and so on, whatever it may be,
 It was not created by anyone. Its cause is its own nature.
 The error in this is that ordinary people can directly see that everything has causes. Since such appearances as the arising of a shoot from a seed can be directly seen, merely to be is to be pervaded by having a cause. Therefore, existence without a cause is negated both ultimately and relatively.
+[9.116cd]
 2. Differences of effect in relation to cause
 ‘Concerning conventional designations such as the many colours in the segments of a lotus and the colourful patterns of a peacock feather, what is the cause of their creation and their being the way they are?’
 To understand this, one must analyse their specific causes:
 Differences such as in the segments of a lotus
 Are produced by different causes.
-[9.117]
+[9.117ab]
 3. Differences of cause in relation to cause
 ‘If different effects are created by different causes, what creates the different causes?’ 
 They are created by previous different causes:
 9.117
 ‘What creates different causes?’
 They come from previous different causes.
+[9.117cd]
 4. Differences of power in relation to cause
 ‘Why do specific causes have the power to create only certain effects and not the power to create others?’ 
 ‘Why is a cause able to produce its effect?’
@@ -8482,23 +8562,25 @@ Impermanent, inanimate, not deities,
 Suitable to be trodden on and impure,
 They are not Īśvara.
 When asked, ‘What is Īśvara?’, it is claimed Īśvara is the elements, such as earth, fire, etc. The elements are the logical subject. The probandum: whatever name they are called by, that is not what is meant by the term ‘Īśvara’. The reason: because of being multiple, impermanent, lacking the sentience of premeditating intentionality,102 mundane, contemptible and impure. These are the opposites of Īśvara, who is pervaded by singularity, permanence, divinity, sentience, worthiness of worship and purity.
-[9.120]
+[9.120ab]
 2. Refuting Īśvara as space
 9.120
 Space is not Īśvara because it is inanimate.
 The logical subject is space. That is not Īśvara because it does not have the sentience of intentionality. The reason here can be proven with the well-known inferences from other sources.
+[9.120cd]
 3. Refuting Īśvara as self
 He is not the self because that was refuted previously.
 4. Refuting Īśvara as inconceivable
 Since it is inconceivable to describe
 A creator who is inconceivable, what would be the point of trying?
 If he is not pervaded by conceivability, were someone to describe him, they would be describing something they cannot comprehend. 
-[9.121]
+[9.121ab]
 2. Effects are impossible
 Showing that it is not logical for effects to be created by Īśvara comprises a question and an answer. The question: 
 9.121
 What could he want to create anyway?
 The response has two parts:
+[9.121cd]
 1.	Refuting a permanent effect
 2.	Refuting an impermanent effect
 1. Refuting a permanent effect
@@ -8509,7 +8591,7 @@ Is Īśvara’s nature not sempiternal? Therefore, because both creator and crea
 Or, the logical subject is the sempiternal objects. [Contradiction:] although the proposition is that it is possible for them be created, it follows that they cannot be created because of their being sempiternal. If the proposition and the reason104 were not established, it would contradict your premise. 
 ‘The pervasion in these two [reasons] is not established.’105 
 If a sempiternal self creates effects, it is not logical for them to have a beginning. If it does not create effects, then it is not logical for those effects to arise. This is because in neither case is there any change.
-[9.122]
+[9.122ab]
 2. Refuting an impermanent effect 
 ‘The effects [creations] of Īśvara—the five consciousnesses, sensations, happiness and suffering and so forth—are impermanent objects.’
 Cognitions arise from cognizables
@@ -8518,6 +8600,7 @@ Cognitions arise from cognizables
 And beginningless happiness and suffering come from actions.
 So, what is it you say he has created?
 It is established by direct perception that impermanent objects arise from causes other than Īśvara. It is also established by direct perception that cognitions arise from their cognizables. It is established from both our scriptures that happiness and suffering arise from actions without beginning. Therefore, these all being the effects of Īśvara is negated.
+[9.122cd]
 3. Contradictions in his being a creator
 This section also establishes the pervasion of the previous prasaṅgas.106 
 1.	Contradictory to a temporary effect
@@ -8527,13 +8610,14 @@ This section also establishes the pervasion of the previous prasaṅgas.106
 If the cause has no beginning,
 How can the effect begin?
 The logical subject is the effects of Īśvara, such as happiness and suffering. It follows that they sempiternally exist without any beginning because of their arising from a sempiternal, beginningless causal power. This proposition is untenable, for it contradicts your premise that the effects are temporary. It is untenable for the reason107 not to be established: if you say the cause is sempiternal, its power to create cannot later increase because, by your own claim, it is a primordial, beginningless causal power, as asserted in the qualification statement.108 
-[9.123]
+[9.123ab]
 2. Establishing the pervasion by [Īśvara’s] independence [447]
 ‘Even though the cause abides sempiternally, that is not contradictory to temporary effects. The pervasion is not established.’
 9.123
 How could his creations not be sempiternal,
 When he depends upon nothing external?
 The sempiternal cause is the logical subject. The probandum: ‘How could his creations not be sempiternal?’, i.e. he cannot create something temporal: because he does not depend upon external conditions, it follows that Īśvara’s state of creating is immutable. Therefore, being immutable, mutability is negated and hence the creations are contemporaneous with Īśvara. Thus, the pervasion is established.
+[9.123cd]
 3. Refuting his dependence
 ‘The reason, “because of his independence from external conditions”, is not established.’ 
 Here we refute Īśvara’s dependence: 
@@ -8547,12 +8631,13 @@ If you claim that everything was created by Īśvara and that there is nothing w
 1.	Establishing the concurrence of conditions as the cause
 2.	Autonomy is violated
 3.	He would be under the power of desire
-[9.124]
+[9.124ab]
 1. Establishing the concurrence of conditions as the cause
 9.124
 If he were dependent, the concurrence itself
 Would be the cause, not Īśvara.
 If there is a concurrence of conditions, either it is an effect of Īśvara or it is not. If it is not, it would be the concurrence and not Īśvara’s causal powers which would be the cause. Thus, it would not be established that Īśvara is the cause but rather that the concurrence is the cause. 
+[9.124cd]
 2. Autonomy is violated
 When assembled, he is powerless not to create,
 When absent, he is powerless to create.
@@ -8566,13 +8651,14 @@ If he creates when he wants to, the effect depends on his wishes.
 How then is he ‘The Almighty’ [Īśvara]?
 ‘The creation of an effect [448] does not depend upon the concurrence of conditions. Rather, the effects arise from Īśvara. He creates the effects when he wishes to.’
 It follows then that his wishes arise from an external power. Being subject to such wishes, his autonomy is violated, which is inappropriate for your Īśvara.
-[9.126]
+[9.126ab]
 2. Refuting [the Vaiśeṣika tradition of arising from] sempiternal particles
 9.126
 For those who assert sempiternal particles,
 The refutation was completed previously.
 The assertion of particles referred to here is the proposal of a substance as the ultimate cause by certain non-Buddhists, such as the Vaiśeṣikas. The refutation was previously completed in the section concerning the foundation of mindfulness of the body [v86], i.e. [they are not ultimate] because they are refuted by their decomposition into parts.
 [ Image: 9.15.jp2 ]
+[9.126cd]
 3. Refuting arising from self
 1.	Formulating the position of the other [i.e. Sāṃkhya] tradition
 2.	The error in that
@@ -8584,13 +8670,14 @@ The assertion of particles referred to here is the proposal of a substance as th
 The position of the Sāṃkhyas is that
 The cause of beings is a permanent, primal substance.
 ‘The primal substance [1] is the sempiternal intrinsic nature. It is in a universal flow in which previously hidden manifestations can become manifest.109 This intrinsic nature is unseen due to obscurations. When manifestations arise from their previous state of non-manifestation, temporal objects are seen. Their cause is the intrinsic nature. Since both the intrinsic nature and what arises from it are in reality one, the primal substance is both cause and effect, but the arising of the manifestations is a relative [delusion].’
-[9.127]
+[9.127ab]
 2. The nature of the primal substance
 9.127
 Its qualities are ‘purity’, ‘activity’ and ‘darkness’.
 While they remain in equilibrium,
 They are called the ‘primal substance’.
 ‘The manifestations and sempiternal matter are pervaded by a oneness of the three qualities of the primal substance in equilibrium. This is the ultimate cause of all things. Individual consciousnesses [2] exist within that as containers of cognition and awareness. Each one is a sentient being experiencing objects. The individual consciousnesses are neither causes nor effects. [449] Since both the primal substance and the individual consciousnesses are ultimate, they are unseen, and are difficult to perceive.’
+[9.127cd]
 3. The nature of its effects
 Manifestations are said to be their disequilibrium.
 ‘When there is disequilibrium, happiness, suffering and so forth manifest within the ‘Great One’ [3] by its evolution into ‘pride’ [4]. From pride arise:
@@ -8609,24 +8696,26 @@ When there is equilibrium, happiness and so forth remain unmanifest within the p
 1.	Refuting the primal substance
 2.	Refuting its qualities
 3.	Refuting its effects
-[9.128]
+[9.128ab]
 1. Refuting the primal substance
 The primal substance is the logical subject. [Contradiction:] although the proposition is that its nature is singular, it follows that it is not singular because it has three qualities. 
 The pervasion for this inference110 is expressed in the root text:
 9.128
 A triple nature that is also singular
 Is illogical. There is no such thing.
+[9.128cd]
 2. Refuting its qualities
 ‘Nevertheless, the three qualities exist.’
 The three qualities also do not exist
 Because each of them would also have three parts.
 The three qualities are also not real, [450] because there would have to be three parts to each of them, such as a purity of the purity and so forth. 
-[9.129]
+[9.129ab]
 3. Refuting its effects
 9.129
 Without the qualities, the existence of sound
 And so forth also becomes extremely implausible.
 Without the qualities, it follows that the elements such as sound would not exist because it is illogical to have the effect without the cause.
+[9.129cd]
 2. Refuting pleasure and so forth being external [to consciousness]
 1.	Refuting by not perceiving its appearance
 2.	Refuting an external cause of pleasure and so forth
@@ -8641,17 +8730,18 @@ Refuting this has four parts:
 2.	The idea contradicts your own words
 3.	Not preexisting in its basis
 4.	Not existing in reality
-[9.130]
+[9.130ab]
 1. Recalling the logic that was already completed
 9.130
 ‘They are caused by the substantial [bare elements].’
 Wasn’t the analysis of such substances already completed?
 If you propose that the five bare elements such as sound are the causes of pleasure and so forth, this would be a cognizable as the cause of cognition and the refutation for this was completed in the section on cognizable arising before cognition. According to the author of the Great Commentary, ‘completed’ here refers to the refutation of existence as atoms, as a composite and as a threefold nature.111
+[9.130cd]
 2. The idea contradicts your own words [451]
 ‘You may have refuted cognizable and cognition as ultimate cause and effect but you did not refute them as relative.’ 
 Nevertheless, if you claim that the cause is the five bare elements and the effect is pleasure and so forth, you contradict your previous position that the primal substance with a threefold nature of pleasure, etc.112 is the cause and the five bare elements are the effect: 
 Also, the pleasure and so forth [in the primal substance] were your causes, [not the bare elements].113
-[9.131]
+[9.131ab]
 3. Not preexisting in its basis
 ‘We do not assert that the five bare elements are the causes of pleasure and so forth. The proposition is that the primal substance with the intrinsic nature of pleasure and so forth creates the five bare elements.’
 Cloth and so forth do not arise from pleasure and so forth. 
@@ -8659,6 +8749,7 @@ Cloth and so forth do not arise from pleasure and so forth.
 9.131
 Rather, pleasure and so forth arise from cloth and so forth.
 It is established by its incompatibility with direct perception that cloth and so forth do not arise from pleasure and so forth. Direct perception does not establish that cloth, etc. and the five bare elements arise from pleasure or the rest of the three qualities; rather, direct perception establishes the non-perception of pleasure and so forth arising from the five bare elements.114
+[9.131cd]
 4. Not existing in reality
 Apart from this, there is no pleasure and so forth.
 ‘We assert that the five bare elements are the causes and pleasure and so forth are the effects.’
@@ -8668,7 +8759,7 @@ The five bare elements have been refuted as a reality. Pleasure, etc. do not exi
 2.	Gross and subtle are contradictory 
 3.	Establishing its contingent states as impermanent
 4.	Establishing the primal substance as impermanent
-[9.132]
+[9.132ab]
 1. Refuting by not perceiving the appearance
 Sempitneral pleasure and so forth
 Have never been perceived.
@@ -8678,6 +8769,7 @@ At the time of pleasure manifesting, it is established with direct perception th
 9.132
 If pleasure and so forth are essentially manifest,
 Why are they not experienced? 
+[9.132cd]
 2. Gross and subtle are contradictory
 ‘The pleasure is not felt since previously it was gross and subsequently it becomes subtle.’ 
 Either subtle and gross are of one intrinsic nature or distinct intrinsic natures. If not distinct, their inherent nature abides with contradictory dharmas, which is illogical:
@@ -8690,7 +8782,7 @@ How can something gross also be subtle?
 Then the gross and subtle states are both impermanent.
 ‘Gross and subtle are contingent states and the intrinsic nature of each state is distinct.’
 If the gross state is eliminated, since it possesses arising and ceasing, that contingent state is impermanent.
-[9.134]
+[9.134ab]
 4. Establishing the primal substance as impermanent115
 ‘The contingent states are impermanent, but the primal substance is permanent.’
 In this way, why not accept
@@ -8700,6 +8792,7 @@ That all such things are impermanent?
 If the gross state is nothing other than pleasure,
 The impermanence of pleasure is evident.
 The primal substance of the three qualities (pleasure and so forth) is the logical subject. ‘Its impermanence is evident’ [in 134b] is the probandum. [The reason:] line 134a, i.e. because it is identified by its gross and subtle impermanent states, like a vase being identified by its blueness. Therefore, if it is established that the primal substance has impermanent states and that these are the intrinsic nature of everything, it is established that all dharmas are impermanent.
+[9.134cd]
 4. Contradictions in an existent arising
 1.	Presenting the position to be refuted
 2.	The position’s uncertainty
@@ -8716,7 +8809,7 @@ By the reason ‘[because of] its former nonexistence’, you establish that the
 9.135
 Although you deny that manifestations can arise 
 From their nonexistence, you also assert it.
-[9.136]
+[9.136ab]
 3. Mixing up the roles
 It also follows that to experience the cause would be to experience the effect and, therefore, the effect is mixed up with the role of the cause: 
 If effects abide in their causes,
@@ -8725,6 +8818,7 @@ To eat food would be to eat excrement.
 9.136
 For the money you spent on cotton, you should have instead
 Bought cotton seeds and worn them.
+[9.136cd]
 4. Abandoning objections
 1.	The roles are the same
 2.	Contradictory to worldly confusion 
@@ -8735,12 +8829,13 @@ Bought cotton seeds and worn them.
 Even if the worldly do not experience it due to delusion, for the non-deluded who cognize the truth, such as Kapila, it is a contradiction to wear cotton, but not to wear cotton seeds:
 Yet, someone who knows the reality is in the same predicament 
 The first line is the objection and the second line is the response. 
-[9.137]
+[9.137ab]
 2. Contradictory to worldly confusion 
 9.137
 And, since that knowledge of reality exists even for
 The worldly, why do they not see it?
 Taking someone who has worldly delusion as the cause and an omniscient teacher who cognizes the twenty-five basic elements as the effect, since the effect abides within the cause, omniscient cognition already exists for that worldly person; in which case, how come he does not cognize the existence of cotton in cotton seeds?
+[9.137cd]
 3. The consequence that the role of the effect is a delusion
 ‘The worldly do not have valid cognition.’
 Then seeing manifestations would also be untrue.
@@ -8791,12 +8886,13 @@ Nothing exists without a cause,
 Nor abides in its conditions,
 Whether individually or combined.
 ‘Without a cause’ means existing without a cause. [456] ‘Individually’ means either self or other. ‘Combined’120 means both self and other.
-[9.142]
+[9.142ab]
 2. Showing that there is no arising or ceasing, coming or going
 9.142
 Nor does it come from other,
 Nor stay, nor go.
 To ‘not come from other’ is to be without arising. To ‘not stay’ is to be free from abiding. To ‘not go’ is to be free from cessation. This is precisely to be free from the three characteristics of the composite. 
+[9.142cd]
 3. The implication of this: that which is dependently originated is mere illusion
 1.	Showing that dependent origination is like an illusion
 2.	Showing dependent origination 
@@ -8844,12 +8940,13 @@ One can establish the reverse pervasion122 by the so-called ‘analysis of the e
 1. The logic 
 1.	Refuting something existent arising as an effect 
 2.	Refuting something nonexistent arising as an effect 
-[9.145]
+[9.145ab]
 1. Refuting something existent arising as an effect 
 9.145
 For something that already exists,
 What cause does it require?
 That which is possible to be created by causes is pervaded by the necessary conditions for its creation. Grasping something as already existent is incompatible with grasping the necessary conditions for its creation. Since the certainty of this is established a priori, anything existent necessarily has no conditions for its creation.
+[9.145cd]
 2. Refuting something nonexistent arising as an effect  
 1.	Presenting the logic in brief [458]
 2.	The contradiction in the possibility of something nonexistent being the cause for an object
@@ -8902,12 +8999,13 @@ Nor is there any existence. Because of this,
 All these beings
 Are forever neither arising nor ceasing.
 Since beings have no cessation, all sentient beings are called ‘always non-ceasing’. Since they have no existence, they are called ‘always non-arising’.
-[9.150]
+[9.150ab]
 2. Abiding is like an illusion
 9.150
 Dreamlike beings,
 When analysed, are like banana trees.
 The first line establishes they are deluded perceptions and the second line indicates the essence of the truth is emptiness.
+[9.150cd]
 3. The sameness of existence and pacification
 In suchness, there is no distinction
 Between nirvāṇa and non-nirvāṇa.
@@ -8941,7 +9039,7 @@ In relation to the eight worldly dharmas:
 •	Not being respected or despised corresponds to not being praised or criticized.
 •	Happiness and suffering are named explicitly.
 •	Joy and misery corresponds to being famous or infamous.
-[9.153] [9.154]
+[9.153] [9.154ab]
 2. Ending conditioned existence, which depends upon these
 When I try to find reality itself,
 Who has craving and what is there to crave?
@@ -8962,6 +9060,7 @@ All is like space.
 May we come to fully understand this.
 Being empty, may one understand this and may people who are like oneself also understand this. 
 This concludes the analytical instructions. The next verses concern instructions on unification with compassion.
+[9.154cd]
 2. Abandoning suffering
 Here it will be shown explicitly that if emptiness is not realized, suffering arises and hence it is implicit that when emptiness is realized, suffering is ended. The suffering from the non-realization of emptiness has two parts:
 1.	An introductory summary of the visible sufferings 
@@ -9028,23 +9127,25 @@ Why can we not dispel it? Because the remedy—the antidote—is extremely diffi
 3. There are many obstacles
 1.	Outer obstacles
 2.	Inner obstacles
-[9.161]
+[9.161ab]
 1. Outer obstacles
 9.161
 It is where demons are striving to cast us
 Into the great lower realms.
 In conditioned existence, demons are striving. For what purpose? To cast us into the lower realms. [For example], the demon Kāmadeva fired his flower-arrow at Queen Padmavati and so forth.128
+[9.161cd]
 2. Inner obstacles
 It is where overcoming doubts is hard
 Among its many mistaken paths.
 With incorrect views and doubts, one clings to one’s doubts about the paths of perfection.
-[9.162]
+[9.162ab]
 4. It is difficult to rely on the supports
 9.162
 An opportunity like this will be difficult to find again,
 After transmigration from this life, such an opportunity will be difficult to find again. There will be no return of the eight freedoms and the five endowments of oneself will be difficult to find. 
 And the presence of Buddhas will be extremely difficult to find.
 The five endowments of others will also be difficult to find.
+[9.162cd]
 5. It is difficult to abandon its causes
 It is difficult to escape the river of defilements.
 It is difficult to escape the river of attachment, craving, views and unawareness. Therefore: [463]
