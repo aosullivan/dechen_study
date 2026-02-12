@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
 
-/// Shows Daily / Quiz / Read for a given text. Daily opens random verse; Quiz/Read show "Coming soon".
+/// Shows Daily / Quiz / Read for a given text. Daily opens random verse; Quiz guesses chapter.
 class TextOptionsScreen extends StatelessWidget {
   const TextOptionsScreen({
     super.key,
@@ -40,7 +41,7 @@ class TextOptionsScreen extends StatelessWidget {
           _OptionTile(
             icon: Icons.quiz_outlined,
             label: 'Quiz',
-            onTap: () => _showComingSoon(context, 'Quiz'),
+            onTap: () => _openQuiz(context),
           ),
           _OptionTile(
             icon: Icons.book_outlined,
@@ -73,6 +74,18 @@ class TextOptionsScreen extends StatelessWidget {
       );
     } else {
       _showComingSoon(context, 'Read');
+    }
+  }
+
+  void _openQuiz(BuildContext context) {
+    if (textId == 'bodhicaryavatara') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const BcvQuizScreen(),
+        ),
+      );
+    } else {
+      _showComingSoon(context, 'Quiz');
     }
   }
 

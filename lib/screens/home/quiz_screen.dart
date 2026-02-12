@@ -40,18 +40,6 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  void _checkAnswer() {
-    if (_selectedChapter == null || _currentSection == null) return;
-
-    setState(() {
-      _showAnswer = true;
-      _totalAnswers++;
-      if (_selectedChapter == _currentSection!.chapterNumber) {
-        _correctAnswers++;
-      }
-    });
-  }
-
   void _nextQuestion() {
     _loadQuiz();
   }
@@ -108,16 +96,7 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           const SizedBox(height: 24),
 
-          // Instructions
-          Text(
-            'Which chapter is this section from?',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-          const SizedBox(height: 24),
-
-          // Section text
+          // Section text (no chapter/verse shown - same style as daily section)
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
@@ -139,15 +118,16 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           const SizedBox(height: 24),
 
-          // Chapter options
+          // Question
           Text(
-            'Select a chapter:',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            'To which chapter does this belong?',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
           ),
           const SizedBox(height: 16),
 
+          // Chapter options - tap to answer immediately
           Wrap(
             spacing: 12,
             runSpacing: 12,
@@ -163,9 +143,16 @@ class _QuizScreenState extends State<QuizScreen> {
                 onSelected: _showAnswer
                     ? null
                     : (selected) {
-                        setState(() {
-                          _selectedChapter = selected ? chapter.number : null;
-                        });
+                        if (selected) {
+                          setState(() {
+                            _selectedChapter = chapter.number;
+                            _showAnswer = true;
+                            _totalAnswers++;
+                            if (chapter.number == _currentSection!.chapterNumber) {
+                              _correctAnswers++;
+                            }
+                          });
+                        }
                       },
                 selectedColor: isCorrect
                     ? Colors.green.withOpacity(0.3)
@@ -181,57 +168,54 @@ class _QuizScreenState extends State<QuizScreen> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 32),
 
-          // Action button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _selectedChapter == null
-                  ? null
-                  : (_showAnswer ? _nextQuestion : _checkAnswer),
-              child: Text(_showAnswer ? 'Next Question' : 'Check Answer'),
-            ),
-          ),
-
-          // Answer feedback
+          // Answer feedback - satisfying green check or red x
           if (_showAnswer) ...[
             const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: (_selectedChapter == _currentSection!.chapterNumber
-                        ? Colors.green
-                        : Colors.red)
-                    .withOpacity(0.1),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
                   color: (_selectedChapter == _currentSection!.chapterNumber
                           ? Colors.green
                           : Colors.red)
-                      .withOpacity(0.3),
+                      .withOpacity(0.15),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: (_selectedChapter == _currentSection!.chapterNumber
+                              ? Colors.green
+                              : Colors.red)
+                          .withOpacity(0.3),
+                      blurRadius: 16,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  _selectedChapter == _currentSection!.chapterNumber
+                      ? Icons.check_circle
+                      : Icons.cancel,
+                  size: 64,
+                  color: _selectedChapter == _currentSection!.chapterNumber
+                      ? Colors.green
+                      : Colors.red,
                 ),
               ),
-              child: Row(
-                children: [
-                  Icon(
-                    _selectedChapter == _currentSection!.chapterNumber
-                        ? Icons.check_circle
-                        : Icons.cancel,
-                    color: _selectedChapter == _currentSection!.chapterNumber
-                        ? Colors.green
-                        : Colors.red,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      _selectedChapter == _currentSection!.chapterNumber
-                          ? 'Correct! This is from Chapter ${_currentSection!.chapterNumber}.'
-                          : 'Not quite. This section is from Chapter ${_currentSection!.chapterNumber}.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                ],
+            ),
+            const SizedBox(height: 24),
+
+            // Next button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _nextQuestion,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8B7355),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text('Next'),
               ),
             ),
           ],
