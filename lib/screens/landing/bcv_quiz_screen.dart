@@ -467,13 +467,39 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 emissionFrequency: 0.05,
                 gravity: 0.15,
                 colors: const [
-                  Color(0xFF8B7355),
-                  Colors.amber,
-                  Colors.green,
-                  Color(0xFFD4C4B0),
+                  Color(0xFFD4AF37),
+                  Color(0xFFF5D76E),
+                  Color(0xFFB8860B),
                 ],
                 minimumSize: const Size(8, 8),
                 maximumSize: const Size(16, 16),
+                createParticlePath: (Size size) {
+                  const points = 5;
+                  final halfW = size.width / 2;
+                  final halfH = size.height / 2;
+                  final outerRadius = min(halfW, halfH);
+                  final innerRadius = outerRadius / 2;
+                  final angle = (2 * pi) / points;
+                  final path = Path();
+                  for (var i = 0; i < points; i++) {
+                    final outerAngle = i * angle - pi / 2;
+                    final innerAngle = outerAngle + angle / 2;
+                    if (i == 0) {
+                      path.moveTo(
+                          halfW + outerRadius * cos(outerAngle),
+                          halfH + outerRadius * sin(outerAngle));
+                    } else {
+                      path.lineTo(
+                          halfW + outerRadius * cos(outerAngle),
+                          halfH + outerRadius * sin(outerAngle));
+                    }
+                    path.lineTo(
+                        halfW + innerRadius * cos(innerAngle),
+                        halfH + innerRadius * sin(innerAngle));
+                  }
+                  path.close();
+                  return path;
+                },
               ),
             ),
           ),
