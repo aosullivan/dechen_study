@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
+import '../../services/verse_hierarchy_service.dart';
 
 /// Read screen for Bodhicaryavatara: sidebar with chapter list, main area with full text.
 /// Optional [scrollToVerseIndex] scrolls to the exact verse after first frame.
@@ -39,6 +42,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// When true, show commentary inline below the verses (instead of modal).
   bool _commentaryExpanded = false;
   final _commentaryService = CommentaryService.instance;
+  final _hierarchyService = VerseHierarchyService.instance;
+
+  /// Verse index currently in view (for breadcrumb). Null until first visibility.
+  int? _visibleVerseIndex;
+  /// Section hierarchy for the visible verse. Each has 'section' and 'title'.
+  List<Map<String, String>> _breadcrumbHierarchy = [];
 
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
@@ -93,6 +102,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         if (widget.highlightSectionIndices != null && _highlightVerseIndices.isNotEmpty) {
           _loadCommentaryForHighlightedSection();
         }
+        _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
+        _setInitialBreadcrumb();
       }
     } catch (e) {
       if (mounted) {
@@ -232,6 +243,74 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _toggleCommentaryExpanded() {
     setState(() {
       _commentaryExpanded = !_commentaryExpanded;
+    });
+  }
+
+  void _setInitialBreadcrumb() {
+    final initialIndex = _scrollTargetVerseIndex ?? 0;
+    if (initialIndex < _verses.length) {
+      _visibleVerseIndex = initialIndex;
+      _hierarchyService.getHierarchyForVerseIndex(initialIndex).then((hierarchy) {
+        if (mounted && _visibleVerseIndex == initialIndex) {
+          setState(() {
+            _breadcrumbHierarchy = hierarchy;
+          });
+        }
+      });
+    }
+  }
+
+  /// Extracts the last segment of the path as the sibling number (e.g. "1.1.3.2" -> "2").
+  String _sectionNumberForDisplay(String section) {
+    if (section.isEmpty) return '';
+    final parts = section.split('.');
+    return parts.last;
+  }
+
+  Widget _buildBreadcrumbItem(Map<String, String> item, int index) {
+    final section = item['section'] ?? item['path'] ?? '';
+    final title = item['title'] ?? '';
+    // Use section path if available, otherwise fallback to index+1 (for legacy/cached data)
+    final numDisplay = _sectionNumberForDisplay(section);
+    final displayNum = numDisplay.isNotEmpty ? numDisplay : '${index + 1}';
+    final baseColor = index == _breadcrumbHierarchy.length - 1
+        ? const Color(0xFF2C2416)
+        : const Color(0xFF8B7355).withValues(alpha: 0.8);
+    final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          fontFamily: 'Lora',
+          color: baseColor,
+        ) ?? const TextStyle(fontFamily: 'Lora', fontSize: 12);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        SizedBox(
+          width: 24,
+          child: Text(
+            '$displayNum.',
+            style: baseStyle.copyWith(
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF8B7355),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(title, style: baseStyle, softWrap: true),
+        ),
+      ],
+    );
+  }
+
+  void _onVerseVisibilityChanged(int verseIndex, double visibility) {
+    if (visibility < 0.3) return;
+    if (_visibleVerseIndex == verseIndex) return;
+    _visibleVerseIndex = verseIndex;
+    _hierarchyService.getHierarchyForVerseIndex(verseIndex).then((hierarchy) {
+      if (mounted && _visibleVerseIndex == verseIndex) {
+        setState(() {
+          _breadcrumbHierarchy = hierarchy;
+        });
+      }
     });
   }
 
@@ -469,12 +548,45 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
-  Widget _buildMainContent() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+  Widget _buildBreadcrumbBar() {
+    if (_breadcrumbHierarchy.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    const indentPerLevel = 16.0;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F7F3),
+        border: Border(
+          bottom: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _chapters.map((ch) {
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < _breadcrumbHierarchy.length; i++)
+            Padding(
+              padding: EdgeInsets.only(left: i * indentPerLevel),
+              child: _buildBreadcrumbItem(_breadcrumbHierarchy[i], i),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMainContent() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildBreadcrumbBar(),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _chapters.map((ch) {
           final key = _chapterKeys[ch.number];
           final verseTexts = ch.startVerseIndex < _verses.length
               ? _verses.sublist(ch.startVerseIndex, ch.endVerseIndex.clamp(0, _verses.length))
@@ -532,7 +644,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   if (isTargetVerse) {
                     w = KeyedSubtree(key: _scrollToVerseKey, child: w);
                   }
-                  return w;
+                  return VisibilityDetector(
+                    key: ValueKey('verse_$gIdx'),
+                    onVisibilityChanged: (info) =>
+                        _onVerseVisibilityChanged(gIdx, info.visibleFraction),
+                    child: w,
+                  );
                 }
 
                 final children = <Widget>[];
@@ -570,7 +687,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                       if (isTargetVerse) {
                         w = KeyedSubtree(key: _scrollToVerseKey, child: w);
                       }
-                      return w;
+                      return VisibilityDetector(
+                        key: ValueKey('verse_$idx'),
+                        onVisibilityChanged: (info) =>
+                            _onVerseVisibilityChanged(idx, info.visibleFraction),
+                        child: w,
+                      );
                     }).toList();
                     final highlightBlock = Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -623,7 +745,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             ],
           );
         }).toList(),
-      ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

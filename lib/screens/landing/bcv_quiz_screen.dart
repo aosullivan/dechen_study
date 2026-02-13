@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
 
@@ -28,7 +28,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   Object? _error;
   String? _wrongAnswerMessage;
   String? _correctAnswerMessage;
-  late ConfettiController _confettiController;
+  bool _showLottieCelebration = false;
 
   static final _verseRefPattern = RegExp(r'\[\d+\.\d+\]');
   static final _correctAnswerMessages = [
@@ -103,14 +103,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _loadQuiz();
-  }
-
-  @override
-  void dispose() {
-    _confettiController.dispose();
-    super.dispose();
   }
 
   Future<void> _loadQuiz() async {
@@ -374,9 +367,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                               if (correct) _correctAnswers++;
                               _wrongAnswerMessage = wrongMsg;
                               _correctAnswerMessage = correctMsg;
+                              _showLottieCelebration = showConfetti;
                             });
                             if (showConfetti) {
-                              _confettiController.play();
+                              Future.delayed(const Duration(seconds: 3), () {
+                                if (mounted) {
+                                  setState(() => _showLottieCelebration = false);
+                                }
+                              });
                             }
                           }
                         },
@@ -457,52 +455,21 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           ],
         ),
       ),
-          Align(
-            alignment: Alignment.center,
-            child: IgnorePointer(
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirectionality: BlastDirectionality.explosive,
-                numberOfParticles: 35,
-                emissionFrequency: 0.05,
-                gravity: 0.15,
-                colors: const [
-                  Color(0xFFD4AF37),
-                  Color(0xFFF5D76E),
-                  Color(0xFFB8860B),
-                ],
-                minimumSize: const Size(8, 8),
-                maximumSize: const Size(16, 16),
-                createParticlePath: (Size size) {
-                  const points = 5;
-                  final halfW = size.width / 2;
-                  final halfH = size.height / 2;
-                  final outerRadius = min(halfW, halfH);
-                  final innerRadius = outerRadius / 2;
-                  final angle = (2 * pi) / points;
-                  final path = Path();
-                  for (var i = 0; i < points; i++) {
-                    final outerAngle = i * angle - pi / 2;
-                    final innerAngle = outerAngle + angle / 2;
-                    if (i == 0) {
-                      path.moveTo(
-                          halfW + outerRadius * cos(outerAngle),
-                          halfH + outerRadius * sin(outerAngle));
-                    } else {
-                      path.lineTo(
-                          halfW + outerRadius * cos(outerAngle),
-                          halfH + outerRadius * sin(outerAngle));
-                    }
-                    path.lineTo(
-                        halfW + innerRadius * cos(innerAngle),
-                        halfH + innerRadius * sin(innerAngle));
-                  }
-                  path.close();
-                  return path;
-                },
+          if (_showLottieCelebration)
+            Align(
+              alignment: Alignment.center,
+              child: IgnorePointer(
+                child: SizedBox(
+                  width: 280,
+                  height: 280,
+                  child: Lottie.network(
+                    'https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json',
+                    fit: BoxFit.contain,
+                    repeat: false,
+                  ),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
