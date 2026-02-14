@@ -66,6 +66,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   static const int _maxMeasureRetries = 5;
   final Map<int, GlobalKey> _verseKeys = {};
   GlobalKey _scrollContentKey = GlobalKey();
+  final ScrollController _sectionSliderScrollController = ScrollController();
+  static const double _sectionSliderLineHeight = 22.0;
+  static const int _sectionSliderVisibleLines = 10;
+  static const double _sidebarWidth = 180;
+  static const double _sidebarCollapsedWidth = 48;
+
+  bool _sidebarCollapsed = false;
+  bool _breadcrumbCollapsed = false;
+  bool _sectionSliderCollapsed = false;
 
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
@@ -92,6 +101,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void dispose() {
     _visibilityDebounceTimer?.cancel();
+    _sectionSliderScrollController.dispose();
     super.dispose();
   }
 
@@ -414,6 +424,24 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Future<void> _onBreadcrumbSectionTap(Map<String, String> item) async {
     final section = item['section'] ?? item['path'] ?? '';
     if (section.isEmpty) return;
+    // Optimistic update: immediately show breadcrumb and section slider for tapped section
+    final hierarchy = _hierarchyService.getHierarchyForSectionSync(section);
+    if (hierarchy.isNotEmpty) {
+      setState(() {
+        _breadcrumbHierarchy = hierarchy;
+        _currentSectionVerseIndices = _hierarchyService.getVerseRefsForSectionSync(section)
+            .map((ref) {
+              var i = _verseService.getIndexForRef(ref);
+              if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
+                i = _verseService.getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
+              }
+              return i;
+            })
+            .whereType<int>()
+            .toSet();
+      });
+      _scrollSectionSliderToCurrent();
+    }
     final firstVerseRef = await _hierarchyService.getFirstVerseForSection(section);
     if (firstVerseRef == null) return;
     var verseIndex = _verseService.getIndexForRef(firstVerseRef);
@@ -423,6 +451,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       );
     }
     if (verseIndex == null) return;
+    _visibleVerseIndex = verseIndex;
     _scrollToVerseIndex(verseIndex);
   }
 
@@ -440,15 +469,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Widget _buildBreadcrumbItem(Map<String, String> item, int index, {VoidCallback? onTap}) {
     final section = item['section'] ?? item['path'] ?? '';
     final title = item['title'] ?? '';
+    final isCurrent = index == _breadcrumbHierarchy.length - 1;
     // Use section path if available, otherwise fallback to index+1 (for legacy/cached data)
     final numDisplay = _sectionNumberForDisplay(section);
     final displayNum = numDisplay.isNotEmpty ? numDisplay : '${index + 1}';
-    final baseColor = index == _breadcrumbHierarchy.length - 1
+    final baseColor = isCurrent
         ? const Color(0xFF2C2416)
         : const Color(0xFF8B7355).withValues(alpha: 0.8);
     final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           fontFamily: 'Lora',
           color: baseColor,
+          fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
         ) ?? const TextStyle(fontFamily: 'Lora', fontSize: 12);
     final content = Row(
       crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -469,9 +500,21 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ),
       ],
     );
-    if (onTap == null) return content;
+    if (onTap == null) {
+      return isCurrent
+          ? Container(
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF8B7355).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: content,
+            )
+          : content;
+    }
     return Material(
-      color: Colors.transparent,
+      color: isCurrent ? const Color(0xFF8B7355).withValues(alpha: 0.12) : Colors.transparent,
+      borderRadius: BorderRadius.circular(4),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(4),
@@ -545,8 +588,42 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         _measureAndUpdateSectionOverlay();
+        _scrollSectionSliderToCurrent();
       });
     });
+  }
+
+  void _scrollSectionSliderToCurrent() {
+    if (_breadcrumbHierarchy.isEmpty) return;
+    final currentPath = _breadcrumbHierarchy.last['section'] ?? _breadcrumbHierarchy.last['path'] ?? '';
+    if (currentPath.isEmpty) return;
+    final flat = _hierarchyService.getFlatSectionsSync();
+    final idx = flat.indexWhere((s) => s.path == currentPath);
+    if (idx < 0) return;
+    final viewportHeight = _sectionSliderLineHeight * _sectionSliderVisibleLines;
+    final targetOffset = (idx * _sectionSliderLineHeight) - (viewportHeight / 2) + (_sectionSliderLineHeight / 2);
+    final maxOffset = (flat.length * _sectionSliderLineHeight - viewportHeight).clamp(0.0, double.infinity);
+    final clamped = targetOffset.clamp(0.0, maxOffset);
+    void doScroll() {
+      if (!mounted || !_sectionSliderScrollController.hasClients) return;
+      _sectionSliderScrollController.animateTo(
+        clamped,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutCubic,
+      );
+    }
+    if (_sectionSliderScrollController.hasClients) {
+      doScroll();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        doScroll();
+        if (!_sectionSliderScrollController.hasClients) {
+          Future.delayed(const Duration(milliseconds: 150), () {
+            if (mounted) doScroll();
+          });
+        }
+      });
+    }
   }
 
   /// Inline commentary panel (inserted below verses in the main scroll). Visually distinct from root text.
@@ -698,6 +775,32 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              _breadcrumbCollapsed ? Icons.account_tree : Icons.account_tree_outlined,
+              color: const Color(0xFF2C2416),
+            ),
+            tooltip: _breadcrumbCollapsed ? 'Show breadcrumb' : 'Hide breadcrumb',
+            onPressed: () => setState(() => _breadcrumbCollapsed = !_breadcrumbCollapsed),
+          ),
+          IconButton(
+            icon: Icon(
+              _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
+              color: const Color(0xFF2C2416),
+            ),
+            tooltip: _sectionSliderCollapsed ? 'Show section overview' : 'Hide section overview',
+            onPressed: () => setState(() => _sectionSliderCollapsed = !_sectionSliderCollapsed),
+          ),
+          IconButton(
+            icon: Icon(
+              _sidebarCollapsed ? Icons.menu_open : Icons.menu,
+              color: const Color(0xFF2C2416),
+            ),
+            tooltip: _sidebarCollapsed ? 'Show chapters' : 'Hide chapters',
+            onPressed: () => setState(() => _sidebarCollapsed = !_sidebarCollapsed),
+          ),
+        ],
       ),
       body: _buildBody(),
     );
@@ -736,49 +839,184 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildSidebar(),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          width: _sidebarCollapsed ? _sidebarCollapsedWidth : _sidebarWidth,
+          child: _buildSidebarContent(),
+        ),
         Expanded(child: _buildMainContent()),
       ],
     );
   }
 
-  Widget _buildSidebar() {
+  Widget _buildSidebarContent() {
     return Container(
-      width: 220,
       decoration: BoxDecoration(
         color: const Color(0xFFF8F7F3),
         border: Border(
           right: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
         ),
       ),
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-        itemCount: _chapters.length,
-        itemBuilder: (context, index) {
-          final ch = _chapters[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Material(
+      child: _sidebarCollapsed
+          ? Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () => _scrollToChapter(ch.number),
-                borderRadius: BorderRadius.circular(6),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Text(
-                    'Chapter ${ch.number}: ${ch.title}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontFamily: 'Lora',
-                          color: const Color(0xFF2C2416),
+                onTap: () => setState(() => _sidebarCollapsed = false),
+                child: Center(
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      'Chapters',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontFamily: 'Lora',
+                            color: const Color(0xFF8B7355),
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+              itemCount: _chapters.length,
+              itemBuilder: (context, index) {
+                final ch = _chapters[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _scrollToChapter(ch.number),
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        child: Text(
+                          'Ch ${ch.number}: ${ch.title}',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                fontFamily: 'Lora',
+                                color: const Color(0xFF2C2416),
+                                fontSize: 13,
+                              ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+  }
+
+  Widget _buildSectionSlider() {
+    final flat = _hierarchyService.getFlatSectionsSync();
+    if (flat.isEmpty) return const SizedBox.shrink();
+    final currentPath = _breadcrumbHierarchy.isNotEmpty
+        ? (_breadcrumbHierarchy.last['section'] ?? _breadcrumbHierarchy.last['path'] ?? '')
+        : '';
+    final sliderHeight = _sectionSliderLineHeight * _sectionSliderVisibleLines;
+    return Container(
+      height: sliderHeight,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F7F3),
+        border: Border(
+          bottom: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+        ),
+      ),
+      child: ListView.builder(
+        controller: _sectionSliderScrollController,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        itemCount: flat.length,
+        itemBuilder: (context, index) {
+          final item = flat[index];
+          final isCurrent = item.path == currentPath;
+          final indent = item.depth * 12.0;
+          return Material(
+            color: isCurrent ? const Color(0xFF8B7355).withValues(alpha: 0.12) : Colors.transparent,
+            child: InkWell(
+              onTap: () => _onBreadcrumbSectionTap({'section': item.path, 'path': item.path, 'title': item.title}),
+              child: SizedBox(
+                height: _sectionSliderLineHeight,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: indent),
+                    child: Text(
+                      () {
+                        final num = _sectionNumberForDisplay(item.path);
+                        return num.isNotEmpty ? '$num. ${item.title}' : item.title;
+                      }(),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontFamily: 'Lora',
+                            fontSize: 12,
+                            color: isCurrent ? const Color(0xFF2C2416) : const Color(0xFF8B7355).withValues(alpha: 0.9),
+                            fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
+                          ) ?? const TextStyle(fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildNavSection(
+    bool collapsed,
+    Widget Function() full,
+    VoidCallback onExpand,
+    String subtitle,
+    String label,
+  ) {
+    return AnimatedCrossFade(
+      duration: const Duration(milliseconds: 200),
+      crossFadeState: collapsed ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      firstChild: full(),
+      secondChild: _buildCollapsedStrip(
+        label: label,
+        onTap: onExpand,
+        subtitle: subtitle,
+      ),
+    );
+  }
+
+  Widget _buildCollapsedStrip({required String label, required VoidCallback onTap, required String subtitle}) {
+    return Material(
+      color: const Color(0xFFF8F7F3),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.expand_more, size: 18, color: const Color(0xFF8B7355)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  subtitle.isNotEmpty ? subtitle : 'Tap to show $label',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontFamily: 'Lora',
+                        color: const Color(0xFF2C2416),
+                        fontSize: 12,
+                      ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -819,10 +1057,23 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildBreadcrumbBar(),
+        _buildNavSection(
+          _breadcrumbCollapsed,
+          _buildBreadcrumbBar,
+          () => setState(() => _breadcrumbCollapsed = false),
+          _breadcrumbHierarchy.isNotEmpty ? (_breadcrumbHierarchy.last['title'] ?? '') : '',
+          'Breadcrumb',
+        ),
+        _buildNavSection(
+          _sectionSliderCollapsed,
+          _buildSectionSlider,
+          () => setState(() => _sectionSliderCollapsed = false),
+          _breadcrumbHierarchy.isNotEmpty ? (_breadcrumbHierarchy.last['title'] ?? '') : '',
+          'Section overview',
+        ),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
               key: _scrollContentKey,
               clipBehavior: Clip.none,

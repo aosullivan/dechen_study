@@ -86,6 +86,50 @@ class VerseHierarchyService {
     return refs;
   }
 
+  List<({String path, String title, int depth})>? _flatSections;
+
+  /// Returns breadcrumb hierarchy for section path (e.g. "3.1.3" -> root to that section).
+  /// Call after _ensureLoaded(). Used when user taps a section to update UI immediately.
+  List<Map<String, String>> getHierarchyForSectionSync(String sectionPath) {
+    if (sectionPath.isEmpty) return [];
+    final flat = getFlatSectionsSync();
+    final parts = sectionPath.split('.');
+    final out = <Map<String, String>>[];
+    var prefix = '';
+    for (var i = 0; i < parts.length; i++) {
+      prefix = prefix.isEmpty ? parts[i] : '$prefix.${parts[i]}';
+      final idx = flat.indexWhere((s) => s.path == prefix);
+      if (idx >= 0) {
+        final item = flat[idx];
+        out.add({'section': item.path, 'path': item.path, 'title': item.title});
+      }
+    }
+    return out;
+  }
+
+  /// Flattened list of all sections in depth-first order. Call after _ensureLoaded().
+  List<({String path, String title, int depth})> getFlatSectionsSync() {
+    if (_flatSections != null) return _flatSections!;
+    final sections = _map?['sections'];
+    if (sections is! List) return [];
+    final out = <({String path, String title, int depth})>[];
+    void visit(dynamic node, int depth) {
+      if (node is! Map) return;
+      final path = (node['path'] ?? '').toString();
+      final title = (node['title'] ?? '').toString();
+      if (path.isNotEmpty && title.isNotEmpty) {
+        out.add((path: path, title: title, depth: depth));
+      }
+      final children = node['children'];
+      if (children is List) {
+        for (final c in children) visit(c, depth + 1);
+      }
+    }
+    for (final s in sections) visit(s, 0);
+    _flatSections = out;
+    return out;
+  }
+
   /// Synchronous getter - call after _ensureLoaded() or getHierarchyForVerse has been called.
   List<Map<String, String>> getHierarchyForVerseSync(String ref) {
     if (_map == null) return [];
