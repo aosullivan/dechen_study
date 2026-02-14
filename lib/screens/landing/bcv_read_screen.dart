@@ -57,6 +57,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Timer? _visibilityDebounceTimer;
   int? _pendingVisibilityVerseIndex;
 
+  /// Animated section overlay: rect we're sliding from and to.
+  Rect? _sectionOverlayRectFrom;
+  Rect? _sectionOverlayRectTo;
+  int _sectionOverlayAnimationId = 0;
+  int _sectionOverlayMeasureRetries = 0;
+  static const int _maxMeasureRetries = 5;
+  final Map<int, GlobalKey> _verseKeys = {};
+  GlobalKey _scrollContentKey = GlobalKey();
+
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
     if (_scrollToVerseIndexAfterTap != null) return _scrollToVerseIndexAfterTap;
@@ -92,6 +101,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _highlightVerseIndices = {};
       _currentSectionVerseIndices = {};
       _sectionVerseIndicesCache.clear();
+      _sectionOverlayRectFrom = null;
+      _sectionOverlayRectTo = null;
+      _sectionOverlayMeasureRetries = 0;
       _commentaryEntryForSelected = null;
       _commentaryExpanded = false;
     });
@@ -176,6 +188,90 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     runs.add(current);
     return runs;
+  }
+
+  /// The section run currently shown (the one containing the visible verse). Used for overlay measurement.
+  List<int>? get _activeSectionRun {
+    final sectionRuns = _getSectionRuns();
+    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+    if (visibleIdx == null || sectionRuns.isEmpty) return null;
+    for (final run in sectionRuns) {
+      if (run.contains(visibleIdx)) return run;
+    }
+    return null;
+  }
+
+  /// Measure the rect of the active section run and animate the overlay to it.
+  void _measureAndUpdateSectionOverlay() {
+    final run = _activeSectionRun;
+    final stackContext = _scrollContentKey.currentContext;
+    if (stackContext == null) return;
+    final stackBox = stackContext.findRenderObject() as RenderBox?;
+    if (stackBox == null || !stackBox.hasSize) return;
+
+    if (run == null || run.isEmpty) {
+      if (_sectionOverlayRectTo != null) {
+        setState(() {
+          _sectionOverlayRectFrom = _sectionOverlayRectTo;
+          _sectionOverlayRectTo = null;
+          _sectionOverlayAnimationId++;
+        });
+      }
+      return;
+    }
+
+    Rect? measured;
+    const padH = 12.0;
+    const padV = 8.0;
+    for (final idx in run) {
+      final key = _verseKeys[idx];
+      if (key?.currentContext == null) continue;
+      final verseBox = key!.currentContext!.findRenderObject() as RenderBox?;
+      if (verseBox == null || !verseBox.hasSize) continue;
+      final topLeft = verseBox.localToGlobal(Offset.zero, ancestor: stackBox);
+      final bottomRight = verseBox.localToGlobal(
+        Offset(verseBox.size.width, verseBox.size.height),
+        ancestor: stackBox,
+      );
+      final verseRect = Rect.fromPoints(topLeft, bottomRight);
+      final padded = Rect.fromLTRB(
+        verseRect.left - padH,
+        verseRect.top - padV,
+        verseRect.right + padH,
+        verseRect.bottom + padV,
+      );
+      measured = measured == null ? padded : measured.expandToInclude(padded);
+    }
+    if (measured == null) {
+      if (_sectionOverlayMeasureRetries < _maxMeasureRetries) {
+        _sectionOverlayMeasureRetries++;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _measureAndUpdateSectionOverlay();
+        });
+      }
+      return;
+    }
+    _sectionOverlayMeasureRetries = 0;
+
+    // Use full content width (match the SizedBox(width: double.infinity) verse containers)
+    final contentWidth = stackBox.size.width;
+    final clamped = Rect.fromLTWH(0, measured.top, contentWidth, measured.height);
+
+    final prevTo = _sectionOverlayRectTo;
+    if (prevTo != null && _rectApproxEquals(prevTo, clamped)) return;
+
+    setState(() {
+      _sectionOverlayRectFrom = prevTo ?? clamped;
+      _sectionOverlayRectTo = clamped;
+      _sectionOverlayAnimationId++;
+    });
+  }
+
+  bool _rectApproxEquals(Rect a, Rect b, [double epsilon = 2]) {
+    return (a.left - b.left).abs() < epsilon &&
+        (a.top - b.top).abs() < epsilon &&
+        (a.width - b.width).abs() < epsilon &&
+        (a.height - b.height).abs() < epsilon;
   }
 
   /// Consecutive verse indices in current section but NOT in highlight (for faint box).
@@ -318,7 +414,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (section.isEmpty) return;
     final firstVerseRef = await _hierarchyService.getFirstVerseForSection(section);
     if (firstVerseRef == null) return;
-    final verseIndex = _verseService.getIndexForRef(firstVerseRef);
+    var verseIndex = _verseService.getIndexForRef(firstVerseRef);
+    if (verseIndex == null && RegExp(r'[a-d]+$').hasMatch(firstVerseRef)) {
+      verseIndex = _verseService.getIndexForRef(
+        firstVerseRef.replaceAll(RegExp(r'[a-d]+$'), ''),
+      );
+    }
     if (verseIndex == null) return;
     _scrollToVerseIndex(verseIndex);
   }
@@ -405,7 +506,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
         indices = <int>{};
         for (final ref in refs) {
-          final i = _verseService.getIndexForRef(ref);
+          var i = _verseService.getIndexForRef(ref);
+          if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
+            i = _verseService.getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
+          }
           if (i != null) indices.add(i);
         }
         _sectionVerseIndicesCache[sectionPath] = indices;
@@ -423,6 +527,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       setState(() {
         _breadcrumbHierarchy = hierarchy;
         _currentSectionVerseIndices = indices;
+        // Clear commentary highlight when user scrolls outside the highlighted block
+        final highlight = _highlightVerseIndices ?? {};
+        if (highlight.isNotEmpty && !highlight.contains(verseIndex)) {
+          _highlightVerseIndices = {};
+          _commentaryEntryForSelected = null;
+          _commentaryExpanded = false;
+        }
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _measureAndUpdateSectionOverlay();
       });
     });
   }
@@ -701,7 +816,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-            child: Column(
+            child: Stack(
+              key: _scrollContentKey,
+              clipBehavior: Clip.none,
+              children: [
+                Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _chapters.map((ch) {
           final key = _chapterKeys[ch.number];
@@ -744,6 +863,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   );
 
                 Widget buildVerseContent(int idx, String text) {
+                  _verseKeys[idx] ??= GlobalKey();
                   final isTargetVerse = _scrollTargetVerseIndex != null &&
                       _scrollTargetVerseIndex == idx &&
                       _scrollToVerseKey != null;
@@ -762,7 +882,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     key: ValueKey('verse_$idx'),
                     onVisibilityChanged: (info) =>
                         _onVerseVisibilityChanged(idx, info.visibleFraction),
-                    child: w,
+                    child: KeyedSubtree(
+                      key: _verseKeys[idx],
+                      child: w,
+                    ),
                   );
                 }
 
@@ -786,9 +909,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
                 final children = <Widget>[];
                 final highlightRuns = _getHighlightRuns();
-                final sectionRuns = _getSectionRuns();
                 final usedInRun = <int>{};
-                final usedInSectionRun = <int>{};
 
                 List<int>? runContaining(int idx, List<List<int>> runList) {
                   for (final r in runList) {
@@ -845,17 +966,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     continue;
                   }
 
-                  if (usedInSectionRun.contains(globalIndex)) continue;
-
-                  final sectionRun = runContaining(globalIndex, sectionRuns);
-                  if (sectionRun != null && sectionRun.first == globalIndex) {
-                    for (final idx in sectionRun) {
-                      usedInSectionRun.add(idx);
-                    }
-                    children.add(wrapInBox(sectionRun, darker: false));
-                    continue;
-                  }
-
+                  // Section highlight is drawn via animated overlay (no inline box)
                   children.add(
                     SizedBox(
                       width: double.infinity,
@@ -870,6 +981,39 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             ),
           );
         }).toList(),
+                ),
+                if (_sectionOverlayRectTo != null)
+                  TweenAnimationBuilder<Rect?>(
+                    key: ValueKey('section_overlay_$_sectionOverlayAnimationId'),
+                    tween: RectTween(
+                      begin: _sectionOverlayRectFrom ?? _sectionOverlayRectTo,
+                      end: _sectionOverlayRectTo,
+                    ),
+                    duration: const Duration(milliseconds: 450),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, rect, child) {
+                      if (rect == null) return const SizedBox.shrink();
+                      return Positioned(
+                        left: rect.left,
+                        top: rect.top,
+                        width: rect.width,
+                        height: rect.height,
+                        child: IgnorePointer(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF8B7355).withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: const Color(0xFF8B7355).withValues(alpha: 0.22),
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+              ],
             ),
           ),
         ),

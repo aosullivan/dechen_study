@@ -33,7 +33,11 @@ class BcvVerseService {
   /// Loads the asset, parses into verses and chapter boundaries, and caches. Idempotent.
   Future<void> _ensureLoaded() async {
     if (_verses != null) return;
-    final content = await rootBundle.loadString(_assetPath);
+    var content = await rootBundle.loadString(_assetPath);
+    // Strip BOM and form-feed (throughout: some chapter headers have leading \f)
+    content = content.replaceAll(RegExp(r'[\uFEFF\x0C]'), '');
+    // Normalize line endings
+    content = content.replaceAll(RegExp(r'\r\n?'), '\n');
     final blocks = content.split(RegExp(r'\n\s*\n'));
     final verses = <String>[];
     final captions = <String?>[];
@@ -43,19 +47,31 @@ class BcvVerseService {
       final trimmed = block.trim();
       if (trimmed.isEmpty) continue;
       final lines = trimmed.split('\n').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
-      final singleLine = lines.length == 1 && lines.single == trimmed.trim();
-      final chapterMatch = singleLine ? _chapterTitleOnly.firstMatch(trimmed) : null;
-      if (chapterMatch != null) {
-        chapterStarts.add((
-          number: int.parse(chapterMatch.group(1)!),
-          title: chapterMatch.group(2)!.trim(),
-          startIndex: verses.length,
-        ));
-        continue;
+      // A block may contain a chapter header mid-block (no blank line before "Chapter N:")
+      var pendingVerseLines = <String>[];
+      for (final line in lines) {
+        final chapterMatch = _chapterTitleOnly.firstMatch(line);
+        if (chapterMatch != null) {
+          if (pendingVerseLines.isNotEmpty) {
+            verses.add(pendingVerseLines.join('\n'));
+            captions.add(_extractCaption(pendingVerseLines.join('\n')));
+            refs.add(_extractRef(pendingVerseLines.join('\n')));
+            pendingVerseLines = [];
+          }
+          chapterStarts.add((
+            number: int.parse(chapterMatch.group(1)!),
+            title: chapterMatch.group(2)!.trim(),
+            startIndex: verses.length,
+          ));
+          continue;
+        }
+        pendingVerseLines.add(line);
       }
-      verses.add(trimmed);
-      captions.add(_extractCaption(trimmed));
-      refs.add(_extractRef(trimmed));
+      if (pendingVerseLines.isNotEmpty) {
+        verses.add(pendingVerseLines.join('\n'));
+        captions.add(_extractCaption(pendingVerseLines.join('\n')));
+        refs.add(_extractRef(pendingVerseLines.join('\n')));
+      }
     }
     _verses = verses;
     _captions = captions;

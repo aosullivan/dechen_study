@@ -32,17 +32,11 @@ class MyApp extends StatelessWidget {
       title: 'Dechen Study',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: false,
+        useMaterial3: true,
         fontFamily: 'Lora',
-        colorScheme: ColorScheme.light(
-          primary: const Color(0xFF8B7355), // Warm brown
-          onPrimary: const Color(0xFFFAF8F5),
-          secondary: const Color(0xFF6B5B45),
-          onSecondary: const Color(0xFFFAF8F5),
-          surface: const Color(0xFFFAF8F5),
-          onSurface: const Color(0xFF2C2416),
-          error: const Color(0xFFB00020),
-          onError: Colors.white,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF8B7355), // Warm brown
+          brightness: Brightness.light,
         ),
         scaffoldBackgroundColor: const Color(0xFFFAF8F5), // Warm off-white
         textTheme: const TextTheme(

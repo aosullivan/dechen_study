@@ -26,12 +26,15 @@ class VerseHierarchyService {
   }
 
   /// Returns the full section hierarchy for [ref] (e.g. "1.5").
-  /// Each item has 'section' (section number) and 'title'. Empty list if not found.
+  /// For split verses (8.19ab/cd), use cd path when ref is base "8.19" (continuation).
   Future<List<Map<String, String>>> getHierarchyForVerse(String ref) async {
     await _ensureLoaded();
     final verseToPath = _map?['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return [];
-    final path = verseToPath[ref];
+    var path = verseToPath[ref];
+    if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+      path = verseToPath['${ref}cd'] ?? verseToPath['${ref}ab'];
+    }
     if (path is! List) return [];
     return path.map((e) {
       if (e is Map) {
@@ -88,7 +91,10 @@ class VerseHierarchyService {
     if (_map == null) return [];
     final verseToPath = _map!['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return [];
-    final path = verseToPath[ref];
+    var path = verseToPath[ref];
+    if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+      path = verseToPath['${ref}cd'] ?? verseToPath['${ref}ab'];
+    }
     if (path is! List) return [];
     return path.map((e) {
       if (e is Map) {
