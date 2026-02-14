@@ -914,13 +914,9 @@
                               "verses": [
                                 "2.54",
                                 "2.55",
-                                "2.56",
-                                "4.37"
+                                "2.56"
                               ],
-                              "children": [],
-                              "needsReview": [
-                                "4.37"
-                              ]
+                              "children": []
                             },
                             {
                               "title": "The example of a precipice",
@@ -1028,19 +1024,23 @@
                   ]
                 },
                 {
-                  "title": "Requesting",
+                  "title": "Requesting the wheel of dharma be turned",
                   "path": "3.2.1.5",
-                  "verses": [],
+                  "verses": [
+                    "3.5"
+                  ],
                   "children": []
                 },
                 {
-                  "title": "Supplication",
+                  "title": "Supplicating the Buddhas not to enter nirvāṇa",
                   "path": "3.2.1.6",
-                  "verses": [],
+                  "verses": [
+                    "3.6"
+                  ],
                   "children": []
                 },
                 {
-                  "title": "Dedication of merit",
+                  "title": "Dedication of the roots of merit",
                   "path": "3.2.1.7",
                   "verses": [],
                   "children": [
@@ -1753,7 +1753,9 @@
                             {
                               "title": "An example of being subject to the faults of non-application",
                               "path": "4.1.2.3.2.1.1",
-                              "verses": [],
+                              "verses": [
+                                "4.37"
+                              ],
                               "children": []
                             },
                             {
@@ -10664,32 +10666,32 @@
     ],
     "4.37": [
       {
-        "section": "3",
-        "title": "The productive cause: the generation of bodhicitta"
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
       },
       {
-        "section": "3.2",
-        "title": "Generating bodhicitta in one's stream of being"
+        "section": "4.1",
+        "title": "Concern"
       },
       {
-        "section": "3.2.1",
-        "title": "Preliminaries"
+        "section": "4.1.2",
+        "title": "Concern for the training"
       },
       {
-        "section": "3.2.1.3",
-        "title": "Confession"
+        "section": "4.1.2.3",
+        "title": "Concern to abandon the defilements"
       },
       {
-        "section": "3.2.1.3.3",
-        "title": "The power of antidote"
+        "section": "4.1.2.3.2",
+        "title": "Rejecting the idea that application will create suffering"
       },
       {
-        "section": "3.2.1.3.3.2",
-        "title": "Advice to engage in it quickly"
+        "section": "4.1.2.3.2.1",
+        "title": "The faults of non-application"
       },
       {
-        "section": "3.2.1.3.3.2.1",
-        "title": "The example of an illness"
+        "section": "4.1.2.3.2.1.1",
+        "title": "An example of being subject to the faults of non-application"
       }
     ],
     "2.57": [
@@ -10926,6 +10928,42 @@
         "title": "Rejoicing in the cause"
       }
     ],
+    "3.5": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.5",
+        "title": "Requesting the wheel of dharma be turned"
+      }
+    ],
+    "3.6": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.6",
+        "title": "Supplicating the Buddhas not to enter nirvāṇa"
+      }
+    ],
     "3.7": [
       {
         "section": "3",
@@ -10941,7 +10979,7 @@
       },
       {
         "section": "3.2.1.7",
-        "title": "Dedication of merit"
+        "title": "Dedication of the roots of merit"
       },
       {
         "section": "3.2.1.7.1",
@@ -10963,7 +11001,7 @@
       },
       {
         "section": "3.2.1.7",
-        "title": "Dedication of merit"
+        "title": "Dedication of the roots of merit"
       },
       {
         "section": "3.2.1.7.2",
@@ -10985,7 +11023,7 @@
       },
       {
         "section": "3.2.1.7",
-        "title": "Dedication of merit"
+        "title": "Dedication of the roots of merit"
       },
       {
         "section": "3.2.1.7.3",
@@ -11007,7 +11045,7 @@
       },
       {
         "section": "3.2.1.7",
-        "title": "Dedication of merit"
+        "title": "Dedication of the roots of merit"
       },
       {
         "section": "3.2.1.7.4",
@@ -37088,6 +37126,8 @@
     "3.2.1.4.3": "3.3",
     "3.2.1.4.3.1": "3.3",
     "3.2.1.4.3.2": "3.4",
+    "3.2.1.5": "3.5",
+    "3.2.1.6": "3.6",
     "3.2.1.7": "3.7",
     "3.2.1.7.1": "3.7",
     "3.2.1.7.2": "3.8",
@@ -37165,7 +37205,8 @@
     "4.1.2.3.1.2.1": "4.34",
     "4.1.2.3.1.2.2": "4.35",
     "4.1.2.3.2": "4.43ab",
-    "4.1.2.3.2.1": "4.38",
+    "4.1.2.3.2.1": "4.37",
+    "4.1.2.3.2.1.1": "4.37",
     "4.1.2.3.2.1.2": "4.38",
     "4.1.2.3.2.2": "4.39",
     "4.1.2.3.2.2.1": "4.39",
