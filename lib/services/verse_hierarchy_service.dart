@@ -134,6 +134,48 @@ class VerseHierarchyService {
     return out;
   }
 
+  /// For a base ref (e.g. "7.7") that splits into ab/cd in different sections,
+  /// returns segments [(ref, leafSectionPath), ...] in document order.
+  /// Empty if ref is not split or not found.
+  List<({String ref, String sectionPath})> getSplitVerseSegmentsSync(
+      String baseRef) {
+    if (_map == null || !RegExp(r'^\d+\.\d+$').hasMatch(baseRef)) {
+      return [];
+    }
+    final verseToPath = _map!['verseToPath'];
+    if (verseToPath == null || verseToPath is! Map) return [];
+    final abPath = verseToPath['${baseRef}ab'];
+    final cdPath = verseToPath['${baseRef}cd'];
+    final aPath = verseToPath['${baseRef}a'];
+    final bcdPath = verseToPath['${baseRef}bcd'];
+    final segments = <({String ref, String sectionPath})>[];
+    String? leafSection(dynamic path) {
+      if (path is! List || path.isEmpty) return null;
+      final last = path.last;
+      if (last is Map) {
+        return (last['section'] ?? last['path'] ?? '').toString();
+      }
+      return null;
+    }
+
+    if (abPath != null && cdPath != null) {
+      final abLeaf = leafSection(abPath);
+      final cdLeaf = leafSection(cdPath);
+      if (abLeaf != null && cdLeaf != null && abLeaf != cdLeaf) {
+        segments.add((ref: '${baseRef}ab', sectionPath: abLeaf));
+        segments.add((ref: '${baseRef}cd', sectionPath: cdLeaf));
+      }
+    } else if (aPath != null && bcdPath != null) {
+      final aLeaf = leafSection(aPath);
+      final bcdLeaf = leafSection(bcdPath);
+      if (aLeaf != null && bcdLeaf != null && aLeaf != bcdLeaf) {
+        segments.add((ref: '${baseRef}a', sectionPath: aLeaf));
+        segments.add((ref: '${baseRef}bcd', sectionPath: bcdLeaf));
+      }
+    }
+    return segments;
+  }
+
   /// Synchronous getter - call after _ensureLoaded() or getHierarchyForVerse has been called.
   List<Map<String, String>> getHierarchyForVerseSync(String ref) {
     if (_map == null) return [];

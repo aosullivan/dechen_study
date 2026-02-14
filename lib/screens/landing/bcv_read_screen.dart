@@ -65,7 +65,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Timer? _visibilityDebounceTimer;
 
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
-  final Map<int, double> _verseVisibility = {};
+  final Map<String, double> _verseVisibility = {};
 
   /// Animated section overlay: rect we're sliding from and to.
   Rect? _sectionOverlayRectFrom;
@@ -74,6 +74,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   int _sectionOverlayMeasureRetries = 0;
   static const int _maxMeasureRetries = 5;
   final Map<int, GlobalKey> _verseKeys = {};
+  final Map<String, GlobalKey> _verseSegmentKeys = {};
   GlobalKey _scrollContentKey = GlobalKey();
   final ScrollController _sectionSliderScrollController = ScrollController();
   static const double _sectionSliderLineHeight = 22.0;
@@ -91,7 +92,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _chaptersPanelCollapsed = false;
 
   double _rightPanelsWidth = 360;
-  double _chaptersPanelHeight = 110;
+  double _chaptersPanelHeight = 80;
   double _breadcrumbPanelHeight = 120;
   double _sectionPanelHeight = 220;
 
@@ -262,8 +263,32 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     Rect? measured;
     const padH = 12.0;
     const padV = 8.0;
+    final currentPath = _breadcrumbHierarchy.isNotEmpty
+        ? (_breadcrumbHierarchy.last['section'] ??
+            _breadcrumbHierarchy.last['path'] ??
+            '')
+        : '';
     for (final idx in run) {
-      final key = _verseKeys[idx];
+      final ref = _verseService.getVerseRef(idx);
+      GlobalKey? key;
+      if (ref != null &&
+          RegExp(r'^\d+\.\d+$').hasMatch(ref) &&
+          currentPath.isNotEmpty) {
+        final segments =
+            _hierarchyService.getSplitVerseSegmentsSync(ref);
+        if (segments.length >= 2) {
+          final matching = segments
+              .where((s) => s.sectionPath == currentPath)
+              .toList();
+          if (matching.length == 1) {
+            final segIdx = segments.indexOf(matching.single);
+            key = segIdx == 0
+                ? _verseKeys[idx]
+                : _verseSegmentKeys['${idx}_$segIdx'];
+          }
+        }
+      }
+      key ??= _verseKeys[idx];
       if (key?.currentContext == null) continue;
       final verseBox = key!.currentContext!.findRenderObject() as RenderBox?;
       if (verseBox == null || !verseBox.hasSize) continue;
@@ -438,7 +463,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _setInitialBreadcrumb() {
     final initialIndex = _scrollTargetVerseIndex ?? 0;
     if (initialIndex < _verses.length) {
-      _visibleVerseIndex = null; // Allow _updateBreadcrumbForVerse to process
+      _visibleVerseIndex = null;
+      _visibleVerseSegmentRef = null; // Allow _updateBreadcrumbForVerse to process
       _updateBreadcrumbForVerse(initialIndex);
     }
   }
@@ -562,40 +588,54 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
-  void _onVerseVisibilityChanged(int verseIndex, double visibility) {
+  void _onVerseVisibilityChanged(int verseIndex, double visibility,
+      {String? segmentRef}) {
+    final key = segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
     if (visibility < 0.05) {
-      _verseVisibility.remove(verseIndex);
+      _verseVisibility.remove(key);
       return;
     }
-    _verseVisibility[verseIndex] = visibility;
-    if (_visibilityDebounceTimer?.isActive ?? false)
-      return; // Throttle: already scheduled
+    _verseVisibility[key] = visibility;
+    if (_visibilityDebounceTimer?.isActive ?? false) return;
     _visibilityDebounceTimer = Timer(const Duration(milliseconds: 120), () {
       _visibilityDebounceTimer = null;
       if (!mounted || _verseVisibility.isEmpty) return;
-      // Pick the verse with highest visibility = most in view (typically near center)
       final best =
           _verseVisibility.entries.reduce((a, b) => a.value >= b.value ? a : b);
-      // Hysteresis: when two verses at a section boundary have nearly equal visibility,
-      // prefer the current section to avoid flip-flopping while scrolling
       const hysteresis = 0.08;
-      final currentVis = _visibleVerseIndex != null
-          ? _verseVisibility[_visibleVerseIndex] ?? 0.0
-          : 0.0;
-      final verseToUse = (_visibleVerseIndex != null &&
-              currentVis >= 0.05 &&
-              (best.value - currentVis).abs() < hysteresis)
-          ? _visibleVerseIndex!
-          : best.key;
-      _updateBreadcrumbForVerse(verseToUse);
+      final currentKey = _visibleVerseIndex != null
+          ? (_visibleVerseSegmentRef != null
+              ? '${_visibleVerseIndex}_$_visibleVerseSegmentRef'
+              : '$_visibleVerseIndex')
+          : null;
+      final currentVis = currentKey != null ? _verseVisibility[currentKey] ?? 0.0 : 0.0;
+      final useCurrent = currentKey != null &&
+          _visibleVerseIndex != null &&
+          currentVis >= 0.05 &&
+          (best.value - currentVis).abs() < hysteresis;
+      final keyToUse = useCurrent ? currentKey : best.key;
+      final parts = keyToUse.split('_');
+      final verseToUse = int.tryParse(parts.first) ?? _visibleVerseIndex ?? 0;
+      final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
+      _updateBreadcrumbForVerse(verseToUse, segmentRef: segRef);
     });
   }
 
-  void _updateBreadcrumbForVerse(int verseIndex) {
-    if (_visibleVerseIndex == verseIndex) return;
+  /// For split verses: the segment ref (e.g. "7.7ab") currently in view.
+  String? _visibleVerseSegmentRef;
+
+  void _updateBreadcrumbForVerse(int verseIndex, {String? segmentRef}) {
+    if (_visibleVerseIndex == verseIndex &&
+        _visibleVerseSegmentRef == segmentRef) return;
     _visibleVerseIndex = verseIndex;
-    _hierarchyService.getHierarchyForVerseIndex(verseIndex).then((hierarchy) {
-      if (!mounted || _visibleVerseIndex != verseIndex) return;
+    _visibleVerseSegmentRef = segmentRef;
+    final future = segmentRef != null
+        ? _hierarchyService.getHierarchyForVerse(segmentRef)
+        : _hierarchyService.getHierarchyForVerseIndex(verseIndex);
+    future.then((hierarchy) {
+      if (!mounted ||
+          _visibleVerseIndex != verseIndex ||
+          _visibleVerseSegmentRef != segmentRef) return;
       final sectionPath = hierarchy.isNotEmpty
           ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
           : '';
@@ -1018,6 +1058,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         itemBuilder: (context, index) {
           final item = flat[index];
           final isCurrent = item.path == currentPath;
+          final isAncestor = currentPath.isNotEmpty &&
+              (item.path == currentPath ||
+                  currentPath.startsWith('${item.path}.'));
           final indent = item.depth * 12.0;
           return Material(
             color: isCurrent
@@ -1047,9 +1090,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 fontSize: 12,
                                 color: isCurrent
                                     ? const Color(0xFF2C2416)
-                                    : const Color(0xFF8B7355)
-                                        .withValues(alpha: 0.9),
-                                fontWeight: isCurrent
+                                    : isAncestor
+                                        ? const Color(0xFF5C4A3A)
+                                        : const Color(0xFF8B7355)
+                                            .withValues(alpha: 0.9),
+                                fontWeight: isAncestor
                                     ? FontWeight.w600
                                     : FontWeight.normal,
                               ) ??
@@ -1383,38 +1428,121 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                   ),
                                 );
 
-                            Widget buildVerseContent(int idx, String text) {
-                              _verseKeys[idx] ??= GlobalKey();
+                            Widget buildVerseContent(int idx, String text,
+                                {List<int>? lineRange,
+                                int? segmentIndex,
+                                String? segmentRef}) {
+                              final lines = text.split('\n');
+                              final displayText = lineRange != null &&
+                                      lineRange.length == 2 &&
+                                      lineRange[0] >= 0 &&
+                                      lineRange[1] < lines.length
+                                  ? lines
+                                      .sublist(lineRange[0], lineRange[1] + 1)
+                                      .join('\n')
+                                  : text;
+                              final isSplitSegment =
+                                  segmentIndex != null && segmentIndex > 0;
+                              if (!isSplitSegment) {
+                                _verseKeys[idx] ??= GlobalKey();
+                              } else {
+                                _verseSegmentKeys['${idx}_$segmentIndex'] ??=
+                                    GlobalKey();
+                              }
                               final isTargetVerse =
                                   _scrollTargetVerseIndex != null &&
                                       _scrollTargetVerseIndex == idx &&
-                                      _scrollToVerseKey != null;
+                                      _scrollToVerseKey != null &&
+                                      (segmentIndex ?? 0) == 0;
                               Widget w = GestureDetector(
                                 onTap: () => _onVerseTap(idx),
                                 behavior: HitTestBehavior.opaque,
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 20),
-                                  child: Text(text, style: verseStyle),
+                                  child: Text(displayText, style: verseStyle),
                                 ),
                               );
                               if (isTargetVerse) {
                                 w = KeyedSubtree(
                                     key: _scrollToVerseKey, child: w);
                               }
+                              final subtreeKey = isSplitSegment
+                                  ? _verseSegmentKeys['${idx}_$segmentIndex']
+                                  : _verseKeys[idx];
+                              final key = subtreeKey ??
+                                  ValueKey('verse_${idx}_seg_$segmentIndex');
                               return VisibilityDetector(
-                                key: ValueKey('verse_$idx'),
+                                key: ValueKey(
+                                    'verse_${idx}_${lineRange ?? 'full'}'),
                                 onVisibilityChanged: (info) =>
                                     _onVerseVisibilityChanged(
-                                        idx, info.visibleFraction),
+                                        idx, info.visibleFraction,
+                                        segmentRef: segmentRef),
                                 child: KeyedSubtree(
-                                  key: _verseKeys[idx],
+                                  key: key,
                                   child: w,
                                 ),
                               );
                             }
 
+                            /// For ab/cd split: ab = first half of lines, cd = second half.
+                            List<int>? lineRangeForSegment(
+                                int segmentIndex, int lineCount) {
+                              if (lineCount < 2 || segmentIndex > 1) return null;
+                              final half = lineCount ~/ 2;
+                              if (segmentIndex == 0) {
+                                return [0, half - 1];
+                              }
+                              return [half, lineCount - 1];
+                            }
+
                             Widget wrapInBox(List<int> indices,
                                 {required bool darker}) {
+                              if (indices.length == 1) {
+                                final idx = indices.single;
+                                final ref = _verseService.getVerseRef(idx);
+                                if (ref != null &&
+                                    RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+                                  final segments = _hierarchyService
+                                      .getSplitVerseSegmentsSync(ref);
+                                  if (segments.length >= 2) {
+                                    final text =
+                                        idx < _verses.length ? _verses[idx] : '';
+                                    final lines = text.split('\n');
+                                    if (lines.length >= 2) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          for (var i = 0;
+                                              i < segments.length;
+                                              i++)
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Container(
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 8),
+                                                decoration: boxDecoration(
+                                                    darker: darker),
+                                                child: buildVerseContent(
+                                                  idx,
+                                                  text,
+                                                  lineRange:
+                                                      lineRangeForSegment(
+                                                          i, lines.length),
+                                                  segmentIndex: i,
+                                                  segmentRef: segments[i].ref,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    }
+                                  }
+                                }
+                              }
                               final verseWidgets = indices.map((idx) {
                                 final text =
                                     idx < _verses.length ? _verses[idx] : '';
@@ -1507,13 +1635,55 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 continue;
                               }
 
-                              // Section highlight is drawn via animated overlay (no inline box)
-                              children.add(
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: buildVerseContent(globalIndex, verse),
-                                ),
-                              );
+                              // Section highlight is drawn via animated overlay.
+                              // For split verses, render as two blocks so overlay can highlight each segment.
+                              final ref = _verseService.getVerseRef(globalIndex);
+                              final isSplit = ref != null &&
+                                  RegExp(r'^\d+\.\d+$').hasMatch(ref) &&
+                                  _hierarchyService
+                                      .getSplitVerseSegmentsSync(ref)
+                                      .length >= 2;
+                              if (isSplit) {
+                                final segments = _hierarchyService
+                                    .getSplitVerseSegmentsSync(ref);
+                                final lines = verse.split('\n');
+                                if (lines.length >= 2) {
+                                  for (var i = 0; i < segments.length; i++) {
+                                    final range =
+                                        lineRangeForSegment(i, lines.length);
+                                    if (range != null) {
+                                      children.add(
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: buildVerseContent(
+                                            globalIndex,
+                                            verse,
+                                            lineRange: range,
+                                            segmentIndex: i,
+                                            segmentRef: segments[i].ref,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                } else {
+                                  children.add(
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: buildVerseContent(
+                                          globalIndex, verse),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                children.add(
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: buildVerseContent(
+                                        globalIndex, verse),
+                                  ),
+                                );
+                              }
                             }
                             return children;
                           }(),

@@ -436,6 +436,8 @@ void main() async {
     '1.7ab': '3.1.1.1.2', // It benefits oneself
     '1.7cd': '3.1.1.1.3', // It has the power to benefit others
     '6.124': '4.3.2.1.4.3.2.2.3.2.1.5', // Confessing needless faults before the Sage
+    '7.7ab': '4.4.3.2.2.4', // Impossible to hold back time
+    '7.7cd': '4.4.3.2.2.5', // The time of death is too late
   };
 
   OverviewNode? findNodeByPath(OverviewNode n, String path) {
