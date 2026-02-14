@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -36,7 +38,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// When set (after tapping a verse), scroll to this verse on next frame then clear.
   int? _scrollToVerseIndexAfterTap;
   /// Verses to highlight (set when arriving from Daily or when user taps a verse); cleared on reload.
-  Set<int> _highlightVerseIndices = {};
+  Set<int>? _highlightVerseIndices = {};
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
   /// When true, show commentary inline below the verses (instead of modal).
@@ -48,12 +50,18 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   int? _visibleVerseIndex;
   /// Section hierarchy for the visible verse. Each has 'section' and 'title'.
   List<Map<String, String>> _breadcrumbHierarchy = [];
+  /// Verse indices belonging to the current section (for faint box highlight).
+  Set<int>? _currentSectionVerseIndices = {};
+  /// Cache: section path -> verse indices (avoids recomputing on same section).
+  final Map<String, Set<int>> _sectionVerseIndicesCache = {};
+  Timer? _visibilityDebounceTimer;
+  int? _pendingVisibilityVerseIndex;
 
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
     if (_scrollToVerseIndexAfterTap != null) return _scrollToVerseIndexAfterTap;
-    if (_highlightVerseIndices.isNotEmpty) {
-      return _highlightVerseIndices.reduce((a, b) => a < b ? a : b);
+    if ((_highlightVerseIndices ?? {}).isNotEmpty) {
+      return (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
     }
     if (widget.scrollToVerseIndex != null) return widget.scrollToVerseIndex;
     if (widget.highlightSectionIndices != null && widget.highlightSectionIndices!.isNotEmpty) {
@@ -71,11 +79,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _load();
   }
 
+  @override
+  void dispose() {
+    _visibilityDebounceTimer?.cancel();
+    super.dispose();
+  }
+
   Future<void> _load() async {
     setState(() {
       _loading = true;
       _error = null;
       _highlightVerseIndices = {};
+      _currentSectionVerseIndices = {};
+      _sectionVerseIndicesCache.clear();
       _commentaryEntryForSelected = null;
       _commentaryExpanded = false;
     });
@@ -99,7 +115,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         if (widget.scrollToVerseIndex != null && _scrollToVerseKey != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToVerseWidget());
         }
-        if (widget.highlightSectionIndices != null && _highlightVerseIndices.isNotEmpty) {
+        if (widget.highlightSectionIndices != null && (_highlightVerseIndices ?? {}).isNotEmpty) {
           _loadCommentaryForHighlightedSection();
         }
         _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
@@ -133,8 +149,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
-    if (_highlightVerseIndices.isEmpty) return;
-    final firstIndex = _highlightVerseIndices.reduce((a, b) => a < b ? a : b);
+    if ((_highlightVerseIndices ?? {}).isEmpty) return;
+    final firstIndex = (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
     final ref = _verseService.getVerseRef(firstIndex);
     if (ref == null) return;
     final entry = await _commentaryService.getCommentaryForRef(ref);
@@ -146,8 +162,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Consecutive verse indices from _highlightVerseIndices, for one continuous highlight per run.
   List<List<int>> _getHighlightRuns() {
-    if (_highlightVerseIndices.isEmpty) return [];
-    final sorted = _highlightVerseIndices.toList()..sort();
+    if ((_highlightVerseIndices ?? {}).isEmpty) return [];
+    final sorted = (_highlightVerseIndices ?? {}).toList()..sort();
     final runs = <List<int>>[];
     var current = [sorted.first];
     for (var i = 1; i < sorted.length; i++) {
@@ -162,9 +178,29 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return runs;
   }
 
+  /// Consecutive verse indices in current section but NOT in highlight (for faint box).
+  List<List<int>> _getSectionRuns() {
+    final section = _currentSectionVerseIndices ?? {};
+    final highlight = _highlightVerseIndices ?? {};
+    final sectionOnly = section.difference(highlight).toList()..sort();
+    if (sectionOnly.isEmpty) return [];
+    final runs = <List<int>>[];
+    var current = [sectionOnly.first];
+    for (var i = 1; i < sectionOnly.length; i++) {
+      if (sectionOnly[i] == current.last + 1) {
+        current.add(sectionOnly[i]);
+      } else {
+        runs.add(current);
+        current = [sectionOnly[i]];
+      }
+    }
+    runs.add(current);
+    return runs;
+  }
+
   Future<void> _onVerseTap(int globalIndex) async {
     // If clicking a verse that's already highlighted, clear selection
-    if (_highlightVerseIndices.contains(globalIndex)) {
+    if ((_highlightVerseIndices ?? {}).contains(globalIndex)) {
       setState(() {
         _highlightVerseIndices = {};
         _commentaryEntryForSelected = null;
@@ -205,11 +241,27 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         verseIndicesInBlock.add(idx);
       }
     }
-    final firstInSection = verseIndicesInBlock.reduce((a, b) => a < b ? a : b);
-    
-    // Switch to new section: highlight only the new section, hide previous commentary (one open at a time)
+    // Highlight only the consecutive run containing the tapped verse (avoids 2+ boxes when block has gaps)
+    final sorted = verseIndicesInBlock.toList()..sort();
+    final highlightRun = <int>{};
+    var runStart = 0;
+    for (var i = 0; i <= sorted.length; i++) {
+      if (i < sorted.length && (i == 0 || sorted[i] == sorted[i - 1] + 1)) {
+        continue; // same run
+      }
+      final run = sorted.sublist(runStart, i);
+      if (run.contains(globalIndex)) {
+        highlightRun.addAll(run);
+        break;
+      }
+      runStart = i;
+    }
+    if (highlightRun.isEmpty) highlightRun.add(globalIndex);
+    final firstInSection = highlightRun.reduce((a, b) => a < b ? a : b);
+
+    // Switch to new section: highlight only the run containing tapped verse, hide previous commentary
     setState(() {
-      _highlightVerseIndices = verseIndicesInBlock;
+      _highlightVerseIndices = highlightRun;
       _commentaryEntryForSelected = entry;
       _commentaryExpanded = false;
       _scrollToVerseIndexAfterTap = firstInSection;
@@ -249,14 +301,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _setInitialBreadcrumb() {
     final initialIndex = _scrollTargetVerseIndex ?? 0;
     if (initialIndex < _verses.length) {
-      _visibleVerseIndex = initialIndex;
-      _hierarchyService.getHierarchyForVerseIndex(initialIndex).then((hierarchy) {
-        if (mounted && _visibleVerseIndex == initialIndex) {
-          setState(() {
-            _breadcrumbHierarchy = hierarchy;
-          });
-        }
-      });
+      _visibleVerseIndex = null; // Allow _updateBreadcrumbForVerse to process
+      _updateBreadcrumbForVerse(initialIndex);
     }
   }
 
@@ -267,7 +313,28 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return parts.last;
   }
 
-  Widget _buildBreadcrumbItem(Map<String, String> item, int index) {
+  Future<void> _onBreadcrumbSectionTap(Map<String, String> item) async {
+    final section = item['section'] ?? item['path'] ?? '';
+    if (section.isEmpty) return;
+    final firstVerseRef = await _hierarchyService.getFirstVerseForSection(section);
+    if (firstVerseRef == null) return;
+    final verseIndex = _verseService.getIndexForRef(firstVerseRef);
+    if (verseIndex == null) return;
+    _scrollToVerseIndex(verseIndex);
+  }
+
+  void _scrollToVerseIndex(int index) {
+    _scrollToVerseIndexAfterTap = index;
+    _scrollToVerseKey ??= GlobalKey();
+    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _scrollToVerseWidget();
+      setState(() => _scrollToVerseIndexAfterTap = null);
+    });
+  }
+
+  Widget _buildBreadcrumbItem(Map<String, String> item, int index, {VoidCallback? onTap}) {
     final section = item['section'] ?? item['path'] ?? '';
     final title = item['title'] ?? '';
     // Use section path if available, otherwise fallback to index+1 (for legacy/cached data)
@@ -280,7 +347,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           fontFamily: 'Lora',
           color: baseColor,
         ) ?? const TextStyle(fontFamily: 'Lora', fontSize: 12);
-    return Row(
+    final content = Row(
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
       children: [
@@ -299,18 +366,64 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ),
       ],
     );
+    if (onTap == null) return content;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(4),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+          child: content,
+        ),
+      ),
+    );
   }
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility) {
-    if (visibility < 0.3) return;
+    if (visibility < 0.35) return;
+    _pendingVisibilityVerseIndex = verseIndex;
+    if (_visibilityDebounceTimer?.isActive ?? false) return; // Throttle: already scheduled
+    _visibilityDebounceTimer = Timer(const Duration(milliseconds: 120), () {
+      _visibilityDebounceTimer = null;
+      final idx = _pendingVisibilityVerseIndex;
+      if (idx == null || !mounted) return;
+      _updateBreadcrumbForVerse(idx);
+    });
+  }
+
+  void _updateBreadcrumbForVerse(int verseIndex) {
     if (_visibleVerseIndex == verseIndex) return;
     _visibleVerseIndex = verseIndex;
     _hierarchyService.getHierarchyForVerseIndex(verseIndex).then((hierarchy) {
-      if (mounted && _visibleVerseIndex == verseIndex) {
-        setState(() {
-          _breadcrumbHierarchy = hierarchy;
-        });
+      if (!mounted || _visibleVerseIndex != verseIndex) return;
+      final sectionPath = hierarchy.isNotEmpty
+          ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
+          : '';
+      Set<int> indices = _sectionVerseIndicesCache[sectionPath] ?? const {};
+      if (indices.isEmpty && sectionPath.isNotEmpty) {
+        final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
+        indices = <int>{};
+        for (final ref in refs) {
+          final i = _verseService.getIndexForRef(ref);
+          if (i != null) indices.add(i);
+        }
+        _sectionVerseIndicesCache[sectionPath] = indices;
       }
+      final oldPath = _breadcrumbHierarchy.isNotEmpty
+          ? (_breadcrumbHierarchy.last['section'] ?? _breadcrumbHierarchy.last['path'] ?? '')
+          : '';
+      final oldIndices = _currentSectionVerseIndices ?? {};
+      if (sectionPath == oldPath &&
+          indices.length == oldIndices.length &&
+          indices.difference(oldIndices).isEmpty) {
+        return;
+      }
+      if (!mounted) return;
+      setState(() {
+        _breadcrumbHierarchy = hierarchy;
+        _currentSectionVerseIndices = indices;
+      });
     });
   }
 
@@ -569,7 +682,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           for (var i = 0; i < _breadcrumbHierarchy.length; i++)
             Padding(
               padding: EdgeInsets.only(left: i * indentPerLevel),
-              child: _buildBreadcrumbItem(_breadcrumbHierarchy[i], i),
+              child: _buildBreadcrumbItem(
+                _breadcrumbHierarchy[i],
+                i,
+                onTap: () => _onBreadcrumbSectionTap(_breadcrumbHierarchy[i]),
+              ),
             ),
         ],
       ),
@@ -591,12 +708,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           final verseTexts = ch.startVerseIndex < _verses.length
               ? _verses.sublist(ch.startVerseIndex, ch.endVerseIndex.clamp(0, _verses.length))
               : <String>[];
-          return Column(
-            key: key,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Chapter ${ch.number}: ${ch.title}',
+          return RepaintBoundary(
+            child: Column(
+              key: key,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Chapter ${ch.number}: ${ch.title}',
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       fontFamily: 'Crimson Text',
                       color: const Color(0xFF2C2416),
@@ -604,57 +722,76 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               ),
               const SizedBox(height: 24),
               ...() {
-                final runs = _getHighlightRuns();
-                final usedInRun = <int>{};
                 final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontFamily: 'Crimson Text',
                       fontSize: 18,
                       height: 1.8,
                       color: const Color(0xFF2C2416),
                     );
-                final highlightDecoration = BoxDecoration(
-                  color: const Color(0xFFEADCC4).withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: const Color(0xFF8B7355).withValues(alpha: 0.4),
-                    width: 1,
-                  ),
-                );
-
-                Widget buildSingleVerse(int gIdx, String verseText) {
-                  final isTargetVerse = _scrollTargetVerseIndex != null &&
-                      _scrollTargetVerseIndex == gIdx &&
-                      _scrollToVerseKey != null;
-                  Widget w = Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Text(verseText, style: verseStyle),
+                // Unified box: same shape, faint (section) vs darker (commentary)
+                BoxDecoration boxDecoration({required bool darker}) =>
+                  BoxDecoration(
+                    color: darker
+                        ? const Color(0xFFEADCC4).withValues(alpha: 0.5)
+                        : const Color(0xFF8B7355).withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: const Color(0xFF8B7355).withValues(
+                        alpha: darker ? 0.45 : 0.22,
+                      ),
+                      width: 1,
+                    ),
                   );
-                  if (_highlightVerseIndices.contains(gIdx)) {
-                    w = Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: highlightDecoration,
-                      child: w,
-                    );
-                  }
-                  w = GestureDetector(
-                    onTap: () => _onVerseTap(gIdx),
+
+                Widget buildVerseContent(int idx, String text) {
+                  final isTargetVerse = _scrollTargetVerseIndex != null &&
+                      _scrollTargetVerseIndex == idx &&
+                      _scrollToVerseKey != null;
+                  Widget w = GestureDetector(
+                    onTap: () => _onVerseTap(idx),
                     behavior: HitTestBehavior.opaque,
-                    child: w,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Text(text, style: verseStyle),
+                    ),
                   );
                   if (isTargetVerse) {
                     w = KeyedSubtree(key: _scrollToVerseKey, child: w);
                   }
                   return VisibilityDetector(
-                    key: ValueKey('verse_$gIdx'),
+                    key: ValueKey('verse_$idx'),
                     onVisibilityChanged: (info) =>
-                        _onVerseVisibilityChanged(gIdx, info.visibleFraction),
+                        _onVerseVisibilityChanged(idx, info.visibleFraction),
                     child: w,
                   );
                 }
 
+                Widget wrapInBox(List<int> indices, {required bool darker}) {
+                  final verseWidgets = indices.map((idx) {
+                    final text = idx < _verses.length ? _verses[idx] : '';
+                    return buildVerseContent(idx, text);
+                  }).toList();
+                  return SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: boxDecoration(darker: darker),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: verseWidgets,
+                      ),
+                    ),
+                  );
+                }
+
                 final children = <Widget>[];
-                List<int>? runContaining(int idx) {
-                  for (final r in runs) {
+                final highlightRuns = _getHighlightRuns();
+                final sectionRuns = _getSectionRuns();
+                final usedInRun = <int>{};
+                final usedInSectionRun = <int>{};
+
+                List<int>? runContaining(int idx, List<List<int>> runList) {
+                  for (final r in runList) {
                     if (r.contains(idx)) return r;
                   }
                   return null;
@@ -664,51 +801,21 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   final localIndex = entry.key;
                   final verse = entry.value;
                   final globalIndex = ch.startVerseIndex + localIndex;
+
                   if (usedInRun.contains(globalIndex)) continue;
-                  final run = runContaining(globalIndex);
-                  if (run != null && run.first == globalIndex) {
-                    for (final idx in run) {
+
+                  final highlightRun = runContaining(globalIndex, highlightRuns);
+                  if (highlightRun != null && highlightRun.first == globalIndex) {
+                    for (final idx in highlightRun) {
                       usedInRun.add(idx);
                     }
-                    final runVerseWidgets = run.map((idx) {
-                      final text = idx < _verses.length ? _verses[idx] : '';
-                      final isTargetVerse = _scrollTargetVerseIndex != null &&
-                          _scrollTargetVerseIndex == idx &&
-                          _scrollToVerseKey != null;
-                      Widget w = Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Text(text, style: verseStyle),
-                      );
-                      w = GestureDetector(
-                        onTap: () => _onVerseTap(idx),
-                        behavior: HitTestBehavior.opaque,
-                        child: w,
-                      );
-                      if (isTargetVerse) {
-                        w = KeyedSubtree(key: _scrollToVerseKey, child: w);
-                      }
-                      return VisibilityDetector(
-                        key: ValueKey('verse_$idx'),
-                        onVisibilityChanged: (info) =>
-                            _onVerseVisibilityChanged(idx, info.visibleFraction),
-                        child: w,
-                      );
-                    }).toList();
-                    final highlightBlock = Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: highlightDecoration,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: runVerseWidgets,
-                      ),
-                    );
                     final hasCommentary = _commentaryEntryForSelected != null;
-                    final entry = _commentaryEntryForSelected;
+                    final commentaryEntry = _commentaryEntryForSelected;
                     children.add(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          highlightBlock,
+                          wrapInBox(highlightRun, darker: true),
                           if (hasCommentary) ...[
                             const SizedBox(height: 8),
                             TextButton.icon(
@@ -727,22 +834,40 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 ),
                               ),
                             ),
-                            if (_commentaryExpanded && entry != null) ...[
-                              _buildInlineCommentaryPanel(entry),
+                            if (_commentaryExpanded && commentaryEntry != null) ...[
+                              _buildInlineCommentaryPanel(commentaryEntry),
                             ],
                           ],
                           const SizedBox(height: 8),
                         ],
                       ),
                     );
-                  } else {
-                    children.add(buildSingleVerse(globalIndex, verse));
+                    continue;
                   }
+
+                  if (usedInSectionRun.contains(globalIndex)) continue;
+
+                  final sectionRun = runContaining(globalIndex, sectionRuns);
+                  if (sectionRun != null && sectionRun.first == globalIndex) {
+                    for (final idx in sectionRun) {
+                      usedInSectionRun.add(idx);
+                    }
+                    children.add(wrapInBox(sectionRun, darker: false));
+                    continue;
+                  }
+
+                  children.add(
+                    SizedBox(
+                      width: double.infinity,
+                      child: buildVerseContent(globalIndex, verse),
+                    ),
+                  );
                 }
                 return children;
               }(),
               const SizedBox(height: 32),
             ],
+            ),
           );
         }).toList(),
             ),

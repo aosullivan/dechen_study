@@ -44,11 +44,43 @@ class VerseHierarchyService {
     }).toList();
   }
 
+  /// Returns the first verse ref for a section path (e.g. "3.1.3"), or null.
+  Future<String?> getFirstVerseForSection(String sectionPath) async {
+    await _ensureLoaded();
+    final map = _map?['sectionToFirstVerse'];
+    if (map == null || map is! Map) return null;
+    final ref = map[sectionPath];
+    return ref?.toString();
+  }
+
   /// Returns the hierarchy for the verse at [index]. Uses BcvVerseService to resolve ref.
   Future<List<Map<String, String>>> getHierarchyForVerseIndex(int index) async {
     final ref = BcvVerseService.instance.getVerseRef(index);
     if (ref == null) return [];
     return getHierarchyForVerse(ref);
+  }
+
+  /// Returns verse refs whose path contains [sectionPath] (section + descendants).
+  /// Call after _ensureLoaded() or any getter has been called.
+  Set<String> getVerseRefsForSectionSync(String sectionPath) {
+    if (_map == null || sectionPath.isEmpty) return {};
+    final verseToPath = _map!['verseToPath'];
+    if (verseToPath == null || verseToPath is! Map) return {};
+    final refs = <String>{};
+    for (final e in verseToPath.entries) {
+      final path = e.value;
+      if (path is! List) continue;
+      for (final item in path) {
+        if (item is Map) {
+          final s = (item['section'] ?? item['path'] ?? '').toString();
+          if (s == sectionPath) {
+            refs.add(e.key.toString());
+            break;
+          }
+        }
+      }
+    }
+    return refs;
   }
 
   /// Synchronous getter - call after _ensureLoaded() or getHierarchyForVerse has been called.

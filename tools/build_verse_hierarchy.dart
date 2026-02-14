@@ -292,7 +292,7 @@ void main() async {
     }
   }
 
-  // Build output: sections tree (root's children = top 5) + verseToPath for app lookup
+  // Build output: sections tree + verseToPath + sectionToFirstVerse for app lookup
   final verseToPath = <String, List<Map<String, String>>>{};
   void collectPaths(OverviewNode n) {
     for (final v in n.verses) {
@@ -301,6 +301,44 @@ void main() async {
     for (final c in n.children) collectPaths(c);
   }
   collectPaths(root);
+
+  // sectionToFirstVerse: for each section path, the first verse ref (for breadcrumb navigation).
+  // Use minimum verse from the dominant chapter (most verses) to avoid wrong refs from fuzzy matches.
+  String? getFirstVerseInNode(OverviewNode n) {
+    final all = <String>[];
+    void collect(OverviewNode node) {
+      all.addAll(node.verses);
+      for (final c in node.children) collect(c);
+    }
+    collect(n);
+    if (all.isEmpty) return null;
+    // Group by chapter, pick chapter with most verses, return its minimum verse
+    final byChapter = <int, List<String>>{};
+    for (final ref in all) {
+      final parts = ref.split('.');
+      if (parts.length == 2) {
+        final ch = int.tryParse(parts[0]) ?? 0;
+        byChapter.putIfAbsent(ch, () => []).add(ref);
+      }
+    }
+    if (byChapter.isEmpty) {
+      all.sort(_compareVerseRefs);
+      return all.first;
+    }
+    final dominant = byChapter.entries
+        .reduce((a, b) => a.value.length >= b.value.length ? a : b);
+    dominant.value.sort(_compareVerseRefs);
+    return dominant.value.first;
+  }
+  final sectionToFirstVerse = <String, String>{};
+  void collectSectionFirstVerse(OverviewNode n) {
+    if (n.title.isNotEmpty) {
+      final first = getFirstVerseInNode(n);
+      if (first != null) sectionToFirstVerse[n.path] = first;
+    }
+    for (final c in n.children) collectSectionFirstVerse(c);
+  }
+  collectSectionFirstVerse(root);
 
   // Convert to JSON-serializable format
   final verseToPathJson = <String, dynamic>{};
@@ -313,6 +351,7 @@ void main() async {
   final output = <String, dynamic>{
     'sections': sections,
     'verseToPath': verseToPathJson,
+    'sectionToFirstVerse': sectionToFirstVerse,
   };
 
   await File(outputPath).writeAsString(
