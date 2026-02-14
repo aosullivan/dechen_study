@@ -55,7 +55,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Cache: section path -> verse indices (avoids recomputing on same section).
   final Map<String, Set<int>> _sectionVerseIndicesCache = {};
   Timer? _visibilityDebounceTimer;
-  int? _pendingVisibilityVerseIndex;
+  /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
+  final Map<int, double> _verseVisibility = {};
 
   /// Animated section overlay: rect we're sliding from and to.
   Rect? _sectionOverlayRectFrom;
@@ -104,6 +105,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _sectionOverlayRectFrom = null;
       _sectionOverlayRectTo = null;
       _sectionOverlayMeasureRetries = 0;
+      _verseVisibility.clear();
       _commentaryEntryForSelected = null;
       _commentaryExpanded = false;
     });
@@ -482,14 +484,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility) {
-    if (visibility < 0.35) return;
-    _pendingVisibilityVerseIndex = verseIndex;
+    if (visibility < 0.05) {
+      _verseVisibility.remove(verseIndex);
+      return;
+    }
+    _verseVisibility[verseIndex] = visibility;
     if (_visibilityDebounceTimer?.isActive ?? false) return; // Throttle: already scheduled
     _visibilityDebounceTimer = Timer(const Duration(milliseconds: 120), () {
       _visibilityDebounceTimer = null;
-      final idx = _pendingVisibilityVerseIndex;
-      if (idx == null || !mounted) return;
-      _updateBreadcrumbForVerse(idx);
+      if (!mounted || _verseVisibility.isEmpty) return;
+      // Pick the verse with highest visibility = most in view (typically near center)
+      final best = _verseVisibility.entries
+          .reduce((a, b) => a.value >= b.value ? a : b);
+      _updateBreadcrumbForVerse(best.key);
     });
   }
 
