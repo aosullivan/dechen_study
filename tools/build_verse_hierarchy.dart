@@ -435,6 +435,7 @@ void main() async {
     '7.75': '4.4.4.2.3', // Self-control (was wrongly matching four foundations of mindfulness)
     '1.7ab': '3.1.1.1.2', // It benefits oneself
     '1.7cd': '3.1.1.1.3', // It has the power to benefit others
+    '6.124': '4.3.2.1.4.3.2.2.3.2.1.5', // Confessing needless faults before the Sage
   };
 
   OverviewNode? findNodeByPath(OverviewNode n, String path) {

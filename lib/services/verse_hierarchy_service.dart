@@ -27,13 +27,17 @@ class VerseHierarchyService {
 
   /// Returns the full section hierarchy for [ref] (e.g. "1.5").
   /// For split verses (8.19ab/cd), use cd path when ref is base "8.19" (continuation).
+  /// For verses like 7.1/7.2 in root text, fallback to 7.1a/7.1bcd etc. when base ref missing.
   Future<List<Map<String, String>>> getHierarchyForVerse(String ref) async {
     await _ensureLoaded();
     final verseToPath = _map?['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return [];
     var path = verseToPath[ref];
     if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
-      path = verseToPath['${ref}cd'] ?? verseToPath['${ref}ab'];
+      for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
+        path = verseToPath['$ref$suffix'];
+        if (path is List && path.isNotEmpty) break;
+      }
     }
     if (path is! List) return [];
     return path.map((e) {
@@ -137,7 +141,10 @@ class VerseHierarchyService {
     if (verseToPath == null || verseToPath is! Map) return [];
     var path = verseToPath[ref];
     if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
-      path = verseToPath['${ref}cd'] ?? verseToPath['${ref}ab'];
+      for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
+        path = verseToPath['$ref$suffix'];
+        if (path is List && path.isNotEmpty) break;
+      }
     }
     if (path is! List) return [];
     return path.map((e) {

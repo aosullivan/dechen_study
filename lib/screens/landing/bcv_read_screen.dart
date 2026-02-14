@@ -7,7 +7,7 @@ import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 
-/// Read screen for Bodhicaryavatara: sidebar with chapter list, main area with full text.
+/// Read screen for Bodhicaryavatara: main area with full text, right-side panels for chapters, section overview, and breadcrumb.
 /// Optional [scrollToVerseIndex] scrolls to the exact verse after first frame.
 /// Optional [highlightSectionIndices] highlights all verses in that section (e.g. from Daily).
 class BcvReadScreen extends StatefulWidget {
@@ -78,8 +78,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final ScrollController _sectionSliderScrollController = ScrollController();
   static const double _sectionSliderLineHeight = 22.0;
   static const int _sectionSliderVisibleLines = 10;
-  static const double _sidebarWidth = 180;
-  static const double _sidebarCollapsedWidth = 48;
   static const double _laptopBreakpoint = 900;
   static const double _rightPanelsMinWidth = 200;
   static const double _rightPanelsMaxWidth = 500;
@@ -88,13 +86,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   static const double _panelPaddingH = 12.0;
   static const double _panelPaddingV = 6.0;
 
-  bool _sidebarCollapsed = false;
   bool _breadcrumbCollapsed = false;
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
 
-  double _rightPanelsWidth = 280;
-  double _chaptersPanelHeight = 180;
+  double _rightPanelsWidth = 360;
+  double _chaptersPanelHeight = 110;
   double _breadcrumbPanelHeight = 120;
   double _sectionPanelHeight = 220;
 
@@ -886,15 +883,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             onPressed: () => setState(
                 () => _sectionSliderCollapsed = !_sectionSliderCollapsed),
           ),
-          IconButton(
-            icon: Icon(
-              _sidebarCollapsed ? Icons.menu_open : Icons.menu,
-              color: const Color(0xFF2C2416),
-            ),
-            tooltip: _sidebarCollapsed ? 'Show chapters' : 'Hide chapters',
-            onPressed: () =>
-                setState(() => _sidebarCollapsed = !_sidebarCollapsed),
-          ),
         ],
       ),
       body: _buildBody(),
@@ -935,81 +923,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       );
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          width: _sidebarCollapsed ? _sidebarCollapsedWidth : _sidebarWidth,
-          child: _buildSidebarContent(),
-        ),
-        Expanded(child: _buildMainContent()),
-      ],
-    );
-  }
-
-  Widget _buildSidebarContent() {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F7F3),
-        border: Border(
-          right:
-              BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
-        ),
-      ),
-      child: _sidebarCollapsed
-          ? Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () => setState(() => _sidebarCollapsed = false),
-                child: Center(
-                  child: RotatedBox(
-                    quarterTurns: 3,
-                    child: Text(
-                      'Chapters',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontFamily: 'Lora',
-                            color: const Color(0xFF8B7355),
-                          ),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-              itemCount: _chapters.length,
-              itemBuilder: (context, index) {
-                final ch = _chapters[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => _scrollToChapter(ch.number),
-                      borderRadius: BorderRadius.circular(6),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 8),
-                        child: Text(
-                          'Ch ${ch.number}: ${ch.title}',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontFamily: 'Lora',
-                                    color: const Color(0xFF2C2416),
-                                    fontSize: 13,
-                                  ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-    );
+    return _buildMainContent();
   }
 
   TextStyle get _panelTextStyle =>
@@ -1020,10 +934,22 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ) ??
       const TextStyle(fontFamily: 'Lora', fontSize: 12);
 
+  int? get _currentChapterNumber {
+    final idx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+    if (idx == null) return null;
+    for (final ch in _chapters) {
+      if (idx >= ch.startVerseIndex && idx < ch.endVerseIndex) {
+        return ch.number;
+      }
+    }
+    return null;
+  }
+
   Widget _buildChaptersPanel({double? height}) {
     if (_chapters.isEmpty) return const SizedBox.shrink();
-    final raw = height ?? _panelLineHeight * _sectionSliderVisibleLines;
+    final raw = height ?? _panelLineHeight * 5;
     final h = raw.clamp(_panelMinHeight, 400.0).toDouble();
+    final currentCh = _currentChapterNumber;
     return SizedBox(
       height: h,
       child: ListView.builder(
@@ -1032,8 +958,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         itemCount: _chapters.length,
         itemBuilder: (context, index) {
           final ch = _chapters[index];
+          final isCurrent = ch.number == currentCh;
           return Material(
-            color: Colors.transparent,
+            color: isCurrent
+                ? const Color(0xFF8B7355).withValues(alpha: 0.12)
+                : Colors.transparent,
             child: InkWell(
               onTap: () => _scrollToChapter(ch.number),
               borderRadius: BorderRadius.circular(6),
@@ -1043,7 +972,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Ch ${ch.number}: ${ch.title}',
-                    style: _panelTextStyle,
+                    style: _panelTextStyle.copyWith(
+                      color: isCurrent
+                          ? const Color(0xFF2C2416)
+                          : const Color(0xFF8B7355).withValues(alpha: 0.9),
+                      fontWeight:
+                          isCurrent ? FontWeight.w600 : FontWeight.normal,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1292,9 +1227,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   Widget _buildPanelsColumn() {
-    final subtitle = _breadcrumbHierarchy.isNotEmpty
+    final breadcrumbSubtitle = _breadcrumbHierarchy.isNotEmpty
         ? (_breadcrumbHierarchy.last['title'] ?? '')
         : '';
+    String chaptersSubtitle = '';
+    final curCh = _currentChapterNumber;
+    if (curCh != null) {
+      for (final c in _chapters) {
+        if (c.number == curCh) {
+          chaptersSubtitle = c.title;
+          break;
+        }
+      }
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1304,32 +1249,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           () => _buildChaptersPanel(height: _chaptersPanelHeight),
           () => setState(() => _chaptersPanelCollapsed = false),
           () => setState(() => _chaptersPanelCollapsed = true),
-          '',
+          chaptersSubtitle,
           'Chapters',
         ),
         _buildVerticalResizeHandle(onDragDelta: (dy) {
           setState(() {
             if (_chaptersPanelHeight + dy >= _panelMinHeight &&
-                _breadcrumbPanelHeight - dy >= _panelMinHeight) {
-              _chaptersPanelHeight += dy;
-              _breadcrumbPanelHeight -= dy;
-            }
-          });
-        }),
-        _buildNavSection(
-          _breadcrumbCollapsed,
-          _buildBreadcrumbBar,
-          () => setState(() => _breadcrumbCollapsed = false),
-          () => setState(() => _breadcrumbCollapsed = true),
-          subtitle,
-          'Breadcrumb Trail',
-          contentHeight: _breadcrumbPanelHeight,
-        ),
-        _buildVerticalResizeHandle(onDragDelta: (dy) {
-          setState(() {
-            if (_breadcrumbPanelHeight + dy >= _panelMinHeight &&
                 _sectionPanelHeight - dy >= _panelMinHeight) {
-              _breadcrumbPanelHeight += dy;
+              _chaptersPanelHeight += dy;
               _sectionPanelHeight -= dy;
             }
           });
@@ -1339,8 +1266,26 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           () => _buildSectionSlider(height: _sectionPanelHeight),
           () => setState(() => _sectionSliderCollapsed = false),
           () => setState(() => _sectionSliderCollapsed = true),
-          subtitle,
+          breadcrumbSubtitle,
           'Section Overview',
+        ),
+        _buildVerticalResizeHandle(onDragDelta: (dy) {
+          setState(() {
+            if (_sectionPanelHeight + dy >= _panelMinHeight &&
+                _breadcrumbPanelHeight - dy >= _panelMinHeight) {
+              _sectionPanelHeight += dy;
+              _breadcrumbPanelHeight -= dy;
+            }
+          });
+        }),
+        _buildNavSection(
+          _breadcrumbCollapsed,
+          _buildBreadcrumbBar,
+          () => setState(() => _breadcrumbCollapsed = false),
+          () => setState(() => _breadcrumbCollapsed = true),
+          breadcrumbSubtitle,
+          'Breadcrumb Trail',
+          contentHeight: _breadcrumbPanelHeight,
         ),
       ],
     );
