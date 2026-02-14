@@ -430,12 +430,35 @@ void main() async {
     }
   }
 
+  // Manual overrides when automatic matching assigns verses to wrong sections.
+  final verseToSectionOverride = <String, String>{
+    '7.75': '4.4.4.2.3', // Self-control (was wrongly matching four foundations of mindfulness)
+    '1.7ab': '3.1.1.1.2', // It benefits oneself
+    '1.7cd': '3.1.1.1.3', // It has the power to benefit others
+  };
+
+  OverviewNode? findNodeByPath(OverviewNode n, String path) {
+    if (n.path == path) return n;
+    for (final c in n.children) {
+      final found = findNodeByPath(c, path);
+      if (found != null) return found;
+    }
+    return null;
+  }
+
+  void removeVerseFromAll(OverviewNode n, String ref) {
+    n.verses.remove(ref);
+    n.needsReviewVerses.remove(ref);
+    for (final c in n.children) removeVerseFromAll(c, ref);
+  }
+
   // Map each verse to its overview node and add to that node.
   // Process in document order (by verse ref) so verse-proximity tiebreaker works correctly.
   final sortedRefs = verseToHeading.keys.toList()
     ..sort(_compareVerseRefs);
   var needsReviewCount = 0;
   for (final ref in sortedRefs) {
+    if (verseToSectionOverride.containsKey(ref)) continue; // handle in override step
     final heading = verseToHeading[ref]!;
     final context = verseToContext[ref] ?? [];
 
@@ -444,11 +467,14 @@ void main() async {
 
     if (node != null) {
       node.verses.add(ref);
-      if (needsReview) {
-        node.needsReviewVerses.add(ref);
-        needsReviewCount++;
-      }
+      if (needsReview) needsReviewCount++;
     }
+  }
+  // Apply overrides: assign verse to correct section (override wrong auto-match).
+  for (final e in verseToSectionOverride.entries) {
+    removeVerseFromAll(root, e.key);
+    final node = findNodeByPath(root, e.value);
+    if (node != null) node.verses.add(e.key);
   }
 
   // Build output: sections tree + verseToPath + sectionToFirstVerse for app lookup

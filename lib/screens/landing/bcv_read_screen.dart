@@ -19,6 +19,7 @@ class BcvReadScreen extends StatefulWidget {
   });
 
   final int? scrollToVerseIndex;
+
   /// When provided (e.g. from Daily "Full text"), these verses are highlighted as one section.
   final Set<int>? highlightSectionIndices;
   final String title;
@@ -35,12 +36,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Object? _error;
   final Map<int, GlobalKey> _chapterKeys = {};
   GlobalKey? _scrollToVerseKey;
+
   /// When set (after tapping a verse), scroll to this verse on next frame then clear.
   int? _scrollToVerseIndexAfterTap;
+
   /// Verses to highlight (set when arriving from Daily or when user taps a verse); cleared on reload.
   Set<int>? _highlightVerseIndices = {};
+
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
+
   /// When true, show commentary inline below the verses (instead of modal).
   bool _commentaryExpanded = false;
   final _commentaryService = CommentaryService.instance;
@@ -48,13 +53,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Verse index currently in view (for breadcrumb). Null until first visibility.
   int? _visibleVerseIndex;
+
   /// Section hierarchy for the visible verse. Each has 'section' and 'title'.
   List<Map<String, String>> _breadcrumbHierarchy = [];
+
   /// Verse indices belonging to the current section (for faint box highlight).
   Set<int>? _currentSectionVerseIndices = {};
+
   /// Cache: section path -> verse indices (avoids recomputing on same section).
   final Map<String, Set<int>> _sectionVerseIndicesCache = {};
   Timer? _visibilityDebounceTimer;
+
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<int, double> _verseVisibility = {};
 
@@ -71,10 +80,23 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   static const int _sectionSliderVisibleLines = 10;
   static const double _sidebarWidth = 180;
   static const double _sidebarCollapsedWidth = 48;
+  static const double _laptopBreakpoint = 900;
+  static const double _rightPanelsMinWidth = 200;
+  static const double _rightPanelsMaxWidth = 500;
+  static const double _panelMinHeight = 60;
+  static const double _panelLineHeight = 22.0;
+  static const double _panelPaddingH = 12.0;
+  static const double _panelPaddingV = 6.0;
 
   bool _sidebarCollapsed = false;
   bool _breadcrumbCollapsed = false;
   bool _sectionSliderCollapsed = false;
+  bool _chaptersPanelCollapsed = false;
+
+  double _rightPanelsWidth = 280;
+  double _chaptersPanelHeight = 180;
+  double _breadcrumbPanelHeight = 120;
+  double _sectionPanelHeight = 220;
 
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
@@ -83,7 +105,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       return (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
     }
     if (widget.scrollToVerseIndex != null) return widget.scrollToVerseIndex;
-    if (widget.highlightSectionIndices != null && widget.highlightSectionIndices!.isNotEmpty) {
+    if (widget.highlightSectionIndices != null &&
+        widget.highlightSectionIndices!.isNotEmpty) {
       return widget.highlightSectionIndices!.reduce((a, b) => a < b ? a : b);
     }
     return null;
@@ -92,7 +115,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.scrollToVerseIndex != null || (widget.highlightSectionIndices?.isNotEmpty ?? false)) {
+    if (widget.scrollToVerseIndex != null ||
+        (widget.highlightSectionIndices?.isNotEmpty ?? false)) {
       _scrollToVerseKey = GlobalKey();
     }
     _load();
@@ -127,8 +151,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _chapters = chapters;
           _verses = verses;
           _loading = false;
-          if (widget.highlightSectionIndices != null && widget.highlightSectionIndices!.isNotEmpty) {
-            _highlightVerseIndices = Set<int>.from(widget.highlightSectionIndices!);
+          if (widget.highlightSectionIndices != null &&
+              widget.highlightSectionIndices!.isNotEmpty) {
+            _highlightVerseIndices =
+                Set<int>.from(widget.highlightSectionIndices!);
           } else if (widget.scrollToVerseIndex != null) {
             _highlightVerseIndices = {widget.scrollToVerseIndex!};
           }
@@ -137,9 +163,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           }
         });
         if (widget.scrollToVerseIndex != null && _scrollToVerseKey != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToVerseWidget());
+          WidgetsBinding.instance
+              .addPostFrameCallback((_) => _scrollToVerseWidget());
         }
-        if (widget.highlightSectionIndices != null && (_highlightVerseIndices ?? {}).isNotEmpty) {
+        if (widget.highlightSectionIndices != null &&
+            (_highlightVerseIndices ?? {}).isNotEmpty) {
           _loadCommentaryForHighlightedSection();
         }
         _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
@@ -158,7 +186,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _scrollToChapter(int chapterNumber) {
     final key = _chapterKeys[chapterNumber];
     if (key?.currentContext != null) {
-      Scrollable.ensureVisible(key!.currentContext!, alignment: 0.0, duration: const Duration(milliseconds: 300));
+      Scrollable.ensureVisible(key!.currentContext!,
+          alignment: 0.0, duration: const Duration(milliseconds: 300));
     }
   }
 
@@ -174,7 +203,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
     if ((_highlightVerseIndices ?? {}).isEmpty) return;
-    final firstIndex = (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
+    final firstIndex =
+        (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
     final ref = _verseService.getVerseRef(firstIndex);
     if (ref == null) return;
     final entry = await _commentaryService.getCommentaryForRef(ref);
@@ -267,7 +297,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     // Use full content width (match the SizedBox(width: double.infinity) verse containers)
     final contentWidth = stackBox.size.width;
-    final clamped = Rect.fromLTWH(0, measured.top, contentWidth, measured.height);
+    final clamped =
+        Rect.fromLTWH(0, measured.top, contentWidth, measured.height);
 
     final prevTo = _sectionOverlayRectTo;
     if (prevTo != null && _rectApproxEquals(prevTo, clamped)) return;
@@ -316,14 +347,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       });
       return;
     }
-    
+
     // Get the verse ref and load commentary
     final ref = _verseService.getVerseRef(globalIndex);
     if (ref == null) return;
-    
+
     final entry = await _commentaryService.getCommentaryForRef(ref);
     if (!mounted) return;
-    
+
     // If this verse has no commentary, just highlight it alone and hide any open commentary
     if (entry == null) {
       setState(() {
@@ -340,7 +371,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       });
       return;
     }
-    
+
     // Find all verse indices in the commentary block
     final verseIndicesInBlock = <int>{};
     for (final verseRef in entry.refsInBlock) {
@@ -387,7 +418,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     String body = entry.commentaryText;
     for (final ref in entry.refsInBlock) {
       // Remove line that is just the ref (e.g. "2.60")
-      body = body.replaceAll(RegExp('^${RegExp.escape(ref)}\\s*\$', multiLine: true), '');
+      body = body.replaceAll(
+          RegExp('^${RegExp.escape(ref)}\\s*\$', multiLine: true), '');
       final verseText = _verseService.getIndexForRef(ref) != null
           ? _verseService.getVerseAt(_verseService.getIndexForRef(ref)!)
           : null;
@@ -429,11 +461,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (hierarchy.isNotEmpty) {
       setState(() {
         _breadcrumbHierarchy = hierarchy;
-        _currentSectionVerseIndices = _hierarchyService.getVerseRefsForSectionSync(section)
+        _currentSectionVerseIndices = _hierarchyService
+            .getVerseRefsForSectionSync(section)
             .map((ref) {
               var i = _verseService.getIndexForRef(ref);
               if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
-                i = _verseService.getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
+                i = _verseService
+                    .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
               }
               return i;
             })
@@ -442,7 +476,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       });
       _scrollSectionSliderToCurrent();
     }
-    final firstVerseRef = await _hierarchyService.getFirstVerseForSection(section);
+    final firstVerseRef =
+        await _hierarchyService.getFirstVerseForSection(section);
     if (firstVerseRef == null) return;
     var verseIndex = _verseService.getIndexForRef(firstVerseRef);
     if (verseIndex == null && RegExp(r'[a-d]+$').hasMatch(firstVerseRef)) {
@@ -466,7 +501,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     });
   }
 
-  Widget _buildBreadcrumbItem(Map<String, String> item, int index, {VoidCallback? onTap}) {
+  Widget _buildBreadcrumbItem(Map<String, String> item, int index,
+      {VoidCallback? onTap}) {
     final section = item['section'] ?? item['path'] ?? '';
     final title = item['title'] ?? '';
     final isCurrent = index == _breadcrumbHierarchy.length - 1;
@@ -477,10 +513,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ? const Color(0xFF2C2416)
         : const Color(0xFF8B7355).withValues(alpha: 0.8);
     final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-          fontFamily: 'Lora',
-          color: baseColor,
-          fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
-        ) ?? const TextStyle(fontFamily: 'Lora', fontSize: 12);
+              fontFamily: 'Lora',
+              color: baseColor,
+              fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
+            ) ??
+        const TextStyle(fontFamily: 'Lora', fontSize: 12);
     final content = Row(
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
@@ -513,7 +550,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           : content;
     }
     return Material(
-      color: isCurrent ? const Color(0xFF8B7355).withValues(alpha: 0.12) : Colors.transparent,
+      color: isCurrent
+          ? const Color(0xFF8B7355).withValues(alpha: 0.12)
+          : Colors.transparent,
       borderRadius: BorderRadius.circular(4),
       child: InkWell(
         onTap: onTap,
@@ -532,14 +571,26 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       return;
     }
     _verseVisibility[verseIndex] = visibility;
-    if (_visibilityDebounceTimer?.isActive ?? false) return; // Throttle: already scheduled
+    if (_visibilityDebounceTimer?.isActive ?? false)
+      return; // Throttle: already scheduled
     _visibilityDebounceTimer = Timer(const Duration(milliseconds: 120), () {
       _visibilityDebounceTimer = null;
       if (!mounted || _verseVisibility.isEmpty) return;
       // Pick the verse with highest visibility = most in view (typically near center)
-      final best = _verseVisibility.entries
-          .reduce((a, b) => a.value >= b.value ? a : b);
-      _updateBreadcrumbForVerse(best.key);
+      final best =
+          _verseVisibility.entries.reduce((a, b) => a.value >= b.value ? a : b);
+      // Hysteresis: when two verses at a section boundary have nearly equal visibility,
+      // prefer the current section to avoid flip-flopping while scrolling
+      const hysteresis = 0.08;
+      final currentVis = _visibleVerseIndex != null
+          ? _verseVisibility[_visibleVerseIndex] ?? 0.0
+          : 0.0;
+      final verseToUse = (_visibleVerseIndex != null &&
+              currentVis >= 0.05 &&
+              (best.value - currentVis).abs() < hysteresis)
+          ? _visibleVerseIndex!
+          : best.key;
+      _updateBreadcrumbForVerse(verseToUse);
     });
   }
 
@@ -558,25 +609,33 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         for (final ref in refs) {
           var i = _verseService.getIndexForRef(ref);
           if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
-            i = _verseService.getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
+            i = _verseService
+                .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
           }
           if (i != null) indices.add(i);
         }
+        // Ensure the visible verse is always included (handles ref/index mapping gaps)
+        indices.add(verseIndex);
         _sectionVerseIndicesCache[sectionPath] = indices;
       }
+      // Always include the visible verse (handles ref→index lookup gaps for verses like 7.39/7.40)
+      final indicesWithVisible = {...indices, verseIndex};
+
       final oldPath = _breadcrumbHierarchy.isNotEmpty
-          ? (_breadcrumbHierarchy.last['section'] ?? _breadcrumbHierarchy.last['path'] ?? '')
+          ? (_breadcrumbHierarchy.last['section'] ??
+              _breadcrumbHierarchy.last['path'] ??
+              '')
           : '';
       final oldIndices = _currentSectionVerseIndices ?? {};
       if (sectionPath == oldPath &&
-          indices.length == oldIndices.length &&
-          indices.difference(oldIndices).isEmpty) {
+          indicesWithVisible.length == oldIndices.length &&
+          indicesWithVisible.difference(oldIndices).isEmpty) {
         return;
       }
       if (!mounted) return;
       setState(() {
         _breadcrumbHierarchy = hierarchy;
-        _currentSectionVerseIndices = indices;
+        _currentSectionVerseIndices = indicesWithVisible;
         // Clear commentary highlight when user scrolls outside the highlighted block
         final highlight = _highlightVerseIndices ?? {};
         if (highlight.isNotEmpty && !highlight.contains(verseIndex)) {
@@ -595,15 +654,22 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _scrollSectionSliderToCurrent() {
     if (_breadcrumbHierarchy.isEmpty) return;
-    final currentPath = _breadcrumbHierarchy.last['section'] ?? _breadcrumbHierarchy.last['path'] ?? '';
+    final currentPath = _breadcrumbHierarchy.last['section'] ??
+        _breadcrumbHierarchy.last['path'] ??
+        '';
     if (currentPath.isEmpty) return;
     final flat = _hierarchyService.getFlatSectionsSync();
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
-    final viewportHeight = _sectionSliderLineHeight * _sectionSliderVisibleLines;
-    final targetOffset = (idx * _sectionSliderLineHeight) - (viewportHeight / 2) + (_sectionSliderLineHeight / 2);
-    final maxOffset = (flat.length * _sectionSliderLineHeight - viewportHeight).clamp(0.0, double.infinity);
-    final clamped = targetOffset.clamp(0.0, maxOffset);
+    final viewportHeight =
+        _sectionSliderLineHeight * _sectionSliderVisibleLines;
+    final targetOffset = (idx * _sectionSliderLineHeight) -
+        (viewportHeight / 2) +
+        (_sectionSliderLineHeight / 2);
+    final maxOffset = (flat.length * _sectionSliderLineHeight - viewportHeight)
+        .clamp(0.0, double.infinity);
+    final maxOffsetSafe = maxOffset.isFinite ? maxOffset : 0.0;
+    final clamped = targetOffset.clamp(0.0, maxOffsetSafe).toDouble();
     void doScroll() {
       if (!mounted || !_sectionSliderScrollController.hasClients) return;
       _sectionSliderScrollController.animateTo(
@@ -612,6 +678,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         curve: Curves.easeOutCubic,
       );
     }
+
     if (_sectionSliderScrollController.hasClients) {
       doScroll();
     } else {
@@ -667,94 +734,102 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: _commentaryHeader.withValues(alpha: 0.15),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(8)),
               ),
-            child: Row(
-              children: [
-                Icon(Icons.menu_book, size: 20, color: _commentaryHeader),
-                const SizedBox(width: 8),
-                Text(
-                  'Commentary',
-                  style: headingStyle?.copyWith(fontSize: 16),
-                ),
-                const Spacer(),
-                TextButton(
-                  onPressed: _toggleCommentaryExpanded,
-                  style: TextButton.styleFrom(
-                    foregroundColor: _commentaryHeader,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text('Close'),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (entry.refsInBlock.length == 1) ...[
+              child: Row(
+                children: [
+                  Icon(Icons.menu_book, size: 20, color: _commentaryHeader),
+                  const SizedBox(width: 8),
                   Text(
-                    'Verse ${entry.refsInBlock.single}',
-                    style: headingStyle,
+                    'Commentary',
+                    style: headingStyle?.copyWith(fontSize: 16),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _verseService.getIndexForRef(entry.refsInBlock.single) != null
-                        ? (_verseService.getVerseAt(
-                            _verseService.getIndexForRef(entry.refsInBlock.single)!,
-                          ) ?? '')
-                        : '',
-                    style: verseStyle,
+                  const Spacer(),
+                  TextButton(
+                    onPressed: _toggleCommentaryExpanded,
+                    style: TextButton.styleFrom(
+                      foregroundColor: _commentaryHeader,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: const Text('Close'),
                   ),
-                ] else ...[
-                  Text(
-                    'Verses ${entry.refsInBlock.join(", ")}',
-                    style: headingStyle,
-                  ),
-                  const SizedBox(height: 12),
-                  ...entry.refsInBlock.map((ref) {
-                    final idx = _verseService.getIndexForRef(ref);
-                    final text = idx != null ? _verseService.getVerseAt(idx) : null;
-                    if (text == null) return const SizedBox.shrink();
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Verse $ref',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontFamily: 'Lora',
-                                  color: _commentaryHeader,
-                                ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(text, style: verseStyle),
-                        ],
-                      ),
-                    );
-                  }),
                 ],
-                const SizedBox(height: 20),
-                Text('Commentary', style: headingStyle),
-                const SizedBox(height: 12),
-                Text(
-                  commentaryOnly,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontFamily: 'Crimson Text',
-                        fontSize: 18,
-                        height: 1.8,
-                        color: const Color(0xFF2C2416),
-                      ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (entry.refsInBlock.length == 1) ...[
+                    Text(
+                      'Verse ${entry.refsInBlock.single}',
+                      style: headingStyle,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      _verseService.getIndexForRef(entry.refsInBlock.single) !=
+                              null
+                          ? (_verseService.getVerseAt(
+                                _verseService
+                                    .getIndexForRef(entry.refsInBlock.single)!,
+                              ) ??
+                              '')
+                          : '',
+                      style: verseStyle,
+                    ),
+                  ] else ...[
+                    Text(
+                      'Verses ${entry.refsInBlock.join(", ")}',
+                      style: headingStyle,
+                    ),
+                    const SizedBox(height: 12),
+                    ...entry.refsInBlock.map((ref) {
+                      final idx = _verseService.getIndexForRef(ref);
+                      final text =
+                          idx != null ? _verseService.getVerseAt(idx) : null;
+                      if (text == null) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Verse $ref',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontFamily: 'Lora',
+                                    color: _commentaryHeader,
+                                  ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(text, style: verseStyle),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
+                  const SizedBox(height: 20),
+                  Text('Commentary', style: headingStyle),
+                  const SizedBox(height: 12),
+                  Text(
+                    commentaryOnly,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontFamily: 'Crimson Text',
+                          fontSize: 18,
+                          height: 1.8,
+                          color: const Color(0xFF2C2416),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -778,19 +853,38 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              _breadcrumbCollapsed ? Icons.account_tree : Icons.account_tree_outlined,
+              _chaptersPanelCollapsed
+                  ? Icons.menu_book
+                  : Icons.menu_book_outlined,
               color: const Color(0xFF2C2416),
             ),
-            tooltip: _breadcrumbCollapsed ? 'Show breadcrumb' : 'Hide breadcrumb',
-            onPressed: () => setState(() => _breadcrumbCollapsed = !_breadcrumbCollapsed),
+            tooltip: _chaptersPanelCollapsed ? 'Show Chapters' : 'Hide Chapters',
+            onPressed: () => setState(
+                () => _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
+          ),
+          IconButton(
+            icon: Icon(
+              _breadcrumbCollapsed
+                  ? Icons.account_tree
+                  : Icons.account_tree_outlined,
+              color: const Color(0xFF2C2416),
+            ),
+            tooltip: _breadcrumbCollapsed
+                ? 'Show Breadcrumb Trail'
+                : 'Hide Breadcrumb Trail',
+            onPressed: () =>
+                setState(() => _breadcrumbCollapsed = !_breadcrumbCollapsed),
           ),
           IconButton(
             icon: Icon(
               _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
               color: const Color(0xFF2C2416),
             ),
-            tooltip: _sectionSliderCollapsed ? 'Show section overview' : 'Hide section overview',
-            onPressed: () => setState(() => _sectionSliderCollapsed = !_sectionSliderCollapsed),
+            tooltip: _sectionSliderCollapsed
+                ? 'Show Section Overview'
+                : 'Hide Section Overview',
+            onPressed: () => setState(
+                () => _sectionSliderCollapsed = !_sectionSliderCollapsed),
           ),
           IconButton(
             icon: Icon(
@@ -798,7 +892,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               color: const Color(0xFF2C2416),
             ),
             tooltip: _sidebarCollapsed ? 'Show chapters' : 'Hide chapters',
-            onPressed: () => setState(() => _sidebarCollapsed = !_sidebarCollapsed),
+            onPressed: () =>
+                setState(() => _sidebarCollapsed = !_sidebarCollapsed),
           ),
         ],
       ),
@@ -808,7 +903,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   Widget _buildBody() {
     if (_loading) {
-      return const Center(child: CircularProgressIndicator(color: Color(0xFF8B7355)));
+      return const Center(
+          child: CircularProgressIndicator(color: Color(0xFF8B7355)));
     }
     if (_error != null) {
       return Center(
@@ -817,9 +913,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Could not load text', style: Theme.of(context).textTheme.titleLarge),
+              Text('Could not load text',
+                  style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
-              Text(_error.toString(), style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
+              Text(_error.toString(),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center),
               const SizedBox(height: 24),
               TextButton(onPressed: _load, child: const Text('Retry')),
             ],
@@ -855,7 +954,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFFF8F7F3),
         border: Border(
-          right: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+          right:
+              BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
         ),
       ),
       child: _sidebarCollapsed
@@ -890,14 +990,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                       onTap: () => _scrollToChapter(ch.number),
                       borderRadius: BorderRadius.circular(6),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 8),
                         child: Text(
                           'Ch ${ch.number}: ${ch.title}',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                fontFamily: 'Lora',
-                                color: const Color(0xFF2C2416),
-                                fontSize: 13,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontFamily: 'Lora',
+                                    color: const Color(0xFF2C2416),
+                                    fontSize: 13,
+                                  ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -910,19 +1012,68 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
-  Widget _buildSectionSlider() {
+  TextStyle get _panelTextStyle =>
+      Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontFamily: 'Lora',
+            fontSize: 12,
+            color: const Color(0xFF2C2416),
+          ) ??
+      const TextStyle(fontFamily: 'Lora', fontSize: 12);
+
+  Widget _buildChaptersPanel({double? height}) {
+    if (_chapters.isEmpty) return const SizedBox.shrink();
+    final raw = height ?? _panelLineHeight * _sectionSliderVisibleLines;
+    final h = raw.clamp(_panelMinHeight, 400.0).toDouble();
+    return SizedBox(
+      height: h,
+      child: ListView.builder(
+        padding: EdgeInsets.symmetric(
+            horizontal: _panelPaddingH, vertical: _panelPaddingV),
+        itemCount: _chapters.length,
+        itemBuilder: (context, index) {
+          final ch = _chapters[index];
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _scrollToChapter(ch.number),
+              borderRadius: BorderRadius.circular(6),
+              child: SizedBox(
+                height: _panelLineHeight,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Ch ${ch.number}: ${ch.title}',
+                    style: _panelTextStyle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSectionSlider({double? height}) {
     final flat = _hierarchyService.getFlatSectionsSync();
     if (flat.isEmpty) return const SizedBox.shrink();
     final currentPath = _breadcrumbHierarchy.isNotEmpty
-        ? (_breadcrumbHierarchy.last['section'] ?? _breadcrumbHierarchy.last['path'] ?? '')
+        ? (_breadcrumbHierarchy.last['section'] ??
+            _breadcrumbHierarchy.last['path'] ??
+            '')
         : '';
-    final sliderHeight = _sectionSliderLineHeight * _sectionSliderVisibleLines;
+    final raw =
+        height ?? _sectionSliderLineHeight * _sectionSliderVisibleLines;
+    final sliderHeight = raw.toDouble();
     return Container(
       height: sliderHeight,
       decoration: BoxDecoration(
         color: const Color(0xFFF8F7F3),
         border: Border(
-          bottom: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+          bottom:
+              BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
         ),
       ),
       child: ListView.builder(
@@ -934,9 +1085,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           final isCurrent = item.path == currentPath;
           final indent = item.depth * 12.0;
           return Material(
-            color: isCurrent ? const Color(0xFF8B7355).withValues(alpha: 0.12) : Colors.transparent,
+            color: isCurrent
+                ? const Color(0xFF8B7355).withValues(alpha: 0.12)
+                : Colors.transparent,
             child: InkWell(
-              onTap: () => _onBreadcrumbSectionTap({'section': item.path, 'path': item.path, 'title': item.title}),
+              onTap: () => _onBreadcrumbSectionTap({
+                'section': item.path,
+                'path': item.path,
+                'title': item.title
+              }),
               child: SizedBox(
                 height: _sectionSliderLineHeight,
                 child: Align(
@@ -946,14 +1103,22 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     child: Text(
                       () {
                         final num = _sectionNumberForDisplay(item.path);
-                        return num.isNotEmpty ? '$num. ${item.title}' : item.title;
+                        return num.isNotEmpty
+                            ? '$num. ${item.title}'
+                            : item.title;
                       }(),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontFamily: 'Lora',
-                            fontSize: 12,
-                            color: isCurrent ? const Color(0xFF2C2416) : const Color(0xFF8B7355).withValues(alpha: 0.9),
-                            fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
-                          ) ?? const TextStyle(fontSize: 12),
+                                fontFamily: 'Lora',
+                                fontSize: 12,
+                                color: isCurrent
+                                    ? const Color(0xFF2C2416)
+                                    : const Color(0xFF8B7355)
+                                        .withValues(alpha: 0.9),
+                                fontWeight: isCurrent
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ) ??
+                          const TextStyle(fontSize: 12),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -967,44 +1132,98 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
-  Widget _buildNavSection(
-    bool collapsed,
-    Widget Function() full,
-    VoidCallback onExpand,
-    String subtitle,
-    String label,
-  ) {
-    return AnimatedCrossFade(
-      duration: const Duration(milliseconds: 200),
-      crossFadeState: collapsed ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      firstChild: full(),
-      secondChild: _buildCollapsedStrip(
-        label: label,
-        onTap: onExpand,
-        subtitle: subtitle,
+  Widget _buildVerticalResizeHandle({
+    required ValueChanged<double> onDragDelta,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onVerticalDragUpdate: (d) => setState(() => onDragDelta(d.delta.dy)),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.resizeUpDown,
+        child: Container(
+          height: 6,
+          color: Colors.transparent,
+          alignment: Alignment.center,
+          child: Container(
+            height: 2,
+            width: 32,
+            decoration: BoxDecoration(
+              color: const Color(0xFFD4C4B0).withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(1),
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildCollapsedStrip({required String label, required VoidCallback onTap, required String subtitle}) {
+  Widget _buildNavSection(
+    bool collapsed,
+    Widget Function() full,
+    VoidCallback onExpand,
+    VoidCallback onCollapse,
+    String subtitle,
+    String label, {
+    double? contentHeight,
+  }) {
+    Widget expandedContent = full();
+    if (contentHeight != null && contentHeight > 0) {
+      final h = contentHeight.clamp(_panelMinHeight, 400.0).toDouble();
+      expandedContent = SizedBox(
+        height: h,
+        child: SingleChildScrollView(child: expandedContent),
+      );
+    }
+    return AnimatedCrossFade(
+      duration: const Duration(milliseconds: 200),
+      crossFadeState:
+          collapsed ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      firstChild: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildPanelHeader(
+            label: label,
+            subtitle: subtitle,
+            expanded: true,
+            onCollapse: onCollapse,
+          ),
+          expandedContent,
+        ],
+      ),
+      secondChild: _buildCollapsedStrip(
+        label: label,
+        onTap: onExpand,
+        subtitle: subtitle,
+        onExpand: onExpand,
+      ),
+    );
+  }
+
+  Widget _buildPanelHeader({
+    required String label,
+    required String subtitle,
+    required bool expanded,
+    required VoidCallback onCollapse,
+  }) {
     return Material(
       color: const Color(0xFFF8F7F3),
       child: InkWell(
-        onTap: onTap,
+        onTap: onCollapse,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             border: Border(
-              bottom: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+              bottom: BorderSide(
+                  color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
             ),
           ),
           child: Row(
             children: [
-              Icon(Icons.expand_more, size: 18, color: const Color(0xFF8B7355)),
+              Icon(Icons.expand_less, size: 20, color: const Color(0xFF8B7355)),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  subtitle.isNotEmpty ? subtitle : 'Tap to show $label',
+                  subtitle.isNotEmpty ? '$label: $subtitle' : label,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
                         color: const Color(0xFF2C2416),
@@ -1021,6 +1240,112 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
+  Widget _buildCollapsedStrip({
+    required String label,
+    required VoidCallback onTap,
+    required String subtitle,
+    required VoidCallback onExpand,
+  }) {
+    return Material(
+      color: const Color(0xFFF8F7F3),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                  color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.expand_more, size: 20, color: const Color(0xFF8B7355)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  subtitle.isNotEmpty ? subtitle : 'Tap to show $label',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontFamily: 'Lora',
+                        color: const Color(0xFF2C2416),
+                        fontSize: 12,
+                      ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.expand_more,
+                    size: 20, color: Color(0xFF8B7355)),
+                tooltip: 'Expand',
+                style: IconButton.styleFrom(
+                  minimumSize: const Size(32, 32),
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: onExpand,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPanelsColumn() {
+    final subtitle = _breadcrumbHierarchy.isNotEmpty
+        ? (_breadcrumbHierarchy.last['title'] ?? '')
+        : '';
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildNavSection(
+          _chaptersPanelCollapsed,
+          () => _buildChaptersPanel(height: _chaptersPanelHeight),
+          () => setState(() => _chaptersPanelCollapsed = false),
+          () => setState(() => _chaptersPanelCollapsed = true),
+          '',
+          'Chapters',
+        ),
+        _buildVerticalResizeHandle(onDragDelta: (dy) {
+          setState(() {
+            if (_chaptersPanelHeight + dy >= _panelMinHeight &&
+                _breadcrumbPanelHeight - dy >= _panelMinHeight) {
+              _chaptersPanelHeight += dy;
+              _breadcrumbPanelHeight -= dy;
+            }
+          });
+        }),
+        _buildNavSection(
+          _breadcrumbCollapsed,
+          _buildBreadcrumbBar,
+          () => setState(() => _breadcrumbCollapsed = false),
+          () => setState(() => _breadcrumbCollapsed = true),
+          subtitle,
+          'Breadcrumb Trail',
+          contentHeight: _breadcrumbPanelHeight,
+        ),
+        _buildVerticalResizeHandle(onDragDelta: (dy) {
+          setState(() {
+            if (_breadcrumbPanelHeight + dy >= _panelMinHeight &&
+                _sectionPanelHeight - dy >= _panelMinHeight) {
+              _breadcrumbPanelHeight += dy;
+              _sectionPanelHeight -= dy;
+            }
+          });
+        }),
+        _buildNavSection(
+          _sectionSliderCollapsed,
+          () => _buildSectionSlider(height: _sectionPanelHeight),
+          () => setState(() => _sectionSliderCollapsed = false),
+          () => setState(() => _sectionSliderCollapsed = true),
+          subtitle,
+          'Section Overview',
+        ),
+      ],
+    );
+  }
+
   Widget _buildBreadcrumbBar() {
     if (_breadcrumbHierarchy.isEmpty) {
       return const SizedBox.shrink();
@@ -1032,7 +1357,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFFF8F7F3),
         border: Border(
-          bottom: BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+          bottom:
+              BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
         ),
       ),
       child: Column(
@@ -1054,195 +1380,208 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   Widget _buildMainContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _buildNavSection(
-          _breadcrumbCollapsed,
-          _buildBreadcrumbBar,
-          () => setState(() => _breadcrumbCollapsed = false),
-          _breadcrumbHierarchy.isNotEmpty ? (_breadcrumbHierarchy.last['title'] ?? '') : '',
-          'Breadcrumb',
-        ),
-        _buildNavSection(
-          _sectionSliderCollapsed,
-          _buildSectionSlider,
-          () => setState(() => _sectionSliderCollapsed = false),
-          _breadcrumbHierarchy.isNotEmpty ? (_breadcrumbHierarchy.last['title'] ?? '') : '',
-          'Section overview',
-        ),
-        Expanded(
-          child: SingleChildScrollView(
+    final isLaptop =
+        MediaQuery.of(context).size.width >= _laptopBreakpoint;
+    final scrollContent = SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
               key: _scrollContentKey,
               clipBehavior: Clip.none,
               children: [
                 Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: _chapters.map((ch) {
-          final key = _chapterKeys[ch.number];
-          final verseTexts = ch.startVerseIndex < _verses.length
-              ? _verses.sublist(ch.startVerseIndex, ch.endVerseIndex.clamp(0, _verses.length))
-              : <String>[];
-          return RepaintBoundary(
-            child: Column(
-              key: key,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Chapter ${ch.number}: ${ch.title}',
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontFamily: 'Crimson Text',
-                      color: const Color(0xFF2C2416),
-                    ),
-              ),
-              const SizedBox(height: 24),
-              ...() {
-                final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontFamily: 'Crimson Text',
-                      fontSize: 18,
-                      height: 1.8,
-                      color: const Color(0xFF2C2416),
-                    );
-                // Unified box: same shape, faint (section) vs darker (commentary)
-                BoxDecoration boxDecoration({required bool darker}) =>
-                  BoxDecoration(
-                    color: darker
-                        ? const Color(0xFFEADCC4).withValues(alpha: 0.5)
-                        : const Color(0xFF8B7355).withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: const Color(0xFF8B7355).withValues(
-                        alpha: darker ? 0.45 : 0.22,
-                      ),
-                      width: 1,
-                    ),
-                  );
-
-                Widget buildVerseContent(int idx, String text) {
-                  _verseKeys[idx] ??= GlobalKey();
-                  final isTargetVerse = _scrollTargetVerseIndex != null &&
-                      _scrollTargetVerseIndex == idx &&
-                      _scrollToVerseKey != null;
-                  Widget w = GestureDetector(
-                    onTap: () => _onVerseTap(idx),
-                    behavior: HitTestBehavior.opaque,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: Text(text, style: verseStyle),
-                    ),
-                  );
-                  if (isTargetVerse) {
-                    w = KeyedSubtree(key: _scrollToVerseKey, child: w);
-                  }
-                  return VisibilityDetector(
-                    key: ValueKey('verse_$idx'),
-                    onVisibilityChanged: (info) =>
-                        _onVerseVisibilityChanged(idx, info.visibleFraction),
-                    child: KeyedSubtree(
-                      key: _verseKeys[idx],
-                      child: w,
-                    ),
-                  );
-                }
-
-                Widget wrapInBox(List<int> indices, {required bool darker}) {
-                  final verseWidgets = indices.map((idx) {
-                    final text = idx < _verses.length ? _verses[idx] : '';
-                    return buildVerseContent(idx, text);
-                  }).toList();
-                  return SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: boxDecoration(darker: darker),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _chapters.map((ch) {
+                    final key = _chapterKeys[ch.number];
+                    final verseTexts = ch.startVerseIndex < _verses.length
+                        ? _verses.sublist(ch.startVerseIndex,
+                            ch.endVerseIndex.clamp(0, _verses.length))
+                        : <String>[];
+                    return RepaintBoundary(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: verseWidgets,
-                      ),
-                    ),
-                  );
-                }
-
-                final children = <Widget>[];
-                final highlightRuns = _getHighlightRuns();
-                final usedInRun = <int>{};
-
-                List<int>? runContaining(int idx, List<List<int>> runList) {
-                  for (final r in runList) {
-                    if (r.contains(idx)) return r;
-                  }
-                  return null;
-                }
-
-                for (final entry in verseTexts.asMap().entries) {
-                  final localIndex = entry.key;
-                  final verse = entry.value;
-                  final globalIndex = ch.startVerseIndex + localIndex;
-
-                  if (usedInRun.contains(globalIndex)) continue;
-
-                  final highlightRun = runContaining(globalIndex, highlightRuns);
-                  if (highlightRun != null && highlightRun.first == globalIndex) {
-                    for (final idx in highlightRun) {
-                      usedInRun.add(idx);
-                    }
-                    final hasCommentary = _commentaryEntryForSelected != null;
-                    final commentaryEntry = _commentaryEntryForSelected;
-                    children.add(
-                      Column(
+                        key: key,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          wrapInBox(highlightRun, darker: true),
-                          if (hasCommentary) ...[
-                            const SizedBox(height: 8),
-                            TextButton.icon(
-                              onPressed: _toggleCommentaryExpanded,
-                              icon: Icon(
-                                _commentaryExpanded ? Icons.expand_less : Icons.menu_book,
-                                size: 18,
-                                color: const Color(0xFF8B7355),
-                              ),
-                              label: Text(
-                                _commentaryExpanded ? 'Hide commentary' : 'Commentary',
-                                style: const TextStyle(
-                                  fontFamily: 'Lora',
-                                  color: Color(0xFF8B7355),
-                                  fontWeight: FontWeight.w500,
+                          Text(
+                            'Chapter ${ch.number}: ${ch.title}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMedium
+                                ?.copyWith(
+                                  fontFamily: 'Crimson Text',
+                                  color: const Color(0xFF2C2416),
                                 ),
-                              ),
-                            ),
-                            if (_commentaryExpanded && commentaryEntry != null) ...[
-                              _buildInlineCommentaryPanel(commentaryEntry),
-                            ],
-                          ],
-                          const SizedBox(height: 8),
+                          ),
+                          const SizedBox(height: 24),
+                          ...() {
+                            final verseStyle =
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      fontFamily: 'Crimson Text',
+                                      fontSize: 18,
+                                      height: 1.8,
+                                      color: const Color(0xFF2C2416),
+                                    );
+                            // Unified box: same shape, faint (section) vs darker (commentary)
+                            BoxDecoration boxDecoration(
+                                    {required bool darker}) =>
+                                BoxDecoration(
+                                  color: darker
+                                      ? const Color(0xFFEADCC4)
+                                          .withValues(alpha: 0.5)
+                                      : const Color(0xFF8B7355)
+                                          .withValues(alpha: 0.08),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: const Color(0xFF8B7355).withValues(
+                                      alpha: darker ? 0.45 : 0.22,
+                                    ),
+                                    width: 1,
+                                  ),
+                                );
+
+                            Widget buildVerseContent(int idx, String text) {
+                              _verseKeys[idx] ??= GlobalKey();
+                              final isTargetVerse =
+                                  _scrollTargetVerseIndex != null &&
+                                      _scrollTargetVerseIndex == idx &&
+                                      _scrollToVerseKey != null;
+                              Widget w = GestureDetector(
+                                onTap: () => _onVerseTap(idx),
+                                behavior: HitTestBehavior.opaque,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 20),
+                                  child: Text(text, style: verseStyle),
+                                ),
+                              );
+                              if (isTargetVerse) {
+                                w = KeyedSubtree(
+                                    key: _scrollToVerseKey, child: w);
+                              }
+                              return VisibilityDetector(
+                                key: ValueKey('verse_$idx'),
+                                onVisibilityChanged: (info) =>
+                                    _onVerseVisibilityChanged(
+                                        idx, info.visibleFraction),
+                                child: KeyedSubtree(
+                                  key: _verseKeys[idx],
+                                  child: w,
+                                ),
+                              );
+                            }
+
+                            Widget wrapInBox(List<int> indices,
+                                {required bool darker}) {
+                              final verseWidgets = indices.map((idx) {
+                                final text =
+                                    idx < _verses.length ? _verses[idx] : '';
+                                return buildVerseContent(idx, text);
+                              }).toList();
+                              return SizedBox(
+                                width: double.infinity,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: boxDecoration(darker: darker),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: verseWidgets,
+                                  ),
+                                ),
+                              );
+                            }
+
+                            final children = <Widget>[];
+                            final highlightRuns = _getHighlightRuns();
+                            final usedInRun = <int>{};
+
+                            List<int>? runContaining(
+                                int idx, List<List<int>> runList) {
+                              for (final r in runList) {
+                                if (r.contains(idx)) return r;
+                              }
+                              return null;
+                            }
+
+                            for (final entry in verseTexts.asMap().entries) {
+                              final localIndex = entry.key;
+                              final verse = entry.value;
+                              final globalIndex =
+                                  ch.startVerseIndex + localIndex;
+
+                              if (usedInRun.contains(globalIndex)) continue;
+
+                              final highlightRun =
+                                  runContaining(globalIndex, highlightRuns);
+                              if (highlightRun != null &&
+                                  highlightRun.first == globalIndex) {
+                                for (final idx in highlightRun) {
+                                  usedInRun.add(idx);
+                                }
+                                final hasCommentary =
+                                    _commentaryEntryForSelected != null;
+                                final commentaryEntry =
+                                    _commentaryEntryForSelected;
+                                children.add(
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      wrapInBox(highlightRun, darker: true),
+                                      if (hasCommentary) ...[
+                                        const SizedBox(height: 8),
+                                        TextButton.icon(
+                                          onPressed: _toggleCommentaryExpanded,
+                                          icon: Icon(
+                                            _commentaryExpanded
+                                                ? Icons.expand_less
+                                                : Icons.menu_book,
+                                            size: 18,
+                                            color: const Color(0xFF8B7355),
+                                          ),
+                                          label: Text(
+                                            _commentaryExpanded
+                                                ? 'Hide commentary'
+                                                : 'Commentary',
+                                            style: const TextStyle(
+                                              fontFamily: 'Lora',
+                                              color: Color(0xFF8B7355),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                        if (_commentaryExpanded &&
+                                            commentaryEntry != null) ...[
+                                          _buildInlineCommentaryPanel(
+                                              commentaryEntry),
+                                        ],
+                                      ],
+                                      const SizedBox(height: 8),
+                                    ],
+                                  ),
+                                );
+                                continue;
+                              }
+
+                              // Section highlight is drawn via animated overlay (no inline box)
+                              children.add(
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: buildVerseContent(globalIndex, verse),
+                                ),
+                              );
+                            }
+                            return children;
+                          }(),
+                          const SizedBox(height: 32),
                         ],
                       ),
                     );
-                    continue;
-                  }
-
-                  // Section highlight is drawn via animated overlay (no inline box)
-                  children.add(
-                    SizedBox(
-                      width: double.infinity,
-                      child: buildVerseContent(globalIndex, verse),
-                    ),
-                  );
-                }
-                return children;
-              }(),
-              const SizedBox(height: 32),
-            ],
-            ),
-          );
-        }).toList(),
+                  }).toList(),
                 ),
                 if (_sectionOverlayRectTo != null)
                   TweenAnimationBuilder<Rect?>(
-                    key: ValueKey('section_overlay_$_sectionOverlayAnimationId'),
+                    key:
+                        ValueKey('section_overlay_$_sectionOverlayAnimationId'),
                     tween: RectTween(
                       begin: _sectionOverlayRectFrom ?? _sectionOverlayRectTo,
                       end: _sectionOverlayRectTo,
@@ -1251,18 +1590,25 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     curve: Curves.easeOutCubic,
                     builder: (context, rect, child) {
                       if (rect == null) return const SizedBox.shrink();
+                      final w = rect.width;
+                      final h = rect.height;
+                      if (w.isNaN || h.isNaN || w <= 0 || h <= 0) {
+                        return const SizedBox.shrink();
+                      }
                       return Positioned(
                         left: rect.left,
                         top: rect.top,
-                        width: rect.width,
-                        height: rect.height,
+                        width: w,
+                        height: h,
                         child: IgnorePointer(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: const Color(0xFF8B7355).withValues(alpha: 0.08),
+                              color: const Color(0xFF8B7355)
+                                  .withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
-                                color: const Color(0xFF8B7355).withValues(alpha: 0.22),
+                                color: const Color(0xFF8B7355)
+                                    .withValues(alpha: 0.22),
                                 width: 1,
                               ),
                             ),
@@ -1273,8 +1619,52 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   ),
               ],
             ),
+          );
+    if (isLaptop) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: scrollContent),
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onHorizontalDragUpdate: (d) {
+              setState(() {
+                final w =
+                    (_rightPanelsWidth - d.delta.dx)
+                        .clamp(
+                            _rightPanelsMinWidth, _rightPanelsMaxWidth)
+                        .toDouble();
+                _rightPanelsWidth = w;
+              });
+            },
+            child: MouseRegion(
+              cursor: SystemMouseCursors.resizeColumn,
+              child: Container(width: 6, color: Colors.transparent),
+            ),
           ),
-        ),
+          SizedBox(
+            width: _rightPanelsWidth,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8F7F3),
+                border: Border(
+                  left: BorderSide(
+                      color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: _buildPanelsColumn(),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildPanelsColumn(),
+        Expanded(child: scrollContent),
       ],
     );
   }
