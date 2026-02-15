@@ -69,9 +69,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final Map<String, Set<int>> _sectionVerseIndicesCache = {};
   Timer? _visibilityDebounceTimer;
 
-  /// True while programmatic scroll (arrow keys, section tap) is animating.
-  /// Suppresses visibility-driven breadcrumb updates that would overwrite our target.
-  bool _suppressVisibilityBreadcrumbUpdates = false;
+  /// Incremented on every programmatic navigation. Async visibility handlers check this before applying.
+  int _syncGeneration = 0;
+
+  /// True while programmatic scroll (section tap, arrow keys) is animating. Blocks visibility updates entirely.
+  bool _isProgrammaticNavigation = false;
 
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<String, double> _verseVisibility = {};
@@ -146,6 +148,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _verseVisibility.clear();
       _commentaryEntryForSelected = null;
       _commentaryExpanded = false;
+      _syncGeneration = 0;
+      _isProgrammaticNavigation = false;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -389,14 +393,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _highlightVerseIndices = {globalIndex};
         _commentaryEntryForSelected = null;
         _commentaryExpanded = false;
-        _scrollToVerseIndexAfterTap = globalIndex;
-        _scrollToVerseKey ??= GlobalKey();
       });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        _scrollToVerseWidget();
-        setState(() => _scrollToVerseIndexAfterTap = null);
-      });
+      _scrollToVerseIndex(globalIndex);
       return;
     }
 
@@ -426,19 +424,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (highlightRun.isEmpty) highlightRun.add(globalIndex);
     final firstInSection = highlightRun.reduce((a, b) => a < b ? a : b);
 
-    // Switch to new section: highlight only the run containing tapped verse, hide previous commentary
     setState(() {
       _highlightVerseIndices = highlightRun;
       _commentaryEntryForSelected = entry;
       _commentaryExpanded = false;
-      _scrollToVerseIndexAfterTap = firstInSection;
-      _scrollToVerseKey ??= GlobalKey();
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _scrollToVerseWidget();
-      setState(() => _scrollToVerseIndexAfterTap = null);
-    });
+    _scrollToVerseIndex(firstInSection);
   }
 
   /// Strip verse ref lines and verse text from commentary body so we show verses once at top.
@@ -468,11 +459,23 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _setInitialBreadcrumb() {
     final initialIndex = _scrollTargetVerseIndex ?? 0;
-    if (initialIndex < _verses.length) {
-      _visibleVerseIndex = null;
-      _visibleVerseSegmentRef = null; // Allow _updateBreadcrumbForVerse to process
-      _updateBreadcrumbForVerse(initialIndex);
-    }
+    if (initialIndex >= _verses.length) return;
+    _hierarchyService.getHierarchyForVerseIndex(initialIndex).then((hierarchy) {
+      if (!mounted) return;
+      final sectionPath = hierarchy.isNotEmpty
+          ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
+          : '';
+      var indices = _verseIndicesForSection(sectionPath);
+      if (indices.isEmpty && sectionPath.isNotEmpty) {
+        indices = {initialIndex};
+      }
+      final indicesWithVisible = {...indices, initialIndex};
+      _applySectionState(
+        hierarchy: hierarchy,
+        verseIndices: indicesWithVisible,
+        verseIndex: initialIndex,
+      );
+    });
   }
 
   /// Extracts the last segment of the path as the sibling number (e.g. "1.1.3.2" -> "2").
@@ -482,32 +485,68 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return parts.last;
   }
 
+  /// Resolve verse indices from section path (refs -> indices, handling split verses).
+  Set<int> _verseIndicesForSection(String sectionPath) {
+    if (sectionPath.isEmpty) return {};
+    final cached = _sectionVerseIndicesCache[sectionPath];
+    if (cached != null && cached.isNotEmpty) return cached;
+    final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
+    final indices = <int>{};
+    for (final ref in refs) {
+      var i = _verseService.getIndexForRef(ref);
+      if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
+        i = _verseService
+            .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
+      }
+      if (i != null) indices.add(i);
+    }
+    if (indices.isNotEmpty) _sectionVerseIndicesCache[sectionPath] = indices;
+    return indices;
+  }
+
+  /// Unified apply: updates breadcrumb, section verses, overlay, slider. All sync update paths call this.
+  /// If [supersedeGen] is set, applies only if it equals current _syncGeneration (discards stale async).
+  void _applySectionState({
+    required List<Map<String, String>> hierarchy,
+    required Set<int> verseIndices,
+    required int verseIndex,
+    String? segmentRef,
+    int? supersedeGen,
+  }) {
+    if (supersedeGen != null && supersedeGen != _syncGeneration) return;
+    setState(() {
+      _breadcrumbHierarchy = hierarchy;
+      _currentSectionVerseIndices = verseIndices;
+      _visibleVerseIndex = verseIndex;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _measureAndUpdateSectionOverlay();
+      _scrollSectionSliderToCurrent();
+    });
+  }
+
   Future<void> _onBreadcrumbSectionTap(Map<String, String> item) async {
     final section = item['section'] ?? item['path'] ?? '';
     if (section.isEmpty) return;
-    // Optimistic update: immediately show breadcrumb and section slider for tapped section
+
+    _syncGeneration++;
+    _isProgrammaticNavigation = true;
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = null;
+
     final hierarchy = _hierarchyService.getHierarchyForSectionSync(section);
     if (hierarchy.isNotEmpty) {
-      setState(() {
-        _breadcrumbHierarchy = hierarchy;
-        _currentSectionVerseIndices = _hierarchyService
-            .getVerseRefsForSectionSync(section)
-            .map((ref) {
-              var i = _verseService.getIndexForRef(ref);
-              if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
-                i = _verseService
-                    .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
-              }
-              return i;
-            })
-            .whereType<int>()
-            .toSet();
-      });
-      _scrollSectionSliderToCurrent();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _measureAndUpdateSectionOverlay();
-      });
+      final verseIndices = _verseIndicesForSection(section);
+      _applySectionState(
+        hierarchy: hierarchy,
+        verseIndices: verseIndices,
+        verseIndex: verseIndices.isNotEmpty
+            ? verseIndices.reduce((a, b) => a < b ? a : b)
+            : 0,
+      );
     }
+
     final firstVerseRef =
         await _hierarchyService.getFirstVerseForSection(section);
     if (firstVerseRef == null) return;
@@ -525,7 +564,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _scrollToVerseIndex(int index) {
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
-    _suppressVisibilityBreadcrumbUpdates = true;
+    _isProgrammaticNavigation = true;
     _scrollToVerseIndexAfterTap = index;
     _scrollToVerseKey ??= GlobalKey();
     setState(() {});
@@ -533,9 +572,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (!mounted) return;
       _scrollToVerseWidget();
       setState(() => _scrollToVerseIndexAfterTap = null);
-      Future.delayed(const Duration(milliseconds: 450), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         if (!mounted) return;
-        _suppressVisibilityBreadcrumbUpdates = false;
+        _isProgrammaticNavigation = false;
         _measureAndUpdateSectionOverlay();
       });
     });
@@ -607,20 +646,49 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
       {String? segmentRef}) {
+    if (_isProgrammaticNavigation) return;
     final key = segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
     if (visibility < 0.05) {
       _verseVisibility.remove(key);
       return;
     }
     _verseVisibility[key] = visibility;
-    if (_visibilityDebounceTimer?.isActive ?? false) return;
-    _visibilityDebounceTimer = Timer(const Duration(milliseconds: 120), () {
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = Timer(const Duration(milliseconds: 150), () {
       _visibilityDebounceTimer = null;
-      if (!mounted || _verseVisibility.isEmpty || _suppressVisibilityBreadcrumbUpdates) return;
+      if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) return;
       final picked = _pickVerseClosestToViewportCenter();
-      if (picked != null) {
-        _updateBreadcrumbForVerse(picked.$1, segmentRef: picked.$2);
-      }
+      if (picked == null) return;
+      final (pickedIdx, pickedSegRef) = picked;
+      final currentGen = _syncGeneration;
+      final future = pickedSegRef != null
+          ? _hierarchyService.getHierarchyForVerse(pickedSegRef)
+          : _hierarchyService.getHierarchyForVerseIndex(pickedIdx);
+      future.then((hierarchy) {
+        if (!mounted || currentGen != _syncGeneration) return;
+        final sectionPath = hierarchy.isNotEmpty
+            ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
+            : '';
+        var indices = _verseIndicesForSection(sectionPath);
+        if (indices.isEmpty && sectionPath.isNotEmpty) {
+          indices = {pickedIdx};
+        }
+        final indicesWithVisible = {...indices, pickedIdx};
+        setState(() {
+          if (_highlightSet.isNotEmpty && !_highlightSet.contains(pickedIdx)) {
+            _highlightVerseIndices = {};
+            _commentaryEntryForSelected = null;
+            _commentaryExpanded = false;
+          }
+        });
+        _applySectionState(
+          hierarchy: hierarchy,
+          verseIndices: indicesWithVisible,
+          verseIndex: pickedIdx,
+          segmentRef: pickedSegRef,
+          supersedeGen: currentGen,
+        );
+      });
     });
   }
 
@@ -687,80 +755,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (segments[i].ref == segmentRef) return i;
     }
     return 0;
-  }
-
-  /// For split verses: the segment ref (e.g. "7.7ab") currently in view.
-  String? _visibleVerseSegmentRef;
-
-  void _updateBreadcrumbForVerse(int verseIndex, {String? segmentRef}) {
-    if (_visibleVerseIndex == verseIndex &&
-        _visibleVerseSegmentRef == segmentRef) {
-      return;
-    }
-    _visibleVerseIndex = verseIndex;
-    _visibleVerseSegmentRef = segmentRef;
-    final future = segmentRef != null
-        ? _hierarchyService.getHierarchyForVerse(segmentRef)
-        : _hierarchyService.getHierarchyForVerseIndex(verseIndex);
-    future.then((hierarchy) {
-      if (!mounted ||
-          _visibleVerseIndex != verseIndex ||
-          _visibleVerseSegmentRef != segmentRef) {
-        return;
-      }
-      final sectionPath = hierarchy.isNotEmpty
-          ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
-          : '';
-      Set<int> indices = _sectionVerseIndicesCache[sectionPath] ?? const {};
-      if (indices.isEmpty && sectionPath.isNotEmpty) {
-        final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
-        indices = <int>{};
-        for (final ref in refs) {
-          var i = _verseService.getIndexForRef(ref);
-          if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
-            i = _verseService
-                .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
-          }
-          if (i != null) {
-            indices.add(i);
-          }
-        }
-        // Ensure the visible verse is always included (handles ref/index mapping gaps)
-        indices.add(verseIndex);
-        _sectionVerseIndicesCache[sectionPath] = indices;
-      }
-      // Always include the visible verse (handles ref→index lookup gaps for verses like 7.39/7.40)
-      final indicesWithVisible = {...indices, verseIndex};
-
-      final oldPath = _breadcrumbHierarchy.isNotEmpty
-          ? (_breadcrumbHierarchy.last['section'] ??
-              _breadcrumbHierarchy.last['path'] ??
-              '')
-          : '';
-      final oldIndices = _currentSectionVerseIndices ?? {};
-      if (sectionPath == oldPath &&
-          indicesWithVisible.length == oldIndices.length &&
-          indicesWithVisible.difference(oldIndices).isEmpty) {
-        return;
-      }
-      if (!mounted) return;
-      setState(() {
-        _breadcrumbHierarchy = hierarchy;
-        _currentSectionVerseIndices = indicesWithVisible;
-        // Clear commentary highlight when user scrolls outside the highlighted block
-        final highlight = _highlightSet;
-        if (highlight.isNotEmpty && !highlight.contains(verseIndex)) {
-          _highlightVerseIndices = {};
-          _commentaryEntryForSelected = null;
-          _commentaryExpanded = false;
-        }
-      });
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        _measureAndUpdateSectionOverlay();
-        _scrollSectionSliderToCurrent();
-      });
-    });
   }
 
   void _scrollSectionSliderToCurrent() {
@@ -1028,8 +1022,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       idx = flat.indexWhere((s) => s.path == currentPath);
     }
     if (idx < 0) {
-      if (direction > 0) idx = -1;
-      else return;
+      if (direction > 0) {
+        idx = -1;
+      } else {
+        return;
+      }
     }
     final newIdx = idx + direction;
     if (newIdx < 0 || newIdx >= flat.length) return;
