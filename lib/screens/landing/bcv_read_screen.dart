@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'bcv/bcv_chapters_panel.dart';
@@ -68,6 +69,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final Map<String, Set<int>> _sectionVerseIndicesCache = {};
   Timer? _visibilityDebounceTimer;
 
+  /// True while programmatic scroll (arrow keys, section tap) is animating.
+  /// Suppresses visibility-driven breadcrumb updates that would overwrite our target.
+  bool _suppressVisibilityBreadcrumbUpdates = false;
+
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<String, double> _verseVisibility = {};
 
@@ -79,6 +84,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final Map<int, GlobalKey> _verseKeys = {};
   final Map<String, GlobalKey> _verseSegmentKeys = {};
   final GlobalKey _scrollContentKey = GlobalKey();
+  final ScrollController _mainScrollController = ScrollController();
   final ScrollController _sectionSliderScrollController = ScrollController();
 
   bool _breadcrumbCollapsed = false;
@@ -122,6 +128,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void dispose() {
     _visibilityDebounceTimer?.cancel();
+    _mainScrollController.dispose();
     _sectionSliderScrollController.dispose();
     super.dispose();
   }
@@ -497,6 +504,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             .toSet();
       });
       _scrollSectionSliderToCurrent();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _measureAndUpdateSectionOverlay();
+      });
     }
     final firstVerseRef =
         await _hierarchyService.getFirstVerseForSection(section);
@@ -513,6 +523,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   void _scrollToVerseIndex(int index) {
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = null;
+    _suppressVisibilityBreadcrumbUpdates = true;
     _scrollToVerseIndexAfterTap = index;
     _scrollToVerseKey ??= GlobalKey();
     setState(() {});
@@ -520,6 +533,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (!mounted) return;
       _scrollToVerseWidget();
       setState(() => _scrollToVerseIndexAfterTap = null);
+      Future.delayed(const Duration(milliseconds: 450), () {
+        if (!mounted) return;
+        _suppressVisibilityBreadcrumbUpdates = false;
+        _measureAndUpdateSectionOverlay();
+      });
     });
   }
 
@@ -598,26 +616,77 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (_visibilityDebounceTimer?.isActive ?? false) return;
     _visibilityDebounceTimer = Timer(const Duration(milliseconds: 120), () {
       _visibilityDebounceTimer = null;
-      if (!mounted || _verseVisibility.isEmpty) return;
+      if (!mounted || _verseVisibility.isEmpty || _suppressVisibilityBreadcrumbUpdates) return;
+      final picked = _pickVerseClosestToViewportCenter();
+      if (picked != null) {
+        _updateBreadcrumbForVerse(picked.$1, segmentRef: picked.$2);
+      }
+    });
+  }
+
+  /// Picks the verse (or segment) whose center is closest to the viewport center.
+  /// Returns (verseIndex, segmentRef?) or null if no verse can be measured.
+  (int, String?)? _pickVerseClosestToViewportCenter() {
+    if (_verseVisibility.isEmpty) return null;
+    final pos = _mainScrollController.hasClients
+        ? _mainScrollController.position
+        : null;
+    if (pos == null) {
       final best =
           _verseVisibility.entries.reduce((a, b) => a.value >= b.value ? a : b);
-      const hysteresis = 0.08;
-      final currentKey = _visibleVerseIndex != null
-          ? (_visibleVerseSegmentRef != null
-              ? '${_visibleVerseIndex}_$_visibleVerseSegmentRef'
-              : '$_visibleVerseIndex')
-          : null;
-      final currentVis = currentKey != null ? _verseVisibility[currentKey] ?? 0.0 : 0.0;
-      final useCurrent = currentKey != null &&
-          _visibleVerseIndex != null &&
-          currentVis >= 0.05 &&
-          (best.value - currentVis).abs() < hysteresis;
-      final keyToUse = useCurrent ? currentKey : best.key;
-      final parts = keyToUse.split('_');
-      final verseToUse = int.tryParse(parts.first) ?? _visibleVerseIndex ?? 0;
+      final parts = best.key.split('_');
+      final verseToUse = int.tryParse(parts.first) ?? 0;
       final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
-      _updateBreadcrumbForVerse(verseToUse, segmentRef: segRef);
-    });
+      return (verseToUse, segRef);
+    }
+    final scrollOffset = pos.pixels;
+    final viewportHeight = pos.viewportDimension;
+    final viewportCenterY = scrollOffset + viewportHeight / 2;
+
+    final stackContext = _scrollContentKey.currentContext;
+    if (stackContext == null) return null;
+    final stackBox = stackContext.findRenderObject() as RenderBox?;
+    if (stackBox == null || !stackBox.hasSize) return null;
+
+    String? bestKey;
+    double bestDist = double.infinity;
+
+    for (final entry in _verseVisibility.entries) {
+      if (entry.value < 0.05) continue;
+      final parts = entry.key.split('_');
+      final idx = int.tryParse(parts.first);
+      if (idx == null) continue;
+      final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
+      GlobalKey? gk = segRef != null
+          ? _verseSegmentKeys['${idx}_${_segmentIndexForRef(idx, segRef)}']
+          : _verseKeys[idx];
+      gk ??= _verseKeys[idx];
+      if (gk?.currentContext == null) continue;
+      final box = gk!.currentContext!.findRenderObject() as RenderBox?;
+      if (box == null || !box.hasSize) continue;
+      final topLeft = box.localToGlobal(Offset.zero, ancestor: stackBox);
+      final verseCenterY = topLeft.dy + box.size.height / 2;
+      final dist = (verseCenterY - viewportCenterY).abs();
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestKey = entry.key;
+      }
+    }
+    if (bestKey == null) return null;
+    final parts = bestKey.split('_');
+    final verseToUse = int.tryParse(parts.first) ?? 0;
+    final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
+    return (verseToUse, segRef);
+  }
+
+  int _segmentIndexForRef(int verseIndex, String segmentRef) {
+    final ref = _verseService.getVerseRef(verseIndex);
+    if (ref == null) return 0;
+    final segments = _hierarchyService.getSplitVerseSegmentsSync(ref);
+    for (var i = 0; i < segments.length; i++) {
+      if (segments[i].ref == segmentRef) return i;
+    }
+    return 0;
   }
 
   /// For split verses: the segment ref (e.g. "7.7ab") currently in view.
@@ -930,8 +999,46 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: Focus(
+        autofocus: true,
+        onKeyEvent: (node, event) {
+          if (event is! KeyDownEvent) return KeyEventResult.ignored;
+          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+            _scrollToAdjacentSection(1);
+            return KeyEventResult.handled;
+          }
+          if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+            _scrollToAdjacentSection(-1);
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: _buildBody(),
+      ),
     );
+  }
+
+  /// Navigate to previous (direction -1) or next (direction 1) section.
+  void _scrollToAdjacentSection(int direction) {
+    final flat = _hierarchyService.getFlatSectionsSync();
+    if (flat.isEmpty) return;
+    var idx = -1;
+    final currentPath = _currentSectionPath;
+    if (currentPath.isNotEmpty) {
+      idx = flat.indexWhere((s) => s.path == currentPath);
+    }
+    if (idx < 0) {
+      if (direction > 0) idx = -1;
+      else return;
+    }
+    final newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= flat.length) return;
+    final section = flat[newIdx];
+    _onBreadcrumbSectionTap({
+      'section': section.path,
+      'path': section.path,
+      'title': section.title,
+    });
   }
 
   Widget _buildBody() {
@@ -1270,6 +1377,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final isLaptop =
         MediaQuery.of(context).size.width >= BcvReadConstants.laptopBreakpoint;
     final scrollContent = SingleChildScrollView(
+            controller: _mainScrollController,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
               key: _scrollContentKey,

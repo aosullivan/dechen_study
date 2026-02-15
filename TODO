@@ -1,5 +1,5 @@
-Still non-consecutive (20 sections):
-Cross-chapter (Scripture, Summary, Patience, Abandoning objections, etc.) – these sections cite verses from multiple chapters by design.
-Within-chapter gaps (e.g. 3.11 vs 3.13–15, 5.84 vs 5.91–97) – the overview may need finer structure in the mapping.
-Likely overview gaps (e.g. 1.1/1.3 with 1.2 elsewhere) – source structure or overview coverage may need to be updated.
-If you want, we can target a specific remaining section for further fixes.
+key up key down to scroll
+breadcrumb display - make it look more like a traditional breadcrumb trail than the current thing which is an indented list
+ensure we always use full vertical space for panels by default and after changing size
+separate section overview scroller
+do somethnig about the commentary

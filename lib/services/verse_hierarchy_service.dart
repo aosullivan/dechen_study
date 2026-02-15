@@ -26,6 +26,7 @@ class VerseHierarchyService {
   }
 
   /// Resolves path list for [ref] from [_map]. Call after _ensureLoaded() or when _map non-null.
+  /// For verses missing from the map (e.g. 6.23, 6.24), falls back to adjacent verses in same chapter.
   List<Map<String, String>>? _pathForRef(String ref) {
     final verseToPath = _map?['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return null;
@@ -35,6 +36,9 @@ class VerseHierarchyService {
         path = verseToPath['$ref$suffix'];
         if (path is List && path.isNotEmpty) break;
       }
+    }
+    if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+      path = _pathFromAdjacentVerse(verseToPath, ref);
     }
     if (path is! List) return null;
     return path.map((e) {
@@ -46,6 +50,26 @@ class VerseHierarchyService {
       }
       return <String, String>{'section': '', 'title': e.toString()};
     }).toList();
+  }
+
+  /// When [ref] has no path, try adjacent verses (v-1, v+1, v-2, v+2, ...) until one has a path.
+  dynamic _pathFromAdjacentVerse(Map verseToPath, String ref) {
+    final parts = ref.split('.');
+    if (parts.length != 2) return null;
+    final ch = int.tryParse(parts[0]);
+    final v = int.tryParse(parts[1]);
+    if (ch == null || v == null || v < 1) return null;
+    for (var offset = 1; offset <= 20; offset++) {
+      if (v - offset >= 1) {
+        final candidate = '$ch.${v - offset}';
+        final p = verseToPath[candidate];
+        if (p is List && p.isNotEmpty) return p;
+      }
+      final candidate = '$ch.${v + offset}';
+      final p = verseToPath[candidate];
+      if (p is List && p.isNotEmpty) return p;
+    }
+    return null;
   }
 
   /// Returns the full section hierarchy for [ref] (e.g. "1.5").
