@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../models/study_models.dart';
 import '../../services/study_service.dart';
+import '../../utils/app_theme.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -10,7 +12,7 @@ class QuizScreen extends StatefulWidget {
 }
 
 class _QuizScreenState extends State<QuizScreen> {
-  final _studyService = StudyService();
+  final _studyService = StudyService.instance;
   bool _isLoading = true;
   Section? _currentSection;
   List<Chapter> _chapters = [];
@@ -48,7 +50,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF8B7355)),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
 
@@ -74,7 +76,7 @@ class _QuizScreenState extends State<QuizScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF8B7355).withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Row(
@@ -88,7 +90,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   Text(
                     '$_correctAnswers / $_totalAnswers',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: const Color(0xFF8B7355),
+                          color: AppColors.primary,
                         ),
                   ),
               ],
@@ -106,8 +108,8 @@ class _QuizScreenState extends State<QuizScreen> {
                 color: _showAnswer
                     ? (_selectedChapter == _currentSection!.chapterNumber
                         ? Colors.green
-                        : Colors.red)
-                    : const Color(0xFFD4C4B0),
+                        : AppColors.wrong)
+                    : AppColors.border,
                 width: _showAnswer ? 2 : 1,
               ),
             ),
@@ -155,15 +157,15 @@ class _QuizScreenState extends State<QuizScreen> {
                         }
                       },
                 selectedColor: isCorrect
-                    ? Colors.green.withOpacity(0.3)
+                    ? Colors.green.withValues(alpha: 0.3)
                     : (isWrong
-                        ? Colors.red.withOpacity(0.3)
-                        : const Color(0xFF8B7355).withOpacity(0.3)),
+                        ? AppColors.wrong.withValues(alpha: 0.3)
+                        : AppColors.primary.withValues(alpha: 0.3)),
                 backgroundColor: Colors.white,
                 side: BorderSide(
                   color: isCorrect
                       ? Colors.green
-                      : (isWrong ? Colors.red : const Color(0xFFD4C4B0)),
+                      : (isWrong ? AppColors.wrong : AppColors.border),
                 ),
               );
             }).toList(),
@@ -178,15 +180,15 @@ class _QuizScreenState extends State<QuizScreen> {
                 decoration: BoxDecoration(
                   color: (_selectedChapter == _currentSection!.chapterNumber
                           ? Colors.green
-                          : Colors.red)
-                      .withOpacity(0.15),
+                          : AppColors.wrong)
+                      .withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
                       color: (_selectedChapter == _currentSection!.chapterNumber
                               ? Colors.green
-                              : Colors.red)
-                          .withOpacity(0.3),
+                              : AppColors.wrong)
+                          .withValues(alpha: 0.3),
                       blurRadius: 16,
                       spreadRadius: 2,
                     ),
@@ -199,7 +201,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   size: 64,
                   color: _selectedChapter == _currentSection!.chapterNumber
                       ? Colors.green
-                      : Colors.red,
+                      : AppColors.wrong,
                 ),
               ),
             ),
@@ -211,7 +213,7 @@ class _QuizScreenState extends State<QuizScreen> {
               child: ElevatedButton(
                 onPressed: _nextQuestion,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF8B7355),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),

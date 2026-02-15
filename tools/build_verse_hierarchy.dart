@@ -5,8 +5,10 @@
 // Structure: overview as JSON tree. Each section node has title, verses[], children[].
 // Verses are grouped under their section. verseToPath provides quick lookup for the app.
 
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
+
+import 'shared/overview_parser.dart';
 
 const overviewPath = 'texts/overviews-pages (EOS).txt';
 const mappingPath = 'texts/verse_commentary_mapping.txt';
@@ -50,16 +52,6 @@ class OverviewNode {
     }
     return result;
   }
-}
-
-/// Normalize title for matching: lowercase, trim, collapse whitespace, remove trailing punctuation.
-String normalize(String s) {
-  return s
-      .toLowerCase()
-      .trim()
-      .replaceAll(RegExp(r'\s+'), ' ')
-      .replaceAll(RegExp(r'[:\.,;]+$'), '')
-      .trim();
 }
 
 /// Parse overview into tree. Indentation = 4 spaces per level.
@@ -132,7 +124,7 @@ bool _contextMatchesTitle(Set<String> contextWords, String title) {
 OverviewNode? _disambiguateByContext(List<OverviewNode> candidates, List<String> context,
     {String? ref}) {
   if (context.isEmpty) return null;
-  final contextNorm = context.map((h) => normalize(_stripNumberPrefix(h))).toSet();
+  final contextNorm = context.map((h) => normalize(stripNumberPrefix(h))).toSet();
   final contextWords = contextNorm.expand((s) => s.split(RegExp(r'\s+')).where((w) => w.length >= 3)).toSet();
 
   int score(OverviewNode n) {
@@ -140,17 +132,17 @@ OverviewNode? _disambiguateByContext(List<OverviewNode> candidates, List<String>
     // Parent match (strong) - exact or flexible word overlap for similar phrasing.
     // Strip number prefix from overview titles so they match context (e.g. "1. Accepting others" -> "Accepting others").
     if (n.parent != null && n.parent!.title.isNotEmpty) {
-      final parentNorm = normalize(_stripNumberPrefix(n.parent!.title));
+      final parentNorm = normalize(stripNumberPrefix(n.parent!.title));
       if (contextNorm.contains(parentNorm)) {
         s += 2;
-      } else if (_contextMatchesTitle(contextWords, _stripNumberPrefix(n.parent!.title))) {
+      } else if (_contextMatchesTitle(contextWords, stripNumberPrefix(n.parent!.title))) {
         s += 1;
       }
     }
     // Sibling match (also strong - e.g. "Elaboration" vs "Accomplishing it")
     final siblings = n.parent?.children ?? [];
     for (final sib in siblings) {
-      if (sib != n && contextNorm.contains(normalize(_stripNumberPrefix(sib.title)))) {
+      if (sib != n && contextNorm.contains(normalize(stripNumberPrefix(sib.title)))) {
         s += 1;
         break;
       }
@@ -172,9 +164,6 @@ OverviewNode? _disambiguateByContext(List<OverviewNode> candidates, List<String>
   return tied.first;
 }
 
-String _stripNumberPrefix(String s) {
-  return s.replaceFirst(RegExp(r'^\d+(\.\d+)*\.\s*'), '').trim();
-}
 
 /// When the target heading has no matching node under the context's parent (overview flatter
 /// than mapping), try matching a parent heading from context instead (e.g. "Its unique preeminence").
@@ -188,7 +177,7 @@ OverviewNode? _matchContextParent(Map<String, List<OverviewNode>> lookup, List<S
     }
   }
   for (final h in context) {
-    final title = _stripNumberPrefix(h);
+    final title = stripNumberPrefix(h);
     final norm = normalize(title);
     if (candidateSiblingTitles.contains(norm)) continue; // don't match sibling
     final nodes = lookup[norm];
@@ -295,63 +284,10 @@ double _similarity(String a, String b) {
   return inter / (as.length + bs.length - inter);
 }
 
-/// Extract verse refs from a line like "[1.1]", "[1.1ab]", "[1.18] [1.19]", "[1.34-1.35ab]"
-/// Preserves split suffixes (ab, cd) so 8.19ab and 8.19cd can map to different sections.
-List<String> extractVerseRefs(String line) {
-  final refs = <String>[];
-  final matches = RegExp(r'\[(\d+\.\d+)([a-d]*)(?:-(\d+\.\d+)[a-d]*)?\]').allMatches(line);
-  for (final m in matches) {
-    final start = m.group(1)!;
-    final suffix = m.group(2) ?? '';
-    final end = m.group(3);
-    final startBase = start.split(RegExp(r'[a-d]')).first;
-    if (end != null) {
-      final endBase = end.split(RegExp(r'[a-d]')).first;
-      final startParts = startBase.split('.');
-      final endParts = endBase.split('.');
-      if (startParts.length == 2 && endParts.length == 2) {
-        final c1 = int.parse(startParts[0]);
-        final v1 = int.parse(startParts[1]);
-        final c2 = int.parse(endParts[0]);
-        final v2 = int.parse(endParts[1]);
-        for (var c = c1; c <= c2; c++) {
-          final vStart = (c == c1) ? v1 : 1;
-          final vEnd = (c == c2) ? v2 : 999;
-          for (var v = vStart; v <= vEnd; v++) {
-            refs.add('$c.$v');
-          }
-        }
-      } else {
-        refs.add(startBase);
-      }
-    } else {
-      refs.add(start + suffix);
-    }
-  }
-  return refs;
-}
-
-/// Check if line looks like a section heading: starts with "N. " or "N.M. " pattern
-bool isSectionHeading(String line) {
-  final t = line.trim();
-  if (t.isEmpty) return false;
-  return RegExp(r'^\d+(\.\d+)*\.\s+.+').hasMatch(t);
-}
-
-/// Extract the heading part (before colon if any). "1. The purpose of each section:" -> "1. The purpose of each section"
-String extractHeading(String line) {
-  final t = line.trim();
-  final colon = t.indexOf(':');
-  if (colon > 0) {
-    return t.substring(0, colon).trim();
-  }
-  return t;
-}
-
 /// Serialize node to JSON (title, verses, children). Skips root.
 Map<String, dynamic> nodeToJson(OverviewNode node) {
-  final verses = List<String>.from(node.verses)..sort(_compareVerseRefs);
-  final needsReview = List<String>.from(node.needsReviewVerses)..sort(_compareVerseRefs);
+  final verses = List<String>.from(node.verses)..sort(compareVerseRefs);
+  final needsReview = List<String>.from(node.needsReviewVerses)..sort(compareVerseRefs);
   final children = node.children.map(nodeToJson).toList();
 
   final out = <String, dynamic>{
@@ -366,17 +302,6 @@ Map<String, dynamic> nodeToJson(OverviewNode node) {
   return out;
 }
 
-int _compareVerseRefs(String a, String b) {
-  final ap = a.split('.');
-  final bp = b.split('.');
-  if (ap.length != 2 || bp.length != 2) return a.compareTo(b);
-  final ac = int.tryParse(ap[0]) ?? 0;
-  final av = int.tryParse(ap[1]) ?? 0;
-  final bc = int.tryParse(bp[0]) ?? 0;
-  final bv = int.tryParse(bp[1]) ?? 0;
-  if (ac != bc) return ac.compareTo(bc);
-  return av.compareTo(bv);
-}
 
 void main() async {
   final overviewContent = await File(overviewPath).readAsString();
@@ -458,7 +383,7 @@ void main() async {
   // Map each verse to its overview node and add to that node.
   // Process in document order (by verse ref) so verse-proximity tiebreaker works correctly.
   final sortedRefs = verseToHeading.keys.toList()
-    ..sort(_compareVerseRefs);
+    ..sort(compareVerseRefs);
   var needsReviewCount = 0;
   for (final ref in sortedRefs) {
     if (verseToSectionOverride.containsKey(ref)) continue; // handle in override step
@@ -510,12 +435,12 @@ void main() async {
       }
     }
     if (byChapter.isEmpty) {
-      all.sort(_compareVerseRefs);
+      all.sort(compareVerseRefs);
       return all.first;
     }
     final dominant = byChapter.entries
         .reduce((a, b) => a.value.length >= b.value.length ? a : b);
-    dominant.value.sort(_compareVerseRefs);
+    dominant.value.sort(compareVerseRefs);
     return dominant.value.first;
   }
   final sectionToFirstVerse = <String, String>{};

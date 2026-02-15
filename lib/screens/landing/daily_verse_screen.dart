@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../services/bcv_verse_service.dart';
+import '../../utils/app_theme.dart';
 import '../../services/commentary_service.dart';
 import 'bcv_read_screen.dart';
 
@@ -108,7 +110,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2416)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -126,7 +128,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
   Widget _buildBody() {
     if (_loading) {
       return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF8B7355)),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
     if (_error != null) {
@@ -172,9 +174,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F7F3),
+              color: AppColors.cardBeige,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE8E4DC)),
+              border: Border.all(color: AppColors.borderLight),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +185,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                   _sectionCaption,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontFamily: 'Lora',
-                        color: const Color(0xFF8B7355),
+                        color: AppColors.primary,
                       ),
                 ),
                 const SizedBox(height: 16),
@@ -201,7 +203,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                             'Verse $ref',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   fontFamily: 'Lora',
-                                  color: const Color(0xFF8B7355),
+                                  color: AppColors.primary,
                                 ),
                           ),
                           const SizedBox(height: 6),
@@ -218,7 +220,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                                 fontFamily: 'Crimson Text',
                                 fontSize: 20,
                                 height: 1.8,
-                                color: Color(0xFF2C2416),
+                                color: AppColors.textDark,
                               ),
                         ),
                       ],
@@ -237,8 +239,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                   icon: const Icon(Icons.refresh, size: 20),
                   label: const Text('Another section'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF8B7355),
-                    side: const BorderSide(color: Color(0xFF8B7355)),
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.primary),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                 ),
@@ -250,8 +252,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                   icon: const Icon(Icons.book, size: 20),
                   label: const Text('Full text'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF8B7355),
-                    side: const BorderSide(color: Color(0xFF8B7355)),
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.primary),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                 ),

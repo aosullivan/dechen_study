@@ -3,9 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'bcv/bcv_chapters_panel.dart';
+import 'bcv/bcv_read_constants.dart';
+import 'bcv/bcv_section_slider.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
+import '../../utils/app_theme.dart';
 
 /// Read screen for Bodhicaryavatara: main area with full text, right-side panels for chapters, section overview, and breadcrumb.
 /// Optional [scrollToVerseIndex] scrolls to the exact verse after first frame.
@@ -72,20 +76,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Rect? _sectionOverlayRectTo;
   int _sectionOverlayAnimationId = 0;
   int _sectionOverlayMeasureRetries = 0;
-  static const int _maxMeasureRetries = 5;
   final Map<int, GlobalKey> _verseKeys = {};
   final Map<String, GlobalKey> _verseSegmentKeys = {};
-  GlobalKey _scrollContentKey = GlobalKey();
+  final GlobalKey _scrollContentKey = GlobalKey();
   final ScrollController _sectionSliderScrollController = ScrollController();
-  static const double _sectionSliderLineHeight = 22.0;
-  static const int _sectionSliderVisibleLines = 10;
-  static const double _laptopBreakpoint = 900;
-  static const double _rightPanelsMinWidth = 200;
-  static const double _rightPanelsMaxWidth = 500;
-  static const double _panelMinHeight = 60;
-  static const double _panelLineHeight = 22.0;
-  static const double _panelPaddingH = 12.0;
-  static const double _panelPaddingV = 6.0;
 
   bool _breadcrumbCollapsed = false;
   bool _sectionSliderCollapsed = false;
@@ -96,15 +90,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   double _breadcrumbPanelHeight = 120;
   double _sectionPanelHeight = 220;
 
+  Set<int> get _highlightSet => _highlightVerseIndices ?? const {};
+
+  bool get _hasInitialHighlight =>
+      widget.highlightSectionIndices != null &&
+      widget.highlightSectionIndices!.isNotEmpty;
+
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
     if (_scrollToVerseIndexAfterTap != null) return _scrollToVerseIndexAfterTap;
-    if ((_highlightVerseIndices ?? {}).isNotEmpty) {
-      return (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
+    if (_highlightSet.isNotEmpty) {
+      return _highlightSet.reduce((a, b) => a < b ? a : b);
     }
     if (widget.scrollToVerseIndex != null) return widget.scrollToVerseIndex;
-    if (widget.highlightSectionIndices != null &&
-        widget.highlightSectionIndices!.isNotEmpty) {
+    if (_hasInitialHighlight) {
       return widget.highlightSectionIndices!.reduce((a, b) => a < b ? a : b);
     }
     return null;
@@ -114,7 +113,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void initState() {
     super.initState();
     if (widget.scrollToVerseIndex != null ||
-        (widget.highlightSectionIndices?.isNotEmpty ?? false)) {
+        _hasInitialHighlight) {
       _scrollToVerseKey = GlobalKey();
     }
     _load();
@@ -165,7 +164,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               .addPostFrameCallback((_) => _scrollToVerseWidget());
         }
         if (widget.highlightSectionIndices != null &&
-            (_highlightVerseIndices ?? {}).isNotEmpty) {
+            _highlightSet.isNotEmpty) {
           _loadCommentaryForHighlightedSection();
         }
         _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
@@ -200,9 +199,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
-    if ((_highlightVerseIndices ?? {}).isEmpty) return;
+    if (_highlightSet.isEmpty) return;
     final firstIndex =
-        (_highlightVerseIndices ?? {}).reduce((a, b) => a < b ? a : b);
+        _highlightSet.reduce((a, b) => a < b ? a : b);
     final ref = _verseService.getVerseRef(firstIndex);
     if (ref == null) return;
     final entry = await _commentaryService.getCommentaryForRef(ref);
@@ -214,8 +213,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Consecutive verse indices from _highlightVerseIndices, for one continuous highlight per run.
   List<List<int>> _getHighlightRuns() {
-    if ((_highlightVerseIndices ?? {}).isEmpty) return [];
-    final sorted = (_highlightVerseIndices ?? {}).toList()..sort();
+    if (_highlightSet.isEmpty) return [];
+    final sorted = _highlightSet.toList()..sort();
     final runs = <List<int>>[];
     var current = [sorted.first];
     for (var i = 1; i < sorted.length; i++) {
@@ -307,7 +306,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       measured = measured == null ? padded : measured.expandToInclude(padded);
     }
     if (measured == null) {
-      if (_sectionOverlayMeasureRetries < _maxMeasureRetries) {
+      if (_sectionOverlayMeasureRetries < BcvReadConstants.maxSectionOverlayMeasureRetries) {
         _sectionOverlayMeasureRetries++;
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _measureAndUpdateSectionOverlay();
@@ -342,7 +341,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Consecutive verse indices in current section but NOT in highlight (for faint box).
   List<List<int>> _getSectionRuns() {
     final section = _currentSectionVerseIndices ?? {};
-    final highlight = _highlightVerseIndices ?? {};
+    final highlight = _highlightSet;
     final sectionOnly = section.difference(highlight).toList()..sort();
     if (sectionOnly.isEmpty) return [];
     final runs = <List<int>>[];
@@ -361,7 +360,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   Future<void> _onVerseTap(int globalIndex) async {
     // If clicking a verse that's already highlighted, clear selection
-    if ((_highlightVerseIndices ?? {}).contains(globalIndex)) {
+    if (_highlightSet.contains(globalIndex)) {
       setState(() {
         _highlightVerseIndices = {};
         _commentaryEntryForSelected = null;
@@ -533,8 +532,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final numDisplay = _sectionNumberForDisplay(section);
     final displayNum = numDisplay.isNotEmpty ? numDisplay : '${index + 1}';
     final baseColor = isCurrent
-        ? const Color(0xFF2C2416)
-        : const Color(0xFF8B7355).withValues(alpha: 0.8);
+        ? AppColors.textDark
+        : AppColors.primary.withValues(alpha: 0.8);
     final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
               fontFamily: 'Lora',
               color: baseColor,
@@ -551,7 +550,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             '$displayNum.',
             style: baseStyle.copyWith(
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF8B7355),
+              color: AppColors.primary,
             ),
           ),
         ),
@@ -565,7 +564,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ? Container(
               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFF8B7355).withValues(alpha: 0.12),
+                color: AppColors.primary.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: content,
@@ -574,7 +573,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     return Material(
       color: isCurrent
-          ? const Color(0xFF8B7355).withValues(alpha: 0.12)
+          ? AppColors.primary.withValues(alpha: 0.12)
           : Colors.transparent,
       borderRadius: BorderRadius.circular(4),
       child: InkWell(
@@ -626,7 +625,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _updateBreadcrumbForVerse(int verseIndex, {String? segmentRef}) {
     if (_visibleVerseIndex == verseIndex &&
-        _visibleVerseSegmentRef == segmentRef) return;
+        _visibleVerseSegmentRef == segmentRef) {
+      return;
+    }
     _visibleVerseIndex = verseIndex;
     _visibleVerseSegmentRef = segmentRef;
     final future = segmentRef != null
@@ -635,7 +636,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     future.then((hierarchy) {
       if (!mounted ||
           _visibleVerseIndex != verseIndex ||
-          _visibleVerseSegmentRef != segmentRef) return;
+          _visibleVerseSegmentRef != segmentRef) {
+        return;
+      }
       final sectionPath = hierarchy.isNotEmpty
           ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
           : '';
@@ -649,7 +652,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             i = _verseService
                 .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
           }
-          if (i != null) indices.add(i);
+          if (i != null) {
+            indices.add(i);
+          }
         }
         // Ensure the visible verse is always included (handles ref/index mapping gaps)
         indices.add(verseIndex);
@@ -674,7 +679,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _breadcrumbHierarchy = hierarchy;
         _currentSectionVerseIndices = indicesWithVisible;
         // Clear commentary highlight when user scrolls outside the highlighted block
-        final highlight = _highlightVerseIndices ?? {};
+        final highlight = _highlightSet;
         if (highlight.isNotEmpty && !highlight.contains(verseIndex)) {
           _highlightVerseIndices = {};
           _commentaryEntryForSelected = null;
@@ -699,11 +704,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
     final viewportHeight =
-        _sectionSliderLineHeight * _sectionSliderVisibleLines;
-    final targetOffset = (idx * _sectionSliderLineHeight) -
+        BcvReadConstants.sectionSliderLineHeight * BcvReadConstants.sectionSliderVisibleLines;
+    final targetOffset = (idx * BcvReadConstants.sectionSliderLineHeight) -
         (viewportHeight / 2) +
-        (_sectionSliderLineHeight / 2);
-    final maxOffset = (flat.length * _sectionSliderLineHeight - viewportHeight)
+        (BcvReadConstants.sectionSliderLineHeight / 2);
+    final maxOffset = (flat.length * BcvReadConstants.sectionSliderLineHeight - viewportHeight)
         .clamp(0.0, double.infinity);
     final maxOffsetSafe = maxOffset.isFinite ? maxOffset : 0.0;
     final clamped = targetOffset.clamp(0.0, maxOffsetSafe).toDouble();
@@ -732,16 +737,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Inline commentary panel (inserted below verses in the main scroll). Visually distinct from root text.
   /// Uses a muted sage/green-grey palette (Dechen-style) and is indented like a subsection.
-  static const Color _commentaryBg = Color(0xFFEDF0E8);
-  static const Color _commentaryBorder = Color(0xFFA3B09A);
-  static const Color _commentaryHeader = Color(0xFF7A8B72);
+  static const Color _commentaryBg = AppColors.commentaryBg;
+  static const Color _commentaryBorder = AppColors.commentaryBorder;
+  static const Color _commentaryHeader = AppColors.commentaryHeader;
 
   Widget _buildInlineCommentaryPanel(CommentaryEntry entry) {
     final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontFamily: 'Crimson Text',
           fontSize: 18,
           height: 1.8,
-          color: const Color(0xFF2C2416),
+          color: AppColors.textDark,
         );
     final headingStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
           fontFamily: 'Lora',
@@ -860,7 +865,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                           fontFamily: 'Crimson Text',
                           fontSize: 18,
                           height: 1.8,
-                          color: const Color(0xFF2C2416),
+                          color: AppColors.textDark,
                         ),
                   ),
                 ],
@@ -879,7 +884,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2416)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -893,7 +898,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               _chaptersPanelCollapsed
                   ? Icons.menu_book
                   : Icons.menu_book_outlined,
-              color: const Color(0xFF2C2416),
+              color: AppColors.textDark,
             ),
             tooltip: _chaptersPanelCollapsed ? 'Show Chapters' : 'Hide Chapters',
             onPressed: () => setState(
@@ -904,7 +909,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               _breadcrumbCollapsed
                   ? Icons.account_tree
                   : Icons.account_tree_outlined,
-              color: const Color(0xFF2C2416),
+              color: AppColors.textDark,
             ),
             tooltip: _breadcrumbCollapsed
                 ? 'Show Breadcrumb Trail'
@@ -915,7 +920,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           IconButton(
             icon: Icon(
               _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
-              color: const Color(0xFF2C2416),
+              color: AppColors.textDark,
             ),
             tooltip: _sectionSliderCollapsed
                 ? 'Show Section Overview'
@@ -932,7 +937,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Widget _buildBody() {
     if (_loading) {
       return const Center(
-          child: CircularProgressIndicator(color: Color(0xFF8B7355)));
+          child: CircularProgressIndicator(color: AppColors.primary));
     }
     if (_error != null) {
       return Center(
@@ -966,14 +971,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return _buildMainContent();
   }
 
-  TextStyle get _panelTextStyle =>
-      Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontFamily: 'Lora',
-            fontSize: 12,
-            color: const Color(0xFF2C2416),
-          ) ??
-      const TextStyle(fontFamily: 'Lora', fontSize: 12);
-
   int? get _currentChapterNumber {
     final idx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
     if (idx == null) return null;
@@ -986,129 +983,29 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   Widget _buildChaptersPanel({double? height}) {
-    if (_chapters.isEmpty) return const SizedBox.shrink();
-    final raw = height ?? _panelLineHeight * 5;
-    final h = raw.clamp(_panelMinHeight, 400.0).toDouble();
-    final currentCh = _currentChapterNumber;
-    return SizedBox(
-      height: h,
-      child: ListView.builder(
-        padding: EdgeInsets.symmetric(
-            horizontal: _panelPaddingH, vertical: _panelPaddingV),
-        itemCount: _chapters.length,
-        itemBuilder: (context, index) {
-          final ch = _chapters[index];
-          final isCurrent = ch.number == currentCh;
-          return Material(
-            color: isCurrent
-                ? const Color(0xFF8B7355).withValues(alpha: 0.12)
-                : Colors.transparent,
-            child: InkWell(
-              onTap: () => _scrollToChapter(ch.number),
-              borderRadius: BorderRadius.circular(6),
-              child: SizedBox(
-                height: _panelLineHeight,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Ch ${ch.number}: ${ch.title}',
-                    style: _panelTextStyle.copyWith(
-                      color: isCurrent
-                          ? const Color(0xFF2C2416)
-                          : const Color(0xFF8B7355).withValues(alpha: 0.9),
-                      fontWeight:
-                          isCurrent ? FontWeight.w600 : FontWeight.normal,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+    return BcvChaptersPanel(
+      chapters: _chapters,
+      currentChapterNumber: _currentChapterNumber,
+      onChapterTap: _scrollToChapter,
+      height: height,
     );
   }
 
+  String get _currentSectionPath => _breadcrumbHierarchy.isNotEmpty
+      ? (_breadcrumbHierarchy.last['section'] ??
+          _breadcrumbHierarchy.last['path'] ??
+          '')
+      : '';
+
   Widget _buildSectionSlider({double? height}) {
     final flat = _hierarchyService.getFlatSectionsSync();
-    if (flat.isEmpty) return const SizedBox.shrink();
-    final currentPath = _breadcrumbHierarchy.isNotEmpty
-        ? (_breadcrumbHierarchy.last['section'] ??
-            _breadcrumbHierarchy.last['path'] ??
-            '')
-        : '';
-    final raw =
-        height ?? _sectionSliderLineHeight * _sectionSliderVisibleLines;
-    final sliderHeight = raw.toDouble();
-    return Container(
-      height: sliderHeight,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F7F3),
-        border: Border(
-          bottom:
-              BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
-        ),
-      ),
-      child: ListView.builder(
-        controller: _sectionSliderScrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        itemCount: flat.length,
-        itemBuilder: (context, index) {
-          final item = flat[index];
-          final isCurrent = item.path == currentPath;
-          final isAncestor = currentPath.isNotEmpty &&
-              (item.path == currentPath ||
-                  currentPath.startsWith('${item.path}.'));
-          final indent = item.depth * 12.0;
-          return Material(
-            color: isCurrent
-                ? const Color(0xFF8B7355).withValues(alpha: 0.12)
-                : Colors.transparent,
-            child: InkWell(
-              onTap: () => _onBreadcrumbSectionTap({
-                'section': item.path,
-                'path': item.path,
-                'title': item.title
-              }),
-              child: SizedBox(
-                height: _sectionSliderLineHeight,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: indent),
-                    child: Text(
-                      () {
-                        final num = _sectionNumberForDisplay(item.path);
-                        return num.isNotEmpty
-                            ? '$num. ${item.title}'
-                            : item.title;
-                      }(),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontFamily: 'Lora',
-                                fontSize: 12,
-                                color: isCurrent
-                                    ? const Color(0xFF2C2416)
-                                    : isAncestor
-                                        ? const Color(0xFF5C4A3A)
-                                        : const Color(0xFF8B7355)
-                                            .withValues(alpha: 0.9),
-                                fontWeight: isAncestor
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                              ) ??
-                          const TextStyle(fontSize: 12),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+    return BcvSectionSlider(
+      flatSections: flat,
+      currentPath: _currentSectionPath,
+      onSectionTap: _onBreadcrumbSectionTap,
+      sectionNumberForDisplay: _sectionNumberForDisplay,
+      scrollController: _sectionSliderScrollController,
+      height: height,
     );
   }
 
@@ -1128,7 +1025,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             height: 2,
             width: 32,
             decoration: BoxDecoration(
-              color: const Color(0xFFD4C4B0).withValues(alpha: 0.6),
+              color: AppColors.border.withValues(alpha: 0.6),
               borderRadius: BorderRadius.circular(1),
             ),
           ),
@@ -1148,7 +1045,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }) {
     Widget expandedContent = full();
     if (contentHeight != null && contentHeight > 0) {
-      final h = contentHeight.clamp(_panelMinHeight, 400.0).toDouble();
+      final h = contentHeight.clamp(BcvReadConstants.panelMinHeight, 400.0).toDouble();
       expandedContent = SizedBox(
         height: h,
         child: SingleChildScrollView(child: expandedContent),
@@ -1186,7 +1083,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     required VoidCallback onCollapse,
   }) {
     return Material(
-      color: const Color(0xFFF8F7F3),
+      color: AppColors.cardBeige,
       child: InkWell(
         onTap: onCollapse,
         child: Container(
@@ -1194,19 +1091,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                  color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+                  color: AppColors.border.withValues(alpha: 0.5)),
             ),
           ),
           child: Row(
             children: [
-              Icon(Icons.expand_less, size: 20, color: const Color(0xFF8B7355)),
+              Icon(Icons.expand_less, size: 20, color: AppColors.primary),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   subtitle.isNotEmpty ? '$label: $subtitle' : label,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
-                        color: const Color(0xFF2C2416),
+                        color: AppColors.textDark,
                         fontSize: 12,
                       ),
                   maxLines: 1,
@@ -1227,7 +1124,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     required VoidCallback onExpand,
   }) {
     return Material(
-      color: const Color(0xFFF8F7F3),
+      color: AppColors.cardBeige,
       child: InkWell(
         onTap: onTap,
         child: Container(
@@ -1235,19 +1132,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                  color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+                  color: AppColors.border.withValues(alpha: 0.5)),
             ),
           ),
           child: Row(
             children: [
-              Icon(Icons.expand_more, size: 20, color: const Color(0xFF8B7355)),
+              Icon(Icons.expand_more, size: 20, color: AppColors.primary),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   subtitle.isNotEmpty ? subtitle : 'Tap to show $label',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
-                        color: const Color(0xFF2C2416),
+                        color: AppColors.textDark,
                         fontSize: 12,
                       ),
                   maxLines: 1,
@@ -1256,7 +1153,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               ),
               IconButton(
                 icon: const Icon(Icons.expand_more,
-                    size: 20, color: Color(0xFF8B7355)),
+                    size: 20, color: AppColors.primary),
                 tooltip: 'Expand',
                 style: IconButton.styleFrom(
                   minimumSize: const Size(32, 32),
@@ -1299,8 +1196,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ),
         _buildVerticalResizeHandle(onDragDelta: (dy) {
           setState(() {
-            if (_chaptersPanelHeight + dy >= _panelMinHeight &&
-                _sectionPanelHeight - dy >= _panelMinHeight) {
+            if (_chaptersPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
+                _sectionPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
               _chaptersPanelHeight += dy;
               _sectionPanelHeight -= dy;
             }
@@ -1316,8 +1213,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ),
         _buildVerticalResizeHandle(onDragDelta: (dy) {
           setState(() {
-            if (_sectionPanelHeight + dy >= _panelMinHeight &&
-                _breadcrumbPanelHeight - dy >= _panelMinHeight) {
+            if (_sectionPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
+                _breadcrumbPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
               _sectionPanelHeight += dy;
               _breadcrumbPanelHeight -= dy;
             }
@@ -1345,10 +1242,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8F7F3),
+        color: AppColors.cardBeige,
         border: Border(
           bottom:
-              BorderSide(color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+              BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
         ),
       ),
       child: Column(
@@ -1371,7 +1268,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   Widget _buildMainContent() {
     final isLaptop =
-        MediaQuery.of(context).size.width >= _laptopBreakpoint;
+        MediaQuery.of(context).size.width >= BcvReadConstants.laptopBreakpoint;
     final scrollContent = SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
@@ -1398,7 +1295,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 .displayMedium
                                 ?.copyWith(
                                   fontFamily: 'Crimson Text',
-                                  color: const Color(0xFF2C2416),
+                                  color: AppColors.textDark,
                                 ),
                           ),
                           const SizedBox(height: 24),
@@ -1408,20 +1305,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                       fontFamily: 'Crimson Text',
                                       fontSize: 18,
                                       height: 1.8,
-                                      color: const Color(0xFF2C2416),
+                                      color: AppColors.textDark,
                                     );
                             // Unified box: same shape, faint (section) vs darker (commentary)
                             BoxDecoration boxDecoration(
                                     {required bool darker}) =>
                                 BoxDecoration(
                                   color: darker
-                                      ? const Color(0xFFEADCC4)
+                                      ? AppColors.landingBackground
                                           .withValues(alpha: 0.5)
-                                      : const Color(0xFF8B7355)
+                                      : AppColors.primary
                                           .withValues(alpha: 0.08),
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
-                                    color: const Color(0xFF8B7355).withValues(
+                                    color: AppColors.primary.withValues(
                                       alpha: darker ? 0.45 : 0.22,
                                     ),
                                     width: 1,
@@ -1609,7 +1506,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                                 ? Icons.expand_less
                                                 : Icons.menu_book,
                                             size: 18,
-                                            color: const Color(0xFF8B7355),
+                                            color: AppColors.primary,
                                           ),
                                           label: Text(
                                             _commentaryExpanded
@@ -1617,7 +1514,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                                 : 'Commentary',
                                             style: const TextStyle(
                                               fontFamily: 'Lora',
-                                              color: Color(0xFF8B7355),
+                                              color: AppColors.primary,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -1718,11 +1615,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                         child: IgnorePointer(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: const Color(0xFF8B7355)
+                              color: AppColors.primary
                                   .withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
-                                color: const Color(0xFF8B7355)
+                                color: AppColors.primary
                                     .withValues(alpha: 0.22),
                                 width: 1,
                               ),
@@ -1747,7 +1644,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 final w =
                     (_rightPanelsWidth - d.delta.dx)
                         .clamp(
-                            _rightPanelsMinWidth, _rightPanelsMaxWidth)
+                            BcvReadConstants.rightPanelsMinWidth, BcvReadConstants.rightPanelsMaxWidth)
                         .toDouble();
                 _rightPanelsWidth = w;
               });
@@ -1761,10 +1658,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             width: _rightPanelsWidth,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFF8F7F3),
+                color: AppColors.cardBeige,
                 border: Border(
                   left: BorderSide(
-                      color: const Color(0xFFD4C4B0).withValues(alpha: 0.5)),
+                      color: AppColors.border.withValues(alpha: 0.5)),
                 ),
               ),
               child: SingleChildScrollView(

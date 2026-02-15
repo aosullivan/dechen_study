@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../utils/app_theme.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
@@ -26,7 +28,7 @@ class TextOptionsScreen extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2416)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -93,7 +95,7 @@ class TextOptionsScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$feature coming soon'),
-        backgroundColor: const Color(0xFF8B7355),
+        backgroundColor: AppColors.primary,
       ),
     );
   }
@@ -114,13 +116,13 @@ class _OptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
-      color: const Color(0xFFF8F7F3),
+      color: AppColors.cardBeige,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: const BorderSide(color: Color(0xFFE8E4DC)),
+        side: const BorderSide(color: AppColors.borderLight),
       ),
       child: ListTile(
-        leading: Icon(icon, color: const Color(0xFF8B7355)),
+        leading: Icon(icon, color: AppColors.primary),
         title: Text(
           label,
           style: Theme.of(context).textTheme.titleLarge,

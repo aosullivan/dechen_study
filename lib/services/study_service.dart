@@ -1,8 +1,15 @@
 import 'dart:math';
-import '../utils/constants.dart';
+
+import 'package:flutter/foundation.dart';
+
 import '../models/study_models.dart';
+import '../utils/constants.dart';
 
 class StudyService {
+  StudyService._();
+  static final StudyService _instance = StudyService._();
+  static StudyService get instance => _instance;
+
   // Get the study text (we'll have just one for now)
   Future<StudyText?> getStudyText() async {
     try {
@@ -13,7 +20,7 @@ class StudyService {
 
       return StudyText.fromJson(response);
     } catch (e) {
-      print('Error fetching study text: $e');
+      debugPrint('Error fetching study text: $e');
       return null;
     }
   }
@@ -27,9 +34,11 @@ class StudyService {
           .order('chapter_number')
           .order('id');
 
-      return (response as List).map((s) => Section.fromJson(s)).toList();
+      return (response as List)
+          .map((s) => Section.fromJson(s as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      print('Error fetching sections: $e');
+      debugPrint('Error fetching sections: $e');
       return [];
     }
   }
@@ -43,7 +52,7 @@ class StudyService {
       final random = Random();
       return sections[random.nextInt(sections.length)];
     } catch (e) {
-      print('Error getting random section: $e');
+      debugPrint('Error getting random section: $e');
       return null;
     }
   }
@@ -70,7 +79,7 @@ class StudyService {
 
       return DailySection.fromJson(response);
     } catch (e) {
-      print('Error fetching daily section: $e');
+      debugPrint('Error fetching daily section: $e');
       return null;
     }
   }
@@ -118,7 +127,7 @@ class StudyService {
 
       return DailySection.fromJson(response);
     } catch (e) {
-      print('Error creating daily section: $e');
+      debugPrint('Error creating daily section: $e');
       return null;
     }
   }
@@ -132,7 +141,7 @@ class StudyService {
           .eq('id', dailySectionId);
       return true;
     } catch (e) {
-      print('Error marking section complete: $e');
+      debugPrint('Error marking section complete: $e');
       return false;
     }
   }
@@ -148,7 +157,7 @@ class StudyService {
 
       return Section.fromJson(response);
     } catch (e) {
-      print('Error fetching section: $e');
+      debugPrint('Error fetching section: $e');
       return null;
     }
   }
@@ -161,9 +170,11 @@ class StudyService {
           .select('*, sections(*)')
           .order('number');
 
-      return (response as List).map((c) => Chapter.fromJson(c)).toList();
+      return (response as List)
+          .map((c) => Chapter.fromJson(c as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      print('Error fetching chapters: $e');
+      debugPrint('Error fetching chapters: $e');
       return [];
     }
   }

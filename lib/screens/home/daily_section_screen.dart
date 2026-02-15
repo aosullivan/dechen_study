@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../models/study_models.dart';
 import '../../services/study_service.dart';
+import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 
 class DailySectionScreen extends StatefulWidget {
@@ -11,7 +13,7 @@ class DailySectionScreen extends StatefulWidget {
 }
 
 class _DailySectionScreenState extends State<DailySectionScreen> {
-  final _studyService = StudyService();
+  final _studyService = StudyService.instance;
   bool _isLoading = true;
   DailySection? _dailySection;
   Section? _section;
@@ -60,7 +62,7 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Section completed! Come back tomorrow for the next one.'),
-            backgroundColor: Color(0xFF8B7355),
+            backgroundColor: AppColors.primary,
           ),
         );
       }
@@ -71,7 +73,7 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF8B7355)),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
 
@@ -96,13 +98,13 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF8B7355).withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
               'Today\'s Section',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: const Color(0xFF8B7355),
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
             ),
@@ -119,7 +121,7 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
               border: Border.all(
-                color: const Color(0xFFD4C4B0),
+                color: AppColors.border,
               ),
             ),
             child: Text(
@@ -140,24 +142,24 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF8B7355).withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: const Color(0xFF8B7355).withOpacity(0.3),
+                  color: AppColors.primary.withValues(alpha: 0.3),
                 ),
               ),
               child: Row(
                 children: [
                   const Icon(
                     Icons.check_circle,
-                    color: Color(0xFF8B7355),
+                    color: AppColors.primary,
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       'Completed! Return tomorrow for the next section.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: const Color(0xFF8B7355),
+                            color: AppColors.primary,
                           ),
                     ),
                   ),

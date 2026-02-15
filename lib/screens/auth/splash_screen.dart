@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 import 'login_screen.dart';
 import '../landing/landing_screen.dart';
@@ -67,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const SizedBox(height: 24),
             const CircularProgressIndicator(
-              color: Color(0xFF8B7355),
+              color: AppColors.primary,
             ),
           ],
         ),

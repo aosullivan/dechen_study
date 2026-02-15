@@ -1,3 +1,22 @@
+/// Safe JSON extraction helpers for fromJson. Throw [FormatException] on missing/invalid data.
+T _require<T>(Map<String, dynamic> json, String key) {
+  final v = json[key];
+  if (v == null) throw FormatException('study_models: missing key "$key"');
+  return v as T;
+}
+
+String _requireString(Map<String, dynamic> json, String key) =>
+    _require<String>(json, key);
+
+int _requireInt(Map<String, dynamic> json, String key) =>
+    _require<int>(json, key);
+
+bool _requireBool(Map<String, dynamic> json, String key) =>
+    _require<bool>(json, key);
+
+List<dynamic> _requireList(Map<String, dynamic> json, String key) =>
+    _require<List<dynamic>>(json, key);
+
 class StudyText {
   final String id;
   final String title;
@@ -13,11 +32,11 @@ class StudyText {
 
   factory StudyText.fromJson(Map<String, dynamic> json) {
     return StudyText(
-      id: json['id'],
-      title: json['title'],
-      fullText: json['full_text'],
-      chapters: (json['chapters'] as List)
-          .map((c) => Chapter.fromJson(c))
+      id: _requireString(json, 'id'),
+      title: _requireString(json, 'title'),
+      fullText: _requireString(json, 'full_text'),
+      chapters: _requireList(json, 'chapters')
+          .map((c) => Chapter.fromJson(c as Map<String, dynamic>))
           .toList(),
     );
   }
@@ -47,11 +66,11 @@ class Chapter {
 
   factory Chapter.fromJson(Map<String, dynamic> json) {
     return Chapter(
-      id: json['id'],
-      number: json['number'],
-      title: json['title'],
-      sections: (json['sections'] as List)
-          .map((s) => Section.fromJson(s))
+      id: _requireString(json, 'id'),
+      number: _requireInt(json, 'number'),
+      title: _requireString(json, 'title'),
+      sections: _requireList(json, 'sections')
+          .map((s) => Section.fromJson(s as Map<String, dynamic>))
           .toList(),
     );
   }
@@ -81,10 +100,10 @@ class Section {
 
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
-      id: json['id'],
-      chapterId: json['chapter_id'],
-      chapterNumber: json['chapter_number'],
-      text: json['text'],
+      id: _requireString(json, 'id'),
+      chapterId: _requireString(json, 'chapter_id'),
+      chapterNumber: _requireInt(json, 'chapter_number'),
+      text: _requireString(json, 'text'),
     );
   }
 
@@ -115,11 +134,11 @@ class DailySection {
 
   factory DailySection.fromJson(Map<String, dynamic> json) {
     return DailySection(
-      id: json['id'],
-      userId: json['user_id'],
-      sectionId: json['section_id'],
-      date: DateTime.parse(json['date']),
-      completed: json['completed'],
+      id: _requireString(json, 'id'),
+      userId: _requireString(json, 'user_id'),
+      sectionId: _requireString(json, 'section_id'),
+      date: DateTime.parse(_requireString(json, 'date')),
+      completed: _requireBool(json, 'completed'),
     );
   }
 

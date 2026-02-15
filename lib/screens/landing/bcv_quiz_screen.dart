@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+
+import '../../utils/app_theme.dart';
 import 'package:lottie/lottie.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
@@ -175,7 +177,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2416)),
+            icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
@@ -185,7 +187,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           centerTitle: true,
         ),
         body: const Center(
-          child: CircularProgressIndicator(color: Color(0xFF8B7355)),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
       );
     }
@@ -196,7 +198,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2416)),
+            icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
@@ -233,7 +235,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF2C2416)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -253,7 +255,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: const Color(0xFF8B7355).withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Row(
@@ -267,7 +269,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                     Text(
                       '$_correctAnswers / $_totalAnswers',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF8B7355),
+                            color: AppColors.primary,
                           ),
                     ),
                 ],
@@ -285,8 +287,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                   color: _showAnswer
                       ? (_selectedChapter == _correctChapterNumber
                           ? Colors.green
-                          : const Color(0xFFB57373))
-                      : const Color(0xFFD4C4B0),
+                          : AppColors.wrong)
+                      : AppColors.border,
                   width: _showAnswer ? 2 : 1,
                 ),
               ),
@@ -379,15 +381,15 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                           }
                         },
                   selectedColor: isCorrect
-                      ? Colors.green.withOpacity(0.3)
+                      ? Colors.green.withValues(alpha: 0.3)
                       : (isWrong
-                          ? const Color(0xFFB57373).withOpacity(0.2)
-                          : const Color(0xFF8B7355).withOpacity(0.3)),
+                          ? AppColors.wrong.withValues(alpha: 0.2)
+                          : AppColors.primary.withValues(alpha: 0.3)),
                   backgroundColor: Colors.white,
                   side: BorderSide(
                     color: isCorrect
                         ? Colors.green
-                        : (isWrong ? const Color(0xFFB57373) : const Color(0xFFD4C4B0)),
+                        : (isWrong ? AppColors.wrong : AppColors.border),
                   ),
                 );
               }).toList(),
@@ -401,14 +403,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 decoration: BoxDecoration(
                   color: (_selectedChapter == _correctChapterNumber
                           ? Colors.green
-                          : const Color(0xFFB57373))
-                      .withOpacity(0.1),
+                          : AppColors.wrong)
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: (_selectedChapter == _correctChapterNumber
                             ? Colors.green
-                            : const Color(0xFFB57373))
-                        .withOpacity(0.4),
+                            : AppColors.wrong)
+                        .withValues(alpha: 0.4),
                   ),
                 ),
                 child: Row(
@@ -420,7 +422,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                       size: 28,
                       color: _selectedChapter == _correctChapterNumber
                           ? Colors.green
-                          : const Color(0xFFB57373),
+                          : AppColors.wrong,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -431,7 +433,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: _selectedChapter == _correctChapterNumber
                                   ? Colors.green.shade800
-                                  : const Color(0xFF6B4A4A),
+                                  : AppColors.darkBrown,
                             ),
                       ),
                     ),
@@ -444,7 +446,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 child: ElevatedButton(
                   onPressed: _nextQuestion,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8B7355),
+                    backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),

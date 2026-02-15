@@ -25,13 +25,10 @@ class VerseHierarchyService {
     }
   }
 
-  /// Returns the full section hierarchy for [ref] (e.g. "1.5").
-  /// For split verses (8.19ab/cd), use cd path when ref is base "8.19" (continuation).
-  /// For verses like 7.1/7.2 in root text, fallback to 7.1a/7.1bcd etc. when base ref missing.
-  Future<List<Map<String, String>>> getHierarchyForVerse(String ref) async {
-    await _ensureLoaded();
+  /// Resolves path list for [ref] from [_map]. Call after _ensureLoaded() or when _map non-null.
+  List<Map<String, String>>? _pathForRef(String ref) {
     final verseToPath = _map?['verseToPath'];
-    if (verseToPath == null || verseToPath is! Map) return [];
+    if (verseToPath == null || verseToPath is! Map) return null;
     var path = verseToPath[ref];
     if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
       for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
@@ -39,7 +36,7 @@ class VerseHierarchyService {
         if (path is List && path.isNotEmpty) break;
       }
     }
-    if (path is! List) return [];
+    if (path is! List) return null;
     return path.map((e) {
       if (e is Map) {
         return <String, String>{
@@ -49,6 +46,14 @@ class VerseHierarchyService {
       }
       return <String, String>{'section': '', 'title': e.toString()};
     }).toList();
+  }
+
+  /// Returns the full section hierarchy for [ref] (e.g. "1.5").
+  /// For split verses (8.19ab/cd), use cd path when ref is base "8.19" (continuation).
+  /// For verses like 7.1/7.2 in root text, fallback to 7.1a/7.1bcd etc. when base ref missing.
+  Future<List<Map<String, String>>> getHierarchyForVerse(String ref) async {
+    await _ensureLoaded();
+    return _pathForRef(ref) ?? [];
   }
 
   /// Returns the first verse ref for a section path (e.g. "3.1.3"), or null.
@@ -126,10 +131,14 @@ class VerseHierarchyService {
       }
       final children = node['children'];
       if (children is List) {
-        for (final c in children) visit(c, depth + 1);
+        for (final c in children) {
+          visit(c, depth + 1);
+        }
       }
     }
-    for (final s in sections) visit(s, 0);
+    for (final s in sections) {
+      visit(s, 0);
+    }
     _flatSections = out;
     return out;
   }
@@ -179,24 +188,6 @@ class VerseHierarchyService {
   /// Synchronous getter - call after _ensureLoaded() or getHierarchyForVerse has been called.
   List<Map<String, String>> getHierarchyForVerseSync(String ref) {
     if (_map == null) return [];
-    final verseToPath = _map!['verseToPath'];
-    if (verseToPath == null || verseToPath is! Map) return [];
-    var path = verseToPath[ref];
-    if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
-      for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
-        path = verseToPath['$ref$suffix'];
-        if (path is List && path.isNotEmpty) break;
-      }
-    }
-    if (path is! List) return [];
-    return path.map((e) {
-      if (e is Map) {
-        return <String, String>{
-          'section': (e['section'] ?? e['path'] ?? '').toString(),
-          'title': (e['title'] ?? '').toString(),
-        };
-      }
-      return <String, String>{'section': '', 'title': e.toString()};
-    }).toList();
+    return _pathForRef(ref) ?? [];
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/app_theme.dart';
+
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
@@ -24,7 +26,7 @@ class AuthTextField extends StatelessWidget {
         labelText: label,
         labelStyle: const TextStyle(
           fontFamily: 'Lora',
-          color: Color(0xFF8B7355),
+          color: AppColors.primary,
         ),
       ),
     );

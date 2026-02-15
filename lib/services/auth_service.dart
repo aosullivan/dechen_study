@@ -1,7 +1,12 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../utils/constants.dart';
 
 class AuthService {
+  AuthService._();
+  static final AuthService _instance = AuthService._();
+  static AuthService get instance => _instance;
+
   Future<AuthResponse> signUp(String email, String password) async {
     return await supabase.auth.signUp(
       email: email,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/auth/splash_screen.dart';
+import 'utils/app_theme.dart';
 import 'utils/constants.dart';
 
 void main() async {
@@ -35,46 +36,46 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Lora',
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF8B7355), // Warm brown
+          seedColor: AppColors.primary,
           brightness: Brightness.light,
         ),
-        scaffoldBackgroundColor: const Color(0xFFFAF8F5), // Warm off-white
+        scaffoldBackgroundColor: AppColors.scaffoldBackground,
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             fontFamily: 'Crimson Text',
             fontSize: 32,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF2C2416),
+            color: AppColors.textDark,
           ),
           displayMedium: TextStyle(
             fontFamily: 'Crimson Text',
             fontSize: 28,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF2C2416),
+            color: AppColors.textDark,
           ),
           titleLarge: TextStyle(
             fontFamily: 'Crimson Text',
             fontSize: 22,
             fontWeight: FontWeight.w500,
-            color: Color(0xFF2C2416),
+            color: AppColors.textDark,
           ),
           bodyLarge: TextStyle(
             fontFamily: 'Lora',
             fontSize: 16,
             height: 1.8,
-            color: Color(0xFF3D3426),
+            color: AppColors.bodyText,
           ),
           bodyMedium: TextStyle(
             fontFamily: 'Lora',
             fontSize: 14,
             height: 1.7,
-            color: Color(0xFF3D3426),
+            color: AppColors.bodyText,
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF8B7355),
-            foregroundColor: const Color(0xFFFAF8F5),
+            backgroundColor: AppColors.primary,
+            foregroundColor: AppColors.scaffoldBackground,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
@@ -87,15 +88,15 @@ class MyApp extends StatelessWidget {
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: Color(0xFFD4C4B0)),
+            borderSide: const BorderSide(color: AppColors.border),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: Color(0xFFD4C4B0)),
+            borderSide: const BorderSide(color: AppColors.border),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: Color(0xFF8B7355), width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

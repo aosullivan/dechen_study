@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../services/auth_service.dart';
+import '../../utils/app_theme.dart';
 import '../auth/login_screen.dart';
 import 'daily_section_screen.dart';
 import 'quiz_screen.dart';
@@ -13,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _authService = AuthService();
+  final _authService = AuthService.instance;
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
@@ -35,11 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: Color(0xFF8B7355)),
+            icon: const Icon(Icons.logout, color: AppColors.primary),
             onPressed: () async {
+              final navigator = Navigator.of(context);
               await _authService.signOut();
               if (!mounted) return;
-              Navigator.of(context).pushReplacement(
+              navigator.pushReplacement(
                 MaterialPageRoute(builder: (_) => const LoginScreen()),
               );
             },
@@ -51,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: const Color(0xFFD4C4B0).withOpacity(0.3),
+              color: AppColors.border.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
@@ -61,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onDestinationSelected: (index) {
             setState(() => _selectedIndex = index);
           },
-          backgroundColor: const Color(0xFFFAF8F5),
-          indicatorColor: const Color(0xFF8B7355).withOpacity(0.2),
+          backgroundColor: AppColors.scaffoldBackground,
+          indicatorColor: AppColors.primary.withValues(alpha: 0.2),
           destinations: const [
             NavigationDestination(
               icon: Icon(Icons.today_outlined),

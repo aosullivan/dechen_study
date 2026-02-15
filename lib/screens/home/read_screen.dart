@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../models/study_models.dart';
 import '../../services/study_service.dart';
+import '../../utils/app_theme.dart';
 
 class ReadScreen extends StatefulWidget {
   const ReadScreen({super.key});
@@ -10,7 +12,7 @@ class ReadScreen extends StatefulWidget {
 }
 
 class _ReadScreenState extends State<ReadScreen> {
-  final _studyService = StudyService();
+  final _studyService = StudyService.instance;
   bool _isLoading = true;
   List<Chapter> _chapters = [];
   int _selectedChapterIndex = 0;
@@ -36,7 +38,7 @@ class _ReadScreenState extends State<ReadScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(color: Color(0xFF8B7355)),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
 
@@ -63,7 +65,7 @@ class _ReadScreenState extends State<ReadScreen> {
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                color: const Color(0xFFD4C4B0).withOpacity(0.3),
+                color: AppColors.border.withValues(alpha: 0.3),
               ),
             ),
           ),
@@ -83,12 +85,12 @@ class _ReadScreenState extends State<ReadScreen> {
                       setState(() => _selectedChapterIndex = index);
                     }
                   },
-                  selectedColor: const Color(0xFF8B7355).withOpacity(0.3),
+                  selectedColor: AppColors.primary.withValues(alpha: 0.3),
                   backgroundColor: Colors.white,
                   side: BorderSide(
                     color: isSelected
-                        ? const Color(0xFF8B7355)
-                        : const Color(0xFFD4C4B0),
+                        ? AppColors.primary
+                        : AppColors.border,
                   ),
                 ),
               );
@@ -112,7 +114,7 @@ class _ReadScreenState extends State<ReadScreen> {
                   Text(
                     currentChapter.title,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: const Color(0xFF8B7355),
+                          color: AppColors.primary,
                         ),
                   ),
                 ],
@@ -129,7 +131,7 @@ class _ReadScreenState extends State<ReadScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                          color: const Color(0xFFD4C4B0),
+                          color: AppColors.border,
                         ),
                       ),
                       child: Text(

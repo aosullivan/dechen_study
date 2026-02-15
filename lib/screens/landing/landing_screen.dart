@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
+import '../../utils/app_theme.dart';
 import 'text_options_screen.dart';
 
 /// dechen.study-style landing: light yellow background, text cards with Details button.
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
-  static const Color _backgroundYellow = Color(0xFFEADCC4);
+  static const Color _backgroundYellow = AppColors.landingBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +43,8 @@ class _BodhicaryavataraCard extends StatelessWidget {
 
   final VoidCallback onTap;
 
-  static const Color _cardBeige = Color(0xFFF8F7F3);
-  static const Color _textDark = Color(0xFF2C2416);
+  static const Color _cardBeige = AppColors.cardBeige;
+  static const Color _textDark = AppColors.textDark;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class _BodhicaryavataraCard extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE8E4DC), width: 1),
+            border: Border.all(color: AppColors.borderLight, width: 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
