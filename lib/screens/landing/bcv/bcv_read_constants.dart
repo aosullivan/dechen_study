@@ -3,6 +3,9 @@ abstract final class BcvReadConstants {
   BcvReadConstants._();
 
   static const double laptopBreakpoint = 900;
+  /// On narrow screens (e.g. phone), nav panels are capped at this fraction of viewport height
+  /// so the reader pane gets at least (1 - this) of the space (e.g. 50% reader minimum).
+  static const double mobileMaxNavFraction = 0.5;
   static const double rightPanelsMinWidth = 200;
   static const double rightPanelsMaxWidth = 500;
   static const double panelMinHeight = 60;

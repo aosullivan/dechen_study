@@ -105,6 +105,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _breadcrumbCollapsed = false;
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
+  bool _mobileNavCollapseInitialized = false;
 
   final FocusNode _sectionOverviewFocusNode = FocusNode();
 
@@ -1892,10 +1893,31 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ],
       );
     }
+    // Mobile: reader-first layout — cap nav at 50% so reader pane gets ≥50% (best practice for small screens).
+    final viewportHeight = MediaQuery.of(context).size.height;
+    final maxNavHeight = viewportHeight * BcvReadConstants.mobileMaxNavFraction;
+    // One-time: collapse all nav panels on mobile so default view is mostly reader.
+    if (!_mobileNavCollapseInitialized) {
+      _mobileNavCollapseInitialized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _chaptersPanelCollapsed = true;
+            _sectionSliderCollapsed = true;
+            _breadcrumbCollapsed = true;
+          });
+        }
+      });
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildPanelsColumn(),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxNavHeight),
+          child: SingleChildScrollView(
+            child: _buildPanelsColumn(),
+          ),
+        ),
         Expanded(child: scrollContent),
       ],
     );
