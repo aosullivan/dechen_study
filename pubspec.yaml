@@ -23,15 +23,6 @@ dependencies:
   # Supabase for auth, database, and storage
   supabase_flutter: ^2.7.0
   
-  # State management
-  flutter_riverpod: ^2.0.0
-  
-  # HTTP client
-  http: ^1.0.0
-  
-  # Local storage for offline tracking
-  shared_preferences: ^2.0.0
-  
   # Environment variables
   flutter_dotenv: ^5.0.0
 
@@ -67,7 +58,6 @@ flutter:
   assets:
     - .env
     - texts/bcv-root
-    - texts/commentary.txt
     - texts/verse_commentary_mapping.txt
     - texts/verse_hierarchy_map.json
 

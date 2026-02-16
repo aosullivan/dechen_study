@@ -11,7 +11,7 @@ class CommentaryEntry {
   final String commentaryText;
 }
 
-/// Loads and parses commentary.txt. Section headers are lines containing one or more [c.v];
+/// Loads and parses verse_commentary_mapping.txt. Section headers are lines containing one or more [c.v];
 /// body runs until the next such line.
 class CommentaryService {
   CommentaryService._();

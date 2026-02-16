@@ -12,9 +12,9 @@
    - Policies configured for CRUD operations per user
 
 3. **Flutter Integration**
-   - Added dependencies: `supabase_flutter`, `flutter_riverpod`, `http`, `shared_preferences`, `flutter_dotenv`
+   - Added dependencies: `supabase_flutter`, `flutter_dotenv`
    - Environment variables configured in `.env` file
-   - Supabase initialized in `main.dart` with Riverpod state management
+   - Supabase initialized in `main.dart`
 
 ## 🔧 Required Dashboard Configuration
 

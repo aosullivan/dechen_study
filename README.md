@@ -121,8 +121,7 @@ The app loads text from bundled assets:
 
 - `texts/bcv-root` – Root text (chapters, verses)
 - `texts/verse_hierarchy_map.json` – Section hierarchy (paths, first verses)
-- `texts/verse_commentary_mapping.txt` – Verse-to-commentary mapping
-- `texts/commentary.txt` – Commentary content
+- `texts/verse_commentary_mapping.txt` – Verse-to-commentary mapping (includes commentary text)
 
 ## Tests
 
