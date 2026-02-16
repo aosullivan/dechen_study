@@ -21,6 +21,7 @@ class BcvReadScreen extends StatefulWidget {
     this.scrollToVerseIndex,
     this.highlightSectionIndices,
     this.title = 'Bodhicaryavatara',
+    this.onSectionNavigateForTest,
   });
 
   final int? scrollToVerseIndex;
@@ -28,6 +29,10 @@ class BcvReadScreen extends StatefulWidget {
   /// When provided (e.g. from Daily "Full text"), these verses are highlighted as one section.
   final Set<int>? highlightSectionIndices;
   final String title;
+
+  /// Test-only: called when arrow-key navigation selects a section. Receives (sectionPath, firstVerseRef).
+  /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
+  final void Function(String sectionPath, String firstVerseRef)? onSectionNavigateForTest;
 
   @override
   State<BcvReadScreen> createState() => _BcvReadScreenState();
@@ -75,6 +80,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// True while programmatic scroll (section tap, arrow keys) is animating. Blocks visibility updates entirely.
   bool _isProgrammaticNavigation = false;
 
+  /// After programmatic nav clears, we still ignore visibility updates until this time.
+  /// Prevents scroll-settle visibility from overwriting the key-down highlight.
+  DateTime? _programmaticNavCooldownUntil;
+
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<String, double> _verseVisibility = {};
 
@@ -89,9 +98,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final ScrollController _mainScrollController = ScrollController();
   final ScrollController _sectionSliderScrollController = ScrollController();
 
+  /// Incremented on each section slider scroll request. Stale retries check this.
+  int _sectionSliderScrollRequestId = 0;
+
   bool _breadcrumbCollapsed = false;
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
+
+  final FocusNode _sectionOverviewFocusNode = FocusNode();
 
   double _rightPanelsWidth = 360;
   double _chaptersPanelHeight = 80;
@@ -132,6 +146,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _visibilityDebounceTimer?.cancel();
     _mainScrollController.dispose();
     _sectionSliderScrollController.dispose();
+    _sectionOverviewFocusNode.dispose();
     super.dispose();
   }
 
@@ -150,6 +165,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _commentaryExpanded = false;
       _syncGeneration = 0;
       _isProgrammaticNavigation = false;
+      _sectionSliderScrollRequestId = 0;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -547,9 +563,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       );
     }
 
+    // Ensure hierarchy loaded; then resolve first verse, preferring current chapter
+    // when section has duplicate titles across chapters (e.g. "Abandoning objections")
+    await _hierarchyService.getFirstVerseForSection(section);
+    final preferredChapter = _currentChapterNumber;
     final firstVerseRef =
-        await _hierarchyService.getFirstVerseForSection(section);
-    if (firstVerseRef == null) return;
+        _hierarchyService.getFirstVerseForSectionInChapterSync(
+            section, preferredChapter) ??
+        _hierarchyService.getFirstVerseForSectionSync(section);
+    if (firstVerseRef == null || firstVerseRef.isEmpty) return;
     var verseIndex = _verseService.getIndexForRef(firstVerseRef);
     if (verseIndex == null && RegExp(r'[a-d]+$').hasMatch(firstVerseRef)) {
       verseIndex = _verseService.getIndexForRef(
@@ -572,12 +594,51 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (!mounted) return;
       _scrollToVerseWidget();
       setState(() => _scrollToVerseIndexAfterTap = null);
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (!mounted) return;
-        _isProgrammaticNavigation = false;
-        _measureAndUpdateSectionOverlay();
-      });
+      _clearProgrammaticNavigationAfterScrollSettles();
     });
+  }
+
+  /// Clears _isProgrammaticNavigation only after the scroll animation finishes and
+  /// visibility callbacks have settled. Prevents race where visibility updates
+  /// overwrite the key-nav highlight.
+  void _clearProgrammaticNavigationAfterScrollSettles() {
+    void doClear() {
+      if (!mounted) return;
+      // Cancel any pending visibility timer
+      _visibilityDebounceTimer?.cancel();
+      _visibilityDebounceTimer = null;
+      _isProgrammaticNavigation = false;
+      // Cooldown: keep ignoring visibility-driven highlights for 500ms after scroll
+      // settles. Prevents scroll-settle callbacks from overwriting key-nav highlight.
+      _programmaticNavCooldownUntil =
+          DateTime.now().add(const Duration(milliseconds: 500));
+      _measureAndUpdateSectionOverlay();
+    }
+
+    final pos = _mainScrollController.hasClients
+        ? _mainScrollController.position
+        : null;
+    if (pos != null && pos.isScrollingNotifier.value) {
+      VoidCallback? listener;
+      listener = () {
+        if (!mounted || pos.isScrollingNotifier.value) return;
+        pos.isScrollingNotifier.removeListener(listener!);
+        // Buffer for visibility debounce (150ms) + a frame for layout
+        Future.delayed(const Duration(milliseconds: 200), () {
+          if (!mounted) return;
+          doClear();
+        });
+      };
+      pos.isScrollingNotifier.addListener(listener);
+      // Fallback: clear after 1.5s in case scroll never settles
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (!mounted) return;
+        pos.isScrollingNotifier.removeListener(listener!);
+        doClear();
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 350), doClear);
+    }
   }
 
   Widget _buildBreadcrumbItem(Map<String, String> item, int index,
@@ -647,6 +708,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
       {String? segmentRef}) {
     if (_isProgrammaticNavigation) return;
+    if (_programmaticNavCooldownUntil != null &&
+        DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
+      return;
+    }
     final key = segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
     if (visibility < 0.05) {
       _verseVisibility.remove(key);
@@ -654,18 +719,23 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     _verseVisibility[key] = visibility;
     _visibilityDebounceTimer?.cancel();
+    // Capture generation when timer STARTS, not when it fires
+    final capturedGen = _syncGeneration;
     _visibilityDebounceTimer = Timer(const Duration(milliseconds: 150), () {
       _visibilityDebounceTimer = null;
       if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) return;
+      if (_programmaticNavCooldownUntil != null &&
+          DateTime.now().isBefore(_programmaticNavCooldownUntil!)) return;
+      // Check if generation changed while timer was pending
+      if (capturedGen != _syncGeneration) return;
       final picked = _pickVerseClosestToViewportCenter();
       if (picked == null) return;
       final (pickedIdx, pickedSegRef) = picked;
-      final currentGen = _syncGeneration;
       final future = pickedSegRef != null
           ? _hierarchyService.getHierarchyForVerse(pickedSegRef)
           : _hierarchyService.getHierarchyForVerseIndex(pickedIdx);
       future.then((hierarchy) {
-        if (!mounted || currentGen != _syncGeneration) return;
+        if (!mounted || capturedGen != _syncGeneration) return;
         final sectionPath = hierarchy.isNotEmpty
             ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
             : '';
@@ -686,7 +756,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           verseIndices: indicesWithVisible,
           verseIndex: pickedIdx,
           segmentRef: pickedSegRef,
-          supersedeGen: currentGen,
+          supersedeGen: capturedGen,
         );
       });
     });
@@ -763,6 +833,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _breadcrumbHierarchy.last['path'] ??
         '';
     if (currentPath.isEmpty) return;
+    _sectionSliderScrollRequestId++;
+    final requestId = _sectionSliderScrollRequestId;
     final flat = _hierarchyService.getFlatSectionsSync();
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
@@ -776,7 +848,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final maxOffsetSafe = maxOffset.isFinite ? maxOffset : 0.0;
     final clamped = targetOffset.clamp(0.0, maxOffsetSafe).toDouble();
     void doScroll() {
-      if (!mounted || !_sectionSliderScrollController.hasClients) return;
+      if (!mounted || requestId != _sectionSliderScrollRequestId) return;
+      if (!_sectionSliderScrollController.hasClients) return;
       _sectionSliderScrollController.animateTo(
         clamped,
         duration: const Duration(milliseconds: 400),
@@ -789,9 +862,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         doScroll();
-        if (!_sectionSliderScrollController.hasClients) {
+        if (!_sectionSliderScrollController.hasClients && mounted) {
           Future.delayed(const Duration(milliseconds: 150), () {
-            if (mounted) doScroll();
+            if (mounted && requestId == _sectionSliderScrollRequestId) {
+              doScroll();
+            }
           });
         }
       });
@@ -993,44 +1068,97 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ),
         ],
       ),
-      body: Focus(
-        autofocus: true,
-        onKeyEvent: (node, event) {
-          if (event is! KeyDownEvent) return KeyEventResult.ignored;
-          if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-            _scrollToAdjacentSection(1);
-            return KeyEventResult.handled;
-          }
-          if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-            _scrollToAdjacentSection(-1);
-            return KeyEventResult.handled;
-          }
-          return KeyEventResult.ignored;
-        },
-        child: _buildBody(),
-      ),
+      body: _buildBody(),
     );
   }
 
-  /// Navigate to previous (direction -1) or next (direction 1) section.
-  void _scrollToAdjacentSection(int direction) {
-    final flat = _hierarchyService.getFlatSectionsSync();
-    if (flat.isEmpty) return;
-    var idx = -1;
-    final currentPath = _currentSectionPath;
-    if (currentPath.isNotEmpty) {
-      idx = flat.indexWhere((s) => s.path == currentPath);
+  /// Last time we handled arrow navigation. Used to debounce key repeat / double-fire.
+  DateTime? _lastArrowNavTime;
+
+  /// Handler for reader pane: always navigates by verse order (new set of verses).
+  KeyEventResult _handleReaderKeyEvent(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+      _debouncedArrowNav(() => _scrollToAdjacentSection(1));
+      return KeyEventResult.handled;
     }
-    if (idx < 0) {
-      if (direction > 0) {
-        idx = -1;
-      } else {
-        return;
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+      _debouncedArrowNav(() => _scrollToAdjacentSection(-1));
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  /// Handler for section overview: uses leaf-based nav (same as reader) so arrow keys
+  /// always move through sections in verse order without skipping.
+  KeyEventResult _handleSectionOverviewKeyEvent(FocusNode node, KeyEvent event) {
+    if (event is! KeyDownEvent) return KeyEventResult.ignored;
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+      _debouncedArrowNav(() => _scrollToAdjacentSection(1));
+      return KeyEventResult.handled;
+    }
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+      _debouncedArrowNav(() => _scrollToAdjacentSection(-1));
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
+  }
+
+  /// Run [fn] only if enough time has passed since last arrow nav (debounce 200ms).
+  void _debouncedArrowNav(void Function() fn) {
+    final now = DateTime.now();
+    if (_lastArrowNavTime != null &&
+        now.difference(_lastArrowNavTime!).inMilliseconds < 200) {
+      return;
+    }
+    _lastArrowNavTime = now;
+    fn();
+  }
+
+  /// Navigate to previous (direction -1) or next (direction 1) section.
+  /// Reader pane: uses leaf sections only so each key down moves exactly one
+  /// "lowest level" section forward (no jumps to parents, no skipping).
+  void _scrollToAdjacentSection(int direction) {
+    final leafOrdered = _hierarchyService.getLeafSectionsByVerseOrderSync();
+    if (leafOrdered.isEmpty) return;
+
+    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+    final verseRef = visibleIdx != null
+        ? _verseService.getVerseRef(visibleIdx)
+        : null;
+    final currentPath = _currentSectionPath;
+
+    var currentIdx = -1;
+    if (currentPath.isNotEmpty) {
+      currentIdx = leafOrdered.indexWhere((s) => s.path == currentPath);
+    }
+    if (currentIdx < 0 && verseRef != null && verseRef.isNotEmpty) {
+      final hierarchy = _hierarchyService.getHierarchyForVerseSync(verseRef);
+      if (hierarchy.isNotEmpty) {
+        final leafPath = hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
+        if (leafPath.isNotEmpty) {
+          currentIdx = leafOrdered.indexWhere((s) => s.path == leafPath);
+        }
       }
     }
-    final newIdx = idx + direction;
-    if (newIdx < 0 || newIdx >= flat.length) return;
-    final section = flat[newIdx];
+    int newIdx;
+    if (currentIdx >= 0) {
+      newIdx = currentIdx + direction;
+    } else if (verseRef != null && verseRef.isNotEmpty) {
+      newIdx = _hierarchyService.findAdjacentSectionIndex(
+        leafOrdered,
+        verseRef,
+        direction: direction,
+      );
+    } else {
+      return;
+    }
+
+    if (newIdx < 0 || newIdx >= leafOrdered.length) return;
+    final section = leafOrdered[newIdx];
+    final firstRef =
+        _hierarchyService.getFirstVerseForSectionSync(section.path) ?? '';
+    widget.onSectionNavigateForTest?.call(section.path, firstRef);
     _onBreadcrumbSectionTap({
       'section': section.path,
       'path': section.path,
@@ -1101,15 +1229,25 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           '')
       : '';
 
-  Widget _buildSectionSlider({double? height}) {
+  Widget _buildSectionSlider({double? height, required bool collapsed}) {
     final flat = _hierarchyService.getFlatSectionsSync();
-    return BcvSectionSlider(
+    final slider = BcvSectionSlider(
       flatSections: flat,
       currentPath: _currentSectionPath,
       onSectionTap: _onBreadcrumbSectionTap,
       sectionNumberForDisplay: _sectionNumberForDisplay,
       scrollController: _sectionSliderScrollController,
       height: height,
+    );
+    return Focus(
+      focusNode: _sectionOverviewFocusNode,
+      skipTraversal: collapsed,
+      onKeyEvent: _handleSectionOverviewKeyEvent,
+      child: Listener(
+        onPointerDown: (_) => _sectionOverviewFocusNode.requestFocus(),
+        behavior: HitTestBehavior.translucent,
+        child: slider,
+      ),
     );
   }
 
@@ -1309,7 +1447,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         }),
         _buildNavSection(
           _sectionSliderCollapsed,
-          () => _buildSectionSlider(height: _sectionPanelHeight),
+          () => _buildSectionSlider(
+            height: _sectionPanelHeight,
+            collapsed: _sectionSliderCollapsed,
+          ),
           () => setState(() => _sectionSliderCollapsed = false),
           () => setState(() => _sectionSliderCollapsed = true),
           breadcrumbSubtitle,
@@ -1373,7 +1514,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   Widget _buildMainContent() {
     final isLaptop =
         MediaQuery.of(context).size.width >= BcvReadConstants.laptopBreakpoint;
-    final scrollContent = SingleChildScrollView(
+    final scrollContent = Focus(
+      autofocus: true,
+      onKeyEvent: _handleReaderKeyEvent,
+      child: SingleChildScrollView(
             controller: _mainScrollController,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
@@ -1736,7 +1880,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   ),
               ],
             ),
-          );
+          ),
+    );
     if (isLaptop) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,

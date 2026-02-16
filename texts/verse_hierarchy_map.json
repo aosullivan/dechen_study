@@ -197,7 +197,8 @@
           "title": "The mental basis: meritorious intelligence",
           "path": "2.2",
           "verses": [
-            "1.5ab"
+            "1.5ab",
+            "1.5cd"
           ],
           "children": []
         }
@@ -537,6 +538,7 @@
               "title": "Summarizing the benefits of others",
               "path": "3.1.5",
               "verses": [
+                "1.36cd",
                 "1.36ab"
               ],
               "children": []
@@ -591,7 +593,11 @@
                     {
                       "title": "Offerings emanated by the mind",
                       "path": "3.2.1.1.4",
-                      "verses": [],
+                      "verses": [
+                        "2.10",
+                        "2.11",
+                        "2.12"
+                      ],
                       "children": []
                     },
                     {
@@ -903,7 +909,11 @@
                         {
                           "title": "Restraint for the next life",
                           "path": "3.2.1.3.4.1",
-                          "verses": [],
+                          "verses": [
+                            "2.60",
+                            "2.61",
+                            "2.62"
+                          ],
                           "children": []
                         },
                         {
@@ -992,7 +1002,8 @@
                   "title": "Requesting the wheel of dharma be turned",
                   "path": "3.2.1.5",
                   "verses": [
-                    "3.5"
+                    "3.5",
+                    "3.6"
                   ],
                   "children": []
                 },
@@ -1339,7 +1350,8 @@
                   "title": "Briefly",
                   "path": "4.1.1.1",
                   "verses": [
-                    "4.1ab"
+                    "4.1ab",
+                    "4.1cd"
                   ],
                   "children": []
                 },
@@ -1867,6 +1879,7 @@
                   "title": "Concluding summary of concern for training",
                   "path": "4.1.2.4",
                   "verses": [
+                    "4.48cd",
                     "4.48ab"
                   ],
                   "children": []
@@ -2785,6 +2798,7 @@
                   "title": "Applying the key point",
                   "path": "4.2.3.5",
                   "verses": [
+                    "5.109cd",
                     "5.109ab"
                   ],
                   "children": []
@@ -2995,7 +3009,9 @@
                                             {
                                               "title": "Refuting the position of the Sāṃkhyas",
                                               "path": "4.3.2.1.4.2.1.1.2.2.1",
-                                              "verses": [],
+                                              "verses": [
+                                                "6.28"
+                                              ],
                                               "children": []
                                             },
                                             {
@@ -3115,12 +3131,33 @@
                                             {
                                               "title": "Abandoning objections",
                                               "path": "4.3.2.1.4.2.1.1.3.3.6",
-                                              "verses": [
-                                                "8.104",
-                                                "8.105",
-                                                "8.106"
-                                              ],
-                                              "children": []
+                                              "verses": [],
+                                              "children": [
+                                                {
+                                                  "title": "Abandoning the objection that it is illogical to say others benefit oneself",
+                                                  "path": "4.3.2.1.4.2.1.1.3.3.6.1",
+                                                  "verses": [
+                                                    "6.50ab"
+                                                  ],
+                                                  "children": []
+                                                },
+                                                {
+                                                  "title": "Abandoning the objection that it is illogical to say one harms others",
+                                                  "path": "4.3.2.1.4.2.1.1.3.3.6.2",
+                                                  "verses": [
+                                                    "6.50cd"
+                                                  ],
+                                                  "children": []
+                                                },
+                                                {
+                                                  "title": "Refuting instigating harm",
+                                                  "path": "4.3.2.1.4.2.1.1.3.3.6.3",
+                                                  "verses": [
+                                                    "6.51"
+                                                  ],
+                                                  "children": []
+                                                }
+                                              ]
                                             }
                                           ]
                                         }
@@ -3192,7 +3229,8 @@
                                           "title": "Objection and response",
                                           "path": "4.3.2.1.4.2.1.2.3.5",
                                           "verses": [
-                                            "6.60"
+                                            "6.60",
+                                            "6.61"
                                           ],
                                           "children": []
                                         },
@@ -3200,7 +3238,9 @@
                                           "title": "Establishing the fact",
                                           "path": "4.3.2.1.4.2.1.2.3.6",
                                           "verses": [
-                                            "6.22"
+                                            "6.22",
+                                            "6.23",
+                                            "6.24"
                                           ],
                                           "children": []
                                         }
@@ -3442,6 +3482,8 @@
                                               "path": "4.3.2.1.4.3.2.1.1.4.2",
                                               "verses": [
                                                 "2.23",
+                                                "2.24",
+                                                "2.25",
                                                 "6.95"
                                               ],
                                               "children": []
@@ -4257,6 +4299,7 @@
                                           "title": "Pride in overcoming the defilements",
                                           "path": "4.4.4.2.1.2.2.3.2.4",
                                           "verses": [
+                                            "7.49ab",
                                             "7.60",
                                             "7.61",
                                             "7.62"
@@ -4500,8 +4543,7 @@
                                   "title": "Freedom and opportunity are wasted",
                                   "path": "4.5.1.2.3.1.1.5",
                                   "verses": [
-                                    "8.8ab",
-                                    "8.8cd"
+                                    "8.8ab"
                                   ],
                                   "children": []
                                 }
@@ -4510,7 +4552,9 @@
                             {
                               "title": "The faults of the desired object",
                               "path": "4.5.1.2.3.1.2",
-                              "verses": [],
+                              "verses": [
+                                "8.8cd"
+                              ],
                               "children": [
                                 {
                                   "title": "They destroy great benefits",
@@ -4894,7 +4938,10 @@
                           "title": "Explanation",
                           "path": "4.5.1.3.3.1",
                           "verses": [
-                            "8.71"
+                            "8.85ab",
+                            "8.85cd",
+                            "8.71",
+                            "8.86"
                           ],
                           "children": []
                         },
@@ -4946,9 +4993,7 @@
                 {
                   "title": "Its unique preeminence",
                   "path": "4.5.2.1",
-                  "verses": [
-                    "8.85ab"
-                  ],
+                  "verses": [],
                   "children": []
                 },
                 {
@@ -5058,8 +5103,7 @@
                               "path": "4.5.3.1.3.3.4",
                               "verses": [
                                 "4.36cd",
-                                "8.100",
-                                "8.101"
+                                "8.100"
                               ],
                               "children": []
                             }
@@ -5068,7 +5112,14 @@
                         {
                           "title": "Abandoning objections",
                           "path": "4.5.3.1.3.4",
-                          "verses": [],
+                          "verses": [
+                            "8.101",
+                            "8.102",
+                            "8.103",
+                            "8.104",
+                            "8.105",
+                            "8.106"
+                          ],
                           "children": []
                         },
                         {
@@ -5654,7 +5705,9 @@
                                   "title": "The fault of not abandoning",
                                   "path": "4.5.3.2.4.2.2.4",
                                   "verses": [
-                                    "8.171"
+                                    "8.171",
+                                    "8.172",
+                                    "8.173"
                                   ],
                                   "children": []
                                 },
@@ -5890,7 +5943,8 @@
                                   "title": "Abandoning the objection that there are no distinctions in understanding",
                                   "path": "4.6.2.1.1.3.3.2",
                                   "verses": [
-                                    "9.5ab"
+                                    "9.5ab",
+                                    "9.5cd"
                                   ],
                                   "children": []
                                 }
@@ -5956,7 +6010,9 @@
                               "verses": [
                                 "9.11",
                                 "9.12",
-                                "9.13"
+                                "9.13",
+                                "9.14",
+                                "9.15"
                               ],
                               "children": []
                             },
@@ -6225,7 +6281,8 @@
                                       "title": "Presenting the objection",
                                       "path": "4.6.2.2.1.2.4.3.1",
                                       "verses": [
-                                        "9.38ab"
+                                        "9.38ab",
+                                        "9.28"
                                       ],
                                       "children": []
                                     },
@@ -6260,7 +6317,8 @@
                           "title": "Presenting the objection",
                           "path": "4.6.2.2.2.1",
                           "verses": [
-                            "9.40ab"
+                            "9.40ab",
+                            "9.40cd"
                           ],
                           "children": []
                         },
@@ -6288,7 +6346,8 @@
                               "title": "We have the same criteria for rejecting [texts as scriptures]",
                               "path": "4.6.2.2.2.3.2",
                               "verses": [
-                                "9.43ab"
+                                "9.43ab",
+                                "9.43cd"
                               ],
                               "children": []
                             }
@@ -6303,7 +6362,8 @@
                               "title": "The error for the śrāvaka tradition in the monk who has abandoned defilements",
                               "path": "4.6.2.2.2.4.1",
                               "verses": [
-                                "9.44ab"
+                                "9.44ab",
+                                "9.44cd"
                               ],
                               "children": []
                             },
@@ -6343,7 +6403,8 @@
                                       "title": "Response to a counter objection",
                                       "path": "4.6.2.2.2.4.3.1.3",
                                       "verses": [
-                                        "9.29ab"
+                                        "9.29ab",
+                                        "9.29cd"
                                       ],
                                       "children": []
                                     }
@@ -6904,7 +6965,8 @@
                                           "path": "4.6.2.3.1.4.1.2.5.2",
                                           "verses": [
                                             "9.85",
-                                            "9.86"
+                                            "9.86",
+                                            "9.87"
                                           ],
                                           "children": []
                                         },
@@ -7227,7 +7289,10 @@
                     {
                       "title": "There is no reason that establishes all dharmas as having inherent nature",
                       "path": "4.6.2.4.1",
-                      "verses": [],
+                      "verses": [
+                        "9.111",
+                        "9.112"
+                      ],
                       "children": []
                     },
                     {
@@ -7515,6 +7580,8 @@
                                           "title": "Refuting the primal substance",
                                           "path": "4.6.2.4.2.1.3.2.1.1",
                                           "verses": [
+                                            "6.28ab",
+                                            "6.28cd",
                                             "9.128ab"
                                           ],
                                           "children": []
@@ -7749,6 +7816,7 @@
                           "title": "Showing that there is no arising or ceasing, coming or going",
                           "path": "4.6.2.4.3.2",
                           "verses": [
+                            "9.142cd",
                             "9.142ab"
                           ],
                           "children": []
@@ -7913,6 +7981,7 @@
                               "title": "Ending conditioned existence, which depends upon these",
                               "path": "4.6.2.5.1.1.2",
                               "verses": [
+                                "9.154cd",
                                 "9.154ab",
                                 "9.153"
                               ],
@@ -8404,6 +8473,16 @@
       }
     ],
     "1.5ab": [
+      {
+        "section": "2",
+        "title": "The primary basis: the individual person"
+      },
+      {
+        "section": "2.2",
+        "title": "The mental basis: meritorious intelligence"
+      }
+    ],
+    "1.5cd": [
       {
         "section": "2",
         "title": "The primary basis: the individual person"
@@ -9227,6 +9306,20 @@
         "title": "Summarizing the benefits of self"
       }
     ],
+    "1.36cd": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.1",
+        "title": "Praising the benefits of bodhicitta"
+      },
+      {
+        "section": "3.1.5",
+        "title": "Summarizing the benefits of others"
+      }
+    ],
     "1.36ab": [
       {
         "section": "3",
@@ -9437,6 +9530,72 @@
       {
         "section": "3.2.1.1.3",
         "title": "Offering the physical body"
+      }
+    ],
+    "2.10": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.1",
+        "title": "Offerings"
+      },
+      {
+        "section": "3.2.1.1.4",
+        "title": "Offerings emanated by the mind"
+      }
+    ],
+    "2.11": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.1",
+        "title": "Offerings"
+      },
+      {
+        "section": "3.2.1.1.4",
+        "title": "Offerings emanated by the mind"
+      }
+    ],
+    "2.12": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.1",
+        "title": "Offerings"
+      },
+      {
+        "section": "3.2.1.1.4",
+        "title": "Offerings emanated by the mind"
       }
     ],
     "2.22": [
@@ -10425,6 +10584,84 @@
         "title": "The example of a precipice"
       }
     ],
+    "2.60": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.3",
+        "title": "Confession"
+      },
+      {
+        "section": "3.2.1.3.4",
+        "title": "The power of desisting"
+      },
+      {
+        "section": "3.2.1.3.4.1",
+        "title": "Restraint for the next life"
+      }
+    ],
+    "2.61": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.3",
+        "title": "Confession"
+      },
+      {
+        "section": "3.2.1.3.4",
+        "title": "The power of desisting"
+      },
+      {
+        "section": "3.2.1.3.4.1",
+        "title": "Restraint for the next life"
+      }
+    ],
+    "2.62": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.3",
+        "title": "Confession"
+      },
+      {
+        "section": "3.2.1.3.4",
+        "title": "The power of desisting"
+      },
+      {
+        "section": "3.2.1.3.4.1",
+        "title": "Restraint for the next life"
+      }
+    ],
     "2.63": [
       {
         "section": "3",
@@ -10630,6 +10867,24 @@
       }
     ],
     "3.5": [
+      {
+        "section": "3",
+        "title": "The productive cause: the generation of bodhicitta"
+      },
+      {
+        "section": "3.2",
+        "title": "Generating bodhicitta in one's stream of being"
+      },
+      {
+        "section": "3.2.1",
+        "title": "Preliminaries"
+      },
+      {
+        "section": "3.2.1.5",
+        "title": "Requesting the wheel of dharma be turned"
+      }
+    ],
+    "3.6": [
       {
         "section": "3",
         "title": "The productive cause: the generation of bodhicitta"
@@ -11312,6 +11567,24 @@
       }
     ],
     "4.1ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.1",
+        "title": "Concern"
+      },
+      {
+        "section": "4.1.1",
+        "title": "Concern for bodhicitta"
+      },
+      {
+        "section": "4.1.1.1",
+        "title": "Briefly"
+      }
+    ],
+    "4.1cd": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -12671,6 +12944,24 @@
       {
         "section": "4.1.2.3.3.2",
         "title": "They are erroneous perceptions"
+      }
+    ],
+    "4.48cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.1",
+        "title": "Concern"
+      },
+      {
+        "section": "4.1.2",
+        "title": "Concern for training"
+      },
+      {
+        "section": "4.1.2.4",
+        "title": "Concluding summary of concern for training"
       }
     ],
     "4.48ab": [
@@ -15791,6 +16082,24 @@
         "title": "Summary of the training"
       }
     ],
+    "5.109cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.2",
+        "title": "Mindfulness and clear comprehension"
+      },
+      {
+        "section": "4.2.3",
+        "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension"
+      },
+      {
+        "section": "4.2.3.5",
+        "title": "Applying the key point"
+      }
+    ],
     "5.109ab": [
       {
         "section": "4",
@@ -16511,6 +16820,52 @@
       {
         "section": "4.3.2.1.4.2.1.1.2.1.2",
         "title": "Their conditions do not have autonomy"
+      }
+    ],
+    "6.28": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.3",
+        "title": "Patience"
+      },
+      {
+        "section": "4.3.2",
+        "title": "Keeping in mind the skilful means for accomplishing patience"
+      },
+      {
+        "section": "4.3.2.1",
+        "title": "Preventing the characteristics of anger"
+      },
+      {
+        "section": "4.3.2.1.4",
+        "title": "Keeping in mind the means of averting the cause of the cause"
+      },
+      {
+        "section": "4.3.2.1.4.2",
+        "title": "Ceasing anger toward the production of undesirables"
+      },
+      {
+        "section": "4.3.2.1.4.2.1",
+        "title": "Stopping impatience with the production of negative actions towards oneself"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1",
+        "title": "Stopping impatience with the establishment of suffering for oneself"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1.2",
+        "title": "Definitive consideration of the qualities in the discrimination"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1.2.2",
+        "title": "Refuting the essential characteristics of autonomy"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1.2.2.1",
+        "title": "Refuting the position of the Sāṃkhyas"
       }
     ],
     "6.29": [
@@ -17535,7 +17890,7 @@
         "title": "The angry mind has it the wrong way round"
       }
     ],
-    "8.104": [
+    "6.50ab": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -17579,9 +17934,13 @@
       {
         "section": "4.3.2.1.4.2.1.1.3.3.6",
         "title": "Abandoning objections"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1.3.3.6.1",
+        "title": "Abandoning the objection that it is illogical to say others benefit oneself"
       }
     ],
-    "8.105": [
+    "6.50cd": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -17625,9 +17984,13 @@
       {
         "section": "4.3.2.1.4.2.1.1.3.3.6",
         "title": "Abandoning objections"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1.3.3.6.2",
+        "title": "Abandoning the objection that it is illogical to say one harms others"
       }
     ],
-    "8.106": [
+    "6.51": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -17671,6 +18034,10 @@
       {
         "section": "4.3.2.1.4.2.1.1.3.3.6",
         "title": "Abandoning objections"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.1.3.3.6.3",
+        "title": "Refuting instigating harm"
       }
     ],
     "6.52": [
@@ -18039,7 +18406,133 @@
         "title": "Objection and response"
       }
     ],
+    "6.61": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.3",
+        "title": "Patience"
+      },
+      {
+        "section": "4.3.2",
+        "title": "Keeping in mind the skilful means for accomplishing patience"
+      },
+      {
+        "section": "4.3.2.1",
+        "title": "Preventing the characteristics of anger"
+      },
+      {
+        "section": "4.3.2.1.4",
+        "title": "Keeping in mind the means of averting the cause of the cause"
+      },
+      {
+        "section": "4.3.2.1.4.2",
+        "title": "Ceasing anger toward the production of undesirables"
+      },
+      {
+        "section": "4.3.2.1.4.2.1",
+        "title": "Stopping impatience with the production of negative actions towards oneself"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2",
+        "title": "Stopping impatience with the establishment of disrespect, etc. [for oneself]"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2.3",
+        "title": "It makes no sense to get angry with obstacles to acquisition"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2.3.5",
+        "title": "Objection and response"
+      }
+    ],
     "6.22": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.3",
+        "title": "Patience"
+      },
+      {
+        "section": "4.3.2",
+        "title": "Keeping in mind the skilful means for accomplishing patience"
+      },
+      {
+        "section": "4.3.2.1",
+        "title": "Preventing the characteristics of anger"
+      },
+      {
+        "section": "4.3.2.1.4",
+        "title": "Keeping in mind the means of averting the cause of the cause"
+      },
+      {
+        "section": "4.3.2.1.4.2",
+        "title": "Ceasing anger toward the production of undesirables"
+      },
+      {
+        "section": "4.3.2.1.4.2.1",
+        "title": "Stopping impatience with the production of negative actions towards oneself"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2",
+        "title": "Stopping impatience with the establishment of disrespect, etc. [for oneself]"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2.3",
+        "title": "It makes no sense to get angry with obstacles to acquisition"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2.3.6",
+        "title": "Establishing the fact"
+      }
+    ],
+    "6.23": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.3",
+        "title": "Patience"
+      },
+      {
+        "section": "4.3.2",
+        "title": "Keeping in mind the skilful means for accomplishing patience"
+      },
+      {
+        "section": "4.3.2.1",
+        "title": "Preventing the characteristics of anger"
+      },
+      {
+        "section": "4.3.2.1.4",
+        "title": "Keeping in mind the means of averting the cause of the cause"
+      },
+      {
+        "section": "4.3.2.1.4.2",
+        "title": "Ceasing anger toward the production of undesirables"
+      },
+      {
+        "section": "4.3.2.1.4.2.1",
+        "title": "Stopping impatience with the production of negative actions towards oneself"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2",
+        "title": "Stopping impatience with the establishment of disrespect, etc. [for oneself]"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2.3",
+        "title": "It makes no sense to get angry with obstacles to acquisition"
+      },
+      {
+        "section": "4.3.2.1.4.2.1.2.3.6",
+        "title": "Establishing the fact"
+      }
+    ],
+    "6.24": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -19348,6 +19841,98 @@
       }
     ],
     "2.23": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.3",
+        "title": "Patience"
+      },
+      {
+        "section": "4.3.2",
+        "title": "Keeping in mind the skilful means for accomplishing patience"
+      },
+      {
+        "section": "4.3.2.1",
+        "title": "Preventing the characteristics of anger"
+      },
+      {
+        "section": "4.3.2.1.4",
+        "title": "Keeping in mind the means of averting the cause of the cause"
+      },
+      {
+        "section": "4.3.2.1.4.3",
+        "title": "Ceasing anger towards those who obstruct desirable dharmas"
+      },
+      {
+        "section": "4.3.2.1.4.3.2",
+        "title": "Abandoning impatience with those who obstruct good for oneself and one’s own side"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1",
+        "title": "Abandoning impatience with those who obstruct worldly dharmas"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1.1",
+        "title": "Not regarding obstruction to worldly praise and reputation as harmful"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1.1.4",
+        "title": "Misconceived happiness"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1.1.4.2",
+        "title": "The intention of the one giving praise is inappropriate as a cause of joy"
+      }
+    ],
+    "2.24": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.3",
+        "title": "Patience"
+      },
+      {
+        "section": "4.3.2",
+        "title": "Keeping in mind the skilful means for accomplishing patience"
+      },
+      {
+        "section": "4.3.2.1",
+        "title": "Preventing the characteristics of anger"
+      },
+      {
+        "section": "4.3.2.1.4",
+        "title": "Keeping in mind the means of averting the cause of the cause"
+      },
+      {
+        "section": "4.3.2.1.4.3",
+        "title": "Ceasing anger towards those who obstruct desirable dharmas"
+      },
+      {
+        "section": "4.3.2.1.4.3.2",
+        "title": "Abandoning impatience with those who obstruct good for oneself and one’s own side"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1",
+        "title": "Abandoning impatience with those who obstruct worldly dharmas"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1.1",
+        "title": "Not regarding obstruction to worldly praise and reputation as harmful"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1.1.4",
+        "title": "Misconceived happiness"
+      },
+      {
+        "section": "4.3.2.1.4.3.2.1.1.4.2",
+        "title": "The intention of the one giving praise is inappropriate as a cause of joy"
+      }
+    ],
+    "2.25": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -23225,6 +23810,48 @@
         "title": "Developing enthusiasm by praising antidotal pride"
       }
     ],
+    "7.49ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.4",
+        "title": "Effort"
+      },
+      {
+        "section": "4.4.4",
+        "title": "Fully developing effort"
+      },
+      {
+        "section": "4.4.4.2",
+        "title": "Extensively"
+      },
+      {
+        "section": "4.4.4.2.1",
+        "title": "Developing the array of powers"
+      },
+      {
+        "section": "4.4.4.2.1.2",
+        "title": "The power of steadfastness"
+      },
+      {
+        "section": "4.4.4.2.1.2.2",
+        "title": "Stable engagement"
+      },
+      {
+        "section": "4.4.4.2.1.2.2.3",
+        "title": "Pride in ability"
+      },
+      {
+        "section": "4.4.4.2.1.2.2.3.2",
+        "title": "The means of reliance"
+      },
+      {
+        "section": "4.4.4.2.1.2.2.3.2.4",
+        "title": "Pride in overcoming the defilements"
+      }
+    ],
     "7.60": [
       {
         "section": "4",
@@ -24109,12 +24736,8 @@
         "title": "Establishing non-attachment towards sentient beings"
       },
       {
-        "section": "4.5.1.2.3.1.1",
-        "title": "The faults of the subject with attachment"
-      },
-      {
-        "section": "4.5.1.2.3.1.1.5",
-        "title": "Freedom and opportunity are wasted"
+        "section": "4.5.1.2.3.1.2",
+        "title": "The faults of the desired object"
       }
     ],
     "8.9": [
@@ -25801,7 +26424,85 @@
         "title": "Negating the characteristics of purity"
       }
     ],
+    "8.85ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.1",
+        "title": "Abandoning contradictory factors"
+      },
+      {
+        "section": "4.5.1.3",
+        "title": "Giving up conceptual discrimination"
+      },
+      {
+        "section": "4.5.1.3.3",
+        "title": "Considering how harm is abandoned by its cause"
+      },
+      {
+        "section": "4.5.1.3.3.1",
+        "title": "Explanation"
+      }
+    ],
+    "8.85cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.1",
+        "title": "Abandoning contradictory factors"
+      },
+      {
+        "section": "4.5.1.3",
+        "title": "Giving up conceptual discrimination"
+      },
+      {
+        "section": "4.5.1.3.3",
+        "title": "Considering how harm is abandoned by its cause"
+      },
+      {
+        "section": "4.5.1.3.3.1",
+        "title": "Explanation"
+      }
+    ],
     "8.71": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.1",
+        "title": "Abandoning contradictory factors"
+      },
+      {
+        "section": "4.5.1.3",
+        "title": "Giving up conceptual discrimination"
+      },
+      {
+        "section": "4.5.1.3.3",
+        "title": "Considering how harm is abandoned by its cause"
+      },
+      {
+        "section": "4.5.1.3.3.1",
+        "title": "Explanation"
+      }
+    ],
+    "8.86": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -26217,24 +26918,6 @@
         "title": "Other faults connected with that"
       }
     ],
-    "8.85ab": [
-      {
-        "section": "4",
-        "title": "The cooperating condition: subsequently accomplishing the training"
-      },
-      {
-        "section": "4.5",
-        "title": "Meditation"
-      },
-      {
-        "section": "4.5.2",
-        "title": "Developing joy in solitude"
-      },
-      {
-        "section": "4.5.2.1",
-        "title": "Its unique preeminence"
-      }
-    ],
     "8.87": [
       {
         "section": "4",
@@ -26591,12 +27274,138 @@
         "title": "Equality in suffering as the object of abandonment"
       },
       {
-        "section": "4.5.3.1.3.3",
-        "title": "Establishing the necessary criterion of the pervasion"
+        "section": "4.5.3.1.3.4",
+        "title": "Abandoning objections"
+      }
+    ],
+    "8.102": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
       },
       {
-        "section": "4.5.3.1.3.3.4",
-        "title": "Abandoning the consequence that the example is not established"
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.1",
+        "title": "Equalizing self and others"
+      },
+      {
+        "section": "4.5.3.1.3",
+        "title": "Equality in suffering as the object of abandonment"
+      },
+      {
+        "section": "4.5.3.1.3.4",
+        "title": "Abandoning objections"
+      }
+    ],
+    "8.103": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.1",
+        "title": "Equalizing self and others"
+      },
+      {
+        "section": "4.5.3.1.3",
+        "title": "Equality in suffering as the object of abandonment"
+      },
+      {
+        "section": "4.5.3.1.3.4",
+        "title": "Abandoning objections"
+      }
+    ],
+    "8.104": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.1",
+        "title": "Equalizing self and others"
+      },
+      {
+        "section": "4.5.3.1.3",
+        "title": "Equality in suffering as the object of abandonment"
+      },
+      {
+        "section": "4.5.3.1.3.4",
+        "title": "Abandoning objections"
+      }
+    ],
+    "8.105": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.1",
+        "title": "Equalizing self and others"
+      },
+      {
+        "section": "4.5.3.1.3",
+        "title": "Equality in suffering as the object of abandonment"
+      },
+      {
+        "section": "4.5.3.1.3.4",
+        "title": "Abandoning objections"
+      }
+    ],
+    "8.106": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.1",
+        "title": "Equalizing self and others"
+      },
+      {
+        "section": "4.5.3.1.3",
+        "title": "Equality in suffering as the object of abandonment"
+      },
+      {
+        "section": "4.5.3.1.3.4",
+        "title": "Abandoning objections"
       }
     ],
     "4.36ab": [
@@ -28781,6 +29590,74 @@
         "title": "The fault of not abandoning"
       }
     ],
+    "8.172": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.2",
+        "title": "Exchanging oneself and others"
+      },
+      {
+        "section": "4.5.3.2.4",
+        "title": "Detailed explanation of the practices related to application"
+      },
+      {
+        "section": "4.5.3.2.4.2",
+        "title": "Controlling the mind for practice"
+      },
+      {
+        "section": "4.5.3.2.4.2.2",
+        "title": "The faults of activities for one’s own sake"
+      },
+      {
+        "section": "4.5.3.2.4.2.2.4",
+        "title": "The fault of not abandoning"
+      }
+    ],
+    "8.173": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.2",
+        "title": "Exchanging oneself and others"
+      },
+      {
+        "section": "4.5.3.2.4",
+        "title": "Detailed explanation of the practices related to application"
+      },
+      {
+        "section": "4.5.3.2.4.2",
+        "title": "Controlling the mind for practice"
+      },
+      {
+        "section": "4.5.3.2.4.2.2",
+        "title": "The faults of activities for one’s own sake"
+      },
+      {
+        "section": "4.5.3.2.4.2.2.4",
+        "title": "The fault of not abandoning"
+      }
+    ],
     "8.174": [
       {
         "section": "4",
@@ -29527,6 +30404,40 @@
         "title": "Abandoning the objection that there are no distinctions in understanding"
       }
     ],
+    "9.5cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.1",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.1.1",
+        "title": "The nature of the two truths in our tradition"
+      },
+      {
+        "section": "4.6.2.1.1.3",
+        "title": "The valid cognitions which ascertain those characteristics"
+      },
+      {
+        "section": "4.6.2.1.1.3.3",
+        "title": "Abandoning objections about these graduations"
+      },
+      {
+        "section": "4.6.2.1.1.3.3.2",
+        "title": "Abandoning the objection that there are no distinctions in understanding"
+      }
+    ],
     "9.6": [
       {
         "section": "4",
@@ -29738,6 +30649,66 @@
       }
     ],
     "9.13": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.1",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.1.2",
+        "title": "Abandoning objections"
+      },
+      {
+        "section": "4.6.2.1.2.2",
+        "title": "Abandoning the objections of Sautrāntikas"
+      },
+      {
+        "section": "4.6.2.1.2.2.3",
+        "title": "To do with karma"
+      }
+    ],
+    "9.14": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.1",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.1.2",
+        "title": "Abandoning objections"
+      },
+      {
+        "section": "4.6.2.1.2.2",
+        "title": "Abandoning the objections of Sautrāntikas"
+      },
+      {
+        "section": "4.6.2.1.2.2.3",
+        "title": "To do with karma"
+      }
+    ],
+    "9.15": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -30669,6 +31640,44 @@
         "title": "Presenting the objection"
       }
     ],
+    "9.28": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.2",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.2.1",
+        "title": "Establishing subject cognition as the path"
+      },
+      {
+        "section": "4.6.2.2.1.2",
+        "title": "Response"
+      },
+      {
+        "section": "4.6.2.2.1.2.4",
+        "title": "Engaging in activity does not depend on effort"
+      },
+      {
+        "section": "4.6.2.2.1.2.4.3",
+        "title": "Abandoning an objection"
+      },
+      {
+        "section": "4.6.2.2.1.2.4.3.1",
+        "title": "Presenting the objection"
+      }
+    ],
     "9.38cd": [
       {
         "section": "4",
@@ -30708,6 +31717,32 @@
       }
     ],
     "9.40ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.2",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.2.2",
+        "title": "Abandoning the objections of śrāvakas"
+      },
+      {
+        "section": "4.6.2.2.2.1",
+        "title": "Presenting the objection"
+      }
+    ],
+    "9.40cd": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -30823,7 +31858,67 @@
         "title": "We have the same criteria for rejecting [texts as scriptures]"
       }
     ],
+    "9.43cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.2",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.2.2",
+        "title": "Abandoning the objections of śrāvakas"
+      },
+      {
+        "section": "4.6.2.2.2.3",
+        "title": "Establishing the [Mahāyāna] scriptures as Buddha’s word"
+      },
+      {
+        "section": "4.6.2.2.2.3.2",
+        "title": "We have the same criteria for rejecting [texts as scriptures]"
+      }
+    ],
     "9.44ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.2",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.2.2",
+        "title": "Abandoning the objections of śrāvakas"
+      },
+      {
+        "section": "4.6.2.2.2.4",
+        "title": "Establishing them as definitive meaning"
+      },
+      {
+        "section": "4.6.2.2.2.4.1",
+        "title": "The error for the śrāvaka tradition in the monk who has abandoned defilements"
+      }
+    ],
+    "9.44cd": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -30930,6 +32025,44 @@
       }
     ],
     "9.29ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.2",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.2.2",
+        "title": "Abandoning the objections of śrāvakas"
+      },
+      {
+        "section": "4.6.2.2.2.4",
+        "title": "Establishing them as definitive meaning"
+      },
+      {
+        "section": "4.6.2.2.2.4.3",
+        "title": "Overcoming objections to that"
+      },
+      {
+        "section": "4.6.2.2.2.4.3.1",
+        "title": "The existence of the suffering of this life"
+      },
+      {
+        "section": "4.6.2.2.2.4.3.1.3",
+        "title": "Response to a counter objection"
+      }
+    ],
+    "9.29cd": [
       {
         "section": "4",
         "title": "The cooperating condition: subsequently accomplishing the training"
@@ -33021,6 +34154,48 @@
         "title": "The deluded cognition"
       }
     ],
+    "9.87": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.3",
+        "title": "How to engage in meditation on emptiness"
+      },
+      {
+        "section": "4.6.2.3.1",
+        "title": "How to engage in meditation on the non-self of the individual"
+      },
+      {
+        "section": "4.6.2.3.1.4",
+        "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
+      },
+      {
+        "section": "4.6.2.3.1.4.1",
+        "title": "Mindfulness of the body"
+      },
+      {
+        "section": "4.6.2.3.1.4.1.2",
+        "title": "An existent body which possesses the parts is not established"
+      },
+      {
+        "section": "4.6.2.3.1.4.1.2.5",
+        "title": "Establishing the delusion"
+      },
+      {
+        "section": "4.6.2.3.1.4.1.2.5.2",
+        "title": "The deluded cognition"
+      }
+    ],
     "9.89": [
       {
         "section": "4",
@@ -34315,6 +35490,50 @@
         "title": "Ceasing to grasp at true existence"
       }
     ],
+    "9.111": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4",
+        "title": "Ceasing to grasp at true existence"
+      },
+      {
+        "section": "4.6.2.4.1",
+        "title": "There is no reason that establishes all dharmas as having inherent nature"
+      }
+    ],
+    "9.112": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4",
+        "title": "Ceasing to grasp at true existence"
+      },
+      {
+        "section": "4.6.2.4.1",
+        "title": "There is no reason that establishes all dharmas as having inherent nature"
+      }
+    ],
     "9.116ab": [
       {
         "section": "4",
@@ -35207,6 +36426,90 @@
       {
         "section": "4.6.2.4.2.1.3.1.3",
         "title": "The nature of its effects"
+      }
+    ],
+    "6.28ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4",
+        "title": "Ceasing to grasp at true existence"
+      },
+      {
+        "section": "4.6.2.4.2",
+        "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+      },
+      {
+        "section": "4.6.2.4.2.1",
+        "title": "The main teaching on refuting an arising with intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4.2.1.3",
+        "title": "Refuting arising from self"
+      },
+      {
+        "section": "4.6.2.4.2.1.3.2",
+        "title": "The error in that"
+      },
+      {
+        "section": "4.6.2.4.2.1.3.2.1",
+        "title": "A general expression of the objection"
+      },
+      {
+        "section": "4.6.2.4.2.1.3.2.1.1",
+        "title": "Refuting the primal substance"
+      }
+    ],
+    "6.28cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4",
+        "title": "Ceasing to grasp at true existence"
+      },
+      {
+        "section": "4.6.2.4.2",
+        "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+      },
+      {
+        "section": "4.6.2.4.2.1",
+        "title": "The main teaching on refuting an arising with intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4.2.1.3",
+        "title": "Refuting arising from self"
+      },
+      {
+        "section": "4.6.2.4.2.1.3.2",
+        "title": "The error in that"
+      },
+      {
+        "section": "4.6.2.4.2.1.3.2.1",
+        "title": "A general expression of the objection"
+      },
+      {
+        "section": "4.6.2.4.2.1.3.2.1.1",
+        "title": "Refuting the primal substance"
       }
     ],
     "9.128ab": [
@@ -36139,6 +37442,32 @@
         "title": "A summary of the refutation of the four [kinds of] arising"
       }
     ],
+    "9.142cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.4",
+        "title": "Ceasing to grasp at true existence"
+      },
+      {
+        "section": "4.6.2.4.3",
+        "title": "Showing that all dharmas arise merely through dependent origination"
+      },
+      {
+        "section": "4.6.2.4.3.2",
+        "title": "Showing that there is no arising or ceasing, coming or going"
+      }
+    ],
     "9.142ab": [
       {
         "section": "4",
@@ -36539,6 +37868,36 @@
       {
         "section": "4.6.2.4.3.3.3.2.3",
         "title": "The sameness of existence and pacification"
+      }
+    ],
+    "9.154cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.5",
+        "title": "The result of meditation on emptiness"
+      },
+      {
+        "section": "4.6.2.5.1",
+        "title": "Benefit of self"
+      },
+      {
+        "section": "4.6.2.5.1.1",
+        "title": "Pacifying attachment"
+      },
+      {
+        "section": "4.6.2.5.1.1.2",
+        "title": "Ending conditioned existence, which depends upon these"
       }
     ],
     "9.154ab": [
@@ -37187,13 +38546,14 @@
     "3.1.3.2.2.4": "1.32",
     "3.1.3.2.2.5": "1.34",
     "3.1.4": "1.35cd",
-    "3.1.5": "1.36ab",
+    "3.1.5": "1.36cd",
     "3.2": "2.26ab",
     "3.2.1": "2.26ab",
     "3.2.1.1": "2.1",
     "3.2.1.1.1": "2.1",
     "3.2.1.1.2": "2.2",
     "3.2.1.1.3": "2.8",
+    "3.2.1.1.4": "2.10",
     "3.2.1.1.5": "2.22",
     "3.2.1.2": "2.26ab",
     "3.2.1.2.1": "2.26cd",
@@ -37224,7 +38584,8 @@
     "3.2.1.3.3.2": "2.54",
     "3.2.1.3.3.2.1": "2.54",
     "3.2.1.3.3.2.2": "2.57",
-    "3.2.1.3.4": "2.63",
+    "3.2.1.3.4": "2.60",
+    "3.2.1.3.4.1": "2.60",
     "3.2.1.3.4.2": "2.63",
     "3.2.1.3.4.3": "2.65",
     "3.2.1.4": "3.2ab",
@@ -37264,7 +38625,7 @@
     "3.2.3.2.1": "3.29",
     "3.2.3.2.2": "3.32",
     "3.2.3.2.3": "3.33",
-    "4": "9.61ab",
+    "4": "9.61cd",
     "4.1": "4.48ab",
     "4.1.1": "4.1ab",
     "4.1.1.1": "4.1ab",
@@ -37280,7 +38641,7 @@
     "4.1.1.2.2.2.2": "4.9",
     "4.1.1.2.2.2.3": "4.10",
     "4.1.1.2.2.3": "4.11",
-    "4.1.2": "4.43cd",
+    "4.1.2": "4.43ab",
     "4.1.2.1": "4.12",
     "4.1.2.1.1": "4.12",
     "4.1.2.1.1.1": "4.12",
@@ -37332,7 +38693,7 @@
     "4.1.2.3.3.1.3": "4.46ab",
     "4.1.2.3.3.1.4": "4.46cd",
     "4.1.2.3.3.2": "4.47",
-    "4.1.2.4": "4.48ab",
+    "4.1.2.4": "4.48cd",
     "4.2": "5.1ab",
     "4.2.1": "5.1ab",
     "4.2.1.1": "5.1ab",
@@ -37377,7 +38738,7 @@
     "4.2.2.3.2.2.1": "5.30",
     "4.2.2.3.2.2.2": "5.31",
     "4.2.2.3.3": "5.33",
-    "4.2.3": "5.75ab",
+    "4.2.3": "5.75cd",
     "4.2.3.1": "5.42ab",
     "4.2.3.1.1": "5.42ab",
     "4.2.3.1.1.1": "5.34",
@@ -37442,7 +38803,7 @@
     "4.2.3.4.4.3": "5.103",
     "4.2.3.4.5": "5.104",
     "4.2.3.4.6": "5.107",
-    "4.2.3.5": "5.109ab",
+    "4.2.3.5": "5.109cd",
     "4.3": "6.112ab",
     "4.3.1": "6.1",
     "4.3.1.1": "6.1",
@@ -37450,15 +38811,15 @@
     "4.3.1.2.1": "6.3",
     "4.3.1.2.2": "6.4",
     "4.3.1.2.3": "6.6",
-    "4.3.2": "6.112ab",
+    "4.3.2": "6.50cd",
     "4.3.2.1": "6.112ab",
     "4.3.2.1.1": "6.7",
     "4.3.2.1.2": "6.8",
-    "4.3.2.1.4": "6.112ab",
+    "4.3.2.1.4": "6.50ab",
     "4.3.2.1.4.1": "6.11",
-    "4.3.2.1.4.2": "6.12",
-    "4.3.2.1.4.2.1": "6.12",
-    "4.3.2.1.4.2.1.1": "6.12",
+    "4.3.2.1.4.2": "6.50ab",
+    "4.3.2.1.4.2.1": "6.50ab",
+    "4.3.2.1.4.2.1.1": "6.50ab",
     "4.3.2.1.4.2.1.1.1": "6.12",
     "4.3.2.1.4.2.1.1.1.1": "6.12",
     "4.3.2.1.4.2.1.1.1.2": "6.13",
@@ -37469,20 +38830,24 @@
     "4.3.2.1.4.2.1.1.2.1": "6.26",
     "4.3.2.1.4.2.1.1.2.1.2": "6.26",
     "4.3.2.1.4.2.1.1.2.2": "6.27",
+    "4.3.2.1.4.2.1.1.2.2.1": "6.28",
     "4.3.2.1.4.2.1.1.2.2.2": "6.29",
     "4.3.2.1.4.2.1.1.2.2.3": "6.27",
     "4.3.2.1.4.2.1.1.2.3": "6.32",
     "4.3.2.1.4.2.1.1.2.4": "6.25",
-    "4.3.2.1.4.2.1.1.3": "6.35",
+    "4.3.2.1.4.2.1.1.3": "6.50ab",
     "4.3.2.1.4.2.1.1.3.1": "6.35",
     "4.3.2.1.4.2.1.1.3.2": "6.39",
-    "4.3.2.1.4.2.1.1.3.3": "6.42",
+    "4.3.2.1.4.2.1.1.3.3": "6.50ab",
     "4.3.2.1.4.2.1.1.3.3.1": "6.42",
     "4.3.2.1.4.2.1.1.3.3.2": "6.43",
     "4.3.2.1.4.2.1.1.3.3.3": "6.45",
     "4.3.2.1.4.2.1.1.3.3.4": "6.47",
     "4.3.2.1.4.2.1.1.3.3.5": "6.48",
-    "4.3.2.1.4.2.1.1.3.3.6": "8.104",
+    "4.3.2.1.4.2.1.1.3.3.6": "6.50ab",
+    "4.3.2.1.4.2.1.1.3.3.6.1": "6.50ab",
+    "4.3.2.1.4.2.1.1.3.3.6.2": "6.50cd",
+    "4.3.2.1.4.2.1.1.3.3.6.3": "6.51",
     "4.3.2.1.4.2.1.2": "6.22",
     "4.3.2.1.4.2.1.2.1": "6.52",
     "4.3.2.1.4.2.1.2.2": "6.54",
@@ -37586,8 +38951,8 @@
     "4.4.3.4.3.3": "7.27",
     "4.4.4": "7.53cd",
     "4.4.4.1": "7.31",
-    "4.4.4.2": "7.67ab",
-    "4.4.4.2.1": "7.67ab",
+    "4.4.4.2": "7.67cd",
+    "4.4.4.2.1": "7.49ab",
     "4.4.4.2.1.1": "7.46ab",
     "4.4.4.2.1.1.1": "7.33",
     "4.4.4.2.1.1.1.1": "7.33",
@@ -37614,10 +38979,10 @@
     "4.4.4.2.1.2.2.3.1.3": "7.53cd",
     "4.4.4.2.1.2.2.3.1.4": "7.54ab",
     "4.4.4.2.1.2.2.3.1.5": "7.54cd",
-    "4.4.4.2.1.2.2.3.2": "7.55",
+    "4.4.4.2.1.2.2.3.2": "7.49ab",
     "4.4.4.2.1.2.2.3.2.1": "7.55",
     "4.4.4.2.1.2.2.3.2.3": "7.59",
-    "4.4.4.2.1.2.2.3.2.4": "7.60",
+    "4.4.4.2.1.2.2.3.2.4": "7.49ab",
     "4.4.4.2.1.3": "7.63",
     "4.4.4.2.1.3.1": "7.63",
     "4.4.4.2.1.3.2": "7.64",
@@ -37635,7 +39000,7 @@
     "4.4.4.2.2.5": "7.74",
     "4.4.4.2.3": "7.75",
     "4.5": "8.169cd",
-    "4.5.1": "8.19ab",
+    "4.5.1": "8.85ab",
     "4.5.1.1": "8.1",
     "4.5.1.2": "8.19cd",
     "4.5.1.2.1": "8.3",
@@ -37648,7 +39013,7 @@
     "4.5.1.2.3.1.1.3": "8.6cd",
     "4.5.1.2.3.1.1.4": "8.7",
     "4.5.1.2.3.1.1.5": "8.8ab",
-    "4.5.1.2.3.1.2": "8.9",
+    "4.5.1.2.3.1.2": "8.8cd",
     "4.5.1.2.3.1.2.2": "8.9",
     "4.5.1.2.3.1.2.3": "8.10",
     "4.5.1.2.3.1.2.4": "8.11",
@@ -37670,7 +39035,7 @@
     "4.5.1.2.5.4.2": "8.31",
     "4.5.1.2.5.4.3": "8.32",
     "4.5.1.2.5.4.4": "8.33",
-    "4.5.1.3": "8.38",
+    "4.5.1.3": "8.85ab",
     "4.5.1.3.1": "8.38",
     "4.5.1.3.2": "8.40",
     "4.5.1.3.2.1": "8.40",
@@ -37690,15 +39055,14 @@
     "4.5.1.3.2.2.2.4": "8.62",
     "4.5.1.3.2.2.2.5": "8.63",
     "4.5.1.3.2.3": "8.65",
-    "4.5.1.3.3": "8.71",
-    "4.5.1.3.3.1": "8.71",
+    "4.5.1.3.3": "8.85ab",
+    "4.5.1.3.3.1": "8.85ab",
     "4.5.1.3.3.2": "8.72",
     "4.5.1.3.3.2.1": "8.72",
     "4.5.1.3.3.2.2": "8.76",
-    "4.5.2": "8.85ab",
-    "4.5.2.1": "8.85ab",
+    "4.5.2": "8.87",
     "4.5.2.2": "8.87",
-    "4.5.3": "8.169ab",
+    "4.5.3": "8.109cd",
     "4.5.3.1": "8.109ab",
     "4.5.3.1.1": "8.89",
     "4.5.3.1.2": "8.91",
@@ -37710,7 +39074,8 @@
     "4.5.3.1.3.3.1": "8.97",
     "4.5.3.1.3.3.2": "8.98",
     "4.5.3.1.3.3.3": "8.99",
-    "4.5.3.1.3.3.4": "8.100",
+    "4.5.3.1.3.3.4": "4.36cd",
+    "4.5.3.1.3.4": "8.101",
     "4.5.3.1.3.5": "4.36ab",
     "4.5.3.1.4": "8.109ab",
     "4.5.3.1.4.1": "8.107",
@@ -37792,11 +39157,11 @@
     "4.5.3.2.4.2.3.3.3": "8.183",
     "4.5.3.2.4.2.3.4": "8.184",
     "4.5.3.2.4.2.4": "8.185",
-    "4.6": "9.117ab",
+    "4.6": "9.116ab",
     "4.6.1": "9.1ab",
     "4.6.1.1": "9.1ab",
     "4.6.1.2": "9.1cd",
-    "4.6.2": "9.117cd",
+    "4.6.2": "9.116cd",
     "4.6.2.1": "9.2cd",
     "4.6.2.1.1": "9.2cd",
     "4.6.2.1.1.1": "9.2cd",
@@ -37834,7 +39199,7 @@
     "4.6.2.1.2.3.1.2.2.3.1": "9.23",
     "4.6.2.1.2.3.1.2.2.3.2": "9.24",
     "4.6.2.1.2.3.1.2.2.3.3": "9.25",
-    "4.6.2.2": "9.32ab",
+    "4.6.2.2": "9.44ab",
     "4.6.2.2.1": "9.32ab",
     "4.6.2.2.1.1": "9.30",
     "4.6.2.2.1.2": "9.32ab",
@@ -37878,8 +39243,8 @@
     "4.6.2.2.2.6.3.4": "9.56ab",
     "4.6.2.2.2.6.3.4.1": "9.55",
     "4.6.2.2.2.6.3.4.2": "9.56ab",
-    "4.6.2.3": "9.64ab",
-    "4.6.2.3.1": "9.72ab",
+    "4.6.2.3": "9.64cd",
+    "4.6.2.3.1": "9.72cd",
     "4.6.2.3.1.1": "9.57",
     "4.6.2.3.1.2": "9.60ab",
     "4.6.2.3.1.2.1": "9.60ab",
@@ -37920,7 +39285,7 @@
     "4.6.2.3.1.3.2.2.2.2": "9.76cd",
     "4.6.2.3.1.3.2.2.3": "9.77ab",
     "4.6.2.3.1.3.2.2.4": "9.77cd",
-    "4.6.2.3.1.4": "9.110ab",
+    "4.6.2.3.1.4": "9.88cd",
     "4.6.2.3.1.4.1": "9.78",
     "4.6.2.3.1.4.1.1": "9.78",
     "4.6.2.3.1.4.1.2": "9.80",
@@ -37963,6 +39328,7 @@
     "4.6.2.3.1.4.4.2.2.2": "9.88cd",
     "4.6.2.3.1.4.4.2.2.3": "9.110ab",
     "4.6.2.4": "9.126ab",
+    "4.6.2.4.1": "9.111",
     "4.6.2.4.2": "9.124ab",
     "4.6.2.4.2.1": "9.123cd",
     "4.6.2.4.2.1.1": "9.116ab",
@@ -37994,7 +39360,7 @@
     "4.6.2.4.2.1.3.1.3": "9.127cd",
     "4.6.2.4.2.1.3.2": "9.128ab",
     "4.6.2.4.2.1.3.2.1": "9.128ab",
-    "4.6.2.4.2.1.3.2.1.1": "9.128ab",
+    "4.6.2.4.2.1.3.2.1.1": "6.28ab",
     "4.6.2.4.2.1.3.2.1.2": "9.128cd",
     "4.6.2.4.2.1.3.2.1.3": "9.129ab",
     "4.6.2.4.2.1.3.2.2": "9.129cd",
@@ -38018,9 +39384,9 @@
     "4.6.2.4.2.2.1": "9.138",
     "4.6.2.4.2.2.2": "9.139",
     "4.6.2.4.2.2.3": "9.140",
-    "4.6.2.4.3": "9.142ab",
+    "4.6.2.4.3": "9.142cd",
     "4.6.2.4.3.1": "9.141",
-    "4.6.2.4.3.2": "9.142ab",
+    "4.6.2.4.3.2": "9.142cd",
     "4.6.2.4.3.3": "9.145ab",
     "4.6.2.4.3.3.2": "9.143",
     "4.6.2.4.3.3.3": "9.145ab",
@@ -38032,10 +39398,10 @@
     "4.6.2.4.3.3.3.2.1": "9.149",
     "4.6.2.4.3.3.3.2.2": "9.150ab",
     "4.6.2.4.3.3.3.2.3": "9.150cd",
-    "4.6.2.5": "9.154ab",
-    "4.6.2.5.1": "9.154ab",
-    "4.6.2.5.1.1": "9.154ab",
-    "4.6.2.5.1.1.2": "9.154ab",
+    "4.6.2.5": "9.154cd",
+    "4.6.2.5.1": "9.154cd",
+    "4.6.2.5.1.1": "9.154cd",
+    "4.6.2.5.1.1.2": "9.154cd",
     "4.6.2.5.1.2": "9.161ab",
     "4.6.2.5.1.2.1": "9.155",
     "4.6.2.5.1.2.2": "9.161ab",

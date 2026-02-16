@@ -1,109 +1,80 @@
-# Study App - Flutter + Supabase
+# Dechen Study
 
-A beautiful study app inspired by dechen.study aesthetics, built with Flutter and Supabase. Features include daily study sections, chapter quizzes, and full text reading.
+A study app for the Bodhicaryavatāra (Bodhisattvacaryāvatāra), built with Flutter and Supabase. Features include full-text reading with section hierarchy, daily verse sections, chapter quiz, commentary, and keyboard navigation.
 
 ## Features
 
-- 📧 **Email Authentication** with confirmation
-- 📅 **Daily Sections** - One section per day, mark as complete
-- 🎯 **Chapter Quiz** - Test yourself by identifying which chapter a random section is from
-- 📖 **Read Mode** - Browse the full text organized by chapters
-- 🎨 **Beautiful UI** - Warm, serene design inspired by dechen.study
+- **Full Text Reading** – Browse the Bodhicaryavatāra organized by chapters, with verse-by-verse navigation
+- **Section Hierarchy** – Commentary structure as parent/child sections; sections are subsets (children refine parents)
+- **Section Overview** – Right-side panel listing the full section hierarchy; tap or use arrow keys to navigate
+- **Keyboard Navigation** – Arrow Up/Down behave differently depending on focus (see below)
+- **Daily Section** – One section per day with random selection
+- **Chapter Quiz** – Identify which chapter a random section belongs to
+- **Commentary** – Inline commentary for verses and sections
+- **Email Authentication** – Sign up with confirmation
+
+## Keyboard Navigation
+
+The read screen has two distinct focus areas with different arrow-key behavior:
+
+### Reader Pane (main text area)
+
+When the **reader pane** has focus (click in the main text, or on first load):
+
+- **Arrow Down** → Jump to the **next lowest-level section** (leaf section only)
+- **Arrow Up** → Jump to the **previous lowest-level section** (leaf section only)
+
+Navigation uses only leaf sections (sections with no children), in verse order. Each key press moves exactly one leaf section forward or backward—never to a parent section and never skipping sections.
+
+### Section Overview (right panel)
+
+When the **section overview** has focus (click in the section list panel):
+
+- **Arrow Down** → Move to the **next item** in the hierarchy (depth-first order)
+  - If the current section has children → go to the first child (smaller subset, may share verses)
+  - If no children → go to next sibling or parent’s next sibling
+  - Only when there is **no** next item in the hierarchy does it fall back to the next section in verse order
+- **Arrow Up** → Move to the **previous item** in the hierarchy (reverse depth-first)
+
+**Summary:** In the reader, arrow down always goes to a new set of verses. In the section overview, arrow down first explores children (more specific subsets); only when children are exhausted does it move to the next verse-ordered section.
 
 ## Prerequisites
 
 - Flutter SDK (3.0+)
-- A Supabase account and project
-- Git and GitHub (already set up)
+- Supabase account and project
+- Fonts: Crimson Text, Lora (see Setup)
 
-## Setup Instructions
+## Setup
 
-### 1. Supabase Configuration
+### 1. Environment
 
-1. Go to your [Supabase Dashboard](https://app.supabase.com)
-2. Create a new project (or use existing)
-3. **Set up the database:**
-   - Go to SQL Editor in Supabase
-   - Copy the contents of `supabase_schema.sql`
-   - Paste and run it to create all tables
+Create a `.env` file in the project root:
 
-4. **Configure Email Authentication:**
-   - Go to Authentication → Settings
-   - Under "Auth Providers", enable Email provider
-   - Configure email templates (optional but recommended):
-     - Customize the confirmation email
-     - Set the redirect URL to match your app
-
-5. **Get your API credentials:**
-   - Go to Settings → API
-   - Copy your `Project URL` and `anon/public` key
-   - You'll need these for the next step
-
-### 2. Flutter App Configuration
-
-1. **Update Supabase credentials:**
-   ```dart
-   // lib/utils/constants.dart
-   const String supabaseUrl = 'YOUR_SUPABASE_URL'; // Paste your Project URL
-   const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'; // Paste your anon key
-   ```
-
-2. **Install fonts:**
-   
-   Download these fonts and place them in a `fonts/` directory in your project root:
-   - **Crimson Text** (Google Fonts): [Download](https://fonts.google.com/specimen/Crimson+Text)
-     - CrimsonText-Regular.ttf
-     - CrimsonText-SemiBold.ttf
-   
-   - **Lora** (Google Fonts): [Download](https://fonts.google.com/specimen/Lora)
-     - Lora-Regular.ttf
-     - Lora-Medium.ttf
-     - Lora-SemiBold.ttf
-
-   OR you can use system fonts by removing the font family from `main.dart` theme.
-
-3. **Install dependencies:**
-   ```bash
-   flutter pub get
-   ```
-
-### 3. Upload Your Study Text
-
-You need to populate the database with your study text. Here are two methods:
-
-#### Method A: Using Supabase SQL Editor (Simple)
-
-1. Go to Supabase → SQL Editor
-2. Modify `sample_data_upload.sql` with your actual text content
-3. Run the SQL to insert your data
-
-#### Method B: Using a Script (Recommended for large texts)
-
-Create a simple Python/Node.js script to:
-1. Read your text file
-2. Parse it into chapters and sections
-3. Insert via Supabase API or SQL
-
-Example structure:
 ```
-Study Text
-├── Chapter 1
-│   ├── Section 1
-│   ├── Section 2
-│   └── Section 3
-├── Chapter 2
-│   ├── Section 1
-│   └── Section 2
-└── ...
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
 ```
 
-### 4. Run the App
+### 2. Fonts
+
+Download and add to a `fonts/` directory:
+
+- **Crimson Text** – [Google Fonts](https://fonts.google.com/specimen/Crimson+Text)
+- **Lora** – [Google Fonts](https://fonts.google.com/specimen/Lora) (variable font)
+
+Ensure `pubspec.yaml` font paths match your files.
+
+### 3. Dependencies
 
 ```bash
-# For mobile (iOS/Android)
-flutter run
+flutter pub get
+```
 
-# For web
+### 4. Run
+
+```bash
+flutter run
+# or for web
 flutter run -d chrome
 ```
 
@@ -111,109 +82,62 @@ flutter run -d chrome
 
 ```
 lib/
-├── main.dart                 # App entry point
+├── main.dart
 ├── models/
-│   └── study_models.dart    # Data models
+│   └── study_models.dart
 ├── screens/
 │   ├── auth/
 │   │   ├── splash_screen.dart
 │   │   ├── login_screen.dart
 │   │   └── signup_screen.dart
-│   └── home/
-│       ├── home_screen.dart
-│       ├── daily_section_screen.dart
-│       ├── quiz_screen.dart
-│       └── read_screen.dart
+│   ├── home/
+│   │   ├── home_screen.dart
+│   │   ├── daily_section_screen.dart
+│   │   ├── quiz_screen.dart
+│   │   └── read_screen.dart
+│   └── landing/
+│       ├── landing_screen.dart
+│       ├── text_options_screen.dart
+│       ├── daily_verse_screen.dart
+│       ├── bcv_quiz_screen.dart
+│       ├── bcv_read_screen.dart      # Full BCV reader with keyboard nav
+│       └── bcv/
+│           ├── bcv_chapters_panel.dart
+│           └── bcv_section_slider.dart
 ├── services/
-│   ├── auth_service.dart    # Authentication logic
-│   └── study_service.dart   # Study data logic
-├── utils/
-│   └── constants.dart       # Supabase config
-└── widgets/
-    └── auth_text_field.dart # Reusable widgets
+│   ├── auth_service.dart
+│   ├── study_service.dart
+│   ├── bcv_verse_service.dart        # Verse loading, chapter boundaries
+│   ├── verse_hierarchy_service.dart  # Section hierarchy, navigation logic
+│   └── commentary_service.dart
+└── utils/
+    ├── app_theme.dart
+    └── constants.dart
 ```
 
-## Database Schema
+## Text Assets
 
-- **study_texts**: Main text documents
-- **chapters**: Chapters within a study text
-- **sections**: Individual sections within chapters
-- **daily_sections**: Tracks daily progress per user
+The app loads text from bundled assets:
 
-## Usage
+- `texts/bcv-root` – Root text (chapters, verses)
+- `texts/verse_hierarchy_map.json` – Section hierarchy (paths, first verses)
+- `texts/verse_commentary_mapping.txt` – Verse-to-commentary mapping
+- `texts/commentary.txt` – Commentary content
 
-1. **Sign Up**: Create account with email (requires confirmation)
-2. **Daily Tab**: View today's section and mark it complete
-3. **Quiz Tab**: Get random sections and guess which chapter they're from
-4. **Read Tab**: Browse the full text organized by chapters
+## Tests
 
-## Design Notes
+```bash
+flutter test
+# Section navigation tests
+flutter test test/section_navigation_test.dart
+```
 
-The app follows a warm, serene aesthetic inspired by dechen.study:
+## Design
+
 - **Colors**: Warm browns (#8B7355), cream backgrounds (#FAF8F5)
 - **Typography**: Crimson Text for headings, Lora for body
-- **Layout**: Clean, spacious, with subtle borders
-- **Animations**: Minimal, elegant transitions
-
-## Customization
-
-### Change Color Scheme
-Edit the colors in `lib/main.dart` under `ThemeData`:
-```dart
-seedColor: const Color(0xFF8B7355), // Main color
-scaffoldBackgroundColor: const Color(0xFFFAF8F5), // Background
-```
-
-### Change Fonts
-Update font families in `pubspec.yaml` and `main.dart`
-
-### Modify Features
-- Edit `daily_section_screen.dart` to change daily section behavior
-- Edit `quiz_screen.dart` to modify quiz logic
-- Edit `read_screen.dart` to customize reading experience
-
-## Troubleshooting
-
-**Email confirmation not working?**
-- Check Supabase email settings
-- Verify email templates are configured
-- Check spam folder for confirmation emails
-
-**Database errors?**
-- Ensure `supabase_schema.sql` was run successfully
-- Check RLS policies are enabled
-- Verify your anon key has correct permissions
-
-**Fonts not loading?**
-- Verify font files are in `fonts/` directory
-- Check `pubspec.yaml` font paths match actual files
-- Run `flutter pub get` after adding fonts
-
-**App not connecting to Supabase?**
-- Double-check URL and anon key in `constants.dart`
-- Ensure you're using the correct anon key (not service role)
-- Check network connectivity
-
-## Future Enhancements
-
-Ideas for extending the app:
-- Progress tracking and statistics
-- Multiple study texts
-- Bookmarks and notes
-- Spaced repetition algorithm
-- Share sections with friends
-- Dark mode
-- Offline mode
+- **Layout**: Main reader + right panels (chapters, section overview, breadcrumb)
 
 ## License
 
-MIT License - feel free to use and modify for your own study needs!
-
-## Support
-
-If you encounter issues:
-1. Check the troubleshooting section
-2. Review Supabase logs in the dashboard
-3. Check Flutter console for error messages
-
-Happy studying! 📚
+MIT

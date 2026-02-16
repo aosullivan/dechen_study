@@ -3,3 +3,6 @@ breadcrumb display - make it look more like a traditional breadcrumb trail than 
 ensure we always use full vertical space for panels by default and after changing size
 separate section overview scroller
 do somethnig about the commentary
+
+keep the functionality that when click down on a section, it highllights all the verses in the next section
+and then click down again and it gets smaller

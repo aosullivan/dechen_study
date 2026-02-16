@@ -193,6 +193,38 @@ OverviewNode? _matchContextParent(Map<String, List<OverviewNode>> lookup, List<S
   return (int.parse(m.group(1)!), int.parse(m.group(2)!));
 }
 
+/// Length of common path prefix. "4.3.2.1" vs "4.3.2.5.1" -> 3 (4.3.2).
+int _pathPrefixLength(String a, String b) {
+  if (a.isEmpty || b.isEmpty) return 0;
+  final ap = a.split('.');
+  final bp = b.split('.');
+  var i = 0;
+  while (i < ap.length && i < bp.length && ap[i] == bp[i]) i++;
+  return i;
+}
+
+/// When multiple candidates share a title, prefer the one whose path shares
+/// the longest prefix with the last path we assigned for this chapter.
+/// Verses in the same chapter appear in document order, so continuity helps.
+OverviewNode? _disambiguateByPathContinuity(
+    List<OverviewNode> candidates, String ref,
+    Map<int, String> lastPathByChapter) {
+  final (ch, _) = _parseVerseRef(ref);
+  if (ch == 0) return null;
+  final lastPath = lastPathByChapter[ch];
+  if (lastPath == null || lastPath.isEmpty) return null;
+  OverviewNode? best;
+  var bestLen = 0;
+  for (final n in candidates) {
+    final len = _pathPrefixLength(n.path, lastPath);
+    if (len > bestLen) {
+      bestLen = len;
+      best = n;
+    }
+  }
+  return best;
+}
+
 /// Distance from ref to node: 0 if node has verse in same chapter within ~50 verses, else large.
 double _verseProximity(String ref, OverviewNode node) {
   final (refCh, refV) = _parseVerseRef(ref);
@@ -211,8 +243,9 @@ double _verseProximity(String ref, OverviewNode node) {
 /// Match mapping heading to overview node. Returns (node, needsReview).
 /// [context] = section headings from preceding mapping lines, for disambiguating repeated titles.
 /// [ref] = verse ref for proximity tiebreaker (e.g. "9.30").
+/// [lastPathByChapter] = path last assigned per chapter; used for path-continuity disambiguation.
 (OverviewNode?, bool) matchToOverview(String heading, Map<String, List<OverviewNode>> lookup,
-    {List<String> context = const [], String? ref}) {
+    {List<String> context = const [], String? ref, Map<int, String>? lastPathByChapter}) {
   // Strip number prefix: "1. The purpose of X" -> "The purpose of X"
   var headingTitle = heading.replaceFirst(RegExp(r'^\d+(\.\d+)*\.\s*'), '').trim();
   // Strip trailing suffixes like "comprises lines 1ab:", " - line 1c", etc.
@@ -239,6 +272,11 @@ double _verseProximity(String ref, OverviewNode node) {
       final bestProx = byProximity.reduce(
           (a, b) => a.$2 <= b.$2 ? a : b);
       if (bestProx.$2 < double.infinity) return (bestProx.$1, false);
+    }
+    // Path continuity: prefer candidate whose path shares prefix with last path for this chapter
+    if (ref != null && lastPathByChapter != null && lastPathByChapter.isNotEmpty) {
+      final byPath = _disambiguateByPathContinuity(exact, ref, lastPathByChapter);
+      if (byPath != null) return (byPath, false);
     }
     // Fallback: try matching a parent heading from context (overview may be flatter than mapping)
     final parentMatch = _matchContextParent(lookup, context, exact);
@@ -381,21 +419,39 @@ void main() async {
   }
 
   // Map each verse to its overview node and add to that node.
-  // Process in document order (by verse ref) so verse-proximity tiebreaker works correctly.
+  // Process in document order (by verse ref) so verse-proximity and path-continuity work.
   final sortedRefs = verseToHeading.keys.toList()
     ..sort(compareVerseRefs);
   var needsReviewCount = 0;
+  final lastPathByChapter = <int, String>{};
   for (final ref in sortedRefs) {
     if (verseToSectionOverride.containsKey(ref)) continue; // handle in override step
     final heading = verseToHeading[ref]!;
     final context = verseToContext[ref] ?? [];
 
-    final (node, needsReview) = matchToOverview(
-        heading, lookup, context: context, ref: ref);
+    var (node, needsReview) = matchToOverview(
+        heading, lookup,
+        context: context, ref: ref, lastPathByChapter: lastPathByChapter);
+
+    // When target heading has no match (e.g. mapping has subsections not in overview),
+    // try context headings—often the parent section matches.
+    if (node == null && context.isNotEmpty) {
+      for (final ctxHeading in context) {
+        final (ctxNode, ctxReview) = matchToOverview(ctxHeading, lookup,
+            context: const [], ref: ref, lastPathByChapter: lastPathByChapter);
+        if (ctxNode != null) {
+          node = ctxNode;
+          needsReview = ctxReview;
+          break;
+        }
+      }
+    }
 
     if (node != null) {
       node.verses.add(ref);
       if (needsReview) needsReviewCount++;
+      final (ch, _) = _parseVerseRef(ref);
+      if (ch > 0) lastPathByChapter[ch] = node.path;
     }
   }
   // Apply overrides: assign verse to correct section (override wrong auto-match).

@@ -83,10 +83,140 @@ class VerseHierarchyService {
   /// Returns the first verse ref for a section path (e.g. "3.1.3"), or null.
   Future<String?> getFirstVerseForSection(String sectionPath) async {
     await _ensureLoaded();
-    final map = _map?['sectionToFirstVerse'];
-    if (map == null || map is! Map) return null;
-    final ref = map[sectionPath];
-    return ref?.toString();
+    return getFirstVerseForSectionSync(sectionPath);
+  }
+
+  /// Sync version. Call after _ensureLoaded().
+  /// Derives from verseToPath (source of truth) rather than sectionToFirstVerse,
+  /// which can contain non-consecutive or parent/child inconsistencies.
+  String? getFirstVerseForSectionSync(String sectionPath) {
+    final refs = getVerseRefsForSectionSync(sectionPath);
+    if (refs.isEmpty) return null;
+    final sorted = refs.toList()..sort(_compareVerseRefs);
+    return sorted.first;
+  }
+
+  /// First verse for section, preferring [preferredChapter] when the section
+  /// has verses in multiple chapters (e.g. duplicate titles like "Abandoning objections").
+  /// Call after _ensureLoaded().
+  String? getFirstVerseForSectionInChapterSync(
+      String sectionPath, int? preferredChapter) {
+    final refs = getVerseRefsForSectionSync(sectionPath);
+    if (refs.isEmpty) return getFirstVerseForSectionSync(sectionPath);
+
+    if (preferredChapter != null) {
+      final inChapter = refs
+          .where((r) {
+            final parts = r.split('.');
+            if (parts.length != 2) return false;
+            final ch = int.tryParse(parts[0]);
+            return ch == preferredChapter;
+          })
+          .toList();
+      if (inChapter.isNotEmpty) {
+        inChapter.sort(_compareVerseRefs);
+        return inChapter.first;
+      }
+    }
+    final sorted = refs.toList()..sort(_compareVerseRefs);
+    return sorted.first;
+  }
+
+  /// Compare verse refs: negative if a < b, 0 if equal, positive if a > b.
+  static int compareVerseRefs(String a, String b) => _compareVerseRefs(a, b);
+
+  /// Find the next (direction 1) or previous (direction -1) section by visible verse.
+  /// Uses verse order so 8.114 -> next goes to first section with firstVerse > 8.114 (e.g. 8.115),
+  /// not 8.117 (which is in a section whose first verse is 8.110).
+  int findAdjacentSectionIndex(
+    List<({String path, String title, int depth})> ordered,
+    String currentVerseRef, {
+    required int direction,
+  }) {
+    if (ordered.isEmpty) return -1;
+    final cur = currentVerseRef;
+    if (direction > 0) {
+      for (var i = 0; i < ordered.length; i++) {
+        final r = getFirstVerseForSectionSync(ordered[i].path);
+        if (r != null && _compareVerseRefs(r, cur) > 0) return i;
+      }
+      return -1;
+    } else {
+      for (var i = ordered.length - 1; i >= 0; i--) {
+        final r = getFirstVerseForSectionSync(ordered[i].path);
+        if (r != null && _compareVerseRefs(r, cur) < 0) return i;
+      }
+      return -1;
+    }
+  }
+
+  /// Leaf sections only (no children), sorted by first verse. For reader arrow-key navigation.
+  /// Ensures each key down moves exactly one "lowest level" section forward.
+  List<({String path, String title, int depth})> getLeafSectionsByVerseOrderSync() {
+    final flat = getFlatSectionsSync();
+    final pathSet = flat.map((s) => s.path).toSet();
+    final leaves = flat.where((s) {
+      return !pathSet.any((p) => p != s.path && p.startsWith('${s.path}.'));
+    }).toList();
+    final withFirst = <({String path, String title, int depth, String firstRef})>[];
+    for (final s in leaves) {
+      final ref = getFirstVerseForSectionSync(s.path);
+      if (ref != null && ref.isNotEmpty) {
+        withFirst.add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
+      }
+    }
+    withFirst.sort((a, b) => _compareVerseRefs(a.firstRef, b.firstRef));
+    return withFirst
+        .map((e) => (path: e.path, title: e.title, depth: e.depth))
+        .toList();
+  }
+
+  /// Sections with first verse, sorted by verse order. For arrow-key navigation.
+  /// Deduplicates sections that share the same base verse (e.g. 9.1ab and 9.1cd)
+  /// so we don't step through each split-verse segment.
+  List<({String path, String title, int depth})> getSectionsByVerseOrderSync() {
+    final flat = getFlatSectionsSync();
+    final withFirst = <({String path, String title, int depth, String firstRef})>[];
+    for (final s in flat) {
+      final ref = getFirstVerseForSectionSync(s.path);
+      if (ref != null && ref.isNotEmpty) {
+        withFirst.add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
+      }
+    }
+    withFirst.sort((a, b) => _compareVerseRefs(a.firstRef, b.firstRef));
+    // Keep one section per (chapter, verse) - skip 9.1cd when we already have 9.1ab
+    final deduped = <({String path, String title, int depth})>[];
+    (int, int)? prevBase;
+    for (final e in withFirst) {
+      final base = _baseVerse(e.firstRef);
+      if (prevBase != null && base.$1 == prevBase.$1 && base.$2 == prevBase.$2) {
+        continue;
+      }
+      prevBase = base;
+      deduped.add((path: e.path, title: e.title, depth: e.depth));
+    }
+    return deduped;
+  }
+
+  static (int, int) _baseVerse(String ref) => baseVerseFromRef(ref);
+
+  /// Public for callers that need to map a section to its verse-order position.
+  static (int, int) baseVerseFromRef(String ref) {
+    final m = RegExp(r'^(\d+)\.(\d+)').firstMatch(ref);
+    if (m == null) return (0, 0);
+    return (int.parse(m.group(1)!), int.parse(m.group(2)!));
+  }
+
+  static int _compareVerseRefs(String a, String b) {
+    final am = RegExp(r'^(\d+)\.(\d+)').firstMatch(a);
+    final bm = RegExp(r'^(\d+)\.(\d+)').firstMatch(b);
+    if (am == null || bm == null) return a.compareTo(b);
+    final ac = int.parse(am.group(1)!);
+    final av = int.parse(am.group(2)!);
+    final bc = int.parse(bm.group(1)!);
+    final bv = int.parse(bm.group(2)!);
+    if (ac != bc) return ac.compareTo(bc);
+    return av.compareTo(bv);
   }
 
   /// Returns the hierarchy for the verse at [index]. Uses BcvVerseService to resolve ref.
