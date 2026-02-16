@@ -72,18 +72,11 @@ class BcvSectionSlider extends StatelessWidget {
                     padding: EdgeInsets.only(left: indent),
                     child: Text(
                       label,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontFamily: 'Lora',
-                            fontSize: 12,
-                            color: isCurrent
-                                ? AppColors.textDark
-                                : isAncestor
-                                    ? AppColors.mutedBrown
-                                    : AppColors.primary.withValues(alpha: 0.9),
-                            fontWeight:
-                                isAncestor ? FontWeight.w600 : FontWeight.normal,
-                          ) ??
-                          const TextStyle(fontSize: 12),
+                      style: sectionListTextStyle(
+                        context,
+                        isCurrent: isCurrent,
+                        isAncestor: isAncestor,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -95,5 +88,30 @@ class BcvSectionSlider extends StatelessWidget {
         },
       ),
     );
+  }
+
+  static TextStyle sectionListTextStyle(
+    BuildContext context, {
+    required bool isCurrent,
+    required bool isAncestor,
+  }) {
+    return Theme.of(context).textTheme.bodySmall?.copyWith(
+          fontFamily: 'Lora',
+          fontSize: BcvReadConstants.sectionListFontSize,
+          height: BcvReadConstants.sectionListLineHeight /
+              BcvReadConstants.sectionListFontSize,
+          color: isCurrent
+              ? AppColors.textDark
+              : isAncestor
+                  ? AppColors.mutedBrown
+                  : AppColors.primary.withValues(alpha: 0.9),
+          fontWeight: isAncestor ? FontWeight.w600 : FontWeight.normal,
+        ) ??
+        TextStyle(
+          fontFamily: 'Lora',
+          fontSize: BcvReadConstants.sectionListFontSize,
+          height: BcvReadConstants.sectionListLineHeight /
+              BcvReadConstants.sectionListFontSize,
+        );
   }
 }

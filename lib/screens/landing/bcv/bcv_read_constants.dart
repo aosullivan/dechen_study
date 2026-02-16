@@ -13,6 +13,10 @@ abstract final class BcvReadConstants {
   static const double sectionSliderLineHeight = 22.0;
   static const int sectionSliderVisibleLines = 10;
 
+  /// Shared by section overview and breadcrumb trail.
+  static const double sectionListFontSize = 12.0;
+  static const double sectionListLineHeight = 22.0;
+
   static const int maxSectionOverlayMeasureRetries = 5;
   static const double sectionSliderIndentPerLevel = 12.0;
   static const double breadcrumbIndentPerLevel = 16.0;

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -639,70 +640,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     } else {
       Future.delayed(const Duration(milliseconds: 350), doClear);
     }
-  }
-
-  Widget _buildBreadcrumbItem(Map<String, String> item, int index,
-      {VoidCallback? onTap}) {
-    final section = item['section'] ?? item['path'] ?? '';
-    final title = item['title'] ?? '';
-    final isCurrent = index == _breadcrumbHierarchy.length - 1;
-    // Use section path if available, otherwise fallback to index+1 (for legacy/cached data)
-    final numDisplay = _sectionNumberForDisplay(section);
-    final displayNum = numDisplay.isNotEmpty ? numDisplay : '${index + 1}';
-    final baseColor = isCurrent
-        ? AppColors.textDark
-        : AppColors.primary.withValues(alpha: 0.8);
-    final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-              fontFamily: 'Lora',
-              color: baseColor,
-              fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
-            ) ??
-        const TextStyle(fontFamily: 'Lora', fontSize: 12);
-    final content = Row(
-      crossAxisAlignment: CrossAxisAlignment.baseline,
-      textBaseline: TextBaseline.alphabetic,
-      children: [
-        SizedBox(
-          width: 24,
-          child: Text(
-            '$displayNum.',
-            style: baseStyle.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Text(title, style: baseStyle, softWrap: true),
-        ),
-      ],
-    );
-    if (onTap == null) {
-      return isCurrent
-          ? Container(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: content,
-            )
-          : content;
-    }
-    return Material(
-      color: isCurrent
-          ? AppColors.primary.withValues(alpha: 0.12)
-          : Colors.transparent,
-      borderRadius: BorderRadius.circular(4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(4),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: content,
-        ),
-      ),
-    );
   }
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
@@ -1472,7 +1409,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           () => setState(() => _breadcrumbCollapsed = true),
           breadcrumbSubtitle,
           'Breadcrumb Trail',
-          contentHeight: _breadcrumbPanelHeight,
         ),
       ],
     );
@@ -1482,10 +1418,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (_breadcrumbHierarchy.isEmpty) {
       return const SizedBox.shrink();
     }
-    const indentPerLevel = 16.0;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: BcvReadConstants.panelPaddingV,
+      ),
       decoration: BoxDecoration(
         color: AppColors.cardBeige,
         border: Border(
@@ -1493,20 +1431,50 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 0; i < _breadcrumbHierarchy.length; i++)
-            Padding(
-              padding: EdgeInsets.only(left: i * indentPerLevel),
-              child: _buildBreadcrumbItem(
-                _breadcrumbHierarchy[i],
-                i,
-                onTap: () => _onBreadcrumbSectionTap(_breadcrumbHierarchy[i]),
-              ),
-            ),
-        ],
+      child: _buildBreadcrumbTrail(),
+    );
+  }
+
+  Widget _buildBreadcrumbTrail() {
+    final baseStyle = BcvSectionSlider.sectionListTextStyle(
+      context,
+      isCurrent: false,
+      isAncestor: false,
+    );
+    final separatorStyle = baseStyle.copyWith(color: AppColors.mutedBrown);
+
+    final spans = <InlineSpan>[];
+    for (var i = 0; i < _breadcrumbHierarchy.length; i++) {
+      if (i > 0) {
+        spans.add(TextSpan(text: ' › ', style: separatorStyle));
+      }
+      final item = _breadcrumbHierarchy[i];
+      final isCurrent = i == _breadcrumbHierarchy.length - 1;
+      final title = item['title'] ?? '';
+      final section = item['section'] ?? item['path'] ?? '';
+      final numDisplay = _sectionNumberForDisplay(section);
+      final label = numDisplay.isNotEmpty ? '$numDisplay. $title' : title;
+      final style = BcvSectionSlider.sectionListTextStyle(
+        context,
+        isCurrent: isCurrent,
+        isAncestor: false,
+      );
+      final recognizer = TapGestureRecognizer()
+        ..onTap = () => _onBreadcrumbSectionTap(item);
+      spans.add(
+        TextSpan(
+          text: label,
+          style: style,
+          recognizer: recognizer,
+        ),
+      );
+    }
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: RichText(
+        text: TextSpan(style: baseStyle, children: spans),
+        softWrap: true,
       ),
     );
   }
