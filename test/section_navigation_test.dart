@@ -4,6 +4,9 @@
 /// Run: flutter test test/section_navigation_test.dart
 library;
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:dechen_study/services/bcv_verse_service.dart';
@@ -59,7 +62,8 @@ void main() {
           expect(
             VerseHierarchyService.compareVerseRefs(ref, prevRef),
             greaterThanOrEqualTo(0),
-            reason: 'Sections should be sorted by first verse: $prevRef then $ref',
+            reason:
+                'Sections should be sorted by first verse: $prevRef then $ref',
           );
         }
         prevRef = ref;
@@ -88,7 +92,8 @@ void main() {
         '8.114',
         direction: 1,
       );
-      expect(nextIdx, greaterThanOrEqualTo(0), reason: 'Should find next section');
+      expect(nextIdx, greaterThanOrEqualTo(0),
+          reason: 'Should find next section');
       final nextRef = hierarchyService.getFirstVerseForSectionSync(
         ordered[nextIdx].path,
       );
@@ -155,7 +160,8 @@ void main() {
     });
   });
 
-  group('Section overview hierarchy navigation (key-down in section panel)', () {
+  group('Section overview hierarchy navigation (key-down in section panel)',
+      () {
     test('getFlatSectionsSync returns depth-first order', () {
       final flat = hierarchyService.getFlatSectionsSync();
       expect(flat, isNotEmpty);
@@ -164,9 +170,12 @@ void main() {
       final idx11 = flat.indexWhere((s) => s.path == '1.1');
       final idx111 = flat.indexWhere((s) => s.path == '1.1.1');
       expect(idx1, greaterThanOrEqualTo(0), reason: 'Section 1 should exist');
-      expect(idx11, greaterThanOrEqualTo(0), reason: 'Section 1.1 should exist');
-      expect(idx111, greaterThanOrEqualTo(0), reason: 'Section 1.1.1 should exist');
-      expect(idx1, lessThan(idx11), reason: '1 before 1.1 in depth-first order');
+      expect(idx11, greaterThanOrEqualTo(0),
+          reason: 'Section 1.1 should exist');
+      expect(idx111, greaterThanOrEqualTo(0),
+          reason: 'Section 1.1.1 should exist');
+      expect(idx1, lessThan(idx11),
+          reason: '1 before 1.1 in depth-first order');
       expect(idx11, lessThan(idx111),
           reason: '1.1 before 1.1.1 in depth-first order');
     });
@@ -175,7 +184,8 @@ void main() {
       final flat = hierarchyService.getFlatSectionsSync();
       final ordered = hierarchyService.getSectionsByVerseOrderSync();
       expect(flat.length, greaterThan(ordered.length),
-          reason: 'Flat has more sections (no dedup); verse-ordered is deduped');
+          reason:
+              'Flat has more sections (no dedup); verse-ordered is deduped');
       // From section 1.1: hierarchy next is flat[idx+1] (e.g. 1.1.1), which is a child
       final idx11 = flat.indexWhere((s) => s.path == '1.1');
       expect(idx11, greaterThanOrEqualTo(0));
@@ -239,23 +249,25 @@ void main() {
     /// 2.37 and 2.38 have distinct leaf sections; 2.39 lives inside 3.1.1.3.5.
     test('2.37 -> 2.38: leaf sequence is consecutive (no skip to 2.39)', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final idx237 = leaves.indexWhere(
-          (s) => hierarchyService.getFirstVerseForSectionSync(s.path) == '2.37');
-      final idx238 = leaves.indexWhere(
-          (s) => hierarchyService.getFirstVerseForSectionSync(s.path) == '2.38');
+      final idx237 = leaves.indexWhere((s) =>
+          hierarchyService.getFirstVerseForSectionSync(s.path) == '2.37');
+      final idx238 = leaves.indexWhere((s) =>
+          hierarchyService.getFirstVerseForSectionSync(s.path) == '2.38');
 
       expect(idx237, greaterThanOrEqualTo(0), reason: '2.37 leaf must exist');
       expect(idx238, greaterThanOrEqualTo(0), reason: '2.38 leaf must exist');
       expect(idx237 + 1, idx238,
-          reason: 'From 2.37 (idx $idx237) next must be 2.38 (idx $idx238), not skip');
+          reason:
+              'From 2.37 (idx $idx237) next must be 2.38 (idx $idx238), not skip');
     });
 
     /// Fallback path: when currentPath unknown, findAdjacentSectionIndex(2.37)
     /// must return 2.38, not 2.39.
-    test('fallback from 2.37: findAdjacentSectionIndex returns 2.38 not 2.39', () {
+    test('fallback from 2.37: findAdjacentSectionIndex returns 2.38 not 2.39',
+        () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final nextIdx =
-          hierarchyService.findAdjacentSectionIndex(leaves, '2.37', direction: 1);
+      final nextIdx = hierarchyService.findAdjacentSectionIndex(leaves, '2.37',
+          direction: 1);
       expect(nextIdx, greaterThanOrEqualTo(0));
       final nextRef =
           hierarchyService.getFirstVerseForSectionSync(leaves[nextIdx].path);
@@ -265,19 +277,20 @@ void main() {
 
     test('8.114 -> 8.115: leaf sequence consecutive (no skip to 8.117)', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final idx114 = leaves.indexWhere(
-          (s) => hierarchyService.getFirstVerseForSectionSync(s.path) == '8.114');
-      final idx115 = leaves.indexWhere(
-          (s) => hierarchyService.getFirstVerseForSectionSync(s.path) == '8.115');
+      final idx114 = leaves.indexWhere((s) =>
+          hierarchyService.getFirstVerseForSectionSync(s.path) == '8.114');
+      final idx115 = leaves.indexWhere((s) =>
+          hierarchyService.getFirstVerseForSectionSync(s.path) == '8.115');
       expect(idx114, greaterThanOrEqualTo(0));
       expect(idx115, greaterThanOrEqualTo(0));
       expect(idx114 + 1, idx115);
     });
 
-    test('fallback from 9.1: findAdjacentSectionIndex returns 9.2 not 9.116', () {
+    test('fallback from 9.1: findAdjacentSectionIndex returns 9.2 not 9.116',
+        () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final nextIdx =
-          hierarchyService.findAdjacentSectionIndex(leaves, '9.1', direction: 1);
+      final nextIdx = hierarchyService.findAdjacentSectionIndex(leaves, '9.1',
+          direction: 1);
       expect(nextIdx, greaterThanOrEqualTo(0));
       final nextRef =
           hierarchyService.getFirstVerseForSectionSync(leaves[nextIdx].path);
@@ -288,31 +301,32 @@ void main() {
       );
     });
 
-    /// Real-world: from 6.49, key down must go to 6.50 (not skip to 6.52).
+    /// Real-world: from 6.48 leaf, next leaf must be 6.49 or 6.50 (not skip to 6.52).
     test('6.49 -> 6.50: leaf sequence has no skip to 6.52', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final idx649 = leaves.indexWhere(
-          (s) => hierarchyService.getFirstVerseForSectionSync(s.path) == '6.48');
-      expect(idx649, greaterThanOrEqualTo(0), reason: '6.48/6.49 leaf must exist');
-      final nextRef = hierarchyService.getFirstVerseForSectionSync(
-          leaves[idx649 + 1].path);
+      final idx648 = leaves.indexWhere((s) =>
+          hierarchyService.getFirstVerseForSectionSync(s.path) == '6.48');
+      expect(idx648, greaterThanOrEqualTo(0), reason: '6.48 leaf must exist');
+      final nextRef =
+          hierarchyService.getFirstVerseForSectionSync(leaves[idx648 + 1].path);
       expect(
         nextRef,
-        anyOf(equals('6.50ab'), equals('6.50')),
-        reason: 'From 6.49 next must be 6.50/6.50ab, not 6.52',
+        anyOf(equals('6.49'), equals('6.50ab'), equals('6.50')),
+        reason: 'From 6.48 next must be 6.49 or 6.50/6.50ab, not 6.52',
       );
       expect(
         nextRef,
         isNot(equals('6.52')),
-        reason: 'Must not skip from 6.49 to 6.52',
+        reason: 'Must not skip from 6.48 to 6.52',
       );
     });
 
     /// Fallback: findAdjacentSectionIndex(6.49, +1) must return 6.50ab section.
-    test('fallback from 6.49: findAdjacentSectionIndex returns 6.50ab not 6.52', () {
+    test('fallback from 6.49: findAdjacentSectionIndex returns 6.50ab not 6.52',
+        () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final nextIdx =
-          hierarchyService.findAdjacentSectionIndex(leaves, '6.49', direction: 1);
+      final nextIdx = hierarchyService.findAdjacentSectionIndex(leaves, '6.49',
+          direction: 1);
       expect(nextIdx, greaterThanOrEqualTo(0));
       final nextRef =
           hierarchyService.getFirstVerseForSectionSync(leaves[nextIdx].path);
@@ -341,9 +355,131 @@ void main() {
         final nextIdx = indices[next];
         if (currIdx != null && nextIdx != null) {
           expect(currIdx + 1, nextIdx,
-              reason: 'From $curr (idx $currIdx) next must be $next (idx $nextIdx)');
+              reason:
+                  'From $curr (idx $currIdx) next must be $next (idx $nextIdx)');
         }
       }
+    });
+  });
+
+  /// Full-doc traversal: report every consecutive leaf pair (same chapter) where
+  /// first-verse numbers skip (e.g. 8.17 then 8.19 skips 8.18). Run with:
+  ///   flutter test test/section_navigation_test.dart --name "consecutive leaves"
+  /// to get a full list in ~4s. Fails if any skips exist (many exist today due to
+  /// outline structure; use this as a regression baseline or to drive fixes).
+  group('Full-doc leaf traversal (no skips)', () {
+    test('consecutive leaves in same chapter have no verse-number skip', () {
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+      expect(leaves, isNotEmpty);
+
+      final skips = <String>[];
+      for (var i = 0; i < leaves.length - 1; i++) {
+        final refA =
+            hierarchyService.getFirstVerseForSectionSync(leaves[i].path);
+        final refB =
+            hierarchyService.getFirstVerseForSectionSync(leaves[i + 1].path);
+        if (refA == null || refB == null) continue;
+
+        final (chA, vA) = VerseHierarchyService.baseVerseFromRef(refA);
+        final (chB, vB) = VerseHierarchyService.baseVerseFromRef(refB);
+        if (chA != chB) continue; // chapter boundary is fine
+
+        final gap = vB - vA;
+        if (gap > 1) {
+          skips.add(
+              '${leaves[i].path} ($refA) -> ${leaves[i + 1].path} ($refB): verse gap $gap');
+        }
+      }
+      expect(
+        skips,
+        isEmpty,
+        reason:
+            'Leaf list has ${skips.length} verse-number skips (key-down would skip verses). First 5:\n${skips.take(5).join('\n')}\n... run test for full list.',
+      );
+    });
+  });
+
+  /// Extracts all "verses" attributes from verse_hierarchy_map.json in order,
+  /// sorts by verse order, then scans for missing or non-consecutive entries.
+  /// Shows results as a list of lines marked 'missing' or 'non-consecutive'.
+  group('verse_hierarchy_map.json validation', () {
+    test('verses are consecutive (report missing / non-consecutive)', () {
+      final jsonFile = File('texts/verse_hierarchy_map.json');
+      expect(jsonFile.existsSync(), true, reason: 'Run from project root');
+
+      final map =
+          jsonDecode(jsonFile.readAsStringSync()) as Map<String, dynamic>;
+      final sectionsRoot = map['sections'] as List<dynamic>?;
+      expect(sectionsRoot, isNotNull);
+
+      // Extract all "verses" arrays sequentially (depth-first)
+      final versesSequential = <String>[];
+      void extractVerses(dynamic node) {
+        if (node is! Map) return;
+        final verses = node['verses'] as List<dynamic>?;
+        if (verses != null) {
+          for (final v in verses) {
+            versesSequential.add(v.toString());
+          }
+        }
+        for (final c in (node['children'] as List<dynamic>? ?? [])) {
+          extractVerses(c);
+        }
+      }
+
+      for (final s in sectionsRoot!) {
+        extractVerses(s);
+      }
+
+      // Deduplicate and sort by verse order
+      final sorted = versesSequential.toSet().toList()
+        ..sort((a, b) => VerseHierarchyService.compareVerseRefs(a, b));
+
+      final missing = <String>[];
+      final nonConsecutive = <String>[];
+
+      for (var i = 0; i < sorted.length - 1; i++) {
+        final refA = sorted[i];
+        final refB = sorted[i + 1];
+        final (chA, vA) = VerseHierarchyService.baseVerseFromRef(refA);
+        final (chB, vB) = VerseHierarchyService.baseVerseFromRef(refB);
+
+        if (chA == chB) {
+          final gap = vB - vA;
+          if (gap > 1) {
+            nonConsecutive.add('$refA -> $refB: non-consecutive (gap $gap)');
+            for (var v = vA + 1; v < vB; v++) {
+              missing.add('$chA.$v: missing');
+            }
+          }
+        } else {
+          if (chB != chA + 1 || vB != 1) {
+            nonConsecutive.add('$refA -> $refB: non-consecutive (chapters)');
+          }
+        }
+      }
+
+      final results = <String>[
+        if (missing.isNotEmpty) ...['--- missing ---', ...missing],
+        if (nonConsecutive.isNotEmpty) ...[
+          if (missing.isNotEmpty) '',
+          '--- non-consecutive ---',
+          ...nonConsecutive,
+        ],
+      ];
+      final report = results.isEmpty ? 'OK' : results.join('\n');
+
+      expect(
+        missing,
+        isEmpty,
+        reason: 'verse_hierarchy_map.json: ${missing.length} missing\n$report',
+      );
+      expect(
+        nonConsecutive,
+        isEmpty,
+        reason:
+            'verse_hierarchy_map.json: ${nonConsecutive.length} non-consecutive\n$report',
+      );
     });
   });
 
@@ -368,7 +504,8 @@ void main() {
         if (i == ordered.length - 1) {
           expect(nextIdx, lessThan(0));
         } else if (nextIdx != i + 1) {
-          jumps.add('At ${ordered[i].path}: expected ${i + 1} but got $nextIdx');
+          jumps
+              .add('At ${ordered[i].path}: expected ${i + 1} but got $nextIdx');
         }
       }
       expect(jumps, isEmpty);
