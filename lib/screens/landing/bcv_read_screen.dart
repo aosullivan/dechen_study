@@ -1305,12 +1305,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     required String subtitle,
     required VoidCallback onExpand,
   }) {
+    final isMobile =
+        MediaQuery.of(context).size.width < BcvReadConstants.laptopBreakpoint;
+    final padding = isMobile
+        ? const EdgeInsets.symmetric(horizontal: 10, vertical: 4)
+        : const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
+    final iconSize = isMobile ? 18.0 : 20.0;
+    // Always show panel type (Chapters, Section Overview, Breadcrumb) then optional subtitle
+    final displayText = subtitle.isNotEmpty ? '$label: $subtitle' : label;
     return Material(
       color: AppColors.cardBeige,
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: padding,
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -1319,30 +1327,31 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ),
           child: Row(
             children: [
-              Icon(Icons.expand_more, size: 20, color: AppColors.primary),
-              const SizedBox(width: 8),
+              Icon(Icons.expand_more, size: iconSize, color: AppColors.primary),
+              SizedBox(width: isMobile ? 6 : 8),
               Expanded(
                 child: Text(
-                  subtitle.isNotEmpty ? subtitle : 'Tap to show $label',
+                  displayText,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
                         color: AppColors.textDark,
-                        fontSize: 12,
+                        fontSize: isMobile ? 11 : 12,
                       ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.expand_more,
-                    size: 20, color: AppColors.primary),
-                tooltip: 'Expand',
-                style: IconButton.styleFrom(
-                  minimumSize: const Size(32, 32),
-                  padding: EdgeInsets.zero,
+              if (!isMobile)
+                IconButton(
+                  icon: Icon(Icons.expand_more,
+                      size: iconSize, color: AppColors.primary),
+                  tooltip: 'Expand',
+                  style: IconButton.styleFrom(
+                    minimumSize: const Size(32, 32),
+                    padding: EdgeInsets.zero,
+                  ),
+                  onPressed: onExpand,
                 ),
-                onPressed: onExpand,
-              ),
             ],
           ),
         ),
