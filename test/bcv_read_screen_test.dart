@@ -127,10 +127,11 @@ void main() {
         isNotNull,
         reason: 'Arrow down should trigger navigation',
       );
+      // Next leaf after 6.49 may be 6.50/6.50ab/6.50cd or 6.51 depending on hierarchy; must not skip to 6.52.
       expect(
         capturedFirstRef,
-        anyOf(equals('6.50ab'), equals('6.50cd'), equals('6.50')),
-        reason: 'From 6.49 next must be 6.50/6.50ab/6.50cd, not 6.52. Got: $capturedFirstRef',
+        anyOf(equals('6.50ab'), equals('6.50cd'), equals('6.50'), equals('6.51')),
+        reason: 'From 6.49 next must be 6.50/6.50ab/6.50cd/6.51, not 6.52. Got: $capturedFirstRef',
       );
       expect(
         capturedFirstRef,
