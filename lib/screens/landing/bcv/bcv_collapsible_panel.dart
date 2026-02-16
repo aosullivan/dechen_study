@@ -62,21 +62,25 @@ class BcvCollapsedStrip extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
     this.onExpand,
+    this.compact = false,
   });
 
   final String label;
   final String subtitle;
   final VoidCallback onTap;
   final VoidCallback? onExpand;
+  /// When true, use minimal padding (mobile: less whitespace).
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final isMobile =
         MediaQuery.of(context).size.width < BcvReadConstants.laptopBreakpoint;
-    final padding = isMobile
-        ? const EdgeInsets.symmetric(horizontal: 10, vertical: 4)
+    final useCompact = compact || isMobile;
+    final padding = useCompact
+        ? const EdgeInsets.symmetric(horizontal: 8, vertical: 2)
         : const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
-    final iconSize = isMobile ? 18.0 : 20.0;
+    final iconSize = useCompact ? 18.0 : 20.0;
     final displayText = subtitle.isNotEmpty ? '$label: $subtitle' : label;
     return Material(
       color: AppColors.cardBeige,
@@ -93,20 +97,20 @@ class BcvCollapsedStrip extends StatelessWidget {
           child: Row(
             children: [
               Icon(Icons.expand_more, size: iconSize, color: AppColors.primary),
-              SizedBox(width: isMobile ? 6 : 8),
+              SizedBox(width: useCompact ? 6 : 8),
               Expanded(
                 child: Text(
                   displayText,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
                         color: AppColors.textDark,
-                        fontSize: isMobile ? 11 : 12,
+                        fontSize: useCompact ? 11 : 12,
                       ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (!isMobile && onExpand != null)
+              if (!useCompact && onExpand != null)
                 IconButton(
                   icon: Icon(Icons.expand_more,
                       size: iconSize, color: AppColors.primary),
@@ -170,6 +174,7 @@ class BcvNavSection extends StatelessWidget {
     required this.onExpand,
     required this.onCollapse,
     this.contentHeight,
+    this.compactStrip = false,
   });
 
   final bool collapsed;
@@ -179,6 +184,8 @@ class BcvNavSection extends StatelessWidget {
   final VoidCallback onExpand;
   final VoidCallback onCollapse;
   final double? contentHeight;
+  /// When true, collapsed strip uses minimal padding (mobile).
+  final bool compactStrip;
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +223,7 @@ class BcvNavSection extends StatelessWidget {
         subtitle: subtitle,
         onTap: onExpand,
         onExpand: onExpand,
+        compact: compactStrip,
       ),
     );
   }
