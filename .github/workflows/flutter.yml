@@ -11,13 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    # Run as non-root so Flutter doesn't warn "running as root" (runner uid on GitHub is 1001)
-    container:
-      image: ghcr.io/cirruslabs/flutter:stable
-      options: --user 1001:123
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        cache: true
 
     - name: Install dependencies
       run: flutter pub get

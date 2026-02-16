@@ -8,6 +8,7 @@ import 'bcv/bcv_breadcrumb_bar.dart';
 import 'bcv/bcv_chapters_panel.dart';
 import 'bcv/bcv_collapsible_panel.dart';
 import 'bcv/bcv_inline_commentary_panel.dart';
+import 'bcv/bcv_mobile_nav_bar.dart';
 import 'bcv/bcv_read_constants.dart';
 import 'bcv/bcv_section_overlay.dart';
 import 'bcv/bcv_section_slider.dart';
@@ -828,6 +829,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile =
+        MediaQuery.of(context).size.width < BcvReadConstants.laptopBreakpoint;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -841,43 +844,50 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(
-              _chaptersPanelCollapsed
-                  ? Icons.menu_book
-                  : Icons.menu_book_outlined,
-              color: AppColors.textDark,
-            ),
-            tooltip: _chaptersPanelCollapsed ? 'Show Chapter' : 'Hide Chapter',
-            onPressed: () => setState(
-                () => _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
-          ),
-          IconButton(
-            icon: Icon(
-              _breadcrumbCollapsed
-                  ? Icons.account_tree
-                  : Icons.account_tree_outlined,
-              color: AppColors.textDark,
-            ),
-            tooltip: _breadcrumbCollapsed
-                ? 'Show Breadcrumb'
-                : 'Hide Breadcrumb',
-            onPressed: () =>
-                setState(() => _breadcrumbCollapsed = !_breadcrumbCollapsed),
-          ),
-          IconButton(
-            icon: Icon(
-              _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
-              color: AppColors.textDark,
-            ),
-            tooltip: _sectionSliderCollapsed
-                ? 'Show Section'
-                : 'Hide Section',
-            onPressed: () => setState(
-                () => _sectionSliderCollapsed = !_sectionSliderCollapsed),
-          ),
-        ],
+        // On mobile, nav is the segment bar below; no duplicate icons in app bar.
+        actions: isMobile
+            ? []
+            : [
+                IconButton(
+                  icon: Icon(
+                    _chaptersPanelCollapsed
+                        ? Icons.menu_book
+                        : Icons.menu_book_outlined,
+                    color: AppColors.textDark,
+                  ),
+                  tooltip:
+                      _chaptersPanelCollapsed ? 'Show Chapter' : 'Hide Chapter',
+                  onPressed: () => setState(
+                      () => _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
+                ),
+                IconButton(
+                  icon: Icon(
+                    _breadcrumbCollapsed
+                        ? Icons.account_tree
+                        : Icons.account_tree_outlined,
+                    color: AppColors.textDark,
+                  ),
+                  tooltip: _breadcrumbCollapsed
+                      ? 'Show Breadcrumb'
+                      : 'Hide Breadcrumb',
+                  onPressed: () => setState(
+                      () => _breadcrumbCollapsed = !_breadcrumbCollapsed),
+                ),
+                IconButton(
+                  icon: Icon(
+                    _sectionSliderCollapsed
+                        ? Icons.list
+                        : Icons.list_alt,
+                    color: AppColors.textDark,
+                  ),
+                  tooltip: _sectionSliderCollapsed
+                      ? 'Show Section'
+                      : 'Hide Section',
+                  onPressed: () => setState(
+                      () => _sectionSliderCollapsed =
+                          !_sectionSliderCollapsed),
+                ),
+              ],
       ),
       body: _buildBody(),
     );
@@ -1122,6 +1132,49 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
+  void _mobileToggleChapter() {
+    setState(() {
+      final wasExpanded = !_chaptersPanelCollapsed;
+      _chaptersPanelCollapsed = !_chaptersPanelCollapsed;
+      if (!_chaptersPanelCollapsed) {
+        _sectionSliderCollapsed = true;
+        _breadcrumbCollapsed = true;
+      }
+      if (wasExpanded) _cooldownAfterPanelClose();
+    });
+  }
+
+  void _mobileToggleSection() {
+    setState(() {
+      final wasExpanded = !_sectionSliderCollapsed;
+      _sectionSliderCollapsed = !_sectionSliderCollapsed;
+      if (!_sectionSliderCollapsed) {
+        _chaptersPanelCollapsed = true;
+        _breadcrumbCollapsed = true;
+      }
+      if (wasExpanded) _cooldownAfterPanelClose();
+    });
+  }
+
+  void _mobileToggleBreadcrumb() {
+    setState(() {
+      final wasExpanded = !_breadcrumbCollapsed;
+      _breadcrumbCollapsed = !_breadcrumbCollapsed;
+      if (!_breadcrumbCollapsed) {
+        _chaptersPanelCollapsed = true;
+        _sectionSliderCollapsed = true;
+      }
+      if (wasExpanded) _cooldownAfterPanelClose();
+    });
+  }
+
+  /// After closing a nav pane, ignore visibility-driven section updates briefly
+  /// so the highlighted verse doesn't jump when the viewport resizes.
+  void _cooldownAfterPanelClose() {
+    _programmaticNavCooldownUntil =
+        DateTime.now().add(const Duration(milliseconds: 500));
+  }
+
   Widget _buildPanelsColumn() {
     final breadcrumbSubtitle = _breadcrumbHierarchy.isNotEmpty
         ? (_breadcrumbHierarchy.last['title'] ?? '')
@@ -1138,8 +1191,53 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     final isMobile =
         MediaQuery.of(context).size.width < BcvReadConstants.laptopBreakpoint;
-    // On mobile: don't repeat section name in Section/Breadcrumb strips (it's in the bottom bar).
-    final sectionSubtitle = isMobile ? '' : breadcrumbSubtitle;
+
+    // Mobile: single segment bar + one expanded pane. Pane height is content-sized
+    // (breadcrumb) or capped with scroll (chapter/section) so the reader fills the rest.
+    if (isMobile) {
+      final maxH = BcvReadConstants.mobilePanelMaxHeight;
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          BcvMobileNavBar(
+            chaptersCollapsed: _chaptersPanelCollapsed,
+            sectionCollapsed: _sectionSliderCollapsed,
+            breadcrumbCollapsed: _breadcrumbCollapsed,
+            onToggleChapter: _mobileToggleChapter,
+            onToggleSection: _mobileToggleSection,
+            onToggleBreadcrumb: _mobileToggleBreadcrumb,
+          ),
+          if (!_chaptersPanelCollapsed)
+            SizedBox(
+              height: maxH,
+              child: SingleChildScrollView(
+                child: _buildChaptersPanel(height: maxH),
+              ),
+            ),
+          if (!_sectionSliderCollapsed)
+            SizedBox(
+              height: maxH,
+              child: SingleChildScrollView(
+                child: _buildSectionSlider(
+                  height: maxH,
+                  collapsed: false,
+                ),
+              ),
+            ),
+          // Breadcrumb: size to content (no fixed height) so reader fills space below.
+          if (!_breadcrumbCollapsed)
+            BcvBreadcrumbBar(
+              hierarchy: _breadcrumbHierarchy,
+              sectionNumberForDisplay: _sectionNumberForDisplay,
+              onSectionTap: _onBreadcrumbSectionTap,
+            ),
+        ],
+      );
+    }
+
+    // Laptop: full collapsible sections with resize handles.
+    final sectionSubtitle = breadcrumbSubtitle;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1151,18 +1249,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           expandedChild: _buildChaptersPanel(height: _chaptersPanelHeight),
           onExpand: () => setState(() => _chaptersPanelCollapsed = false),
           onCollapse: () => setState(() => _chaptersPanelCollapsed = true),
-          compactStrip: isMobile,
         ),
-        if (!isMobile)
-          BcvVerticalResizeHandle(onDragDelta: (dy) {
-            setState(() {
-              if (_chaptersPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
-                  _sectionPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
-                _chaptersPanelHeight += dy;
-                _sectionPanelHeight -= dy;
-              }
-            });
-          }),
+        BcvVerticalResizeHandle(onDragDelta: (dy) {
+          setState(() {
+            if (_chaptersPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
+                _sectionPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
+              _chaptersPanelHeight += dy;
+              _sectionPanelHeight -= dy;
+            }
+          });
+        }),
         BcvNavSection(
           collapsed: _sectionSliderCollapsed,
           label: 'Section',
@@ -1174,18 +1270,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           onExpand: () => setState(() => _sectionSliderCollapsed = false),
           onCollapse: () => setState(() => _sectionSliderCollapsed = true),
           contentHeight: _sectionPanelHeight,
-          compactStrip: isMobile,
         ),
-        if (!isMobile)
-          BcvVerticalResizeHandle(onDragDelta: (dy) {
-            setState(() {
-              if (_sectionPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
-                  _breadcrumbPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
-                _sectionPanelHeight += dy;
-                _breadcrumbPanelHeight -= dy;
-              }
-            });
-          }),
+        BcvVerticalResizeHandle(onDragDelta: (dy) {
+          setState(() {
+            if (_sectionPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
+                _breadcrumbPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
+              _sectionPanelHeight += dy;
+              _breadcrumbPanelHeight -= dy;
+            }
+          });
+        }),
         BcvNavSection(
           collapsed: _breadcrumbCollapsed,
           label: 'Breadcrumb',
@@ -1197,7 +1291,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ),
           onExpand: () => setState(() => _breadcrumbCollapsed = false),
           onCollapse: () => setState(() => _breadcrumbCollapsed = true),
-          compactStrip: isMobile,
         ),
       ],
     );
@@ -1599,10 +1692,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ],
       );
     }
-    // Mobile: reader-first layout — cap nav at 50% so reader pane gets ≥50% (best practice for small screens).
-    final viewportHeight = MediaQuery.of(context).size.height;
-    final maxNavHeight = viewportHeight * BcvReadConstants.mobileMaxNavFraction;
-    // One-time: collapse all nav panels on mobile so default view is mostly reader.
+    // Mobile: nav (segment bar + optional pane) is content-sized; reader fills the rest.
     if (!_mobileNavCollapseInitialized) {
       _mobileNavCollapseInitialized = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1618,12 +1708,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: maxNavHeight),
-          child: SingleChildScrollView(
-            child: _buildPanelsColumn(),
-          ),
-        ),
+        _buildPanelsColumn(),
         Expanded(child: scrollContent),
         _buildMobileSectionNavBar(),
       ],
