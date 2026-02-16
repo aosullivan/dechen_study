@@ -94,10 +94,8 @@ void main() {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
-      String? capturedPath;
       String? capturedFirstRef;
       void onNavigate(String path, String firstRef) {
-        capturedPath = path;
         capturedFirstRef = firstRef;
       }
 

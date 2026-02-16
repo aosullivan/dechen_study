@@ -662,7 +662,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _visibilityDebounceTimer = null;
       if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) return;
       if (_programmaticNavCooldownUntil != null &&
-          DateTime.now().isBefore(_programmaticNavCooldownUntil!)) return;
+          DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
+        return;
+      }
       // Check if generation changed while timer was pending
       if (capturedGen != _syncGeneration) return;
       final picked = _pickVerseClosestToViewportCenter();
