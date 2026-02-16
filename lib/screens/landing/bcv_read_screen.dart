@@ -475,6 +475,30 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     });
   }
 
+  /// On mobile, open commentary in a bottom sheet to avoid cluttering the reader.
+  void _openCommentaryBottomSheet() {
+    final entry = _commentaryEntryForSelected;
+    if (entry == null) return;
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.3,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (_, scrollController) => SingleChildScrollView(
+          controller: scrollController,
+          child: _buildInlineCommentaryPanel(
+            entry,
+            onCloseOverride: () => Navigator.of(ctx).pop(),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _setInitialBreadcrumb() {
     final initialIndex = _scrollTargetVerseIndex ?? 0;
     if (initialIndex >= _verses.length) return;
@@ -819,7 +843,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   static const Color _commentaryBorder = AppColors.commentaryBorder;
   static const Color _commentaryHeader = AppColors.commentaryHeader;
 
-  Widget _buildInlineCommentaryPanel(CommentaryEntry entry) {
+  Widget _buildInlineCommentaryPanel(CommentaryEntry entry,
+      {VoidCallback? onCloseOverride}) {
     final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontFamily: 'Crimson Text',
           fontSize: 18,
@@ -867,7 +892,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: _toggleCommentaryExpanded,
+                    onPressed: onCloseOverride ?? _toggleCommentaryExpanded,
                     style: TextButton.styleFrom(
                       foregroundColor: _commentaryHeader,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1042,6 +1067,57 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
+  }
+
+  /// Slim bar on mobile: Previous / Next section (replaces arrow keys).
+  Widget _buildMobileSectionNavBar() {
+    return Material(
+      color: AppColors.cardBeige,
+      child: SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                  color: AppColors.border.withValues(alpha: 0.5)),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.keyboard_arrow_up),
+                tooltip: 'Previous section',
+                onPressed: () => _debouncedArrowNav(
+                    () => _scrollToAdjacentSection(-1)),
+                style: IconButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Section',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontFamily: 'Lora',
+                      color: AppColors.textDark,
+                    ),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(Icons.keyboard_arrow_down),
+                tooltip: 'Next section',
+                onPressed: () => _debouncedArrowNav(
+                    () => _scrollToAdjacentSection(1)),
+                style: IconButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Run [fn] only if enough time has passed since last arrow nav (debounce 200ms).
@@ -1497,7 +1573,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final scrollContent = Focus(
       autofocus: true,
       onKeyEvent: _handleReaderKeyEvent,
-      child: SingleChildScrollView(
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          if (!isLaptop) {
+            _debouncedArrowNav(() => _scrollToAdjacentSection(1));
+          }
+        },
+        child: SingleChildScrollView(
             controller: _mainScrollController,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
@@ -1729,16 +1812,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                       if (hasCommentary) ...[
                                         const SizedBox(height: 8),
                                         TextButton.icon(
-                                          onPressed: _toggleCommentaryExpanded,
+                                          onPressed: isLaptop
+                                              ? _toggleCommentaryExpanded
+                                              : _openCommentaryBottomSheet,
                                           icon: Icon(
-                                            _commentaryExpanded
+                                            isLaptop &&
+                                                    _commentaryExpanded
                                                 ? Icons.expand_less
                                                 : Icons.menu_book,
                                             size: 18,
                                             color: AppColors.primary,
                                           ),
                                           label: Text(
-                                            _commentaryExpanded
+                                            isLaptop &&
+                                                    _commentaryExpanded
                                                 ? 'Hide commentary'
                                                 : 'Commentary',
                                             style: const TextStyle(
@@ -1748,7 +1835,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                             ),
                                           ),
                                         ),
-                                        if (_commentaryExpanded &&
+                                        if (isLaptop &&
+                                            _commentaryExpanded &&
                                             commentaryEntry != null) ...[
                                           _buildInlineCommentaryPanel(
                                               commentaryEntry),
@@ -1820,7 +1908,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   }).toList(),
                 ),
                 if (_sectionOverlayRectTo != null)
-                  TweenAnimationBuilder<Rect?>(
+                  IgnorePointer(
+                    child: TweenAnimationBuilder<Rect?>(
                     key:
                         ValueKey('section_overlay_$_sectionOverlayAnimationId'),
                     tween: RectTween(
@@ -1858,9 +1947,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                       );
                     },
                   ),
+                ),
               ],
             ),
           ),
+        ),
     );
     if (isLaptop) {
       return Row(
@@ -1928,6 +2019,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ),
         ),
         Expanded(child: scrollContent),
+        _buildMobileSectionNavBar(),
       ],
     );
   }
