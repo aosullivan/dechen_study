@@ -55,3 +55,5 @@ app.*.map.json
 
 # Supabase credentials (NEVER commit these!)
 lib/config/supabase_config.dart
+.vercel
+.env*.local
