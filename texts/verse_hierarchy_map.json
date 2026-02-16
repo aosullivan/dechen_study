@@ -6231,7 +6231,7 @@
                                               "verses": [
                                                 "9.25",
                                                 "9.26",
-                                                "9.27"
+                                                "9.27ab"
                                               ],
                                               "children": []
                                             }
@@ -6248,35 +6248,30 @@
                         {
                           "title": "Non-establishment of the basis",
                           "path": "4.6.2.1.2.3.2",
-                          "verses": [
-                            "9.27",
-                            "9.28",
-                            "9.29ab",
-                            "9.29cd"
-                          ],
+                          "verses": [],
                           "children": [
                             {
                               "title": "Presenting the objection",
                               "path": "4.6.2.1.2.3.2.1",
-                              "verses": [],
+                              "verses": ["9.27cd"],
                               "children": []
                             },
                             {
                               "title": "The logic which refutes the objection",
                               "path": "4.6.2.1.2.3.2.2",
-                              "verses": [],
+                              "verses": ["9.28ab"],
                               "children": []
                             },
                             {
                               "title": "A counterobjection",
                               "path": "4.6.2.1.2.3.2.3",
-                              "verses": [],
+                              "verses": ["9.28cd", "9.29ab"],
                               "children": []
                             },
                             {
                               "title": "Establishing the pervasion for the counter objection",
                               "path": "4.6.2.1.2.3.2.4",
-                              "verses": [],
+                              "verses": ["9.29cd"],
                               "children": []
                             }
                           ]

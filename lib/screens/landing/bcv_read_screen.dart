@@ -368,10 +368,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   /// Consecutive verse indices in current section but NOT in highlight (for faint box).
+  /// When the whole section is highlighted (e.g. from Daily), use full section so the faint box still shows.
   List<List<int>> _getSectionRuns() {
     final section = _currentSectionVerseIndices ?? {};
     final highlight = _highlightSet;
-    final sectionOnly = section.difference(highlight).toList()..sort();
+    var sectionOnly = section.difference(highlight).toList()..sort();
+    if (sectionOnly.isEmpty && section.isNotEmpty) {
+      sectionOnly = section.toList()..sort();
+    }
     if (sectionOnly.isEmpty) return [];
     final runs = <List<int>>[];
     var current = [sectionOnly.first];
@@ -1908,46 +1912,51 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                   }).toList(),
                 ),
                 if (_sectionOverlayRectTo != null)
-                  IgnorePointer(
+                  Positioned.fill(
                     child: TweenAnimationBuilder<Rect?>(
-                    key:
-                        ValueKey('section_overlay_$_sectionOverlayAnimationId'),
-                    tween: RectTween(
-                      begin: _sectionOverlayRectFrom ?? _sectionOverlayRectTo,
-                      end: _sectionOverlayRectTo,
-                    ),
-                    duration: const Duration(milliseconds: 450),
-                    curve: Curves.easeOutCubic,
-                    builder: (context, rect, child) {
-                      if (rect == null) return const SizedBox.shrink();
-                      final w = rect.width;
-                      final h = rect.height;
-                      if (w.isNaN || h.isNaN || w <= 0 || h <= 0) {
-                        return const SizedBox.shrink();
-                      }
-                      return Positioned(
-                        left: rect.left,
-                        top: rect.top,
-                        width: w,
-                        height: h,
-                        child: IgnorePointer(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.primary
-                                  .withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                color: AppColors.primary
-                                    .withValues(alpha: 0.22),
-                                width: 1,
+                      key:
+                          ValueKey('section_overlay_$_sectionOverlayAnimationId'),
+                      tween: RectTween(
+                        begin: _sectionOverlayRectFrom ?? _sectionOverlayRectTo,
+                        end: _sectionOverlayRectTo,
+                      ),
+                      duration: const Duration(milliseconds: 450),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, rect, child) {
+                        if (rect == null) return const SizedBox.shrink();
+                        final w = rect.width;
+                        final h = rect.height;
+                        if (w.isNaN || h.isNaN || w <= 0 || h <= 0) {
+                          return const SizedBox.shrink();
+                        }
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Positioned(
+                              left: rect.left,
+                              top: rect.top,
+                              width: w,
+                              height: h,
+                              child: IgnorePointer(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary
+                                        .withValues(alpha: 0.08),
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: AppColors.primary
+                                          .withValues(alpha: 0.22),
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      );
-                    },
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
               ],
             ),
           ),
