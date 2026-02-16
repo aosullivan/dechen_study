@@ -1,9 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/app_theme.dart';
-import '../../utils/constants.dart';
-import 'login_screen.dart';
 import '../landing/landing_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,38 +19,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _redirect() async {
     await Future.delayed(const Duration(seconds: 1));
-    
+
     if (!mounted) return;
 
-    // In debug mode, skip login and go straight to landing (for local dev)
-    if (kDebugMode) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LandingScreen()),
-      );
-      return;
-    }
-
-    try {
-      final session = supabase.auth.currentSession;
-      if (session != null) {
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LandingScreen()),
-        );
-      } else {
-        if (!mounted) return;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => LoginScreen()),
-        );
-      }
-    } catch (e) {
-      // If Supabase is not configured, go to login screen
-      debugPrint('Auth check error: $e');
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => LoginScreen()),
-      );
-    }
+    // Skip login for now — go straight to landing (re-enable session check to require login)
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const LandingScreen()),
+    );
   }
 
   @override
