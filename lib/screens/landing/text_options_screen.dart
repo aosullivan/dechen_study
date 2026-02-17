@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../services/bcv_verse_service.dart';
+import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
 
 /// Shows Daily / Quiz / Read for a given text. Daily opens random verse; Quiz guesses chapter.
-class TextOptionsScreen extends StatelessWidget {
+class TextOptionsScreen extends StatefulWidget {
   const TextOptionsScreen({
     super.key,
     required this.textId,
@@ -15,6 +17,24 @@ class TextOptionsScreen extends StatelessWidget {
 
   final String textId;
   final String title;
+
+  @override
+  State<TextOptionsScreen> createState() => _TextOptionsScreenState();
+}
+
+class _TextOptionsScreenState extends State<TextOptionsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Pre-warm services so the read screen opens instantly.
+    if (widget.textId == 'bodhicaryavatara') {
+      BcvVerseService.instance.preload();
+      VerseHierarchyService.instance.preload();
+    }
+  }
+
+  String get textId => widget.textId;
+  String get title => widget.title;
 
   @override
   Widget build(BuildContext context) {

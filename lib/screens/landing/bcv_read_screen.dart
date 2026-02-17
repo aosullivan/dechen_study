@@ -1241,7 +1241,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   Widget _buildPanelsColumn() {
     final breadcrumbSubtitle = _breadcrumbHierarchy.isNotEmpty
-        ? (_breadcrumbHierarchy.last['title'] ?? '')
+        ? (_breadcrumbHierarchy.last['title'] ?? '').trim()
         : '';
     String chaptersSubtitle = '';
     final curCh = _currentChapterNumber;
@@ -1817,9 +1817,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           children: [
             ConstrainedBox(
               constraints: BoxConstraints(maxHeight: maxPanelsHeight),
-              child: ListenableBuilder(
-                listenable: _sectionChangeNotifier,
-                builder: (_, __) => _buildPanelsColumn(),
+              child: SingleChildScrollView(
+                child: ListenableBuilder(
+                  listenable: _sectionChangeNotifier,
+                  builder: (_, __) => _buildPanelsColumn(),
+                ),
               ),
             ),
             Expanded(child: scrollContent),

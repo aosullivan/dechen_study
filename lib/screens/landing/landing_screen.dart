@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../../services/bcv_verse_service.dart';
+import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import 'text_options_screen.dart';
 
 /// dechen.study-style landing: light yellow background, text cards with Details button.
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
 
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
   static const Color _backgroundYellow = AppColors.landingBackground;
+
+  @override
+  void initState() {
+    super.initState();
+    // Pre-warm heavy assets so the read screen opens instantly.
+    BcvVerseService.instance.preload();
+    VerseHierarchyService.instance.preload();
+  }
 
   @override
   Widget build(BuildContext context) {

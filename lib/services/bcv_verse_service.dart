@@ -131,6 +131,9 @@ class BcvVerseService {
   /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd".
   static final RegExp segmentSuffixPattern = RegExp(r'[a-d]+$');
 
+  /// Pre-warm: start loading and parsing the asset so it's ready when the read screen opens.
+  Future<void> preload() => _ensureLoaded();
+
   /// Loads the asset, parses in a background isolate, and caches. Idempotent.
   Future<void> _ensureLoaded() async {
     if (_verses != null) return;

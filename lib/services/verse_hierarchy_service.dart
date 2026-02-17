@@ -5,6 +5,13 @@ import 'package:flutter/services.dart';
 
 import 'bcv_verse_service.dart';
 
+/// Holds parsed hierarchy data from the background isolate.
+class _ParsedHierarchy {
+  _ParsedHierarchy({required this.map, required this.sectionToRefs});
+  final Map<String, dynamic> map;
+  final Map<String, Set<String>> sectionToRefs;
+}
+
 /// Loads verse hierarchy mapping and provides section path for each verse.
 /// Hierarchy comes from overviews-pages (EOS).txt (definitive source).
 class VerseHierarchyService {
@@ -16,15 +23,40 @@ class VerseHierarchyService {
 
   Map<String, dynamic>? _map;
 
-  static Map<String, dynamic> _decodeJson(String content) {
-    return Map<String, dynamic>.from(jsonDecode(content) as Map);
+  /// Result from background isolate: decoded map + pre-built reverse index.
+  static _ParsedHierarchy _decodeAndIndex(String content) {
+    final map = Map<String, dynamic>.from(jsonDecode(content) as Map);
+    // Build reverse index (section path -> verse refs) in the isolate to avoid main-thread work.
+    final sectionToRefs = <String, Set<String>>{};
+    final verseToPath = map['verseToPath'];
+    if (verseToPath is Map) {
+      for (final e in verseToPath.entries) {
+        final path = e.value;
+        if (path is! List) continue;
+        final ref = e.key.toString();
+        for (final item in path) {
+          if (item is Map) {
+            final s = (item['section'] ?? item['path'] ?? '').toString();
+            if (s.isNotEmpty) {
+              (sectionToRefs[s] ??= {}).add(ref);
+            }
+          }
+        }
+      }
+    }
+    return _ParsedHierarchy(map: map, sectionToRefs: sectionToRefs);
   }
+
+  /// Pre-warm: start loading and parsing so it's ready when the read screen opens.
+  Future<void> preload() => _ensureLoaded();
 
   Future<void> _ensureLoaded() async {
     if (_map != null) return;
     try {
       final content = await rootBundle.loadString(_assetPath);
-      _map = await compute(_decodeJson, content);
+      final result = await compute(_decodeAndIndex, content);
+      _map = result.map;
+      _sectionToRefsIndex = result.sectionToRefs;
     } catch (_) {
       _map = {};
     }
