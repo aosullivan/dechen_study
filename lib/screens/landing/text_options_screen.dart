@@ -6,6 +6,7 @@ import '../../utils/app_theme.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
+import 'textual_overview_screen.dart';
 
 /// Shows Daily / Quiz / Read for a given text. Daily opens random verse; Quiz guesses chapter.
 class TextOptionsScreen extends StatefulWidget {
@@ -70,6 +71,11 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             label: 'Read',
             onTap: () => _openRead(context),
           ),
+          _OptionTile(
+            icon: Icons.account_tree_outlined,
+            label: 'Textual Overview',
+            onTap: () => _openOverview(context),
+          ),
         ],
       ),
     );
@@ -110,6 +116,18 @@ Navigator.of(context).push(
       );
     } else {
       _showComingSoon(context, 'Quiz');
+    }
+  }
+
+  void _openOverview(BuildContext context) {
+    if (textId == 'bodhicaryavatara') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const TextualOverviewScreen(),
+        ),
+      );
+    } else {
+      _showComingSoon(context, 'Textual Overview');
     }
   }
 

@@ -69,8 +69,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Min index in highlight set (computed on setState, for commentary button placement).
   int? _minHighlightIndex;
 
-  /// Cached first verse index of current highlight run/block (for commentary).
-  int? _firstHighlightVerseIndex;
 
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
@@ -79,7 +77,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final _hierarchyService = VerseHierarchyService.instance;
 
   List<int> _chapterHeaderFlatIndices = <int>[];
-  int? _totalItemCount;
 
   /// Verse index currently in view (for breadcrumb). Null until first visibility.
   int? _visibleVerseIndex;
@@ -129,7 +126,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
   bool _mobileNavCollapseInitialized = false;
-  bool _isMobile = false;
 
   final FocusNode _sectionOverviewFocusNode = FocusNode();
 
@@ -184,7 +180,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       fontFamily: 'Crimson Text',
       color: AppColors.textDark,
     );
-    _isMobile = MediaQuery.of(context).size.width < BcvReadConstants.laptopBreakpoint;
   }
 
   @override
@@ -205,7 +200,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _error = null;
       _highlightVerseIndices = {};
       _minHighlightIndex = null;
-      _firstHighlightVerseIndex = null;
       _currentSectionVerseIndices = {};
       _sectionVerseIndicesCache.clear();
       _sectionOverlayRectFrom = null;
@@ -219,7 +213,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _isProgrammaticNavigation = false;
       _sectionSliderScrollRequestId = 0;
       _chapterHeaderFlatIndices.clear();
-      _totalItemCount = null;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -233,11 +226,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               widget.highlightSectionIndices!.isNotEmpty) {
             _highlightVerseIndices = Set<int>.from(widget.highlightSectionIndices!);
             _minHighlightIndex = _highlightVerseIndices!.reduce((a, b) => a < b ? a : b);
-            _firstHighlightVerseIndex = _minHighlightIndex;
           } else if (widget.scrollToVerseIndex != null) {
             _highlightVerseIndices = {widget.scrollToVerseIndex!};
             _minHighlightIndex = widget.scrollToVerseIndex;
-            _firstHighlightVerseIndex = widget.scrollToVerseIndex;
           }
 
           // Build flat indices for ListView.builder
@@ -248,7 +239,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             flatIndex += 1 + (c.endVerseIndex - c.startVerseIndex);
             _chapterKeys[c.number] = GlobalKey();
           }
-          _totalItemCount = flatIndex;
         });
         if (widget.scrollToVerseIndex != null && _scrollToVerseKey != null) {
           WidgetsBinding.instance
@@ -287,7 +277,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     // Clear any verse selection — user is navigating to a new chapter.
     _highlightVerseIndices = {};
     _minHighlightIndex = null;
-    _firstHighlightVerseIndex = null;
     _commentaryEntryForSelected = null;
 
     // Update breadcrumb to the first section of the target chapter.
@@ -497,7 +486,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       setState(() {
         _highlightVerseIndices = {};
         _minHighlightIndex = null;
-        _firstHighlightVerseIndex = null;
         _commentaryEntryForSelected = null;
       });
       return;
@@ -515,7 +503,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       setState(() {
         _highlightVerseIndices = {globalIndex};
         _minHighlightIndex = globalIndex;
-        _firstHighlightVerseIndex = globalIndex;
         _commentaryEntryForSelected = null;
       });
       _scrollToVerseIndex(globalIndex);
@@ -551,7 +538,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     setState(() {
       _highlightVerseIndices = highlightRun;
       _minHighlightIndex = firstInSection;
-      _firstHighlightVerseIndex = firstInSection;
       _commentaryEntryForSelected = entry;
     });
     _showCommentary();
@@ -559,8 +545,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
 
-  /// On mobile, open commentary in a bottom sheet to avoid cluttering the reader.
-  void _openCommentaryBottomSheet() {
+  /// Show commentary as a bottom sheet (slides up, swipe down to dismiss).
+  void _showCommentary() {
     final entry = _commentaryEntryForSelected;
     if (entry == null) return;
     showModalBottomSheet<void>(
@@ -574,7 +560,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         expand: false,
         builder: (_, scrollController) => SingleChildScrollView(
           controller: scrollController,
-          child:           BcvInlineCommentaryPanel(
+          child: BcvInlineCommentaryPanel(
             entry: entry,
             verseService: _verseService,
             onClose: () => Navigator.of(ctx).pop(),
@@ -582,44 +568,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ),
       ),
     );
-  }
-
-  void _showCommentary() {
-    final entry = _commentaryEntryForSelected;
-    if (entry == null) return;
-    if (_isMobile) {
-      _openCommentaryBottomSheet();
-    } else {
-      showDialog<void>(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext ctx) => Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(ctx).pop(),
-                  ),
-                ),
-                Expanded(
-                  child: BcvInlineCommentaryPanel(
-                    entry: entry,
-                    verseService: _verseService,
-                    onClose: () => Navigator.of(ctx).pop(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
   }
 
   void _setInitialBreadcrumb() {
