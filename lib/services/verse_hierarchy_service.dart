@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'bcv_verse_service.dart';
@@ -15,11 +16,15 @@ class VerseHierarchyService {
 
   Map<String, dynamic>? _map;
 
+  static Map<String, dynamic> _decodeJson(String content) {
+    return Map<String, dynamic>.from(jsonDecode(content) as Map);
+  }
+
   Future<void> _ensureLoaded() async {
     if (_map != null) return;
     try {
       final content = await rootBundle.loadString(_assetPath);
-      _map = Map<String, dynamic>.from(jsonDecode(content) as Map);
+      _map = await compute(_decodeJson, content);
     } catch (_) {
       _map = {};
     }

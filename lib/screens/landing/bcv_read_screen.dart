@@ -17,6 +17,12 @@ import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 
+/// Notifier for section-related state (breadcrumb, overlay, visible verse).
+/// Allows panels and overlay to rebuild independently of the verse list.
+class _SectionChangeNotifier extends ChangeNotifier {
+  void notify() => notifyListeners();
+}
+
 /// Read screen for Bodhicaryavatara: main area with full text, right-side panels for chapters, section overview, and breadcrumb.
 /// Optional [scrollToVerseIndex] scrolls to the exact verse after first frame.
 /// Optional [highlightSectionIndices] highlights all verses in that section (e.g. from Daily).
@@ -89,6 +95,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Prevents scroll-settle visibility from overwriting the key-down highlight.
   DateTime? _programmaticNavCooldownUntil;
 
+  /// True while the user is actively scrolling (finger/wheel down). Gates visibility processing.
+  bool _isUserScrolling = false;
+
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<String, double> _verseVisibility = {};
 
@@ -100,6 +109,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final Map<int, GlobalKey> _verseKeys = {};
   final Map<String, GlobalKey> _verseSegmentKeys = {};
   final GlobalKey _scrollContentKey = GlobalKey();
+  final _sectionChangeNotifier = _SectionChangeNotifier();
   final ScrollController _mainScrollController = ScrollController();
   final ScrollController _sectionSliderScrollController = ScrollController();
 
@@ -117,6 +127,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   double _chaptersPanelHeight = 80;
   double _breadcrumbPanelHeight = 120;
   double _sectionPanelHeight = 220;
+
+  /// Cached TextStyles — recomputed only when theme changes.
+  TextStyle? _verseStyle;
+  TextStyle? _chapterTitleStyle;
 
   Set<int> get _highlightSet => _highlightVerseIndices ?? const {};
 
@@ -148,11 +162,28 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final theme = Theme.of(context).textTheme;
+    _verseStyle = theme.bodyLarge?.copyWith(
+      fontFamily: 'Crimson Text',
+      fontSize: 18,
+      height: 1.8,
+      color: AppColors.textDark,
+    );
+    _chapterTitleStyle = theme.displayMedium?.copyWith(
+      fontFamily: 'Crimson Text',
+      color: AppColors.textDark,
+    );
+  }
+
+  @override
   void dispose() {
     _visibilityDebounceTimer?.cancel();
     _mainScrollController.dispose();
     _sectionSliderScrollController.dispose();
     _sectionOverviewFocusNode.dispose();
+    _sectionChangeNotifier.dispose();
     super.dispose();
   }
 
@@ -283,11 +314,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     if (run == null || run.isEmpty) {
       if (_sectionOverlayRectTo != null) {
-        setState(() {
-          _sectionOverlayRectFrom = _sectionOverlayRectTo;
-          _sectionOverlayRectTo = null;
-          _sectionOverlayAnimationId++;
-        });
+        _sectionOverlayRectFrom = _sectionOverlayRectTo;
+        _sectionOverlayRectTo = null;
+        _sectionOverlayAnimationId++;
+        _sectionChangeNotifier.notify();
       }
       return;
     }
@@ -357,11 +387,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final prevTo = _sectionOverlayRectTo;
     if (prevTo != null && _rectApproxEquals(prevTo, clamped)) return;
 
-    setState(() {
-      _sectionOverlayRectFrom = prevTo ?? clamped;
-      _sectionOverlayRectTo = clamped;
-      _sectionOverlayAnimationId++;
-    });
+    _sectionOverlayRectFrom = prevTo ?? clamped;
+    _sectionOverlayRectTo = clamped;
+    _sectionOverlayAnimationId++;
+    _sectionChangeNotifier.notify();
   }
 
   bool _rectApproxEquals(Rect a, Rect b, [double epsilon = 2]) {
@@ -546,11 +575,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     int? supersedeGen,
   }) {
     if (supersedeGen != null && supersedeGen != _syncGeneration) return;
-    setState(() {
-      _breadcrumbHierarchy = hierarchy;
-      _currentSectionVerseIndices = verseIndices;
-      _visibleVerseIndex = verseIndex;
-    });
+    _breadcrumbHierarchy = hierarchy;
+    _currentSectionVerseIndices = verseIndices;
+    _visibleVerseIndex = verseIndex;
+    _sectionChangeNotifier.notify();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _measureAndUpdateSectionOverlay();
@@ -659,7 +687,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
       {String? segmentRef}) {
-    if (_isProgrammaticNavigation) return;
+    if (_isProgrammaticNavigation || _isUserScrolling) return;
     if (_programmaticNavCooldownUntil != null &&
         DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
       return;
@@ -673,7 +701,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _visibilityDebounceTimer?.cancel();
     // Capture generation when timer STARTS, not when it fires
     final capturedGen = _syncGeneration;
-    _visibilityDebounceTimer = Timer(const Duration(milliseconds: 150), () {
+    _visibilityDebounceTimer = Timer(const Duration(milliseconds: 250), () {
       _visibilityDebounceTimer = null;
       if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) return;
       if (_programmaticNavCooldownUntil != null &&
@@ -698,13 +726,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           indices = {pickedIdx};
         }
         final indicesWithVisible = {...indices, pickedIdx};
-        setState(() {
-          if (_highlightSet.isNotEmpty && !_highlightSet.contains(pickedIdx)) {
+        if (_highlightSet.isNotEmpty && !_highlightSet.contains(pickedIdx)) {
+          setState(() {
             _highlightVerseIndices = {};
             _commentaryEntryForSelected = null;
             _commentaryExpanded = false;
-          }
-        });
+          });
+        }
         _applySectionState(
           hierarchy: hierarchy,
           verseIndices: indicesWithVisible,
@@ -1309,7 +1337,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             _debouncedArrowNav(() => _scrollToAdjacentSection(1));
           }
         },
-        child: SingleChildScrollView(
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification is ScrollStartNotification) {
+              _isUserScrolling = true;
+            } else if (notification is ScrollEndNotification) {
+              _isUserScrolling = false;
+            }
+            return false;
+          },
+          child: SingleChildScrollView(
             controller: _mainScrollController,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Stack(
@@ -1331,23 +1368,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                         children: [
                           Text(
                             'Chapter ${ch.number}: ${ch.title}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMedium
-                                ?.copyWith(
-                                  fontFamily: 'Crimson Text',
-                                  color: AppColors.textDark,
-                                ),
+                            style: _chapterTitleStyle,
                           ),
                           const SizedBox(height: 24),
                           ...() {
-                            final verseStyle =
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontFamily: 'Crimson Text',
-                                      fontSize: 18,
-                                      height: 1.8,
-                                      color: AppColors.textDark,
-                                    );
+                            final verseStyle = _verseStyle;
                             // Unified box: same shape, faint (section) vs darker (commentary)
                             BoxDecoration boxDecoration(
                                     {required bool darker}) =>
@@ -1639,18 +1664,26 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                     );
                   }).toList(),
                 ),
-                if (_sectionOverlayRectTo != null)
-                  Positioned.fill(
-                    child: BcvSectionOverlay(
-                      animationId: _sectionOverlayAnimationId,
-                      rectFrom: _sectionOverlayRectFrom,
-                      rectTo: _sectionOverlayRectTo,
-                    ),
+                Positioned.fill(
+                  child: ListenableBuilder(
+                    listenable: _sectionChangeNotifier,
+                    builder: (_, __) {
+                      if (_sectionOverlayRectTo == null) {
+                        return const SizedBox.shrink();
+                      }
+                      return BcvSectionOverlay(
+                        animationId: _sectionOverlayAnimationId,
+                        rectFrom: _sectionOverlayRectFrom,
+                        rectTo: _sectionOverlayRectTo,
+                      );
+                    },
                   ),
+                ),
               ],
             ),
           ),
         ),
+      ),
     );
     if (isLaptop) {
       return Row(
@@ -1685,7 +1718,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 ),
               ),
               child: SingleChildScrollView(
-                child: _buildPanelsColumn(),
+                child: ListenableBuilder(
+                  listenable: _sectionChangeNotifier,
+                  builder: (_, __) => _buildPanelsColumn(),
+                ),
               ),
             ),
           ),
@@ -1708,9 +1744,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildPanelsColumn(),
+        ListenableBuilder(
+          listenable: _sectionChangeNotifier,
+          builder: (_, __) => _buildPanelsColumn(),
+        ),
         Expanded(child: scrollContent),
-        _buildMobileSectionNavBar(),
+        ListenableBuilder(
+          listenable: _sectionChangeNotifier,
+          builder: (_, __) => _buildMobileSectionNavBar(),
+        ),
       ],
     );
   }

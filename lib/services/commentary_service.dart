@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// One commentary block: the list of verse refs it covers and the commentary text.
@@ -11,19 +12,10 @@ class CommentaryEntry {
   final String commentaryText;
 }
 
-/// Loads and parses verse_commentary_mapping.txt. Section headers are lines containing one or more [c.v];
-/// body runs until the next such line.
-class CommentaryService {
-  CommentaryService._();
-  static final CommentaryService _instance = CommentaryService._();
-  static CommentaryService get instance => _instance;
-
-  static const String _assetPath = 'texts/verse_commentary_mapping.txt';
-  /// Matches [c.v] and captures c.v as group 1 (with dot).
-  static final RegExp _refInBrackets = RegExp(r'\[(\d+\.\d+)\]');
-
-  /// Sort verse refs by chapter then verse (e.g. 6.27 before 6.31).
-  static int _compareRefs(String a, String b) {
+/// Top-level so it can run in a compute isolate.
+({Map<String, List<String>> refToRefsInBlock, Map<String, String> refToCommentary, List<CommentaryEntry> allSections}) _parseCommentary(String content) {
+  final refInBrackets = RegExp(r'\[(\d+\.\d+)\]');
+  int compareRefs(String a, String b) {
     final ap = a.split('.');
     final bp = b.split('.');
     if (ap.length != 2 || bp.length != 2) return a.compareTo(b);
@@ -34,6 +26,43 @@ class CommentaryService {
     if (ac != bc) return ac.compareTo(bc);
     return av.compareTo(bv);
   }
+  final refToRefsInBlock = <String, List<String>>{};
+  final refToCommentary = <String, String>{};
+  final allSections = <CommentaryEntry>[];
+  final lines = content.split('\n');
+  var i = 0;
+  while (i < lines.length) {
+    final line = lines[i];
+    final refs = refInBrackets.allMatches(line).map((m) => m.group(1)!).toList();
+    if (refs.isEmpty) { i++; continue; }
+    final refsDeduped = refs.toSet().toList()..sort(compareRefs);
+    final bodyLines = <String>[];
+    i++;
+    while (i < lines.length) {
+      final next = lines[i];
+      if (refInBrackets.hasMatch(next)) break;
+      bodyLines.add(next);
+      i++;
+    }
+    final commentaryText = bodyLines.join('\n').trim();
+    final entry = CommentaryEntry(refsInBlock: refsDeduped, commentaryText: commentaryText);
+    allSections.add(entry);
+    for (final ref in refsDeduped) {
+      refToRefsInBlock[ref] = refsDeduped;
+      refToCommentary[ref] = commentaryText;
+    }
+  }
+  return (refToRefsInBlock: refToRefsInBlock, refToCommentary: refToCommentary, allSections: allSections);
+}
+
+/// Loads and parses verse_commentary_mapping.txt. Section headers are lines containing one or more [c.v];
+/// body runs until the next such line.
+class CommentaryService {
+  CommentaryService._();
+  static final CommentaryService _instance = CommentaryService._();
+  static CommentaryService get instance => _instance;
+
+  static const String _assetPath = 'texts/verse_commentary_mapping.txt';
 
   Map<String, List<String>>? _refToRefsInBlock;
   Map<String, String>? _refToCommentary;
@@ -43,48 +72,15 @@ class CommentaryService {
     if (_refToRefsInBlock != null) return;
     try {
       final content = await rootBundle.loadString(_assetPath);
-      _parse(content);
+      final result = await compute(_parseCommentary, content);
+      _refToRefsInBlock = result.refToRefsInBlock;
+      _refToCommentary = result.refToCommentary;
+      _allSections = result.allSections;
     } catch (_) {
       _refToRefsInBlock = {};
       _refToCommentary = {};
       _allSections = [];
     }
-  }
-
-  void _parse(String content) {
-    final refToRefsInBlock = <String, List<String>>{};
-    final refToCommentary = <String, String>{};
-    final allSections = <CommentaryEntry>[];
-    final lines = content.split('\n');
-    var i = 0;
-    while (i < lines.length) {
-      final line = lines[i];
-      final refs = _refInBrackets.allMatches(line).map((m) => m.group(1)!).toList();
-      if (refs.isEmpty) {
-        i++;
-        continue;
-      }
-      final refsDeduped = refs.toSet().toList()
-        ..sort(_compareRefs);
-      final bodyLines = <String>[];
-      i++;
-      while (i < lines.length) {
-        final next = lines[i];
-        if (_refInBrackets.hasMatch(next)) break;
-        bodyLines.add(next);
-        i++;
-      }
-      final commentaryText = bodyLines.join('\n').trim();
-      final entry = CommentaryEntry(refsInBlock: refsDeduped, commentaryText: commentaryText);
-      allSections.add(entry);
-      for (final ref in refsDeduped) {
-        refToRefsInBlock[ref] = refsDeduped;
-        refToCommentary[ref] = commentaryText;
-      }
-    }
-    _refToRefsInBlock = refToRefsInBlock;
-    _refToCommentary = refToCommentary;
-    _allSections = allSections;
   }
 
   /// Returns the commentary for [ref] (e.g. "1.5"), or null if none.

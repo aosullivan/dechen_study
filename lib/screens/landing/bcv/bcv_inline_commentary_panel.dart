@@ -23,8 +23,12 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
   static const Color _commentaryHeader = AppColors.commentaryHeader;
 
   /// Strip verse ref lines and verse text from commentary body so we show verses once at top.
+  static final Map<String, String> _commentaryBodyCache = {};
   static String commentaryOnlyBody(
       CommentaryEntry entry, BcvVerseService verseService) {
+    final cacheKey = entry.commentaryText;
+    final cached = _commentaryBodyCache[cacheKey];
+    if (cached != null) return cached;
     String body = entry.commentaryText;
     for (final ref in entry.refsInBlock) {
       body = body.replaceAll(
@@ -36,7 +40,9 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
         body = body.replaceAll(verseText, '');
       }
     }
-    return body.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim();
+    final result = body.replaceAll(RegExp(r'\n{3,}'), '\n\n').trim();
+    _commentaryBodyCache[cacheKey] = result;
+    return result;
   }
 
   @override
