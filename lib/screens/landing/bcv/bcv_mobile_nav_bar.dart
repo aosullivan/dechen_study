@@ -28,7 +28,7 @@ class BcvMobileNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontFamily: 'Lora',
-          fontSize: 13,
+          fontSize: BcvReadConstants.panelFontSize,
           color: AppColors.textDark,
         );
     return Material(

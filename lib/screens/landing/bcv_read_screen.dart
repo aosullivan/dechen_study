@@ -12,6 +12,7 @@ import 'bcv/bcv_mobile_nav_bar.dart';
 import 'bcv/bcv_read_constants.dart';
 import 'bcv/bcv_section_overlay.dart';
 import 'bcv/bcv_section_slider.dart';
+import 'bcv/bcv_verse_text.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
@@ -168,7 +169,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _verseStyle = theme.bodyLarge?.copyWith(
       fontFamily: 'Crimson Text',
       fontSize: 18,
-      height: 1.8,
+      height: 1.5,
       color: AppColors.textDark,
     );
     _chapterTitleStyle = theme.displayMedium?.copyWith(
@@ -188,6 +189,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   Future<void> _load() async {
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = null;
     setState(() {
       _loading = true;
       _error = null;
@@ -198,6 +201,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _sectionOverlayRectTo = null;
       _sectionOverlayMeasureRetries = 0;
       _verseVisibility.clear();
+      _verseKeys.clear();
+      _verseSegmentKeys.clear();
       _commentaryEntryForSelected = null;
       _commentaryExpanded = false;
       _syncGeneration = 0;
@@ -334,7 +339,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       final ref = _verseService.getVerseRef(idx);
       GlobalKey? key;
       if (ref != null &&
-          RegExp(r'^\d+\.\d+$').hasMatch(ref) &&
+          BcvVerseService.baseVerseRefPattern.hasMatch(ref) &&
           currentPath.isNotEmpty) {
         final segments =
             _hierarchyService.getSplitVerseSegmentsSync(ref);
@@ -554,11 +559,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
     final indices = <int>{};
     for (final ref in refs) {
-      var i = _verseService.getIndexForRef(ref);
-      if (i == null && RegExp(r'[a-d]+$').hasMatch(ref)) {
-        i = _verseService
-            .getIndexForRef(ref.replaceAll(RegExp(r'[a-d]+$'), ''));
-      }
+      final i = _verseService.getIndexForRefWithFallback(ref);
       if (i != null) indices.add(i);
     }
     if (indices.isNotEmpty) _sectionVerseIndicesCache[sectionPath] = indices;
@@ -616,12 +617,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             section, preferredChapter) ??
         _hierarchyService.getFirstVerseForSectionSync(section);
     if (firstVerseRef == null || firstVerseRef.isEmpty) return;
-    var verseIndex = _verseService.getIndexForRef(firstVerseRef);
-    if (verseIndex == null && RegExp(r'[a-d]+$').hasMatch(firstVerseRef)) {
-      verseIndex = _verseService.getIndexForRef(
-        firstVerseRef.replaceAll(RegExp(r'[a-d]+$'), ''),
-      );
-    }
+    final verseIndex = _verseService.getIndexForRefWithFallback(firstVerseRef);
     if (verseIndex == null) return;
     _visibleVerseIndex = verseIndex;
     _scrollToVerseIndex(verseIndex);
@@ -663,12 +659,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ? _mainScrollController.position
         : null;
     if (pos != null && pos.isScrollingNotifier.value) {
+      var listenerRemoved = false;
       VoidCallback? listener;
       listener = () {
         if (!mounted || pos.isScrollingNotifier.value) return;
-        pos.isScrollingNotifier.removeListener(listener!);
-        // Buffer for visibility debounce (150ms) + a frame for layout
-        Future.delayed(const Duration(milliseconds: 200), () {
+        if (!listenerRemoved) {
+          listenerRemoved = true;
+          pos.isScrollingNotifier.removeListener(listener!);
+        }
+        // Buffer for visibility debounce (250ms) + a frame for layout
+        Future.delayed(const Duration(milliseconds: 300), () {
           if (!mounted) return;
           doClear();
         });
@@ -677,7 +677,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       // Fallback: clear after 1.5s in case scroll never settles
       Future.delayed(const Duration(milliseconds: 1500), () {
         if (!mounted) return;
-        pos.isScrollingNotifier.removeListener(listener!);
+        if (!listenerRemoved) {
+          listenerRemoved = true;
+          pos.isScrollingNotifier.removeListener(listener!);
+        }
         doClear();
       });
     } else {
@@ -1417,12 +1420,23 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                       _scrollTargetVerseIndex == idx &&
                                       _scrollToVerseKey != null &&
                                       (segmentIndex ?? 0) == 0;
+                              final effectiveStyle = verseStyle ??
+                                  Theme.of(context).textTheme.bodyLarge!
+                                      .copyWith(
+                                        fontFamily: 'Crimson Text',
+                                        fontSize: 18,
+                                        height: 1.5,
+                                        color: AppColors.textDark,
+                                      );
                               Widget w = GestureDetector(
                                 onTap: () => _onVerseTap(idx),
                                 behavior: HitTestBehavior.opaque,
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 20),
-                                  child: Text(displayText, style: verseStyle),
+                                  child: BcvVerseText(
+                                    text: displayText,
+                                    style: effectiveStyle,
+                                  ),
                                 ),
                               );
                               if (isTargetVerse) {
@@ -1465,7 +1479,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 final idx = indices.single;
                                 final ref = _verseService.getVerseRef(idx);
                                 if (ref != null &&
-                                    RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+                                    BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
                                   final segments = _hierarchyService
                                       .getSplitVerseSegmentsSync(ref);
                                   if (segments.length >= 2) {
@@ -1610,7 +1624,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                               // For split verses, render as two blocks so overlay can highlight each segment.
                               final ref = _verseService.getVerseRef(globalIndex);
                               final isSplit = ref != null &&
-                                  RegExp(r'^\d+\.\d+$').hasMatch(ref) &&
+                                  BcvVerseService.baseVerseRefPattern.hasMatch(ref) &&
                                   _hierarchyService
                                       .getSplitVerseSegmentsSync(ref)
                                       .length >= 2;
@@ -1741,19 +1755,34 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         }
       });
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ListenableBuilder(
-          listenable: _sectionChangeNotifier,
-          builder: (_, __) => _buildPanelsColumn(),
-        ),
-        Expanded(child: scrollContent),
-        ListenableBuilder(
-          listenable: _sectionChangeNotifier,
-          builder: (_, __) => _buildMobileSectionNavBar(),
-        ),
-      ],
+    // Constrain panels height so Column never overflows (e.g. in tests or small viewports).
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const minReaderHeight = 100.0;
+        final maxPanelsHeight = (constraints.maxHeight -
+                minReaderHeight -
+                BcvReadConstants.mobileNavBarHeight)
+            .clamp(0.0, double.infinity);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: maxPanelsHeight,
+              child: SingleChildScrollView(
+                child: ListenableBuilder(
+                  listenable: _sectionChangeNotifier,
+                  builder: (_, __) => _buildPanelsColumn(),
+                ),
+              ),
+            ),
+            Expanded(child: scrollContent),
+            ListenableBuilder(
+              listenable: _sectionChangeNotifier,
+              builder: (_, __) => _buildMobileSectionNavBar(),
+            ),
+          ],
+        );
+      },
     );
   }
 }

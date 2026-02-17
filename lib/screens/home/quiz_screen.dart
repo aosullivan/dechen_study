@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/study_models.dart';
 import '../../services/study_service.dart';
 import '../../utils/app_theme.dart';
+import '../landing/bcv/bcv_verse_text.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -113,9 +114,10 @@ class _QuizScreenState extends State<QuizScreen> {
                 width: _showAnswer ? 2 : 1,
               ),
             ),
-            child: Text(
-              _currentSection!.text,
-              style: Theme.of(context).textTheme.bodyLarge,
+            child: BcvVerseText(
+              text: _currentSection!.text,
+              style: Theme.of(context).textTheme.bodyLarge ??
+                  const TextStyle(fontSize: 16, height: 1.5),
             ),
           ),
           const SizedBox(height: 24),

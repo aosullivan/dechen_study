@@ -36,13 +36,13 @@ class VerseHierarchyService {
     final verseToPath = _map?['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return null;
     var path = verseToPath[ref];
-    if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+    if ((path == null || path is! List) && BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
       for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
         path = verseToPath['$ref$suffix'];
         if (path is List && path.isNotEmpty) break;
       }
     }
-    if ((path == null || path is! List) && RegExp(r'^\d+\.\d+$').hasMatch(ref)) {
+    if ((path == null || path is! List) && BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
       path = _pathFromAdjacentVerse(verseToPath, ref);
     }
     if (path is! List) return null;
@@ -307,7 +307,7 @@ class VerseHierarchyService {
   /// Empty if ref is not split or not found.
   List<({String ref, String sectionPath})> getSplitVerseSegmentsSync(
       String baseRef) {
-    if (_map == null || !RegExp(r'^\d+\.\d+$').hasMatch(baseRef)) {
+    if (_map == null || !BcvVerseService.baseVerseRefPattern.hasMatch(baseRef)) {
       return [];
     }
     final verseToPath = _map!['verseToPath'];

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../services/bcv_verse_service.dart';
 import '../../../services/commentary_service.dart';
 import '../../../utils/app_theme.dart';
+import 'bcv_verse_text.dart';
 
 /// Inline commentary panel: verse ref(s), verse text, and commentary body.
 /// Used in the read screen and in the mobile commentary bottom sheet.
@@ -50,7 +51,13 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
     final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontFamily: 'Crimson Text',
           fontSize: 18,
-          height: 1.8,
+          height: 1.5,
+          color: AppColors.textDark,
+        ) ??
+        const TextStyle(
+          fontFamily: 'Crimson Text',
+          fontSize: 18,
+          height: 1.5,
           color: AppColors.textDark,
         );
     final headingStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -116,8 +123,8 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
                       style: headingStyle,
                     ),
                     const SizedBox(height: 12),
-                    Text(
-                      verseService.getIndexForRef(entry.refsInBlock.single) !=
+                    BcvVerseText(
+                      text: verseService.getIndexForRef(entry.refsInBlock.single) !=
                               null
                           ? (verseService.getVerseAt(
                                 verseService.getIndexForRef(
@@ -154,7 +161,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
                                   ),
                             ),
                             const SizedBox(height: 4),
-                            Text(text, style: verseStyle),
+                            BcvVerseText(text: text, style: verseStyle),
                           ],
                         ),
                       );
@@ -168,7 +175,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontFamily: 'Crimson Text',
                           fontSize: 18,
-                          height: 1.8,
+                          height: 1.5,
                           color: AppColors.textDark,
                         ),
                   ),

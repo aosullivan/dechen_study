@@ -40,7 +40,7 @@ class BcvPanelHeader extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
                         color: AppColors.textDark,
-                        fontSize: 12,
+                        fontSize: BcvReadConstants.panelFontSize,
                       ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -104,7 +104,7 @@ class BcvCollapsedStrip extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Lora',
                         color: AppColors.textDark,
-                        fontSize: useCompact ? 11 : 12,
+                        fontSize: useCompact ? 13 : BcvReadConstants.panelFontSize,
                       ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

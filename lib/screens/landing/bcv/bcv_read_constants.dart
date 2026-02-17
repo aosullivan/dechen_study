@@ -13,16 +13,20 @@ abstract final class BcvReadConstants {
   static const double rightPanelsMinWidth = 200;
   static const double rightPanelsMaxWidth = 500;
   static const double panelMinHeight = 60;
-  static const double panelLineHeight = 22.0;
+  /// Line height for panel list rows. Tied to [panelFontSize] for readability.
+  static const double panelLineHeight = 24.0;
   static const double panelPaddingH = 12.0;
   static const double panelPaddingV = 6.0;
 
-  static const double sectionSliderLineHeight = 22.0;
+  static const double sectionSliderLineHeight = 24.0;
   static const int sectionSliderVisibleLines = 10;
 
-  /// Shared by section overview and breadcrumb trail.
-  static const double sectionListFontSize = 12.0;
-  static const double sectionListLineHeight = 22.0;
+  /// Minimum readable font size for nav panels (chapters, section list, breadcrumb).
+  /// Keeps navigation accessible; reader pane keeps its own size so you can see enough text.
+  static const double panelFontSize = 14.0;
+  /// Section list uses same size as panel for consistency.
+  static const double sectionListFontSize = 14.0;
+  static const double sectionListLineHeight = 24.0;
 
   static const int maxSectionOverlayMeasureRetries = 5;
   static const double sectionSliderIndentPerLevel = 12.0;

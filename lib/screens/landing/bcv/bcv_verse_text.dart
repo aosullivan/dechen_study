@@ -37,7 +37,7 @@ class BcvVerseText extends StatelessWidget {
           ));
           if (i < logicalLines.length - 1) {
             final lineGap = (style.fontSize ?? 18) *
-                ((style.height ?? 1.8) - 1.0).clamp(0.0, 20.0);
+                ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0);
             children.add(SizedBox(height: lineGap));
           }
         }

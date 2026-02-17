@@ -26,8 +26,8 @@ dependencies:
   # Environment variables
   flutter_dotenv: ^5.0.0
 
-  # Lottie for quiz celebrations
-  lottie: ^3.0.0
+  # Confetti for quiz success animation
+  confetti: ^0.8.0
 
   # Visibility detection for scroll-based breadcrumb
   visibility_detector: ^0.4.0+2

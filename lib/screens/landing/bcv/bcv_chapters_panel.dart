@@ -26,10 +26,13 @@ class BcvChaptersPanel extends StatelessWidget {
     final h = raw.clamp(BcvReadConstants.panelMinHeight, 400.0).toDouble();
     final style = Theme.of(context).textTheme.bodySmall?.copyWith(
           fontFamily: 'Lora',
-          fontSize: 12,
+          fontSize: BcvReadConstants.panelFontSize,
           color: AppColors.textDark,
         ) ??
-        const TextStyle(fontFamily: 'Lora', fontSize: 12, color: AppColors.textDark);
+        TextStyle(
+            fontFamily: 'Lora',
+            fontSize: BcvReadConstants.panelFontSize,
+            color: AppColors.textDark);
     return SizedBox(
       height: h,
       child: ListView.builder(

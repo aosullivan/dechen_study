@@ -30,6 +30,12 @@ class BcvVerseService {
   static final RegExp _chapterTitleOnly = RegExp(r'^Chapter (\d+):\s*(.+)\s*$');
   static final RegExp _verseRef = RegExp(r'\[(\d+)\.(\d+)\]');
 
+  /// Matches a base verse ref like "1.5" (no suffix). Shared across the app.
+  static final RegExp baseVerseRefPattern = RegExp(r'^\d+\.\d+$');
+
+  /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd".
+  static final RegExp segmentSuffixPattern = RegExp(r'[a-d]+$');
+
   /// Loads the asset, parses into verses and chapter boundaries, and caches. Idempotent.
   Future<void> _ensureLoaded() async {
     if (_verses != null) return;
@@ -140,6 +146,16 @@ class BcvVerseService {
       if (_refs![i] == ref) return i;
     }
     return null;
+  }
+
+  /// Like [getIndexForRef] but also tries stripping segment suffixes (ab, cd, etc.)
+  /// so "8.19ab" falls back to "8.19".
+  int? getIndexForRefWithFallback(String ref) {
+    var i = getIndexForRef(ref);
+    if (i == null && segmentSuffixPattern.hasMatch(ref)) {
+      i = getIndexForRef(ref.replaceAll(segmentSuffixPattern, ''));
+    }
+    return i;
   }
 
   /// Returns the verse text at [index], or null if out of range.

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../utils/app_theme.dart';
 import '../../services/commentary_service.dart';
+import 'bcv/bcv_verse_text.dart';
 import 'bcv_read_screen.dart';
 
 /// Full-screen display of a random section (one or more verses) from the commentary mapping,
@@ -208,18 +209,18 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                           ),
                           const SizedBox(height: 6),
                         ],
-                        Text(
-                          text,
+                        BcvVerseText(
+                          text: text,
                           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                 fontFamily: 'Crimson Text',
                                 fontSize: 20,
-                                height: 1.8,
+                                height: 1.5,
                                 color: const Color(0xFF2C2416),
                               ) ??
                               const TextStyle(
                                 fontFamily: 'Crimson Text',
                                 fontSize: 20,
-                                height: 1.8,
+                                height: 1.5,
                                 color: AppColors.textDark,
                               ),
                         ),
