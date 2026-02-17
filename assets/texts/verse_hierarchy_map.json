@@ -75,26 +75,30 @@
             {
               "title": "The literal meaning of the commitment to compose",
               "path": "1.3.2",
-              "verses": [
-                "1.1cd"
-              ],
+              "verses": [],
               "children": [
                 {
                   "title": "Setting out the subject matter to be elaborated",
                   "path": "1.3.2.1",
-                  "verses": [],
+                  "verses": [
+                    "1.1c"
+                  ],
                   "children": []
                 },
                 {
                   "title": "Abandoning personal invention",
                   "path": "1.3.2.2",
-                  "verses": [],
+                  "verses": [
+                    "1.1d"
+                  ],
                   "children": []
                 },
                 {
                   "title": "Abandoning the fault of repetition",
                   "path": "1.3.2.3",
-                  "verses": [],
+                  "verses": [
+                    "1.1d"
+                  ],
                   "children": []
                 }
               ]
@@ -168,15 +172,13 @@
         {
           "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments",
           "path": "2.1",
-          "verses": [
-            "1.4ab"
-          ],
+          "verses": [],
           "children": [
             {
               "title": "Their nature",
               "path": "2.1.1",
               "verses": [
-                "1.4cd"
+                "1.4ab"
               ],
               "children": []
             },
@@ -189,7 +191,9 @@
             {
               "title": "The extent of the benefits it brings",
               "path": "2.1.3",
-              "verses": [],
+              "verses": [
+                "1.4cd"
+              ],
               "children": []
             }
           ]
@@ -473,26 +477,7 @@
                             "1.29",
                             "1.30"
                           ],
-                          "children": [
-                            {
-                              "title": "Those possessing the cause—ignorance",
-                              "path": "3.1.3.2.2.2.1",
-                              "verses": [],
-                              "children": []
-                            },
-                            {
-                              "title": "Those experiencing result—destitution of happiness",
-                              "path": "3.1.3.2.2.2.2",
-                              "verses": [],
-                              "children": []
-                            },
-                            {
-                              "title": "Those tormented by suffering",
-                              "path": "3.1.3.2.2.2.3",
-                              "verses": [],
-                              "children": []
-                            }
-                          ]
+                          "children": []
                         },
                         {
                           "title": "It does not depend on getting anything back",
@@ -618,14 +603,13 @@
                 {
                   "title": "Taking refuge",
                   "path": "3.2.1.2",
-                  "verses": [
-                    "2.26ab"
-                  ],
+                  "verses": [],
                   "children": [
                     {
                       "title": "Classifications",
                       "path": "3.2.1.2.1",
                       "verses": [
+                        "2.26ab",
                         "2.26cd"
                       ],
                       "children": []
@@ -2211,14 +2195,14 @@
                     {
                       "title": "Showing its cause",
                       "path": "4.2.2.3.2",
-                      "verses": [
-                        "5.29cd"
-                      ],
+                      "verses": [],
                       "children": [
                         {
                           "title": "Keeping in mind the faults of its loss",
                           "path": "4.2.2.3.2.1",
-                          "verses": [],
+                          "verses": [
+                            "5.29cd"
+                          ],
                           "children": []
                         },
                         {
@@ -2905,16 +2889,16 @@
                     {
                       "title": "The means of averting that cause",
                       "path": "4.3.2.1.3",
-                      "verses": [],
+                      "verses": [
+                        "6.9",
+                        "6.10"
+                      ],
                       "children": []
                     },
                     {
                       "title": "Keeping in mind the means of averting the cause of the cause",
                       "path": "4.3.2.1.4",
-                      "verses": [
-                        "6.9",
-                        "6.10"
-                      ],
+                      "verses": [],
                       "children": [
                         {
                           "title": "General explanation distinguishing desirable and undesirable dharmas",
@@ -3072,7 +3056,6 @@
                                               "title": "Summary",
                                               "path": "4.3.2.1.4.2.1.1.2.2.3",
                                               "verses": [
-                                                "6.27",
                                                 "6.31",
                                                 "6.33",
                                                 "6.34"
@@ -4215,7 +4198,9 @@
                                 {
                                   "title": "Briefly",
                                   "path": "4.4.4.2.1.2.2.1",
-                                  "verses": [],
+                                  "verses": [
+                                    "7.49cd"
+                                  ],
                                   "children": [
                                     "7.46ab"
                                   ]
@@ -4223,9 +4208,7 @@
                                 {
                                   "title": "Pride in actions",
                                   "path": "4.4.4.2.1.2.2.2",
-                                  "verses": [
-                                    "7.49cd"
-                                  ],
+                                  "verses": [],
                                   "children": [
                                     {
                                       "title": "Briefly",
@@ -4585,14 +4568,14 @@
                             {
                               "title": "The faults of the desired object",
                               "path": "4.5.1.2.3.1.2",
-                              "verses": [
-                                "8.8cd"
-                              ],
+                              "verses": [],
                               "children": [
                                 {
                                   "title": "They destroy great benefits",
                                   "path": "4.5.1.2.3.1.2.1",
-                                  "verses": [],
+                                  "verses": [
+                                    "8.8cd"
+                                  ],
                                   "children": []
                                 },
                                 {
@@ -5998,14 +5981,14 @@
                             {
                               "title": "Abandoning objections about these graduations",
                               "path": "4.6.2.1.1.3.3",
-                              "verses": [
-                                "9.4cd"
-                              ],
+                              "verses": [],
                               "children": [
                                 {
                                   "title": "Abandoning the objection that practice is meaningless",
                                   "path": "4.6.2.1.1.3.3.1",
-                                  "verses": [],
+                                  "verses": [
+                                    "9.4cd"
+                                  ],
                                   "children": []
                                 },
                                 {
@@ -6253,25 +6236,34 @@
                             {
                               "title": "Presenting the objection",
                               "path": "4.6.2.1.2.3.2.1",
-                              "verses": ["9.27cd"],
+                              "verses": [
+                                "9.27cd"
+                              ],
                               "children": []
                             },
                             {
                               "title": "The logic which refutes the objection",
                               "path": "4.6.2.1.2.3.2.2",
-                              "verses": ["9.28ab"],
+                              "verses": [
+                                "9.28ab"
+                              ],
                               "children": []
                             },
                             {
                               "title": "A counterobjection",
                               "path": "4.6.2.1.2.3.2.3",
-                              "verses": ["9.28cd", "9.29ab"],
+                              "verses": [
+                                "9.28cd",
+                                "9.29ab"
+                              ],
                               "children": []
                             },
                             {
                               "title": "Establishing the pervasion for the counter objection",
                               "path": "4.6.2.1.2.3.2.4",
-                              "verses": ["9.29cd"],
+                              "verses": [
+                                "9.29cd"
+                              ],
                               "children": []
                             }
                           ]
@@ -6630,7 +6622,8 @@
                                       "title": "Having no fear",
                                       "path": "4.6.2.2.2.6.3.4.2",
                                       "verses": [
-                                        "9.56ab"
+                                        "9.56ab",
+                                        "9.56cd"
                                       ],
                                       "children": []
                                     }
@@ -6647,9 +6640,7 @@
                 {
                   "title": "How to engage in meditation on emptiness",
                   "path": "4.6.2.3",
-                  "verses": [
-                    "9.56cd"
-                  ],
+                  "verses": [],
                   "children": [
                     {
                       "title": "How to engage in meditation on the non-self of the individual",
@@ -6692,14 +6683,14 @@
                                     {
                                       "title": "Establishing the pervasion",
                                       "path": "4.6.2.3.1.2.1.1.2",
-                                      "verses": [
-                                        "9.60cd"
-                                      ],
+                                      "verses": [],
                                       "children": [
                                         {
                                           "title": "The violation of its intrinsic nature",
                                           "path": "4.6.2.3.1.2.1.1.2.1",
-                                          "verses": [],
+                                          "verses": [
+                                            "9.60cd"
+                                          ],
                                           "children": []
                                         },
                                         {
@@ -6793,14 +6784,14 @@
                                     {
                                       "title": "Answer",
                                       "path": "4.6.2.3.1.2.1.3.2",
-                                      "verses": [
-                                        "9.66cd"
-                                      ],
+                                      "verses": [],
                                       "children": [
                                         {
                                           "title": "The consequence that all beings are one",
                                           "path": "4.6.2.3.1.2.1.3.2.1",
-                                          "verses": [],
+                                          "verses": [
+                                            "9.66cd"
+                                          ],
                                           "children": []
                                         },
                                         {
@@ -6934,14 +6925,14 @@
                                 {
                                   "title": "Response",
                                   "path": "4.6.2.3.1.3.2.2",
-                                  "verses": [
-                                    "9.75cd"
-                                  ],
+                                  "verses": [],
                                   "children": [
                                     {
                                       "title": "Establishing that sentient beings are designated",
                                       "path": "4.6.2.3.1.3.2.2.1",
-                                      "verses": [],
+                                      "verses": [
+                                        "9.75cd"
+                                      ],
                                       "children": []
                                     },
                                     {
@@ -6992,9 +6983,7 @@
                         {
                           "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness",
                           "path": "4.6.2.3.1.4",
-                          "verses": [
-                            "7.76"
-                          ],
+                          "verses": [],
                           "children": [
                             {
                               "title": "Mindfulness of the body",
@@ -7363,7 +7352,8 @@
                                           "title": "Our position does not have that fault",
                                           "path": "4.6.2.3.1.4.4.2.2.3",
                                           "verses": [
-                                            "9.110ab"
+                                            "9.110ab",
+                                            "9.110cd"
                                           ],
                                           "children": []
                                         }
@@ -7382,16 +7372,17 @@
                 {
                   "title": "Ceasing to grasp at true existence",
                   "path": "4.6.2.4",
-                  "verses": [
-                    "9.110cd"
-                  ],
+                  "verses": [],
                   "children": [
                     {
                       "title": "There is no reason that establishes all dharmas as having inherent nature",
                       "path": "4.6.2.4.1",
                       "verses": [
                         "9.111",
-                        "9.112"
+                        "9.112",
+                        "9.113",
+                        "9.114",
+                        "9.115"
                       ],
                       "children": []
                     },
@@ -7509,15 +7500,15 @@
                                             {
                                               "title": "Refuting Īśvara as self",
                                               "path": "4.6.2.4.2.1.2.2.1.1.3",
-                                              "verses": [
-                                                "9.120cd"
-                                              ],
+                                              "verses": [],
                                               "children": []
                                             },
                                             {
                                               "title": "Refuting Īśvara as inconceivable",
                                               "path": "4.6.2.4.2.1.2.2.1.1.4",
-                                              "verses": [],
+                                              "verses": [
+                                                "9.120cd"
+                                              ],
                                               "children": []
                                             }
                                           ]
@@ -7550,14 +7541,14 @@
                                         {
                                           "title": "Contradictions in his being a creator",
                                           "path": "4.6.2.4.2.1.2.2.1.3",
-                                          "verses": [
-                                            "9.122cd"
-                                          ],
+                                          "verses": [],
                                           "children": [
                                             {
                                               "title": "Contradictory to a temporary effect",
                                               "path": "4.6.2.4.2.1.2.2.1.3.1",
-                                              "verses": [],
+                                              "verses": [
+                                                "9.122cd"
+                                              ],
                                               "children": []
                                             },
                                             {
@@ -7571,14 +7562,14 @@
                                             {
                                               "title": "Refuting his dependence",
                                               "path": "4.6.2.4.2.1.2.2.1.3.3",
-                                              "verses": [
-                                                "9.123cd"
-                                              ],
+                                              "verses": [],
                                               "children": [
                                                 {
                                                   "title": "Everything being an effect of Īśvara contradicts his dependence",
                                                   "path": "4.6.2.4.2.1.2.2.1.3.3.1",
-                                                  "verses": [],
+                                                  "verses": [
+                                                    "9.123cd"
+                                                  ],
                                                   "children": []
                                                 },
                                                 {
@@ -7622,7 +7613,8 @@
                                       "title": "Refuting the Vaiśeṣika tradition of arising from sempiternal particles",
                                       "path": "4.6.2.4.2.1.2.2.2",
                                       "verses": [
-                                        "9.126ab"
+                                        "9.126ab",
+                                        "9.126cd"
                                       ],
                                       "children": []
                                     }
@@ -7633,9 +7625,7 @@
                             {
                               "title": "Refuting arising from self",
                               "path": "4.6.2.4.2.1.3",
-                              "verses": [
-                                "9.126cd"
-                              ],
+                              "verses": [],
                               "children": [
                                 {
                                   "title": "Formulating the position of the other [i.e. Sāṃkhya] tradition",
@@ -7680,8 +7670,6 @@
                                           "title": "Refuting the primal substance",
                                           "path": "4.6.2.4.2.1.3.2.1.1",
                                           "verses": [
-                                            "6.28ab",
-                                            "6.28cd",
                                             "9.128ab"
                                           ],
                                           "children": []
@@ -7707,14 +7695,14 @@
                                     {
                                       "title": "Refuting pleasure and so forth being external",
                                       "path": "4.6.2.4.2.1.3.2.2",
-                                      "verses": [
-                                        "9.129cd"
-                                      ],
+                                      "verses": [],
                                       "children": [
                                         {
                                           "title": "Refuting by not perceiving the appearance",
                                           "path": "4.6.2.4.2.1.3.2.2.1",
-                                          "verses": [],
+                                          "verses": [
+                                            "9.129cd"
+                                          ],
                                           "children": []
                                         },
                                         {
@@ -7800,14 +7788,14 @@
                                     {
                                       "title": "Contradictions in an existent arising",
                                       "path": "4.6.2.4.2.1.3.2.4",
-                                      "verses": [
-                                        "9.134cd"
-                                      ],
+                                      "verses": [],
                                       "children": [
                                         {
                                           "title": "Presenting the position to be refuted",
                                           "path": "4.6.2.4.2.1.3.2.4.1",
-                                          "verses": [],
+                                          "verses": [
+                                            "9.134cd"
+                                          ],
                                           "children": []
                                         },
                                         {
@@ -7829,15 +7817,14 @@
                                         {
                                           "title": "Abandoning objections",
                                           "path": "4.6.2.4.2.1.3.2.4.4",
-                                          "verses": [
-                                            "9.136cd",
-                                            "9.5"
-                                          ],
+                                          "verses": [],
                                           "children": [
                                             {
                                               "title": "The roles are the same",
                                               "path": "4.6.2.4.2.1.3.2.4.4.1",
-                                              "verses": [],
+                                              "verses": [
+                                                "9.136cd"
+                                              ],
                                               "children": []
                                             },
                                             {
@@ -7916,7 +7903,6 @@
                           "title": "Showing that there is no arising or ceasing, coming or going",
                           "path": "4.6.2.4.3.2",
                           "verses": [
-                            "9.142cd",
                             "9.142ab"
                           ],
                           "children": []
@@ -7929,7 +7915,9 @@
                             {
                               "title": "Showing that dependent origination is like an illusion",
                               "path": "4.6.2.4.3.3.1",
-                              "verses": [],
+                              "verses": [
+                                "9.142cd"
+                              ],
                               "children": []
                             },
                             {
@@ -7987,14 +7975,14 @@
                                     {
                                       "title": "Refuting something nonexistent arising as an effect",
                                       "path": "4.6.2.4.3.3.3.1.2",
-                                      "verses": [
-                                        "9.145cd"
-                                      ],
+                                      "verses": [],
                                       "children": [
                                         {
                                           "title": "Presenting the logic in brief",
                                           "path": "4.6.2.4.3.3.3.1.2.1",
-                                          "verses": [],
+                                          "verses": [
+                                            "9.145cd"
+                                          ],
                                           "children": []
                                         },
                                         {
@@ -8003,14 +7991,16 @@
                                           "verses": [
                                             "9.146",
                                             "9.147",
-                                            "9.148"
+                                            "9.148ab"
                                           ],
                                           "children": []
                                         },
                                         {
                                           "title": "Refuting [the cessation of] the object itself",
                                           "path": "4.6.2.4.3.3.3.1.2.3",
-                                          "verses": [],
+                                          "verses": [
+                                            "9.148cd"
+                                          ],
                                           "children": []
                                         }
                                       ]
@@ -8702,7 +8692,7 @@
         "title": "The literal meaning of homage and praise"
       }
     ],
-    "1.1cd": [
+    "1.1c": [
       {
         "section": "1",
         "title": "The purposes and relation"
@@ -8714,6 +8704,28 @@
       {
         "section": "1.3.2",
         "title": "The literal meaning of the commitment to compose"
+      },
+      {
+        "section": "1.3.2.1",
+        "title": "Setting out the subject matter to be elaborated"
+      }
+    ],
+    "1.1d": [
+      {
+        "section": "1",
+        "title": "The purposes and relation"
+      },
+      {
+        "section": "1.3",
+        "title": "The literal meaning of each section"
+      },
+      {
+        "section": "1.3.2",
+        "title": "The literal meaning of the commitment to compose"
+      },
+      {
+        "section": "1.3.2.2",
+        "title": "Abandoning personal invention"
       }
     ],
     "1.2": [
@@ -9240,6 +9252,10 @@
       {
         "section": "2.1",
         "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments"
+      },
+      {
+        "section": "2.1.1",
+        "title": "Their nature"
       }
     ],
     "1.4cd": [
@@ -9252,8 +9268,8 @@
         "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments"
       },
       {
-        "section": "2.1.1",
-        "title": "Their nature"
+        "section": "2.1.3",
+        "title": "The extent of the benefits it brings"
       }
     ],
     "1.5ab": [
@@ -9560,6 +9576,10 @@
       {
         "section": "3.2.1.2",
         "title": "Taking refuge"
+      },
+      {
+        "section": "3.2.1.2.1",
+        "title": "Classifications"
       }
     ],
     "2.26cd": [
@@ -23074,8 +23094,8 @@
         "title": "Stable engagement"
       },
       {
-        "section": "4.4.4.2.1.2.2.2",
-        "title": "Pride in actions"
+        "section": "4.4.4.2.1.2.2.1",
+        "title": "Briefly"
       }
     ],
     "7.5": [
@@ -24142,32 +24162,6 @@
       {
         "section": "4.4.4.2.3",
         "title": "Self-control"
-      }
-    ],
-    "7.76": [
-      {
-        "section": "4",
-        "title": "The cooperating condition: subsequently accomplishing the training"
-      },
-      {
-        "section": "4.6",
-        "title": "Wisdom"
-      },
-      {
-        "section": "4.6.2",
-        "title": "It is the wisdom of the emptiness of intrinsic nature"
-      },
-      {
-        "section": "4.6.2.3",
-        "title": "How to engage in meditation on emptiness"
-      },
-      {
-        "section": "4.6.2.3.1",
-        "title": "How to engage in meditation on the non-self of the individual"
-      },
-      {
-        "section": "4.6.2.3.1.4",
-        "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
       }
     ],
     "7.7ab": [
@@ -29924,6 +29918,10 @@
       {
         "section": "4.5.1.2.3.1.2",
         "title": "The faults of the desired object"
+      },
+      {
+        "section": "4.5.1.2.3.1.2.1",
+        "title": "They destroy great benefits"
       }
     ],
     "8.9": [
@@ -35610,6 +35608,10 @@
       {
         "section": "4.6.2.1.1.3.3",
         "title": "Abandoning objections about these graduations"
+      },
+      {
+        "section": "4.6.2.1.1.3.3.1",
+        "title": "Abandoning the objection that practice is meaningless"
       }
     ],
     "9.5": [
@@ -35906,8 +35908,28 @@
         "title": "It is the wisdom of the emptiness of intrinsic nature"
       },
       {
-        "section": "4.6.2.3",
-        "title": "How to engage in meditation on emptiness"
+        "section": "4.6.2.2",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.2.2",
+        "title": "Abandoning the objections of śrāvakas"
+      },
+      {
+        "section": "4.6.2.2.2.6",
+        "title": "Explaining extensively the criteria for establishing the Mahāyāna scriptures as Buddha's word"
+      },
+      {
+        "section": "4.6.2.2.2.6.3",
+        "title": "The function of the two cognitions"
+      },
+      {
+        "section": "4.6.2.2.2.6.3.4",
+        "title": "It is not something to be afraid of"
+      },
+      {
+        "section": "4.6.2.2.2.6.3.4.2",
+        "title": "Having no fear"
       }
     ],
     "9.57": [
@@ -36160,6 +36182,10 @@
       {
         "section": "4.6.2.3.1.2.1.1.2",
         "title": "Establishing the pervasion"
+      },
+      {
+        "section": "4.6.2.3.1.2.1.1.2.1",
+        "title": "The violation of its intrinsic nature"
       }
     ],
     "9.61ab": [
@@ -36564,6 +36590,10 @@
       {
         "section": "4.6.2.3.1.2.1.3.2",
         "title": "Answer"
+      },
+      {
+        "section": "4.6.2.3.1.2.1.3.2.1",
+        "title": "The consequence that all beings are one"
       }
     ],
     "9.67ab": [
@@ -37052,6 +37082,10 @@
       {
         "section": "4.6.2.3.1.3.2.2",
         "title": "Response"
+      },
+      {
+        "section": "4.6.2.3.1.3.2.2.1",
+        "title": "Establishing that sentient beings are designated"
       }
     ],
     "9.76ab": [
@@ -38247,10 +38281,10 @@
     "1.2.3": "1.1",
     "1.3": "1.1ab",
     "1.3.1": "1.1ab",
-    "1.3.2": "1.1cd",
-    "1.3.2.1": "1.1cd",
-    "1.3.2.2": "1.1cd",
-    "1.3.2.3": "1.1cd",
+    "1.3.2": "1.1c",
+    "1.3.2.1": "1.1c",
+    "1.3.2.2": "1.1d",
+    "1.3.2.3": "1.1d",
     "1.3.3": "1.2",
     "1.3.3.1": "1.2",
     "1.3.3.2": "1.3ab",
@@ -38261,9 +38295,9 @@
     "1.4.1.3": "1.1",
     "2": "1.4ab",
     "2.1": "1.4ab",
-    "2.1.1": "1.4cd",
+    "2.1.1": "1.4ab",
     "2.1.2": "1.4ab",
-    "2.1.3": "1.4ab",
+    "2.1.3": "1.4cd",
     "2.2": "1.5ab",
     "3": "1.6ab",
     "3.1": "1.6ab",
@@ -38776,8 +38810,8 @@
     "4.4.4.2.1.2.1.3": "7.48",
     "4.4.4.2.1.2.2": "7.49cd",
     "4.4.4.2.1.2.2.1": "7.49cd",
-    "4.4.4.2.1.2.2.2": "7.49cd",
-    "4.4.4.2.1.2.2.2.1": "7.49cd",
+    "4.4.4.2.1.2.2.2": "7.50",
+    "4.4.4.2.1.2.2.2.1": "7.50",
     "4.4.4.2.1.2.2.2.2": "7.50",
     "4.4.4.2.1.2.2.2.3": "7.51",
     "4.4.4.2.1.2.2.3": "7.52",
@@ -38822,7 +38856,6 @@
     "4.5.1.2.3.1.1.3": "8.6cd",
     "4.5.1.2.3.1.1.4": "8.7",
     "4.5.1.2.3.1.1.5": "8.8ab",
-    "4.5.1.2.3.1.2": "8.8cd",
     "4.5.1.2.3.1.2.1": "8.8cd",
     "4.5.1.2.3.1.2.2": "8.9",
     "4.5.1.2.3.1.2.3": "8.10",
@@ -39081,7 +39114,7 @@
     "4.6.2.2.2.6.3.4": "9.55",
     "4.6.2.2.2.6.3.4.1": "9.55",
     "4.6.2.2.2.6.3.4.2": "9.56ab",
-    "4.6.2.3": "9.56cd",
+    "4.6.2.3": "9.57",
     "4.6.2.3.1": "9.57",
     "4.6.2.3.1.1": "9.57",
     "4.6.2.3.1.2": "9.60ab",
@@ -39126,7 +39159,7 @@
     "4.6.2.3.1.3.2.2.2.2": "9.76cd",
     "4.6.2.3.1.3.2.2.3": "9.77ab",
     "4.6.2.3.1.3.2.2.4": "9.77cd",
-    "4.6.2.3.1.4": "7.76",
+    "4.6.2.3.1.4": "9.78",
     "4.6.2.3.1.4.1": "9.78",
     "4.6.2.3.1.4.1.1": "9.78",
     "4.6.2.3.1.4.1.2": "9.80",
