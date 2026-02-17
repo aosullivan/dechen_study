@@ -44,7 +44,8 @@ class BcvReadScreen extends StatefulWidget {
 
   /// Test-only: called when arrow-key navigation selects a section. Receives (sectionPath, firstVerseRef).
   /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
-  final void Function(String sectionPath, String firstVerseRef)? onSectionNavigateForTest;
+  final void Function(String sectionPath, String firstVerseRef)?
+      onSectionNavigateForTest;
 
   @override
   State<BcvReadScreen> createState() => _BcvReadScreenState();
@@ -155,8 +156,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.scrollToVerseIndex != null ||
-        _hasInitialHighlight) {
+    if (widget.scrollToVerseIndex != null || _hasInitialHighlight) {
       _scrollToVerseKey = GlobalKey();
     }
     _load();
@@ -269,8 +269,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
     if (_highlightSet.isEmpty) return;
-    final firstIndex =
-        _highlightSet.reduce((a, b) => a < b ? a : b);
+    final firstIndex = _highlightSet.reduce((a, b) => a < b ? a : b);
     final ref = _verseService.getVerseRef(firstIndex);
     if (ref == null) return;
     final entry = await _commentaryService.getCommentaryForRef(ref);
@@ -341,12 +340,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (ref != null &&
           BcvVerseService.baseVerseRefPattern.hasMatch(ref) &&
           currentPath.isNotEmpty) {
-        final segments =
-            _hierarchyService.getSplitVerseSegmentsSync(ref);
+        final segments = _hierarchyService.getSplitVerseSegmentsSync(ref);
         if (segments.length >= 2) {
-          final matching = segments
-              .where((s) => s.sectionPath == currentPath)
-              .toList();
+          final matching =
+              segments.where((s) => s.sectionPath == currentPath).toList();
           if (matching.length == 1) {
             final segIdx = segments.indexOf(matching.single);
             key = segIdx == 0
@@ -374,7 +371,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       measured = measured == null ? padded : measured.expandToInclude(padded);
     }
     if (measured == null) {
-      if (_sectionOverlayMeasureRetries < BcvReadConstants.maxSectionOverlayMeasureRetries) {
+      if (_sectionOverlayMeasureRetries <
+          BcvReadConstants.maxSectionOverlayMeasureRetries) {
         _sectionOverlayMeasureRetries++;
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _measureAndUpdateSectionOverlay();
@@ -612,9 +610,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     // when section has duplicate titles across chapters (e.g. "Abandoning objections")
     await _hierarchyService.getFirstVerseForSection(section);
     final preferredChapter = _currentChapterNumber;
-    final firstVerseRef =
-        _hierarchyService.getFirstVerseForSectionInChapterSync(
-            section, preferredChapter) ??
+    final firstVerseRef = _hierarchyService
+            .getFirstVerseForSectionInChapterSync(section, preferredChapter) ??
         _hierarchyService.getFirstVerseForSectionSync(section);
     if (firstVerseRef == null || firstVerseRef.isEmpty) return;
     final verseIndex = _verseService.getIndexForRefWithFallback(firstVerseRef);
@@ -690,60 +687,67 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
       {String? segmentRef}) {
-    if (_isProgrammaticNavigation || _isUserScrolling) return;
+    if (_isProgrammaticNavigation) return;
     if (_programmaticNavCooldownUntil != null &&
         DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
       return;
     }
-    final key = segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
+    final key =
+        segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
     if (visibility < 0.05) {
       _verseVisibility.remove(key);
       return;
     }
     _verseVisibility[key] = visibility;
+    // While actively scrolling, record visibility but defer processing
+    if (_isUserScrolling) return;
     _visibilityDebounceTimer?.cancel();
-    // Capture generation when timer STARTS, not when it fires
-    final capturedGen = _syncGeneration;
     _visibilityDebounceTimer = Timer(const Duration(milliseconds: 250), () {
       _visibilityDebounceTimer = null;
-      if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) return;
-      if (_programmaticNavCooldownUntil != null &&
-          DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
-        return;
+      _processVisibility();
+    });
+  }
+
+  /// Core visibility processing: pick the best verse, look up hierarchy, apply section state.
+  void _processVisibility() {
+    if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) {
+      return;
+    }
+    if (_programmaticNavCooldownUntil != null &&
+        DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
+      return;
+    }
+    final capturedGen = _syncGeneration;
+    final picked = _pickVerseClosestToViewportCenter();
+    if (picked == null) return;
+    final (pickedIdx, pickedSegRef) = picked;
+    final future = pickedSegRef != null
+        ? _hierarchyService.getHierarchyForVerse(pickedSegRef)
+        : _hierarchyService.getHierarchyForVerseIndex(pickedIdx);
+    future.then((hierarchy) {
+      if (!mounted || capturedGen != _syncGeneration) return;
+      final sectionPath = hierarchy.isNotEmpty
+          ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
+          : '';
+      var indices = _verseIndicesForSection(sectionPath);
+      if (indices.isEmpty && sectionPath.isNotEmpty) {
+        indices = {pickedIdx};
       }
-      // Check if generation changed while timer was pending
-      if (capturedGen != _syncGeneration) return;
-      final picked = _pickVerseClosestToViewportCenter();
-      if (picked == null) return;
-      final (pickedIdx, pickedSegRef) = picked;
-      final future = pickedSegRef != null
-          ? _hierarchyService.getHierarchyForVerse(pickedSegRef)
-          : _hierarchyService.getHierarchyForVerseIndex(pickedIdx);
-      future.then((hierarchy) {
-        if (!mounted || capturedGen != _syncGeneration) return;
-        final sectionPath = hierarchy.isNotEmpty
-            ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
-            : '';
-        var indices = _verseIndicesForSection(sectionPath);
-        if (indices.isEmpty && sectionPath.isNotEmpty) {
-          indices = {pickedIdx};
-        }
-        final indicesWithVisible = {...indices, pickedIdx};
-        if (_highlightSet.isNotEmpty && !_highlightSet.contains(pickedIdx)) {
-          setState(() {
-            _highlightVerseIndices = {};
-            _commentaryEntryForSelected = null;
-            _commentaryExpanded = false;
-          });
-        }
-        _applySectionState(
-          hierarchy: hierarchy,
-          verseIndices: indicesWithVisible,
-          verseIndex: pickedIdx,
-          segmentRef: pickedSegRef,
-          supersedeGen: capturedGen,
-        );
-      });
+      final indicesWithVisible = {...indices, pickedIdx};
+      if (_highlightSet.isNotEmpty && !_highlightSet.contains(pickedIdx)) {
+        setState(() {
+          _highlightVerseIndices = {};
+          _commentaryEntryForSelected = null;
+          _commentaryExpanded = false;
+        });
+      }
+      _applySectionState(
+        hierarchy: hierarchy,
+        verseIndices: indicesWithVisible,
+        verseIndex: pickedIdx,
+        segmentRef: pickedSegRef,
+        supersedeGen: capturedGen,
+      );
     });
   }
 
@@ -823,12 +827,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final flat = _hierarchyService.getFlatSectionsSync();
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
-    final viewportHeight =
-        BcvReadConstants.sectionSliderLineHeight * BcvReadConstants.sectionSliderVisibleLines;
+    final viewportHeight = BcvReadConstants.sectionSliderLineHeight *
+        BcvReadConstants.sectionSliderVisibleLines;
     final targetOffset = (idx * BcvReadConstants.sectionSliderLineHeight) -
         (viewportHeight / 2) +
         (BcvReadConstants.sectionSliderLineHeight / 2);
-    final maxOffset = (flat.length * BcvReadConstants.sectionSliderLineHeight - viewportHeight)
+    final maxOffset = (flat.length * BcvReadConstants.sectionSliderLineHeight -
+            viewportHeight)
         .clamp(0.0, double.infinity);
     final maxOffsetSafe = maxOffset.isFinite ? maxOffset : 0.0;
     final clamped = targetOffset.clamp(0.0, maxOffsetSafe).toDouble();
@@ -906,17 +911,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 ),
                 IconButton(
                   icon: Icon(
-                    _sectionSliderCollapsed
-                        ? Icons.list
-                        : Icons.list_alt,
+                    _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
                     color: AppColors.textDark,
                   ),
-                  tooltip: _sectionSliderCollapsed
-                      ? 'Show Section'
-                      : 'Hide Section',
+                  tooltip:
+                      _sectionSliderCollapsed ? 'Show Section' : 'Hide Section',
                   onPressed: () => setState(
-                      () => _sectionSliderCollapsed =
-                          !_sectionSliderCollapsed),
+                      () => _sectionSliderCollapsed = !_sectionSliderCollapsed),
                 ),
               ],
       ),
@@ -943,7 +944,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Handler for section overview: uses leaf-based nav (same as reader) so arrow keys
   /// always move through sections in verse order without skipping.
-  KeyEventResult _handleSectionOverviewKeyEvent(FocusNode node, KeyEvent event) {
+  KeyEventResult _handleSectionOverviewKeyEvent(
+      FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
     if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
       _debouncedArrowNav(() => _scrollToAdjacentSection(1));
@@ -970,8 +972,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(
-                  color: AppColors.border.withValues(alpha: 0.5)),
+              top: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
             ),
           ),
           child: Row(
@@ -980,8 +981,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               IconButton(
                 icon: const Icon(Icons.keyboard_arrow_up),
                 tooltip: 'Previous section',
-                onPressed: () => _debouncedArrowNav(
-                    () => _scrollToAdjacentSection(-1)),
+                onPressed: () =>
+                    _debouncedArrowNav(() => _scrollToAdjacentSection(-1)),
                 style: IconButton.styleFrom(
                   foregroundColor: AppColors.primary,
                 ),
@@ -1003,8 +1004,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               IconButton(
                 icon: const Icon(Icons.keyboard_arrow_down),
                 tooltip: 'Next section',
-                onPressed: () => _debouncedArrowNav(
-                    () => _scrollToAdjacentSection(1)),
+                onPressed: () =>
+                    _debouncedArrowNav(() => _scrollToAdjacentSection(1)),
                 style: IconButton.styleFrom(
                   foregroundColor: AppColors.primary,
                 ),
@@ -1035,9 +1036,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (leafOrdered.isEmpty) return;
 
     final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-    final verseRef = visibleIdx != null
-        ? _verseService.getVerseRef(visibleIdx)
-        : null;
+    final verseRef =
+        visibleIdx != null ? _verseService.getVerseRef(visibleIdx) : null;
     final currentPath = _currentSectionPath;
 
     var currentIdx = -1;
@@ -1047,7 +1047,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (currentIdx < 0 && verseRef != null && verseRef.isNotEmpty) {
       final hierarchy = _hierarchyService.getHierarchyForVerseSync(verseRef);
       if (hierarchy.isNotEmpty) {
-        final leafPath = hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
+        final leafPath =
+            hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
         if (leafPath.isNotEmpty) {
           currentIdx = leafOrdered.indexWhere((s) => s.path == leafPath);
         }
@@ -1305,7 +1306,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         BcvVerticalResizeHandle(onDragDelta: (dy) {
           setState(() {
             if (_sectionPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
-                _breadcrumbPanelHeight - dy >= BcvReadConstants.panelMinHeight) {
+                _breadcrumbPanelHeight - dy >=
+                    BcvReadConstants.panelMinHeight) {
               _sectionPanelHeight += dy;
               _breadcrumbPanelHeight -= dy;
             }
@@ -1346,6 +1348,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               _isUserScrolling = true;
             } else if (notification is ScrollEndNotification) {
               _isUserScrolling = false;
+              // Process deferred visibility now that scroll settled
+              if (_verseVisibility.isNotEmpty && !_isProgrammaticNavigation) {
+                _visibilityDebounceTimer?.cancel();
+                _visibilityDebounceTimer =
+                    Timer(const Duration(milliseconds: 100), () {
+                  _visibilityDebounceTimer = null;
+                  _processVisibility();
+                });
+              }
             }
             return false;
           },
@@ -1421,7 +1432,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                       _scrollToVerseKey != null &&
                                       (segmentIndex ?? 0) == 0;
                               final effectiveStyle = verseStyle ??
-                                  Theme.of(context).textTheme.bodyLarge!
+                                  Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
                                       .copyWith(
                                         fontFamily: 'Crimson Text',
                                         fontSize: 18,
@@ -1465,7 +1478,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                             /// For ab/cd split: ab = first half of lines, cd = second half.
                             List<int>? lineRangeForSegment(
                                 int segmentIndex, int lineCount) {
-                              if (lineCount < 2 || segmentIndex > 1) return null;
+                              if (lineCount < 2 || segmentIndex > 1) {
+                                return null;
+                              }
                               final half = lineCount ~/ 2;
                               if (segmentIndex == 0) {
                                 return [0, half - 1];
@@ -1479,12 +1494,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 final idx = indices.single;
                                 final ref = _verseService.getVerseRef(idx);
                                 if (ref != null &&
-                                    BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
+                                    BcvVerseService.baseVerseRefPattern
+                                        .hasMatch(ref)) {
                                   final segments = _hierarchyService
                                       .getSplitVerseSegmentsSync(ref);
                                   if (segments.length >= 2) {
-                                    final text =
-                                        idx < _verses.length ? _verses[idx] : '';
+                                    final text = idx < _verses.length
+                                        ? _verses[idx]
+                                        : '';
                                     final lines = text.split('\n');
                                     if (lines.length >= 2) {
                                       return Column(
@@ -1497,8 +1514,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                             SizedBox(
                                               width: double.infinity,
                                               child: Container(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
                                                         horizontal: 12,
                                                         vertical: 8),
                                                 decoration: boxDecoration(
@@ -1584,16 +1601,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                               ? _toggleCommentaryExpanded
                                               : _openCommentaryBottomSheet,
                                           icon: Icon(
-                                            isLaptop &&
-                                                    _commentaryExpanded
+                                            isLaptop && _commentaryExpanded
                                                 ? Icons.expand_less
                                                 : Icons.menu_book,
                                             size: 18,
                                             color: AppColors.primary,
                                           ),
                                           label: Text(
-                                            isLaptop &&
-                                                    _commentaryExpanded
+                                            isLaptop && _commentaryExpanded
                                                 ? 'Hide commentary'
                                                 : 'Commentary',
                                             style: const TextStyle(
@@ -1622,12 +1637,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
                               // Section highlight is drawn via animated overlay.
                               // For split verses, render as two blocks so overlay can highlight each segment.
-                              final ref = _verseService.getVerseRef(globalIndex);
+                              final ref =
+                                  _verseService.getVerseRef(globalIndex);
                               final isSplit = ref != null &&
-                                  BcvVerseService.baseVerseRefPattern.hasMatch(ref) &&
+                                  BcvVerseService.baseVerseRefPattern
+                                      .hasMatch(ref) &&
                                   _hierarchyService
-                                      .getSplitVerseSegmentsSync(ref)
-                                      .length >= 2;
+                                          .getSplitVerseSegmentsSync(ref)
+                                          .length >=
+                                      2;
                               if (isSplit) {
                                 final segments = _hierarchyService
                                     .getSplitVerseSegmentsSync(ref);
@@ -1655,8 +1673,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                   children.add(
                                     SizedBox(
                                       width: double.infinity,
-                                      child: buildVerseContent(
-                                          globalIndex, verse),
+                                      child:
+                                          buildVerseContent(globalIndex, verse),
                                     ),
                                   );
                                 }
@@ -1664,8 +1682,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 children.add(
                                   SizedBox(
                                     width: double.infinity,
-                                    child: buildVerseContent(
-                                        globalIndex, verse),
+                                    child:
+                                        buildVerseContent(globalIndex, verse),
                                   ),
                                 );
                               }
@@ -1708,11 +1726,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             behavior: HitTestBehavior.opaque,
             onHorizontalDragUpdate: (d) {
               setState(() {
-                final w =
-                    (_rightPanelsWidth - d.delta.dx)
-                        .clamp(
-                            BcvReadConstants.rightPanelsMinWidth, BcvReadConstants.rightPanelsMaxWidth)
-                        .toDouble();
+                final w = (_rightPanelsWidth - d.delta.dx)
+                    .clamp(BcvReadConstants.rightPanelsMinWidth,
+                        BcvReadConstants.rightPanelsMaxWidth)
+                    .toDouble();
                 _rightPanelsWidth = w;
               });
             },
@@ -1766,13 +1783,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: maxPanelsHeight,
-              child: SingleChildScrollView(
-                child: ListenableBuilder(
-                  listenable: _sectionChangeNotifier,
-                  builder: (_, __) => _buildPanelsColumn(),
-                ),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: maxPanelsHeight),
+              child: ListenableBuilder(
+                listenable: _sectionChangeNotifier,
+                builder: (_, __) => _buildPanelsColumn(),
               ),
             ),
             Expanded(child: scrollContent),

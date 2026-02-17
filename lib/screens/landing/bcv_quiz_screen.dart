@@ -289,45 +289,46 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Section text – scrollable so rest fits on one screen
-                Expanded(
+                // Section text – compact box, larger readable text
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 200),
                   child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: _showAnswer
-                            ? (_selectedChapter == _correctChapterNumber
-                                ? Colors.green
-                                : AppColors.wrong)
-                            : AppColors.border,
-                        width: _showAnswer ? 2 : 1,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 3,
-                          offset: const Offset(0, 1),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: _showAnswer
+                              ? (_selectedChapter == _correctChapterNumber
+                                  ? Colors.green
+                                  : AppColors.wrong)
+                              : AppColors.border,
+                          width: _showAnswer ? 2 : 1,
                         ),
-                      ],
-                    ),
-                    child: SingleChildScrollView(
-                      child: BcvVerseText(
-                        text: _sectionText,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontFamily: 'Crimson Text',
-                              fontSize: 15,
-                              height: 1.5,
-                            ) ??
-                            const TextStyle(
-                              fontFamily: 'Crimson Text',
-                              fontSize: 15,
-                              height: 1.5,
-                            ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: SingleChildScrollView(
+                        child: BcvVerseText(
+                          text: _sectionText,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontFamily: 'Crimson Text',
+                                fontSize: 18,
+                                height: 1.65,
+                              ) ??
+                              const TextStyle(
+                                fontFamily: 'Crimson Text',
+                                fontSize: 18,
+                                height: 1.65,
+                              ),
+                        ),
                       ),
                     ),
-                  ),
                 ),
                 const SizedBox(height: 10),
 
@@ -341,16 +342,16 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 ),
                 const SizedBox(height: 8),
 
-                // Chapter options: 2 neat rows of 5
+                // Chapter options: 2 neat rows of 5 (number + title per cell)
                 LayoutBuilder(
                   builder: (context, constraints) {
                     const crossAxisCount = 5;
                     const spacing = 8.0;
-                    const rowHeight = 44.0;
+                    const rowHeight = 58.0;
                     final cellWidth = (constraints.maxWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
                     final rowCount = (_chapters.length / crossAxisCount).ceil();
                     final gridHeight = rowCount * rowHeight + (rowCount - 1) * spacing;
-                    const maxGridHeight = 96.0;
+                    const maxGridHeight = 124.0;
                     return SizedBox(
                       height: gridHeight > maxGridHeight ? maxGridHeight : gridHeight,
                       child: GridView.builder(
@@ -422,7 +423,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                               borderRadius: BorderRadius.circular(8),
                               child: Container(
                                 margin: const EdgeInsets.all(0),
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: isCorrect
                                       ? Colors.green.withValues(alpha: 0.2)
@@ -447,17 +448,36 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                   ],
                                 ),
                                 alignment: Alignment.center,
-                                child: Text(
-                                  '${chapter.number}',
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: isCorrect
-                                            ? Colors.green.shade800
-                                            : (isWrong ? AppColors.wrong : AppColors.textDark),
-                                      ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      '${chapter.number}',
+                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: isCorrect
+                                                ? Colors.green.shade800
+                                                : (isWrong ? AppColors.wrong : AppColors.textDark),
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      chapter.title,
+                                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                            color: isCorrect
+                                                ? Colors.green.shade800
+                                                : (isWrong ? AppColors.wrong : AppColors.textDark),
+                                            height: 1.2,
+                                          ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
