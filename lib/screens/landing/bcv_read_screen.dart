@@ -75,8 +75,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
 
-  /// When true, show commentary inline below the verses (instead of modal).
-  bool _commentaryExpanded = false;
   final _commentaryService = CommentaryService.instance;
   final _hierarchyService = VerseHierarchyService.instance;
 
@@ -131,6 +129,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
   bool _mobileNavCollapseInitialized = false;
+  bool _isMobile = false;
 
   final FocusNode _sectionOverviewFocusNode = FocusNode();
 
@@ -185,6 +184,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       fontFamily: 'Crimson Text',
       color: AppColors.textDark,
     );
+    _isMobile = MediaQuery.of(context).size.width < BcvReadConstants.laptopBreakpoint;
   }
 
   @override
@@ -215,7 +215,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _verseKeys.clear();
       _verseSegmentKeys.clear();
       _commentaryEntryForSelected = null;
-      _commentaryExpanded = false;
       _syncGeneration = 0;
       _isProgrammaticNavigation = false;
       _sectionSliderScrollRequestId = 0;
@@ -279,9 +278,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     // Guard: treat chapter click as programmatic navigation so visibility
     // callbacks don't overwrite the expected focus.
     _syncGeneration++;
+    final capturedGen = _syncGeneration;
     _isProgrammaticNavigation = true;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
+    _verseVisibility.clear(); // Discard stale visibility data
+
+    // Clear any verse selection — user is navigating to a new chapter.
+    _highlightVerseIndices = {};
+    _minHighlightIndex = null;
+    _firstHighlightVerseIndex = null;
+    _commentaryEntryForSelected = null;
 
     // Update breadcrumb to the first section of the target chapter.
     final chapter = _chapters.firstWhere(
@@ -293,7 +300,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _hierarchyService
         .getHierarchyForVerseIndex(firstVerseIndex)
         .then((hierarchy) {
-      if (!mounted) return;
+      if (!mounted || capturedGen != _syncGeneration) return;
       final sectionPath = hierarchy.isNotEmpty
           ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
           : '';
@@ -305,6 +312,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         hierarchy: hierarchy,
         verseIndices: {...indices, firstVerseIndex},
         verseIndex: firstVerseIndex,
+        supersedeGen: capturedGen,
       );
     });
 
@@ -491,7 +499,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _minHighlightIndex = null;
         _firstHighlightVerseIndex = null;
         _commentaryEntryForSelected = null;
-        _commentaryExpanded = false;
       });
       return;
     }
@@ -510,7 +517,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _minHighlightIndex = globalIndex;
         _firstHighlightVerseIndex = globalIndex;
         _commentaryEntryForSelected = null;
-        _commentaryExpanded = false;
       });
       _scrollToVerseIndex(globalIndex);
       return;
@@ -547,16 +553,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _minHighlightIndex = firstInSection;
       _firstHighlightVerseIndex = firstInSection;
       _commentaryEntryForSelected = entry;
-      _commentaryExpanded = false;
     });
+    _showCommentary();
     _scrollToVerseIndex(firstInSection);
   }
 
-  void _toggleCommentaryExpanded() {
-    setState(() {
-      _commentaryExpanded = !_commentaryExpanded;
-    });
-  }
 
   /// On mobile, open commentary in a bottom sheet to avoid cluttering the reader.
   void _openCommentaryBottomSheet() {
@@ -573,7 +574,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         expand: false,
         builder: (_, scrollController) => SingleChildScrollView(
           controller: scrollController,
-          child: BcvInlineCommentaryPanel(
+          child:           BcvInlineCommentaryPanel(
             entry: entry,
             verseService: _verseService,
             onClose: () => Navigator.of(ctx).pop(),
@@ -581,6 +582,44 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ),
       ),
     );
+  }
+
+  void _showCommentary() {
+    final entry = _commentaryEntryForSelected;
+    if (entry == null) return;
+    if (_isMobile) {
+      _openCommentaryBottomSheet();
+    } else {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext ctx) => Dialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.of(ctx).pop(),
+                  ),
+                ),
+                Expanded(
+                  child: BcvInlineCommentaryPanel(
+                    entry: entry,
+                    verseService: _verseService,
+                    onClose: () => Navigator.of(ctx).pop(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   void _setInitialBreadcrumb() {
@@ -655,6 +694,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _isProgrammaticNavigation = true;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
+    _verseVisibility.clear(); // Discard stale visibility data
 
     final hierarchy = _hierarchyService.getHierarchyForSectionSync(section);
     if (hierarchy.isNotEmpty) {
@@ -686,6 +726,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _isProgrammaticNavigation = true;
+    _verseVisibility.clear(); // Discard stale visibility data
     // Try scrolling using existing verse GlobalKey (avoids full rebuild)
     final existingKey = _verseKeys[index];
     if (existingKey?.currentContext != null) {
@@ -814,7 +855,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         setState(() {
           _highlightVerseIndices = {};
           _commentaryEntryForSelected = null;
-          _commentaryExpanded = false;
         });
       }
       _applySectionState(
@@ -1151,6 +1191,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _isProgrammaticNavigation = true;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
+    _verseVisibility.clear(); // Discard stale visibility data
 
     final hierarchy =
         _hierarchyService.getHierarchyForSectionSync(section.path);
@@ -1542,21 +1583,25 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                         height: 1.5,
                                         color: AppColors.textDark,
                                       );
-                              Widget w = GestureDetector(
-                                onTap: () => _onVerseTap(idx),
-                                behavior: HitTestBehavior.opaque,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: BcvVerseText(
-                                    text: displayText,
-                                    style: effectiveStyle,
-                                  ),
+                              final inner = Padding(
+                                padding: const EdgeInsets.only(bottom: 20),
+                                child: BcvVerseText(
+                                  text: displayText,
+                                  style: effectiveStyle,
                                 ),
                               );
+                              Widget w = inner;
                               if (isTargetVerse) {
                                 w = KeyedSubtree(
                                     key: _scrollToVerseKey, child: w);
                               }
+                              w = SizedBox(
+                                width: double.infinity,
+                                child: InkWell(
+                                  onTap: () => _onVerseTap(idx),
+                                  child: w,
+                                ),
+                              );
                               final subtreeKey = isSplitSegment
                                   ? _verseSegmentKeys['${idx}_$segmentIndex']
                                   : _verseKeys[idx];
@@ -1685,50 +1730,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 for (final idx in highlightRun) {
                                   usedInRun.add(idx);
                                 }
-                                final hasCommentary =
-                                    _commentaryEntryForSelected != null;
-                                final commentaryEntry =
-                                    _commentaryEntryForSelected;
                                 children.add(
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       wrapInBox(highlightRun, darker: true),
-                                      if (hasCommentary) ...[
-                                        const SizedBox(height: 8),
-                                        TextButton.icon(
-                                          onPressed: isLaptop
-                                              ? _toggleCommentaryExpanded
-                                              : _openCommentaryBottomSheet,
-                                          icon: Icon(
-                                            isLaptop && _commentaryExpanded
-                                                ? Icons.expand_less
-                                                : Icons.menu_book,
-                                            size: 18,
-                                            color: AppColors.primary,
-                                          ),
-                                          label: Text(
-                                            isLaptop && _commentaryExpanded
-                                                ? 'Hide commentary'
-                                                : 'Commentary',
-                                            style: const TextStyle(
-                                              fontFamily: 'Lora',
-                                              color: AppColors.primary,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                        if (isLaptop &&
-                                            _commentaryExpanded &&
-                                            commentaryEntry != null) ...[
-                                          BcvInlineCommentaryPanel(
-                                            entry: commentaryEntry,
-                                            verseService: _verseService,
-                                            onClose: _toggleCommentaryExpanded,
-                                          ),
-                                        ],
-                                      ],
+                                      const SizedBox(height: 8),
                                       const SizedBox(height: 8),
                                     ],
                                   ),

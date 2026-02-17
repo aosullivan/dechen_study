@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' show Offset, Path, Size;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   bool _isLoading = true;
   String _sectionText = '';
   int _correctChapterNumber = 0;
+  String? _correctVerseNum;
   List<BcvChapter> _chapters = [];
   int? _selectedChapter;
   bool _showAnswer = false;
@@ -149,11 +151,13 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
         }
       }
       final chapterNum = int.tryParse(refs.first.split('.').first) ?? 1;
+      final verseNum = refs.first.split('.').last;
       final chapters = await _verseService.getChapters();
       if (mounted) {
         setState(() {
           _sectionText = texts.join('\n\n');
           _correctChapterNumber = chapterNum;
+            _correctVerseNum = verseNum;
           _chapters = chapters;
           _isLoading = false;
         });
@@ -171,6 +175,28 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   /// Strip [c.v] markers so we don't reveal the chapter.
   String _stripVerseRef(String text) {
     return text.replaceAll(_verseRefPattern, '').trim();
+  }
+
+  /// Star path for confetti particles (5-pointed star centered in [size]).
+  static Path _createStarPath(Size size) {
+    const points = 5;
+    final center = Offset(size.width / 2, size.height / 2);
+    final outerR = size.shortestSide / 2;
+    final innerR = outerR * 0.4;
+    final path = Path();
+    for (var i = 0; i < points * 2; i++) {
+      final radius = i.isEven ? outerR : innerR;
+      final angle = (i * (pi / points)) - (pi / 2);
+      final x = center.dx + radius * cos(angle);
+      final y = center.dy + radius * sin(angle);
+      if (i == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+    path.close();
+    return path;
   }
 
   void _nextQuestion() {
@@ -260,33 +286,23 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Score display
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+                if (_totalAnswers > 0)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+                    ),
+                    child: Text(
+                      '$_correctAnswers / $_totalAnswers',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      textAlign: TextAlign.end,
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Quiz',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                      if (_totalAnswers > 0)
-                        Text(
-                          '$_correctAnswers / $_totalAnswers',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                    ],
-                  ),
-                ),
                 const SizedBox(height: 10),
 
                 // Section text – compact box, larger readable text
@@ -346,12 +362,12 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     const crossAxisCount = 5;
-                    const spacing = 8.0;
-                    const rowHeight = 58.0;
+                    const spacing = 12.0;
+                    const rowHeight = 72.0;
                     final cellWidth = (constraints.maxWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
                     final rowCount = (_chapters.length / crossAxisCount).ceil();
                     final gridHeight = rowCount * rowHeight + (rowCount - 1) * spacing;
-                    const maxGridHeight = 124.0;
+                    const maxGridHeight = 156.0;
                     return SizedBox(
                       height: gridHeight > maxGridHeight ? maxGridHeight : gridHeight,
                       child: GridView.builder(
@@ -374,7 +390,10 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
 
                           return Material(
                             color: Colors.transparent,
-                            child: InkWell(
+                            child: Semantics(
+                              label: 'Chapter ${chapter.number}: ${chapter.title}',
+                              button: true,
+                              child: InkWell(
                               onTap: _showAnswer
                                   ? null
                                   : () {
@@ -384,10 +403,9 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
 
                                       if (!correct) {
                                         _consecutiveCorrect = 0;
-                                        final chapterStr = _chapters
-                                            .where((c) => c.number == _correctChapterNumber)
-                                            .map((c) => 'Chapter ${c.number}: ${c.title}')
-                                            .firstOrNull ?? 'Chapter $_correctChapterNumber';
+                                        final correctChapter = _chapters.firstWhere((c) => c.number == _correctChapterNumber);
+                                      final verseStr = _correctVerseNum ?? '';
+                                      final chapterStr = 'Chapter ${correctChapter.number}${verseStr.isNotEmpty ? ', verse $verseStr' : ''}: ${correctChapter.title}';
                                         final template = _wrongAnswerTemplates[
                                             Random().nextInt(_wrongAnswerTemplates.length)];
                                         wrongMsg = template.replaceFirst('%s', chapterStr);
@@ -406,6 +424,10 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                           correctMsg = _correctAnswerMessages[
                                               Random().nextInt(_correctAnswerMessages.length)];
                                         }
+                                        final verseStr = _correctVerseNum ?? '';
+                                        if (verseStr.isNotEmpty) {
+                                          correctMsg = '$correctMsg It was Chapter $_correctChapterNumber, verse $verseStr.';
+                                        }
                                       }
 
                                       setState(() {
@@ -423,7 +445,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                               borderRadius: BorderRadius.circular(8),
                               child: Container(
                                 margin: const EdgeInsets.all(0),
-                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: isCorrect
                                       ? Colors.green.withValues(alpha: 0.2)
@@ -454,8 +476,9 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                   children: [
                                     Text(
                                       '${chapter.number}',
-                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                            fontWeight: FontWeight.w700,
+                                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
                                             color: isCorrect
                                                 ? Colors.green.shade800
                                                 : (isWrong ? AppColors.wrong : AppColors.textDark),
@@ -467,11 +490,12 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                     const SizedBox(height: 2),
                                     Text(
                                       chapter.title,
-                                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                            fontSize: 14,
+                                            height: 1.25,
                                             color: isCorrect
                                                 ? Colors.green.shade800
                                                 : (isWrong ? AppColors.wrong : AppColors.textDark),
-                                            height: 1.2,
                                           ),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -481,8 +505,9 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                 ),
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        );
+                    },
                       ),
                     );
                   },
@@ -565,6 +590,9 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
               minBlastForce: 15,
               emissionFrequency: 0.05,
               gravity: 0.15,
+              createParticlePath: _createStarPath,
+              minimumSize: const Size(12, 12),
+              maximumSize: const Size(20, 20),
               colors: const [
                 Color(0xFFFFD700), // Gold
                 Colors.amber,

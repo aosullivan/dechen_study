@@ -115,7 +115,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Daily section',
+          'Daily verses',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
@@ -238,7 +238,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                 child: OutlinedButton.icon(
                   onPressed: _loading ? null : _loadSection,
                   icon: const Icon(Icons.refresh, size: 20),
-                  label: const Text('Another section'),
+                  label: const Text('Another verse'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     side: const BorderSide(color: AppColors.primary),
