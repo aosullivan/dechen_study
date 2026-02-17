@@ -89,11 +89,13 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openRead(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => BcvReadScreen(title: title),
-        ),
-      );
+Navigator.of(context).push(
+      PageRouteBuilder<void>(
+        pageBuilder: (_, __, ___) => BcvReadScreen(title: title),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
+    );
     } else {
       _showComingSoon(context, 'Read');
     }

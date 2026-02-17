@@ -66,6 +66,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Verses to highlight (set when arriving from Daily or when user taps a verse); cleared on reload.
   Set<int>? _highlightVerseIndices = {};
 
+  /// Min index in highlight set (computed on setState, for commentary button placement).
+  int? _minHighlightIndex;
+
+  /// Cached first verse index of current highlight run/block (for commentary).
+  int? _firstHighlightVerseIndex;
+
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
 
@@ -73,6 +79,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _commentaryExpanded = false;
   final _commentaryService = CommentaryService.instance;
   final _hierarchyService = VerseHierarchyService.instance;
+
+  List<int> _chapterHeaderFlatIndices = <int>[];
+  int? _totalItemCount;
 
   /// Verse index currently in view (for breadcrumb). Null until first visibility.
   int? _visibleVerseIndex;
@@ -195,6 +204,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _loading = true;
       _error = null;
       _highlightVerseIndices = {};
+      _minHighlightIndex = null;
+      _firstHighlightVerseIndex = null;
       _currentSectionVerseIndices = {};
       _sectionVerseIndicesCache.clear();
       _sectionOverlayRectFrom = null;
@@ -208,6 +219,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _syncGeneration = 0;
       _isProgrammaticNavigation = false;
       _sectionSliderScrollRequestId = 0;
+      _chapterHeaderFlatIndices.clear();
+      _totalItemCount = null;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -219,14 +232,24 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _loading = false;
           if (widget.highlightSectionIndices != null &&
               widget.highlightSectionIndices!.isNotEmpty) {
-            _highlightVerseIndices =
-                Set<int>.from(widget.highlightSectionIndices!);
+            _highlightVerseIndices = Set<int>.from(widget.highlightSectionIndices!);
+            _minHighlightIndex = _highlightVerseIndices!.reduce((a, b) => a < b ? a : b);
+            _firstHighlightVerseIndex = _minHighlightIndex;
           } else if (widget.scrollToVerseIndex != null) {
             _highlightVerseIndices = {widget.scrollToVerseIndex!};
+            _minHighlightIndex = widget.scrollToVerseIndex;
+            _firstHighlightVerseIndex = widget.scrollToVerseIndex;
           }
+
+          // Build flat indices for ListView.builder
+          _chapterHeaderFlatIndices.clear();
+          int flatIndex = 0;
           for (final c in chapters) {
+            _chapterHeaderFlatIndices.add(flatIndex); // Header slot
+            flatIndex += 1 + (c.endVerseIndex - c.startVerseIndex);
             _chapterKeys[c.number] = GlobalKey();
           }
+          _totalItemCount = flatIndex;
         });
         if (widget.scrollToVerseIndex != null && _scrollToVerseKey != null) {
           WidgetsBinding.instance
@@ -269,7 +292,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
     if (_highlightSet.isEmpty) return;
-    final firstIndex = _highlightSet.reduce((a, b) => a < b ? a : b);
+    final firstIndex = _minHighlightIndex ?? _highlightSet.reduce((a, b) => a < b ? a : b);
     final ref = _verseService.getVerseRef(firstIndex);
     if (ref == null) return;
     final entry = await _commentaryService.getCommentaryForRef(ref);
@@ -432,6 +455,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (_highlightSet.contains(globalIndex)) {
       setState(() {
         _highlightVerseIndices = {};
+        _minHighlightIndex = null;
+        _firstHighlightVerseIndex = null;
         _commentaryEntryForSelected = null;
         _commentaryExpanded = false;
       });
@@ -449,6 +474,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (entry == null) {
       setState(() {
         _highlightVerseIndices = {globalIndex};
+        _minHighlightIndex = globalIndex;
+        _firstHighlightVerseIndex = globalIndex;
         _commentaryEntryForSelected = null;
         _commentaryExpanded = false;
       });
@@ -484,6 +511,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     setState(() {
       _highlightVerseIndices = highlightRun;
+      _minHighlightIndex = firstInSection;
+      _firstHighlightVerseIndex = firstInSection;
       _commentaryEntryForSelected = entry;
       _commentaryExpanded = false;
     });
