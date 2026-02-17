@@ -157,7 +157,9 @@ class VerseHierarchyService {
 
   /// Leaf sections only (no children), sorted by first verse. For reader arrow-key navigation.
   /// Ensures each key down moves exactly one "lowest level" section forward.
+  /// Result is cached after first computation.
   List<({String path, String title, int depth})> getLeafSectionsByVerseOrderSync() {
+    if (_cachedLeafSections != null) return _cachedLeafSections!;
     final flat = getFlatSectionsSync();
     final pathSet = flat.map((s) => s.path).toSet();
     final leaves = flat.where((s) {
@@ -171,15 +173,18 @@ class VerseHierarchyService {
       }
     }
     withFirst.sort((a, b) => _compareVerseRefs(a.firstRef, b.firstRef));
-    return withFirst
+    _cachedLeafSections = withFirst
         .map((e) => (path: e.path, title: e.title, depth: e.depth))
         .toList();
+    return _cachedLeafSections!;
   }
 
   /// Sections with first verse, sorted by verse order. For arrow-key navigation.
   /// Deduplicates sections that share the same base verse (e.g. 9.1ab and 9.1cd)
   /// so we don't step through each split-verse segment.
+  /// Result is cached after first computation.
   List<({String path, String title, int depth})> getSectionsByVerseOrderSync() {
+    if (_cachedSectionsByVerseOrder != null) return _cachedSectionsByVerseOrder!;
     final flat = getFlatSectionsSync();
     final withFirst = <({String path, String title, int depth, String firstRef})>[];
     for (final s in flat) {
@@ -200,7 +205,8 @@ class VerseHierarchyService {
       prevBase = base;
       deduped.add((path: e.path, title: e.title, depth: e.depth));
     }
-    return deduped;
+    _cachedSectionsByVerseOrder = deduped;
+    return _cachedSectionsByVerseOrder!;
   }
 
   static (int, int) _baseVerse(String ref) => baseVerseFromRef(ref);
@@ -231,30 +237,39 @@ class VerseHierarchyService {
     return getHierarchyForVerse(ref);
   }
 
-  /// Returns verse refs whose path contains [sectionPath] (section + descendants).
-  /// Call after _ensureLoaded() or any getter has been called.
-  Set<String> getVerseRefsForSectionSync(String sectionPath) {
-    if (_map == null || sectionPath.isEmpty) return {};
-    final verseToPath = _map!['verseToPath'];
-    if (verseToPath == null || verseToPath is! Map) return {};
-    final refs = <String>{};
+  /// Builds a reverse index from section path -> set of verse refs. Called once lazily.
+  void _ensureSectionToRefsIndex() {
+    if (_sectionToRefsIndex != null) return;
+    _sectionToRefsIndex = {};
+    final verseToPath = _map?['verseToPath'];
+    if (verseToPath == null || verseToPath is! Map) return;
     for (final e in verseToPath.entries) {
       final path = e.value;
       if (path is! List) continue;
+      final ref = e.key.toString();
       for (final item in path) {
         if (item is Map) {
           final s = (item['section'] ?? item['path'] ?? '').toString();
-          if (s == sectionPath) {
-            refs.add(e.key.toString());
-            break;
+          if (s.isNotEmpty) {
+            (_sectionToRefsIndex![s] ??= {}).add(ref);
           }
         }
       }
     }
-    return refs;
+  }
+
+  /// Returns verse refs whose path contains [sectionPath] (section + descendants).
+  /// Uses a pre-built reverse index for O(1) lookup.
+  Set<String> getVerseRefsForSectionSync(String sectionPath) {
+    if (_map == null || sectionPath.isEmpty) return {};
+    _ensureSectionToRefsIndex();
+    return _sectionToRefsIndex?[sectionPath] ?? {};
   }
 
   List<({String path, String title, int depth})>? _flatSections;
+  List<({String path, String title, int depth})>? _cachedLeafSections;
+  List<({String path, String title, int depth})>? _cachedSectionsByVerseOrder;
+  Map<String, Set<String>>? _sectionToRefsIndex;
 
   /// Returns breadcrumb hierarchy for section path (e.g. "3.1.3" -> root to that section).
   /// Call after _ensureLoaded(). Used when user taps a section to update UI immediately.

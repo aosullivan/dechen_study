@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// One chapter: number, title, and verse index range into the flat verse list.
@@ -15,6 +16,103 @@ class BcvChapter {
   final int endVerseIndex;
 }
 
+/// Result of parsing the bcv-root asset in a background isolate.
+class _ParseResult {
+  _ParseResult({
+    required this.verses,
+    required this.captions,
+    required this.refs,
+    required this.chapters,
+  });
+  final List<String> verses;
+  final List<String?> captions;
+  final List<String?> refs;
+  final List<BcvChapter> chapters;
+}
+
+/// Top-level so it can run in a compute isolate.
+_ParseResult _parseBcvRoot(String content) {
+  final chapterTitleOnly = RegExp(r'^Chapter (\d+):\s*(.+)\s*$');
+  final verseRefPattern = RegExp(r'\[(\d+)\.(\d+)\]');
+
+  String? extractCaption(String block) {
+    final match = verseRefPattern.allMatches(block).lastOrNull;
+    if (match == null) return null;
+    return 'Chapter ${match.group(1)}, Verse ${match.group(2)}';
+  }
+
+  String? extractRef(String block) {
+    final match = verseRefPattern.allMatches(block).lastOrNull;
+    if (match == null) return null;
+    return '${match.group(1)}.${match.group(2)}';
+  }
+
+  // Strip BOM and form-feed
+  content = content.replaceAll(RegExp(r'[\uFEFF\x0C]'), '');
+  // Normalize line endings
+  content = content.replaceAll(RegExp(r'\r\n?'), '\n');
+  final blocks = content.split(RegExp(r'\n\s*\n'));
+  final verses = <String>[];
+  final captions = <String?>[];
+  final refs = <String?>[];
+  final chapterStarts = <List<dynamic>>[];
+  for (final block in blocks) {
+    final trimmed = block.trim();
+    if (trimmed.isEmpty) continue;
+    final lines = trimmed
+        .split('\n')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+    var pendingVerseLines = <String>[];
+    for (final line in lines) {
+      final chapterMatch = chapterTitleOnly.firstMatch(line);
+      if (chapterMatch != null) {
+        if (pendingVerseLines.isNotEmpty) {
+          final joined = pendingVerseLines.join('\n');
+          verses.add(joined);
+          captions.add(extractCaption(joined));
+          refs.add(extractRef(joined));
+          pendingVerseLines = [];
+        }
+        chapterStarts.add([
+          int.parse(chapterMatch.group(1)!),
+          chapterMatch.group(2)!.trim(),
+          verses.length,
+        ]);
+        continue;
+      }
+      pendingVerseLines.add(line);
+    }
+    if (pendingVerseLines.isNotEmpty) {
+      final joined = pendingVerseLines.join('\n');
+      verses.add(joined);
+      captions.add(extractCaption(joined));
+      refs.add(extractRef(joined));
+    }
+  }
+  // Build chapters
+  final chapters = <BcvChapter>[];
+  for (var i = 0; i < chapterStarts.length; i++) {
+    final start = chapterStarts[i];
+    final endIndex = i + 1 < chapterStarts.length
+        ? chapterStarts[i + 1][2] as int
+        : verses.length;
+    chapters.add(BcvChapter(
+      number: start[0] as int,
+      title: start[1] as String,
+      startVerseIndex: start[2] as int,
+      endVerseIndex: endIndex,
+    ));
+  }
+  return _ParseResult(
+    verses: verses,
+    captions: captions,
+    refs: refs,
+    chapters: chapters,
+  );
+}
+
 /// Loads and parses the bcv-root asset, caches verses and chapters, and provides random verse selection.
 class BcvVerseService {
   BcvVerseService._();
@@ -27,95 +125,21 @@ class BcvVerseService {
   List<BcvChapter>? _chapters;
   static const String _assetPath = 'texts/bcv-root';
 
-  static final RegExp _chapterTitleOnly = RegExp(r'^Chapter (\d+):\s*(.+)\s*$');
-  static final RegExp _verseRef = RegExp(r'\[(\d+)\.(\d+)\]');
-
   /// Matches a base verse ref like "1.5" (no suffix). Shared across the app.
   static final RegExp baseVerseRefPattern = RegExp(r'^\d+\.\d+$');
 
   /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd".
   static final RegExp segmentSuffixPattern = RegExp(r'[a-d]+$');
 
-  /// Loads the asset, parses into verses and chapter boundaries, and caches. Idempotent.
+  /// Loads the asset, parses in a background isolate, and caches. Idempotent.
   Future<void> _ensureLoaded() async {
     if (_verses != null) return;
-    var content = await rootBundle.loadString(_assetPath);
-    // Strip BOM and form-feed (throughout: some chapter headers have leading \f)
-    content = content.replaceAll(RegExp(r'[\uFEFF\x0C]'), '');
-    // Normalize line endings
-    content = content.replaceAll(RegExp(r'\r\n?'), '\n');
-    final blocks = content.split(RegExp(r'\n\s*\n'));
-    final verses = <String>[];
-    final captions = <String?>[];
-    final refs = <String?>[];
-    final chapterStarts = <({int number, String title, int startIndex})>[];
-    for (final block in blocks) {
-      final trimmed = block.trim();
-      if (trimmed.isEmpty) continue;
-      final lines = trimmed.split('\n').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
-      // A block may contain a chapter header mid-block (no blank line before "Chapter N:")
-      var pendingVerseLines = <String>[];
-      for (final line in lines) {
-        final chapterMatch = _chapterTitleOnly.firstMatch(line);
-        if (chapterMatch != null) {
-          if (pendingVerseLines.isNotEmpty) {
-            verses.add(pendingVerseLines.join('\n'));
-            captions.add(_extractCaption(pendingVerseLines.join('\n')));
-            refs.add(_extractRef(pendingVerseLines.join('\n')));
-            pendingVerseLines = [];
-          }
-          chapterStarts.add((
-            number: int.parse(chapterMatch.group(1)!),
-            title: chapterMatch.group(2)!.trim(),
-            startIndex: verses.length,
-          ));
-          continue;
-        }
-        pendingVerseLines.add(line);
-      }
-      if (pendingVerseLines.isNotEmpty) {
-        verses.add(pendingVerseLines.join('\n'));
-        captions.add(_extractCaption(pendingVerseLines.join('\n')));
-        refs.add(_extractRef(pendingVerseLines.join('\n')));
-      }
-    }
-    _verses = verses;
-    _captions = captions;
-    _refs = refs;
-    _chapters = _buildChapters(chapterStarts, verses.length);
-  }
-
-  List<BcvChapter> _buildChapters(
-    List<({int number, String title, int startIndex})> starts,
-    int verseCount,
-  ) {
-    if (starts.isEmpty) return [];
-    final out = <BcvChapter>[];
-    for (var i = 0; i < starts.length; i++) {
-      final start = starts[i];
-      final endIndex = i + 1 < starts.length ? starts[i + 1].startIndex : verseCount;
-      out.add(BcvChapter(
-        number: start.number,
-        title: start.title,
-        startVerseIndex: start.startIndex,
-        endVerseIndex: endIndex,
-      ));
-    }
-    return out;
-  }
-
-  String? _extractCaption(String block) {
-    final match = _verseRef.allMatches(block).lastOrNull;
-    if (match == null) return null;
-    final c = match.group(1);
-    final v = match.group(2);
-    return 'Chapter $c, Verse $v';
-  }
-
-  String? _extractRef(String block) {
-    final match = _verseRef.allMatches(block).lastOrNull;
-    if (match == null) return null;
-    return '${match.group(1)}.${match.group(2)}';
+    final content = await rootBundle.loadString(_assetPath);
+    final result = await compute(_parseBcvRoot, content);
+    _verses = result.verses;
+    _captions = result.captions;
+    _refs = result.refs;
+    _chapters = result.chapters;
   }
 
   /// Returns a random verse text. Loads and parses asset on first call.

@@ -624,6 +624,18 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _isProgrammaticNavigation = true;
+    // Try scrolling using existing verse GlobalKey (avoids full rebuild)
+    final existingKey = _verseKeys[index];
+    if (existingKey?.currentContext != null) {
+      Scrollable.ensureVisible(
+        existingKey!.currentContext!,
+        alignment: 0.2,
+        duration: const Duration(milliseconds: 300),
+      );
+      _clearProgrammaticNavigationAfterScrollSettles();
+      return;
+    }
+    // Fallback: attach temporary key via rebuild (for initial load / unmounted verses)
     _scrollToVerseIndexAfterTap = index;
     _scrollToVerseKey ??= GlobalKey();
     setState(() {});
@@ -645,10 +657,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _visibilityDebounceTimer?.cancel();
       _visibilityDebounceTimer = null;
       _isProgrammaticNavigation = false;
-      // Cooldown: keep ignoring visibility-driven highlights for 500ms after scroll
+      // Cooldown: keep ignoring visibility-driven highlights briefly after scroll
       // settles. Prevents scroll-settle callbacks from overwriting key-nav highlight.
       _programmaticNavCooldownUntil =
-          DateTime.now().add(const Duration(milliseconds: 500));
+          DateTime.now().add(const Duration(milliseconds: 150));
       _measureAndUpdateSectionOverlay();
     }
 
@@ -664,15 +676,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           listenerRemoved = true;
           pos.isScrollingNotifier.removeListener(listener!);
         }
-        // Buffer for visibility debounce (250ms) + a frame for layout
-        Future.delayed(const Duration(milliseconds: 300), () {
+        // Brief buffer for visibility debounce to settle
+        Future.delayed(const Duration(milliseconds: 100), () {
           if (!mounted) return;
           doClear();
         });
       };
       pos.isScrollingNotifier.addListener(listener);
-      // Fallback: clear after 1.5s in case scroll never settles
-      Future.delayed(const Duration(milliseconds: 1500), () {
+      // Fallback: clear after 800ms in case scroll never settles
+      Future.delayed(const Duration(milliseconds: 800), () {
         if (!mounted) return;
         if (!listenerRemoved) {
           listenerRemoved = true;
@@ -681,7 +693,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         doClear();
       });
     } else {
-      Future.delayed(const Duration(milliseconds: 350), doClear);
+      Future.delayed(const Duration(milliseconds: 150), doClear);
     }
   }
 
@@ -1069,14 +1081,34 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     if (newIdx < 0 || newIdx >= leafOrdered.length) return;
     final section = leafOrdered[newIdx];
-    final firstRef =
-        _hierarchyService.getFirstVerseForSectionSync(section.path) ?? '';
-    widget.onSectionNavigateForTest?.call(section.path, firstRef);
-    _onBreadcrumbSectionTap({
-      'section': section.path,
-      'path': section.path,
-      'title': section.title,
-    });
+
+    // Fully synchronous path — no async gaps that let the next key press race.
+    _syncGeneration++;
+    _isProgrammaticNavigation = true;
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = null;
+
+    final hierarchy =
+        _hierarchyService.getHierarchyForSectionSync(section.path);
+    final verseIndices = _verseIndicesForSection(section.path);
+
+    final preferredChapter = _currentChapterNumber;
+    final firstVerseRef = _hierarchyService
+            .getFirstVerseForSectionInChapterSync(
+                section.path, preferredChapter) ??
+        _hierarchyService.getFirstVerseForSectionSync(section.path);
+    widget.onSectionNavigateForTest?.call(section.path, firstVerseRef ?? '');
+    if (firstVerseRef == null || firstVerseRef.isEmpty) return;
+    final verseIndex =
+        _verseService.getIndexForRefWithFallback(firstVerseRef);
+    if (verseIndex == null) return;
+
+    _applySectionState(
+      hierarchy: hierarchy,
+      verseIndices: verseIndices.isNotEmpty ? verseIndices : {verseIndex},
+      verseIndex: verseIndex,
+    );
+    _scrollToVerseIndex(verseIndex);
   }
 
   Widget _buildBody() {
