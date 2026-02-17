@@ -72,17 +72,47 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
 
   void _onPickerChanged(int depth, String? path) {
     setState(() {
+      // Truncate selections beyond this depth.
       if (_pickerSelections.length > depth) {
         _pickerSelections = _pickerSelections.sublist(0, depth);
       }
       if (path != null) {
         _pickerSelections.add(path);
         _scrollToPath = path;
+        // Deeper pickers (depth > 0) also select the section to show verses.
+        if (depth > 0) {
+          _selectedPath = path;
+          _selectedTitle = _flatSections
+              .where((s) => s.path == path)
+              .firstOrNull
+              ?.title;
+        } else {
+          // Top-level picker just filters, doesn't select.
+          _selectedPath = null;
+          _selectedTitle = null;
+        }
       } else {
+        // "All" picked — clear selection.
+        _selectedPath = null;
+        _selectedTitle = null;
         _scrollToPath =
             _pickerSelections.isNotEmpty ? _pickerSelections.last : null;
       }
     });
+  }
+
+  /// Build picker selections from a section path.
+  /// "4.3.2.1" -> ["4", "4.3", "4.3.2", "4.3.2.1"].
+  /// Depth-0 nodes like "4" return ["4"].
+  List<String> _pickerSelectionsForPath(String sectionPath) {
+    final parts = sectionPath.split('.');
+    final selections = <String>[];
+    var prefix = '';
+    for (final part in parts) {
+      prefix = prefix.isEmpty ? part : '$prefix.$part';
+      selections.add(prefix);
+    }
+    return selections;
   }
 
   void _onNodeTap(({String path, String title, int depth}) section) {
@@ -97,12 +127,14 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
         } else {
           _selectedPath = section.path;
           _selectedTitle = section.title;
+          _pickerSelections = _pickerSelectionsForPath(section.path);
         }
       });
     } else {
       setState(() {
         _selectedPath = section.path;
         _selectedTitle = section.title;
+        _pickerSelections = _pickerSelectionsForPath(section.path);
       });
       showModalBottomSheet<void>(
         context: context,
@@ -130,10 +162,12 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     }
   }
 
-  /// Filtered flat sections with depth rebased so the subtree root starts at 0.
+  /// Filtered flat sections: only the top-level picker (depth 0) filters.
+  /// Deeper pickers just scroll, so the full subtree stays visible.
   List<({String path, String title, int depth})> get _filteredSections {
     if (_pickerSelections.isEmpty) return _flatSections;
-    final root = _pickerSelections.last;
+    // Only filter by the first (top-level) selection.
+    final root = _pickerSelections[0];
     final rootDepth =
         _flatSections.where((s) => s.path == root).firstOrNull?.depth ?? 0;
     return _flatSections

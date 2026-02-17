@@ -1,0 +1,3900 @@
+{
+  "description": "Mapping of Bodhicaryavatara sections to emotional categories based on thematic content",
+  "categories": [
+    "Joy / Happiness / Enjoyment / Laughter",
+    "Feeling Treated with Respect",
+    "Well-Rested / Energized",
+    "Worry / Anxiety",
+    "Stress",
+    "Love / Affection / Connectedness",
+    "Contentment / Satisfaction / Calm",
+    "Physical Pain / Discomfort",
+    "Sadness",
+    "Anger / Frustration / Irritation",
+    "Tiredness / Fatigue",
+    "Disgust / Annoyance / Contempt",
+    "Boredom",
+    "Loneliness",
+    "Fear / Apprehension",
+    "Guilt / Regret",
+    "Embarrassment / Shame",
+    "Hopelessness / Discouragement",
+    "Overwhelmed",
+    "Gratitude / Hope / Pride"
+  ],
+  "sections": [
+    {
+      "path": "1",
+      "title": "The purposes and relation",
+      "emotion": "Contentment / Satisfaction / Calm",
+      "children": [
+        {
+          "path": "1.1",
+          "title": "The purpose of each section",
+          "emotion": "Contentment / Satisfaction / Calm",
+          "children": [
+            {
+              "path": "1.1.1",
+              "title": "The purpose of homage and praise",
+              "emotion": "Contentment / Satisfaction / Calm"
+            },
+            {
+              "path": "1.1.2",
+              "title": "The purpose of commitment to compose",
+              "emotion": "Contentment / Satisfaction / Calm"
+            },
+            {
+              "path": "1.1.3",
+              "title": "The purpose of discarding pride",
+              "emotion": "Contentment / Satisfaction / Calm"
+            }
+          ]
+        },
+        {
+          "path": "1.2",
+          "title": "The condensed meaning of each section",
+          "emotion": "Contentment / Satisfaction / Calm",
+          "children": [
+            {
+              "path": "1.2.1",
+              "title": "The condensed meaning of homage and praise",
+              "emotion": "Contentment / Satisfaction / Calm"
+            },
+            {
+              "path": "1.2.2",
+              "title": "The condensed meaning of the commitment to compose",
+              "emotion": "Contentment / Satisfaction / Calm"
+            },
+            {
+              "path": "1.2.3",
+              "title": "The condensed meaning of discarding pride",
+              "emotion": "Contentment / Satisfaction / Calm"
+            }
+          ]
+        },
+        {
+          "path": "1.3",
+          "title": "The literal meaning of each section",
+          "emotion": "Contentment / Satisfaction / Calm",
+          "children": [
+            {
+              "path": "1.3.1",
+              "title": "The literal meaning of homage and praise",
+              "emotion": "Contentment / Satisfaction / Calm"
+            },
+            {
+              "path": "1.3.2",
+              "title": "The literal meaning of the commitment to compose",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "1.3.2.1",
+                  "title": "Setting out the subject matter to be elaborated",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                },
+                {
+                  "path": "1.3.2.2",
+                  "title": "Abandoning personal invention",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                },
+                {
+                  "path": "1.3.2.3",
+                  "title": "Abandoning the fault of repetition",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                }
+              ]
+            },
+            {
+              "path": "1.3.3",
+              "title": "The literal meaning of discarding pride",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "1.3.3.1",
+                  "title": "The understanding of others is not the primary goal",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                },
+                {
+                  "path": "1.3.3.2",
+                  "title": "The author’s own understanding is the primary goal",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                },
+                {
+                  "path": "1.3.3.3",
+                  "title": "Yet, in dependence upon that, there is benefit for others",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "1.4",
+          "title": "The implicit section: the four branches of purpose and relation",
+          "emotion": "Contentment / Satisfaction / Calm",
+          "children": [
+            {
+              "path": "1.4.1",
+              "title": "The purpose of presenting the four branches",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "1.4.1.2",
+                  "title": "The condensed meaning",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                },
+                {
+                  "path": "1.4.1.3",
+                  "title": "The literal meaning",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "2",
+      "title": "The primary basis: the individual person",
+      "emotion": "Gratitude / Hope / Pride",
+      "children": [
+        {
+          "path": "2.1",
+          "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments",
+          "emotion": "Gratitude / Hope / Pride",
+          "children": [
+            {
+              "path": "2.1.1",
+              "title": "Their nature",
+              "emotion": "Gratitude / Hope / Pride"
+            },
+            {
+              "path": "2.1.2",
+              "title": "Difficult to acquire",
+              "emotion": "Gratitude / Hope / Pride"
+            },
+            {
+              "path": "2.1.3",
+              "title": "The extent of the benefits it brings",
+              "emotion": "Gratitude / Hope / Pride"
+            }
+          ]
+        },
+        {
+          "path": "2.2",
+          "title": "The mental basis: meritorious intelligence",
+          "emotion": "Gratitude / Hope / Pride"
+        }
+      ]
+    },
+    {
+      "path": "3",
+      "title": "The productive cause: the generation of bodhicitta",
+      "emotion": "Love / Affection / Connectedness",
+      "children": [
+        {
+          "path": "3.1",
+          "title": "Praising the benefits of bodhicitta",
+          "emotion": "Joy / Happiness / Enjoyment / Laughter",
+          "children": [
+            {
+              "path": "3.1.1",
+              "title": "Ordinary benefits",
+              "emotion": "Joy / Happiness / Enjoyment / Laughter",
+              "children": [
+                {
+                  "path": "3.1.1.1",
+                  "title": "Invisible benefits",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                  "children": [
+                    {
+                      "path": "3.1.1.1.1",
+                      "title": "It overcomes all nonvirtue",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                      "children": [
+                        {
+                          "path": "3.1.1.1.1.1",
+                          "title": "The nature of nonvirtue",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "3.1.1.1.1.2",
+                          "title": "How bodhicitta overcomes nonvirtue",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.1.1.1.2",
+                      "title": "It benefits oneself",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.1.3",
+                      "title": "It has the power to benefit others",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.1.4",
+                      "title": "It fulfils individual worldly wishes",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    }
+                  ]
+                },
+                {
+                  "path": "3.1.1.2",
+                  "title": "Visible benefits",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                },
+                {
+                  "path": "3.1.1.3",
+                  "title": "Praising the benefits by analogy",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                  "children": [
+                    {
+                      "path": "3.1.1.3.1",
+                      "title": "It transforms the inferior into the supreme, like the elixir of an alchemist",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.3.2",
+                      "title": "It is difficult to find but extremely powerful, like a wish fulfilling jewel",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.3.3",
+                      "title": "Its fruits know no exhaustion, like the inconceivable tree",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.3.4",
+                      "title": "It overcomes the inexpiable evil deeds, like a warrior",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.3.5",
+                      "title": "It consumes the inevitable results of nonvirtuous actions, like the fire at the end of time",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.1.1.3.6",
+                      "title": "Other specific examples",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "3.1.2",
+              "title": "The extraordinary benefits of bodhicitta",
+              "emotion": "Joy / Happiness / Enjoyment / Laughter",
+              "children": [
+                {
+                  "path": "3.1.2.1",
+                  "title": "Divisions",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                },
+                {
+                  "path": "3.1.2.2",
+                  "title": "Characteristics",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                },
+                {
+                  "path": "3.1.2.3",
+                  "title": "Benefits of aspiration",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                },
+                {
+                  "path": "3.1.2.4",
+                  "title": "Benefits of application",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                }
+              ]
+            },
+            {
+              "path": "3.1.3",
+              "title": "The reasons for the benefits",
+              "emotion": "Joy / Happiness / Enjoyment / Laughter",
+              "children": [
+                {
+                  "path": "3.1.3.1",
+                  "title": "Scripture",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                },
+                {
+                  "path": "3.1.3.2",
+                  "title": "Reasoning",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                  "children": [
+                    {
+                      "path": "3.1.3.2.1",
+                      "title": "Aspiration bodhicitta",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "3.1.3.2.1.1",
+                          "title": "The vastness of its intent",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.1.3.2.1.2",
+                          "title": "Its rarity",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "3.1.3.2.1.2.1",
+                              "title": "There is nobody else who has such a benevolent intent",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "3.1.3.2.1.2.2",
+                              "title": "Not even for themselves",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "3.1.3.2.1.2.3",
+                              "title": "Establishing the greatness of the benefit of generating this mind",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "3.1.3.2.1.3",
+                          "title": "The greatness of its goodness",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.1.3.2.2",
+                      "title": "Application bodhicitta",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "3.1.3.2.2.1",
+                          "title": "The actual practice is undertaken",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.1.3.2.2.2",
+                          "title": "The many individuals affected",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.1.3.2.2.3",
+                          "title": "It does not depend on getting anything back",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.1.3.2.2.4",
+                          "title": "Establishing vastness",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.1.3.2.2.5",
+                          "title": "Explaining how it is particularly powerful",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "3.1.4",
+              "title": "Summarizing the benefits of self",
+              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+            },
+            {
+              "path": "3.1.5",
+              "title": "Summarizing the benefits of others",
+              "emotion": "Love / Affection / Connectedness"
+            }
+          ]
+        },
+        {
+          "path": "3.2",
+          "title": "Generating bodhicitta in one's stream of being",
+          "emotion": "Gratitude / Hope / Pride",
+          "children": [
+            {
+              "path": "3.2.1",
+              "title": "Preliminaries",
+              "emotion": "Gratitude / Hope / Pride",
+              "children": [
+                {
+                  "path": "3.2.1.1",
+                  "title": "Offerings",
+                  "emotion": "Gratitude / Hope / Pride",
+                  "children": [
+                    {
+                      "path": "3.2.1.1.1",
+                      "title": "Offering worldly substances owned by oneself",
+                      "emotion": "Gratitude / Hope / Pride"
+                    },
+                    {
+                      "path": "3.2.1.1.2",
+                      "title": "Offering unowned worldly substances",
+                      "emotion": "Gratitude / Hope / Pride"
+                    },
+                    {
+                      "path": "3.2.1.1.3",
+                      "title": "Offering the physical body",
+                      "emotion": "Gratitude / Hope / Pride"
+                    },
+                    {
+                      "path": "3.2.1.1.4",
+                      "title": "Offerings emanated by the mind",
+                      "emotion": "Gratitude / Hope / Pride"
+                    },
+                    {
+                      "path": "3.2.1.1.5",
+                      "title": "Unsurpassable offerings",
+                      "emotion": "Gratitude / Hope / Pride"
+                    },
+                    {
+                      "path": "3.2.1.1.6",
+                      "title": "Offering homage",
+                      "emotion": "Gratitude / Hope / Pride"
+                    }
+                  ]
+                },
+                {
+                  "path": "3.2.1.2",
+                  "title": "Taking refuge",
+                  "emotion": "Fear / Apprehension",
+                  "children": [
+                    {
+                      "path": "3.2.1.2.1",
+                      "title": "Classifications",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "3.2.1.2.2",
+                      "title": "Explaining their distinguishing characteristics",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "3.2.1.2.3",
+                      "title": "Nature",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "3.2.1.2.4",
+                      "title": "Distinction of resultant refuge and generation of aspiration bodhicitta",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "3.2.1.2.5",
+                      "title": "Purpose",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "3.2.1.2.6",
+                      "title": "The meaning of the term ‘refuge’",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "3.2.1.2.7",
+                      "title": "The distinct trainings",
+                      "emotion": "Fear / Apprehension"
+                    }
+                  ]
+                },
+                {
+                  "path": "3.2.1.3",
+                  "title": "Confession",
+                  "emotion": "Guilt / Regret",
+                  "children": [
+                    {
+                      "path": "3.2.1.3.1",
+                      "title": "The power of regret",
+                      "emotion": "Guilt / Regret",
+                      "children": [
+                        {
+                          "path": "3.2.1.3.1.1",
+                          "title": "Consideration of each type of act individually",
+                          "emotion": "Guilt / Regret",
+                          "children": [
+                            {
+                              "path": "3.2.1.3.1.1.1",
+                              "title": "Supplication to the objects of reliance",
+                              "emotion": "Guilt / Regret"
+                            },
+                            {
+                              "path": "3.2.1.3.1.1.2",
+                              "title": "Consideration of the natures individually",
+                              "emotion": "Guilt / Regret"
+                            },
+                            {
+                              "path": "3.2.1.3.1.1.3",
+                              "title": "Consideration of the objects individually",
+                              "emotion": "Guilt / Regret"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "3.2.1.3.1.2",
+                          "title": "Longing to be freed swiftly",
+                          "emotion": "Worry / Anxiety",
+                          "children": [
+                            {
+                              "path": "3.2.1.3.1.2.1",
+                              "title": "The aspects of longing",
+                              "emotion": "Worry / Anxiety"
+                            },
+                            {
+                              "path": "3.2.1.3.1.2.2",
+                              "title": "Ceasing to rely on the unreliable",
+                              "emotion": "Worry / Anxiety"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "3.2.1.3.1.3",
+                          "title": "Consideration of individual meaningless acts",
+                          "emotion": "Guilt / Regret",
+                          "children": [
+                            {
+                              "path": "3.2.1.3.1.3.1",
+                              "title": "Various kinds of nonvirtuous actions have been committed",
+                              "emotion": "Guilt / Regret"
+                            },
+                            {
+                              "path": "3.2.1.3.1.3.2",
+                              "title": "Consideration of their meaninglessness",
+                              "emotion": "Guilt / Regret"
+                            },
+                            {
+                              "path": "3.2.1.3.1.3.3",
+                              "title": "Logically establishing that point",
+                              "emotion": "Guilt / Regret"
+                            },
+                            {
+                              "path": "3.2.1.3.1.3.4",
+                              "title": "Empirically establishing that point",
+                              "emotion": "Guilt / Regret"
+                            },
+                            {
+                              "path": "3.2.1.3.1.3.5",
+                              "title": "Summary",
+                              "emotion": "Guilt / Regret"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "3.2.1.3.1.4",
+                          "title": "Fear of the results",
+                          "emotion": "Fear / Apprehension",
+                          "children": [
+                            {
+                              "path": "3.2.1.3.1.4.1",
+                              "title": "The inevitable result: the transmigration to another rebirth",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "3.2.1.3.1.4.2",
+                              "title": "Fear of experiencing this",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "3.2.1.3.1.4.3",
+                              "title": "The reason why the fear will not abate",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "3.2.1.3.1.4.4",
+                              "title": "The aspects of suffering",
+                              "emotion": "Fear / Apprehension"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.1.3.2",
+                      "title": "The power of reliance",
+                      "emotion": "Gratitude / Hope / Pride",
+                      "children": [
+                        {
+                          "path": "3.2.1.3.2.1",
+                          "title": "Taking hold of the general supports",
+                          "emotion": "Gratitude / Hope / Pride"
+                        },
+                        {
+                          "path": "3.2.1.3.2.2",
+                          "title": "Taking hold of the particular supports of specific bodhisattvas",
+                          "emotion": "Gratitude / Hope / Pride"
+                        },
+                        {
+                          "path": "3.2.1.3.2.3",
+                          "title": "Having taken hold of the supports, the subsequent practice—to follow their instructions",
+                          "emotion": "Gratitude / Hope / Pride"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.1.3.3",
+                      "title": "The power of antidote",
+                      "emotion": "Gratitude / Hope / Pride",
+                      "children": [
+                        {
+                          "path": "3.2.1.3.3.1",
+                          "title": "The reasons to persevere in the antidote",
+                          "emotion": "Gratitude / Hope / Pride",
+                          "children": [
+                            {
+                              "path": "3.2.1.3.3.1.1",
+                              "title": "The example of an illness",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "3.2.1.3.3.1.2",
+                              "title": "The example of a precipice",
+                              "emotion": "Gratitude / Hope / Pride"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "3.2.1.3.3.2",
+                          "title": "Advice to engage in it quickly",
+                          "emotion": "Gratitude / Hope / Pride"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.1.3.4",
+                      "title": "The power of desisting",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "3.2.1.3.4.1",
+                          "title": "Restraint for the next life",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "3.2.1.3.4.2",
+                          "title": "Purifying former lives",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "3.2.1.3.4.3",
+                          "title": "Conclusion of the chapter",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "3.2.1.4",
+                  "title": "Rejoicing",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                  "children": [
+                    {
+                      "path": "3.2.1.4.1",
+                      "title": "Rejoicing in worldly virtue",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                      "children": [
+                        {
+                          "path": "3.2.1.4.1.1",
+                          "title": "Rejoicing in the outcome of merit, which leads to the higher realms",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "3.2.1.4.1.2",
+                          "title": "Rejoicing in the outcome of liberation, which leads to enlightenment",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.1.4.2",
+                      "title": "Rejoicing in the virtue of śrāvakas",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.2.1.4.3",
+                      "title": "Rejoicing in the virtue of Buddhas",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                      "children": [
+                        {
+                          "path": "3.2.1.4.3.1",
+                          "title": "Rejoicing in the result",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "3.2.1.4.3.2",
+                          "title": "Rejoicing in the cause",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "3.2.1.5",
+                  "title": "Requesting the wheel of dharma be turned",
+                  "emotion": "Gratitude / Hope / Pride"
+                },
+                {
+                  "path": "3.2.1.6",
+                  "title": "Supplication",
+                  "emotion": "Gratitude / Hope / Pride"
+                },
+                {
+                  "path": "3.2.1.7",
+                  "title": "Dedication of the roots of merit",
+                  "emotion": "Love / Affection / Connectedness",
+                  "children": [
+                    {
+                      "path": "3.2.1.7.1",
+                      "title": "General aspiration for freedom from suffering",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "3.2.1.7.2",
+                      "title": "Aspiration to eliminate the suffering of sickness",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "3.2.1.7.3",
+                      "title": "Aspiration to eliminate the suffering of hunger",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "3.2.1.7.4",
+                      "title": "Aspiration to eliminate the suffering of poverty",
+                      "emotion": "Love / Affection / Connectedness"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "3.2.2",
+              "title": "Main part",
+              "emotion": "Love / Affection / Connectedness",
+              "children": [
+                {
+                  "path": "3.2.2.1",
+                  "title": "The main part: the actual practice of generating bodhicitta",
+                  "emotion": "Love / Affection / Connectedness",
+                  "children": [
+                    {
+                      "path": "3.2.2.1.1",
+                      "title": "Aspiration to give up everything",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "3.2.2.1.1.1",
+                          "title": "How to give up everything",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.2.2.1.1.2",
+                          "title": "The reason for doing so",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.2.2.1.1.3",
+                          "title": "The subsequent practice",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.2.1.2",
+                      "title": "Aspiration for inexhaustible causes",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "3.2.2.1.2.1",
+                          "title": "General explanation",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.2.2.1.2.2",
+                          "title": "Aspiration for their attitudes to become inexhaustible causes",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.2.2.1.2.3",
+                          "title": "Aspiration for their actions to become inexhaustible causes",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.2.1.3",
+                      "title": "Aspiration to be a cause of sustenance",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "3.2.2.1.3.1",
+                          "title": "Necessities",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.2.2.1.3.2",
+                          "title": "Vast worlds",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "3.2.2.1.3.3",
+                          "title": "Unconstrained location and duration",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.2.1.4",
+                      "title": "Reciting the words of the vow",
+                      "emotion": "Love / Affection / Connectedness"
+                    }
+                  ]
+                },
+                {
+                  "path": "3.2.2.2",
+                  "title": "The ritual",
+                  "emotion": "Feeling Treated with Respect",
+                  "children": [
+                    {
+                      "path": "3.2.2.2.1",
+                      "title": "The cause of generating bodhicitta with nothing lacking",
+                      "emotion": "Feeling Treated with Respect",
+                      "children": [
+                        {
+                          "path": "3.2.2.2.1.1",
+                          "title": "The cause—meditation on compassion",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "3.2.2.2.1.2",
+                          "title": "The root—stabilizing faith",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "3.2.2.2.1.3",
+                          "title": "Other supports of bodhicitta",
+                          "emotion": "Feeling Treated with Respect"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "3.2.2.2.2",
+                      "title": "The purpose of a proper ritual",
+                      "emotion": "Feeling Treated with Respect",
+                      "children": [
+                        {
+                          "path": "3.2.2.2.2.1",
+                          "title": "That there is a purpose to properly receiving it",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "3.2.2.2.2.2",
+                          "title": "The method of taking it",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "3.2.2.2.2.2.1",
+                              "title": "From whom it is received",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "3.2.2.2.2.2.2",
+                              "title": "Basis of receiving",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "3.2.2.2.2.2.3",
+                              "title": "Time",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "3.2.2.2.2.2.4",
+                              "title": "Ritual",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "3.2.2.2.2.2.5",
+                              "title": "Overcoming the objection that it is not possible always to maintain it",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "3.2.3",
+              "title": "The conclusion",
+              "emotion": "Joy / Happiness / Enjoyment / Laughter",
+              "children": [
+                {
+                  "path": "3.2.3.1",
+                  "title": "Generating joy in the attainment of the benefit of self",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                  "children": [
+                    {
+                      "path": "3.2.3.1.1",
+                      "title": "Identifying the benefit established",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.2.3.1.2",
+                      "title": "To have concern not to corrupt it with faults",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    },
+                    {
+                      "path": "3.2.3.1.3",
+                      "title": "Identifying the difficulty of acquiring it",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                    }
+                  ]
+                },
+                {
+                  "path": "3.2.3.2",
+                  "title": "Generating joy in the attainment of the benefit of others",
+                  "emotion": "Love / Affection / Connectedness",
+                  "children": [
+                    {
+                      "path": "3.2.3.2.1",
+                      "title": "The power to dispel suffering",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "3.2.3.2.2",
+                      "title": "The power to dispel obscurations",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "3.2.3.2.3",
+                      "title": "The power to establish benefit and happiness",
+                      "emotion": "Love / Affection / Connectedness"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "4",
+      "title": "The cooperating condition: subsequently accomplishing the training",
+      "emotion": "Stress",
+      "children": [
+        {
+          "path": "4.1",
+          "title": "Concern",
+          "emotion": "Worry / Anxiety",
+          "children": [
+            {
+              "path": "4.1.1",
+              "title": "Concern for bodhicitta",
+              "emotion": "Worry / Anxiety",
+              "children": [
+                {
+                  "path": "4.1.1.1",
+                  "title": "Briefly",
+                  "emotion": "Worry / Anxiety"
+                },
+                {
+                  "path": "4.1.1.2",
+                  "title": "Extensively",
+                  "emotion": "Worry / Anxiety",
+                  "children": [
+                    {
+                      "path": "4.1.1.2.1",
+                      "title": "Reasons for not abandoning bodhicitta",
+                      "emotion": "Worry / Anxiety"
+                    },
+                    {
+                      "path": "4.1.1.2.2",
+                      "title": "The faults of abandoning it",
+                      "emotion": "Fear / Apprehension",
+                      "children": [
+                        {
+                          "path": "4.1.1.2.2.1",
+                          "title": "One goes to the lower realms",
+                          "emotion": "Fear / Apprehension",
+                          "children": [
+                            {
+                              "path": "4.1.1.2.2.1.1",
+                              "title": "Deceiving all beings",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "4.1.1.2.2.1.2",
+                              "title": "Scriptural establishment",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "4.1.1.2.2.1.3",
+                              "title": "Abandoning contradiction with other scriptures",
+                              "emotion": "Fear / Apprehension"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.1.1.2.2.2",
+                          "title": "The benefit of others is damaged",
+                          "emotion": "Fear / Apprehension",
+                          "children": [
+                            {
+                              "path": "4.1.1.2.2.2.1",
+                              "title": "It is a heavy downfall for oneself",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "4.1.1.2.2.2.2",
+                              "title": "Interrupting the virtue of others is just as bad",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "4.1.1.2.2.2.3",
+                              "title": "The reason for these",
+                              "emotion": "Fear / Apprehension"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.1.1.2.2.3",
+                          "title": "The attainment of the bhūmis is obstructed",
+                          "emotion": "Fear / Apprehension"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "4.1.2",
+              "title": "Concern for training",
+              "emotion": "Worry / Anxiety",
+              "children": [
+                {
+                  "path": "4.1.2.1",
+                  "title": "Concern to abandon nonvirtue",
+                  "emotion": "Fear / Apprehension",
+                  "children": [
+                    {
+                      "path": "4.1.2.1.1",
+                      "title": "Faults causing rebirth in the lower realms",
+                      "emotion": "Fear / Apprehension",
+                      "children": [
+                        {
+                          "path": "4.1.2.1.1.1",
+                          "title": "Again and again taking lower rebirths",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.1.2.1.1.2",
+                          "title": "Not having had the circumstances of their final exhaustion",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.1.2.1.1.3",
+                          "title": "The same again in the future",
+                          "emotion": "Fear / Apprehension"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.1.2.1.2",
+                      "title": "Not attaining freedom",
+                      "emotion": "Hopelessness / Discouragement"
+                    },
+                    {
+                      "path": "4.1.2.1.3",
+                      "title": "The instability of freedom when it is attained",
+                      "emotion": "Worry / Anxiety"
+                    },
+                    {
+                      "path": "4.1.2.1.4",
+                      "title": "No virtuous deeds in the lower realms",
+                      "emotion": "Hopelessness / Discouragement",
+                      "children": [
+                        {
+                          "path": "4.1.2.1.4.1",
+                          "title": "No opportunity for virtue",
+                          "emotion": "Hopelessness / Discouragement"
+                        },
+                        {
+                          "path": "4.1.2.1.4.2",
+                          "title": "The reason for this",
+                          "emotion": "Hopelessness / Discouragement"
+                        },
+                        {
+                          "path": "4.1.2.1.4.3",
+                          "title": "The inability to return from the lower realms",
+                          "emotion": "Hopelessness / Discouragement"
+                        },
+                        {
+                          "path": "4.1.2.1.4.4",
+                          "title": "A scriptural reference for that",
+                          "emotion": "Hopelessness / Discouragement"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.1.2.2",
+                  "title": "Concern to cultivate virtue",
+                  "emotion": "Stress",
+                  "children": [
+                    {
+                      "path": "4.1.2.2.1",
+                      "title": "Many nonvirtues were previously gathered",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.1.2.2.2",
+                      "title": "They are not exhausted by themselves",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.1.2.2.3",
+                      "title": "Therefore, one should strive in virtue, the antidote",
+                      "emotion": "Stress",
+                      "children": [
+                        {
+                          "path": "4.1.2.2.3.1",
+                          "title": "General explanation of the fault of not striving",
+                          "emotion": "Stress"
+                        },
+                        {
+                          "path": "4.1.2.2.3.2",
+                          "title": "The fault in this life",
+                          "emotion": "Stress"
+                        },
+                        {
+                          "path": "4.1.2.2.3.3",
+                          "title": "The fault in future lives",
+                          "emotion": "Stress"
+                        },
+                        {
+                          "path": "4.1.2.2.3.4",
+                          "title": "Advice in overcoming that with an admonition",
+                          "emotion": "Gratitude / Hope / Pride",
+                          "children": [
+                            {
+                              "path": "4.1.2.2.3.4.1",
+                              "title": "One has attained freedom, the basis",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.2.3.4.2",
+                              "title": "One has clearly distinguished good from bad",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.2.3.4.3",
+                              "title": "It is only logical, therefore, to persevere",
+                              "emotion": "Gratitude / Hope / Pride"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.1.2.3",
+                  "title": "Concern to abandon the defilements",
+                  "emotion": "Anger / Frustration / Irritation",
+                  "children": [
+                    {
+                      "path": "4.1.2.3.1",
+                      "title": "Examining the contrasting attitude",
+                      "emotion": "Anger / Frustration / Irritation",
+                      "children": [
+                        {
+                          "path": "4.1.2.3.1.1",
+                          "title": "Examination of the harms",
+                          "emotion": "Overwhelmed",
+                          "children": [
+                            {
+                              "path": "4.1.2.3.1.1.1",
+                              "title": "Loss of autonomy",
+                              "emotion": "Overwhelmed"
+                            },
+                            {
+                              "path": "4.1.2.3.1.1.2",
+                              "title": "Application to suffering",
+                              "emotion": "Overwhelmed"
+                            },
+                            {
+                              "path": "4.1.2.3.1.1.3",
+                              "title": "Their perpetual presence",
+                              "emotion": "Overwhelmed"
+                            },
+                            {
+                              "path": "4.1.2.3.1.1.4",
+                              "title": "They achieve nothing",
+                              "emotion": "Overwhelmed"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.1.2.3.1.2",
+                          "title": "Examining impatience",
+                          "emotion": "Anger / Frustration / Irritation",
+                          "children": [
+                            {
+                              "path": "4.1.2.3.1.2.1",
+                              "title": "Harmful to the mind",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.1.2.3.1.2.2",
+                              "title": "Harmful to the body",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.1.2.3.1.2.3",
+                              "title": "Developing pride",
+                              "emotion": "Anger / Frustration / Irritation"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.1.2.3.2",
+                      "title": "Rejecting the idea that application will create suffering",
+                      "emotion": "Stress",
+                      "children": [
+                        {
+                          "path": "4.1.2.3.2.1",
+                          "title": "The faults of non-application",
+                          "emotion": "Fear / Apprehension",
+                          "children": [
+                            {
+                              "path": "4.1.2.3.2.1.1",
+                              "title": "An example of the faults of non-application",
+                              "emotion": "Fear / Apprehension"
+                            },
+                            {
+                              "path": "4.1.2.3.2.1.2",
+                              "title": "The point of the example",
+                              "emotion": "Fear / Apprehension"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.1.2.3.2.2",
+                          "title": "The qualities of application",
+                          "emotion": "Gratitude / Hope / Pride",
+                          "children": [
+                            {
+                              "path": "4.1.2.3.2.2.1",
+                              "title": "Benefit of self",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.3.2.2.2",
+                              "title": "Benefit of other",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.3.2.2.3",
+                              "title": "Fulfilment of vows",
+                              "emotion": "Gratitude / Hope / Pride"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.1.2.3.2.3",
+                          "title": "The means of devoting oneself to that application",
+                          "emotion": "Stress",
+                          "children": [
+                            {
+                              "path": "4.1.2.3.2.3.1",
+                              "title": "Not stopping until the defilements have been abandoned",
+                              "emotion": "Stress"
+                            },
+                            {
+                              "path": "4.1.2.3.2.3.2",
+                              "title": "Dedication in this",
+                              "emotion": "Stress"
+                            },
+                            {
+                              "path": "4.1.2.3.2.3.3",
+                              "title": "Relying on antidotes for one’s own impatience",
+                              "emotion": "Stress"
+                            },
+                            {
+                              "path": "4.1.2.3.2.3.4",
+                              "title": "Abandoning objections to that",
+                              "emotion": "Stress"
+                            },
+                            {
+                              "path": "4.1.2.3.2.3.5",
+                              "title": "No obedience to the defilements",
+                              "emotion": "Stress"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.1.2.3.3",
+                      "title": "Developing enthusiasm in one’s ability to abandon the defilements",
+                      "emotion": "Gratitude / Hope / Pride",
+                      "children": [
+                        {
+                          "path": "4.1.2.3.3.1",
+                          "title": "They have no other basis",
+                          "emotion": "Gratitude / Hope / Pride",
+                          "children": [
+                            {
+                              "path": "4.1.2.3.3.1.1",
+                              "title": "Presenting an example of expulsion",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.3.3.1.2",
+                              "title": "The related meaning",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.3.3.1.3",
+                              "title": "The nature of the antidotes which bring about abandonment",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.1.2.3.3.1.4",
+                              "title": "The essential characteristic of their not returning",
+                              "emotion": "Gratitude / Hope / Pride"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.1.2.3.3.2",
+                          "title": "They are erroneous perceptions",
+                          "emotion": "Gratitude / Hope / Pride"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.1.2.4",
+                  "title": "Concluding summary of concern for training",
+                  "emotion": "Worry / Anxiety"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension",
+          "emotion": "Stress",
+          "children": [
+            {
+              "path": "4.2.1",
+              "title": "Guarding the mind as the means of guarding training",
+              "emotion": "Worry / Anxiety",
+              "children": [
+                {
+                  "path": "4.2.1.1",
+                  "title": "By guarding the mind, one guards all",
+                  "emotion": "Worry / Anxiety",
+                  "children": [
+                    {
+                      "path": "4.2.1.1.1",
+                      "title": "Showing this with a forward pervasion",
+                      "emotion": "Worry / Anxiety"
+                    },
+                    {
+                      "path": "4.2.1.1.2",
+                      "title": "Showing the reverse pervasion",
+                      "emotion": "Worry / Anxiety"
+                    },
+                    {
+                      "path": "4.2.1.1.3",
+                      "title": "Establishing the reverse pervasion",
+                      "emotion": "Worry / Anxiety"
+                    },
+                    {
+                      "path": "4.2.1.1.4",
+                      "title": "When one guards the mind, dangers subside",
+                      "emotion": "Worry / Anxiety"
+                    },
+                    {
+                      "path": "4.2.1.1.5",
+                      "title": "Condensed meaning",
+                      "emotion": "Worry / Anxiety"
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.1.2",
+                  "title": "The reason everything depends upon mind",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.2.1.2.1",
+                      "title": "All faults depend upon mind",
+                      "emotion": "Fear / Apprehension",
+                      "children": [
+                        {
+                          "path": "4.2.1.2.1.1",
+                          "title": "Presenting a scriptural gloss",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.2.1.2.1.2",
+                          "title": "Establishing that",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.2.1.2.1.3",
+                          "title": "Conclusion",
+                          "emotion": "Fear / Apprehension"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.2.1.2.2",
+                      "title": "All virtues depend upon mind",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.2.1.2.2.1",
+                          "title": "Giving",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.2.1.2.2.2",
+                          "title": "Moral conduct",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.2.1.2.2.3",
+                          "title": "Patience",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.2.1.2.2.3.1",
+                              "title": "The actual meaning",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.2.1.2.2.3.2",
+                              "title": "A related example",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.2.1.2.2.3.3",
+                              "title": "The related point",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.1.2.2.4",
+                          "title": "Energy",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.2.1.2.2.5",
+                          "title": "Meditation",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.2.1.2.2.6",
+                          "title": "Wisdom",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.1.3",
+                  "title": "One should make effort to guard the mind",
+                  "emotion": "Stress",
+                  "children": [
+                    {
+                      "path": "4.2.1.3.1",
+                      "title": "General explanation",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.2.1.3.2",
+                      "title": "Everything is accomplished by it",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.2.1.3.3",
+                      "title": "A perspective for guarding the mind in this way",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.2.1.3.4",
+                      "title": "The reason it makes sense to guard it",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.2.1.3.5",
+                      "title": "Properly guarding it",
+                      "emotion": "Stress"
+                    },
+                    {
+                      "path": "4.2.1.3.6",
+                      "title": "Conclusion to take great care in mindfulness",
+                      "emotion": "Stress"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "4.2.2",
+              "title": "Guarding mindfulness and clear comprehension as the means of guarding the mind",
+              "emotion": "Worry / Anxiety",
+              "children": [
+                {
+                  "path": "4.2.2.1",
+                  "title": "Brief description",
+                  "emotion": "Worry / Anxiety"
+                },
+                {
+                  "path": "4.2.2.2",
+                  "title": "The faults of lacking mindfulness and clear comprehension",
+                  "emotion": "Fear / Apprehension",
+                  "children": [
+                    {
+                      "path": "4.2.2.2.1",
+                      "title": "Little power to act",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "4.2.2.2.2",
+                      "title": "Wisdom will not flourish",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "4.2.2.2.3",
+                      "title": "Moral conduct will not flourish",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "4.2.2.2.4",
+                      "title": "Accumulated virtues are destroyed",
+                      "emotion": "Fear / Apprehension"
+                    },
+                    {
+                      "path": "4.2.2.2.5",
+                      "title": "Accumulated virtues are not produced",
+                      "emotion": "Fear / Apprehension"
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.2.3",
+                  "title": "Guarding mindfulness as the means of guarding clear comprehension",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.2.2.3.1",
+                      "title": "Expressing the main point",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.2.2.3.2",
+                      "title": "Showing its cause",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.2.2.3.2.1",
+                          "title": "Keeping in mind the faults of its loss",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.2.2.3.2.2",
+                          "title": "Relying on the conditions which prevent its loss",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.2.2.3.2.2.1",
+                              "title": "The outer condition: reliance on the spiritual friend",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.2.2.3.2.2.2",
+                              "title": "The inner condition: a proper mental attitude",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.2.3.2.3",
+                          "title": "An additional benefit",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.2.2.3.3",
+                      "title": "How to definitively generate clear comprehension through mindfulness",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "4.2.3",
+              "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension",
+              "emotion": "Feeling Treated with Respect",
+              "children": [
+                {
+                  "path": "4.2.3.1",
+                  "title": "Training in the conduct of vows",
+                  "emotion": "Feeling Treated with Respect",
+                  "children": [
+                    {
+                      "path": "4.2.3.1.1",
+                      "title": "In relation to type",
+                      "emotion": "Feeling Treated with Respect",
+                      "children": [
+                        {
+                          "path": "4.2.3.1.1.1",
+                          "title": "In relation to the body",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "4.2.3.1.1.1.1",
+                              "title": "Temporarily remaining at ease",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.1.2",
+                              "title": "In relation to sight",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.1.3",
+                              "title": "In relation to other situations",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.1.4",
+                              "title": "Preparing and checking oneself",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.3.1.1.2",
+                          "title": "In relation to mind",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "4.2.3.1.1.3",
+                          "title": "Times when there is a dispensation regardless of type",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "4.2.3.1.1.3.1",
+                              "title": "Times when there is a dispensation on bodily conduct",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.3.2",
+                              "title": "Referencing a scriptural source for that",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.3.3",
+                              "title": "Abandoning an objection",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.3.4",
+                              "title": "The qualities of behaving in this way",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.3.5",
+                              "title": "The faults of not doing do",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.1.3.6",
+                              "title": "Concluding summary",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.2.3.1.2",
+                      "title": "Guarding against damage",
+                      "emotion": "Feeling Treated with Respect",
+                      "children": [
+                        {
+                          "path": "4.2.3.1.2.1",
+                          "title": "Guarding against damage to vows of body",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "4.2.3.1.2.1.1",
+                              "title": "Not letting the vows be stolen by distracting conditions",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.2.1.2",
+                              "title": "Abandoning meaningless behaviour",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.2.1.3",
+                              "title": "Examining the motivation",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.3.1.2.2",
+                          "title": "Guarding against damage to vows of mind",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "4.2.3.1.2.2.1",
+                              "title": "Types of antidote",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.1.2.2.2",
+                              "title": "Briefly explaining how to apply them",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.3.2",
+                  "title": "Training in the conduct of accumulating virtue",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.2.3.2.1",
+                      "title": "Accomplishing non-attachment to the body",
+                      "emotion": "Disgust / Annoyance / Contempt",
+                      "children": [
+                        {
+                          "path": "4.2.3.2.1.1",
+                          "title": "Inanimate",
+                          "emotion": "Disgust / Annoyance / Contempt"
+                        },
+                        {
+                          "path": "4.2.3.2.1.2",
+                          "title": "Impure",
+                          "emotion": "Disgust / Annoyance / Contempt"
+                        },
+                        {
+                          "path": "4.2.3.2.1.3",
+                          "title": "Essenceless",
+                          "emotion": "Disgust / Annoyance / Contempt"
+                        },
+                        {
+                          "path": "4.2.3.2.1.4",
+                          "title": "Useless",
+                          "emotion": "Disgust / Annoyance / Contempt"
+                        },
+                        {
+                          "path": "4.2.3.2.1.5",
+                          "title": "Applying it to use",
+                          "emotion": "Disgust / Annoyance / Contempt"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.2.3.2.2",
+                      "title": "Training in the means of accomplishing virtue",
+                      "emotion": "Feeling Treated with Respect",
+                      "children": [
+                        {
+                          "path": "4.2.3.2.2.1",
+                          "title": "Skilful means for ordinary conduct",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "4.2.3.2.2.2",
+                          "title": "Skilful means for conduct towards agents",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "4.2.3.2.2.2.1",
+                              "title": "How to respond to those who are giving advice",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.2.2.2.2",
+                              "title": "How to respond to those who expressing the truth",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.2.2.2.3",
+                              "title": "How to respond to those who are creating merit",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.2.2.2.4",
+                              "title": "How to respond to descriptions",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.2.2.2.5",
+                              "title": "The greatness of the mind that is respectful to others",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.3.2.2.3",
+                          "title": "Skilful means for conduct of action",
+                          "emotion": "Feeling Treated with Respect",
+                          "children": [
+                            {
+                              "path": "4.2.3.2.2.3.1",
+                              "title": "Connected with speaking",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.2.2.3.2",
+                              "title": "Connected with looking",
+                              "emotion": "Feeling Treated with Respect"
+                            },
+                            {
+                              "path": "4.2.3.2.2.3.3",
+                              "title": "Connected with virtuous action",
+                              "emotion": "Feeling Treated with Respect"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.3.3",
+                  "title": "Training in the conduct of benefitting sentient beings",
+                  "emotion": "Love / Affection / Connectedness",
+                  "children": [
+                    {
+                      "path": "4.2.3.3.1",
+                      "title": "Increasing activities for the benefit of others",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "4.2.3.3.2",
+                      "title": "The conduct of gathering sentient beings",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "4.2.3.3.2.1",
+                          "title": "Gathering with wealth and possessions",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "4.2.3.3.2.1.1",
+                              "title": "External gathering",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.2.3.3.2.1.2",
+                              "title": "Internal gathering",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.3.3.2.2",
+                          "title": "Gathering with dharma",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "4.2.3.3.2.2.1",
+                              "title": "Vessels of its explanation",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.2.3.3.2.2.2",
+                              "title": "Methods of its explanation",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.2.3.3.2.3",
+                          "title": "The subsequent conduct of protecting the minds of sentient beings",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.3.4",
+                  "title": "Factors which enhance the training",
+                  "emotion": "Feeling Treated with Respect",
+                  "children": [
+                    {
+                      "path": "4.2.3.4.1",
+                      "title": "The cause of purifying faults",
+                      "emotion": "Feeling Treated with Respect"
+                    },
+                    {
+                      "path": "4.2.3.4.2",
+                      "title": "The basis of training",
+                      "emotion": "Feeling Treated with Respect"
+                    },
+                    {
+                      "path": "4.2.3.4.3",
+                      "title": "The aim",
+                      "emotion": "Feeling Treated with Respect"
+                    },
+                    {
+                      "path": "4.2.3.4.4",
+                      "title": "The teacher of the training",
+                      "emotion": "Feeling Treated with Respect",
+                      "children": [
+                        {
+                          "path": "4.2.3.4.4.1",
+                          "title": "The spiritual friend",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "4.2.3.4.4.2",
+                          "title": "One should rely upon him",
+                          "emotion": "Feeling Treated with Respect"
+                        },
+                        {
+                          "path": "4.2.3.4.4.3",
+                          "title": "Consideration of reliance upon application",
+                          "emotion": "Feeling Treated with Respect"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.2.3.4.5",
+                      "title": "Becoming knowledgeable",
+                      "emotion": "Feeling Treated with Respect"
+                    },
+                    {
+                      "path": "4.2.3.4.6",
+                      "title": "Summary of the training",
+                      "emotion": "Feeling Treated with Respect"
+                    }
+                  ]
+                },
+                {
+                  "path": "4.2.3.5",
+                  "title": "Applying the key point",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "4.3",
+          "title": "Patience",
+          "emotion": "Anger / Frustration / Irritation",
+          "children": [
+            {
+              "path": "4.3.1",
+              "title": "Developing motivation for patience",
+              "emotion": "Anger / Frustration / Irritation",
+              "children": [
+                {
+                  "path": "4.3.1.1",
+                  "title": "Invisible results",
+                  "emotion": "Fear / Apprehension"
+                },
+                {
+                  "path": "4.3.1.2",
+                  "title": "Visible results",
+                  "emotion": "Anger / Frustration / Irritation",
+                  "children": [
+                    {
+                      "path": "4.3.1.2.1",
+                      "title": "Harm to the mind",
+                      "emotion": "Anger / Frustration / Irritation"
+                    },
+                    {
+                      "path": "4.3.1.2.2",
+                      "title": "Harm to the body",
+                      "emotion": "Anger / Frustration / Irritation"
+                    },
+                    {
+                      "path": "4.3.1.2.3",
+                      "title": "Summarizing the invisible and visible results",
+                      "emotion": "Anger / Frustration / Irritation"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "4.3.2",
+              "title": "Keeping in mind the skilful means for accomplishing patience",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "4.3.2.1",
+                  "title": "Preventing the characteristics of anger",
+                  "emotion": "Anger / Frustration / Irritation",
+                  "children": [
+                    {
+                      "path": "4.3.2.1.1",
+                      "title": "The nature of its cause",
+                      "emotion": "Anger / Frustration / Irritation"
+                    },
+                    {
+                      "path": "4.3.2.1.2",
+                      "title": "Striving in the means of averting that cause",
+                      "emotion": "Anger / Frustration / Irritation"
+                    },
+                    {
+                      "path": "4.3.2.1.3",
+                      "title": "The means of averting that cause",
+                      "emotion": "Anger / Frustration / Irritation"
+                    },
+                    {
+                      "path": "4.3.2.1.4",
+                      "title": "Keeping in mind the means of averting the cause of the cause",
+                      "emotion": "Anger / Frustration / Irritation",
+                      "children": [
+                        {
+                          "path": "4.3.2.1.4.1",
+                          "title": "General explanation distinguishing desirable and undesirable dharmas",
+                          "emotion": "Anger / Frustration / Irritation"
+                        },
+                        {
+                          "path": "4.3.2.1.4.2",
+                          "title": "Ceasing anger toward the production of undesirables",
+                          "emotion": "Anger / Frustration / Irritation",
+                          "children": [
+                            {
+                              "path": "4.3.2.1.4.2.1",
+                              "title": "Stopping impatience with the production of negative actions towards oneself",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.3.2.1.4.2.2",
+                              "title": "Stopping impatience with the production of negative actions towards one’s own side",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.3.2.1.4.2.3",
+                              "title": "Stopping impatience with the production of good towards one’s enemies",
+                              "emotion": "Anger / Frustration / Irritation"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.3.2.1.4.3",
+                          "title": "Ceasing anger towards those who obstruct desirable dharmas",
+                          "emotion": "Anger / Frustration / Irritation",
+                          "children": [
+                            {
+                              "path": "4.3.2.1.4.3.1",
+                              "title": "Abandoning impatience with those who obstruct accomplishing negative actions towards one’s enemies",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.3.2.1.4.3.2",
+                              "title": "Abandoning impatience with those who obstruct good for oneself and one’s own side",
+                              "emotion": "Anger / Frustration / Irritation"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.3.2.2",
+                  "title": "Keeping in mind the results of patience",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.3.2.2.1",
+                      "title": "Brief presentation",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.3.2.2.2",
+                      "title": "An example from the perspective of the result",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.3.2.2.3",
+                      "title": "The example is far outweighed",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.3.2.2.4",
+                      "title": "Summary enumeration of results",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "4.4",
+          "title": "Effort",
+          "emotion": "Tiredness / Fatigue",
+          "children": [
+            {
+              "path": "4.4.1",
+              "title": "Developing enthusiasm for effort",
+              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+            },
+            {
+              "path": "4.4.2",
+              "title": "The nature of effort",
+              "emotion": "Well-Rested / Energized"
+            },
+            {
+              "path": "4.4.3",
+              "title": "Abandoning opposing factors",
+              "emotion": "Tiredness / Fatigue",
+              "children": [
+                {
+                  "path": "4.4.3.1",
+                  "title": "Summarizing the opposing factors",
+                  "emotion": "Tiredness / Fatigue"
+                },
+                {
+                  "path": "4.4.3.2",
+                  "title": "Abandoning the laziness of non-application",
+                  "emotion": "Tiredness / Fatigue",
+                  "children": [
+                    {
+                      "path": "4.4.3.2.1",
+                      "title": "Examining the cause of non-application and averting it",
+                      "emotion": "Tiredness / Fatigue"
+                    },
+                    {
+                      "path": "4.4.3.2.2",
+                      "title": "Examining the faults of this life and averting them",
+                      "emotion": "Fear / Apprehension",
+                      "children": [
+                        {
+                          "path": "4.4.3.2.2.1",
+                          "title": "Having certainty about impermanence",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.2.2",
+                          "title": "An example of seeing this",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.2.3",
+                          "title": "It will befall one",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.2.4",
+                          "title": "Impossible to hold back time",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.2.5",
+                          "title": "The time of death is too late",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.2.6",
+                          "title": "Explaining the impossibility of holding back time",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.2.7",
+                          "title": "Describing the actual kinds of suffering",
+                          "emotion": "Fear / Apprehension"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.4.3.2.3",
+                      "title": "Examining the sufferings of future lives and averting them",
+                      "emotion": "Fear / Apprehension",
+                      "children": [
+                        {
+                          "path": "4.4.3.2.3.1",
+                          "title": "Suffering is certain to arise",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.3.2",
+                          "title": "A difficult consideration",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.3.3",
+                          "title": "A mass of contradictions",
+                          "emotion": "Fear / Apprehension"
+                        },
+                        {
+                          "path": "4.4.3.2.3.4",
+                          "title": "Exhortation for the means of liberation from that",
+                          "emotion": "Fear / Apprehension"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.4.3.3",
+                  "title": "Abandoning the laziness of negative behaviour",
+                  "emotion": "Boredom"
+                },
+                {
+                  "path": "4.4.3.4",
+                  "title": "Abandoning the laziness of despondency",
+                  "emotion": "Hopelessness / Discouragement",
+                  "children": [
+                    {
+                      "path": "4.4.3.4.1",
+                      "title": "The antidotes and their result briefly explained",
+                      "emotion": "Hopelessness / Discouragement"
+                    },
+                    {
+                      "path": "4.4.3.4.2",
+                      "title": "The antidote to the despondency of thinking that one lacks the cause",
+                      "emotion": "Hopelessness / Discouragement"
+                    },
+                    {
+                      "path": "4.4.3.4.3",
+                      "title": "The antidote to the despondency of impatience with application",
+                      "emotion": "Hopelessness / Discouragement",
+                      "children": [
+                        {
+                          "path": "4.4.3.4.3.1",
+                          "title": "The difficulties have great benefit",
+                          "emotion": "Hopelessness / Discouragement"
+                        },
+                        {
+                          "path": "4.4.3.4.3.2",
+                          "title": "It is not suffering",
+                          "emotion": "Hopelessness / Discouragement"
+                        },
+                        {
+                          "path": "4.4.3.4.3.3",
+                          "title": "It is actually happiness",
+                          "emotion": "Hopelessness / Discouragement"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "4.4.4",
+              "title": "Fully developing effort",
+              "emotion": "Well-Rested / Energized",
+              "children": [
+                {
+                  "path": "4.4.4.1",
+                  "title": "Briefly",
+                  "emotion": "Well-Rested / Energized"
+                },
+                {
+                  "path": "4.4.4.2",
+                  "title": "Extensively",
+                  "emotion": "Well-Rested / Energized",
+                  "children": [
+                    {
+                      "path": "4.4.4.2.1",
+                      "title": "Developing the array of powers",
+                      "emotion": "Well-Rested / Energized",
+                      "children": [
+                        {
+                          "path": "4.4.4.2.1.1",
+                          "title": "The power of motivation",
+                          "emotion": "Gratitude / Hope / Pride",
+                          "children": [
+                            {
+                              "path": "4.4.4.2.1.1.1",
+                              "title": "Object",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.4.4.2.1.1.2",
+                              "title": "Result of motivation",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.4.4.2.1.1.3",
+                              "title": "Cause of motivation",
+                              "emotion": "Gratitude / Hope / Pride"
+                            },
+                            {
+                              "path": "4.4.4.2.1.1.4",
+                              "title": "Conclusion",
+                              "emotion": "Gratitude / Hope / Pride"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.4.4.2.1.2",
+                          "title": "The power of steadfastness",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.4.4.2.1.2.1",
+                              "title": "Stable preparation",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.4.4.2.1.2.2",
+                              "title": "Stable engagement",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.4.4.2.1.3",
+                          "title": "The power of joy",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                          "children": [
+                            {
+                              "path": "4.4.4.2.1.3.1",
+                              "title": "One should enjoy the play of good actions themselves without concern for a result",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "4.4.4.2.1.3.2",
+                              "title": "Consideration of the result: enjoyment",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "4.4.4.2.1.3.3",
+                              "title": "How to apply the power of joy",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.4.4.2.1.4",
+                          "title": "The power of rest",
+                          "emotion": "Well-Rested / Energized",
+                          "children": [
+                            {
+                              "path": "4.4.4.2.1.4.1",
+                              "title": "Temporary rest",
+                              "emotion": "Well-Rested / Energized"
+                            },
+                            {
+                              "path": "4.4.4.2.1.4.2",
+                              "title": "Finishing rest",
+                              "emotion": "Well-Rested / Energized"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.4.4.2.2",
+                      "title": "Dedication",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.4.4.2.2.1",
+                          "title": "Dedication to concern",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.4.4.2.2.2",
+                          "title": "Dedication to mindfulness and clear comprehension",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.4.4.2.2.3",
+                          "title": "Not allowing circumstances to arise which oppose those two",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.4.4.2.2.4",
+                          "title": "Overcoming their arising",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.4.4.2.2.5",
+                          "title": "Subsequently accomplishing supporting actions",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.4.4.2.3",
+                      "title": "Self-control",
+                      "emotion": "Stress"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation",
+          "emotion": "Contentment / Satisfaction / Calm",
+          "children": [
+            {
+              "path": "4.5.1",
+              "title": "Abandoning contradictory factors",
+              "emotion": "Stress",
+              "children": [
+                {
+                  "path": "4.5.1.1",
+                  "title": "Briefly",
+                  "emotion": "Stress"
+                },
+                {
+                  "path": "4.5.1.2",
+                  "title": "Abandoning the world",
+                  "emotion": "Loneliness",
+                  "children": [
+                    {
+                      "path": "4.5.1.2.1",
+                      "title": "The causes of not abandoning the world",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "4.5.1.2.2",
+                      "title": "The greatness of the antidote to those causes",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.5.1.2.3",
+                      "title": "How the antidotes are accomplished",
+                      "emotion": "Loneliness",
+                      "children": [
+                        {
+                          "path": "4.5.1.2.3.1",
+                          "title": "Establishing non-attachment towards sentient beings",
+                          "emotion": "Loneliness",
+                          "children": [
+                            {
+                              "path": "4.5.1.2.3.1.1",
+                              "title": "The faults of the subject with attachment",
+                              "emotion": "Loneliness"
+                            },
+                            {
+                              "path": "4.5.1.2.3.1.2",
+                              "title": "The faults of the desired object",
+                              "emotion": "Loneliness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.1.2.3.2",
+                          "title": "Establishing non-attachment towards possessions, etc",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.5.1.2.3.2.1",
+                              "title": "The faults of the subject with attachment",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.5.1.2.3.2.2",
+                              "title": "The faults of the desired object",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.1.2.4",
+                      "title": "The faults of worldly involvement",
+                      "emotion": "Overwhelmed"
+                    },
+                    {
+                      "path": "4.5.1.2.5",
+                      "title": "The qualities of non-distraction",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.5.1.2.5.1",
+                          "title": "Friends",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.5.1.2.5.2",
+                          "title": "Places",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.5.1.2.5.3",
+                          "title": "Livelihood",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.5.1.2.5.4",
+                          "title": "Discriminations",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.5.1.2.5.4.1",
+                              "title": "Impurity",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.5.1.2.5.4.2",
+                              "title": "The inevitability of separation from friends",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.5.1.2.5.4.3",
+                              "title": "They are not truly friends",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.5.1.2.5.4.4",
+                              "title": "They are unreliable",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.1.2.5.5",
+                          "title": "Non-distraction",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.5.1.3",
+                  "title": "Giving up conceptual discrimination",
+                  "emotion": "Disgust / Annoyance / Contempt",
+                  "children": [
+                    {
+                      "path": "4.5.1.3.1",
+                      "title": "Examining how the result is destroyed",
+                      "emotion": "Sadness"
+                    },
+                    {
+                      "path": "4.5.1.3.2",
+                      "title": "Examining the impure nature",
+                      "emotion": "Disgust / Annoyance / Contempt",
+                      "children": [
+                        {
+                          "path": "4.5.1.3.2.1",
+                          "title": "Impurity connected with the burial ground",
+                          "emotion": "Disgust / Annoyance / Contempt",
+                          "children": [
+                            {
+                              "path": "4.5.1.3.2.1.1",
+                              "title": "The result is not what one thinks",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            },
+                            {
+                              "path": "4.5.1.3.2.1.2",
+                              "title": "It is nothing other than what is discarded in the burial ground",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            },
+                            {
+                              "path": "4.5.1.3.2.1.3",
+                              "title": "It is not logical to selfishly protect that",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            },
+                            {
+                              "path": "4.5.1.3.2.1.4",
+                              "title": "It is not logical to attach ornaments to it",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            },
+                            {
+                              "path": "4.5.1.3.2.1.5",
+                              "title": "It is not logical to be so afraid of it",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            },
+                            {
+                              "path": "4.5.1.3.2.1.6",
+                              "title": "Adorning it with clothes does not make it desirable",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.1.3.2.2",
+                          "title": "Impurity connected with the living",
+                          "emotion": "Disgust / Annoyance / Contempt",
+                          "children": [
+                            {
+                              "path": "4.5.1.3.2.2.1",
+                              "title": "Seeing their impurity directly",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            },
+                            {
+                              "path": "4.5.1.3.2.2.2",
+                              "title": "Making certain of this with reasoning",
+                              "emotion": "Disgust / Annoyance / Contempt"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.1.3.2.3",
+                          "title": "Negating the characteristics of purity",
+                          "emotion": "Disgust / Annoyance / Contempt"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.1.3.3",
+                      "title": "Considering how harm is abandoned by its cause",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.5.1.3.3.1",
+                          "title": "Explanation",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.5.1.3.3.2",
+                          "title": "Elaboration",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.5.1.3.3.2.1",
+                              "title": "The desirable object itself is not attained",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.5.1.3.3.2.2",
+                              "title": "Other faults connected with that",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "4.5.2",
+              "title": "Developing joy in solitude",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "4.5.2.1",
+                  "title": "Its unique preeminence",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.5.2.1.1",
+                      "title": "Explanation",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.5.2.1.2",
+                      "title": "No opposing conditions",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.5.2.1.3",
+                      "title": "Supporting conditions",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    }
+                  ]
+                },
+                {
+                  "path": "4.5.2.2",
+                  "title": "Its unique happiness",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                }
+              ]
+            },
+            {
+              "path": "4.5.3",
+              "title": "Focussing the mind on samatha",
+              "emotion": "Love / Affection / Connectedness",
+              "children": [
+                {
+                  "path": "4.5.3.1",
+                  "title": "Equalizing self and others",
+                  "emotion": "Love / Affection / Connectedness",
+                  "children": [
+                    {
+                      "path": "4.5.3.1.1",
+                      "title": "Brief explanation",
+                      "emotion": "Love / Affection / Connectedness"
+                    },
+                    {
+                      "path": "4.5.3.1.2",
+                      "title": "Equality of subjection to suffering from self-grasping",
+                      "emotion": "Sadness",
+                      "children": [
+                        {
+                          "path": "4.5.3.1.2.1",
+                          "title": "Explanation",
+                          "emotion": "Sadness"
+                        },
+                        {
+                          "path": "4.5.3.1.2.2",
+                          "title": "Accomplishing it",
+                          "emotion": "Sadness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.3.1.3",
+                      "title": "Equality in suffering as the object of abandonment",
+                      "emotion": "Sadness",
+                      "children": [
+                        {
+                          "path": "4.5.3.1.3.1",
+                          "title": "Brief presentation of the proof",
+                          "emotion": "Sadness"
+                        },
+                        {
+                          "path": "4.5.3.1.3.2",
+                          "title": "Establishing the pervasion of that",
+                          "emotion": "Sadness"
+                        },
+                        {
+                          "path": "4.5.3.1.3.3",
+                          "title": "Establishing the necessary criterion of the pervasion",
+                          "emotion": "Sadness",
+                          "children": [
+                            {
+                              "path": "4.5.3.1.3.3.1",
+                              "title": "The error that follows from the different times",
+                              "emotion": "Sadness"
+                            },
+                            {
+                              "path": "4.5.3.1.3.3.2",
+                              "title": "Establishing that grasping the self as singular is error",
+                              "emotion": "Sadness"
+                            },
+                            {
+                              "path": "4.5.3.1.3.3.3",
+                              "title": "The error that follows from the parts of the body",
+                              "emotion": "Sadness"
+                            },
+                            {
+                              "path": "4.5.3.1.3.3.4",
+                              "title": "Abandoning the consequence that the example is not established",
+                              "emotion": "Sadness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.3.1.3.4",
+                          "title": "Abandoning objections",
+                          "emotion": "Sadness"
+                        },
+                        {
+                          "path": "4.5.3.1.3.5",
+                          "title": "Summarizing the definitive meaning of valid cognition",
+                          "emotion": "Sadness"
+                        },
+                        {
+                          "path": "4.5.3.1.3.6",
+                          "title": "Abandoning objections that it is not definitive",
+                          "emotion": "Sadness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.3.1.4",
+                      "title": "The qualities of meditating on equality",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                      "children": [
+                        {
+                          "path": "4.5.3.1.4.1",
+                          "title": "Undertaking the benefit of others with happiness",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "4.5.3.1.4.2",
+                          "title": "Establishing that to accomplish the benefit of others is the supreme happiness",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "4.5.3.1.4.3",
+                          "title": "Pacifying one’s own arrogance",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "4.5.3.1.4.4",
+                          "title": "Disregarding the results",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        },
+                        {
+                          "path": "4.5.3.1.4.5",
+                          "title": "Advice to strive in practising this",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.3.1.5",
+                      "title": "The possibility of meditating on equality",
+                      "emotion": "Gratitude / Hope / Pride"
+                    }
+                  ]
+                },
+                {
+                  "path": "4.5.3.2",
+                  "title": "Exchanging oneself and others",
+                  "emotion": "Love / Affection / Connectedness",
+                  "children": [
+                    {
+                      "path": "4.5.3.2.1",
+                      "title": "Brief description of the essential characteristics",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "4.5.3.2.1.1",
+                          "title": "Establishing the aspiration",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "4.5.3.2.1.2",
+                          "title": "Establishing the application",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.3.2.2",
+                      "title": "Detailed explanation of the essential characteristics",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "4.5.3.2.2.1",
+                          "title": "Accepting others",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.2.1.1",
+                              "title": "The possibility of exchanging oneself and others",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.2.1.2",
+                              "title": "Pacifying arrogance",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.2.1.3",
+                              "title": "Disregarding the results",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.2.1.4",
+                              "title": "Advice to strive in practising this",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.2.1.5",
+                              "title": "A particular practice for the benefit of others",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.2.1.6",
+                              "title": "Accomplishing by habituation",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.2.1.7",
+                              "title": "Liberation of self and others from suffering",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.3.2.2.2",
+                          "title": "Abandoning clinging to ‘I’",
+                          "emotion": "Anger / Frustration / Irritation",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.2.2.1",
+                              "title": "Out of attachment to one’s body, one is afraid of things which are not frightening",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.5.3.2.2.2.2",
+                              "title": "Getting involved in all kinds of nonvirtue",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.5.3.2.2.2.3",
+                              "title": "The faults of putting oneself first and qualities of putting others first",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.5.3.2.2.2.4",
+                              "title": "Summary",
+                              "emotion": "Anger / Frustration / Irritation"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.3.2.3",
+                      "title": "Detailed explanation of the practices related to aspiration",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "4.5.3.2.3.1",
+                          "title": "Brief explanation",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "4.5.3.2.3.2",
+                          "title": "Meditation on envy",
+                          "emotion": "Anger / Frustration / Irritation",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.3.2.1",
+                              "title": "Meditating on envy of worldly dharmas",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.5.3.2.3.2.2",
+                              "title": "Meditating on envy of good qualities",
+                              "emotion": "Anger / Frustration / Irritation"
+                            },
+                            {
+                              "path": "4.5.3.2.3.2.3",
+                              "title": "The outcome of meditating like this",
+                              "emotion": "Anger / Frustration / Irritation"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.3.2.3.3",
+                          "title": "Meditation on competitiveness",
+                          "emotion": "Anger / Frustration / Irritation"
+                        },
+                        {
+                          "path": "4.5.3.2.3.4",
+                          "title": "Meditation on pride",
+                          "emotion": "Embarrassment / Shame",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.3.4.1",
+                              "title": "Types of pride",
+                              "emotion": "Embarrassment / Shame"
+                            },
+                            {
+                              "path": "4.5.3.2.3.4.2",
+                              "title": "The goodness of thinking about that",
+                              "emotion": "Embarrassment / Shame"
+                            },
+                            {
+                              "path": "4.5.3.2.3.4.3",
+                              "title": "Having so meditated, the practice to be relied on",
+                              "emotion": "Embarrassment / Shame"
+                            },
+                            {
+                              "path": "4.5.3.2.3.4.4",
+                              "title": "Faults unrelated to pride",
+                              "emotion": "Embarrassment / Shame"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.3.2.3.5",
+                          "title": "The results of the meditations",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.3.5.1",
+                              "title": "The fault of looking after the unexchanged self",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "4.5.3.2.3.5.2",
+                              "title": "The qualities of exchanging self and other",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "4.5.3.2.3.5.3",
+                              "title": "Experiencing the results",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "4.5.3.2.3.5.4",
+                              "title": "Making an effort to meditate for the sake of the results",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.5.3.2.4",
+                      "title": "Detailed explanation of the practices related to application",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "4.5.3.2.4.1",
+                          "title": "How to accomplish the practice",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.4.1.1",
+                              "title": "General statement",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.1.2",
+                              "title": "The practice for the benefit and happiness of others",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.1.3",
+                              "title": "Taking on all faults",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.1.4",
+                              "title": "Completely taking a lowly status for the benefit of others",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.1.5",
+                              "title": "Concise summary of the practice: accepting harm",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.1.6",
+                              "title": "Correctly protecting the mind",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.5.3.2.4.2",
+                          "title": "Controlling the mind for practice",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "4.5.3.2.4.2.1",
+                              "title": "In respect of subjugating the mind",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.2.2",
+                              "title": "The faults of activities for one’s own sake",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.2.3",
+                              "title": "The faults of taking the body as an object of grasping",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "4.5.3.2.4.2.4",
+                              "title": "The practice of controlling the mind",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom",
+          "emotion": "Contentment / Satisfaction / Calm",
+          "children": [
+            {
+              "path": "4.6.1",
+              "title": "Explaining that wisdom is the principal",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "4.6.1.1",
+                  "title": "The reason wisdom is the principal",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                },
+                {
+                  "path": "4.6.1.2",
+                  "title": "Advice to strive in this",
+                  "emotion": "Contentment / Satisfaction / Calm"
+                }
+              ]
+            },
+            {
+              "path": "4.6.2",
+              "title": "It is the wisdom of the emptiness of intrinsic nature",
+              "emotion": "Contentment / Satisfaction / Calm",
+              "children": [
+                {
+                  "path": "4.6.2.1",
+                  "title": "Establishing the object as empty",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.6.2.1.1",
+                      "title": "The nature of the two truths in our tradition",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.1.1.1",
+                          "title": "Distinguishing the two truths",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.1.1.1.1",
+                              "title": "Basis of the distinction",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.1.1.2",
+                              "title": "Meaning of the distinction",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.1.1.3",
+                              "title": "Ascertaining the number",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.1.1.4",
+                              "title": "Definitions",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.1.1.2",
+                          "title": "Their characteristics",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.1.1.3",
+                          "title": "The valid cognitions which ascertain those characteristics",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.1.1.3.1",
+                              "title": "Distinguishing the types of conceptual thought",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.1.3.2",
+                              "title": "The graduations of refuter",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.1.3.3",
+                              "title": "Abandoning objections about these graduations",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.6.2.1.2",
+                      "title": "Abandoning objections",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.1.2.1",
+                          "title": "Abandoning the objections of Vaibhāṣikas",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.1.2.1.1",
+                              "title": "Abandoning objections of contradiction with valid cognition",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.1.2",
+                              "title": "Abandoning objections of contradiction with the textual tradition of the Bhagavān",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.1.2.2",
+                          "title": "Abandoning the objections of Sautrāntikas",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.1.2.2.1",
+                              "title": "To do with the bases of accumulation",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.2.2",
+                              "title": "To do with rebirth",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.2.3",
+                              "title": "To do with karma",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.2.4",
+                              "title": "To do with the distinction between saṃsāra and nirvāṇa",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.1.2.3",
+                          "title": "Abandoning objections of the Vijñaptimātrins",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.1.2.3.1",
+                              "title": "Non-establishment of the subject",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.1.2.3.2",
+                          "title": "Non-establishment of the basis",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.1.2.3.2.1",
+                              "title": "Presenting the objection",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.3.2.2",
+                              "title": "The logic which refutes the objection",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.3.2.3",
+                              "title": "A counterobjection",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.1.2.3.2.4",
+                              "title": "Establishing the pervasion for the counter objection",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.6.2.2",
+                  "title": "Establishing the object as empty",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.6.2.2.1",
+                      "title": "Establishing subject cognition as the path",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.2.1.1",
+                          "title": "Objection",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.2.1.2",
+                          "title": "Response",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.2.1.2.1",
+                              "title": "A partial knowledge of illusion is not the antidote",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.1.2.2",
+                              "title": "Knowledge that everything is illusion is the antidote",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.1.2.3",
+                              "title": "How that is the arising of the wisdom without dualistic appearances",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.1.2.4",
+                              "title": "Engaging in activity does not depend on effort",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.6.2.2.2",
+                      "title": "Abandoning the objections of śrāvakas",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.2.2.1",
+                          "title": "Presenting the objection",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.2.2.2",
+                          "title": "The scriptural criterion for the path",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.2.2.3",
+                          "title": "Establishing the [Mahāyāna] scriptures as Buddha’s word",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.2.2.3.1",
+                              "title": "We have the same criteria for accepting [texts as scriptures]",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.2.3.2",
+                              "title": "We have the same criteria for rejecting [texts as scriptures]",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.2.2.4",
+                          "title": "Establishing them as definitive meaning",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.2.2.4.1",
+                              "title": "The error for the śrāvaka tradition in the monk who has abandoned defilements",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.2.4.2",
+                              "title": "The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.2.4.3",
+                              "title": "Overcoming objections to that",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.2.2.5",
+                          "title": "Summarizing the meaning of this section",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.2.2.6",
+                          "title": "Explaining extensively the criteria for establishing the Mahāyāna scriptures as Buddha’s word",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.2.2.6.1",
+                              "title": "We have the same criteria",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.2.6.2",
+                              "title": "To abandon it because of not understanding it is an error",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.2.2.6.3",
+                              "title": "The function of the two cognitions",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.6.2.3",
+                  "title": "How to engage in meditation on emptiness",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.6.2.3.1",
+                      "title": "How to engage in meditation on the non-self of the individual",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.3.1.1",
+                          "title": "The general explanation of individual non-self in the six elements",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.3.1.2",
+                          "title": "Refuting the self of the skandhas and elements, etc. as designated by tīrthikas",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.3.1.2.1",
+                              "title": "Refuting Sāṃkhyas",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.3.1.2.2",
+                              "title": "Refuting Naiyāyikas",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.3.1.3",
+                          "title": "Abandoning objections to non-self",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.3.1.3.1",
+                              "title": "Abandoning the objection that the connection of actions and effects is not logical",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.3.1.3.2",
+                              "title": "Abandoning the objection of objects of cultivating compassion being illogical",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.3.1.4",
+                          "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.3.1.4.1",
+                              "title": "Mindfulness of the body",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.3.1.4.2",
+                              "title": "Mindfulness of sensations",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.3.1.4.3",
+                              "title": "Mindfulness of mind",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.3.1.4.4",
+                              "title": "Mindfulness of dharmas",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.6.2.4",
+                  "title": "Ceasing to grasp at true existence",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.6.2.4.1",
+                      "title": "There is no reason that establishes all dharmas as having inherent nature",
+                      "emotion": "Contentment / Satisfaction / Calm"
+                    },
+                    {
+                      "path": "4.6.2.4.2",
+                      "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.4.2.1",
+                          "title": "The main teaching on refuting an arising with intrinsic nature",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.4.2.1.1",
+                              "title": "Refuting arising from no cause",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.4.2.1.2",
+                              "title": "Refuting arising from other",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.4.2.1.3",
+                              "title": "Refuting arising from self",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.4.2.2",
+                          "title": "Abandoning objections to the middle way",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.4.2.2.1",
+                              "title": "Setting out the objections",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.4.2.2.2",
+                              "title": "Response to the first prasaṅga: our position is not a valid cognition with a positive affirmation",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.4.2.2.3",
+                              "title": "Response to the second prasaṅga: showing that the pervasion is not established, for even though there is an analysis, it is not contrary to valid cognition",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.6.2.4.3",
+                      "title": "Showing that all dharmas arise merely through dependent origination",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.4.3.1",
+                          "title": "A summary of the refutation of the four [kinds of] arising",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.4.3.2",
+                          "title": "Showing that there is no arising or ceasing, coming or going",
+                          "emotion": "Contentment / Satisfaction / Calm"
+                        },
+                        {
+                          "path": "4.6.2.4.3.3",
+                          "title": "The implication of that: that which is dependently originated is mere illusion",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.4.3.3.1",
+                              "title": "Showing that dependent origination is like an illusion",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.4.3.3.2",
+                              "title": "Showing dependent origination",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.4.3.3.3",
+                              "title": "Establishing the pervasion",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "path": "4.6.2.5",
+                  "title": "The result of meditation on emptiness",
+                  "emotion": "Contentment / Satisfaction / Calm",
+                  "children": [
+                    {
+                      "path": "4.6.2.5.1",
+                      "title": "Benefit of self",
+                      "emotion": "Contentment / Satisfaction / Calm",
+                      "children": [
+                        {
+                          "path": "4.6.2.5.1.1",
+                          "title": "Pacifying attachment",
+                          "emotion": "Contentment / Satisfaction / Calm",
+                          "children": [
+                            {
+                              "path": "4.6.2.5.1.1.1",
+                              "title": "The non-establishment of the eight worldly dharmas, the objects of attachment",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            },
+                            {
+                              "path": "4.6.2.5.1.1.2",
+                              "title": "Ending conditioned existence, which depends upon these",
+                              "emotion": "Contentment / Satisfaction / Calm"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "4.6.2.5.1.2",
+                          "title": "Pacifying suffering",
+                          "emotion": "Sadness",
+                          "children": [
+                            {
+                              "path": "4.6.2.5.1.2.1",
+                              "title": "A summary of visible sufferings",
+                              "emotion": "Sadness"
+                            },
+                            {
+                              "path": "4.6.2.5.1.2.2",
+                              "title": "The invisible sufferings of other lives",
+                              "emotion": "Sadness"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "4.6.2.5.2",
+                      "title": "Benefit of others",
+                      "emotion": "Love / Affection / Connectedness",
+                      "children": [
+                        {
+                          "path": "4.6.2.5.2.1",
+                          "title": "Pacifying suffering",
+                          "emotion": "Love / Affection / Connectedness"
+                        },
+                        {
+                          "path": "4.6.2.5.2.2",
+                          "title": "Pacifying attachment",
+                          "emotion": "Love / Affection / Connectedness"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "5",
+      "title": "The subsequent results of the practice: dedication of merit",
+      "emotion": "Gratitude / Hope / Pride",
+      "children": [
+        {
+          "path": "5.1",
+          "title": "Dedication related to the means",
+          "emotion": "Gratitude / Hope / Pride"
+        },
+        {
+          "path": "5.2",
+          "title": "Dedication for the benefit of others",
+          "emotion": "Love / Affection / Connectedness",
+          "children": [
+            {
+              "path": "5.2.1",
+              "title": "Dedication for worldly benefit",
+              "emotion": "Love / Affection / Connectedness",
+              "children": [
+                {
+                  "path": "5.2.1.1",
+                  "title": "General dedication",
+                  "emotion": "Love / Affection / Connectedness"
+                },
+                {
+                  "path": "5.2.1.2",
+                  "title": "Dedication for the benefit of specific lower realms",
+                  "emotion": "Sadness",
+                  "children": [
+                    {
+                      "path": "5.2.1.2.1",
+                      "title": "Dedication for the benefit of hell-beings",
+                      "emotion": "Sadness",
+                      "children": [
+                        {
+                          "path": "5.2.1.2.1.1",
+                          "title": "Dedication for their own pacification of suffering",
+                          "emotion": "Sadness",
+                          "children": [
+                            {
+                              "path": "5.2.1.2.1.1.1",
+                              "title": "Dedication for general pacification",
+                              "emotion": "Sadness"
+                            },
+                            {
+                              "path": "5.2.1.2.1.1.2",
+                              "title": "Dedication for pacifying the cold hells",
+                              "emotion": "Sadness"
+                            },
+                            {
+                              "path": "5.2.1.2.1.1.3",
+                              "title": "Dedication for pacifying the hot hells",
+                              "emotion": "Sadness"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "5.2.1.2.1.2",
+                          "title": "Dedication for their pacification by others",
+                          "emotion": "Love / Affection / Connectedness",
+                          "children": [
+                            {
+                              "path": "5.2.1.2.1.2.1",
+                              "title": "Pacification by Vajrapāṇi’s power",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "5.2.1.2.1.2.2",
+                              "title": "Pacification by Padmapāṇi’s compassion",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "5.2.1.2.1.2.3",
+                              "title": "Pacification by Mañjughoṣa’s emanation",
+                              "emotion": "Love / Affection / Connectedness"
+                            },
+                            {
+                              "path": "5.2.1.2.1.2.4",
+                              "title": "Pacification by the force of the other bodhisattvas’ proximity",
+                              "emotion": "Love / Affection / Connectedness"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "path": "5.2.1.2.2",
+                      "title": "Dedication for the benefit of animals",
+                      "emotion": "Sadness"
+                    },
+                    {
+                      "path": "5.2.1.2.3",
+                      "title": "Dedication for the benefit of ghosts",
+                      "emotion": "Sadness"
+                    }
+                  ]
+                },
+                {
+                  "path": "5.2.1.3",
+                  "title": "Dedication for the benefit of the higher realms",
+                  "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                  "children": [
+                    {
+                      "path": "5.2.1.3.1",
+                      "title": "Freedom from suffering",
+                      "emotion": "Sadness"
+                    },
+                    {
+                      "path": "5.2.1.3.2",
+                      "title": "Attaining wishes",
+                      "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                      "children": [
+                        {
+                          "path": "5.2.1.3.2.1",
+                          "title": "General dedication",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter",
+                          "children": [
+                            {
+                              "path": "5.2.1.3.2.1.1",
+                              "title": "Attaining wealth and possessions",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "5.2.1.3.2.1.2",
+                              "title": "Entering the path of perfection",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            },
+                            {
+                              "path": "5.2.1.3.2.1.3",
+                              "title": "Attaining worldly happiness",
+                              "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                            }
+                          ]
+                        },
+                        {
+                          "path": "5.2.1.3.2.2",
+                          "title": "Dedication specific to monastics",
+                          "emotion": "Joy / Happiness / Enjoyment / Laughter"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "5.2.2",
+              "title": "Dedication for transcendental benefit",
+              "emotion": "Gratitude / Hope / Pride"
+            }
+          ]
+        },
+        {
+          "path": "5.3",
+          "title": "Dedication for the benefit of self",
+          "emotion": "Gratitude / Hope / Pride"
+        },
+        {
+          "path": "5.4",
+          "title": "Dedication for the teachings to remain as a source of happiness",
+          "emotion": "Gratitude / Hope / Pride"
+        },
+        {
+          "path": "5.5",
+          "title": "Homage of remembrance of kind ones",
+          "emotion": "Gratitude / Hope / Pride"
+        }
+      ]
+    }
+  ],
+  "emotion_distribution": {
+    "Contentment / Satisfaction / Calm": 183,
+    "Love / Affection / Connectedness": 92,
+    "Joy / Happiness / Enjoyment / Laughter": 62,
+    "Feeling Treated with Respect": 59,
+    "Fear / Apprehension": 55,
+    "Gratitude / Hope / Pride": 53,
+    "Anger / Frustration / Irritation": 35,
+    "Sadness": 27,
+    "Stress": 26,
+    "Worry / Anxiety": 20,
+    "Disgust / Annoyance / Contempt": 19,
+    "Hopelessness / Discouragement": 13,
+    "Guilt / Regret": 12,
+    "Well-Rested / Energized": 8,
+    "Overwhelmed": 6,
+    "Tiredness / Fatigue": 5,
+    "Loneliness": 5,
+    "Embarrassment / Shame": 5,
+    "Boredom": 1
+  }
+}

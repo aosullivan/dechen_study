@@ -6,6 +6,7 @@ import '../../utils/app_theme.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
+import 'inspiration_screen.dart';
 import 'textual_overview_screen.dart';
 
 /// Shows Daily / Quiz / Read for a given text. Daily opens random verse; Quiz guesses chapter.
@@ -24,6 +25,9 @@ class TextOptionsScreen extends StatefulWidget {
 }
 
 class _TextOptionsScreenState extends State<TextOptionsScreen> {
+  /// Label of the tile currently loading (null = none).
+  String? _loadingLabel;
+
   @override
   void initState() {
     super.initState();
@@ -59,21 +63,31 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           _OptionTile(
             icon: Icons.today_outlined,
             label: 'Daily',
+            loading: _loadingLabel == 'Daily',
             onTap: () => _openDaily(context),
+          ),
+          _OptionTile(
+            icon: Icons.self_improvement_outlined,
+            label: 'Inspiration',
+            loading: _loadingLabel == 'Inspiration',
+            onTap: () => _openInspiration(context),
           ),
           _OptionTile(
             icon: Icons.quiz_outlined,
             label: 'Quiz',
+            loading: _loadingLabel == 'Quiz',
             onTap: () => _openQuiz(context),
           ),
           _OptionTile(
             icon: Icons.book_outlined,
             label: 'Read',
+            loading: _loadingLabel == 'Read',
             onTap: () => _openRead(context),
           ),
           _OptionTile(
             icon: Icons.account_tree_outlined,
             label: 'Textual Overview',
+            loading: _loadingLabel == 'Textual Overview',
             onTap: () => _openOverview(context),
           ),
         ],
@@ -93,21 +107,81 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     }
   }
 
-  void _openRead(BuildContext context) {
+  void _openInspiration(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
-Navigator.of(context).push(
-      PageRouteBuilder<void>(
-        pageBuilder: (_, __, ___) => BcvReadScreen(title: title),
-        transitionDuration: Duration.zero,
-        reverseTransitionDuration: Duration.zero,
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const InspirationScreen(),
+        ),
+      );
+    } else {
+      _showComingSoon(context, 'Inspiration');
+    }
+  }
+
+  void _openRead(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+            SizedBox(width: 16),
+            Text('Loading Reader...'),
+          ],
+        ),
+        duration: Duration(seconds: 5),
+        behavior: SnackBarBehavior.floating,
       ),
     );
+    if (textId == 'bodhicaryavatara') {
+      setState(() => _loadingLabel = 'Read');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        Navigator.of(context)
+            .push(
+              PageRouteBuilder<void>(
+                pageBuilder: (_, __, ___) => BcvReadScreen(title: title),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            )
+            .then((_) {
+          if (mounted) setState(() => _loadingLabel = null);
+        });
+      });
     } else {
       _showComingSoon(context, 'Read');
     }
   }
 
   void _openQuiz(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+            SizedBox(width: 16),
+            Text('Loading Quiz...'),
+          ],
+        ),
+        duration: Duration(seconds: 5),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
     if (textId == 'bodhicaryavatara') {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
@@ -120,12 +194,40 @@ Navigator.of(context).push(
   }
 
   void _openOverview(BuildContext context) {
-    if (textId == 'bodhicaryavatara') {
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const TextualOverviewScreen(),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
+            ),
+            SizedBox(width: 16),
+            Text('Loading Textual Overview...'),
+          ],
         ),
-      );
+        duration: Duration(seconds: 5),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+    if (textId == 'bodhicaryavatara') {
+      setState(() => _loadingLabel = 'Textual Overview');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        Navigator.of(context)
+            .push(
+              MaterialPageRoute<void>(
+                builder: (_) => const TextualOverviewScreen(),
+              ),
+            )
+            .then((_) {
+          if (mounted) setState(() => _loadingLabel = null);
+        });
+      });
     } else {
       _showComingSoon(context, 'Textual Overview');
     }
@@ -146,11 +248,13 @@ class _OptionTile extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.loading = false,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -162,12 +266,21 @@ class _OptionTile extends StatelessWidget {
         side: const BorderSide(color: AppColors.borderLight),
       ),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.primary),
+        leading: loading
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.primary,
+                ),
+              )
+            : Icon(icon, color: AppColors.primary),
         title: Text(
           label,
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        onTap: onTap,
+        onTap: loading ? null : onTap,
       ),
     );
   }

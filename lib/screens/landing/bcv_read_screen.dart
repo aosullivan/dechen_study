@@ -636,7 +636,19 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (firstVerseRef == null || firstVerseRef.isEmpty) return;
     final verseIndex = _verseService.getIndexForRefWithFallback(firstVerseRef);
     if (verseIndex == null) return;
-    _visibleVerseIndex = verseIndex;
+
+    // Re-apply section state with the resolved verse so the chapter panel,
+    // breadcrumb, and overlay all reflect the correct position.
+    final resolvedHierarchy =
+        _hierarchyService.getHierarchyForSectionSync(section);
+    final resolvedIndices = _verseIndicesForSection(section);
+    _applySectionState(
+      hierarchy:
+          resolvedHierarchy.isNotEmpty ? resolvedHierarchy : hierarchy,
+      verseIndices:
+          resolvedIndices.isNotEmpty ? resolvedIndices : {verseIndex},
+      verseIndex: verseIndex,
+    );
     _scrollToVerseIndex(verseIndex);
   }
 
