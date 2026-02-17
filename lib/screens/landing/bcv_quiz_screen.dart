@@ -416,7 +416,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                         _wrongAnswerMessage = wrongMsg;
                                         _correctAnswerMessage = correctMsg;
                                       });
-                                      if (correct) {
+                                      if (correct && _consecutiveCorrect >= 3) {
                                         _confettiController.play();
                                       }
                                     },
