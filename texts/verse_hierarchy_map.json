@@ -2886,16 +2886,16 @@
                     {
                       "title": "The means of averting that cause",
                       "path": "4.3.2.1.3",
-                      "verses": [],
+                      "verses": [
+                        "6.9",
+                        "6.10"
+                      ],
                       "children": []
                     },
                     {
                       "title": "Keeping in mind the means of averting the cause of the cause",
                       "path": "4.3.2.1.4",
-                      "verses": [
-                        "6.9",
-                        "6.10"
-                      ],
+                      "verses": [],
                       "children": [
                         {
                           "title": "General explanation distinguishing desirable and undesirable dharmas",
