@@ -274,10 +274,43 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _scrollToChapter(int chapterNumber) {
     final key = _chapterKeys[chapterNumber];
-    if (key?.currentContext != null) {
-      Scrollable.ensureVisible(key!.currentContext!,
-          alignment: 0.0, duration: const Duration(milliseconds: 300));
-    }
+    if (key?.currentContext == null) return;
+
+    // Guard: treat chapter click as programmatic navigation so visibility
+    // callbacks don't overwrite the expected focus.
+    _syncGeneration++;
+    _isProgrammaticNavigation = true;
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = null;
+
+    // Update breadcrumb to the first section of the target chapter.
+    final chapter = _chapters.firstWhere(
+      (c) => c.number == chapterNumber,
+      orElse: () => _chapters.first,
+    );
+    final firstVerseIndex = chapter.startVerseIndex;
+    _visibleVerseIndex = firstVerseIndex;
+    _hierarchyService
+        .getHierarchyForVerseIndex(firstVerseIndex)
+        .then((hierarchy) {
+      if (!mounted) return;
+      final sectionPath = hierarchy.isNotEmpty
+          ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
+          : '';
+      var indices = _verseIndicesForSection(sectionPath);
+      if (indices.isEmpty && sectionPath.isNotEmpty) {
+        indices = {firstVerseIndex};
+      }
+      _applySectionState(
+        hierarchy: hierarchy,
+        verseIndices: {...indices, firstVerseIndex},
+        verseIndex: firstVerseIndex,
+      );
+    });
+
+    Scrollable.ensureVisible(key!.currentContext!,
+        alignment: 0.0, duration: const Duration(milliseconds: 300));
+    _clearProgrammaticNavigationAfterScrollSettles();
   }
 
   void _scrollToVerseWidget() {
@@ -686,10 +719,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _visibilityDebounceTimer?.cancel();
       _visibilityDebounceTimer = null;
       _isProgrammaticNavigation = false;
-      // Cooldown: keep ignoring visibility-driven highlights briefly after scroll
-      // settles. Prevents scroll-settle callbacks from overwriting key-nav highlight.
+      // Cooldown: keep ignoring visibility-driven highlights after scroll
+      // settles. Prevents scroll-settle callbacks from overwriting key-nav
+      // or chapter-click highlight.
       _programmaticNavCooldownUntil =
-          DateTime.now().add(const Duration(milliseconds: 150));
+          DateTime.now().add(const Duration(milliseconds: 600));
       _measureAndUpdateSectionOverlay();
     }
 
@@ -722,7 +756,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         doClear();
       });
     } else {
-      Future.delayed(const Duration(milliseconds: 150), doClear);
+      // No active scroll detected — wait for scroll animation (300ms) + buffer
+      Future.delayed(const Duration(milliseconds: 400), doClear);
     }
   }
 
@@ -1409,8 +1444,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               _isUserScrolling = true;
             } else if (notification is ScrollEndNotification) {
               _isUserScrolling = false;
-              // Process deferred visibility now that scroll settled
-              if (_verseVisibility.isNotEmpty && !_isProgrammaticNavigation) {
+              // Process deferred visibility now that scroll settled — but only
+              // if we're not in programmatic navigation or its cooldown period.
+              final inCooldown = _programmaticNavCooldownUntil != null &&
+                  DateTime.now().isBefore(_programmaticNavCooldownUntil!);
+              if (_verseVisibility.isNotEmpty &&
+                  !_isProgrammaticNavigation &&
+                  !inCooldown) {
                 _visibilityDebounceTimer?.cancel();
                 _visibilityDebounceTimer =
                     Timer(const Duration(milliseconds: 100), () {

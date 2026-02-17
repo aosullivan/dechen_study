@@ -560,16 +560,15 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
             child: ConfettiWidget(
               confettiController: _confettiController,
               blastDirectionality: BlastDirectionality.explosive,
-              numberOfParticles: 30,
+              numberOfParticles: 50,
               maxBlastForce: 40,
               minBlastForce: 15,
               emissionFrequency: 0.05,
               gravity: 0.15,
               colors: const [
-                Colors.green,
+                Color(0xFFFFD700), // Gold
                 Colors.amber,
-                Colors.orange,
-                AppColors.primary,
+                Colors.amberAccent,
               ],
               shouldLoop: false,
             ),
