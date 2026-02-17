@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui' show Offset, Path, Size;
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
@@ -107,7 +106,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
     _loadQuiz();
   }
 
@@ -156,7 +156,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
         setState(() {
           _sectionText = texts.join('\n\n');
           _correctChapterNumber = chapterNum;
-            _correctVerseNum = verseNum;
+          _correctVerseNum = verseNum;
           _chapters = chapters;
           _isLoading = false;
         });
@@ -282,11 +282,13 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 // Score display
                 if (_totalAnswers > 0)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+                      border: Border.all(
+                          color: AppColors.border.withValues(alpha: 0.6)),
                     ),
                     child: Text(
                       '$_correctAnswers / $_totalAnswers',
@@ -303,42 +305,43 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 200),
                   child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: _showAnswer
-                              ? (_selectedChapter == _correctChapterNumber
-                                  ? Colors.green
-                                  : AppColors.wrong)
-                              : AppColors.border,
-                          width: _showAnswer ? 2 : 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
-                            blurRadius: 3,
-                            offset: const Offset(0, 1),
-                          ),
-                        ],
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: _showAnswer
+                            ? (_selectedChapter == _correctChapterNumber
+                                ? Colors.green
+                                : AppColors.wrong)
+                            : AppColors.border,
+                        width: _showAnswer ? 2 : 1,
                       ),
-                      child: SingleChildScrollView(
-                        child: BcvVerseText(
-                          text: _sectionText,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontFamily: 'Crimson Text',
-                                fontSize: 18,
-                                height: 1.65,
-                              ) ??
-                              const TextStyle(
-                                fontFamily: 'Crimson Text',
-                                fontSize: 18,
-                                height: 1.65,
-                              ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
                         ),
+                      ],
+                    ),
+                    child: SingleChildScrollView(
+                      child: BcvVerseText(
+                        text: _sectionText,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  fontFamily: 'Crimson Text',
+                                  fontSize: 18,
+                                  height: 1.65,
+                                ) ??
+                            const TextStyle(
+                              fontFamily: 'Crimson Text',
+                              fontSize: 18,
+                              height: 1.65,
+                            ),
                       ),
                     ),
+                  ),
                 ),
                 const SizedBox(height: 10),
 
@@ -358,12 +361,17 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                     const crossAxisCount = 5;
                     const spacing = 12.0;
                     const rowHeight = 72.0;
-                    final cellWidth = (constraints.maxWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+                    final cellWidth = (constraints.maxWidth -
+                            (spacing * (crossAxisCount - 1))) /
+                        crossAxisCount;
                     final rowCount = (_chapters.length / crossAxisCount).ceil();
-                    final gridHeight = rowCount * rowHeight + (rowCount - 1) * spacing;
+                    final gridHeight =
+                        rowCount * rowHeight + (rowCount - 1) * spacing;
                     const maxGridHeight = 156.0;
                     return SizedBox(
-                      height: gridHeight > maxGridHeight ? maxGridHeight : gridHeight,
+                      height: gridHeight > maxGridHeight
+                          ? maxGridHeight
+                          : gridHeight,
                       child: GridView.builder(
                         physics: gridHeight <= maxGridHeight
                             ? const NeverScrollableScrollPhysics()
@@ -378,130 +386,168 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                         itemBuilder: (context, index) {
                           final chapter = _chapters[index];
                           final isSelected = _selectedChapter == chapter.number;
-                          final isCorrect =
-                              _showAnswer && chapter.number == _correctChapterNumber;
-                          final isWrong = _showAnswer && isSelected && !isCorrect;
+                          final isCorrect = _showAnswer &&
+                              chapter.number == _correctChapterNumber;
+                          final isWrong =
+                              _showAnswer && isSelected && !isCorrect;
 
                           return Material(
                             color: Colors.transparent,
                             child: Semantics(
-                              label: 'Chapter ${chapter.number}: ${chapter.title}',
+                              label:
+                                  'Chapter ${chapter.number}: ${chapter.title}',
                               button: true,
                               child: InkWell(
-                              onTap: _showAnswer
-                                  ? null
-                                  : () {
-                                      final correct = chapter.number == _correctChapterNumber;
-                                      String? wrongMsg;
-                                      String? correctMsg;
+                                onTap: _showAnswer
+                                    ? null
+                                    : () {
+                                        final correct = chapter.number ==
+                                            _correctChapterNumber;
+                                        String? wrongMsg;
+                                        String? correctMsg;
 
-                                      if (!correct) {
-                                        _consecutiveCorrect = 0;
-                                        final correctChapter = _chapters.firstWhere((c) => c.number == _correctChapterNumber);
-                                      final verseStr = _correctVerseNum ?? '';
-                                      final chapterStr = 'Chapter ${correctChapter.number}${verseStr.isNotEmpty ? ', verse $verseStr' : ''}: ${correctChapter.title}';
-                                        final template = _wrongAnswerTemplates[
-                                            Random().nextInt(_wrongAnswerTemplates.length)];
-                                        wrongMsg = template.replaceFirst('%s', chapterStr);
-                                      } else {
-                                        _consecutiveCorrect++;
-                                        if (_consecutiveCorrect == 10) {
-                                          correctMsg = _milestone10Messages[
-                                              Random().nextInt(_milestone10Messages.length)];
-                                        } else if (_consecutiveCorrect == 5) {
-                                          correctMsg = _milestone5Messages[
-                                              Random().nextInt(_milestone5Messages.length)];
-                                        } else if (_consecutiveCorrect == 3) {
-                                          correctMsg = _milestone3Messages[
-                                              Random().nextInt(_milestone3Messages.length)];
+                                        if (!correct) {
+                                          _consecutiveCorrect = 0;
+                                          final correctChapter =
+                                              _chapters.firstWhere((c) =>
+                                                  c.number ==
+                                                  _correctChapterNumber);
+                                          final verseStr =
+                                              _correctVerseNum ?? '';
+                                          final chapterStr =
+                                              'Chapter ${correctChapter.number}${verseStr.isNotEmpty ? ', verse $verseStr' : ''}: ${correctChapter.title}';
+                                          final template =
+                                              _wrongAnswerTemplates[Random()
+                                                  .nextInt(_wrongAnswerTemplates
+                                                      .length)];
+                                          wrongMsg = template.replaceFirst(
+                                              '%s', chapterStr);
                                         } else {
-                                          correctMsg = _correctAnswerMessages[
-                                              Random().nextInt(_correctAnswerMessages.length)];
+                                          _consecutiveCorrect++;
+                                          if (_consecutiveCorrect == 10) {
+                                            correctMsg = _milestone10Messages[
+                                                Random().nextInt(
+                                                    _milestone10Messages
+                                                        .length)];
+                                          } else if (_consecutiveCorrect == 5) {
+                                            correctMsg = _milestone5Messages[
+                                                Random().nextInt(
+                                                    _milestone5Messages
+                                                        .length)];
+                                          } else if (_consecutiveCorrect == 3) {
+                                            correctMsg = _milestone3Messages[
+                                                Random().nextInt(
+                                                    _milestone3Messages
+                                                        .length)];
+                                          } else {
+                                            correctMsg = _correctAnswerMessages[
+                                                Random().nextInt(
+                                                    _correctAnswerMessages
+                                                        .length)];
+                                          }
+                                          final verseStr =
+                                              _correctVerseNum ?? '';
+                                          if (verseStr.isNotEmpty) {
+                                            correctMsg =
+                                                '$correctMsg It was Chapter $_correctChapterNumber, verse $verseStr.';
+                                          }
                                         }
-                                        final verseStr = _correctVerseNum ?? '';
-                                        if (verseStr.isNotEmpty) {
-                                          correctMsg = '$correctMsg It was Chapter $_correctChapterNumber, verse $verseStr.';
-                                        }
-                                      }
 
-                                      setState(() {
-                                        _selectedChapter = chapter.number;
-                                        _showAnswer = true;
-                                        _totalAnswers++;
-                                        if (correct) _correctAnswers++;
-                                        _wrongAnswerMessage = wrongMsg;
-                                        _correctAnswerMessage = correctMsg;
-                                      });
-                                      if (correct && _consecutiveCorrect >= 3) {
-                                        _confettiController.play();
-                                      }
-                                    },
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                margin: const EdgeInsets.all(0),
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: isCorrect
-                                      ? Colors.green.withValues(alpha: 0.2)
-                                      : (isWrong
-                                          ? AppColors.wrong.withValues(alpha: 0.15)
-                                          : (isSelected
-                                              ? AppColors.primary.withValues(alpha: 0.15)
-                                              : Colors.white)),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
+                                        setState(() {
+                                          _selectedChapter = chapter.number;
+                                          _showAnswer = true;
+                                          _totalAnswers++;
+                                          if (correct) _correctAnswers++;
+                                          _wrongAnswerMessage = wrongMsg;
+                                          _correctAnswerMessage = correctMsg;
+                                        });
+                                        if (correct &&
+                                            _consecutiveCorrect >= 3) {
+                                          _confettiController.play();
+                                        }
+                                      },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  margin: const EdgeInsets.all(0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 6, vertical: 8),
+                                  decoration: BoxDecoration(
                                     color: isCorrect
-                                        ? Colors.green
-                                        : (isWrong ? AppColors.wrong : AppColors.border),
-                                    width: isCorrect || isWrong ? 2 : 1,
+                                        ? Colors.green.withValues(alpha: 0.2)
+                                        : (isWrong
+                                            ? AppColors.wrong
+                                                .withValues(alpha: 0.15)
+                                            : (isSelected
+                                                ? AppColors.primary
+                                                    .withValues(alpha: 0.15)
+                                                : Colors.white)),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: isCorrect
+                                          ? Colors.green
+                                          : (isWrong
+                                              ? AppColors.wrong
+                                              : AppColors.border),
+                                      width: isCorrect || isWrong ? 2 : 1,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black
+                                            .withValues(alpha: 0.04),
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.04),
-                                      blurRadius: 2,
-                                      offset: const Offset(0, 1),
-                                    ),
-                                  ],
-                                ),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      '${chapter.number}',
-                                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w800,
-                                            color: isCorrect
-                                                ? Colors.green.shade800
-                                                : (isWrong ? AppColors.wrong : AppColors.textDark),
-                                          ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      chapter.title,
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                            fontSize: 14,
-                                            height: 1.25,
-                                            color: isCorrect
-                                                ? Colors.green.shade800
-                                                : (isWrong ? AppColors.wrong : AppColors.textDark),
-                                          ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        '${chapter.number}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w800,
+                                              color: isCorrect
+                                                  ? Colors.green.shade800
+                                                  : (isWrong
+                                                      ? AppColors.wrong
+                                                      : AppColors.textDark),
+                                            ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        chapter.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              fontSize: 14,
+                                              height: 1.25,
+                                              color: isCorrect
+                                                  ? Colors.green.shade800
+                                                  : (isWrong
+                                                      ? AppColors.wrong
+                                                      : AppColors.textDark),
+                                            ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                    },
+                          );
+                        },
                       ),
                     );
                   },
@@ -511,7 +557,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 if (_showAnswer) ...[
                   const SizedBox(height: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
                       color: (_selectedChapter == _correctChapterNumber
                               ? Colors.green
@@ -542,10 +589,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                             _selectedChapter == _correctChapterNumber
                                 ? (_correctAnswerMessage ?? 'Correct!')
                                 : _wrongAnswerMessage ?? 'Not quite.',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: _selectedChapter == _correctChapterNumber
-                                      ? Colors.green.shade800
-                                      : AppColors.darkBrown,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color:
+                                      _selectedChapter == _correctChapterNumber
+                                          ? Colors.green.shade800
+                                          : AppColors.darkBrown,
                                 ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

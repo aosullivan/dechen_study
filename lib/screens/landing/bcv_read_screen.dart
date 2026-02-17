@@ -69,14 +69,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Min index in highlight set (computed on setState, for commentary button placement).
   int? _minHighlightIndex;
 
-
   /// Commentary for the currently selected verse group (loaded on tap); null if none or not loaded.
   CommentaryEntry? _commentaryEntryForSelected;
 
   final _commentaryService = CommentaryService.instance;
   final _hierarchyService = VerseHierarchyService.instance;
 
-  List<int> _chapterHeaderFlatIndices = <int>[];
+  final List<int> _chapterHeaderFlatIndices = <int>[];
 
   /// Verse index currently in view (for breadcrumb). Null until first visibility.
   int? _visibleVerseIndex;
@@ -224,8 +223,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _loading = false;
           if (widget.highlightSectionIndices != null &&
               widget.highlightSectionIndices!.isNotEmpty) {
-            _highlightVerseIndices = Set<int>.from(widget.highlightSectionIndices!);
-            _minHighlightIndex = _highlightVerseIndices!.reduce((a, b) => a < b ? a : b);
+            _highlightVerseIndices =
+                Set<int>.from(widget.highlightSectionIndices!);
+            _minHighlightIndex =
+                _highlightVerseIndices!.reduce((a, b) => a < b ? a : b);
           } else if (widget.scrollToVerseIndex != null) {
             _highlightVerseIndices = {widget.scrollToVerseIndex!};
             _minHighlightIndex = widget.scrollToVerseIndex;
@@ -322,7 +323,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
     if (_highlightSet.isEmpty) return;
-    final firstIndex = _minHighlightIndex ?? _highlightSet.reduce((a, b) => a < b ? a : b);
+    final firstIndex =
+        _minHighlightIndex ?? _highlightSet.reduce((a, b) => a < b ? a : b);
     final ref = _verseService.getVerseRef(firstIndex);
     if (ref == null) return;
     final entry = await _commentaryService.getCommentaryForRef(ref);
@@ -502,7 +504,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final entry = _commentaryEntryForSelected;
     if (entry == null) return;
     final screenHeight = MediaQuery.of(context).size.height;
-    final initialSize = screenHeight > 900 ? 0.8 : screenHeight > 600 ? 0.7 : 0.6;
+    final initialSize = screenHeight > 900
+        ? 0.8
+        : screenHeight > 600
+            ? 0.7
+            : 0.6;
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= BcvReadConstants.laptopBreakpoint;
     showModalBottomSheet<void>(
@@ -643,10 +649,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _hierarchyService.getHierarchyForSectionSync(section);
     final resolvedIndices = _verseIndicesForSection(section);
     _applySectionState(
-      hierarchy:
-          resolvedHierarchy.isNotEmpty ? resolvedHierarchy : hierarchy,
-      verseIndices:
-          resolvedIndices.isNotEmpty ? resolvedIndices : {verseIndex},
+      hierarchy: resolvedHierarchy.isNotEmpty ? resolvedHierarchy : hierarchy,
+      verseIndices: resolvedIndices.isNotEmpty ? resolvedIndices : {verseIndex},
       verseIndex: verseIndex,
     );
     _scrollToVerseIndex(verseIndex);
@@ -1128,14 +1132,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final verseIndices = _verseIndicesForSection(section.path);
 
     final preferredChapter = _currentChapterNumber;
-    final firstVerseRef = _hierarchyService
-            .getFirstVerseForSectionInChapterSync(
+    final firstVerseRef =
+        _hierarchyService.getFirstVerseForSectionInChapterSync(
                 section.path, preferredChapter) ??
-        _hierarchyService.getFirstVerseForSectionSync(section.path);
+            _hierarchyService.getFirstVerseForSectionSync(section.path);
     widget.onSectionNavigateForTest?.call(section.path, firstVerseRef ?? '');
     if (firstVerseRef == null || firstVerseRef.isEmpty) return;
-    final verseIndex =
-        _verseService.getIndexForRefWithFallback(firstVerseRef);
+    final verseIndex = _verseService.getIndexForRefWithFallback(firstVerseRef);
     if (verseIndex == null) return;
 
     _applySectionState(

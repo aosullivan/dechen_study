@@ -60,6 +60,7 @@ flutter:
     - texts/bcv-root
     - texts/verse_commentary_mapping.txt
     - texts/verse_hierarchy_map.json
+    - texts/section_emotion_mappings.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -43,21 +43,23 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: ListView(
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text(
+              title,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         children: [
           _OptionTile(
@@ -91,6 +93,48 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             onTap: () => _openOverview(context),
           ),
         ],
+          ),
+        ),
+        if (_loadingLabel != null) _buildLoadingOverlay(),
+      ],
+    );
+  }
+
+  Widget _buildLoadingOverlay() {
+    final message = _loadingLabel == 'Read'
+        ? 'Loading Reader...'
+        : _loadingLabel == 'Textual Overview'
+            ? 'Loading Textual Overview...'
+            : 'Loading...';
+    return Positioned.fill(
+      child: Material(
+        color: Colors.black26,
+        child: Center(
+          child: Card(
+            margin: const EdgeInsets.symmetric(horizontal: 48),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Text(
+                    message,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -120,41 +164,20 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _openRead(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-              ),
-            ),
-            SizedBox(width: 16),
-            Text('Loading Reader...'),
-          ],
-        ),
-        duration: Duration(seconds: 5),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
     if (textId == 'bodhicaryavatara') {
       setState(() => _loadingLabel = 'Read');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
-        Navigator.of(context)
-            .push(
-              PageRouteBuilder<void>(
-                pageBuilder: (_, __, ___) => BcvReadScreen(title: title),
-                transitionDuration: Duration.zero,
-                reverseTransitionDuration: Duration.zero,
-              ),
-            )
-            .then((_) {
-          if (mounted) setState(() => _loadingLabel = null);
-        });
+        await Future.delayed(const Duration(milliseconds: 350));
+        if (!mounted) return;
+        await Navigator.of(context).push(
+          PageRouteBuilder<void>(
+            pageBuilder: (_, __, ___) => BcvReadScreen(title: title),
+            transitionDuration: Duration.zero,
+            reverseTransitionDuration: Duration.zero,
+          ),
+        );
+        if (mounted) setState(() => _loadingLabel = null);
       });
     } else {
       _showComingSoon(context, 'Read');
@@ -194,39 +217,18 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _openOverview(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-              ),
-            ),
-            SizedBox(width: 16),
-            Text('Loading Textual Overview...'),
-          ],
-        ),
-        duration: Duration(seconds: 5),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
     if (textId == 'bodhicaryavatara') {
       setState(() => _loadingLabel = 'Textual Overview');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (!mounted) return;
-        Navigator.of(context)
-            .push(
-              MaterialPageRoute<void>(
-                builder: (_) => const TextualOverviewScreen(),
-              ),
-            )
-            .then((_) {
-          if (mounted) setState(() => _loadingLabel = null);
-        });
+        await Future.delayed(const Duration(milliseconds: 350));
+        if (!mounted) return;
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const TextualOverviewScreen(),
+          ),
+        );
+        if (mounted) setState(() => _loadingLabel = null);
       });
     } else {
       _showComingSoon(context, 'Textual Overview');
