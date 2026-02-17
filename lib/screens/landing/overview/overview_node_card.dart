@@ -20,6 +20,11 @@ class OverviewNodeCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
+  String get _shortNumber {
+    final dot = path.lastIndexOf('.');
+    return dot >= 0 ? path.substring(dot + 1) : path;
+  }
+
   @override
   Widget build(BuildContext context) {
     final indent = depth * OverviewConstants.indentPerLevel +
@@ -28,42 +33,63 @@ class OverviewNodeCard extends StatelessWidget {
 
     return SizedBox(
       height: OverviewConstants.nodeHeight,
-      child: Padding(
-        padding: EdgeInsets.only(left: indent),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: GestureDetector(
-            onTap: onTap,
-            child: Container(
-              constraints:
-                  const BoxConstraints(maxWidth: OverviewConstants.nodeMaxWidth),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.15)
-                    : OverviewConstants.depthColor(depth),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
+      child: Row(
+        children: [
+          SizedBox(width: indent),
+          Flexible(
+            child: GestureDetector(
+              onTap: onTap,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.primary
-                      : AppColors.border.withValues(alpha: 0.6),
-                  width: isSelected ? 1.5 : 0.5,
+                      ? AppColors.primary.withValues(alpha: 0.15)
+                      : OverviewConstants.depthColor(depth),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.border.withValues(alpha: 0.6),
+                    width: isSelected ? 1.5 : 0.5,
+                  ),
                 ),
-              ),
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'Lora',
-                  fontSize: OverviewConstants.fontSizeForDepth(depth),
-                  fontWeight: OverviewConstants.fontWeightForDepth(depth),
-                  color: isSelected ? AppColors.primary : AppColors.textDark,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '$_shortNumber. ',
+                        style: TextStyle(
+                          fontFamily: 'Lora',
+                          fontSize:
+                              OverviewConstants.fontSizeForDepth(depth) - 1,
+                          fontWeight: FontWeight.w600,
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.mutedBrown,
+                        ),
+                      ),
+                      TextSpan(
+                        text: title,
+                        style: TextStyle(
+                          fontFamily: 'Lora',
+                          fontSize: OverviewConstants.fontSizeForDepth(depth),
+                          fontWeight:
+                              OverviewConstants.fontWeightForDepth(depth),
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.textDark,
+                        ),
+                      ),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

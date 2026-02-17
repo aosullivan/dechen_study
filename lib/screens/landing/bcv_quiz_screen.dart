@@ -35,7 +35,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   String? _correctAnswerMessage;
   late ConfettiController _confettiController;
 
-  static final _verseRefPattern = RegExp(r'\[\d+\.\d+\]');
   static final _correctAnswerMessages = [
     'Well done! That\'s correct.',
     'Brilliant! Spot on.',
@@ -147,7 +146,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
         final idx = _verseService.getIndexForRef(ref);
         if (idx != null) {
           final text = _verseService.getVerseAt(idx) ?? '';
-          texts.add(_stripVerseRef(text));
+          texts.add(text);
         }
       }
       final chapterNum = int.tryParse(refs.first.split('.').first) ?? 1;
@@ -170,11 +169,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
         });
       }
     }
-  }
-
-  /// Strip [c.v] markers so we don't reveal the chapter.
-  String _stripVerseRef(String text) {
-    return text.replaceAll(_verseRefPattern, '').trim();
   }
 
   /// Star path for confetti particles (5-pointed star centered in [size]).

@@ -13,11 +13,14 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
     required this.entry,
     required this.verseService,
     required this.onClose,
+    this.forBottomSheet = false,
   });
 
   final CommentaryEntry entry;
   final BcvVerseService verseService;
   final VoidCallback onClose;
+  /// When true, uses a minimal style (single background, no colored header box).
+  final bool forBottomSheet;
 
   static const Color _commentaryBg = AppColors.commentaryBg;
   static const Color _commentaryBorder = AppColors.commentaryBorder;
@@ -62,9 +65,50 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
         );
     final headingStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
           fontFamily: 'Lora',
-          color: _commentaryHeader,
+          color: forBottomSheet ? AppColors.bodyText : _commentaryHeader,
         );
     final commentaryOnly = commentaryOnlyBody(entry, verseService);
+
+    if (forBottomSheet) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 8, 12),
+            child: Row(
+              children: [
+                Text(
+                  'Commentary',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontFamily: 'Lora',
+                    color: AppColors.bodyText,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: onClose,
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Text('Close'),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+            child: _buildContent(context, verseStyle, headingStyle, commentaryOnly),
+          ),
+        ],
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.only(left: 24, top: 8, bottom: 16, right: 0),
       child: Container(
@@ -114,77 +158,88 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (entry.refsInBlock.length == 1) ...[
-                    Text(
-                      'Verse ${entry.refsInBlock.single}',
-                      style: headingStyle,
-                    ),
-                    const SizedBox(height: 12),
-                    BcvVerseText(
-                      text: verseService.getIndexForRef(entry.refsInBlock.single) !=
-                              null
-                          ? (verseService.getVerseAt(
-                                verseService.getIndexForRef(
-                                    entry.refsInBlock.single)!,
-                              ) ??
-                              '')
-                          : '',
-                      style: verseStyle,
-                    ),
-                  ] else ...[
-                    Text(
-                      'Verses ${entry.refsInBlock.join(", ")}',
-                      style: headingStyle,
-                    ),
-                    const SizedBox(height: 12),
-                    ...entry.refsInBlock.map((ref) {
-                      final idx = verseService.getIndexForRef(ref);
-                      final text =
-                          idx != null ? verseService.getVerseAt(idx) : null;
-                      if (text == null) return const SizedBox.shrink();
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Verse $ref',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontFamily: 'Lora',
-                                    color: _commentaryHeader,
-                                  ),
-                            ),
-                            const SizedBox(height: 4),
-                            BcvVerseText(text: text, style: verseStyle),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                  const SizedBox(height: 20),
-                  Text('Commentary', style: headingStyle),
-                  const SizedBox(height: 12),
-                  Text(
-                    commentaryOnly,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontFamily: 'Crimson Text',
-                          fontSize: 18,
-                          height: 1.5,
-                          color: AppColors.textDark,
-                        ),
-                  ),
-                ],
-              ),
+              child: _buildContent(context, verseStyle, headingStyle, commentaryOnly),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    TextStyle verseStyle,
+    TextStyle? headingStyle,
+    String commentaryOnly,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (entry.refsInBlock.length == 1) ...[
+          Text(
+            'Verse ${entry.refsInBlock.single}',
+            style: headingStyle,
+          ),
+          const SizedBox(height: 12),
+          BcvVerseText(
+            text: verseService.getIndexForRef(entry.refsInBlock.single) !=
+                    null
+                ? (verseService.getVerseAt(
+                      verseService.getIndexForRef(
+                          entry.refsInBlock.single)!,
+                    ) ??
+                    '')
+                : '',
+            style: verseStyle,
+          ),
+        ] else ...[
+          Text(
+            'Verses ${entry.refsInBlock.join(", ")}',
+            style: headingStyle,
+          ),
+          const SizedBox(height: 12),
+          ...entry.refsInBlock.map((ref) {
+            final idx = verseService.getIndexForRef(ref);
+            final text =
+                idx != null ? verseService.getVerseAt(idx) : null;
+            if (text == null) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Verse $ref',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(
+                          fontFamily: 'Lora',
+                          color: forBottomSheet
+                              ? AppColors.mutedBrown
+                              : _commentaryHeader,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  BcvVerseText(text: text, style: verseStyle),
+                ],
+              ),
+            );
+          }),
+        ],
+        const SizedBox(height: 20),
+        Text('Commentary', style: headingStyle),
+        const SizedBox(height: 12),
+        Text(
+          commentaryOnly,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontFamily: 'Crimson Text',
+                fontSize: 18,
+                height: 1.5,
+                color: AppColors.textDark,
+              ),
+        ),
+      ],
     );
   }
 }

@@ -481,16 +481,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   Future<void> _onVerseTap(int globalIndex) async {
-    // If clicking a verse that's already highlighted, clear selection
-    if (_highlightSet.contains(globalIndex)) {
-      setState(() {
-        _highlightVerseIndices = {};
-        _minHighlightIndex = null;
-        _commentaryEntryForSelected = null;
-      });
-      return;
-    }
-
     // Get the verse ref and load commentary
     final ref = _verseService.getVerseRef(globalIndex);
     if (ref == null) return;
@@ -498,63 +488,42 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final entry = await _commentaryService.getCommentaryForRef(ref);
     if (!mounted) return;
 
-    // If this verse has no commentary, just highlight it alone and hide any open commentary
-    if (entry == null) {
-      setState(() {
-        _highlightVerseIndices = {globalIndex};
-        _minHighlightIndex = globalIndex;
-        _commentaryEntryForSelected = null;
-      });
-      _scrollToVerseIndex(globalIndex);
-      return;
-    }
-
-    // Find all verse indices in the commentary block
-    final verseIndicesInBlock = <int>{};
-    for (final verseRef in entry.refsInBlock) {
-      final idx = _verseService.getIndexForRef(verseRef);
-      if (idx != null) {
-        verseIndicesInBlock.add(idx);
-      }
-    }
-    // Highlight only the consecutive run containing the tapped verse (avoids 2+ boxes when block has gaps)
-    final sorted = verseIndicesInBlock.toList()..sort();
-    final highlightRun = <int>{};
-    var runStart = 0;
-    for (var i = 0; i <= sorted.length; i++) {
-      if (i < sorted.length && (i == 0 || sorted[i] == sorted[i - 1] + 1)) {
-        continue; // same run
-      }
-      final run = sorted.sublist(runStart, i);
-      if (run.contains(globalIndex)) {
-        highlightRun.addAll(run);
-        break;
-      }
-      runStart = i;
-    }
-    if (highlightRun.isEmpty) highlightRun.add(globalIndex);
-    final firstInSection = highlightRun.reduce((a, b) => a < b ? a : b);
+    // No commentary for this verse — do nothing.
+    if (entry == null) return;
 
     setState(() {
-      _highlightVerseIndices = highlightRun;
-      _minHighlightIndex = firstInSection;
       _commentaryEntryForSelected = entry;
     });
     _showCommentary();
-    _scrollToVerseIndex(firstInSection);
   }
 
-
-  /// Show commentary as a bottom sheet (slides up, swipe down to dismiss).
+  /// Show commentary as a bottom sheet that gently springs up from the bottom.
   void _showCommentary() {
     final entry = _commentaryEntryForSelected;
     if (entry == null) return;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final initialSize = screenHeight > 900 ? 0.8 : screenHeight > 600 ? 0.7 : 0.6;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth >= BcvReadConstants.laptopBreakpoint;
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      backgroundColor: AppColors.scaffoldBackground,
+      barrierColor: Colors.black26,
+      // On desktop, use most of the screen width; cap at 900 for readability.
+      constraints: isDesktop
+          ? BoxConstraints(maxWidth: screenWidth.clamp(0, 900).toDouble())
+          : null,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      transitionAnimationController: AnimationController(
+        vsync: Navigator.of(context),
+        duration: const Duration(milliseconds: 450),
+      ),
       builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
+        initialChildSize: initialSize,
         minChildSize: 0.3,
         maxChildSize: 0.95,
         expand: false,
@@ -564,6 +533,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
             entry: entry,
             verseService: _verseService,
             onClose: () => Navigator.of(ctx).pop(),
+            forBottomSheet: true,
           ),
         ),
       ),

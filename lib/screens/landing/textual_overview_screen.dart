@@ -8,6 +8,7 @@ import 'overview/overview_tree_view.dart';
 import 'overview/overview_verse_panel.dart';
 
 /// Full-screen hierarchical tree view of the entire text structure.
+/// Cascading dropdown pickers at the top let you drill down level by level.
 /// Tapping a section opens a side panel (desktop) or bottom sheet (mobile)
 /// showing the verses for that section.
 class TextualOverviewScreen extends StatefulWidget {
@@ -23,6 +24,12 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
 
   String? _selectedPath;
   String? _selectedTitle;
+
+  /// Cascading picker selections: index i holds the chosen path at depth i.
+  List<String> _pickerSelections = [];
+
+  /// Set when a picker changes — the tree scrolls to this path.
+  String? _scrollToPath;
 
   @override
   void initState() {
@@ -42,6 +49,42 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     });
   }
 
+  /// Returns children of [parentPath] (empty string = root-level sections).
+  List<({String path, String title, int depth})> _childrenOf(
+      String parentPath) {
+    if (parentPath.isEmpty) {
+      return _flatSections.where((s) => s.depth == 0).toList();
+    }
+    final parentDepth =
+        _flatSections.where((s) => s.path == parentPath).firstOrNull?.depth;
+    if (parentDepth == null) return [];
+    final childDepth = parentDepth + 1;
+    return _flatSections
+        .where((s) =>
+            s.depth == childDepth && s.path.startsWith('$parentPath.'))
+        .toList();
+  }
+
+  static String _shortNum(String path) {
+    final dot = path.lastIndexOf('.');
+    return dot >= 0 ? path.substring(dot + 1) : path;
+  }
+
+  void _onPickerChanged(int depth, String? path) {
+    setState(() {
+      if (_pickerSelections.length > depth) {
+        _pickerSelections = _pickerSelections.sublist(0, depth);
+      }
+      if (path != null) {
+        _pickerSelections.add(path);
+        _scrollToPath = path;
+      } else {
+        _scrollToPath =
+            _pickerSelections.isNotEmpty ? _pickerSelections.last : null;
+      }
+    });
+  }
+
   void _onNodeTap(({String path, String title, int depth}) section) {
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
@@ -57,7 +100,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
         }
       });
     } else {
-      // Mobile: show bottom sheet.
       setState(() {
         _selectedPath = section.path;
         _selectedTitle = section.title;
@@ -88,6 +130,18 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     }
   }
 
+  /// Filtered flat sections with depth rebased so the subtree root starts at 0.
+  List<({String path, String title, int depth})> get _filteredSections {
+    if (_pickerSelections.isEmpty) return _flatSections;
+    final root = _pickerSelections.last;
+    final rootDepth =
+        _flatSections.where((s) => s.path == root).firstOrNull?.depth ?? 0;
+    return _flatSections
+        .where((s) => s.path == root || s.path.startsWith('$root.'))
+        .map((s) => (path: s.path, title: s.title, depth: s.depth - rootDepth))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,41 +168,192 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
 
-    if (!isDesktop) {
-      return OverviewTreeView(
-        flatSections: _flatSections,
-        selectedPath: _selectedPath,
-        onNodeTap: _onNodeTap,
-      );
-    }
-
-    // Desktop: tree on left, verse panel on right.
-    return Row(
+    return Column(
       children: [
+        _buildPickers(),
         Expanded(
-          child: OverviewTreeView(
-            flatSections: _flatSections,
-            selectedPath: _selectedPath,
-            onNodeTap: _onNodeTap,
-          ),
-        ),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          width: _selectedPath != null ? OverviewConstants.versePanelWidth : 0,
-          child: _selectedPath != null
-              ? OverviewVersePanel(
-                  key: ValueKey(_selectedPath),
-                  sectionPath: _selectedPath!,
-                  sectionTitle: _selectedTitle ?? '',
-                  onClose: () => setState(() {
-                    _selectedPath = null;
-                    _selectedTitle = null;
-                  }),
+          child: isDesktop
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: OverviewTreeView(
+                        flatSections: _filteredSections,
+                        selectedPath: _selectedPath,
+                        onNodeTap: _onNodeTap,
+                        scrollToPath: _scrollToPath,
+                      ),
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      width: _selectedPath != null
+                          ? OverviewConstants.versePanelWidth
+                          : 0,
+                      child: _selectedPath != null
+                          ? OverviewVersePanel(
+                              key: ValueKey(_selectedPath),
+                              sectionPath: _selectedPath!,
+                              sectionTitle: _selectedTitle ?? '',
+                              onClose: () => setState(() {
+                                _selectedPath = null;
+                                _selectedTitle = null;
+                              }),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
                 )
-              : const SizedBox.shrink(),
+              : OverviewTreeView(
+                  flatSections: _filteredSections,
+                  selectedPath: _selectedPath,
+                  onNodeTap: _onNodeTap,
+                  scrollToPath: _scrollToPath,
+                ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPickers() {
+    final pickers = <Widget>[];
+
+    final rootChildren = _childrenOf('');
+    if (rootChildren.isEmpty) return const SizedBox.shrink();
+
+    pickers.add(_buildDropdownPicker(
+      depth: 0,
+      options: rootChildren,
+      selectedPath:
+          _pickerSelections.isNotEmpty ? _pickerSelections[0] : null,
+    ));
+
+    for (var i = 0; i < _pickerSelections.length; i++) {
+      final children = _childrenOf(_pickerSelections[i]);
+      if (children.isEmpty) break;
+      pickers.add(_buildDropdownPicker(
+        depth: i + 1,
+        options: children,
+        selectedPath: i + 1 < _pickerSelections.length
+            ? _pickerSelections[i + 1]
+            : null,
+      ));
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: const BoxDecoration(
+        color: AppColors.cardBeige,
+        border: Border(bottom: BorderSide(color: AppColors.borderLight)),
+      ),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 6,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          for (var i = 0; i < pickers.length; i++) ...[
+            if (i > 0)
+              const Icon(Icons.chevron_right,
+                  size: 18, color: AppColors.mutedBrown),
+            pickers[i],
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdownPicker({
+    required int depth,
+    required List<({String path, String title, int depth})> options,
+    required String? selectedPath,
+  }) {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 260),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        color: AppColors.scaffoldBackground,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selectedPath,
+          hint: Text(
+            depth == 0 ? 'Section' : 'Subsection',
+            style: const TextStyle(
+              fontFamily: 'Lora',
+              fontSize: 13,
+              color: AppColors.mutedBrown,
+            ),
+          ),
+          isDense: true,
+          isExpanded: true,
+          icon: const Padding(
+            padding: EdgeInsets.only(right: 6),
+            child: Icon(Icons.expand_more,
+                size: 18, color: AppColors.mutedBrown),
+          ),
+          style: const TextStyle(
+            fontFamily: 'Lora',
+            fontSize: 13,
+            color: AppColors.textDark,
+          ),
+          selectedItemBuilder: (context) {
+            // The displayed selected value (compact, truncated).
+            return [
+              // "All" item:
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('All', style: TextStyle(
+                  fontFamily: 'Lora', fontSize: 13,
+                  color: AppColors.mutedBrown, fontStyle: FontStyle.italic,
+                )),
+              ),
+              // Each option:
+              ...options.map((s) => Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '${_shortNum(s.path)}. ${s.title}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'Lora', fontSize: 13,
+                    color: AppColors.textDark,
+                  ),
+                ),
+              )),
+            ];
+          },
+          items: [
+            const DropdownMenuItem<String>(
+              value: '',
+              child: Text(
+                'All',
+                style: TextStyle(
+                  fontFamily: 'Lora',
+                  fontSize: 13,
+                  color: AppColors.mutedBrown,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+            ...options.map((s) => DropdownMenuItem<String>(
+                  value: s.path,
+                  child: Text(
+                    '${_shortNum(s.path)}. ${s.title}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )),
+          ],
+          onChanged: (value) {
+            if (value == null || value.isEmpty) {
+              _onPickerChanged(depth, null);
+            } else {
+              _onPickerChanged(depth, value);
+            }
+          },
+        ),
+      ),
     );
   }
 }

@@ -199,7 +199,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (ref != null && _sectionRefs.length > 1) ...[
+                        if (ref != null) ...[
                           Text(
                             'Verse $ref',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(

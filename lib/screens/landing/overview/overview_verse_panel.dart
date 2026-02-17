@@ -117,7 +117,7 @@ class OverviewVersePanel extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            v.ref,
+                            'Verse ${v.ref}',
                             style: const TextStyle(
                               fontFamily: 'Lora',
                               fontSize: 11,

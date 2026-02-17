@@ -47,6 +47,11 @@ _ParseResult _parseBcvRoot(String content) {
     return '${match.group(1)}.${match.group(2)}';
   }
 
+  /// Remove [c.v] markers from verse text so they aren't displayed inline.
+  String stripMarkers(String text) {
+    return text.replaceAll(verseRefPattern, '').trimRight();
+  }
+
   // Strip BOM and form-feed
   content = content.replaceAll(RegExp(r'[\uFEFF\x0C]'), '');
   // Normalize line endings
@@ -70,9 +75,9 @@ _ParseResult _parseBcvRoot(String content) {
       if (chapterMatch != null) {
         if (pendingVerseLines.isNotEmpty) {
           final joined = pendingVerseLines.join('\n');
-          verses.add(joined);
           captions.add(extractCaption(joined));
           refs.add(extractRef(joined));
+          verses.add(stripMarkers(joined));
           pendingVerseLines = [];
         }
         chapterStarts.add([
@@ -86,9 +91,9 @@ _ParseResult _parseBcvRoot(String content) {
     }
     if (pendingVerseLines.isNotEmpty) {
       final joined = pendingVerseLines.join('\n');
-      verses.add(joined);
       captions.add(extractCaption(joined));
       refs.add(extractRef(joined));
+      verses.add(stripMarkers(joined));
     }
   }
   // Build chapters
