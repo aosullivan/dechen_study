@@ -191,15 +191,6 @@ Part 5, The subsequent results of the practice: this comprises the chapter on �
 >>> In my undertaking 
 To enter the bodhisattva conduct…
 Therefore, the conduct brings about the results.
-1. Dgos ’brel yan lag bzhi, Skt. anubandha-catuṣṭaya: an explanatory system from the Sanskrit literary tradition concerning the purpose of a textual composition. The four branches are the explanandum (brjod bya) or topic to be explained, the immediate purpose (dgos pa) or reason for explaining, the metapurpose (dgos pa’i dgos pa) or reason why the immediate purpose is sought and the relation (’brel ba), i.e. how the explanans (rab tu byed or rjod byed) relates to or brings about the immediate purpose. These ‘implicit’ points are set out by Sonam Tsemo after the explaining the first three ‘explicit’ points.
-2. These three points are based on Vasubandhu’s Vyākhyāyukti (D406, pp.30-31), a system widely followed in explanatory texts, e.g. in Haribhadra’s Ābhisamayālaṃkārāloka. See Buton’s description of this system in Obermiller, 1931, pp. 71-2. Vasubandhu also adds ‘connections between sections’ (mtshams sbyar) and ‘objections and replies’ (brgal ba dang lan) to these three points. All five are present throughout the text, though these three are emphasized in the introductory section.
-3. Lhopa Rinchen Pal expands on this topic in some detail (pp. 23-26). Here I have slightly elaborated the outline given by Sonam Tsemo based on these comments.
-4. Lhopa Rinchen Pal (p. 26) notes the standard (sor bzhag) Tibetan translation of ‘Sugata’ is bde gshegs, i.e. ‘one gone to bliss’, which treats the syllable ‘su’ of ‘Sugata’ as signifying ‘sukha’ (bliss, Tib. bde ba). However, he gives examples where Tibetans translate ‘su’ not as bde ba but as legs pa (excellence, beauty, goodness) and thus explains the meaning of ‘Sugata’ as ‘those who have gone (to abandonment and realization) excellently’. In the extant Tibetan editions of Sonam Tsemo’s text, this point is not clear; rather the three terms ‘excellent’, ‘without exception’ and ‘irreversible’ all seem related to ‘su’. This is probably a typographical error caused by a subsequent repetition of legs pa in relation to ‘gata’, omission of repetition being the most common detectable typographical error throughout the present text. Hence, I have altered this passage slightly in light of Lhopa Rinchen Pal’s explanation.
-5. According to certain śrāvaka doctrines, continuity of their vows has a subtle physical form while maintained. See Sapan, A Clear Differentiation of the Three Codes, trans. Rhoton, p. 73 n.1. Note the Tibetan text has spong ba here, a misprint for sbyong ba.
-6. See note 1 in this chapter.
-7. The three aspirations of the main part of the bodhisattva vow—the aspiration to give up all, to be an inexhaustible source of goodness and to be the causes of enjoyment. See chapter 3.
-8. This verse in Śāntideva’s text is a quote from the Samādhiraja Sutra. See also The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 329-330.
-9. Ibid., appearing as the last of the text’s twenty-seven root verses.
 
 Part 2: The Primary Basis
 The Individual Person
@@ -257,8 +248,6 @@ There are two uncommon thoughts:
 The common and uncommon attitudes are the proper basis for the generation of bodhicitta and the subsequent practice of the conduct by someone who is of the awakened Mahāyāna family.
 If one wonders how the difficulty of acquiring human birth is being exemplified here, the example is: ‘night’ means being without the appearance of the sun, ‘dark and black’ means being without the appearance of the moon, ‘clouds’ means having little chance of any appearances and ‘just as lightning flashes for an instant’ means appearing nevertheless, despite those factors. Also, ‘through the power of the Buddhas’ is the condition of the attitudes, ‘merit and intelligence’ is the nature, ‘only rarely’ means arising only very occasionally and ‘arise fleetingly’ means not remaining for very long.
 
-1. Bram ze rgyal ba’i drod kyi skye mched kyi rnam par thar pa’i gzhung, found in the Avataṃsaka Sutra, wherein the bodhisattva Sudhana receives instruction from over fifty teachers, including Brahmin Jayosmayatana, a non-Buddhist ascetic practising heat endurance by sitting among four large fires. The sutra provides a list of eight difficulties (the difficulties of acquiring the opposite of the eight non-freedoms, of acquiring human birth itself, of acquiring pure and abundant freedoms, of the Buddha appearing, of unimpaired senses, of hearing the Buddhadharma, of associating with holy persons and of meeting pure spiritual friends), of which the first and third are referred to here. See The Flower Ornament Scripture: A Translation of the Avatamsaka Sutra, p. 1218.
-2. Chos ’dir gtogs pa la ’jug pa, c.f. Lhopa Rinchen Pal, rnam gzhag ’dir la ’jug pa (p. 40)
 
 Part 3: The Productive Cause
 The Generation of Bodhicitta
@@ -404,9 +393,11 @@ The first two lines enumerate the divisions as two and the latter two name each 
 Some say that aspiration, as the wish to go, is generating the mind which arises from symbols [or words] because one merely takes motivation as one’s object in order to have realization of the path. Application, as the actual going, is generating the mind of the attainment of the ultimate dharmata because one takes actual enlightenment as one’s object by directly entering the uncorrupted path of seeing the truth. However, this is not the opinion of the Ācārya [Śāntideva] because he explains in the Śikṣā-samuccaya that ordinary individuals also train in application [bodhicitta] and hence the dharmata is attained only by receiving teachings on the practices of application bodhicitta.4 [264]
 According to Ācārya Jetāri, aspiration is the pursuit of enlightenment for the benefit of beings and application is the protection of that intention from decline.5 However, this is not the opinion of the Ācārya because protection from decline does not fit the example of going somewhere.
 According to some others, aspiration is as before [i.e. pursuit of enlightenment] but application is the training itself. However, this was not the intention of the Ācārya because in the liturgy, generating application bodhicitta is separate to undertaking the training.6 It would also contradict the scriptures, which refer to three bases:
+
 •	The fortunate basis—the [bodhisattva or Mahāyāna] family
 •	The basis for practising the conduct—generating bodhicitta
 •	The basis for the swift attainment of perfect buddhahood—the bodhisattva training 7 
+
 That is, the teaching on the second basis—generating bodhicitta—is distinct from the teaching on the third basis—the training. The source for the explanation of aspiration and application given by the Ācārya is the Avataṃsaka Sutra, where it says,
 It is rare for a person to have the aspiration for enlightenment.
 It is even rarer to pursue the conduct.8
@@ -539,10 +530,10 @@ Of overflowing treasures to the Sugatas.11
 >>> Whoever is destitute of happiness
 >>> And burdened with many sufferings
 >>> Will be filled with every happiness
-And cut off from all their suffering,
+>>>And cut off from all their suffering,
 
 1.30
-And their ignorance, too, will be dispelled.
+>>>And their ignorance, too, will be dispelled.
 >>> What virtue could equal that?
 >>> What friend can compare to it?
 >>> What merit is remotely comparable to it?
@@ -602,41 +593,7 @@ Those in whom this sacred jewel of mind is born
 Bringing happiness even to those who harm them means, out of compassion, they bestow happiness on those who do them harm. It does not mean the happiness arises as a result of the harms committed, for that would contradict the earlier assertion in verse 34.
 
 [1.36cd]
-1. Gzung ba’i cho ga—later this section is styled more generally as ‘Generating bodhicitta in one’s stream of being’.
-2. To kill one’s father, mother, or an arhat, to maliciously shed the blood of a Buddha, or to cause a schism in the saṅgha.
-3. H94, p. 248b
-4. See The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 10-12.
-5. This is a reference to Jetāri’s text, A Ritual for Generating Bodhicitta and Receiving the Commitments (D3968). In Jetāri’s liturgy (p. 243a), one first vows three times to ‘take hold of the mind of aspiration and application’, and then vows three times to undertake the bodhisattva training:
-‘ “Just as the Sugatas of the past
->>> Generated bodhicitta,
-And maintained bodhicitta,
-At all times,
->>> Likewise for the benefit of beings,
-I will generate bodhicitta,
-And likewise at all times,
-I will maintain bodhicitta.”
-‘Recite this three times to take hold of the bodhicittas of aspiration and application. When one has the stability in holding this bodhisattva vow, this vow is given:
-‘ “Just as the Sugatas of the past
-Held the bodhisattva trainings—
-Gradually practising
-Training in bodhicitta,
->>> Likewise for the benefit of beings,
-I, too, will hold the vow of enlightenment
-And likewise I will gradually 
-Practise the trainings.”
-‘Recite this three times to take the vow.’
-Jetāri’s ritual is based on v3.23-24 of the Bodhicaryāvatāra and Jetāri himself is considered a lineage holder of Śāntideva’s vow (see e.g. Lhopa Rinchen Pal, p. 76) but, nevertheless, differs slightly from Sonam Tsemo on treating application bodhicitta as protection from decline rather than the latter’s ‘pursuit of the means to achieve the result’.
-6.  The practice of generating application bodhicitta, as distinct from undertaking the bodhisattva training, is not emphasised in the present text. However it is taught elsewhere, just as the practice of generating aspiration bodhicitta is often taught separately. See Sapan, Clarifying the Sage’s Intent, trans. David Jackson (2015), pp. 412-413. Lhopa Rinchen Pal concurs that application bodhicitta is not the training itself and cites Sapan:
-‘My own lama said, “For the Ācārya [Śāntideva], the vow of aspiration is the promise to complete the bodhisattva training [bslabs pa mtha’ dag gzung ba] and the vow of application is the promise to practise in accord with that undertaking [ji ltar gzung ba ltar spyad pa].” Some say that application is the training itself, however that is not correct. That is taught separately, as Ācārya Asaṅga explains [in the Bodhisattvabhūmi]… Therefore, aspiration and application bodhicitta are the pursuit [don du gnyer] of the result and pursuit of the conduct which is the means for the result.’ (p.51-52)
-Lhopa Rinchen Pal adds that according to Sapan, it is not merely that the intention of aspiration bodhicitta is incomplete without application, but that aspiration and application are generated and maintained separately.
-7. These three ‘bases’ (brten) or ‘supports’ (gzhi) are set out in the opening section of Asaṅga’s Bodhisattvabhūmi. See The Bodhisattva Path to Unsurpassed Enlightenment: A Complete Translation of the Bodhisattvabhūmi, pp. 3-5.
-8. The version of these lines in the Kangyur more clearly distinguishes the generation of bodhicitta from the training in accord with the Bodhisattvabhūmi: 
-‘Son of noble family, it is very rare for a sentient being to generate the unsurpassable, completely perfect bodhicitta. For those who have generated the unsurpassable, completely perfect bodhicitta, it is even rarer for them to undertake the bodhisattva conduct.’ (H94, 94b-95a.2)
-‘To undertake the conduct’ (spyod pa yongs su tshol ba) is, in Sonam Tsemo’s version of this quotation, spyod pa don du gnyer, and in Lhopa Rinchen Pal (p. 51) spyod pa chas pa.
-9. Lhan cig skyes pa’i lha
-10. H129, p. 182b.4-182b.5
-11. H72, 352b.4
-12. H131, 331b.6-7
+
 
 >>> Chapter 2: Confession of Faults
 [ Image: 1.6.jp2 ]
@@ -832,7 +789,7 @@ Having offered objects for the purpose of pleasure, now one offers objects which
 The masters of the tenth bhūmi, who have gained mastery over the six higher perceptions, make offerings to the Buddhas by manifesting light rays which arise from their actions:
 2.22
 >>> Just as Mañjughoṣa and others
-Made offerings to the conquerors
+>>> Made offerings to the conquerors
 >>> Likewise I make offerings
 >>> To the Tathāgatas and their sons.
 6. Offering homage
@@ -1630,38 +1587,6 @@ Developing the joy of others:
 >>> I invite beings to every happiness.
 >>> May the gods, demigods and all the rest be joyful.
 This verse constitutes an invitation. By whom is it made? By oneself. Invited to what? To the happiness of the gods for as long as they have not yet attained buddhahood itself. Who is the witness of this? It is done before all the Buddhas.
-1. I have corrected an apparent textual corruption here, where two similar references to the root text have been elided— ‘bdag la zhes pa dang’ should be repeated to indicate both 3.15c and 3.16a.
-2. See commentary and notes to v1.16. Though Sonam Tsemo references Jetāri here, there remains a slight difference in their understanding of application bodhicitta. Jetāri and Sonam Tsemo agree however that the two parts of v3.23-24 are: (1) generating both aspects of bodhicitta together—aspiration and application, and (2) undertaking the training, which is distinct from generating (application) bodhicitta.
-Lhopa Rinchen Pal (p. 78) and other commentators have noted that taking the vows of aspiration and application together in this way is characteristic of the Mañjuśrī-Nāgārjuna lineage of the vow, while taking them separately is characteristic of the Maitreya-Asaṅga lineage. Thus if the second part of the vow comprised application bodhicitta, then Jetāri’s system, which separates it, would violate the Mañjuśrī-Nāgārjuna (Madhyamaka) tradition of the vow.
-3. These causes of losing the prātimokṣa vows are listed by Vasubandhu in the Abhidharmakośa. See Sapan, A Clear Differentiation of the Three Codes, trans. Rhoton, p.41 and p.74, n.2.
-4. While a defeat (phas pham pa, Skt. pārājika) warrants expulsion from the monastic saṅgha, a resembling downfall has only the appearance of a violation of the vow. Resembling downfalls are presented in detail below, at the beginning of chapter four.
-5. The prātimokṣa, bodhisattva and vidyādhara vows. See Sapan, A Clear Differentiation of the Three Codes, trans. Rhoton.
-6. H232, p. 21b.4-21b.5
-7. Spang ba’i sems pa. Though some editions of the text have this as sems dpa’ (and the term is even repeated), the edition with sems pa is evidently correct as can be seen from its close resemblance to Gampopa’s discussion of this topic in the Ornament of Precious Liberation, which uses the term ‘sems pa’. That resemblance also suggests a common Kadampa origin for these points.
-8. According to the vinaya, following the ceremony of full ordination (bsnyen rdzogs pa, Skt. upasampadā), the monk preserves the over two hundred rules of monastic observance. After ten years, he may become an ‘elder monk’ (gnas pa brten pa, Skt. sthavira) who gains certain distinct obligations as well as being relieved of certain others.
-9. Bodhicaryāvatāra, v5.102
-10. Sdom pa sna ’ga’ spyod pa tsam
-11. The five exemptions (nges pa lnga), are restrictions upon or exceptions to the maintenance of the vow for specific individuals, acts, places, times or circumstances. See Vasubandhu’s Abhidharmakosabhasyam, trans. Leo M. Pruden (English), vol. 2, p. 609-610: 
-‘He who undertakes [any of the five exemptions] does not acquire the discipline [i.e. vow]; rather, he does a good action similar to the acquisition of the discipline.’
-The suggestion is that since the training is intermittent (c.f. Bodhicaryāvatāra v1.18-19) the exemption of time is present. Lhopa Rinchen Pal (p. 79), who repeats much of this section on ‘method’, adds a reference to Asaṅga’s Yogācārabhūmi-viniścayasaṃgraha in which vows of abandonment are distinguished as lesser, middling, greater and perfected according to the limits of their duration, scope, etc. and says that here one should train in applying antidotes in a similar way. See also Sapan’s comments on the bodhisattva prātimokṣa: 
-‘Train in abstaining from the ten nonvirtuous deeds by gradually accustoming yourself to longer and longer periods of practice…’ (Clarifying the Sage’s Intent, trans. David Jackson, p. 432)
-12. In the Śikṣā-samuccaya, Śāntideva relates this as follows:
-‘On this topic, one should not be afraid to take a vow that lasts for all time due to concern about downfalls that may occur in another life, for, in the Aspiration Prayer of Akṣobhya, it says:
-“When the Tathāgata Akṣobhya was still a bodhisattva, he said this:
-‘If in all my future births I am not ordained, I will have lied to the 
-Blessed Ones, the Buddhas.
-Intelligent ones may purify
-One life through effort,
-But they will purify the rest of their lives
-Through understanding.’” ’ (The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 15-16)
-13. Deceiving the lama or those worthy of offerings, causing someone to regret something which should not be regretted, disparaging a bodhisattva who is generating bodhicitta, conducting oneself with pretense and deceit. See Sapan, Clarifying the Sage’s Intent, trans. David Jackson (2015), pp. 412-413. 
-14. ’gro ba gzhan gyi rnam rten dge slong gi ’du shes med pa. Karma Thinley Rinpoche confirmed that this refers to cases such as gods, eunuchs, etc. to whom celibacy does not apply.
-15. In certain extreme circumstances, misdeeds such as killing may be committed by bodhisattvas who have a perfectly pure intention. See the section on ‘Inherent misdeeds in the moral conduct of the vow’ at the beginning of chapter four.
-16. While the text here adds de ’dus ma byas pa yin pa’i phyir (‘because of its being non-composite’), this appears to be a corruption, when compared to Lhopa Rinchen Pal who has de’ang byas yod yin pas so, ‘because that very function exists’ (p. 84).
-17. Shes pa rang bzhin du ma gnas: the general condition which includes ‘beings who are unable to hold a monastic position’ (see chapter 3, note 14).
-18. Several examples are given in the vinaya texts of Upananda misrepresenting the scriptures in order to trick others, typically old monks (rgan zhugs, Skt. mahallaka), into violating the monastic rules for his personal gain.
-19. Lhopa Rinchen Pal, p. 85.
-20. Mos pa spyod pa ba, i.e. the second of the five paths of the Mahāyāna. See e.g. Sapan, Clarifying the Sage’s Intent, chapter 11.
 
 Part 4: The Cooperating Condition
 Practising the Training
@@ -2180,27 +2105,6 @@ The first two lines indicate their having no external support. The first part of
 >>> How can the patient be cured by the medicine?
 The first two lines indicate that one should endeavour consistently with the training. The second two lines give an example of the faults of not endeavouring.
 [4.48cd]
-1. These are given in the Ākāśagarbha Sutra and quoted in full by Śāntideva in the Śikṣā-samuccaya. See The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 63-68.
-2. Bzlog pa, c.f. cho ga ’jam pos bzlogs in Lhopa Rinchen Pal (p. 102).
-3. Nyes pa sbom po, i.e. not a downfall but nevertheless an extremely negative action.
-4. Cho ga btsan po yod kyang sbyor ba las bag yangs su byas, i.e. a dispensation on the prohibition of killing etc. can apply but only under very special circumstances such as in this example. This type of fault has a homonymic parallel in the vinaya, mentioned in e.g. Dharmamitra’s commentary on the Vinayasūtra: 
-‘A formal rule [cho ga btsan po] is a strict observance [bkas bcad dam po] specified by the Bhagavān, such as bathing in the two-weeks of the full moon which, if not confessed, is a root downfall. There are certain circumstances when this observance is dispensed: during the rainy season, during an illness, when working, when going on a journey, during heavy wind or rain. One may dispense with it at that time.’ (D4120, p, 368b-369a). 
-In the Mahāyāna, practising the dispensation when it does not apply is a ‘heavy fault’ of the bodhisattva vow, whereas in the vinaya it is a downfall of the monastic vows.
-5. A resembling downfall is an act or omission which seems to be a downfall but is not actually one. A resembling non-downfall is an act or omission which seems to be permissible but is in fact a downfall.
-6. The implied attendant misdeed here is destroying plants, one of the monastic rules that can be repaired by confession.
-7. Lhopa Rinchen Pal, p. 103: 
-‘If it was possible to benefit them in some other way but one gave up samādhi, it is practising a dispensation even though a formal rule is available. If in order to accomplish their vast benefit, one abandons yoga, it is resembling downfall. If one remains in yoga having abandoned their benefit, it is a resembling non-downfall.’
-8. Lhopa Rinchen Pal, p. 103: 
-‘If one is accomplishing the benefit of some beings and one sees there would be a cessation of accomplishing qualities and hearing, etc. of a vast country and that country would be harmed for a long time, one can either accomplish all their benefits, or accomplish the benefit of the many beings by another means, or avert the harm for both of them. If it was possible to do so, yet one abandons a benefit, it is the former fault. If there is no other means, without forgetting the benefit, one should continue to benefit of the vast country. That would be a resembling downfall. Otherwise, it is a resembling non-downfall.’
-9. In other commentaries, line 4.3d is explained as unhesitatingly practising the bodhisattva conduct, e.g. Prajñākaramati (W21708, p. 79): ‘What doubts could remain? Therefore, it is logical to exert oneself fully in such a promise.’ 
-C.f. Lhopa Rinchen Pal (p. 88): ‘Although one may have promised to do something which one has not examined, one should examine it, i.e. analyse whether or not it is beneficial.’
-10. Lhopa Rinchen Pal (p. 89) has ‘Bhimasena’.
-11. Lhopa Rinchen Pal (p.89-90) identifies the Great Commentary (’grel chen las) as the source of this opinion. Prajñākaramati’s Great Commentary relates that Ārya Śāriputra abandoned perfect enlightenment but, attaining the ‘enlightenment of the śrāvakas’, worked for many aeons to benefit sentient beings who were the objects of his former vow to liberate them from saṃsāric suffering (W21708, pp. 81-82). Sapan notes that the śrāvakas had a tradition of ‘generating bodhicitta’ (sems bskyed) where they resolved to attain the results of arhat, pratyekabuddha or Buddha but this tradition had declined (see Sapan, A Clear Differentiation of the Three Codes, trans. Rhoton,  p.81). For comments on whether ’grel chen is indeed W21708, see chapter 6, note 14.
-12. Lhopa Rinchen Pal (pp. 89-90) adds, 
-‘My own lama [Sapan] said that since such cases are inconceivable, one should never abandon bodhicitta… In the White Lotus of Holy Dharma Sutra (H116, p.52-53) Śāriputra’s final enlightenment as the completely perfect Buddha Padmaguru [c.f. ‘Padmaprabha (padma’i ’od)’ in H116] is predicted. Since it is impossible for a Buddha not to previously generate bodhicitta, it seems Śāriputra only appeared to abandon [bodhicitta].’
-13. From the Eight Thousand Verse Perfection of Wisdom Sutra (H12, 278b). That version has ‘morality’ (tshul khrims) in place of ‘the development of bodhicitta’ in the third line.
-14. I.e. the ‘four similar defeats’ (pham pa’i gnas lta bu bzhi): According to the tradition (see e.g. Sakya Pandita, Clarifying the Sage’s Intent, trans. David Jackson, p. 412-413), there are four specific acts which violate the bodhisattva vow. They are ‘similar’ to the four defeats of the śrāvakas in that they constitute breakages of a vow, but they differ in that the bodhisattva vow, unlike the Hīnayāna vows, can be retaken and restored. Thus, abandoning the vow simpliciter is more serious than breaking the vow by these four means.
-15. H332, p. 392b
 
 >>> Chapter 5: Clear Comprehension
 1.	Guarding the mind as the means of guarding training [1-22]
@@ -3196,33 +3100,6 @@ Practising that which one has seen, training in protecting the minds of others a
 >>> Just by reading about the treatment?
 That application will bring the result, that mere words will not bring the result and an example of that are indicated in the first, second and final two lines, respectively.
 [5.109cd]
-1. H232, p. 129b
-2. The ‘women’ here are explained by other commentators including Prajñākaramati (W21708, p. 104) and Thokme Zangpo (W1KG1795, p. 64) to be denizens of the Śālmari (or Śālmali) hell, who entice one into tortures, manifesting as the result of sexual misconduct. Lhopa Rinchen Pal (p. 95) glosses the point as ‘one’s own nonvirtues are the appearances of mind’ and gives a quote from the same sutra: 
-‘One’s mind is an enemy, a great enemy. There is no enemy other than the mind. Just like a stick on fire will burn itself, one’s own mind is burned by mind itself.’
-See also Śāntideva’s reference to this in The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 240-241.
-3. This section heading was previously given as ‘The reason (’thad pa) for guarding the mind’.
-4. Tshangs skud, known as yajnopavita.
-5. Skyes po bslu ba’i sgyu sum cu so gnyis—Lhopa Rinchen Pal (p. 97) uses a similar expression, skyes po bslu ba’i sgyu thabs sum bcu rtsa gnyis dang ldan pa.
-6. Restrictions on monastic eating times are dispensed with in certain cases of sickness and famine. The downfall is afterwards, when the sickness or famine is removed and the monk neglects to apply the restriction again.
-7. Sonam Tsemo has rjes su bsten pa (‘serve’) here, while the root text is normally rjes su brtan pa (‘instruct’), i.e. receive teachings.
-8. Rang bzhin, i.e. body or mind. Some editions of the Tibetan text erroneously have rang bzhin med. Lhopa Rinchen Pal (p. 98) has rang bzhin.
-9. H176, 209b
-10. The text has giving (sbyin pa) here, but presumably the intent is to match v5.42d. Lhopa Rinchen Pal, on this same point, has moral conduct (p. 99).
-11. There is a minor textual corruption here, with three headings indicated but only two given. I have replaced the missing second heading based on Lhopa Rinchen Pal (p. 99) who, in the other headings, has followed Sonam Tsemo.
-12. Here I have followed Lhopa Rinchen Pal (p. 101) for whom lus kyi spyod pa (bodily conduct) becomes las kyi spyod pa (conduct of action) and by whom the titles of sections two and three are reversed. Since this seems to fit the content here better than having section two entitled ‘bodily conduct’, I have assumed a typographical error in the Tibetan version of Sonam Tsemo’s text.
-13. I.e. six antidotes correlating to the six perfections.
-14. See chapter 2, note 1. Lhopa Rinchen Pal (p. 104) also gives this quote.
-15. Ma dad pa’i gnas mang ba: The translation of this expression is informed by Lhopa Rinchen Pal’s comment (p.105), ‘gzhan ma dad pa dang nyes spyod gyi rgyur ’gyur bas skyes pa med par zhes so’: ‘“Unaccompanied” becomes a cause of lacking faith and negative conduct in others.’
-16. In Prajñākaramati (W21708, p. 137): ‘dpung pa gnyi ga mnyam pa ste dus gcig tu mi mnye ba’o’, i.e. shoulders or upper arms.
-17. The text here mentions only confession and dedication, but since Lhopa Rinchen Pal (p. 106) and other commentators have confession, rejoicing and dedication, I have assumed a typographical error.
-18. H67, p. 175
-19. Lhopa Rinchen Pal (p. 106):
-‘Therefore, because one should subdue [tshar gcad] and protect others and be knowledgeable oneself, one should endeavour in this.’
-20. Sadaprarudita’s extraordinary devotion and dedication to receiving the Prajñāpāramitā teachings from the bodhisattva Dharmodgata are related in, e.g. Patrul Rinpoche, Words of My Perfect Teacher, pp. 153-157.
-21. The passage on Śrisambhava in the Avataṃsaka Sutra (H94, p. 227b) contains the detailed instructions given by the boy and girl bodhisattvas Śrisambhava and Śrimati to Sudhana, including the famous instruction:
-‘Noble son, you should look upon yourself as sick, the spiritual friend as the doctor, the teaching as medicine and practice as the cure.’ (The Flower Ornament Scripture: A Translation of the Avatamsaka Sutra, pp. 1444-1452)
-22. As noted above, these are also quoted in full by Śāntideva in chapter four of the Śikṣā-samuccaya. See The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, pp. 63-68.
-23. This refers to the Śikṣā-samuccaya and the Sutra-samuccaya of Śāntideva and two works of the same titles by Nāgārjuna, of which only Śāntideva’s Śikṣā-samuccaya (D3940) and Nāgārjuna’s Sutra-samucaya (D3934) are extant.
 
 >>> Chapter 6: Patience
 [ Image: 6.1.jp2 ]
@@ -3799,9 +3676,9 @@ Although acquisitions may be acquired though anger, they will be lost but one’
 [6.56]
 2. Ceasing to create more harm
 6.56
-It would be better to die today
-Than to live a long life badly,
-For although someone like me might be around for a long time,
+>>> It would be better to die today
+>>> Than to live a long life badly,
+>>> For although someone like me might be around for a long time,
 >>> The suffering of death still awaits.
 Even though one may live a long life, the suffering of death cannot be avoided. 
 [6.57] [6.58]
@@ -4464,28 +4341,7 @@ The first verse indicates that the harms of the lower realms that result from do
 A long life,
 And all the vast pleasures of a universal emperor.
 The first two lines indicate the principal result. The second two lines indicate the visible results [in this life]. The second verse indicates the fully ripened result [in future lives].
-1. See commentary to verse 6.11
-2. Primal substance is gtso bo (Skt. prakṛti). Individual consciousness is skye bu (Skt. puruṣa).
-3. Universal flow is ’gro ba or ’gro ba thams cad (Skt. jagat). Manifestations are gsal ba or rnam ’gyur (Skt. vikāra).
-4. Outer objects and inner experiences exist like reflections within the two sides of a double-sided mirror, which is itself a material evolution of the primal substance. According to Mipham (The Wisdom Chapter: Jamgon Mipham’s Commentary on the Ninth Chapter of The Way of the Bodhisattva, p. 133), the ‘Great One’ itself is the mirror of mind.
-5. The Great One (chen po or blo, Skt. mahat or buddhi) is the first evolution of the disequilibrium of the primal matter. Pride, nga rgyal, means misidentifying the manifestations as self. The five bare elements, de tsam, are sounds, smells, tastes, touchables and colours. The five elements, ’byung ba, are the gross elements of fire, water, earth, air and space. The eleven organs, dbang po, are the five senses, five action organs and the mind (yid). These twenty-three manifestations, in addition to the primal substance and the individual consciousness, comprise the twenty-five ontological enumerations of this school. See commentary to v9.127 for a more detailed description of this system.
-6. The example of the self autonomously creating harm relates to the chapter topic, i.e. patience, and section topic, i.e. ‘Stopping impatience with the establishment of suffering for oneself’ etc.
-7. Blo sngon du btang, cognates blo sngon du gtong ba’i sems pa, bsam blo sngon nas gtong ba, blo sngon du btang ba, Skt: buddhī-purvaka, ‘preceded by design, intentional’ or ‘preceded by intelligence’ (Monier-Williams). This term is used in Sonam Tsemo’s discussion of the Naiyāyikas.
-8. Though the text here has ‘not matter’ (bems po yang ma yin), the negation must be a typographical error, for it would not accord with the Naiyāyika doctrine (e.g. Prajñākaramati: ‘sems pa med pa yang sems med pa’i rang bzhin te bem po zhe bya ba’o’, W21708, p. 163) or indeed Sonam Tsemo’s own subsequent remarks (see commentary to v9.68).
-9. The pervader is ‘gradual and instantaneous function’. It not supported by the sempiternal self.
-10. Qualification: ‘The sempiternal self has no gradual or instantaneous function.’
-11. Pervasion: ‘Whatever has no (gradual or instantaneous) function is not an agent (producing an effect).’
-12. The ability to change is not supported by the sempiternal self.
-13. Qualification: ‘The sempiternal self is unchanging.’
-14. In support of this point, Sonam Tsemo quotes the root text at v6.27b here as ‘bdag ces rtag pa’, i.e. ‘sempiternal self’, rather than the more usual ‘bdag ces brtags pa’, i.e. ‘designated self’, found in the extant Tibetan editions of the root text. Lhopa Rinchen Pal, (p. 116) reiterates Sonam Tsemo’s point here and attributes it to the author of the Great Commentary (’grel chen mkhan po). However, he corrects v6.27b to ‘designated self’. In the extant Tibetan translation of Prajñākaramati’s Great Commentary, v6.27b is quoted as ‘brtags pa’ (W21708, p. 162) but the treatment of this line seems to be associated with the Sāṃkhyas and not the Naiyāyikas. However, this is the only notable point of difference among several points of direct correspondence between the ‘author of the Great Commentary’ and the extant Tibetan edition of the Great Commentary (see chapter 9, note 27). Within the present section, the three topics identified by Sonam Tsemo—refuting the primal substance, manifestations and individual consciousnesses—correspond with Prajñākaramati’s commentary. Here they are represented with formal logic, which is absent from Prajñākaramati, but this is a difference of style rather than substance. The Tibetan colophon to the Great Commentary (W21708, p. 534) notes that chapters 1, 2, 7, 8 and 9 were translated by the Indian pandita Sumatikirti and the Tibetan translator Darma-drak (dar ma grags), while the remaining chapters, including the present one, were translated by one Lodro Zangdragpa (blo gros bzang grags pa). It is possible a version of chapter six of the Great Commentary other than the extant Lodro Zangdragpa translation was available to Sonam Tsemo.
-15. The primal substance supports the ‘contrary’ property of being material, i.e. contrary to intentionality.
-16. The individual consciousness does not support the property of being a creator.
-17. The creator of experience is temporary.
-18. The text here indicates six but gives only five headings. I have treated the title of the fifth section as the missing one and replaced it. Lhopa Rinchen Pal (p. 119) uses a different schema here, so his text cannot be consulted.
-19. Previously this heading was ‘…the production of negative actions towards my side’.
-20. The text here has ‘gzhan la mi ’dod pa’, but it is evidently correct in Lhopa Rinchen Pal (p. 122) as ‘gzhan la mi gnod pa’.
-21. Pervasion: ‘Whatever is a cause of virtue is not an obstruction to merit.’
-22. H239, 97b.7
+
 
 >>> Chapter 7: Effort
 1.	Developing enthusiasm for effort [v1]
@@ -5180,18 +5036,6 @@ The result of effort in self-control:
 >>> I should accomplish everything in this way
 >>> Under the power of enthusiasm.
 
-1. H232, p.33a. Sonam Tsemo adds ‘and so forth’ here, i.e. the passage continues, as quoted in the Śikṣā-samuccaya: 
-‘They did not attain enlightenment while already being tathāgatas. In the same way, I shall strive and in the same way I shall practise diligently. With effort shared with all sentient beings, with effort that takes all sentient beings as its object, I will completely awaken to unsurpassable complete enlightenment.’ (The Training Anthology of Śāntideva: A Translation of the Śikṣā-samuccaya, p. 58)
-2. Reverse pervasion: ‘Where there is no virtue, the cause (i.e. motivation) was absent.’ Forward pervasion: ‘Where there is motivation, the result will be present.’
-3. H94, 174a. That version is slightly more descriptive and hence longer than the one quoted here. This sutra passage is also quoted in the Śikṣā-samuccaya (D3940, 153a, under v24 of the root verses) in the longer form, though with yet another translation. All the Tibetan editions of Sonam Tsemo’s commentary here erroneously have ri mo mnyams for ri mi mnyams (‘the rugged mountains’).
-4. Lhopa Rinchen Pal (p. 135): 
-‘Weakening other actions means ceasing conduct, i.e. action diminishing the unattained. Weakening results means not attaining the results themselves, i.e. action diminishing the attained.’ 
-C.f. Sthiramati’s Mahāyānasūtrālaṃkāraṭīkā (D4034, 85a.2-3): 
-‘If a shameless person commits actions such as killing, although he may have virtuous dharmas in the past such as faith and moral conduct, they will be lost. This is called action damaging attained virtuous dharmas (thob pa las nyams). Though in future lives one would have attained virtuous dharmas such as faith and moral conduct, they will not be attained. This is called action damaging unattained virtuous dharmas (ma thob pa las nyams).’
-5. The Tibetan text text here has ’thad (logic, reason) for the second heading (the first being bsten par rigs pa) but later has thabs (means), which is confirmed by Lhopa Rinchen Pal (p. 136).
-6. Just as the defilement of anger can be productively turned against the defilements (v4.29, 4.43 and 6.46), so pride can be productively used against them. The English word ‘pride’ is particularly suitable here in having proper (productive, virtuous) and improper (nonvirtuous, defiled) applications. As Thomas Reid expressed it in his Essays on the Active Powers of Man (1788):
-‘When it is grounded upon a vain conceit of inward worth that we do not possess, it is arrogance and deceit. But when a man, without thinking of himself more highly than he ought to think, is conscious of that integrity of heart, and uprightness of conduct, which he most highly esteems in others, and values himself upon this account; this perhaps may be called pride of virtue, but it is not a vicious pride. It is a noble and magnanimous disposition, without which there can be no steady virtue.’ (Quoted in P.M.S. Hacker, The Passions: A Study of Human Nature, p. 139. See also pp. 140-151)
-7. I have altered the text’s apparently erroneous rkyen nyin to rkyen nyen in accord with Lhopa Rinchen Pal’s (p. 137) nyon mongs nyen gnyen po stobs bskyed.
 
 >>> Chapter 8: Meditation
 1.	Abandoning contradictory factors
@@ -6829,16 +6673,6 @@ Focussing on meditation:
 >>> And continually rest in equipoise
 >>> Upon the perfect object.
 
-1. Though this section is not listed here, a section of this name is found later covering verses 85-88. Lhopa Rinchen Pal’s (p. 145) equivalent section in this list is entitled ‘The qualities of solitude’, confirming that it belongs here and that its loss in Sonam Tsemo’s text is a typographical error.
-2. Non-distraction (mi g.yeng ba) earlier; here, solitude (dben pa).
-3. The time taken on the Mahāyāna path to attain buddhahood.
-4. Pervasion: ‘Whatever is suffering should be abandoned.’
-5. Pervasion: ‘Whatever is happiness should be established’
-6. H129, 200b-222b.
-7. Dpa’ bas sbyin. Lhopa Rinchen Pal (p. 149) has dpa’ sbyin. H129 has dpa’ bas byin.
-8. The text indicates four sections but only names three; here I have assumed the second one is missing and offered its title.
-9. This list is slightly corrupted in the Tibetan text and has been corrected here by reference to Lhopa Rinchen Pal (p. 155). The first heading was missing and the fifth appeared as two separate sections.
-10. Lhopa Rinchen Pal (p.156) attributes this interpretation to Puṇyaśrīmitra.
 
 >>> Chapter 9: Wisdom
 1.	Explaining that wisdom is the principal [v1]
@@ -7101,7 +6935,7 @@ A stream of being that persists from birth for a long time is not pervaded by be
 ‘If everything were illusion-like, it would follow that there would be no nonvirtue, such as killing, nor any virtue in doing good. If nonvirtue or virtue existed in illusions, then it would be nonvirtuous to kill a person conjured by an illusionist and virtuous to give him food.’
 9.11
 >>> When illusory beings are killed,
-There is no nonvirtue because they do not have minds.
+>>>There is no nonvirtue because they do not have minds.
 >>> Merit and nonvirtue originate
 >>> With those who possess an illusory mind.
 You accept that it is not nonvirtuous to destroy a heap of stones, while it is nonvirtuous to kill a person, for there is a difference in the existence or nonexistence of a mind. Similarly, though we assert that everything is like an illusion, when there is the illusion of mind-possession, we say that there is merit in the giving of food and nonvirtue in killing. If there is no mind, there is no nonvirtue or virtue in such things.
@@ -7116,7 +6950,7 @@ In that case, if both are existent, that would also contradict it.
 ‘But one can see their non-contradiction.’
 Within illusoriness, too, one can see different effects such as horses and elephants coming from different conditions, so the differentiation of causes and their various effects is not contradicted:
 >>> Having arisen from a variety of conditions,
-Illusions are varied too,
+>>> Illusions are varied too,
 However, whether illusory or real [393], the arising of different effects from unvarying causes is denied:
 9.13
 >>> But nowhere is there a single condition
@@ -7269,7 +7103,7 @@ It is reasonable to say that a lamp, as an object of awareness, is established a
 2. Rejecting the perception of its existence
 9.22
 >>> If it is not seen by anyone,
-Then whether it is luminous or not 
+>>> Then whether it is luminous or not 
 >>> Is like the looks of a barren woman’s daughter—
 >>> Discussing it is meaningless.
 In particular, it is meaningless to discuss whether it is luminous or not, for there can be no ascertainment of it in anyone’s understanding. Why? Because the general concept of ‘self-awareness’ lacks an intrinsic nature from which to draw the conclusion. An example of this is the looks of the daughter of a barren woman.
