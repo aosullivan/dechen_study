@@ -58,6 +58,7 @@ flutter:
   assets:
     - .env
     - texts/bcv-root
+    - texts/bcv_parsed.json
     - texts/verse_commentary_mapping.txt
     - texts/verse_hierarchy_map.json
     - texts/section_emotion_mappings.json

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
@@ -27,13 +25,10 @@ class TextOptionsScreen extends StatefulWidget {
 }
 
 class _TextOptionsScreenState extends State<TextOptionsScreen> {
-  /// Label of the tile currently loading (null = none).
-  String? _loadingLabel;
-
   @override
   void initState() {
     super.initState();
-    // Pre-warm services so the read screen opens instantly.
+    // Pre-warm services so the read screen opens quickly.
     if (widget.textId == 'bodhicaryavatara') {
       BcvVerseService.instance.preload();
       VerseHierarchyService.instance.preload();
@@ -45,98 +40,49 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        children: [
+          _OptionTile(
+            icon: Icons.today_outlined,
+            label: 'Daily',
+            onTap: () => _openDaily(context),
           ),
-          body: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            children: [
-              _OptionTile(
-                icon: Icons.today_outlined,
-                label: 'Daily',
-                loading: _loadingLabel == 'Daily',
-                onTap: () => _openDaily(context),
-              ),
           _OptionTile(
             icon: Icons.self_improvement_outlined,
             label: 'Inspiration',
-            loading: _loadingLabel == 'Inspiration',
             onTap: () => _openInspiration(context),
           ),
           _OptionTile(
             icon: Icons.quiz_outlined,
-                label: 'Quiz',
-                loading: _loadingLabel == 'Quiz',
-                onTap: () => _openQuiz(context),
-              ),
-              _OptionTile(
-                icon: Icons.book_outlined,
-                label: 'Read',
-                loading: _loadingLabel == 'Read',
-                onTap: () => _openRead(context),
-              ),
-              _OptionTile(
-                icon: Icons.account_tree_outlined,
-                label: 'Textual Overview',
-                loading: _loadingLabel == 'Textual Overview',
-                onTap: () => _openOverview(context),
-              ),
-            ],
+            label: 'Quiz',
+            onTap: () => _openQuiz(context),
           ),
-        ),
-        if (_loadingLabel != null) _buildLoadingOverlay(),
-      ],
-    );
-  }
-
-  Widget _buildLoadingOverlay() {
-    final message = _loadingLabel == 'Read'
-        ? 'Loading Reader...'
-        : _loadingLabel == 'Textual Overview'
-            ? 'Loading Textual Overview...'
-            : 'Loading...';
-    return Positioned.fill(
-      child: Material(
-        color: Colors.black26,
-        child: Center(
-          child: Card(
-            margin: const EdgeInsets.symmetric(horizontal: 48),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    message,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
-              ),
-            ),
+          _OptionTile(
+            icon: Icons.book_outlined,
+            label: 'Read',
+            onTap: () => _openRead(context),
           ),
-        ),
+          _OptionTile(
+            icon: Icons.account_tree_outlined,
+            label: 'Textual Overview',
+            onTap: () => _openOverview(context),
+          ),
+        ],
       ),
     );
   }
@@ -167,15 +113,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openRead(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
-      setState(() => _loadingLabel = 'Read');
-      _pushWithLoadingOverlay(
-        context,
-        message: 'Loading Reader...',
-        builder: (onLoadComplete) => BcvReadScreen(
-          title: title,
-          onLoadComplete: onLoadComplete,
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => BcvReadScreen(title: title),
         ),
-        usePageRouteBuilder: true,
       );
     } else {
       _showComingSoon(context, 'Read');
@@ -183,26 +124,6 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _openQuiz(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-              ),
-            ),
-            SizedBox(width: 16),
-            Text('Loading Quiz...'),
-          ],
-        ),
-        duration: Duration(seconds: 5),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
     if (textId == 'bodhicaryavatara') {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
@@ -216,106 +137,14 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openOverview(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
-      setState(() => _loadingLabel = 'Textual Overview');
-      _pushWithLoadingOverlay(
-        context,
-        message: 'Loading Textual Overview...',
-        builder: (onLoadComplete) => TextualOverviewScreen(
-          onLoadComplete: onLoadComplete,
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const TextualOverviewScreen(),
         ),
       );
     } else {
       _showComingSoon(context, 'Textual Overview');
     }
-  }
-
-  /// Pushes a route and shows a loading overlay on top until the destination
-  /// calls [onLoadComplete]. The overlay stays visible during the long load.
-  void _pushWithLoadingOverlay(
-    BuildContext context, {
-    required String message,
-    required Widget Function(VoidCallback onLoadComplete) builder,
-    bool usePageRouteBuilder = false,
-  }) {
-    final navigator = Navigator.of(context);
-    final overlay = Overlay.of(context);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) return;
-      await Future.delayed(const Duration(milliseconds: 350));
-      if (!mounted) return;
-
-      OverlayEntry? overlayEntry;
-      var overlayRemoved = false;
-
-      void removeOverlay() {
-        if (overlayRemoved) return;
-        overlayRemoved = true;
-        overlayEntry?.remove();
-        if (mounted) setState(() => _loadingLabel = null);
-      }
-
-      overlayEntry = OverlayEntry(
-        builder: (overlayContext) =>
-            _buildLoadingOverlayContent(overlayContext, message),
-      );
-
-      final route = usePageRouteBuilder
-          ? PageRouteBuilder<void>(
-              pageBuilder: (_, __, ___) => builder(removeOverlay),
-              transitionDuration: Duration.zero,
-              reverseTransitionDuration: Duration.zero,
-            )
-          : MaterialPageRoute<void>(
-              builder: (_) => builder(removeOverlay),
-            );
-
-      unawaited(
-        navigator.push(route).then((_) => removeOverlay()),
-      );
-
-      // Insert overlay after route is built so it appears on top during loading.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final entry = overlayEntry;
-        if (mounted && entry != null && !overlayRemoved) {
-          overlay.insert(entry);
-        }
-      });
-    });
-  }
-
-  Widget _buildLoadingOverlayContent(BuildContext context, String message) {
-    return Positioned.fill(
-      child: Material(
-        color: Colors.black26,
-        child: Center(
-          child: Card(
-            margin: const EdgeInsets.symmetric(horizontal: 48),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    message,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   void _showComingSoon(BuildContext context, String feature) {
@@ -333,13 +162,11 @@ class _OptionTile extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
-    this.loading = false,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
-  final bool loading;
 
   @override
   Widget build(BuildContext context) {
@@ -351,21 +178,12 @@ class _OptionTile extends StatelessWidget {
         side: const BorderSide(color: AppColors.borderLight),
       ),
       child: ListTile(
-        leading: loading
-            ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppColors.primary,
-                ),
-              )
-            : Icon(icon, color: AppColors.primary),
+        leading: Icon(icon, color: AppColors.primary),
         title: Text(
           label,
           style: Theme.of(context).textTheme.titleLarge,
         ),
-        onTap: loading ? null : onTap,
+        onTap: onTap,
       ),
     );
   }

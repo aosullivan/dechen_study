@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/app_theme.dart';
 import '../landing/landing_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -40,9 +39,6 @@ class _SplashScreenState extends State<SplashScreen> {
               style: Theme.of(context).textTheme.displayLarge,
             ),
             const SizedBox(height: 24),
-            const CircularProgressIndicator(
-              color: AppColors.primary,
-            ),
           ],
         ),
       ),

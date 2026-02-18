@@ -12,10 +12,7 @@ import 'overview/overview_verse_panel.dart';
 /// Tapping a section opens a side panel (desktop) or bottom sheet (mobile)
 /// showing the verses for that section.
 class TextualOverviewScreen extends StatefulWidget {
-  const TextualOverviewScreen({super.key, this.onLoadComplete});
-
-  /// Called when initial load completes (success or error). Used to dismiss loading overlay.
-  final VoidCallback? onLoadComplete;
+  const TextualOverviewScreen({super.key});
 
   @override
   State<TextualOverviewScreen> createState() => _TextualOverviewScreenState();
@@ -50,15 +47,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
       _flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
       _loading = false;
     });
-    // Defer until after build, layout, and paint so content is visible before overlay is removed
-    if (widget.onLoadComplete != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await Future.delayed(const Duration(milliseconds: 250));
-          if (mounted) widget.onLoadComplete?.call();
-        });
-      });
-    }
   }
 
   /// Returns children of [parentPath] (empty string = root-level sections).
@@ -203,7 +191,13 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
         centerTitle: true,
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            )
           : _buildBody(context),
     );
   }

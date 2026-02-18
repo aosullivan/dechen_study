@@ -214,9 +214,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           ),
           centerTitle: true,
         ),
-        body: const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
+        body: const Center(child: SizedBox.shrink()),
       );
     }
 

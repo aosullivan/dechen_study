@@ -70,7 +70,15 @@ Ensure `pubspec.yaml` font paths match your files.
 flutter pub get
 ```
 
-### 4. Run
+### 4. Build text assets
+
+If you've cloned the repo, pre-built assets may already exist. If you change `texts/bcv-root` or pull changes that modify it, run:
+
+```bash
+dart run tools/build_bcv_parsed.dart
+```
+
+### 5. Run
 
 ```bash
 flutter run
@@ -119,7 +127,7 @@ lib/
 
 The app loads text from bundled assets:
 
-- `texts/bcv-root` – Root text (chapters, verses)
+- `texts/bcv-root` – Source root text (chapters, verses). Run `dart run tools/build_bcv_parsed.dart` to regenerate `texts/bcv_parsed.json` after changes.
 - `texts/verse_hierarchy_map.json` – Section hierarchy (paths, first verses)
 - `texts/verse_commentary_mapping.txt` – Verse-to-commentary mapping (includes commentary text)
 

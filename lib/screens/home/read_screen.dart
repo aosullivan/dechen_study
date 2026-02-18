@@ -37,9 +37,7 @@ class _ReadScreenState extends State<ReadScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
+      return const Center(child: SizedBox.shrink());
     }
 
     if (_chapters.isEmpty) {

@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// One chapter: number, title, and verse index range into the flat verse list.
@@ -16,109 +16,7 @@ class BcvChapter {
   final int endVerseIndex;
 }
 
-/// Result of parsing the bcv-root asset in a background isolate.
-class _ParseResult {
-  _ParseResult({
-    required this.verses,
-    required this.captions,
-    required this.refs,
-    required this.chapters,
-  });
-  final List<String> verses;
-  final List<String?> captions;
-  final List<String?> refs;
-  final List<BcvChapter> chapters;
-}
-
-/// Top-level so it can run in a compute isolate.
-_ParseResult _parseBcvRoot(String content) {
-  final chapterTitleOnly = RegExp(r'^Chapter (\d+):\s*(.+)\s*$');
-  final verseRefPattern = RegExp(r'\[(\d+)\.(\d+)\]');
-
-  String? extractCaption(String block) {
-    final match = verseRefPattern.allMatches(block).lastOrNull;
-    if (match == null) return null;
-    return 'Chapter ${match.group(1)}, Verse ${match.group(2)}';
-  }
-
-  String? extractRef(String block) {
-    final match = verseRefPattern.allMatches(block).lastOrNull;
-    if (match == null) return null;
-    return '${match.group(1)}.${match.group(2)}';
-  }
-
-  /// Remove [c.v] markers from verse text so they aren't displayed inline.
-  String stripMarkers(String text) {
-    return text.replaceAll(verseRefPattern, '').trimRight();
-  }
-
-  // Strip BOM and form-feed
-  content = content.replaceAll(RegExp(r'[\uFEFF\x0C]'), '');
-  // Normalize line endings
-  content = content.replaceAll(RegExp(r'\r\n?'), '\n');
-  final blocks = content.split(RegExp(r'\n\s*\n'));
-  final verses = <String>[];
-  final captions = <String?>[];
-  final refs = <String?>[];
-  final chapterStarts = <List<dynamic>>[];
-  for (final block in blocks) {
-    final trimmed = block.trim();
-    if (trimmed.isEmpty) continue;
-    final lines = trimmed
-        .split('\n')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
-    var pendingVerseLines = <String>[];
-    for (final line in lines) {
-      final chapterMatch = chapterTitleOnly.firstMatch(line);
-      if (chapterMatch != null) {
-        if (pendingVerseLines.isNotEmpty) {
-          final joined = pendingVerseLines.join('\n');
-          captions.add(extractCaption(joined));
-          refs.add(extractRef(joined));
-          verses.add(stripMarkers(joined));
-          pendingVerseLines = [];
-        }
-        chapterStarts.add([
-          int.parse(chapterMatch.group(1)!),
-          chapterMatch.group(2)!.trim(),
-          verses.length,
-        ]);
-        continue;
-      }
-      pendingVerseLines.add(line);
-    }
-    if (pendingVerseLines.isNotEmpty) {
-      final joined = pendingVerseLines.join('\n');
-      captions.add(extractCaption(joined));
-      refs.add(extractRef(joined));
-      verses.add(stripMarkers(joined));
-    }
-  }
-  // Build chapters
-  final chapters = <BcvChapter>[];
-  for (var i = 0; i < chapterStarts.length; i++) {
-    final start = chapterStarts[i];
-    final endIndex = i + 1 < chapterStarts.length
-        ? chapterStarts[i + 1][2] as int
-        : verses.length;
-    chapters.add(BcvChapter(
-      number: start[0] as int,
-      title: start[1] as String,
-      startVerseIndex: start[2] as int,
-      endVerseIndex: endIndex,
-    ));
-  }
-  return _ParseResult(
-    verses: verses,
-    captions: captions,
-    refs: refs,
-    chapters: chapters,
-  );
-}
-
-/// Loads and parses the bcv-root asset, caches verses and chapters, and provides random verse selection.
+/// Loads pre-parsed bcv data from bcv_parsed.json (built by tools/build_bcv_parsed.dart).
 class BcvVerseService {
   BcvVerseService._();
   static final BcvVerseService _instance = BcvVerseService._();
@@ -128,7 +26,7 @@ class BcvVerseService {
   List<String?>? _captions;
   List<String?>? _refs;
   List<BcvChapter>? _chapters;
-  static const String _assetPath = 'texts/bcv-root';
+  static const String _assetPath = 'texts/bcv_parsed.json';
 
   /// Matches a base verse ref like "1.5" (no suffix). Shared across the app.
   static final RegExp baseVerseRefPattern = RegExp(r'^\d+\.\d+$');
@@ -139,15 +37,27 @@ class BcvVerseService {
   /// Pre-warm: start loading and parsing the asset so it's ready when the read screen opens.
   Future<void> preload() => _ensureLoaded();
 
-  /// Loads the asset, parses in a background isolate, and caches. Idempotent.
+  /// Loads pre-parsed JSON and caches. Idempotent.
   Future<void> _ensureLoaded() async {
     if (_verses != null) return;
     final content = await rootBundle.loadString(_assetPath);
-    final result = await compute(_parseBcvRoot, content);
-    _verses = result.verses;
-    _captions = result.captions;
-    _refs = result.refs;
-    _chapters = result.chapters;
+    final json = jsonDecode(content) as Map<String, dynamic>;
+    _verses = (json['verses'] as List<dynamic>).cast<String>();
+    _captions = (json['captions'] as List<dynamic>)
+        .map((e) => e == null ? null : e as String)
+        .toList();
+    _refs = (json['refs'] as List<dynamic>)
+        .map((e) => e == null ? null : e as String)
+        .toList();
+    final chList = json['chapters'] as List<dynamic>;
+    _chapters = chList
+        .map((c) => BcvChapter(
+              number: c['number'] as int,
+              title: c['title'] as String,
+              startVerseIndex: c['startVerseIndex'] as int,
+              endVerseIndex: c['endVerseIndex'] as int,
+            ))
+        .toList();
   }
 
   /// Returns a random verse text. Loads and parses asset on first call.

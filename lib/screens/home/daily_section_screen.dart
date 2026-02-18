@@ -72,9 +72,7 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
+      return const Center(child: SizedBox.shrink());
     }
 
     if (_dailySection == null || _section == null) {

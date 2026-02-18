@@ -95,9 +95,7 @@ class _InspirationVerseScreenState extends State<InspirationVerseScreen> {
 
   Widget _buildBody() {
     if (_loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
+      return const Center(child: SizedBox.shrink());
     }
     if (_error != null) {
       return Center(

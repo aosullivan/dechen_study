@@ -50,9 +50,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
+      return const Center(child: SizedBox.shrink());
     }
 
     if (_currentSection == null || _chapters.isEmpty) {

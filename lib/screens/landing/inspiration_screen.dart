@@ -28,9 +28,7 @@ class InspirationScreen extends StatelessWidget {
         future: InspirationService.instance.getFeelingCategories(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            );
+            return const Center(child: SizedBox.shrink());
           }
           final categories = snapshot.data ?? [];
           if (categories.isEmpty) {

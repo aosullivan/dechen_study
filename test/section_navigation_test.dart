@@ -51,6 +51,22 @@ void main() {
       );
     });
 
+    test('leaf sections order split verses 8.136ab before 8.136cd for keydown', () {
+      final leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
+      final abIdx = leafOrdered.indexWhere((s) {
+        final ref = hierarchyService.getFirstVerseForSectionSync(s.path);
+        return ref == '8.136ab';
+      });
+      final cdIdx = leafOrdered.indexWhere((s) {
+        final ref = hierarchyService.getFirstVerseForSectionSync(s.path);
+        return ref == '8.136cd';
+      });
+      if (abIdx >= 0 && cdIdx >= 0) {
+        expect(abIdx, lessThan(cdIdx),
+            reason: '8.136ab section should come before 8.136cd so keydown goes ab -> cd');
+      }
+    });
+
     test('getSectionsByVerseOrderSync returns sections in verse order', () {
       final ordered = hierarchyService.getSectionsByVerseOrderSync();
       expect(ordered, isNotEmpty);

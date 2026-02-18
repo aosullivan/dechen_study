@@ -165,23 +165,27 @@ class VerseHierarchyService {
   /// Find the next (direction 1) or previous (direction -1) section by visible verse.
   /// Uses verse order so 8.114 -> next goes to first section with firstVerse > 8.114 (e.g. 8.115),
   /// not 8.117 (which is in a section whose first verse is 8.110).
+  /// When [useFullRefOrder] is true (e.g. leaf list with split verses), 8.136ab -> next is 8.136cd.
+  /// When false (deduplicated list), 9.1 -> next is 9.2 (one section per base verse).
   int findAdjacentSectionIndex(
     List<({String path, String title, int depth})> ordered,
     String currentVerseRef, {
     required int direction,
+    bool useFullRefOrder = false,
   }) {
     if (ordered.isEmpty) return -1;
     final cur = currentVerseRef;
+    final compare = useFullRefOrder ? _compareVerseRefsFull : _compareVerseRefs;
     if (direction > 0) {
       for (var i = 0; i < ordered.length; i++) {
         final r = getFirstVerseForSectionSync(ordered[i].path);
-        if (r != null && _compareVerseRefs(r, cur) > 0) return i;
+        if (r != null && compare(r, cur) > 0) return i;
       }
       return -1;
     } else {
       for (var i = ordered.length - 1; i >= 0; i--) {
         final r = getFirstVerseForSectionSync(ordered[i].path);
-        if (r != null && _compareVerseRefs(r, cur) < 0) return i;
+        if (r != null && compare(r, cur) < 0) return i;
       }
       return -1;
     }
@@ -204,7 +208,7 @@ class VerseHierarchyService {
         withFirst.add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
       }
     }
-    withFirst.sort((a, b) => _compareVerseRefs(a.firstRef, b.firstRef));
+    withFirst.sort((a, b) => _compareVerseRefsFull(a.firstRef, b.firstRef));
     _cachedLeafSections = withFirst
         .map((e) => (path: e.path, title: e.title, depth: e.depth))
         .toList();
@@ -260,6 +264,14 @@ class VerseHierarchyService {
     final bv = int.parse(bm.group(2)!);
     if (ac != bc) return ac.compareTo(bc);
     return av.compareTo(bv);
+  }
+
+  /// Like [_compareVerseRefs] but breaks ties by full ref (8.136ab < 8.136cd).
+  /// Use for leaf-section order and for "next section" when multiple sections share a base verse.
+  static int _compareVerseRefsFull(String a, String b) {
+    final c = _compareVerseRefs(a, b);
+    if (c != 0) return c;
+    return a.compareTo(b);
   }
 
   /// Returns the hierarchy for the verse at [index]. Uses BcvVerseService to resolve ref.

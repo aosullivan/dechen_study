@@ -34,7 +34,6 @@ class BcvReadScreen extends StatefulWidget {
     this.highlightSectionIndices,
     this.title = 'Bodhicaryavatara',
     this.onSectionNavigateForTest,
-    this.onLoadComplete,
   });
 
   final int? scrollToVerseIndex;
@@ -47,9 +46,6 @@ class BcvReadScreen extends StatefulWidget {
   /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
   final void Function(String sectionPath, String firstVerseRef)?
       onSectionNavigateForTest;
-
-  /// Called when initial load completes (success or error). Used to dismiss loading overlay.
-  final VoidCallback? onLoadComplete;
 
   @override
   State<BcvReadScreen> createState() => _BcvReadScreenState();
@@ -87,8 +83,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Section hierarchy for the visible verse. Each has 'section' and 'title'.
   List<Map<String, String>> _breadcrumbHierarchy = [];
 
-  /// Verse indices belonging to the current section (for faint box highlight).
+  /// Verse indices belonging to the current section (for overlay measurement).
   Set<int>? _currentSectionVerseIndices = {};
+
+  /// Animated section overlay: rect we're sliding from and to.
+  Rect? _sectionOverlayRectFrom;
+  Rect? _sectionOverlayRectTo;
+  int _sectionOverlayAnimationId = 0;
+  int _sectionOverlayMeasureRetries = 0;
 
   /// Cache: section path -> verse indices (avoids recomputing on same section).
   final Map<String, Set<int>> _sectionVerseIndicesCache = {};
@@ -110,11 +112,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<String, double> _verseVisibility = {};
 
-  /// Animated section overlay: rect we're sliding from and to.
-  Rect? _sectionOverlayRectFrom;
-  Rect? _sectionOverlayRectTo;
-  int _sectionOverlayAnimationId = 0;
-  int _sectionOverlayMeasureRetries = 0;
   final Map<int, GlobalKey> _verseKeys = {};
   final Map<String, GlobalKey> _verseSegmentKeys = {};
   final GlobalKey _scrollContentKey = GlobalKey();
@@ -203,8 +200,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _error = null;
       _highlightVerseIndices = {};
       _minHighlightIndex = null;
-      _currentSectionVerseIndices = {};
       _sectionVerseIndicesCache.clear();
+      _currentSectionVerseIndices = {};
       _sectionOverlayRectFrom = null;
       _sectionOverlayRectTo = null;
       _sectionOverlayMeasureRetries = 0;
@@ -256,28 +253,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
         _setInitialBreadcrumb();
       }
-      // Defer until after build, layout, and paint so content is visible before overlay is removed
-      if (widget.onLoadComplete != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            await Future.delayed(const Duration(milliseconds: 250));
-            if (mounted) widget.onLoadComplete?.call();
-          });
-        });
-      }
     } catch (e) {
       if (mounted) {
         setState(() {
           _loading = false;
           _error = e;
-        });
-      }
-      if (widget.onLoadComplete != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            await Future.delayed(const Duration(milliseconds: 250));
-            if (mounted) widget.onLoadComplete?.call();
-          });
         });
       }
     }
@@ -373,120 +353,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return runs;
   }
 
-  /// The section run currently shown (the one containing the visible verse). Used for overlay measurement.
-  List<int>? get _activeSectionRun {
-    final sectionRuns = _getSectionRuns();
-    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-    if (visibleIdx == null || sectionRuns.isEmpty) return null;
-    for (final run in sectionRuns) {
-      if (run.contains(visibleIdx)) return run;
-    }
-    return null;
-  }
-
-  /// Measure the rect of the active section run and animate the overlay to it.
-  void _measureAndUpdateSectionOverlay() {
-    final run = _activeSectionRun;
-    final stackContext = _scrollContentKey.currentContext;
-    if (stackContext == null) return;
-    final stackBox = stackContext.findRenderObject() as RenderBox?;
-    if (stackBox == null || !stackBox.hasSize) return;
-
-    if (run == null || run.isEmpty) {
-      if (_sectionOverlayRectTo != null) {
-        _sectionOverlayRectFrom = _sectionOverlayRectTo;
-        _sectionOverlayRectTo = null;
-        _sectionOverlayAnimationId++;
-        _sectionChangeNotifier.notify();
-      }
-      return;
-    }
-
-    Rect? measured;
-    const leftMargin = 12.0;
-    const rightMargin = 20.0;
-    // Each verse widget includes a 20px bottom padding for spacing between
-    // verses. We trim that from the last verse so the overlay border sits
-    // snugly below the text rather than bleeding into the next verse's space.
-    const verseBottomPadding = 20.0;
-    // Small visual margin so the border doesn't sit flush against the text.
-    const marginV = 6.0;
-    for (final idx in run) {
-      // Use full verse key so overlay covers the whole verse, not a small segment.
-      final key = _verseKeys[idx];
-      if (key?.currentContext == null) continue;
-      final verseBox = key!.currentContext!.findRenderObject() as RenderBox?;
-      if (verseBox == null || !verseBox.hasSize) continue;
-      final topLeft = verseBox.localToGlobal(Offset.zero, ancestor: stackBox);
-      final bottomRight = verseBox.localToGlobal(
-        Offset(verseBox.size.width, verseBox.size.height),
-        ancestor: stackBox,
-      );
-      final verseRect = Rect.fromPoints(topLeft, bottomRight);
-      measured = measured == null ? verseRect : measured.expandToInclude(verseRect);
-    }
-    if (measured == null) {
-      if (_sectionOverlayMeasureRetries <
-          BcvReadConstants.maxSectionOverlayMeasureRetries) {
-        _sectionOverlayMeasureRetries++;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) _measureAndUpdateSectionOverlay();
-        });
-      }
-      return;
-    }
-    _sectionOverlayMeasureRetries = 0;
-
-    // Build the overlay rect: full content width with side margins, trimmed
-    // vertically to hug just the section verses with a small visual margin.
-    final contentWidth = stackBox.size.width;
-    final clamped = Rect.fromLTRB(
-      leftMargin,
-      measured.top - marginV,
-      contentWidth - rightMargin,
-      measured.bottom - verseBottomPadding + marginV,
-    );
-
-    final prevTo = _sectionOverlayRectTo;
-    if (prevTo != null && _rectApproxEquals(prevTo, clamped)) return;
-
-    _sectionOverlayRectFrom = prevTo ?? clamped;
-    _sectionOverlayRectTo = clamped;
-    _sectionOverlayAnimationId++;
-    _sectionChangeNotifier.notify();
-  }
-
-  bool _rectApproxEquals(Rect a, Rect b, [double epsilon = 2]) {
-    return (a.left - b.left).abs() < epsilon &&
-        (a.top - b.top).abs() < epsilon &&
-        (a.width - b.width).abs() < epsilon &&
-        (a.height - b.height).abs() < epsilon;
-  }
-
-  /// Consecutive verse indices in current section but NOT in highlight (for faint box).
-  /// When the whole section is highlighted (e.g. from Daily), use full section so the faint box still shows.
-  List<List<int>> _getSectionRuns() {
-    final section = _currentSectionVerseIndices ?? {};
-    final highlight = _highlightSet;
-    var sectionOnly = section.difference(highlight).toList()..sort();
-    if (sectionOnly.isEmpty && section.isNotEmpty) {
-      sectionOnly = section.toList()..sort();
-    }
-    if (sectionOnly.isEmpty) return [];
-    final runs = <List<int>>[];
-    var current = [sectionOnly.first];
-    for (var i = 1; i < sectionOnly.length; i++) {
-      if (sectionOnly[i] == current.last + 1) {
-        current.add(sectionOnly[i]);
-      } else {
-        runs.add(current);
-        current = [sectionOnly[i]];
-      }
-    }
-    runs.add(current);
-    return runs;
-  }
-
   Future<void> _onVerseTap(int globalIndex) async {
     // Get the verse ref and load commentary
     final ref = _verseService.getVerseRef(globalIndex);
@@ -564,12 +430,124 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         indices = {initialIndex};
       }
       final indicesWithVisible = {...indices, initialIndex};
+      // When opening from Daily "Full text", use the highlight set as the section
+      // so the overlay box is drawn around those verses (not a hierarchy superset).
+      final sectionIndices = _highlightSet.isNotEmpty
+          ? _highlightSet
+          : indicesWithVisible;
       _applySectionState(
         hierarchy: hierarchy,
-        verseIndices: indicesWithVisible,
+        verseIndices: sectionIndices,
         verseIndex: initialIndex,
       );
     });
+  }
+
+  /// Consecutive verse indices in current section but NOT in highlight.
+  /// When the whole section is highlighted (e.g. from Daily), use full section.
+  List<List<int>> _getSectionRuns() {
+    final section = _currentSectionVerseIndices ?? {};
+    final highlight = _highlightSet;
+    var sectionOnly = section.difference(highlight).toList()..sort();
+    if (sectionOnly.isEmpty && section.isNotEmpty) {
+      sectionOnly = section.toList()..sort();
+    }
+    if (sectionOnly.isEmpty) return [];
+    final runs = <List<int>>[];
+    var current = [sectionOnly.first];
+    for (var i = 1; i < sectionOnly.length; i++) {
+      if (sectionOnly[i] == current.last + 1) {
+        current.add(sectionOnly[i]);
+      } else {
+        runs.add(current);
+        current = [sectionOnly[i]];
+      }
+    }
+    runs.add(current);
+    return runs;
+  }
+
+  /// The section run currently shown (the one containing the visible verse). Used for overlay measurement.
+  List<int>? get _activeSectionRun {
+    final sectionRuns = _getSectionRuns();
+    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+    if (visibleIdx == null || sectionRuns.isEmpty) return null;
+    for (final run in sectionRuns) {
+      if (run.contains(visibleIdx)) return run;
+    }
+    return null;
+  }
+
+  /// Measure the rect of the active section run and animate the overlay to it.
+  void _measureAndUpdateSectionOverlay() {
+    final run = _activeSectionRun;
+    final stackContext = _scrollContentKey.currentContext;
+    if (stackContext == null) return;
+    final stackBox = stackContext.findRenderObject() as RenderBox?;
+    if (stackBox == null || !stackBox.hasSize) return;
+
+    if (run == null || run.isEmpty) {
+      if (_sectionOverlayRectTo != null) {
+        _sectionOverlayRectFrom = _sectionOverlayRectTo;
+        _sectionOverlayRectTo = null;
+        _sectionOverlayAnimationId++;
+        _sectionChangeNotifier.notify();
+      }
+      return;
+    }
+
+    Rect? measured;
+    const leftMargin = 12.0;
+    const rightMargin = 20.0;
+    const verseBottomPadding = 20.0;
+    const marginV = 6.0;
+    for (final idx in run) {
+      final key = _verseKeys[idx];
+      if (key?.currentContext == null) continue;
+      final verseBox = key!.currentContext!.findRenderObject() as RenderBox?;
+      if (verseBox == null || !verseBox.hasSize) continue;
+      final topLeft = verseBox.localToGlobal(Offset.zero, ancestor: stackBox);
+      final bottomRight = verseBox.localToGlobal(
+        Offset(verseBox.size.width, verseBox.size.height),
+        ancestor: stackBox,
+      );
+      final verseRect = Rect.fromPoints(topLeft, bottomRight);
+      measured = measured == null ? verseRect : measured.expandToInclude(verseRect);
+    }
+    if (measured == null) {
+      if (_sectionOverlayMeasureRetries <
+          BcvReadConstants.maxSectionOverlayMeasureRetries) {
+        _sectionOverlayMeasureRetries++;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _measureAndUpdateSectionOverlay();
+        });
+      }
+      return;
+    }
+    _sectionOverlayMeasureRetries = 0;
+
+    final contentWidth = stackBox.size.width;
+    final clamped = Rect.fromLTRB(
+      leftMargin,
+      measured.top - marginV,
+      contentWidth - rightMargin,
+      measured.bottom - verseBottomPadding + marginV,
+    );
+
+    final prevTo = _sectionOverlayRectTo;
+    if (prevTo != null && _rectApproxEquals(prevTo, clamped)) return;
+
+    _sectionOverlayRectFrom = prevTo ?? clamped;
+    _sectionOverlayRectTo = clamped;
+    _sectionOverlayAnimationId++;
+    _sectionChangeNotifier.notify();
+  }
+
+  bool _rectApproxEquals(Rect a, Rect b, [double epsilon = 2]) {
+    return (a.left - b.left).abs() < epsilon &&
+        (a.top - b.top).abs() < epsilon &&
+        (a.width - b.width).abs() < epsilon &&
+        (a.height - b.height).abs() < epsilon;
   }
 
   /// Extracts the last segment of the path as the sibling number (e.g. "1.1.3.2" -> "2").
@@ -1117,6 +1095,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         leafOrdered,
         verseRef,
         direction: direction,
+        useFullRefOrder: true,
       );
     } else {
       return;
@@ -1156,30 +1135,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   Widget _buildBody() {
     if (_loading) {
-      return Center(
-        child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 48),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Text(
-                  'Loading Reader...',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ],
-            ),
-          ),
+      return const Center(
+        child: SizedBox(
+          width: 24,
+          height: 24,
+          child: CircularProgressIndicator(strokeWidth: 2),
         ),
       );
     }
@@ -1471,9 +1431,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               key: _scrollContentKey,
               clipBehavior: Clip.none,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _chapters.map((ch) {
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    const overlayHorizontalMargin = 32.0;
+                    final contentMaxWidth = (constraints.maxWidth - overlayHorizontalMargin).clamp(0.0, double.infinity);
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: contentMaxWidth),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _chapters.map((ch) {
                     final key = _chapterKeys[ch.number];
                     final verseTexts = ch.startVerseIndex < _verses.length
                         ? _verses.sublist(ch.startVerseIndex,
@@ -1491,23 +1458,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                           const SizedBox(height: 24),
                           ...() {
                             final verseStyle = _verseStyle;
-                            // Unified box: same shape, faint (section) vs darker (commentary)
-                            BoxDecoration boxDecoration(
-                                    {required bool darker}) =>
-                                BoxDecoration(
-                                  color: darker
-                                      ? AppColors.landingBackground
-                                          .withValues(alpha: 0.5)
-                                      : AppColors.primary
-                                          .withValues(alpha: 0.08),
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(
-                                    color: AppColors.primary.withValues(
-                                      alpha: darker ? 0.45 : 0.22,
-                                    ),
-                                    width: 1,
-                                  ),
-                                );
 
                             Widget buildVerseContent(int idx, String text,
                                 {List<int>? lineRange,
@@ -1625,80 +1575,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                               return [half, lineCount - 1];
                             }
 
-                            Widget wrapInBox(List<int> indices,
-                                {required bool darker}) {
-                              if (indices.length == 1) {
-                                final idx = indices.single;
-                                final ref = _verseService.getVerseRef(idx);
-                                if (ref != null &&
-                                    BcvVerseService.baseVerseRefPattern
-                                        .hasMatch(ref)) {
-                                  final segments = _hierarchyService
-                                      .getSplitVerseSegmentsSync(ref);
-                                  if (segments.length >= 2) {
-                                    final text = idx < _verses.length
-                                        ? _verses[idx]
-                                        : '';
-                                    final lines = text.split('\n');
-                                    if (lines.length >= 2) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          for (var i = 0;
-                                              i < segments.length;
-                                              i++)
-                                            SizedBox(
-                                              width: double.infinity,
-                                              child: Container(
-                                                decoration: boxDecoration(
-                                                    darker: darker),
-                                                clipBehavior: Clip.none,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          72, 28, 72, 28),
-                                                  child: buildVerseContent(
-                                                    idx,
-                                                    text,
-                                                    lineRange:
-                                                        lineRangeForSegment(
-                                                            i, lines.length),
-                                                    segmentIndex: i,
-                                                    segmentRef: segments[i].ref,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      );
-                                    }
-                                  }
-                                }
-                              }
-                              final verseWidgets = indices.map((idx) {
-                                final text =
-                                    idx < _verses.length ? _verses[idx] : '';
-                                return buildVerseContent(idx, text);
-                              }).toList();
-                              return SizedBox(
-                                width: double.infinity,
-                                child: Container(
-                                  decoration: boxDecoration(darker: darker),
-                                  clipBehavior: Clip.none,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        72, 28, 72, 28),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: verseWidgets,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-
                             final children = <Widget>[];
                             final highlightRuns = _getHighlightRuns();
                             final usedInRun = <int>{};
@@ -1726,16 +1602,64 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 for (final idx in highlightRun) {
                                   usedInRun.add(idx);
                                 }
-                                children.add(
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      wrapInBox(highlightRun, darker: true),
-                                      const SizedBox(height: 24),
-                                    ],
-                                  ),
-                                );
+                                // Render highlighted verses without the light box; overlay draws the border.
+                                for (final idx in highlightRun) {
+                                  final text =
+                                      idx < _verses.length ? _verses[idx] : '';
+                                  final ref =
+                                      _verseService.getVerseRef(idx);
+                                  final isSplit = ref != null &&
+                                      BcvVerseService.baseVerseRefPattern
+                                          .hasMatch(ref) &&
+                                      _hierarchyService
+                                              .getSplitVerseSegmentsSync(ref)
+                                              .length >=
+                                          2;
+                                  if (isSplit) {
+                                    final segments = _hierarchyService
+                                        .getSplitVerseSegmentsSync(ref);
+                                    final lines = text.split('\n');
+                                    if (lines.length >= 2) {
+                                      for (var i = 0;
+                                          i < segments.length;
+                                          i++) {
+                                        final range =
+                                            lineRangeForSegment(
+                                                i, lines.length);
+                                        if (range != null) {
+                                          children.add(
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: buildVerseContent(
+                                                idx,
+                                                text,
+                                                lineRange: range,
+                                                segmentIndex: i,
+                                                segmentRef: segments[i].ref,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    } else {
+                                      children.add(
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child:
+                                              buildVerseContent(idx, text),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    children.add(
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child:
+                                            buildVerseContent(idx, text),
+                                      ),
+                                    );
+                                  }
+                                }
                                 continue;
                               }
 
@@ -1799,8 +1723,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                       ),
                     );
                   }).toList(),
-                ),
-                Positioned.fill(
+                        ),
+                      );
+                },
+              ),
+              Positioned.fill(
                   child: ListenableBuilder(
                     listenable: _sectionChangeNotifier,
                     builder: (_, __) {
