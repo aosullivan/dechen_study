@@ -7,7 +7,7 @@ import 'bcv_verse_text.dart';
 
 /// Inline commentary panel: verse ref(s), verse text, and commentary body.
 /// Used in the read screen and in the mobile commentary bottom sheet.
-class BcvInlineCommentaryPanel extends StatelessWidget {
+class BcvInlineCommentaryPanel extends StatefulWidget {
   const BcvInlineCommentaryPanel({
     super.key,
     required this.entry,
@@ -21,6 +21,13 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
   final VoidCallback onClose;
   /// When true, uses a minimal style (single background, no colored header box).
   final bool forBottomSheet;
+
+  @override
+  State<BcvInlineCommentaryPanel> createState() =>
+      _BcvInlineCommentaryPanelState();
+}
+
+class _BcvInlineCommentaryPanelState extends State<BcvInlineCommentaryPanel> {
 
   static const Color _commentaryBg = AppColors.commentaryBg;
   static const Color _commentaryBorder = AppColors.commentaryBorder;
@@ -65,11 +72,12 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
         );
     final headingStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
           fontFamily: 'Lora',
-          color: forBottomSheet ? AppColors.bodyText : _commentaryHeader,
+          color: widget.forBottomSheet ? AppColors.bodyText : _commentaryHeader,
         );
-    final commentaryOnly = commentaryOnlyBody(entry, verseService);
+    final commentaryOnly =
+        commentaryOnlyBody(widget.entry, widget.verseService);
 
-    if (forBottomSheet) {
+    if (widget.forBottomSheet) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
@@ -88,7 +96,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
                 ),
                 const Spacer(),
                 TextButton(
-                  onPressed: onClose,
+                  onPressed: widget.onClose,
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -103,7 +111,10 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
           const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-            child: _buildContent(context, verseStyle, headingStyle, commentaryOnly),
+            child: SelectionArea(
+              child: _buildContent(
+                  context, verseStyle, headingStyle, commentaryOnly),
+            ),
           ),
         ],
       );
@@ -144,21 +155,24 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: onClose,
-                      style: TextButton.styleFrom(
-                        foregroundColor: _commentaryHeader,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
+                    onPressed: widget.onClose,
+                    style: TextButton.styleFrom(
+                      foregroundColor: _commentaryHeader,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                     child: const Text('Close'),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: _buildContent(context, verseStyle, headingStyle, commentaryOnly),
+            SelectionArea(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: _buildContent(
+                    context, verseStyle, headingStyle, commentaryOnly),
+              ),
             ),
           ],
         ),
@@ -175,18 +189,18 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (entry.refsInBlock.length == 1) ...[
+        if (widget.entry.refsInBlock.length == 1) ...[
           Text(
-            'Verse ${entry.refsInBlock.single}',
+            'Verse ${widget.entry.refsInBlock.single}',
             style: headingStyle,
           ),
           const SizedBox(height: 12),
           BcvVerseText(
-            text: verseService.getIndexForRef(entry.refsInBlock.single) !=
+            text: widget.verseService.getIndexForRef(widget.entry.refsInBlock.single) !=
                     null
-                ? (verseService.getVerseAt(
-                      verseService.getIndexForRef(
-                          entry.refsInBlock.single)!,
+                ? (widget.verseService.getVerseAt(
+                      widget.verseService.getIndexForRef(
+                          widget.entry.refsInBlock.single)!,
                     ) ??
                     '')
                 : '',
@@ -194,14 +208,14 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
           ),
         ] else ...[
           Text(
-            'Verses ${entry.refsInBlock.join(", ")}',
+            'Verses ${widget.entry.refsInBlock.join(", ")}',
             style: headingStyle,
           ),
           const SizedBox(height: 12),
-          ...entry.refsInBlock.map((ref) {
-            final idx = verseService.getIndexForRef(ref);
+          ...widget.entry.refsInBlock.map((ref) {
+            final idx = widget.verseService.getIndexForRef(ref);
             final text =
-                idx != null ? verseService.getVerseAt(idx) : null;
+                idx != null ? widget.verseService.getVerseAt(idx) : null;
             if (text == null) return const SizedBox.shrink();
             return Padding(
               padding: const EdgeInsets.only(bottom: 16),
@@ -215,7 +229,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
                         .bodyMedium
                         ?.copyWith(
                           fontFamily: 'Lora',
-                          color: forBottomSheet
+                          color: widget.forBottomSheet
                               ? AppColors.mutedBrown
                               : _commentaryHeader,
                         ),

@@ -398,10 +398,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (entry == null) return;
     final screenHeight = MediaQuery.of(context).size.height;
     final initialSize = screenHeight > 900
-        ? 0.8
+        ? 0.92
         : screenHeight > 600
-            ? 0.7
-            : 0.6;
+            ? 0.88
+            : 0.8;
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= BcvReadConstants.laptopBreakpoint;
     showModalBottomSheet<void>(
@@ -423,8 +423,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       ),
       builder: (ctx) => DraggableScrollableSheet(
         initialChildSize: initialSize,
-        minChildSize: 0.3,
-        maxChildSize: 0.95,
+        minChildSize: 0.4,
+        maxChildSize: 0.98,
         expand: false,
         builder: (_, scrollController) => SingleChildScrollView(
           controller: scrollController,
