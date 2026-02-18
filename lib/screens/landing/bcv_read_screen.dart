@@ -426,14 +426,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         minChildSize: 0.4,
         maxChildSize: 0.98,
         expand: false,
-        builder: (_, scrollController) => SingleChildScrollView(
-          controller: scrollController,
-          child: BcvInlineCommentaryPanel(
-            entry: entry,
-            verseService: _verseService,
-            onClose: () => Navigator.of(ctx).pop(),
-            forBottomSheet: true,
-          ),
+        builder: (_, scrollController) => BcvInlineCommentaryPanel(
+          entry: entry,
+          onClose: () => Navigator.of(ctx).pop(),
+          forBottomSheet: true,
+          scrollController: scrollController,
         ),
       ),
     );

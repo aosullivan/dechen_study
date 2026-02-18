@@ -14,7 +14,10 @@ class CommentaryEntry {
 
 /// Top-level so it can run in a compute isolate.
 ({Map<String, List<String>> refToRefsInBlock, Map<String, String> refToCommentary, List<CommentaryEntry> allSections}) _parseCommentary(String content) {
-  final refInBrackets = RegExp(r'\[(\d+\.\d+)\]');
+  // Detects a section header line: any line starting with [chapter.verse (e.g. [1.32], [1.4ab], [1.34-1.35ab])
+  final sectionHeader = RegExp(r'^\[\d+\.');
+  // Extracts verse refs from a header, handling ranges like [1.34-1.35ab] → ["1.34", "1.35"]
+  final refExtract = RegExp(r'(?:\[|-)(\d+\.\d+)');
   int compareRefs(String a, String b) {
     final ap = a.split('.');
     final bp = b.split('.');
@@ -33,14 +36,15 @@ class CommentaryEntry {
   var i = 0;
   while (i < lines.length) {
     final line = lines[i];
-    final refs = refInBrackets.allMatches(line).map((m) => m.group(1)!).toList();
+    if (!sectionHeader.hasMatch(line)) { i++; continue; }
+    final refs = refExtract.allMatches(line).map((m) => m.group(1)!).toList();
     if (refs.isEmpty) { i++; continue; }
     final refsDeduped = refs.toSet().toList()..sort(compareRefs);
     final bodyLines = <String>[];
     i++;
     while (i < lines.length) {
       final next = lines[i];
-      if (refInBrackets.hasMatch(next)) break;
+      if (sectionHeader.hasMatch(next)) break;
       bodyLines.add(next);
       i++;
     }
