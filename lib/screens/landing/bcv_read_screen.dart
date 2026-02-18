@@ -86,6 +86,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Verse indices belonging to the current section (for overlay measurement).
   Set<int>? _currentSectionVerseIndices = {};
 
+  /// For split verses (e.g. 8.136ab / 8.136cd), tracks which segment ref is
+  /// currently active so the overlay and scroll target the correct half.
+  String? _currentSegmentRef;
+
   /// Animated section overlay: rect we're sliding from and to.
   Rect? _sectionOverlayRectFrom;
   Rect? _sectionOverlayRectTo;
@@ -208,6 +212,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _minHighlightIndex = null;
       _sectionVerseIndicesCache.clear();
       _currentSectionVerseIndices = {};
+      _currentSegmentRef = null;
       _sectionOverlayRectFrom = null;
       _sectionOverlayRectTo = null;
       _sectionOverlayMeasureRetries = 0;
@@ -519,7 +524,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     const verseBottomPadding = 20.0;
     const marginV = 6.0;
     for (final idx in run) {
-      final key = _verseKeys[idx];
+      // For split verses, use the specific segment key when we know which
+      // half is active (e.g. 8.136cd → use _verseSegmentKeys['N_1'], not ab).
+      GlobalKey? key;
+      final segRef = _currentSegmentRef;
+      if (segRef != null) {
+        final segIdx = _segmentIndexForRef(idx, segRef);
+        if (segIdx > 0) {
+          key = _verseSegmentKeys['${idx}_$segIdx'];
+        }
+      }
+      key ??= _verseKeys[idx];
       if (key?.currentContext == null) continue;
       final verseBox = key!.currentContext!.findRenderObject() as RenderBox?;
       if (verseBox == null || !verseBox.hasSize) continue;
@@ -601,6 +616,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (supersedeGen != null && supersedeGen != _syncGeneration) return;
     _breadcrumbHierarchy = hierarchy;
     _currentSectionVerseIndices = verseIndices;
+    _currentSegmentRef = segmentRef;
     _visibleVerseIndex = verseIndex;
     _sectionChangeNotifier.notify();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -624,6 +640,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final hierarchy = _hierarchyService.getHierarchyForSectionSync(section);
     if (hierarchy.isNotEmpty) {
       final verseIndices = _verseIndicesForSection(section);
+      // segmentRef resolved below after async load; use null here (early preview).
       _applySectionState(
         hierarchy: hierarchy,
         verseIndices: verseIndices,
@@ -653,20 +670,30 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       hierarchy: resolvedHierarchy.isNotEmpty ? resolvedHierarchy : hierarchy,
       verseIndices: resolvedIndices.isNotEmpty ? resolvedIndices : {verseIndex},
       verseIndex: verseIndex,
+      segmentRef: firstVerseRef,
     );
-    _scrollToVerseIndex(verseIndex);
+    _scrollToVerseIndex(verseIndex, segmentRef: firstVerseRef);
   }
 
-  void _scrollToVerseIndex(int index) {
+  void _scrollToVerseIndex(int index, {String? segmentRef}) {
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _isProgrammaticNavigation = true;
     _verseVisibility.clear(); // Discard stale visibility data
+    // For split verses, prefer the specific segment key (e.g. cd half)
+    // over the default verse key which always points to the ab half.
+    GlobalKey? keyToUse;
+    if (segmentRef != null) {
+      final segIdx = _segmentIndexForRef(index, segmentRef);
+      if (segIdx > 0) {
+        keyToUse = _verseSegmentKeys['${index}_$segIdx'];
+      }
+    }
+    keyToUse ??= _verseKeys[index];
     // Try scrolling using existing verse GlobalKey (avoids full rebuild)
-    final existingKey = _verseKeys[index];
-    if (existingKey?.currentContext != null) {
+    if (keyToUse?.currentContext != null) {
       Scrollable.ensureVisible(
-        existingKey!.currentContext!,
+        keyToUse!.currentContext!,
         alignment: 0.2,
         duration: const Duration(milliseconds: 300),
       );
@@ -984,7 +1011,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Last time we handled arrow navigation. Used to debounce key repeat / double-fire.
   DateTime? _lastArrowNavTime;
 
-  /// Handler for reader pane: always navigates by verse order (new set of verses).
+  /// Handler for reader pane: arrow keys for section nav, Enter/Space to show commentary.
   KeyEventResult _handleReaderKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
     if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
@@ -993,6 +1020,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
       _debouncedArrowNav(() => _scrollToAdjacentSection(-1));
+      return KeyEventResult.handled;
+    }
+    if (event.logicalKey == LogicalKeyboardKey.enter ||
+        event.logicalKey == LogicalKeyboardKey.space) {
+      final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+      if (visibleIdx != null) _onVerseTap(visibleIdx);
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -1153,8 +1186,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       hierarchy: hierarchy,
       verseIndices: verseIndices.isNotEmpty ? verseIndices : {verseIndex},
       verseIndex: verseIndex,
+      segmentRef: firstVerseRef,
     );
-    _scrollToVerseIndex(verseIndex);
+    _scrollToVerseIndex(verseIndex, segmentRef: firstVerseRef);
   }
 
   Widget _buildBody() {
@@ -1420,11 +1454,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       onKeyEvent: _handleReaderKeyEvent,
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () {
-          if (!isLaptop) {
-            _debouncedArrowNav(() => _scrollToAdjacentSection(1));
-          }
-        },
+        // No onTap here: verse InkWells must receive taps to open commentary.
+        // On mobile, use the section nav bar for prev/next section.
         child: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification is ScrollStartNotification) {
