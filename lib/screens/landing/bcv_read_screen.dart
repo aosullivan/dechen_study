@@ -260,7 +260,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (widget.onLoadComplete != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            await Future.delayed(const Duration(milliseconds: 100));
+            await Future.delayed(const Duration(milliseconds: 250));
             if (mounted) widget.onLoadComplete?.call();
           });
         });
@@ -275,7 +275,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (widget.onLoadComplete != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            await Future.delayed(const Duration(milliseconds: 100));
+            await Future.delayed(const Duration(milliseconds: 250));
             if (mounted) widget.onLoadComplete?.call();
           });
         });
@@ -1156,8 +1156,32 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   Widget _buildBody() {
     if (_loading) {
-      return const Center(
-          child: CircularProgressIndicator(color: AppColors.primary));
+      return Center(
+        child: Card(
+          margin: const EdgeInsets.symmetric(horizontal: 48),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Text(
+                  'Loading Reader...',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
     if (_error != null) {
       return Center(
@@ -1541,7 +1565,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 );
                               }
                               final inner = Padding(
-                                padding: const EdgeInsets.fromLTRB(28, 0, 0, 0),
+                                padding: const EdgeInsets.fromLTRB(28, 0, 28, 0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -1633,7 +1657,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
-                                                          72, 28, 32, 28),
+                                                          72, 28, 72, 28),
                                                   child: buildVerseContent(
                                                     idx,
                                                     text,
@@ -1664,7 +1688,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                   clipBehavior: Clip.none,
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(
-                                        72, 28, 32, 28),
+                                        72, 28, 72, 28),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,

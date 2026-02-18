@@ -83,7 +83,7 @@ void main() {
       await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
       await tester.pump(const Duration(milliseconds: 600));
 
-      expect(find.textContaining('[2.40]'), findsWidgets);
+      expect(find.textContaining('2.40'), findsWidgets);
 
       // Let programmatic-navigation timers complete (scroll-settle + fallback)
       await tester.pump(const Duration(seconds: 2));

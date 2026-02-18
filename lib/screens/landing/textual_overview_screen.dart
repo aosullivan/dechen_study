@@ -54,7 +54,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     if (widget.onLoadComplete != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          await Future.delayed(const Duration(milliseconds: 100));
+          await Future.delayed(const Duration(milliseconds: 250));
           if (mounted) widget.onLoadComplete?.call();
         });
       });
