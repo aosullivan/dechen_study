@@ -102,6 +102,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// True while programmatic scroll (section tap, arrow keys) is animating. Blocks visibility updates entirely.
   bool _isProgrammaticNavigation = false;
 
+  /// True when the current highlight was set intentionally (e.g. from Daily Verse, or explicit
+  /// navigation). Prevents visibility-driven processing from auto-clearing the highlight.
+  /// Cleared only when the user explicitly navigates to a new section (chapter tap, arrow keys,
+  /// breadcrumb tap).
+  bool _intentionalHighlight = false;
+
   /// After programmatic nav clears, we still ignore visibility updates until this time.
   /// Prevents scroll-settle visibility from overwriting the key-down highlight.
   DateTime? _programmaticNavCooldownUntil;
@@ -211,6 +217,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _commentaryEntryForSelected = null;
       _syncGeneration = 0;
       _isProgrammaticNavigation = false;
+      _intentionalHighlight = false;
       _sectionSliderScrollRequestId = 0;
       _chapterHeaderFlatIndices.clear();
     });
@@ -228,9 +235,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 Set<int>.from(widget.highlightSectionIndices!);
             _minHighlightIndex =
                 _highlightVerseIndices!.reduce((a, b) => a < b ? a : b);
+            _intentionalHighlight = true;
           } else if (widget.scrollToVerseIndex != null) {
             _highlightVerseIndices = {widget.scrollToVerseIndex!};
             _minHighlightIndex = widget.scrollToVerseIndex;
+            _intentionalHighlight = true;
           }
 
           // Build flat indices for ListView.builder
@@ -243,8 +252,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           }
         });
         if (widget.scrollToVerseIndex != null && _scrollToVerseKey != null) {
-          WidgetsBinding.instance
-              .addPostFrameCallback((_) => _scrollToVerseWidget());
+          // Activate programmatic-navigation guard so visibility callbacks
+          // during and after the initial scroll animation cannot clear the
+          // intentional highlight before the user has a chance to see it.
+          _isProgrammaticNavigation = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            _scrollToVerseWidget();
+            _clearProgrammaticNavigationAfterScrollSettles();
+          });
         }
         if (widget.highlightSectionIndices != null &&
             _highlightSet.isNotEmpty) {
@@ -278,6 +294,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     // Clear any verse selection — user is navigating to a new chapter.
     _highlightVerseIndices = {};
+    _intentionalHighlight = false;
     _minHighlightIndex = null;
     _commentaryEntryForSelected = null;
 
@@ -599,6 +616,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     _syncGeneration++;
     _isProgrammaticNavigation = true;
+    _intentionalHighlight = false;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data
@@ -768,7 +786,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         indices = {pickedIdx};
       }
       final indicesWithVisible = {...indices, pickedIdx};
-      if (_highlightSet.isNotEmpty && !_highlightSet.contains(pickedIdx)) {
+      // Only auto-clear a highlight if it was NOT set intentionally (e.g. from
+      // Daily Verse or explicit navigation). Intentional highlights persist
+      // until the user navigates away via chapter/section/arrow-key actions.
+      if (_highlightSet.isNotEmpty &&
+          !_highlightSet.contains(pickedIdx) &&
+          !_intentionalHighlight) {
         setState(() {
           _highlightVerseIndices = {};
           _commentaryEntryForSelected = null;
@@ -1107,6 +1130,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     // Fully synchronous path — no async gaps that let the next key press race.
     _syncGeneration++;
     _isProgrammaticNavigation = true;
+    _intentionalHighlight = false;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data
