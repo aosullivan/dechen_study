@@ -168,12 +168,12 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
       );
     }
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 24, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(28, 24, 24, 24),
             decoration: BoxDecoration(
               color: AppColors.cardBeige,
               borderRadius: BorderRadius.circular(8),

@@ -1,0 +1,178 @@
+{
+  "description": "Simple 'how I'm feeling' categories for Chapter 7 (Effort). User taps a feeling → app shows relevant therapeutic sections.",
+  "chapterPath": "4.4",
+  "chapterTitle": "Chapter 7: Effort",
+  "feelingCategories": [
+    {
+      "id": "lazy",
+      "label": "Lazy / Can't get started",
+      "hint": "Readings to help you begin"
+    },
+    {
+      "id": "procrastinating",
+      "label": "Procrastinating",
+      "hint": "Why wait? Use your time well"
+    },
+    {
+      "id": "hopeless",
+      "label": "Hopeless / Discouraged",
+      "hint": "Hope and encouragement"
+    },
+    {
+      "id": "anxious",
+      "label": "Anxious / Fearful",
+      "hint": "Facing fear with clarity"
+    },
+    {
+      "id": "guilty",
+      "label": "Guilty / Regretful",
+      "hint": "Turn regret into change"
+    },
+    {
+      "id": "tired",
+      "label": "Tired / Burned out",
+      "hint": "Rest and sustainable effort"
+    },
+    {
+      "id": "distracted",
+      "label": "Distracted / Restless",
+      "hint": "Steady focus and vigilance"
+    },
+    {
+      "id": "doubting_myself",
+      "label": "Doubting myself",
+      "hint": "Belief in your capacity"
+    },
+    {
+      "id": "need_motivation",
+      "label": "Need motivation",
+      "hint": "Spark and purpose"
+    },
+    {
+      "id": "need_to_keep_going",
+      "label": "Need to keep going",
+      "hint": "Persistence and commitment"
+    },
+    {
+      "id": "overwhelmed",
+      "label": "Overwhelmed",
+      "hint": "Simplify and reframe"
+    },
+    {
+      "id": "need_perspective",
+      "label": "Need perspective",
+      "hint": "See what matters"
+    },
+    {
+      "id": "take_care_of_myself",
+      "label": "Want to take care of myself",
+      "hint": "Rest, pacing, self-care"
+    }
+  ],
+  "feelingToSections": {
+    "lazy": [
+      { "path": "4.4.1", "title": "Developing enthusiasm for effort" },
+      { "path": "4.4.2", "title": "The nature of effort" },
+      { "path": "4.4.3.1", "title": "Summarizing the opposing factors" },
+      { "path": "4.4.3.2.1", "title": "Examining the cause of non-application and averting it" },
+      { "path": "4.4.3.3", "title": "Abandoning the laziness of negative behaviour" },
+      { "path": "4.4.4.2.1.3.1", "title": "One should enjoy the play of good actions themselves without concern for a result" },
+      { "path": "4.4.4.2.1.3.2.1", "title": "Certainty that the result will come" },
+      { "path": "4.4.4.2.1.3.3", "title": "How to apply the power of joy" },
+      { "path": "4.4.4.2.1.2.2.1", "title": "Briefly (pride in actions)" }
+    ],
+    "procrastinating": [
+      { "path": "4.4.3.2.2.1", "title": "Having certainty about impermanence" },
+      { "path": "4.4.3.2.2.2", "title": "An example of seeing this" },
+      { "path": "4.4.3.2.2.3", "title": "It will befall one" },
+      { "path": "4.4.3.2.2.4", "title": "Impossible to hold back time" },
+      { "path": "4.4.3.2.2.5", "title": "The time of death is too late" },
+      { "path": "4.4.3.2.2.6", "title": "Explaining the impossibility of holding back time" },
+      { "path": "4.4.3.2.2.7", "title": "Describing the actual kinds of suffering" },
+      { "path": "4.4.3.2.3.4", "title": "Exhortation for the means of liberation from that" }
+    ],
+    "hopeless": [
+      { "path": "4.4.3.4.1", "title": "The antidotes and their result briefly explained" },
+      { "path": "4.4.3.4.2", "title": "The antidote to the despondency of thinking that one lacks the cause" },
+      { "path": "4.4.3.4.3.1", "title": "The difficulties have great benefit" },
+      { "path": "4.4.3.4.3.2", "title": "It is not suffering" },
+      { "path": "4.4.3.4.3.3", "title": "It is actually happiness" },
+      { "path": "4.4.4.2.1.1.3.2", "title": "The ripening of purely white actions" },
+      { "path": "4.4.4.2.1.2.2.3.1.2", "title": "The cause of that arising" },
+      { "path": "4.4.4.2.1.2.2.3.2.3", "title": "Developing enthusiasm by praising antidotal pride" }
+    ],
+    "anxious": [
+      { "path": "4.4.3.2.2.7", "title": "Describing the actual kinds of suffering" },
+      { "path": "4.4.3.2.3.1", "title": "Suffering is certain to arise" },
+      { "path": "4.4.4.2.1.1.1.1", "title": "Abandoning the faults of oneself and others" },
+      { "path": "4.4.4.2.1.1.3.3", "title": "The ripening of purely black actions" },
+      { "path": "4.4.4.2.2.2", "title": "Dedication to mindfulness and clear comprehension" }
+    ],
+    "guilty": [
+      { "path": "4.4.3.2.3.2", "title": "A difficult consideration" },
+      { "path": "4.4.4.2.1.1.1.1", "title": "Abandoning the faults of oneself and others" },
+      { "path": "4.4.4.2.1.1.1.3", "title": "Kinds of acts" },
+      { "path": "4.4.4.2.1.1.3.1", "title": "The result of mixed actions" },
+      { "path": "4.4.4.2.1.1.3.3", "title": "The ripening of purely black actions" },
+      { "path": "4.4.4.2.2.4", "title": "Overcoming their arising" }
+    ],
+    "tired": [
+      { "path": "4.4.3.2.1", "title": "Examining the cause of non-application and averting it" },
+      { "path": "4.4.4.2.1.4.1", "title": "Temporary rest" },
+      { "path": "4.4.4.2.1.4.2", "title": "Finishing rest" },
+      { "path": "4.4.4.2.2.4", "title": "Overcoming their arising" }
+    ],
+    "distracted": [
+      { "path": "4.4.3.3", "title": "Abandoning the laziness of negative behaviour" },
+      { "path": "4.4.4.2.2.1", "title": "Dedication to concern" },
+      { "path": "4.4.4.2.2.3", "title": "Not allowing circumstances to arise which oppose those two" },
+      { "path": "4.4.4.2.2.4", "title": "Overcoming their arising" }
+    ],
+    "doubting_myself": [
+      { "path": "4.4.3.4.2", "title": "The antidote to the despondency of thinking that one lacks the cause" },
+      { "path": "4.4.4.2.1.1.4", "title": "Conclusion (cultivate pride from the outset)" },
+      { "path": "4.4.4.2.1.2.2.3.1.1", "title": "Showing the fault by example" },
+      { "path": "4.4.4.2.1.2.2.3.1.2", "title": "The cause of that arising" },
+      { "path": "4.4.4.2.1.2.2.3.2.1", "title": "The nature of antidotal pride" },
+      { "path": "4.4.4.2.1.2.2.3.2.4", "title": "Pride in overcoming the defilements" }
+    ],
+    "need_motivation": [
+      { "path": "4.4.1", "title": "Developing enthusiasm for effort" },
+      { "path": "4.4.3.2.3.4", "title": "Exhortation for the means of liberation from that" },
+      { "path": "4.4.4.1", "title": "Briefly (four powers)" },
+      { "path": "4.4.4.2.1.1.2", "title": "Result of motivation" },
+      { "path": "4.4.4.2.1.1.1.2", "title": "Accomplishing all good qualities" },
+      { "path": "4.4.4.2.1.2.2.2.2", "title": "Extensively (I will do it for them)" },
+      { "path": "4.4.4.2.1.3.2.2", "title": "Consideration of what is better" }
+    ],
+    "need_to_keep_going": [
+      { "path": "4.4.4.2.1.2.1.2", "title": "Method of preparation" },
+      { "path": "4.4.4.2.1.2.1.3", "title": "The fault of not doing it" },
+      { "path": "4.4.4.2.1.2.2.3.1.4", "title": "Striving to rely on that" },
+      { "path": "4.4.4.2.1.2.2.3.1.5", "title": "If one does not strive, one's vows will be broken" },
+      { "path": "4.4.4.2.1.4.2", "title": "Finishing rest" },
+      { "path": "4.4.4.2.2.5", "title": "Subsequently accomplishing supporting actions" },
+      { "path": "4.4.4.2.3", "title": "Self-control" }
+    ],
+    "overwhelmed": [
+      { "path": "4.4.3.4.3.1", "title": "The difficulties have great benefit" },
+      { "path": "4.4.3.4.3.2", "title": "It is not suffering" },
+      { "path": "4.4.4.1", "title": "Briefly (four powers)" },
+      { "path": "4.4.4.2.1.4.1", "title": "Temporary rest" },
+      { "path": "4.4.4.2.2.5", "title": "Subsequently accomplishing supporting actions" }
+    ],
+    "need_perspective": [
+      { "path": "4.4.3.2.2.1", "title": "Having certainty about impermanence" },
+      { "path": "4.4.3.2.2.2", "title": "An example of seeing this" },
+      { "path": "4.4.3.2.3.3", "title": "A mass of contradictions" },
+      { "path": "4.4.4.2.1.1.1.2", "title": "Accomplishing all good qualities" },
+      { "path": "4.4.4.2.1.1.3.1", "title": "The result of mixed actions" },
+      { "path": "4.4.4.2.1.3.2.2", "title": "Consideration of what is better" }
+    ],
+    "take_care_of_myself": [
+      { "path": "4.4.4.2.1.4.1", "title": "Temporary rest" },
+      { "path": "4.4.4.2.1.4.2", "title": "Finishing rest" },
+      { "path": "4.4.4.2.1.2.2.3.1.1", "title": "Showing the fault by example" }
+    ]
+  }
+}

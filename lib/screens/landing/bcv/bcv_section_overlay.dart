@@ -47,11 +47,11 @@ class BcvSectionOverlay extends StatelessWidget {
               child: IgnorePointer(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.08),
+                    color: AppColors.primary.withValues(alpha: 0.0),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.22),
-                      width: 1,
+                      color: AppColors.primary.withValues(alpha: 0.15),
+                      width: 1.5,
                     ),
                   ),
                 ),

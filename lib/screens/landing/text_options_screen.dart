@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
@@ -60,14 +62,14 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             ),
           ),
           body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        children: [
-          _OptionTile(
-            icon: Icons.today_outlined,
-            label: 'Daily',
-            loading: _loadingLabel == 'Daily',
-            onTap: () => _openDaily(context),
-          ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            children: [
+              _OptionTile(
+                icon: Icons.today_outlined,
+                label: 'Daily',
+                loading: _loadingLabel == 'Daily',
+                onTap: () => _openDaily(context),
+              ),
           _OptionTile(
             icon: Icons.self_improvement_outlined,
             label: 'Inspiration',
@@ -76,23 +78,23 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           ),
           _OptionTile(
             icon: Icons.quiz_outlined,
-            label: 'Quiz',
-            loading: _loadingLabel == 'Quiz',
-            onTap: () => _openQuiz(context),
-          ),
-          _OptionTile(
-            icon: Icons.book_outlined,
-            label: 'Read',
-            loading: _loadingLabel == 'Read',
-            onTap: () => _openRead(context),
-          ),
-          _OptionTile(
-            icon: Icons.account_tree_outlined,
-            label: 'Textual Overview',
-            loading: _loadingLabel == 'Textual Overview',
-            onTap: () => _openOverview(context),
-          ),
-        ],
+                label: 'Quiz',
+                loading: _loadingLabel == 'Quiz',
+                onTap: () => _openQuiz(context),
+              ),
+              _OptionTile(
+                icon: Icons.book_outlined,
+                label: 'Read',
+                loading: _loadingLabel == 'Read',
+                onTap: () => _openRead(context),
+              ),
+              _OptionTile(
+                icon: Icons.account_tree_outlined,
+                label: 'Textual Overview',
+                loading: _loadingLabel == 'Textual Overview',
+                onTap: () => _openOverview(context),
+              ),
+            ],
           ),
         ),
         if (_loadingLabel != null) _buildLoadingOverlay(),
@@ -166,19 +168,15 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   void _openRead(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
       setState(() => _loadingLabel = 'Read');
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        if (!mounted) return;
-        await Future.delayed(const Duration(milliseconds: 350));
-        if (!mounted) return;
-        await Navigator.of(context).push(
-          PageRouteBuilder<void>(
-            pageBuilder: (_, __, ___) => BcvReadScreen(title: title),
-            transitionDuration: Duration.zero,
-            reverseTransitionDuration: Duration.zero,
-          ),
-        );
-        if (mounted) setState(() => _loadingLabel = null);
-      });
+      _pushWithLoadingOverlay(
+        context,
+        message: 'Loading Reader...',
+        builder: (onLoadComplete) => BcvReadScreen(
+          title: title,
+          onLoadComplete: onLoadComplete,
+        ),
+        usePageRouteBuilder: true,
+      );
     } else {
       _showComingSoon(context, 'Read');
     }
@@ -219,20 +217,105 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   void _openOverview(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
       setState(() => _loadingLabel = 'Textual Overview');
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        if (!mounted) return;
-        await Future.delayed(const Duration(milliseconds: 350));
-        if (!mounted) return;
-        await Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const TextualOverviewScreen(),
-          ),
-        );
-        if (mounted) setState(() => _loadingLabel = null);
-      });
+      _pushWithLoadingOverlay(
+        context,
+        message: 'Loading Textual Overview...',
+        builder: (onLoadComplete) => TextualOverviewScreen(
+          onLoadComplete: onLoadComplete,
+        ),
+      );
     } else {
       _showComingSoon(context, 'Textual Overview');
     }
+  }
+
+  /// Pushes a route and shows a loading overlay on top until the destination
+  /// calls [onLoadComplete]. The overlay stays visible during the long load.
+  void _pushWithLoadingOverlay(
+    BuildContext context, {
+    required String message,
+    required Widget Function(VoidCallback onLoadComplete) builder,
+    bool usePageRouteBuilder = false,
+  }) {
+    final navigator = Navigator.of(context);
+    final overlay = Overlay.of(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      await Future.delayed(const Duration(milliseconds: 350));
+      if (!mounted) return;
+
+      OverlayEntry? overlayEntry;
+      var overlayRemoved = false;
+
+      void removeOverlay() {
+        if (overlayRemoved) return;
+        overlayRemoved = true;
+        overlayEntry?.remove();
+        if (mounted) setState(() => _loadingLabel = null);
+      }
+
+      overlayEntry = OverlayEntry(
+        builder: (overlayContext) =>
+            _buildLoadingOverlayContent(overlayContext, message),
+      );
+
+      final route = usePageRouteBuilder
+          ? PageRouteBuilder<void>(
+              pageBuilder: (_, __, ___) => builder(removeOverlay),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            )
+          : MaterialPageRoute<void>(
+              builder: (_) => builder(removeOverlay),
+            );
+
+      unawaited(
+        navigator.push(route).then((_) => removeOverlay()),
+      );
+
+      // Insert overlay after route is built so it appears on top during loading.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final entry = overlayEntry;
+        if (mounted && entry != null && !overlayRemoved) {
+          overlay.insert(entry);
+        }
+      });
+    });
+  }
+
+  Widget _buildLoadingOverlayContent(BuildContext context, String message) {
+    return Positioned.fill(
+      child: Material(
+        color: Colors.black26,
+        child: Center(
+          child: Card(
+            margin: const EdgeInsets.symmetric(horizontal: 48),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Text(
+                    message,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _showComingSoon(BuildContext context, String feature) {

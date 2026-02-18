@@ -4,7 +4,7 @@ import '../../services/inspiration_service.dart';
 import '../../utils/app_theme.dart';
 import 'inspiration_verse_screen.dart';
 
-/// "How are you feeling today?" — pick a negative emotion to see relevant sections.
+/// "How are you feeling today?" — pick a feeling to see a random verse.
 class InspirationScreen extends StatelessWidget {
   const InspirationScreen({super.key});
 
@@ -24,62 +24,82 @@ class InspirationScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 8),
-              Text(
-                'How are you feeling today?',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontFamily: 'Crimson Text',
-                      color: AppColors.textDark,
-                    ),
-                textAlign: TextAlign.center,
+      body: FutureBuilder<List<FeelingCategory>>(
+        future: InspirationService.instance.getFeelingCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
+          }
+          final categories = snapshot.data ?? [];
+          if (categories.isEmpty) {
+            return Center(
+              child: Text(
+                'No feeling categories loaded.',
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Choose what resonates and receive a related teaching.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontFamily: 'Lora',
-                      color: AppColors.mutedBrown,
-                    ),
-                textAlign: TextAlign.center,
+            );
+          }
+          return SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    'How are you feeling today?',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontFamily: 'Crimson Text',
+                          color: AppColors.textDark,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Choose what resonates and receive a random verse.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontFamily: 'Lora',
+                          color: AppColors.mutedBrown,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    alignment: WrapAlignment.center,
+                    children: categories.map((c) {
+                      return _FeelingChip(
+                        label: c.label,
+                        onTap: () => _openFeeling(context, c.id, c.label),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-              const SizedBox(height: 32),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.center,
-                children: InspirationService.negativeEmotions.map((emotion) {
-                  final label =
-                      InspirationService.emotionLabels[emotion] ?? emotion;
-                  return _EmotionChip(
-                    label: label,
-                    onTap: () => _openEmotion(context, emotion),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  void _openEmotion(BuildContext context, String emotion) {
+  void _openFeeling(BuildContext context, String feelingId, String feelingLabel) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => InspirationVerseScreen(emotion: emotion),
+        builder: (_) => InspirationVerseScreen(
+          feelingId: feelingId,
+          feelingLabel: feelingLabel,
+        ),
       ),
     );
   }
 }
 
-class _EmotionChip extends StatelessWidget {
-  const _EmotionChip({required this.label, required this.onTap});
+class _FeelingChip extends StatelessWidget {
+  const _FeelingChip({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;

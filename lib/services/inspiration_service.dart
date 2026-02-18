@@ -1,139 +1,140 @@
+import 'dart:math';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'bcv_verse_service.dart';
 import 'verse_hierarchy_service.dart';
 
-/// A section with its emotion mapping and verse references.
+/// One feeling category for the Inspiration picker.
+class FeelingCategory {
+  const FeelingCategory({
+    required this.id,
+    required this.label,
+    required this.hint,
+  });
+  final String id;
+  final String label;
+  final String hint;
+}
+
+/// A section with verse refs for a feeling (used to pick a random verse).
 class InspirationSection {
   const InspirationSection({
     required this.path,
     required this.title,
-    required this.emotion,
     required this.verseRefs,
   });
   final String path;
   final String title;
-  final String emotion;
   final List<String> verseRefs;
 }
 
-/// Loads section-to-emotion mappings and provides filtered sections by emotion.
+/// Result of picking one random verse for a feeling.
+class InspirationRandomVerse {
+  const InspirationRandomVerse({
+    required this.verseRef,
+    required this.verseText,
+    required this.sectionTitle,
+    required this.sectionPath,
+  });
+  final String verseRef;
+  final String verseText;
+  final String sectionTitle;
+  final String sectionPath;
+}
+
+/// Loads full-text feeling→sections mapping and provides random verse by feeling.
 class InspirationService {
   InspirationService._();
   static final InspirationService _instance = InspirationService._();
   static InspirationService get instance => _instance;
 
-  static const String _assetPath = 'texts/section_emotion_mappings.json';
+  static const String _assetPath = 'texts/full_text_feeling_advice_mapping.json';
 
-  static const List<String> negativeEmotions = [
-    'Worry / Anxiety',
-    'Stress',
-    'Sadness',
-    'Anger / Frustration / Irritation',
-    'Tiredness / Fatigue',
-    'Disgust / Annoyance / Contempt',
-    'Boredom',
-    'Loneliness',
-    'Fear / Apprehension',
-    'Guilt / Regret',
-    'Embarrassment / Shame',
-    'Hopelessness / Discouragement',
-    'Overwhelmed',
-  ];
-
-  /// Short display labels for the emotion picker UI.
-  static const Map<String, String> emotionLabels = {
-    'Worry / Anxiety': 'Worried',
-    'Stress': 'Stressed',
-    'Sadness': 'Sad',
-    'Anger / Frustration / Irritation': 'Angry',
-    'Tiredness / Fatigue': 'Tired',
-    'Disgust / Annoyance / Contempt': 'Annoyed',
-    'Boredom': 'Bored',
-    'Loneliness': 'Lonely',
-    'Fear / Apprehension': 'Fearful',
-    'Guilt / Regret': 'Guilty',
-    'Embarrassment / Shame': 'Ashamed',
-    'Hopelessness / Discouragement': 'Hopeless',
-    'Overwhelmed': 'Overwhelmed',
-  };
-
-  Map<String, List<_RawSection>>? _rawByEmotion;
+  List<FeelingCategory>? _categories;
+  Map<String, List<Map<String, dynamic>>>? _feelingToSectionsRaw;
+  final _random = Random();
 
   Future<void> preload() => _ensureLoaded();
 
   Future<void> _ensureLoaded() async {
-    if (_rawByEmotion != null) return;
+    if (_categories != null) return;
     final content = await rootBundle.loadString(_assetPath);
-    await VerseHierarchyService.instance.preload();
-    _rawByEmotion = await compute(_parseRaw, content);
-  }
-
-  /// Parse the JSON and collect leaf sections with verse refs, grouped by emotion.
-  /// Runs in a background isolate — but verse ref lookup needs the main isolate,
-  /// so we do a two-pass approach: parse in isolate, then enrich on main thread.
-  static Map<String, List<_RawSection>> _parseRaw(String content) {
     final data = jsonDecode(content) as Map<String, dynamic>;
-    final sections = data['sections'] as List<dynamic>? ?? [];
-    final byEmotion = <String, List<_RawSection>>{};
-
-    void visit(Map<String, dynamic> node) {
-      final children = node['children'] as List<dynamic>?;
-      final hasChildren = children != null && children.isNotEmpty;
-      if (hasChildren) {
-        for (final c in children) {
-          if (c is Map<String, dynamic>) visit(c);
-        }
-      } else {
-        // Leaf node
-        final emotion = node['emotion'] as String? ?? '';
-        final path = node['path'] as String? ?? '';
-        final title = node['title'] as String? ?? '';
-        if (emotion.isNotEmpty && path.isNotEmpty) {
-          (byEmotion[emotion] ??= []).add(_RawSection(path: path, title: title));
-        }
-      }
+    final categoriesList = data['feelingCategories'] as List<dynamic>? ?? [];
+    _categories = categoriesList
+        .map((c) {
+          final map = c as Map<String, dynamic>;
+          return FeelingCategory(
+            id: map['id'] as String? ?? '',
+            label: map['label'] as String? ?? '',
+            hint: map['hint'] as String? ?? '',
+          );
+        })
+        .where((c) => c.id.isNotEmpty)
+        .toList();
+    final toSections = data['feelingToSections'] as Map<String, dynamic>? ?? {};
+    _feelingToSectionsRaw = <String, List<Map<String, dynamic>>>{};
+    for (final e in toSections.entries) {
+      final list = e.value as List<dynamic>? ?? [];
+      _feelingToSectionsRaw![e.key.toString()] = list
+          .map((s) => (s as Map<String, dynamic>))
+          .where((s) => s['path'] != null && s['title'] != null)
+          .toList();
     }
-
-    for (final s in sections) {
-      if (s is Map<String, dynamic>) visit(s);
-    }
-    return byEmotion;
   }
 
-  /// Enriches raw sections with verse refs from VerseHierarchyService.
-  /// Must be called on the main isolate after _ensureLoaded.
-  List<InspirationSection> _enrichSections(List<_RawSection> raw) {
-    final hierarchy = VerseHierarchyService.instance;
+  /// All feeling categories for the picker.
+  Future<List<FeelingCategory>> getFeelingCategories() async {
+    await _ensureLoaded();
+    return List.from(_categories!);
+  }
+
+  /// Sections for [feelingId], enriched with verse refs from the hierarchy.
+  Future<List<InspirationSection>> getSectionsForFeeling(String feelingId) async {
+    await _ensureLoaded();
+    await VerseHierarchyService.instance.preload();
+    final raw = _feelingToSectionsRaw?[feelingId];
+    if (raw == null || raw.isEmpty) return [];
     final result = <InspirationSection>[];
     for (final s in raw) {
-      final refs = hierarchy.getVerseRefsForSectionSync(s.path);
+      final path = s['path'] as String? ?? '';
+      final title = s['title'] as String? ?? '';
+      final refs = VerseHierarchyService.instance.getVerseRefsForSectionSync(path);
       if (refs.isEmpty) continue;
       final sorted = refs.toList()
         ..sort(VerseHierarchyService.compareVerseRefs);
       result.add(InspirationSection(
-        path: s.path,
-        title: s.title,
-        emotion: '',
+        path: path,
+        title: title,
         verseRefs: sorted,
       ));
     }
     return result;
   }
 
-  /// Returns sections for the given emotion, with verse refs populated.
-  Future<List<InspirationSection>> getSectionsForEmotion(String emotion) async {
-    await _ensureLoaded();
-    final raw = _rawByEmotion?[emotion];
-    if (raw == null || raw.isEmpty) return [];
-    return _enrichSections(raw);
+  /// One random verse for [feelingId]. Returns null if no verses available.
+  Future<InspirationRandomVerse?> getRandomVerseForFeeling(String feelingId) async {
+    final sections = await getSectionsForFeeling(feelingId);
+    if (sections.isEmpty) return null;
+    final pairs = <({String ref, String title, String path})>[];
+    for (final sec in sections) {
+      for (final ref in sec.verseRefs) {
+        pairs.add((ref: ref, title: sec.title, path: sec.path));
+      }
+    }
+    if (pairs.isEmpty) return null;
+    final p = pairs[_random.nextInt(pairs.length)];
+    await BcvVerseService.instance.getChapters();
+    final idx = BcvVerseService.instance.getIndexForRefWithFallback(p.ref);
+    if (idx == null) return null;
+    final text = BcvVerseService.instance.getVerseAt(idx) ?? '';
+    return InspirationRandomVerse(
+      verseRef: p.ref,
+      verseText: text,
+      sectionTitle: p.title,
+      sectionPath: p.path,
+    );
   }
-}
-
-class _RawSection {
-  const _RawSection({required this.path, required this.title});
-  final String path;
-  final String title;
 }

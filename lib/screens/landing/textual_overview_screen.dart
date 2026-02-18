@@ -12,7 +12,10 @@ import 'overview/overview_verse_panel.dart';
 /// Tapping a section opens a side panel (desktop) or bottom sheet (mobile)
 /// showing the verses for that section.
 class TextualOverviewScreen extends StatefulWidget {
-  const TextualOverviewScreen({super.key});
+  const TextualOverviewScreen({super.key, this.onLoadComplete});
+
+  /// Called when initial load completes (success or error). Used to dismiss loading overlay.
+  final VoidCallback? onLoadComplete;
 
   @override
   State<TextualOverviewScreen> createState() => _TextualOverviewScreenState();
@@ -47,6 +50,15 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
       _flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
       _loading = false;
     });
+    // Defer until after build, layout, and paint so content is visible before overlay is removed
+    if (widget.onLoadComplete != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (mounted) widget.onLoadComplete?.call();
+        });
+      });
+    }
   }
 
   /// Returns children of [parentPath] (empty string = root-level sections).
@@ -60,8 +72,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     if (parentDepth == null) return [];
     final childDepth = parentDepth + 1;
     return _flatSections
-        .where((s) =>
-            s.depth == childDepth && s.path.startsWith('$parentPath.'))
+        .where(
+            (s) => s.depth == childDepth && s.path.startsWith('$parentPath.'))
         .toList();
   }
 
@@ -82,10 +94,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
         // Deeper pickers (depth > 0) also select the section to show verses.
         if (depth > 0) {
           _selectedPath = path;
-          _selectedTitle = _flatSections
-              .where((s) => s.path == path)
-              .firstOrNull
-              ?.title;
+          _selectedTitle =
+              _flatSections.where((s) => s.path == path).firstOrNull?.title;
         } else {
           // Top-level picker just filters, doesn't select.
           _selectedPath = null;
@@ -257,8 +267,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     pickers.add(_buildDropdownPicker(
       depth: 0,
       options: rootChildren,
-      selectedPath:
-          _pickerSelections.isNotEmpty ? _pickerSelections[0] : null,
+      selectedPath: _pickerSelections.isNotEmpty ? _pickerSelections[0] : null,
     ));
 
     for (var i = 0; i < _pickerSelections.length; i++) {
@@ -267,9 +276,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
       pickers.add(_buildDropdownPicker(
         depth: i + 1,
         options: children,
-        selectedPath: i + 1 < _pickerSelections.length
-            ? _pickerSelections[i + 1]
-            : null,
+        selectedPath:
+            i + 1 < _pickerSelections.length ? _pickerSelections[i + 1] : null,
       ));
     }
 
@@ -323,8 +331,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
           isExpanded: true,
           icon: const Padding(
             padding: EdgeInsets.only(right: 6),
-            child: Icon(Icons.expand_more,
-                size: 18, color: AppColors.mutedBrown),
+            child:
+                Icon(Icons.expand_more, size: 18, color: AppColors.mutedBrown),
           ),
           style: const TextStyle(
             fontFamily: 'Lora',
@@ -337,24 +345,28 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
               // "All" item:
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text('All', style: TextStyle(
-                  fontFamily: 'Lora', fontSize: 13,
-                  color: AppColors.mutedBrown, fontStyle: FontStyle.italic,
-                )),
+                child: Text('All',
+                    style: TextStyle(
+                      fontFamily: 'Lora',
+                      fontSize: 13,
+                      color: AppColors.mutedBrown,
+                      fontStyle: FontStyle.italic,
+                    )),
               ),
               // Each option:
               ...options.map((s) => Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '${_shortNum(s.path)}. ${s.title}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontFamily: 'Lora', fontSize: 13,
-                    color: AppColors.textDark,
-                  ),
-                ),
-              )),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${_shortNum(s.path)}. ${s.title}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontFamily: 'Lora',
+                        fontSize: 13,
+                        color: AppColors.textDark,
+                      ),
+                    ),
+                  )),
             ];
           },
           items: [

@@ -34,6 +34,7 @@ class BcvReadScreen extends StatefulWidget {
     this.highlightSectionIndices,
     this.title = 'Bodhicaryavatara',
     this.onSectionNavigateForTest,
+    this.onLoadComplete,
   });
 
   final int? scrollToVerseIndex;
@@ -46,6 +47,9 @@ class BcvReadScreen extends StatefulWidget {
   /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
   final void Function(String sectionPath, String firstVerseRef)?
       onSectionNavigateForTest;
+
+  /// Called when initial load completes (success or error). Used to dismiss loading overlay.
+  final VoidCallback? onLoadComplete;
 
   @override
   State<BcvReadScreen> createState() => _BcvReadScreenState();
@@ -252,11 +256,28 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
         _setInitialBreadcrumb();
       }
+      // Defer until after build, layout, and paint so content is visible before overlay is removed
+      if (widget.onLoadComplete != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await Future.delayed(const Duration(milliseconds: 100));
+            if (mounted) widget.onLoadComplete?.call();
+          });
+        });
+      }
     } catch (e) {
       if (mounted) {
         setState(() {
           _loading = false;
           _error = e;
+        });
+      }
+      if (widget.onLoadComplete != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await Future.delayed(const Duration(milliseconds: 100));
+            if (mounted) widget.onLoadComplete?.call();
+          });
         });
       }
     }
@@ -382,32 +403,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
 
     Rect? measured;
-    const padH = 12.0;
-    const padV = 8.0;
-    final currentPath = _breadcrumbHierarchy.isNotEmpty
-        ? (_breadcrumbHierarchy.last['section'] ??
-            _breadcrumbHierarchy.last['path'] ??
-            '')
-        : '';
+    const leftMargin = 12.0;
+    const rightMargin = 20.0;
+    // Each verse widget includes a 20px bottom padding for spacing between
+    // verses. We trim that from the last verse so the overlay border sits
+    // snugly below the text rather than bleeding into the next verse's space.
+    const verseBottomPadding = 20.0;
+    // Small visual margin so the border doesn't sit flush against the text.
+    const marginV = 6.0;
     for (final idx in run) {
-      final ref = _verseService.getVerseRef(idx);
-      GlobalKey? key;
-      if (ref != null &&
-          BcvVerseService.baseVerseRefPattern.hasMatch(ref) &&
-          currentPath.isNotEmpty) {
-        final segments = _hierarchyService.getSplitVerseSegmentsSync(ref);
-        if (segments.length >= 2) {
-          final matching =
-              segments.where((s) => s.sectionPath == currentPath).toList();
-          if (matching.length == 1) {
-            final segIdx = segments.indexOf(matching.single);
-            key = segIdx == 0
-                ? _verseKeys[idx]
-                : _verseSegmentKeys['${idx}_$segIdx'];
-          }
-        }
-      }
-      key ??= _verseKeys[idx];
+      // Use full verse key so overlay covers the whole verse, not a small segment.
+      final key = _verseKeys[idx];
       if (key?.currentContext == null) continue;
       final verseBox = key!.currentContext!.findRenderObject() as RenderBox?;
       if (verseBox == null || !verseBox.hasSize) continue;
@@ -417,13 +423,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ancestor: stackBox,
       );
       final verseRect = Rect.fromPoints(topLeft, bottomRight);
-      final padded = Rect.fromLTRB(
-        verseRect.left - padH,
-        verseRect.top - padV,
-        verseRect.right + padH,
-        verseRect.bottom + padV,
-      );
-      measured = measured == null ? padded : measured.expandToInclude(padded);
+      measured = measured == null ? verseRect : measured.expandToInclude(verseRect);
     }
     if (measured == null) {
       if (_sectionOverlayMeasureRetries <
@@ -437,10 +437,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     _sectionOverlayMeasureRetries = 0;
 
-    // Use full content width (match the SizedBox(width: double.infinity) verse containers)
+    // Build the overlay rect: full content width with side margins, trimmed
+    // vertically to hug just the section verses with a small visual margin.
     final contentWidth = stackBox.size.width;
-    final clamped =
-        Rect.fromLTWH(0, measured.top, contentWidth, measured.height);
+    final clamped = Rect.fromLTRB(
+      leftMargin,
+      measured.top - marginV,
+      contentWidth - rightMargin,
+      measured.bottom - verseBottomPadding + marginV,
+    );
 
     final prevTo = _sectionOverlayRectTo;
     if (prevTo != null && _rectApproxEquals(prevTo, clamped)) return;
@@ -1437,7 +1442,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           },
           child: SingleChildScrollView(
             controller: _mainScrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
             child: Stack(
               key: _scrollContentKey,
               clipBehavior: Clip.none,
@@ -1516,11 +1521,39 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                         height: 1.5,
                                         color: AppColors.textDark,
                                       );
+                              final ref = _verseService.getVerseRef(idx);
+                              Widget refWidget = const SizedBox.shrink();
+                              if (ref != null &&
+                                  (segmentIndex == null || segmentIndex == 0)) {
+                                refWidget = Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                  child: Text(
+                                    'Verse $ref',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          fontFamily: 'Lora',
+                                          color: AppColors.primary,
+                                        ),
+                                  ),
+                                );
+                              }
                               final inner = Padding(
-                                padding: const EdgeInsets.only(bottom: 20),
-                                child: BcvVerseText(
-                                  text: displayText,
-                                  style: effectiveStyle,
+                                padding: const EdgeInsets.fromLTRB(28, 0, 0, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    refWidget,
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                      child: BcvVerseText(
+                                        text: displayText,
+                                        style: effectiveStyle,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                               Widget w = inner;
@@ -1532,6 +1565,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                 width: double.infinity,
                                 child: InkWell(
                                   onTap: () => _onVerseTap(idx),
+                                  hoverColor: Colors.transparent,
                                   child: w,
                                 ),
                               );
@@ -1593,20 +1627,22 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                             SizedBox(
                                               width: double.infinity,
                                               child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12,
-                                                        vertical: 8),
                                                 decoration: boxDecoration(
                                                     darker: darker),
-                                                child: buildVerseContent(
-                                                  idx,
-                                                  text,
-                                                  lineRange:
-                                                      lineRangeForSegment(
-                                                          i, lines.length),
-                                                  segmentIndex: i,
-                                                  segmentRef: segments[i].ref,
+                                                clipBehavior: Clip.none,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          72, 28, 32, 28),
+                                                  child: buildVerseContent(
+                                                    idx,
+                                                    text,
+                                                    lineRange:
+                                                        lineRangeForSegment(
+                                                            i, lines.length),
+                                                    segmentIndex: i,
+                                                    segmentRef: segments[i].ref,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -1624,13 +1660,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                               return SizedBox(
                                 width: double.infinity,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
                                   decoration: boxDecoration(darker: darker),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: verseWidgets,
+                                  clipBehavior: Clip.none,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        72, 28, 32, 28),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: verseWidgets,
+                                    ),
                                   ),
                                 ),
                               );
@@ -1669,8 +1708,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       wrapInBox(highlightRun, darker: true),
-                                      const SizedBox(height: 8),
-                                      const SizedBox(height: 8),
+                                      const SizedBox(height: 24),
                                     ],
                                   ),
                                 );
