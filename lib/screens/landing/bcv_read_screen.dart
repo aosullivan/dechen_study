@@ -141,6 +141,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
   bool _mobileNavCollapseInitialized = false;
+  bool _deferredStartupWorkScheduled = false;
 
   final FocusNode _sectionOverviewFocusNode = FocusNode();
 
@@ -153,11 +154,25 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   TextStyle? _verseStyle;
   TextStyle? _chapterTitleStyle;
 
+  bool get _isLaptopLayout =>
+      MediaQuery.of(context).size.width >= BcvReadConstants.laptopBreakpoint;
+
+  double get _readerLeftPadding => _isLaptopLayout ? 12.0 : 16.0;
+  double get _readerRightPadding => _isLaptopLayout ? 20.0 : 16.0;
+  double get _overlayLeftInset => _isLaptopLayout ? 12.0 : 8.0;
+  double get _overlayRightInset => _isLaptopLayout ? 20.0 : 8.0;
+  double get _verseHorizontalInset => _isLaptopLayout ? 28.0 : 18.0;
+  double get _verseWrapIndent => _isLaptopLayout ? 24.0 : 8.0;
+
   Set<int> get _highlightSet => _highlightVerseIndices ?? const {};
 
   bool get _hasInitialHighlight =>
       widget.highlightSectionIndices != null &&
       widget.highlightSectionIndices!.isNotEmpty;
+
+  /// Deep-link style open (e.g. Daily -> Full text): prioritize getting to verse first.
+  bool get _isDeepLinkOpen =>
+      widget.scrollToVerseIndex != null || _hasInitialHighlight;
 
   int get _syncGeneration => _navState.syncGeneration;
 
@@ -220,6 +235,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
+    if (_isDeepLinkOpen) {
+      // Keep desktop startup light when opened from Daily/Verse deep links.
+      _chaptersPanelCollapsed = true;
+      _sectionSliderCollapsed = true;
+      _breadcrumbCollapsed = true;
+    }
     if (widget.scrollToVerseIndex != null || _hasInitialHighlight) {
       _scrollToVerseKey = GlobalKey();
     }
@@ -275,6 +296,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _intentionalHighlight = false;
       _sectionSliderScrollRequestId = 0;
       _chapterHeaderFlatIndices.clear();
+      _deferredStartupWorkScheduled = false;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -311,6 +333,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           // during and after the initial scroll animation cannot clear the
           // intentional highlight before the user has a chance to see it.
           _startProgrammaticNavigation();
+          final initialAlignment = _initialDeepLinkScrollAlignment();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             _scrollToVerseIndex(
@@ -318,16 +341,34 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               segmentRef: _initialSegmentRefForVerseIndex(
                 widget.scrollToVerseIndex!,
               ),
+              alignment: initialAlignment,
             );
             _clearProgrammaticNavigationAfterScrollSettles();
           });
         }
-        if (widget.highlightSectionIndices != null &&
-            _highlightSet.isNotEmpty) {
-          _loadCommentaryForHighlightedSection();
+        if (_isDeepLinkOpen) {
+          final initialIndex = _scrollTargetVerseIndex;
+          if (initialIndex != null && initialIndex < _verses.length) {
+            _visibleVerseIndex = initialIndex;
+            _currentSectionVerseIndices = _highlightSet.isNotEmpty
+                ? Set<int>.from(_highlightSet)
+                : {initialIndex};
+            _currentSegmentRef = _initialSegmentRefForVerseIndex(initialIndex);
+            _sectionChangeNotifier.notify();
+          }
+          // Fallback in case scroll-settle callback doesn't fire.
+          _scheduleDeferredStartupWork(
+            delay: const Duration(milliseconds: 1200),
+          );
+        } else {
+          if (widget.highlightSectionIndices != null &&
+              _highlightSet.isNotEmpty) {
+            _loadCommentaryForHighlightedSection();
+          }
+          _hierarchyService
+              .getHierarchyForVerse('1.1'); // Preload hierarchy map
+          _setInitialBreadcrumb();
         }
-        _hierarchyService.getHierarchyForVerse('1.1'); // Preload hierarchy map
-        _setInitialBreadcrumb();
       }
     } catch (e) {
       if (mounted) {
@@ -388,11 +429,18 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _clearProgrammaticNavigationAfterScrollSettles();
   }
 
-  void _scrollToVerseWidget() {
+  double _initialDeepLinkScrollAlignment() {
+    final fromCardWithSectionHighlight =
+        widget.scrollToVerseIndex != null && _hasInitialHighlight;
+    if (fromCardWithSectionHighlight && !_isLaptopLayout) return 0.3;
+    return 0.2;
+  }
+
+  void _scrollToVerseWidget({double alignment = 0.2}) {
     if (_scrollToVerseKey?.currentContext == null) return;
     Scrollable.ensureVisible(
       _scrollToVerseKey!.currentContext!,
-      alignment: 0.2,
+      alignment: alignment,
       duration: const Duration(milliseconds: 300),
     );
   }
@@ -506,6 +554,21 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
+  void _scheduleDeferredStartupWork(
+      {Duration delay = const Duration(milliseconds: 0)}) {
+    if (!_isDeepLinkOpen || _deferredStartupWorkScheduled) return;
+    _deferredStartupWorkScheduled = true;
+    Future<void>.delayed(delay, () {
+      if (!mounted) return;
+      _setInitialBreadcrumb();
+      if (widget.highlightSectionIndices != null && _highlightSet.isNotEmpty) {
+        _loadCommentaryForHighlightedSection();
+      }
+      // Best-effort warm-up once initial jump is done.
+      _hierarchyService.getHierarchyForVerse('1.1');
+    });
+  }
+
   void _setInitialBreadcrumb() {
     final initialIndex = _scrollTargetVerseIndex ?? 0;
     if (initialIndex >= _verses.length) return;
@@ -590,8 +653,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
 
     Rect? measured;
-    const leftMargin = 12.0;
-    const rightMargin = 20.0;
+    final leftMargin = _overlayLeftInset;
+    final rightMargin = _overlayRightInset;
     const verseBottomPadding = 20.0;
     const marginV = 6.0;
     for (final idx in run) {
@@ -746,7 +809,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _scrollToVerseIndex(verseIndex, segmentRef: firstVerseRef);
   }
 
-  void _scrollToVerseIndex(int index, {String? segmentRef}) {
+  void _scrollToVerseIndex(int index,
+      {String? segmentRef, double alignment = 0.2}) {
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _startProgrammaticNavigation();
@@ -765,7 +829,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (keyToUse?.currentContext != null) {
       Scrollable.ensureVisible(
         keyToUse!.currentContext!,
-        alignment: 0.2,
+        alignment: alignment,
         duration: const Duration(milliseconds: 300),
       );
       _clearProgrammaticNavigationAfterScrollSettles();
@@ -777,7 +841,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      _scrollToVerseWidget();
+      _scrollToVerseWidget(alignment: alignment);
       setState(() => _scrollToVerseIndexAfterTap = null);
       _clearProgrammaticNavigationAfterScrollSettles();
     });
@@ -795,6 +859,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       // Keep ignoring visibility-driven highlights briefly after settling.
       _markProgrammaticNavigationSettled();
       _measureAndUpdateSectionOverlay();
+      _scheduleDeferredStartupWork();
     }
 
     final pos = _mainScrollController.hasClients
@@ -962,6 +1027,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   void _scrollSectionSliderToCurrent() {
+    if (_sectionSliderCollapsed) return;
     if (_breadcrumbHierarchy.isEmpty) return;
     final currentPath = _breadcrumbHierarchy.last['section'] ??
         _breadcrumbHierarchy.last['path'] ??
@@ -1503,8 +1569,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   Widget _buildMainContent() {
-    final isLaptop =
-        MediaQuery.of(context).size.width >= BcvReadConstants.laptopBreakpoint;
+    final isLaptop = _isLaptopLayout;
     final scrollContent = Focus(
       autofocus: true,
       onKeyEvent: _handleReaderKeyEvent,
@@ -1533,14 +1598,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           },
           child: SingleChildScrollView(
             controller: _mainScrollController,
-            padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
+            padding: EdgeInsets.fromLTRB(
+              _readerLeftPadding,
+              20,
+              _readerRightPadding,
+              20,
+            ),
             child: Stack(
               key: _scrollContentKey,
               clipBehavior: Clip.none,
               children: [
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    const overlayHorizontalMargin = 32.0;
+                    final overlayHorizontalMargin =
+                        _overlayLeftInset + _overlayRightInset;
                     final contentMaxWidth =
                         (constraints.maxWidth - overlayHorizontalMargin)
                             .clamp(0.0, double.infinity);
@@ -1627,8 +1698,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                       );
                                     }
                                     final inner = Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          28, 0, 28, 0),
+                                      padding: EdgeInsets.fromLTRB(
+                                          _verseHorizontalInset,
+                                          0,
+                                          _verseHorizontalInset,
+                                          0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1640,6 +1714,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                             child: BcvVerseText(
                                               text: displayText,
                                               style: effectiveStyle,
+                                              wrapIndent: _verseWrapIndent,
                                             ),
                                           ),
                                         ],
