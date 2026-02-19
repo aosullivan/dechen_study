@@ -115,6 +115,40 @@ void main() {
       expect(path172.last['section'], path);
       expect(path173.last['section'], path);
     });
+
+    test('4.27 split headings map to non-empty sibling leaves', () {
+      const path2 = '4.1.2.2.3.4.2';
+      const path3 = '4.1.2.2.3.4.3';
+
+      final refs2 = hierarchyService.getVerseRefsForSectionSync(path2);
+      final refs3 = hierarchyService.getVerseRefsForSectionSync(path3);
+      expect(refs2, contains('4.27ab'));
+      expect(refs3, contains('4.27cd'));
+
+      final path27ab = hierarchyService.getHierarchyForVerseSync('4.27ab');
+      final path27cd = hierarchyService.getHierarchyForVerseSync('4.27cd');
+      expect(path27ab, isNotEmpty);
+      expect(path27cd, isNotEmpty);
+      expect(path27ab.last['section'], path2);
+      expect(path27cd.last['section'], path3);
+    });
+
+    test('8.145 split headings map to non-empty sibling leaves', () {
+      const path1 = '4.5.3.2.3.2.3.1';
+      const path2 = '4.5.3.2.3.2.3.2';
+
+      final refs1 = hierarchyService.getVerseRefsForSectionSync(path1);
+      final refs2 = hierarchyService.getVerseRefsForSectionSync(path2);
+      expect(refs1, contains('8.145ab'));
+      expect(refs2, contains('8.145cd'));
+
+      final path145ab = hierarchyService.getHierarchyForVerseSync('8.145ab');
+      final path145cd = hierarchyService.getHierarchyForVerseSync('8.145cd');
+      expect(path145ab, isNotEmpty);
+      expect(path145cd, isNotEmpty);
+      expect(path145ab.last['section'], path1);
+      expect(path145cd.last['section'], path2);
+    });
   });
 
   group('Adjacent section navigation (8.114 -> 8.115, not 8.117)', () {

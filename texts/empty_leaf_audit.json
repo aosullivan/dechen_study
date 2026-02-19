@@ -1,11 +1,11 @@
 {
-  "generated_at_utc": "2026-02-19T03:08:14.780Z",
+  "generated_at_utc": "2026-02-19T03:24:34.503Z",
   "counts": {
-    "total_leaves": 744,
-    "empty_leaves": 86,
-    "suspicious_misassigned": 8,
-    "ambiguous_empty": 10,
-    "expected_empty": 68,
+    "total_leaves": 738,
+    "empty_leaves": 140,
+    "suspicious_misassigned": 10,
+    "ambiguous_empty": 15,
+    "expected_empty": 115,
     "index_inconsistency": 0
   },
   "results": [
@@ -110,6 +110,122 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
+      "path": "1.2.3",
+      "title": "The condensed meaning of discarding pride",
+      "chain": [
+        {
+          "path": "1",
+          "title": "The purposes and relation"
+        },
+        {
+          "path": "1.2",
+          "title": "The condensed meaning of each section"
+        },
+        {
+          "path": "1.2.3",
+          "title": "The condensed meaning of discarding pride"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "1.3.2.1",
+      "title": "Setting out the subject matter to be elaborated",
+      "chain": [
+        {
+          "path": "1",
+          "title": "The purposes and relation"
+        },
+        {
+          "path": "1.3",
+          "title": "The literal meaning of each section"
+        },
+        {
+          "path": "1.3.2",
+          "title": "The literal meaning of the commitment to compose"
+        },
+        {
+          "path": "1.3.2.1",
+          "title": "Setting out the subject matter to be elaborated"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "1.3.2.2",
+      "title": "Abandoning personal invention",
+      "chain": [
+        {
+          "path": "1",
+          "title": "The purposes and relation"
+        },
+        {
+          "path": "1.3",
+          "title": "The literal meaning of each section"
+        },
+        {
+          "path": "1.3.2",
+          "title": "The literal meaning of the commitment to compose"
+        },
+        {
+          "path": "1.3.2.2",
+          "title": "Abandoning personal invention"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "1.3.2.3",
+      "title": "Abandoning the fault of repetition",
+      "chain": [
+        {
+          "path": "1",
+          "title": "The purposes and relation"
+        },
+        {
+          "path": "1.3",
+          "title": "The literal meaning of each section"
+        },
+        {
+          "path": "1.3.2",
+          "title": "The literal meaning of the commitment to compose"
+        },
+        {
+          "path": "1.3.2.3",
+          "title": "Abandoning the fault of repetition"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "1.3.3.3",
+      "title": "Yet, in dependence upon that, there is benefit for others",
+      "chain": [
+        {
+          "path": "1",
+          "title": "The purposes and relation"
+        },
+        {
+          "path": "1.3",
+          "title": "The literal meaning of each section"
+        },
+        {
+          "path": "1.3.3",
+          "title": "The literal meaning of discarding pride"
+        },
+        {
+          "path": "1.3.3.3",
+          "title": "Yet, in dependence upon that, there is benefit for others"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
       "path": "1.4.1.2",
       "title": "The condensed meaning",
       "chain": [
@@ -158,6 +274,26 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
+      "path": "2.1.1",
+      "title": "Their nature",
+      "chain": [
+        {
+          "path": "2",
+          "title": "The primary basis: the individual person"
+        },
+        {
+          "path": "2.1",
+          "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments"
+        },
+        {
+          "path": "2.1.1",
+          "title": "Their nature"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
       "path": "2.1.2",
       "title": "Difficult to acquire",
       "chain": [
@@ -172,6 +308,182 @@
         {
           "path": "2.1.2",
           "title": "Difficult to acquire"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.1.1.1.1.2",
+      "title": "How bodhicitta overcomes nonvirtue",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.1",
+          "title": "Praising the benefits of bodhicitta"
+        },
+        {
+          "path": "3.1.1",
+          "title": "Ordinary benefits"
+        },
+        {
+          "path": "3.1.1.1",
+          "title": "Invisible benefits"
+        },
+        {
+          "path": "3.1.1.1.1",
+          "title": "It overcomes all nonvirtue"
+        },
+        {
+          "path": "3.1.1.1.1.2",
+          "title": "How bodhicitta overcomes nonvirtue"
+        }
+      ],
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "1.7ab",
+          "currentPath": "3.1.1.1.2",
+          "heading": "2. How bodhicitta overcomes nonvirtue"
+        }
+      ],
+      "matchCount": 1
+    },
+    {
+      "path": "3.1.1.3.6",
+      "title": "Other specific examples",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.1",
+          "title": "Praising the benefits of bodhicitta"
+        },
+        {
+          "path": "3.1.1",
+          "title": "Ordinary benefits"
+        },
+        {
+          "path": "3.1.1.3",
+          "title": "Praising the benefits by analogy"
+        },
+        {
+          "path": "3.1.1.3.6",
+          "title": "Other specific examples"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.1.3.2.2.2.1",
+      "title": "Those possessing the cause—ignorance",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.1",
+          "title": "Praising the benefits of bodhicitta"
+        },
+        {
+          "path": "3.1.3",
+          "title": "The reasons for the benefits"
+        },
+        {
+          "path": "3.1.3.2",
+          "title": "Reasoning"
+        },
+        {
+          "path": "3.1.3.2.2",
+          "title": "Application bodhicitta"
+        },
+        {
+          "path": "3.1.3.2.2.2",
+          "title": "The many individuals affected"
+        },
+        {
+          "path": "3.1.3.2.2.2.1",
+          "title": "Those possessing the cause—ignorance"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.1.3.2.2.2.2",
+      "title": "Those experiencing result—destitution of happiness",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.1",
+          "title": "Praising the benefits of bodhicitta"
+        },
+        {
+          "path": "3.1.3",
+          "title": "The reasons for the benefits"
+        },
+        {
+          "path": "3.1.3.2",
+          "title": "Reasoning"
+        },
+        {
+          "path": "3.1.3.2.2",
+          "title": "Application bodhicitta"
+        },
+        {
+          "path": "3.1.3.2.2.2",
+          "title": "The many individuals affected"
+        },
+        {
+          "path": "3.1.3.2.2.2.2",
+          "title": "Those experiencing result—destitution of happiness"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.1.3.2.2.2.3",
+      "title": "Those tormented by suffering",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.1",
+          "title": "Praising the benefits of bodhicitta"
+        },
+        {
+          "path": "3.1.3",
+          "title": "The reasons for the benefits"
+        },
+        {
+          "path": "3.1.3.2",
+          "title": "Reasoning"
+        },
+        {
+          "path": "3.1.3.2.2",
+          "title": "Application bodhicitta"
+        },
+        {
+          "path": "3.1.3.2.2.2",
+          "title": "The many individuals affected"
+        },
+        {
+          "path": "3.1.3.2.2.2.3",
+          "title": "Those tormented by suffering"
         }
       ],
       "classification": "expected_empty",
@@ -202,16 +514,36 @@
           "title": "Offering homage"
         }
       ],
-      "classification": "suspicious_misassigned",
-      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
-      "sampleRefs": [
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.2.1.2.1",
+      "title": "Classifications",
+      "chain": [
         {
-          "ref": "2.1",
-          "currentPath": "3.2.1.1.1",
-          "heading": "6.\tOffering homage"
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.2",
+          "title": "Generating bodhicitta in one's stream of being"
+        },
+        {
+          "path": "3.2.1",
+          "title": "Preliminaries"
+        },
+        {
+          "path": "3.2.1.2",
+          "title": "Taking refuge"
+        },
+        {
+          "path": "3.2.1.2.1",
+          "title": "Classifications"
         }
       ],
-      "matchCount": 1
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "3.2.1.2.2",
@@ -266,14 +598,8 @@
           "title": "Nature"
         }
       ],
-      "classification": "ambiguous_empty",
-      "reason": "Matching heading exists but context did not reliably match this leaf",
-      "sampleRefs": [
-        {
-          "ref": "8.137",
-          "currentPath": "4.5.3.2.2.2.4.3"
-        }
-      ]
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "3.2.1.2.4",
@@ -388,6 +714,102 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
+      "path": "3.2.1.3.1.4.1",
+      "title": "The inevitable result: the transmigration to another rebirth",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.2",
+          "title": "Generating bodhicitta in one's stream of being"
+        },
+        {
+          "path": "3.2.1",
+          "title": "Preliminaries"
+        },
+        {
+          "path": "3.2.1.3",
+          "title": "Confession"
+        },
+        {
+          "path": "3.2.1.3.1",
+          "title": "The power of regret"
+        },
+        {
+          "path": "3.2.1.3.1.4",
+          "title": "Fear of the results"
+        },
+        {
+          "path": "3.2.1.3.1.4.1",
+          "title": "The inevitable result: the transmigration to another rebirth"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.2.1.3.3.1",
+      "title": "The reasons to persevere in the antidote",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.2",
+          "title": "Generating bodhicitta in one's stream of being"
+        },
+        {
+          "path": "3.2.1",
+          "title": "Preliminaries"
+        },
+        {
+          "path": "3.2.1.3",
+          "title": "Confession"
+        },
+        {
+          "path": "3.2.1.3.3",
+          "title": "The power of antidote"
+        },
+        {
+          "path": "3.2.1.3.3.1",
+          "title": "The reasons to persevere in the antidote"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "3.2.1.4.2",
+      "title": "Rejoicing in the virtue of śrāvakas",
+      "chain": [
+        {
+          "path": "3",
+          "title": "The productive cause: the generation of bodhicitta"
+        },
+        {
+          "path": "3.2",
+          "title": "Generating bodhicitta in one's stream of being"
+        },
+        {
+          "path": "3.2.1",
+          "title": "Preliminaries"
+        },
+        {
+          "path": "3.2.1.4",
+          "title": "Rejoicing"
+        },
+        {
+          "path": "3.2.1.4.2",
+          "title": "Rejoicing in the virtue of śrāvakas"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
       "path": "3.2.1.6",
       "title": "Supplication",
       "chain": [
@@ -440,16 +862,30 @@
           "title": "General explanation"
         }
       ],
-      "classification": "suspicious_misassigned",
-      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
-          "ref": "3.16",
-          "currentPath": "3.2.2.1.2.2",
-          "heading": "1. General explanation"
+          "ref": "5.18ab",
+          "currentPath": "4.2.1.3.1"
+        },
+        {
+          "ref": "5.18",
+          "currentPath": "4.2.1.3.1"
+        },
+        {
+          "ref": "5.18cd",
+          "currentPath": "4.2.1.3.1"
+        },
+        {
+          "ref": "9.116ab",
+          "currentPath": "4.6.2.4.2.1.1.1"
+        },
+        {
+          "ref": "9.116",
+          "currentPath": "4.6.2.4.2.1.1.1"
         }
-      ],
-      "matchCount": 1
+      ]
     },
     {
       "path": "3.2.2.2.1.1",
@@ -760,8 +1196,8 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.1.2.2.3.4.3",
-      "title": "It is only logical, therefore, to persevere",
+      "path": "4.1.2.3.1.2.3",
+      "title": "Developing pride",
       "chain": [
         {
           "path": "4",
@@ -776,28 +1212,28 @@
           "title": "Concern for training"
         },
         {
-          "path": "4.1.2.2",
-          "title": "Concern to cultivate virtue"
+          "path": "4.1.2.3",
+          "title": "Concern to abandon the defilements"
         },
         {
-          "path": "4.1.2.2.3",
-          "title": "Therefore, one should strive in virtue, the antidote"
+          "path": "4.1.2.3.1",
+          "title": "Examining the contrasting attitude"
         },
         {
-          "path": "4.1.2.2.3.4",
-          "title": "Advice in overcoming that with an admonition"
+          "path": "4.1.2.3.1.2",
+          "title": "Examining impatience"
         },
         {
-          "path": "4.1.2.2.3.4.3",
-          "title": "It is only logical, therefore, to persevere"
+          "path": "4.1.2.3.1.2.3",
+          "title": "Developing pride"
         }
       ],
       "classification": "expected_empty",
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.1.2.3.2.3.2",
-      "title": "Dedication in this",
+      "path": "4.1.2.3.2.3.3",
+      "title": "Relying on antidotes for one’s own impatience",
       "chain": [
         {
           "path": "4",
@@ -824,24 +1260,16 @@
           "title": "The means of devoting oneself to that application"
         },
         {
-          "path": "4.1.2.3.2.3.2",
-          "title": "Dedication in this"
+          "path": "4.1.2.3.2.3.3",
+          "title": "Relying on antidotes for one’s own impatience"
         }
       ],
-      "classification": "suspicious_misassigned",
-      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
-      "sampleRefs": [
-        {
-          "ref": "4.43cd",
-          "currentPath": "4.1.2.3.2.3.3",
-          "heading": "2. Dedication in this"
-        }
-      ],
-      "matchCount": 1
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.1.2.3.2.3.5",
-      "title": "No obedience to the defilements",
+      "path": "4.1.2.3.2.3.4",
+      "title": "Abandoning objections to that",
       "chain": [
         {
           "path": "4",
@@ -868,8 +1296,72 @@
           "title": "The means of devoting oneself to that application"
         },
         {
-          "path": "4.1.2.3.2.3.5",
-          "title": "No obedience to the defilements"
+          "path": "4.1.2.3.2.3.4",
+          "title": "Abandoning objections to that"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.1.2.3.3.1.4",
+      "title": "The essential characteristic of their not returning",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.1",
+          "title": "Concern"
+        },
+        {
+          "path": "4.1.2",
+          "title": "Concern for training"
+        },
+        {
+          "path": "4.1.2.3",
+          "title": "Concern to abandon the defilements"
+        },
+        {
+          "path": "4.1.2.3.3",
+          "title": "Developing enthusiasm in one’s ability to abandon the defilements"
+        },
+        {
+          "path": "4.1.2.3.3.1",
+          "title": "They have no other basis"
+        },
+        {
+          "path": "4.1.2.3.3.1.4",
+          "title": "The essential characteristic of their not returning"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.2.1.1.2",
+      "title": "Showing the reverse pervasion",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.1",
+          "title": "Guarding the mind as the means of guarding training"
+        },
+        {
+          "path": "4.2.1.1",
+          "title": "By guarding the mind, one guards all"
+        },
+        {
+          "path": "4.2.1.1.2",
+          "title": "Showing the reverse pervasion"
         }
       ],
       "classification": "expected_empty",
@@ -908,14 +1400,82 @@
       "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
+          "ref": "7.46",
+          "currentPath": "4.4.4.2.1.1.4"
+        },
+        {
           "ref": "7.46cd",
-          "currentPath": null
+          "currentPath": "4.4.4.2.1.1.4"
+        },
+        {
+          "ref": "9.95",
+          "currentPath": "4.6.2.3.1.2.1.1.2.3"
         },
         {
           "ref": "9.96ab",
-          "currentPath": "4.6.2.3.1.4.2.2.2"
+          "currentPath": "4.6.2.3.1.2.1.1.2.3"
         }
       ]
+    },
+    {
+      "path": "4.2.1.3.2",
+      "title": "Everything is accomplished by it",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.1",
+          "title": "Guarding the mind as the means of guarding training"
+        },
+        {
+          "path": "4.2.1.3",
+          "title": "One should make effort to guard the mind"
+        },
+        {
+          "path": "4.2.1.3.2",
+          "title": "Everything is accomplished by it"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.2.2.3.2.1",
+      "title": "Keeping in mind the faults of its loss",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.2",
+          "title": "Guarding mindfulness and clear comprehension as the means of guarding the mind"
+        },
+        {
+          "path": "4.2.2.3",
+          "title": "Guarding mindfulness as the means of guarding clear comprehension"
+        },
+        {
+          "path": "4.2.2.3.2",
+          "title": "Showing its cause"
+        },
+        {
+          "path": "4.2.2.3.2.1",
+          "title": "Keeping in mind the faults of its loss"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "4.2.2.3.3",
@@ -942,8 +1502,14 @@
           "title": "How to definitively generate clear comprehension through mindfulness"
         }
       ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "5.33",
+          "currentPath": "4.2.2.3.2.3"
+        }
+      ]
     },
     {
       "path": "4.2.3.1.1.1.4",
@@ -982,6 +1548,78 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
+      "path": "4.2.3.1.1.3.2",
+      "title": "Referencing a scriptural source for that",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3",
+          "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3.1",
+          "title": "Training in the conduct of vows"
+        },
+        {
+          "path": "4.2.3.1.1",
+          "title": "In relation to type"
+        },
+        {
+          "path": "4.2.3.1.1.3",
+          "title": "Times when there is a dispensation regardless of type"
+        },
+        {
+          "path": "4.2.3.1.1.3.2",
+          "title": "Referencing a scriptural source for that"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.2.3.1.1.3.5",
+      "title": "The faults of not doing do",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3",
+          "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3.1",
+          "title": "Training in the conduct of vows"
+        },
+        {
+          "path": "4.2.3.1.1",
+          "title": "In relation to type"
+        },
+        {
+          "path": "4.2.3.1.1.3",
+          "title": "Times when there is a dispensation regardless of type"
+        },
+        {
+          "path": "4.2.3.1.1.3.5",
+          "title": "The faults of not doing do"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
       "path": "4.2.3.1.1.3.6",
       "title": "Concluding summary",
       "chain": [
@@ -1014,12 +1652,154 @@
           "title": "Concluding summary"
         }
       ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "9.101",
+          "currentPath": "4.6.2.3.1.4.2.4.3"
+        }
+      ]
+    },
+    {
+      "path": "4.2.3.2.2.2.3",
+      "title": "How to respond to those who are creating merit",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3",
+          "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3.2",
+          "title": "Training in the conduct of accumulating virtue"
+        },
+        {
+          "path": "4.2.3.2.2",
+          "title": "Training in the means of accomplishing virtue"
+        },
+        {
+          "path": "4.2.3.2.2.2",
+          "title": "Skilful means for conduct towards agents"
+        },
+        {
+          "path": "4.2.3.2.2.2.3",
+          "title": "How to respond to those who are creating merit"
+        }
+      ],
       "classification": "expected_empty",
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.3.2.1.4.2.1.1.2.1.1.2",
-      "title": "General explanation of the sameness of their qualities by example",
+      "path": "4.2.3.2.2.3.3.2",
+      "title": "Fields",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3",
+          "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3.2",
+          "title": "Training in the conduct of accumulating virtue"
+        },
+        {
+          "path": "4.2.3.2.2",
+          "title": "Training in the means of accomplishing virtue"
+        },
+        {
+          "path": "4.2.3.2.2.3",
+          "title": "Skilful means for conduct of action"
+        },
+        {
+          "path": "4.2.3.2.2.3.3",
+          "title": "Connected with virtuous action"
+        },
+        {
+          "path": "4.2.3.2.2.3.3.2",
+          "title": "Fields"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.2.3.4.4.2",
+      "title": "One should rely upon him",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.2",
+          "title": "Mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3",
+          "title": "How to train in the conduct of guarding the mind with mindfulness and clear comprehension"
+        },
+        {
+          "path": "4.2.3.4",
+          "title": "Factors which enhance the training"
+        },
+        {
+          "path": "4.2.3.4.4",
+          "title": "The teacher of the training"
+        },
+        {
+          "path": "4.2.3.4.4.2",
+          "title": "One should rely upon him"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.3.2.1.3",
+      "title": "The means of averting that cause",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.3",
+          "title": "Patience"
+        },
+        {
+          "path": "4.3.2",
+          "title": "Keeping in mind the skilful means for accomplishing patience"
+        },
+        {
+          "path": "4.3.2.1",
+          "title": "Preventing the characteristics of anger"
+        },
+        {
+          "path": "4.3.2.1.3",
+          "title": "The means of averting that cause"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.2.1.1",
+      "title": "Anger and the angry person do not have autonomy",
       "chain": [
         {
           "path": "4",
@@ -1064,26 +1844,14 @@
         {
           "path": "4.3.2.1.4.2.1.1.2.1.1",
           "title": "Anger and the angry person do not have autonomy"
-        },
-        {
-          "path": "4.3.2.1.4.2.1.1.2.1.1.2",
-          "title": "General explanation of the sameness of their qualities by example"
         }
       ],
-      "classification": "suspicious_misassigned",
-      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
-      "sampleRefs": [
-        {
-          "ref": "6.24",
-          "currentPath": "4.3.2.1.4.2.1.1.2.1.1.1",
-          "heading": "2. General explanation of the sameness of their qualities by example"
-        }
-      ],
-      "matchCount": 1
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.3.2.1.4.2.1.1.2.1.1.3",
-      "title": "Connecting with the meaning",
+      "path": "4.3.2.1.4.2.1.1.2.2.1",
+      "title": "Refuting the position of the Sāṃkhyas",
       "chain": [
         {
           "path": "4",
@@ -1122,30 +1890,20 @@
           "title": "Definitive consideration of the qualities in the discrimination"
         },
         {
-          "path": "4.3.2.1.4.2.1.1.2.1",
-          "title": "Since it depends on a cause, it does not have autonomy"
+          "path": "4.3.2.1.4.2.1.1.2.2",
+          "title": "Refuting the essential characteristics of autonomy"
         },
         {
-          "path": "4.3.2.1.4.2.1.1.2.1.1",
-          "title": "Anger and the angry person do not have autonomy"
-        },
-        {
-          "path": "4.3.2.1.4.2.1.1.2.1.1.3",
-          "title": "Connecting with the meaning"
+          "path": "4.3.2.1.4.2.1.1.2.2.1",
+          "title": "Refuting the position of the Sāṃkhyas"
         }
       ],
-      "classification": "ambiguous_empty",
-      "reason": "Matching heading exists but context did not reliably match this leaf",
-      "sampleRefs": [
-        {
-          "ref": "6.25",
-          "currentPath": "4.3.2.1.4.2.1.1.2.4"
-        }
-      ]
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.3.2.1.4.2.1.1.2.1.1.4",
-      "title": "Summary",
+      "path": "4.3.2.1.4.2.1.1.3.3.6.2",
+      "title": "Abandoning the objection that it is illogical to say one harms others",
       "chain": [
         {
           "path": "4",
@@ -1180,96 +1938,24 @@
           "title": "Stopping impatience with the establishment of suffering for oneself"
         },
         {
-          "path": "4.3.2.1.4.2.1.1.2",
-          "title": "Definitive consideration of the qualities in the discrimination"
+          "path": "4.3.2.1.4.2.1.1.3",
+          "title": "In discriminating harmful sentient beings, how to think of them as not causing the harm"
         },
         {
-          "path": "4.3.2.1.4.2.1.1.2.1",
-          "title": "Since it depends on a cause, it does not have autonomy"
+          "path": "4.3.2.1.4.2.1.1.3.3",
+          "title": "Examination of one’s own faults"
         },
         {
-          "path": "4.3.2.1.4.2.1.1.2.1.1",
-          "title": "Anger and the angry person do not have autonomy"
+          "path": "4.3.2.1.4.2.1.1.3.3.6",
+          "title": "Abandoning objections"
         },
         {
-          "path": "4.3.2.1.4.2.1.1.2.1.1.4",
-          "title": "Summary"
+          "path": "4.3.2.1.4.2.1.1.3.3.6.2",
+          "title": "Abandoning the objection that it is illogical to say one harms others"
         }
       ],
-      "classification": "ambiguous_empty",
-      "reason": "Matching heading exists but context did not reliably match this leaf",
-      "sampleRefs": [
-        {
-          "ref": "6.26",
-          "currentPath": "4.3.2.1.4.2.1.1.2.1.2"
-        },
-        {
-          "ref": "8.134",
-          "currentPath": "4.5.3.2.2.2.3.2.4"
-        },
-        {
-          "ref": "8.135",
-          "currentPath": "4.5.3.2.2.2.3.2.4"
-        }
-      ]
-    },
-    {
-      "path": "4.3.2.1.4.2.1.2.3.6",
-      "title": "Establishing the purpose",
-      "chain": [
-        {
-          "path": "4",
-          "title": "The cooperating condition: subsequently accomplishing the training"
-        },
-        {
-          "path": "4.3",
-          "title": "Patience"
-        },
-        {
-          "path": "4.3.2",
-          "title": "Keeping in mind the skilful means for accomplishing patience"
-        },
-        {
-          "path": "4.3.2.1",
-          "title": "Preventing the characteristics of anger"
-        },
-        {
-          "path": "4.3.2.1.4",
-          "title": "Keeping in mind the means of averting the cause of the cause"
-        },
-        {
-          "path": "4.3.2.1.4.2",
-          "title": "Ceasing anger toward the production of undesirables"
-        },
-        {
-          "path": "4.3.2.1.4.2.1",
-          "title": "Stopping impatience with the production of negative actions towards oneself"
-        },
-        {
-          "path": "4.3.2.1.4.2.1.2",
-          "title": "Stopping impatience with the establishment of disrespect, etc. [for oneself]"
-        },
-        {
-          "path": "4.3.2.1.4.2.1.2.3",
-          "title": "It makes no sense to get angry with obstacles to acquisition"
-        },
-        {
-          "path": "4.3.2.1.4.2.1.2.3.6",
-          "title": "Establishing the purpose"
-        }
-      ],
-      "classification": "ambiguous_empty",
-      "reason": "Matching heading exists but context did not reliably match this leaf",
-      "sampleRefs": [
-        {
-          "ref": "6.62",
-          "currentPath": "4.3.2.1.4.2.1.2.4"
-        },
-        {
-          "ref": "6.63",
-          "currentPath": "4.3.2.1.4.2.1.2.4"
-        }
-      ]
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "4.3.2.1.4.3.2.1.1.3",
@@ -1316,8 +2002,208 @@
           "title": "Misconceived grasping for meaning"
         }
       ],
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "6.92",
+          "currentPath": "4.3.2.1.4.3.2.1.1.2",
+          "heading": "3. Misconceived grasping for meaning"
+        }
+      ],
+      "matchCount": 1
+    },
+    {
+      "path": "4.3.2.1.4.3.2.2.3.1.3.5.2",
+      "title": "Different qualities",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.3",
+          "title": "Patience"
+        },
+        {
+          "path": "4.3.2",
+          "title": "Keeping in mind the skilful means for accomplishing patience"
+        },
+        {
+          "path": "4.3.2.1",
+          "title": "Preventing the characteristics of anger"
+        },
+        {
+          "path": "4.3.2.1.4",
+          "title": "Keeping in mind the means of averting the cause of the cause"
+        },
+        {
+          "path": "4.3.2.1.4.3",
+          "title": "Ceasing anger towards those who obstruct desirable dharmas"
+        },
+        {
+          "path": "4.3.2.1.4.3.2",
+          "title": "Abandoning impatience with those who obstruct good for oneself and one’s own side"
+        },
+        {
+          "path": "4.3.2.1.4.3.2.2",
+          "title": "Abandoning impatience with those who obstruct merit"
+        },
+        {
+          "path": "4.3.2.1.4.3.2.2.3",
+          "title": "Considering them as objects of respect"
+        },
+        {
+          "path": "4.3.2.1.4.3.2.2.3.1",
+          "title": "One should respect them for their own qualities"
+        },
+        {
+          "path": "4.3.2.1.4.3.2.2.3.1.3",
+          "title": "Regarding them, therefore, as like the Teacher"
+        },
+        {
+          "path": "4.3.2.1.4.3.2.2.3.1.3.5",
+          "title": "Summary"
+        },
+        {
+          "path": "4.3.2.1.4.3.2.2.3.1.3.5.2",
+          "title": "Different qualities"
+        }
+      ],
       "classification": "expected_empty",
       "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.4.3.1",
+      "title": "Summarizing the opposing factors",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.4",
+          "title": "Effort"
+        },
+        {
+          "path": "4.4.3",
+          "title": "Abandoning opposing factors"
+        },
+        {
+          "path": "4.4.3.1",
+          "title": "Summarizing the opposing factors"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.4.4.2.1.2.1.1",
+      "title": "Method of not being deterred",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.4",
+          "title": "Effort"
+        },
+        {
+          "path": "4.4.4",
+          "title": "Fully developing effort"
+        },
+        {
+          "path": "4.4.4.2",
+          "title": "Extensively"
+        },
+        {
+          "path": "4.4.4.2.1",
+          "title": "Developing the array of powers"
+        },
+        {
+          "path": "4.4.4.2.1.2",
+          "title": "The power of steadfastness"
+        },
+        {
+          "path": "4.4.4.2.1.2.1",
+          "title": "Stable preparation"
+        },
+        {
+          "path": "4.4.4.2.1.2.1.1",
+          "title": "Method of not being deterred"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.4.4.2.1.2.2.1",
+      "title": "Briefly",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.4",
+          "title": "Effort"
+        },
+        {
+          "path": "4.4.4",
+          "title": "Fully developing effort"
+        },
+        {
+          "path": "4.4.4.2",
+          "title": "Extensively"
+        },
+        {
+          "path": "4.4.4.2.1",
+          "title": "Developing the array of powers"
+        },
+        {
+          "path": "4.4.4.2.1.2",
+          "title": "The power of steadfastness"
+        },
+        {
+          "path": "4.4.4.2.1.2.2",
+          "title": "Stable engagement"
+        },
+        {
+          "path": "4.4.4.2.1.2.2.1",
+          "title": "Briefly"
+        }
+      ],
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "4.1ab",
+          "currentPath": "4.1.1.1",
+          "heading": "1. Briefly"
+        },
+        {
+          "ref": "4.1",
+          "currentPath": "4.1.1.1",
+          "heading": "1. Briefly"
+        },
+        {
+          "ref": "4.1cd",
+          "currentPath": "4.1.1.1",
+          "heading": "1. Briefly"
+        },
+        {
+          "ref": "7.31",
+          "currentPath": "4.4.4.1",
+          "heading": "1. Briefly"
+        },
+        {
+          "ref": "7.32",
+          "currentPath": "4.4.4.1",
+          "heading": "1. Briefly"
+        }
+      ],
+      "matchCount": 5
     },
     {
       "path": "4.4.4.2.1.2.2.2.1",
@@ -1365,12 +2251,17 @@
       "sampleRefs": [
         {
           "ref": "4.1ab",
-          "currentPath": null,
+          "currentPath": "4.1.1.1",
+          "heading": "1. Briefly"
+        },
+        {
+          "ref": "4.1",
+          "currentPath": "4.1.1.1",
           "heading": "1. Briefly"
         },
         {
           "ref": "4.1cd",
-          "currentPath": null,
+          "currentPath": "4.1.1.1",
           "heading": "1. Briefly"
         },
         {
@@ -1382,14 +2273,57 @@
           "ref": "7.32",
           "currentPath": "4.4.4.1",
           "heading": "1. Briefly"
-        },
-        {
-          "ref": "7.50",
-          "currentPath": "4.4.4.2.1.2.2.2.2",
-          "heading": "1. Briefly"
         }
       ],
       "matchCount": 5
+    },
+    {
+      "path": "4.4.4.2.1.2.2.3.1.5",
+      "title": "If one does not strive, one’s vows will be broken",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.4",
+          "title": "Effort"
+        },
+        {
+          "path": "4.4.4",
+          "title": "Fully developing effort"
+        },
+        {
+          "path": "4.4.4.2",
+          "title": "Extensively"
+        },
+        {
+          "path": "4.4.4.2.1",
+          "title": "Developing the array of powers"
+        },
+        {
+          "path": "4.4.4.2.1.2",
+          "title": "The power of steadfastness"
+        },
+        {
+          "path": "4.4.4.2.1.2.2",
+          "title": "Stable engagement"
+        },
+        {
+          "path": "4.4.4.2.1.2.2.3",
+          "title": "Pride in ability"
+        },
+        {
+          "path": "4.4.4.2.1.2.2.3.1",
+          "title": "The logic of reliance"
+        },
+        {
+          "path": "4.4.4.2.1.2.2.3.1.5",
+          "title": "If one does not strive, one’s vows will be broken"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "4.4.4.2.1.2.2.3.2.3",
@@ -1440,16 +2374,210 @@
       "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
-          "ref": "7.60",
-          "currentPath": "4.4.4.2.1.2.2.3.2.4"
+          "ref": "7.59",
+          "currentPath": "4.4.4.2.1.2.2.3.2.2"
+        }
+      ]
+    },
+    {
+      "path": "4.4.4.2.1.4.2",
+      "title": "Finishing rest",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
         },
         {
-          "ref": "7.61",
-          "currentPath": "4.4.4.2.1.2.2.3.2.4"
+          "path": "4.4",
+          "title": "Effort"
         },
         {
-          "ref": "7.62",
-          "currentPath": "4.4.4.2.1.2.2.3.2.4"
+          "path": "4.4.4",
+          "title": "Fully developing effort"
+        },
+        {
+          "path": "4.4.4.2",
+          "title": "Extensively"
+        },
+        {
+          "path": "4.4.4.2.1",
+          "title": "Developing the array of powers"
+        },
+        {
+          "path": "4.4.4.2.1.4",
+          "title": "The power of rest"
+        },
+        {
+          "path": "4.4.4.2.1.4.2",
+          "title": "Finishing rest"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.1.2.3.1.1.3",
+      "title": "One’s misery knows no end",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.1",
+          "title": "Abandoning contradictory factors"
+        },
+        {
+          "path": "4.5.1.2",
+          "title": "Abandoning the world"
+        },
+        {
+          "path": "4.5.1.2.3",
+          "title": "How the antidotes are accomplished"
+        },
+        {
+          "path": "4.5.1.2.3.1",
+          "title": "Establishing non-attachment towards sentient beings"
+        },
+        {
+          "path": "4.5.1.2.3.1.1",
+          "title": "The faults of the subject with attachment"
+        },
+        {
+          "path": "4.5.1.2.3.1.1.3",
+          "title": "One’s misery knows no end"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.1.2.3.1.2.1",
+      "title": "They destroy great benefits",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.1",
+          "title": "Abandoning contradictory factors"
+        },
+        {
+          "path": "4.5.1.2",
+          "title": "Abandoning the world"
+        },
+        {
+          "path": "4.5.1.2.3",
+          "title": "How the antidotes are accomplished"
+        },
+        {
+          "path": "4.5.1.2.3.1",
+          "title": "Establishing non-attachment towards sentient beings"
+        },
+        {
+          "path": "4.5.1.2.3.1.2",
+          "title": "The faults of the desired object"
+        },
+        {
+          "path": "4.5.1.2.3.1.2.1",
+          "title": "They destroy great benefits"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.1.2.3.2.1",
+      "title": "The faults of the subject with attachment",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.1",
+          "title": "Abandoning contradictory factors"
+        },
+        {
+          "path": "4.5.1.2",
+          "title": "Abandoning the world"
+        },
+        {
+          "path": "4.5.1.2.3",
+          "title": "How the antidotes are accomplished"
+        },
+        {
+          "path": "4.5.1.2.3.2",
+          "title": "Establishing non-attachment towards possessions, etc"
+        },
+        {
+          "path": "4.5.1.2.3.2.1",
+          "title": "The faults of the subject with attachment"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.1.2.5.5",
+      "title": "Non-distraction",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.1",
+          "title": "Abandoning contradictory factors"
+        },
+        {
+          "path": "4.5.1.2",
+          "title": "Abandoning the world"
+        },
+        {
+          "path": "4.5.1.2.5",
+          "title": "The qualities of non-distraction"
+        },
+        {
+          "path": "4.5.1.2.5.5",
+          "title": "Non-distraction"
+        }
+      ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "8.34",
+          "currentPath": "4.6.2.3.1.4.4.2.2.2"
+        },
+        {
+          "ref": "8.35",
+          "currentPath": "4.6.2.3.1.4.4.2.2.2"
+        },
+        {
+          "ref": "8.36",
+          "currentPath": "4.6.2.3.1.4.4.2.2.2"
+        },
+        {
+          "ref": "8.37",
+          "currentPath": "4.6.2.3.1.4.4.2.2.2"
         }
       ]
     },
@@ -1490,14 +2618,18 @@
       "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
-          "ref": "8.45",
-          "currentPath": "4.5.1.3.2.1.3"
+          "ref": "8.43",
+          "currentPath": "4.5.1.3.2.1.1.2"
+        },
+        {
+          "ref": "8.44",
+          "currentPath": "4.5.1.3.2.1.1.2"
         }
       ]
     },
     {
-      "path": "4.5.3.2.3.2.3.1",
-      "title": "Developing the perspective of the assumed self",
+      "path": "4.5.2.1",
+      "title": "Its unique preeminence",
       "chain": [
         {
           "path": "4",
@@ -1508,36 +2640,234 @@
           "title": "Meditation"
         },
         {
-          "path": "4.5.3",
-          "title": "Focussing the mind on samatha"
+          "path": "4.5.2",
+          "title": "Developing joy in solitude"
         },
         {
-          "path": "4.5.3.2",
-          "title": "Exchanging oneself and others"
-        },
-        {
-          "path": "4.5.3.2.3",
-          "title": "Detailed explanation of the practices related to aspiration"
-        },
-        {
-          "path": "4.5.3.2.3.2",
-          "title": "Meditation on envy"
-        },
-        {
-          "path": "4.5.3.2.3.2.3",
-          "title": "The outcome of meditating like this"
-        },
-        {
-          "path": "4.5.3.2.3.2.3.1",
-          "title": "Developing the perspective of the assumed self"
+          "path": "4.5.2.1",
+          "title": "Its unique preeminence"
         }
       ],
       "classification": "expected_empty",
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.5.3.2.3.2.3.2",
-      "title": "Having patience with the harm they may cause",
+      "path": "4.5.3.1.3.2",
+      "title": "Establishing the pervasion of that",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.1",
+          "title": "Equalizing self and others"
+        },
+        {
+          "path": "4.5.3.1.3",
+          "title": "Equality in suffering as the object of abandonment"
+        },
+        {
+          "path": "4.5.3.1.3.2",
+          "title": "Establishing the pervasion of that"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.3.1.3.6",
+      "title": "Abandoning objections that it is not definitive",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.1",
+          "title": "Equalizing self and others"
+        },
+        {
+          "path": "4.5.3.1.3",
+          "title": "Equality in suffering as the object of abandonment"
+        },
+        {
+          "path": "4.5.3.1.3.6",
+          "title": "Abandoning objections that it is not definitive"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.3.1.4.4",
+      "title": "Disregarding the results",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.1",
+          "title": "Equalizing self and others"
+        },
+        {
+          "path": "4.5.3.1.4",
+          "title": "The qualities of meditating on equality"
+        },
+        {
+          "path": "4.5.3.1.4.4",
+          "title": "Disregarding the results"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.3.1.4.5",
+      "title": "Advice to strive in practising this",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.1",
+          "title": "Equalizing self and others"
+        },
+        {
+          "path": "4.5.3.1.4",
+          "title": "The qualities of meditating on equality"
+        },
+        {
+          "path": "4.5.3.1.4.5",
+          "title": "Advice to strive in practising this"
+        }
+      ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "8.110",
+          "currentPath": "4.5.3.2.2.1.4"
+        },
+        {
+          "ref": "8.117",
+          "currentPath": "4.5.3.2.2.1.4"
+        }
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.1.3",
+      "title": "Disregarding the results",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.2",
+          "title": "Exchanging oneself and others"
+        },
+        {
+          "path": "4.5.3.2.2",
+          "title": "Detailed explanation of the essential characteristics"
+        },
+        {
+          "path": "4.5.3.2.2.1",
+          "title": "Accepting others"
+        },
+        {
+          "path": "4.5.3.2.2.1.3",
+          "title": "Disregarding the results"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.3.2.2.2.4.2",
+      "title": "Nature",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.2",
+          "title": "Exchanging oneself and others"
+        },
+        {
+          "path": "4.5.3.2.2",
+          "title": "Detailed explanation of the essential characteristics"
+        },
+        {
+          "path": "4.5.3.2.2.2",
+          "title": "Abandoning clinging to ‘I’"
+        },
+        {
+          "path": "4.5.3.2.2.2.4",
+          "title": "Summary"
+        },
+        {
+          "path": "4.5.3.2.2.2.4.2",
+          "title": "Nature"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.3.2.3.2.3.5",
+      "title": "Abandoning conceit and giving up aggression towards the learned",
       "chain": [
         {
           "path": "4",
@@ -1568,20 +2898,112 @@
           "title": "The outcome of meditating like this"
         },
         {
-          "path": "4.5.3.2.3.2.3.2",
-          "title": "Having patience with the harm they may cause"
+          "path": "4.5.3.2.3.2.3.5",
+          "title": "Abandoning conceit and giving up aggression towards the learned"
         }
       ],
-      "classification": "suspicious_misassigned",
-      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
-      "sampleRefs": [
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.5.3.2.4.2.2.2",
+      "title": "Not giving away any control",
+      "chain": [
         {
-          "ref": "8.145",
-          "currentPath": "4.5.3.2.3.2.3.3",
-          "heading": "2. Having patience with the harm they may cause"
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.5",
+          "title": "Meditation"
+        },
+        {
+          "path": "4.5.3",
+          "title": "Focussing the mind on samatha"
+        },
+        {
+          "path": "4.5.3.2",
+          "title": "Exchanging oneself and others"
+        },
+        {
+          "path": "4.5.3.2.4",
+          "title": "Detailed explanation of the practices related to application"
+        },
+        {
+          "path": "4.5.3.2.4.2",
+          "title": "Controlling the mind for practice"
+        },
+        {
+          "path": "4.5.3.2.4.2.2",
+          "title": "The faults of activities for one’s own sake"
+        },
+        {
+          "path": "4.5.3.2.4.2.2.2",
+          "title": "Not giving away any control"
         }
       ],
-      "matchCount": 1
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.1.2",
+      "title": "Advice to strive in this",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.1",
+          "title": "Explaining that wisdom is the principal"
+        },
+        {
+          "path": "4.6.1.2",
+          "title": "Advice to strive in this"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.1.1.1.1",
+      "title": "Basis of the distinction",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.1",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.1.1",
+          "title": "The nature of the two truths in our tradition"
+        },
+        {
+          "path": "4.6.2.1.1.1",
+          "title": "Distinguishing the two truths"
+        },
+        {
+          "path": "4.6.2.1.1.1.1",
+          "title": "Basis of the distinction"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "4.6.2.1.1.1.2",
@@ -1620,42 +3042,6 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.6.2.1.1.1.3",
-      "title": "Ascertaining the number",
-      "chain": [
-        {
-          "path": "4",
-          "title": "The cooperating condition: subsequently accomplishing the training"
-        },
-        {
-          "path": "4.6",
-          "title": "Wisdom"
-        },
-        {
-          "path": "4.6.2",
-          "title": "It is the wisdom of the emptiness of intrinsic nature"
-        },
-        {
-          "path": "4.6.2.1",
-          "title": "Establishing the object as empty"
-        },
-        {
-          "path": "4.6.2.1.1",
-          "title": "The nature of the two truths in our tradition"
-        },
-        {
-          "path": "4.6.2.1.1.1",
-          "title": "Distinguishing the two truths"
-        },
-        {
-          "path": "4.6.2.1.1.1.3",
-          "title": "Ascertaining the number"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
       "path": "4.6.2.1.1.2",
       "title": "Their characteristics",
       "chain": [
@@ -1688,8 +3074,8 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.6.2.1.2.2.4",
-      "title": "To do with the distinction between saṃsāra and nirvāṇa",
+      "path": "4.6.2.1.2.2.1",
+      "title": "To do with the bases of accumulation",
       "chain": [
         {
           "path": "4",
@@ -1716,8 +3102,68 @@
           "title": "Abandoning the objections of Sautrāntikas"
         },
         {
-          "path": "4.6.2.1.2.2.4",
-          "title": "To do with the distinction between saṃsāra and nirvāṇa"
+          "path": "4.6.2.1.2.2.1",
+          "title": "To do with the bases of accumulation"
+        }
+      ],
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "9.9",
+          "currentPath": "4.6.2.1.2.2.4",
+          "heading": "1. To do with the bases of accumulation"
+        }
+      ],
+      "matchCount": 1
+    },
+    {
+      "path": "4.6.2.1.2.3.1.2.1.2.1",
+      "title": "Scriptural reference",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.1",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.1.2",
+          "title": "Abandoning objections"
+        },
+        {
+          "path": "4.6.2.1.2.3",
+          "title": "Abandoning objections of the Vijñaptimātrins"
+        },
+        {
+          "path": "4.6.2.1.2.3.1",
+          "title": "Non-establishment of the subject"
+        },
+        {
+          "path": "4.6.2.1.2.3.1.2",
+          "title": "Abandoning objections of the True Representationalists"
+        },
+        {
+          "path": "4.6.2.1.2.3.1.2.1",
+          "title": "Objecting that mind is an appearance"
+        },
+        {
+          "path": "4.6.2.1.2.3.1.2.1.2",
+          "title": "Establishing pervasion though scriptures"
+        },
+        {
+          "path": "4.6.2.1.2.3.1.2.1.2.1",
+          "title": "Scriptural reference"
         }
       ],
       "classification": "expected_empty",
@@ -1776,18 +3222,628 @@
       "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
+          "ref": "7.46",
+          "currentPath": "4.4.4.2.1.1.4"
+        },
+        {
           "ref": "7.46cd",
-          "currentPath": null
+          "currentPath": "4.4.4.2.1.1.4"
+        },
+        {
+          "ref": "9.95",
+          "currentPath": "4.6.2.3.1.2.1.1.2.3"
         },
         {
           "ref": "9.96ab",
-          "currentPath": "4.6.2.3.1.4.2.2.2"
+          "currentPath": "4.6.2.3.1.2.1.1.2.3"
         }
       ]
     },
     {
-      "path": "4.6.2.3.1.4.1.2.5.3",
-      "title": "General summary",
+      "path": "4.6.2.2.1.2.2.2",
+      "title": "Abandoning clinging to nonexistence",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.1",
+          "title": "Establishing subject cognition as the path"
+        },
+        {
+          "path": "4.6.2.2.1.2",
+          "title": "Response"
+        },
+        {
+          "path": "4.6.2.2.1.2.2",
+          "title": "Knowledge that everything is illusion is the antidote"
+        },
+        {
+          "path": "4.6.2.2.1.2.2.2",
+          "title": "Abandoning clinging to nonexistence"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.2.1.2.4.3.2",
+      "title": "Presenting the reason of scriptural citation",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.1",
+          "title": "Establishing subject cognition as the path"
+        },
+        {
+          "path": "4.6.2.2.1.2",
+          "title": "Response"
+        },
+        {
+          "path": "4.6.2.2.1.2.4",
+          "title": "Engaging in activity does not depend on effort"
+        },
+        {
+          "path": "4.6.2.2.1.2.4.3",
+          "title": "Abandoning an objection"
+        },
+        {
+          "path": "4.6.2.2.1.2.4.3.2",
+          "title": "Presenting the reason of scriptural citation"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.2.1.2.4.3.3",
+      "title": "Establishing the pervasion of that",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.1",
+          "title": "Establishing subject cognition as the path"
+        },
+        {
+          "path": "4.6.2.2.1.2",
+          "title": "Response"
+        },
+        {
+          "path": "4.6.2.2.1.2.4",
+          "title": "Engaging in activity does not depend on effort"
+        },
+        {
+          "path": "4.6.2.2.1.2.4.3",
+          "title": "Abandoning an objection"
+        },
+        {
+          "path": "4.6.2.2.1.2.4.3.3",
+          "title": "Establishing the pervasion of that"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.2.2.2",
+      "title": "The scriptural criterion for the path",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.2",
+          "title": "Abandoning the objections of śrāvakas"
+        },
+        {
+          "path": "4.6.2.2.2.2",
+          "title": "The scriptural criterion for the path"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.2.2.4.2",
+      "title": "The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.2",
+          "title": "Abandoning the objections of śrāvakas"
+        },
+        {
+          "path": "4.6.2.2.2.4",
+          "title": "Establishing them as definitive meaning"
+        },
+        {
+          "path": "4.6.2.2.2.4.2",
+          "title": "The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.2",
+          "title": "Abandoning the objections of śrāvakas"
+        },
+        {
+          "path": "4.6.2.2.2.4",
+          "title": "Establishing them as definitive meaning"
+        },
+        {
+          "path": "4.6.2.2.2.4.3",
+          "title": "Overcoming objections to that"
+        },
+        {
+          "path": "4.6.2.2.2.4.3.1",
+          "title": "The existence of the suffering of this life"
+        },
+        {
+          "path": "4.6.2.2.2.4.3.1.2",
+          "title": "Response"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.2.2.4.3.2.4",
+      "title": "The logical conclusion",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.2",
+          "title": "Establishing the object as empty"
+        },
+        {
+          "path": "4.6.2.2.2",
+          "title": "Abandoning the objections of śrāvakas"
+        },
+        {
+          "path": "4.6.2.2.2.4",
+          "title": "Establishing them as definitive meaning"
+        },
+        {
+          "path": "4.6.2.2.2.4.3",
+          "title": "Overcoming objections to that"
+        },
+        {
+          "path": "4.6.2.2.2.4.3.2",
+          "title": "The existence of the suffering of future lives"
+        },
+        {
+          "path": "4.6.2.2.2.4.3.2.4",
+          "title": "The logical conclusion"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.2.1.1.3.2",
+      "title": "This has the same fault that was previously explained",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.2",
+          "title": "Refuting the self of the skandhas and elements, etc. as designated by tīrthikas"
+        },
+        {
+          "path": "4.6.2.3.1.2.1",
+          "title": "Refuting Sāṃkhyas"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.1",
+          "title": "General refutation of the individual consciousness"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.1.3",
+          "title": "Abandoning objections"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.1.3.2",
+          "title": "This has the same fault that was previously explained"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.2.1.1.3.5",
+      "title": "Not conceivable as a singularity",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.2",
+          "title": "Refuting the self of the skandhas and elements, etc. as designated by tīrthikas"
+        },
+        {
+          "path": "4.6.2.3.1.2.1",
+          "title": "Refuting Sāṃkhyas"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.1",
+          "title": "General refutation of the individual consciousness"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.1.3",
+          "title": "Abandoning objections"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.1.3.5",
+          "title": "Not conceivable as a singularity"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.2.1.3.2.3",
+      "title": "The general case is not established",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.2",
+          "title": "Refuting the self of the skandhas and elements, etc. as designated by tīrthikas"
+        },
+        {
+          "path": "4.6.2.3.1.2.1",
+          "title": "Refuting Sāṃkhyas"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.3",
+          "title": "Refuting its single nature"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.3.2",
+          "title": "Answer"
+        },
+        {
+          "path": "4.6.2.3.1.2.1.3.2.3",
+          "title": "The general case is not established"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.2.2.3",
+      "title": "Summarized meaning",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.2",
+          "title": "Refuting the self of the skandhas and elements, etc. as designated by tīrthikas"
+        },
+        {
+          "path": "4.6.2.3.1.2.2",
+          "title": "Refuting Naiyāyikas"
+        },
+        {
+          "path": "4.6.2.3.1.2.2.3",
+          "title": "Summarized meaning"
+        }
+      ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "9.74",
+          "currentPath": "4.6.2.3.1.3.1.6"
+        }
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.3.1.4",
+      "title": "Abandoning contradiction to scripture",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.3",
+          "title": "Abandoning objections to non-self"
+        },
+        {
+          "path": "4.6.2.3.1.3.1",
+          "title": "Abandoning the objection that the connection of actions and effects is not logical"
+        },
+        {
+          "path": "4.6.2.3.1.3.1.4",
+          "title": "Abandoning contradiction to scripture"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.3.2.2.1",
+      "title": "Establishing that sentient beings are designated",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.3",
+          "title": "Abandoning objections to non-self"
+        },
+        {
+          "path": "4.6.2.3.1.3.2",
+          "title": "Abandoning the objection of objects of cultivating compassion being illogical"
+        },
+        {
+          "path": "4.6.2.3.1.3.2.2",
+          "title": "Response"
+        },
+        {
+          "path": "4.6.2.3.1.3.2.2.1",
+          "title": "Establishing that sentient beings are designated"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.3.2.2.4",
+      "title": "Abandoning that they are the same",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.3",
+          "title": "Abandoning objections to non-self"
+        },
+        {
+          "path": "4.6.2.3.1.3.2",
+          "title": "Abandoning the objection of objects of cultivating compassion being illogical"
+        },
+        {
+          "path": "4.6.2.3.1.3.2.2",
+          "title": "Response"
+        },
+        {
+          "path": "4.6.2.3.1.3.2.2.4",
+          "title": "Abandoning that they are the same"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.4.1.1",
+      "title": "The individual parts are not the body",
       "chain": [
         {
           "path": "4",
@@ -1818,20 +3874,25 @@
           "title": "Mindfulness of the body"
         },
         {
-          "path": "4.6.2.3.1.4.1.2",
-          "title": "An existent body which possesses the parts is not established"
-        },
-        {
-          "path": "4.6.2.3.1.4.1.2.5",
-          "title": "Establishing the delusion"
-        },
-        {
-          "path": "4.6.2.3.1.4.1.2.5.3",
-          "title": "General summary"
+          "path": "4.6.2.3.1.4.1.1",
+          "title": "The individual parts are not the body"
         }
       ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "9.78",
+          "currentPath": "4.6.2.3.1.4.1.2.5.3",
+          "heading": "1. The individual parts are not the body"
+        },
+        {
+          "ref": "9.79",
+          "currentPath": "4.6.2.3.1.4.1.2.5.3",
+          "heading": "1. The individual parts are not the body"
+        }
+      ],
+      "matchCount": 2
     },
     {
       "path": "4.6.2.3.1.4.2.1.1",
@@ -1883,12 +3944,17 @@
           "heading": "1. The non-establishment of suffering as ultimate"
         },
         {
+          "ref": "9.88",
+          "currentPath": "4.6.2.3.1.4.4.2.2.2",
+          "heading": "1. The non-establishment of suffering as ultimate"
+        },
+        {
           "ref": "9.88cd",
           "currentPath": "4.6.2.3.1.4.4.2.2.2",
           "heading": "1. The non-establishment of suffering as ultimate"
         }
       ],
-      "matchCount": 2
+      "matchCount": 3
     },
     {
       "path": "4.6.2.3.1.4.2.1.2",
@@ -1929,6 +3995,58 @@
         {
           "path": "4.6.2.3.1.4.2.1.2",
           "title": "The non-establishment of happiness as ultimate"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.3.1.4.2.2.1.2.2",
+      "title": "Establishing the reason",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.4",
+          "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
+        },
+        {
+          "path": "4.6.2.3.1.4.2",
+          "title": "Mindfulness of sensations"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.2",
+          "title": "The non-establishment of its cause: contact"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.2.1",
+          "title": "Objects not meeting with sense organs"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.2.1.2",
+          "title": "There is no contact with the subtle [particles]"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.2.1.2.2",
+          "title": "Establishing the reason"
         }
       ],
       "classification": "expected_empty",
@@ -1987,12 +4105,12 @@
       "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
-          "ref": "9.69cd",
-          "currentPath": "4.6.2.3.1.2.2.3"
+          "ref": "9.69",
+          "currentPath": "4.6.2.3.1.2.2.2"
         },
         {
-          "ref": "9.95",
-          "currentPath": null
+          "ref": "9.69cd",
+          "currentPath": "4.6.2.3.1.2.2.2"
         }
       ]
     },
@@ -2049,14 +4167,66 @@
       "reason": "Matching heading exists but context did not reliably match this leaf",
       "sampleRefs": [
         {
+          "ref": "7.46",
+          "currentPath": "4.4.4.2.1.1.4"
+        },
+        {
           "ref": "7.46cd",
-          "currentPath": null
+          "currentPath": "4.4.4.2.1.1.4"
+        },
+        {
+          "ref": "9.95",
+          "currentPath": "4.6.2.3.1.2.1.1.2.3"
         },
         {
           "ref": "9.96ab",
-          "currentPath": "4.6.2.3.1.4.2.2.2"
+          "currentPath": "4.6.2.3.1.2.1.1.2.3"
         }
       ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.2.3",
+      "title": "A composite completely refuted",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.4",
+          "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
+        },
+        {
+          "path": "4.6.2.3.1.4.2",
+          "title": "Mindfulness of sensations"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.2",
+          "title": "The non-establishment of its cause: contact"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.2.3",
+          "title": "A composite completely refuted"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "4.6.2.3.1.4.2.3",
@@ -2093,6 +4263,56 @@
         {
           "path": "4.6.2.3.1.4.2.3",
           "title": "The non-establishment of the object of sensation"
+        }
+      ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "9.99",
+          "currentPath": "4.6.2.3.1.4.4.2.2.2"
+        }
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.4.2",
+      "title": "No self-experience",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.3",
+          "title": "How to engage in meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.3.1",
+          "title": "How to engage in meditation on the non-self of the individual"
+        },
+        {
+          "path": "4.6.2.3.1.4",
+          "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
+        },
+        {
+          "path": "4.6.2.3.1.4.2",
+          "title": "Mindfulness of sensations"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.4",
+          "title": "The non-establishment of the subject"
+        },
+        {
+          "path": "4.6.2.3.1.4.2.4.2",
+          "title": "No self-experience"
         }
       ],
       "classification": "expected_empty",
@@ -2139,12 +4359,20 @@
           "title": "Concluding summary"
         }
       ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "9.101",
+          "currentPath": "4.6.2.3.1.4.2.4.3",
+          "heading": "4. Concluding summary"
+        }
+      ],
+      "matchCount": 1
     },
     {
-      "path": "4.6.2.3.1.4.4.1",
-      "title": "Establishing all as non-arising",
+      "path": "4.6.2.3.1.4.4.2.1",
+      "title": "Abandoning the objection that there is no relative",
       "chain": [
         {
           "path": "4",
@@ -2175,8 +4403,65 @@
           "title": "Mindfulness of dharmas"
         },
         {
-          "path": "4.6.2.3.1.4.4.1",
-          "title": "Establishing all as non-arising"
+          "path": "4.6.2.3.1.4.4.2",
+          "title": "Abandoning objections"
+        },
+        {
+          "path": "4.6.2.3.1.4.4.2.1",
+          "title": "Abandoning the objection that there is no relative"
+        }
+      ],
+      "classification": "suspicious_misassigned",
+      "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
+      "sampleRefs": [
+        {
+          "ref": "9.106",
+          "currentPath": "4.6.2.3.1.4.4.1",
+          "heading": "1. Abandoning the objection that there is no relative"
+        },
+        {
+          "ref": "9.107",
+          "currentPath": "4.6.2.3.1.4.4.1",
+          "heading": "1. Abandoning the objection that there is no relative"
+        }
+      ],
+      "matchCount": 2
+    },
+    {
+      "path": "4.6.2.4.2.1.1.4",
+      "title": "Differences of power in relation to cause",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.1",
+          "title": "Refuting arising from no cause"
+        },
+        {
+          "path": "4.6.2.4.2.1.1.4",
+          "title": "Differences of power in relation to cause"
         }
       ],
       "classification": "expected_empty",
@@ -2315,8 +4600,8 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.6.2.4.2.1.2.2.1.1.3",
-      "title": "Refuting Īśvara as self",
+      "path": "4.6.2.4.2.1.2.2.1.1.4",
+      "title": "Refuting Īśvara as inconceivable",
       "chain": [
         {
           "path": "4",
@@ -2359,16 +4644,138 @@
           "title": "Īśvara is not established"
         },
         {
-          "path": "4.6.2.4.2.1.2.2.1.1.3",
-          "title": "Refuting Īśvara as self"
+          "path": "4.6.2.4.2.1.2.2.1.1.4",
+          "title": "Refuting Īśvara as inconceivable"
+        }
+      ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "9.121ab",
+          "currentPath": "4.6.2.4.2.1.2.2.1.1.3"
+        }
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.2.2.1.3.3.1",
+      "title": "Everything being an effect of Īśvara contradicts his dependence",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.2",
+          "title": "Refuting arising from other"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2",
+          "title": "Refuting arising from a permanent other"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1",
+          "title": "Refuting arising from Īśvara"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3",
+          "title": "Contradictions in his being a creator"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3.3",
+          "title": "Refuting his dependence"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3.3.1",
+          "title": "Everything being an effect of Īśvara contradicts his dependence"
         }
       ],
       "classification": "expected_empty",
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
-      "path": "4.6.2.4.2.1.3.1.2",
-      "title": "The nature of the primal substance",
+      "path": "4.6.2.4.2.1.2.2.1.3.3.2.2",
+      "title": "Autonomy is violated",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.2",
+          "title": "Refuting arising from other"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2",
+          "title": "Refuting arising from a permanent other"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1",
+          "title": "Refuting arising from Īśvara"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3",
+          "title": "Contradictions in his being a creator"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3.3",
+          "title": "Refuting his dependence"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3.3.2",
+          "title": "Dependence is contrary to Īśvara"
+        },
+        {
+          "path": "4.6.2.4.2.1.2.2.1.3.3.2.2",
+          "title": "Autonomy is violated"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.2.1.3.1.3",
+      "title": "The nature of its effects",
       "chain": [
         {
           "path": "4",
@@ -2403,20 +4810,318 @@
           "title": "Formulating the position of the other [i.e. Sāṃkhya] tradition"
         },
         {
-          "path": "4.6.2.4.2.1.3.1.2",
-          "title": "The nature of the primal substance"
+          "path": "4.6.2.4.2.1.3.1.3",
+          "title": "The nature of its effects"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.2.1",
+      "title": "Refuting by not perceiving the appearance",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.3",
+          "title": "Refuting arising from self"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2",
+          "title": "The error in that"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.2",
+          "title": "Refuting pleasure and so forth being external"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.2.1",
+          "title": "Refuting by not perceiving the appearance"
+        }
+      ],
+      "classification": "ambiguous_empty",
+      "reason": "Matching heading exists but context did not reliably match this leaf",
+      "sampleRefs": [
+        {
+          "ref": "9.132ab",
+          "currentPath": "4.6.2.4.2.1.3.2.3.1"
+        },
+        {
+          "ref": "9.132",
+          "currentPath": "4.6.2.4.2.1.3.2.3.1"
+        },
+        {
+          "ref": "9.132cd",
+          "currentPath": "4.6.2.4.2.1.3.2.3.1"
+        }
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.2.2.4",
+      "title": "Not existing in reality",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.3",
+          "title": "Refuting arising from self"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2",
+          "title": "The error in that"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.2",
+          "title": "Refuting pleasure and so forth being external"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.2.2",
+          "title": "Refuting an external cause of pleasure and so forth"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.2.2.4",
+          "title": "Not existing in reality"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.3.2",
+      "title": "Gross and subtle are contradictory",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.3",
+          "title": "Refuting arising from self"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2",
+          "title": "The error in that"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.3",
+          "title": "A permanent primal substance is unreasonable"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.3.2",
+          "title": "Gross and subtle are contradictory"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.4.1",
+      "title": "Presenting the position to be refuted",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.3",
+          "title": "Refuting arising from self"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2",
+          "title": "The error in that"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.4",
+          "title": "Contradictions in an existent arising"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.4.1",
+          "title": "Presenting the position to be refuted"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.4.4.1",
+      "title": "The roles are the same",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.2",
+          "title": "Refutation of the tīrthikas’ position that the arising of the inherent nature of all dharmas is established"
+        },
+        {
+          "path": "4.6.2.4.2.1",
+          "title": "The main teaching on refuting an arising with intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4.2.1.3",
+          "title": "Refuting arising from self"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2",
+          "title": "The error in that"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.4",
+          "title": "Contradictions in an existent arising"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.4.4",
+          "title": "Abandoning objections"
+        },
+        {
+          "path": "4.6.2.4.2.1.3.2.4.4.1",
+          "title": "The roles are the same"
         }
       ],
       "classification": "suspicious_misassigned",
       "reason": "Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves",
       "sampleRefs": [
         {
-          "ref": "9.127cd",
-          "currentPath": "4.6.2.4.2.1.3.1.3",
-          "heading": "2. The nature of the primal substance"
+          "ref": "9.137ab",
+          "currentPath": "4.6.2.4.2.1.3.2.4.4.3",
+          "heading": "1. The roles [of cause and effect] are the same"
         }
       ],
       "matchCount": 1
+    },
+    {
+      "path": "4.6.2.4.3.3.1",
+      "title": "Showing that dependent origination is like an illusion",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.3",
+          "title": "Showing that all dharmas arise merely through dependent origination"
+        },
+        {
+          "path": "4.6.2.4.3.3",
+          "title": "The implication of that: that which is dependently originated is mere illusion"
+        },
+        {
+          "path": "4.6.2.4.3.3.1",
+          "title": "Showing that dependent origination is like an illusion"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
     },
     {
       "path": "4.6.2.4.3.3.2.1",
@@ -2579,6 +5284,190 @@
       "reason": "No direct mapping heading found for this leaf title"
     },
     {
+      "path": "4.6.2.4.3.3.3.1.2.1",
+      "title": "Presenting the logic in brief",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.3",
+          "title": "Showing that all dharmas arise merely through dependent origination"
+        },
+        {
+          "path": "4.6.2.4.3.3",
+          "title": "The implication of that: that which is dependently originated is mere illusion"
+        },
+        {
+          "path": "4.6.2.4.3.3.3",
+          "title": "Establishing the pervasion"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.1",
+          "title": "The logic"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.1.2",
+          "title": "Refuting something nonexistent arising as an effect"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.1.2.1",
+          "title": "Presenting the logic in brief"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.3.3.3.1.2.3",
+      "title": "Refuting [the cessation of] the object itself",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.3",
+          "title": "Showing that all dharmas arise merely through dependent origination"
+        },
+        {
+          "path": "4.6.2.4.3.3",
+          "title": "The implication of that: that which is dependently originated is mere illusion"
+        },
+        {
+          "path": "4.6.2.4.3.3.3",
+          "title": "Establishing the pervasion"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.1",
+          "title": "The logic"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.1.2",
+          "title": "Refuting something nonexistent arising as an effect"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.1.2.3",
+          "title": "Refuting [the cessation of] the object itself"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.4.3.3.3.2.3",
+      "title": "The sameness of existence and pacification",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.4",
+          "title": "Ceasing to grasp at true existence"
+        },
+        {
+          "path": "4.6.2.4.3",
+          "title": "Showing that all dharmas arise merely through dependent origination"
+        },
+        {
+          "path": "4.6.2.4.3.3",
+          "title": "The implication of that: that which is dependently originated is mere illusion"
+        },
+        {
+          "path": "4.6.2.4.3.3.3",
+          "title": "Establishing the pervasion"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.2",
+          "title": "Making certain of the reason"
+        },
+        {
+          "path": "4.6.2.4.3.3.3.2.3",
+          "title": "The sameness of existence and pacification"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
+      "path": "4.6.2.5.1.2.2.2.5",
+      "title": "It is difficult to abandon its causes",
+      "chain": [
+        {
+          "path": "4",
+          "title": "The cooperating condition: subsequently accomplishing the training"
+        },
+        {
+          "path": "4.6",
+          "title": "Wisdom"
+        },
+        {
+          "path": "4.6.2",
+          "title": "It is the wisdom of the emptiness of intrinsic nature"
+        },
+        {
+          "path": "4.6.2.5",
+          "title": "The result of meditation on emptiness"
+        },
+        {
+          "path": "4.6.2.5.1",
+          "title": "Benefit of self"
+        },
+        {
+          "path": "4.6.2.5.1.2",
+          "title": "Pacifying suffering"
+        },
+        {
+          "path": "4.6.2.5.1.2.2",
+          "title": "The invisible sufferings of other lives"
+        },
+        {
+          "path": "4.6.2.5.1.2.2.2",
+          "title": "Continuously experiencing suffering"
+        },
+        {
+          "path": "4.6.2.5.1.2.2.2.5",
+          "title": "It is difficult to abandon its causes"
+        }
+      ],
+      "classification": "expected_empty",
+      "reason": "No direct mapping heading found for this leaf title"
+    },
+    {
       "path": "5.1",
       "title": "Dedication related to the means",
       "chain": [
@@ -2589,102 +5478,6 @@
         {
           "path": "5.1",
           "title": "Dedication related to the means"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.1",
-      "title": "General dedication",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.1",
-          "title": "General dedication"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.1.1",
-      "title": "Dedication for general pacification",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.1",
-          "title": "Dedication for their own pacification of suffering"
-        },
-        {
-          "path": "5.2.1.2.1.1.1",
-          "title": "Dedication for general pacification"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.1.2",
-      "title": "Dedication for pacifying the cold hells",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.1",
-          "title": "Dedication for their own pacification of suffering"
-        },
-        {
-          "path": "5.2.1.2.1.1.2",
-          "title": "Dedication for pacifying the cold hells"
         }
       ],
       "classification": "expected_empty",
@@ -2725,482 +5518,6 @@
         {
           "path": "5.2.1.2.1.1.3.1",
           "title": "Dedication for pacifying the suffering of the main hells"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.1.3.2",
-      "title": "Dedication for pacifying the neighbouring hells",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.1",
-          "title": "Dedication for their own pacification of suffering"
-        },
-        {
-          "path": "5.2.1.2.1.1.3",
-          "title": "Dedication for pacifying the hot hells"
-        },
-        {
-          "path": "5.2.1.2.1.1.3.2",
-          "title": "Dedication for pacifying the neighbouring hells"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.2.1",
-      "title": "Pacification by Vajrapāṇi’s power",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.2",
-          "title": "Dedication for their pacification by others"
-        },
-        {
-          "path": "5.2.1.2.1.2.1",
-          "title": "Pacification by Vajrapāṇi’s power"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.2.2",
-      "title": "Pacification by Padmapāṇi’s compassion",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.2",
-          "title": "Dedication for their pacification by others"
-        },
-        {
-          "path": "5.2.1.2.1.2.2",
-          "title": "Pacification by Padmapāṇi’s compassion"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.2.3",
-      "title": "Pacification by Mañjughoṣa’s emanation",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.2",
-          "title": "Dedication for their pacification by others"
-        },
-        {
-          "path": "5.2.1.2.1.2.3",
-          "title": "Pacification by Mañjughoṣa’s emanation"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.1.2.4",
-      "title": "Pacification by the force of the other bodhisattvas’ proximity",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.1",
-          "title": "Dedication for the benefit of hell-beings"
-        },
-        {
-          "path": "5.2.1.2.1.2",
-          "title": "Dedication for their pacification by others"
-        },
-        {
-          "path": "5.2.1.2.1.2.4",
-          "title": "Pacification by the force of the other bodhisattvas’ proximity"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.2",
-      "title": "Dedication for the benefit of animals",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.2",
-          "title": "Dedication for the benefit of animals"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.2.3",
-      "title": "Dedication for the benefit of ghosts",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.2",
-          "title": "Dedication for the benefit of specific lower realms"
-        },
-        {
-          "path": "5.2.1.2.3",
-          "title": "Dedication for the benefit of ghosts"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.3.1",
-      "title": "Freedom from suffering",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.3",
-          "title": "Dedication for the benefit of the higher realms"
-        },
-        {
-          "path": "5.2.1.3.1",
-          "title": "Freedom from suffering"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.3.2.1.1",
-      "title": "Attaining wealth and possessions",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.3",
-          "title": "Dedication for the benefit of the higher realms"
-        },
-        {
-          "path": "5.2.1.3.2",
-          "title": "Attaining wishes"
-        },
-        {
-          "path": "5.2.1.3.2.1",
-          "title": "General dedication"
-        },
-        {
-          "path": "5.2.1.3.2.1.1",
-          "title": "Attaining wealth and possessions"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.3.2.1.2",
-      "title": "Entering the path of perfection",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.3",
-          "title": "Dedication for the benefit of the higher realms"
-        },
-        {
-          "path": "5.2.1.3.2",
-          "title": "Attaining wishes"
-        },
-        {
-          "path": "5.2.1.3.2.1",
-          "title": "General dedication"
-        },
-        {
-          "path": "5.2.1.3.2.1.2",
-          "title": "Entering the path of perfection"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.3.2.1.3",
-      "title": "Attaining worldly happiness",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.3",
-          "title": "Dedication for the benefit of the higher realms"
-        },
-        {
-          "path": "5.2.1.3.2",
-          "title": "Attaining wishes"
-        },
-        {
-          "path": "5.2.1.3.2.1",
-          "title": "General dedication"
-        },
-        {
-          "path": "5.2.1.3.2.1.3",
-          "title": "Attaining worldly happiness"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.1.3.2.2",
-      "title": "Dedication specific to monastics",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.1",
-          "title": "Dedication for worldly benefit"
-        },
-        {
-          "path": "5.2.1.3",
-          "title": "Dedication for the benefit of the higher realms"
-        },
-        {
-          "path": "5.2.1.3.2",
-          "title": "Attaining wishes"
-        },
-        {
-          "path": "5.2.1.3.2.2",
-          "title": "Dedication specific to monastics"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.2.2",
-      "title": "Dedication for transcendental benefit",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.2",
-          "title": "Dedication for the benefit of others"
-        },
-        {
-          "path": "5.2.2",
-          "title": "Dedication for transcendental benefit"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.3",
-      "title": "Dedication for the benefit of self",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.3",
-          "title": "Dedication for the benefit of self"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.4",
-      "title": "Dedication for the teachings to remain as a source of happiness",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.4",
-          "title": "Dedication for the teachings to remain as a source of happiness"
-        }
-      ],
-      "classification": "expected_empty",
-      "reason": "No direct mapping heading found for this leaf title"
-    },
-    {
-      "path": "5.5",
-      "title": "Homage of remembrance of kind ones",
-      "chain": [
-        {
-          "path": "5",
-          "title": "The subsequent results of the practice: dedication of merit"
-        },
-        {
-          "path": "5.5",
-          "title": "Homage of remembrance of kind ones"
         }
       ],
       "classification": "expected_empty",

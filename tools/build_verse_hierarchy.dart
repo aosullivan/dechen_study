@@ -478,7 +478,45 @@ void main() async {
         '4.3.2.1.4.3.2.2.3.2.1.5', // Confessing needless faults before the Sage
     '7.7ab': '4.4.3.2.2.4', // Impossible to hold back time
     '7.7cd': '4.4.3.2.2.5', // The time of death is too late
+    // 4.27 is split across two sibling leaves in commentary prose.
+    '4.27ab': '4.1.2.2.3.4.2', // One has clearly distinguished good from bad
+    '4.27cd': '4.1.2.2.3.4.3', // It is only logical, therefore, to persevere
+    // 8.145 is split across two sibling leaves.
+    '8.145ab':
+        '4.5.3.2.3.2.3.1', // Developing the perspective of the assumed self
+    '8.145cd':
+        '4.5.3.2.3.2.3.2', // Having patience with the harm they may cause
+    // Leaf-level remaps found in empty-leaf audits.
+    '5.33': '4.2.2.3.2.3', // An additional benefit
+    '5.39': '4.2.3.1.1.1.3', // In relation to other situations
+    '6.92': '4.3.2.1.4.3.2.1.1.2', // Mere joy is not meaningful
+    '6.93': '4.3.2.1.4.3.2.1.1.2', // Mere joy is not meaningful
+    '7.59': '4.4.4.2.1.2.2.3.2.2', // 'Pride' here does not mean defiled pride
+    '8.43': '4.5.1.3.2.1.1.2', // Obstructing the door to liberation
+    '8.44': '4.5.1.3.2.1.1.2', // Obstructing the door to liberation
+    '9.2ab': '4.6.2.1.1.1.3', // Ascertaining the number
+    '9.9':
+        '4.6.2.1.2.2.4', // To do with the distinction between saṃsāra and nirvāṇa
+    '9.78': '4.6.2.3.1.4.1.2.5.3', // General summary
+    '9.79': '4.6.2.3.1.4.1.2.5.3', // General summary
+    '9.101': '4.6.2.3.1.4.2.4.3', // No experiencer apart from those
+    '9.106': '4.6.2.3.1.4.4.1', // Establishing all as non-arising
+    '9.107': '4.6.2.3.1.4.4.1', // Establishing all as non-arising
+    '9.121ab': '4.6.2.4.2.1.2.2.1.1.3', // Refuting Īśvara as self
+    '9.121cd': '4.6.2.4.2.1.2.2.1.1.3', // Refuting Īśvara as self
+    '9.151':
+        '4.6.2.5.1.1.1', // The non-establishment of the eight worldly dharmas...
+    '9.152':
+        '4.6.2.5.1.1.1', // The non-establishment of the eight worldly dharmas...
+    '9.153':
+        '4.6.2.5.1.1.1', // The non-establishment of the eight worldly dharmas...
+    '9.154ab':
+        '4.6.2.5.1.1.1', // The non-establishment of the eight worldly dharmas...
   };
+  final baseRefsToDropWhenSplit = <String>[
+    '4.27',
+    '8.145',
+  ];
 
   OverviewNode? findNodeByPath(OverviewNode n, String path) {
     if (n.path == path) return n;
@@ -535,6 +573,9 @@ void main() async {
     removeVerseFromAll(root, e.key);
     final node = findNodeByPath(root, e.value);
     if (node != null) node.verses.add(e.key);
+  }
+  for (final ref in baseRefsToDropWhenSplit) {
+    removeVerseFromAll(root, ref);
   }
 
   // Build output: sections tree + verseToPath + sectionToFirstVerse for app lookup

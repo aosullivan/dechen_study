@@ -154,6 +154,21 @@ Audit outputs:
 - `texts/empty_leaf_audit.md` – human-readable summary
 - `texts/empty_leaf_audit.json` – machine-readable details
 
+Notes:
+
+- `tools/build_verse_hierarchy.dart` parses both bracketed refs (e.g. `[9.101]`) and standalone ref lines (e.g. `9.101`).
+
+Latest audit snapshot (from generated files):
+
+- Generated: `2026-02-19T03:24:34.503Z`
+- Total leaves: `738`
+- Empty leaves: `140`
+- Expected empty: `115`
+- Suspicious misassigned: `10`
+- Ambiguous empty: `15`
+- Index inconsistencies: `0`
+- Quoted-heading follow-up candidates: `16` (see `texts/expected_empty_quoted_candidates.json`)
+
 ## Tests
 
 ```bash

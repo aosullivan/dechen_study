@@ -1,0 +1,2911 @@
+{
+  "summary": {
+    "expected_empty_total": 115,
+    "title_found_in_mapping": 206,
+    "found_with_direct_refs": 54,
+    "found_with_zero_refs_block": 152
+  },
+  "withRefs": [
+    {
+      "path": "1.3.3.3",
+      "title": "Yet, in dependence upon that, there is benefit for others",
+      "heading": "3.\tYet, in dependence upon that, there is benefit for others",
+      "start": 112,
+      "end": 113,
+      "quoteLines": 0,
+      "refs": [
+        "1.2"
+      ],
+      "nextRefs": [
+        "1.2",
+        "1.3ab",
+        "1.3",
+        "1.3cd"
+      ]
+    },
+    {
+      "path": "3.1.1.3.6",
+      "title": "Other specific examples",
+      "heading": "6.\tOther specific examples",
+      "start": 323,
+      "end": 324,
+      "quoteLines": 0,
+      "refs": [
+        "1.10"
+      ],
+      "nextRefs": [
+        "1.10",
+        "1.11",
+        "1.11",
+        "1.12"
+      ]
+    },
+    {
+      "path": "3.2.1.1.6",
+      "title": "Offering homage",
+      "heading": "6.\tOffering homage",
+      "start": 619,
+      "end": 621,
+      "quoteLines": 0,
+      "refs": [
+        "2.1"
+      ],
+      "nextRefs": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6"
+      ]
+    },
+    {
+      "path": "3.2.1.2.3",
+      "title": "Nature",
+      "heading": "2. Nature",
+      "start": 6220,
+      "end": 6223,
+      "quoteLines": 2,
+      "refs": [
+        "8.137"
+      ],
+      "nextRefs": [
+        "8.137",
+        "8.138",
+        "8.138",
+        "8.139"
+      ]
+    },
+    {
+      "path": "4.1.2.3.3.1.4",
+      "title": "The essential characteristic of their not returning",
+      "heading": "4.\tThe essential characteristic of their not returning",
+      "start": 2068,
+      "end": 2069,
+      "quoteLines": 0,
+      "refs": [
+        "4.45ab"
+      ],
+      "nextRefs": [
+        "4.45",
+        "4.45cd",
+        "4.46ab",
+        "4.46",
+        "4.46cd"
+      ]
+    },
+    {
+      "path": "4.1.2.3.3.1.4",
+      "title": "The essential characteristic of their not returning",
+      "heading": "4. The essential characteristic of their not returning",
+      "start": 2086,
+      "end": 2091,
+      "quoteLines": 2,
+      "refs": [
+        "4.47"
+      ],
+      "nextRefs": [
+        "4.47",
+        "4.48ab",
+        "4.48",
+        "4.48cd"
+      ]
+    },
+    {
+      "path": "4.2.1.1.2",
+      "title": "Showing the reverse pervasion",
+      "heading": "2. Showing the reverse pervasion",
+      "start": 2132,
+      "end": 2135,
+      "quoteLines": 2,
+      "refs": [
+        "5.2"
+      ],
+      "nextRefs": [
+        "5.2",
+        "5.3",
+        "5.3",
+        "5.4",
+        "5.5"
+      ]
+    },
+    {
+      "path": "4.2.1.3.2",
+      "title": "Everything is accomplished by it",
+      "heading": "2. Everything is accomplished by it",
+      "start": 2293,
+      "end": 2297,
+      "quoteLines": 2,
+      "refs": [
+        "5.19"
+      ],
+      "nextRefs": [
+        "5.19",
+        "5.20",
+        "5.20",
+        "5.21"
+      ]
+    },
+    {
+      "path": "4.2.3.1.1.1.4",
+      "title": "Preparing and checking oneself",
+      "heading": "4.\tPreparing and checking oneself",
+      "start": 2456,
+      "end": 2457,
+      "quoteLines": 0,
+      "refs": [
+        "5.34"
+      ],
+      "nextRefs": [
+        "5.34",
+        "5.35",
+        "5.36",
+        "5.37",
+        "5.38",
+        "5.35"
+      ]
+    },
+    {
+      "path": "4.2.3.1.1.3.2",
+      "title": "Referencing a scriptural source for that",
+      "heading": "2. Referencing a scriptural source for that",
+      "start": 2529,
+      "end": 2533,
+      "quoteLines": 2,
+      "refs": [
+        "5.43"
+      ],
+      "nextRefs": [
+        "5.43",
+        "5.44ab",
+        "5.44",
+        "5.44cd"
+      ]
+    },
+    {
+      "path": "4.2.3.2.2.2.3",
+      "title": "How to respond to those who are creating merit",
+      "heading": "3. How to respond to those who are creating merit",
+      "start": 2800,
+      "end": 2804,
+      "quoteLines": 2,
+      "refs": [
+        "5.76"
+      ],
+      "nextRefs": [
+        "5.76",
+        "5.77",
+        "5.78",
+        "5.77",
+        "5.78"
+      ]
+    },
+    {
+      "path": "4.2.3.2.2.3.3.2",
+      "title": "Fields",
+      "heading": "2. Fields",
+      "start": 2858,
+      "end": 2862,
+      "quoteLines": 1,
+      "refs": [
+        "5.82"
+      ],
+      "nextRefs": [
+        "5.82",
+        "5.83",
+        "5.83"
+      ]
+    },
+    {
+      "path": "4.2.3.4.4.2",
+      "title": "One should rely upon him",
+      "heading": "2. One should rely upon him",
+      "start": 3047,
+      "end": 3050,
+      "quoteLines": 0,
+      "refs": [
+        "5.103"
+      ],
+      "nextRefs": [
+        "5.103",
+        "5.104",
+        "5.105",
+        "5.106",
+        "5.104",
+        "5.105"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.2.2.1",
+      "title": "Refuting the position of the Sāṃkhyas",
+      "heading": "1. Refuting the position of the Sāṃkhyas",
+      "start": 3376,
+      "end": 3381,
+      "quoteLines": 2,
+      "refs": [
+        "6.27"
+      ],
+      "nextRefs": [
+        "6.28",
+        "6.28",
+        "6.29",
+        "6.30"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.3.3.6.2",
+      "title": "Abandoning the objection that it is illogical to say one harms others",
+      "heading": "2. Abandoning the objection that it is illogical to say one harms others",
+      "start": 3615,
+      "end": 3622,
+      "quoteLines": 2,
+      "refs": [
+        "6.51"
+      ],
+      "nextRefs": [
+        "6.51"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.3.2.2.3.1.3.5.2",
+      "title": "Different qualities",
+      "heading": "2. Different qualities",
+      "start": 4195,
+      "end": 4198,
+      "quoteLines": 2,
+      "refs": [
+        "6.117",
+        "6.118"
+      ],
+      "nextRefs": [
+        "6.117",
+        "6.118"
+      ]
+    },
+    {
+      "path": "4.4.4.2.1.2.2.3.1.5",
+      "title": "If one does not strive, one’s vows will be broken",
+      "heading": "5.\tIf one does not strive, one’s vows will be broken",
+      "start": 4820,
+      "end": 4821,
+      "quoteLines": 0,
+      "refs": [
+        "7.52"
+      ],
+      "nextRefs": [
+        "7.52",
+        "7.53ab",
+        "7.53",
+        "7.53cd"
+      ]
+    },
+    {
+      "path": "4.4.4.2.1.4.2",
+      "title": "Finishing rest",
+      "heading": "2.\tFinishing rest",
+      "start": 4955,
+      "end": 4956,
+      "quoteLines": 0,
+      "refs": [
+        "7.67ab"
+      ],
+      "nextRefs": [
+        "7.67",
+        "7.67cd"
+      ]
+    },
+    {
+      "path": "4.5.1.2.3.1.1.3",
+      "title": "One’s misery knows no end",
+      "heading": "3. One’s misery knows no end",
+      "start": 5114,
+      "end": 5117,
+      "quoteLines": 2,
+      "refs": [
+        "8.7"
+      ],
+      "nextRefs": [
+        "8.7",
+        "8.8ab",
+        "8.8",
+        "8.8cd"
+      ]
+    },
+    {
+      "path": "4.5.1.2.3.1.2.1",
+      "title": "They destroy great benefits",
+      "heading": "1. They destroy great benefits",
+      "start": 5139,
+      "end": 5143,
+      "quoteLines": 1,
+      "refs": [
+        "8.9"
+      ],
+      "nextRefs": [
+        "8.9",
+        "8.10",
+        "8.10",
+        "8.11"
+      ]
+    },
+    {
+      "path": "4.5.3.1.3.2",
+      "title": "Establishing the pervasion of that",
+      "heading": "3.\tEstablishing the pervasion of that",
+      "start": 7307,
+      "end": 7308,
+      "quoteLines": 0,
+      "refs": [
+        "9.38ab"
+      ],
+      "nextRefs": [
+        "9.38",
+        "9.38cd",
+        "9.39"
+      ]
+    },
+    {
+      "path": "4.5.3.1.3.6",
+      "title": "Abandoning objections that it is not definitive",
+      "heading": "6.\tAbandoning objections that it is not definitive",
+      "start": 5825,
+      "end": 5826,
+      "quoteLines": 0,
+      "refs": [
+        "8.94"
+      ],
+      "nextRefs": [
+        "8.94",
+        "8.95",
+        "8.96",
+        "8.95",
+        "8.96"
+      ]
+    },
+    {
+      "path": "4.5.3.1.4.4",
+      "title": "Disregarding the results",
+      "heading": "4. Disregarding the results",
+      "start": 5980,
+      "end": 5983,
+      "quoteLines": 2,
+      "refs": [
+        "8.110"
+      ],
+      "nextRefs": [
+        "8.110",
+        "8.111",
+        "8.112",
+        "8.111",
+        "8.112"
+      ]
+    },
+    {
+      "path": "4.5.3.1.4.4",
+      "title": "Disregarding the results",
+      "heading": "3. Disregarding the results",
+      "start": 6060,
+      "end": 6063,
+      "quoteLines": 2,
+      "refs": [
+        "8.117"
+      ],
+      "nextRefs": [
+        "8.117",
+        "8.118",
+        "8.118",
+        "8.119"
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.1.3",
+      "title": "Disregarding the results",
+      "heading": "4. Disregarding the results",
+      "start": 5980,
+      "end": 5983,
+      "quoteLines": 2,
+      "refs": [
+        "8.110"
+      ],
+      "nextRefs": [
+        "8.110",
+        "8.111",
+        "8.112",
+        "8.111",
+        "8.112"
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.1.3",
+      "title": "Disregarding the results",
+      "heading": "3. Disregarding the results",
+      "start": 6060,
+      "end": 6063,
+      "quoteLines": 2,
+      "refs": [
+        "8.117"
+      ],
+      "nextRefs": [
+        "8.117",
+        "8.118",
+        "8.118",
+        "8.119"
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.2.4.2",
+      "title": "Nature",
+      "heading": "2. Nature",
+      "start": 6220,
+      "end": 6223,
+      "quoteLines": 2,
+      "refs": [
+        "8.137"
+      ],
+      "nextRefs": [
+        "8.137",
+        "8.138",
+        "8.138",
+        "8.139"
+      ]
+    },
+    {
+      "path": "4.5.3.2.3.2.3.5",
+      "title": "Abandoning conceit and giving up aggression towards the learned",
+      "heading": "5. Abandoning conceit and giving up aggression towards the learned",
+      "start": 6322,
+      "end": 6325,
+      "quoteLines": 2,
+      "refs": [
+        "8.147",
+        "8.148",
+        "8.149",
+        "8.150"
+      ],
+      "nextRefs": [
+        "8.147",
+        "8.148",
+        "8.149",
+        "8.150"
+      ]
+    },
+    {
+      "path": "4.5.3.2.4.2.2.2",
+      "title": "Not giving away any control",
+      "heading": "2. Not giving away any control",
+      "start": 6528,
+      "end": 6532,
+      "quoteLines": 1,
+      "refs": [
+        "8.170"
+      ],
+      "nextRefs": [
+        "8.170",
+        "8.171",
+        "8.171",
+        "8.172",
+        "8.173"
+      ]
+    },
+    {
+      "path": "4.6.1.2",
+      "title": "Advice to strive in this",
+      "heading": "2.\tAdvice to strive in this",
+      "start": 6688,
+      "end": 6689,
+      "quoteLines": 0,
+      "refs": [
+        "9.1ab"
+      ],
+      "nextRefs": [
+        "9.1",
+        "9.1cd"
+      ]
+    },
+    {
+      "path": "4.6.2.1.2.3.1.2.1.2.1",
+      "title": "Scriptural reference",
+      "heading": "1. Scriptural reference",
+      "start": 7050,
+      "end": 7057,
+      "quoteLines": 2,
+      "refs": [
+        "9.18"
+      ],
+      "nextRefs": [
+        "9.18",
+        "9.19",
+        "9.19",
+        "9.20"
+      ]
+    },
+    {
+      "path": "4.6.2.2.1.2.2.2",
+      "title": "Abandoning clinging to nonexistence",
+      "heading": "2. Abandoning clinging to nonexistence",
+      "start": 7253,
+      "end": 7258,
+      "quoteLines": 2,
+      "refs": [
+        "9.33"
+      ],
+      "nextRefs": [
+        "9.33",
+        "9.34",
+        "9.34"
+      ]
+    },
+    {
+      "path": "4.6.2.2.1.2.4.3.2",
+      "title": "Presenting the reason of scriptural citation",
+      "heading": "2. Presenting the reason of scriptural citation",
+      "start": 7315,
+      "end": 7325,
+      "quoteLines": 2,
+      "refs": [
+        "9.39"
+      ],
+      "nextRefs": [
+        "9.39"
+      ]
+    },
+    {
+      "path": "4.6.2.2.1.2.4.3.3",
+      "title": "Establishing the pervasion of that",
+      "heading": "3.\tEstablishing the pervasion of that",
+      "start": 7307,
+      "end": 7308,
+      "quoteLines": 0,
+      "refs": [
+        "9.38ab"
+      ],
+      "nextRefs": [
+        "9.38",
+        "9.38cd",
+        "9.39"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "heading": "2.\tResponse",
+      "start": 7218,
+      "end": 7219,
+      "quoteLines": 0,
+      "refs": [
+        "9.30"
+      ],
+      "nextRefs": [
+        "9.30",
+        "9.31"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "heading": "2.\tResponse",
+      "start": 7807,
+      "end": 7808,
+      "quoteLines": 0,
+      "refs": [
+        "9.75ab"
+      ],
+      "nextRefs": [
+        "9.75",
+        "9.75cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.2.4",
+      "title": "The logical conclusion",
+      "heading": "4.\tThe logical conclusion",
+      "start": 7398,
+      "end": 7399,
+      "quoteLines": 0,
+      "refs": [
+        "9.44ab"
+      ],
+      "nextRefs": [
+        "9.44",
+        "9.44cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.2.4",
+      "title": "The logical conclusion",
+      "heading": "4. The logical conclusion",
+      "start": 7468,
+      "end": 7471,
+      "quoteLines": 2,
+      "refs": [
+        "9.48"
+      ],
+      "nextRefs": [
+        "9.48",
+        "9.49",
+        "9.50",
+        "9.49",
+        "9.50",
+        "9.51"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.2.1.1.3.2",
+      "title": "This has the same fault that was previously explained",
+      "heading": "2. This has the same fault that was previously explained",
+      "start": 7648,
+      "end": 7652,
+      "quoteLines": 2,
+      "refs": [
+        "9.63"
+      ],
+      "nextRefs": [
+        "9.63",
+        "9.64ab",
+        "9.64",
+        "9.64cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.2.1.1.3.5",
+      "title": "Not conceivable as a singularity",
+      "heading": "5.\tNot conceivable as a singularity",
+      "start": 7638,
+      "end": 7639,
+      "quoteLines": 0,
+      "refs": [
+        "9.62ab"
+      ],
+      "nextRefs": [
+        "9.62",
+        "9.62cd",
+        "9.63"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.2.1.1.3.5",
+      "title": "Not conceivable as a singularity",
+      "heading": "5. Not conceivable as a singularity",
+      "start": 7671,
+      "end": 7676,
+      "quoteLines": 2,
+      "refs": [
+        "9.65"
+      ],
+      "nextRefs": [
+        "9.65"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.3.1.4",
+      "title": "Abandoning contradiction to scripture",
+      "heading": "4. Abandoning contradiction to scripture",
+      "start": 7784,
+      "end": 7789,
+      "quoteLines": 2,
+      "refs": [
+        "9.73"
+      ],
+      "nextRefs": [
+        "9.73",
+        "9.74",
+        "9.74"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.3.2.2.4",
+      "title": "Abandoning that they are the same",
+      "heading": "4.\tAbandoning that they are the same",
+      "start": 7827,
+      "end": 7828,
+      "quoteLines": 0,
+      "refs": [
+        "9.76ab"
+      ],
+      "nextRefs": [
+        "9.76",
+        "9.76cd",
+        "9.77ab"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.2.3",
+      "title": "A composite completely refuted",
+      "heading": "3. A composite completely refuted",
+      "start": 8083,
+      "end": 8090,
+      "quoteLines": 2,
+      "refs": [
+        "9.97"
+      ],
+      "nextRefs": [
+        "9.97",
+        "9.98",
+        "9.98",
+        "9.99"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.1.4",
+      "title": "Differences of power in relation to cause",
+      "heading": "4.\tDifferences of power in relation to cause",
+      "start": 8342,
+      "end": 8343,
+      "quoteLines": 0,
+      "refs": [
+        "9.116ab"
+      ],
+      "nextRefs": [
+        "9.116",
+        "9.116cd",
+        "9.117ab"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.2.2.1.3.3.2.2",
+      "title": "Autonomy is violated",
+      "heading": "2. Autonomy is violated",
+      "start": 8495,
+      "end": 8499,
+      "quoteLines": 1,
+      "refs": [
+        "9.125"
+      ],
+      "nextRefs": [
+        "9.125",
+        "9.126ab",
+        "9.126",
+        "9.126cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.2.2.4",
+      "title": "Not existing in reality",
+      "heading": "4.\tNot existing in reality",
+      "start": 8586,
+      "end": 8587,
+      "quoteLines": 0,
+      "refs": [
+        "9.130ab"
+      ],
+      "nextRefs": [
+        "9.130",
+        "9.130cd",
+        "9.131ab",
+        "9.131",
+        "9.131cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.3.2",
+      "title": "Gross and subtle are contradictory",
+      "heading": "2. Gross and subtle are contradictory",
+      "start": 8627,
+      "end": 8632,
+      "quoteLines": 2,
+      "refs": [
+        "9.133"
+      ],
+      "nextRefs": [
+        "9.133",
+        "9.134ab",
+        "9.134",
+        "9.134cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.4.1",
+      "title": "Presenting the position to be refuted",
+      "heading": "1. Presenting the position to be refuted",
+      "start": 8655,
+      "end": 8660,
+      "quoteLines": 2,
+      "refs": [
+        "9.135"
+      ],
+      "nextRefs": [
+        "9.135",
+        "9.136ab",
+        "9.136",
+        "9.136cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.1",
+      "title": "Showing that dependent origination is like an illusion",
+      "heading": "1. Showing that dependent origination is like an illusion",
+      "start": 8754,
+      "end": 8758,
+      "quoteLines": 2,
+      "refs": [
+        "9.143",
+        "9.144"
+      ],
+      "nextRefs": [
+        "9.143",
+        "9.144"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.3.1.2.1",
+      "title": "Presenting the logic in brief",
+      "heading": "1. Presenting the logic in brief",
+      "start": 8808,
+      "end": 8812,
+      "quoteLines": 2,
+      "refs": [
+        "9.146",
+        "9.147",
+        "9.148"
+      ],
+      "nextRefs": [
+        "9.146",
+        "9.147",
+        "9.148"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.3.2.3",
+      "title": "The sameness of existence and pacification",
+      "heading": "3.\tThe sameness of existence and pacification",
+      "start": 8847,
+      "end": 8848,
+      "quoteLines": 0,
+      "refs": [
+        "9.149"
+      ],
+      "nextRefs": [
+        "9.149",
+        "9.150ab",
+        "9.150",
+        "9.150cd"
+      ]
+    },
+    {
+      "path": "4.6.2.5.1.2.2.2.5",
+      "title": "It is difficult to abandon its causes",
+      "heading": "5.\tIt is difficult to abandon its causes",
+      "start": 8950,
+      "end": 8951,
+      "quoteLines": 0,
+      "refs": [
+        "9.157"
+      ],
+      "nextRefs": [
+        "9.157",
+        "9.158",
+        "9.159",
+        "9.160",
+        "9.158",
+        "9.159"
+      ]
+    },
+    {
+      "path": "4.6.2.5.1.2.2.2.5",
+      "title": "It is difficult to abandon its causes",
+      "heading": "5. It is difficult to abandon its causes",
+      "start": 9001,
+      "end": 9005,
+      "quoteLines": 2,
+      "refs": [
+        "9.163",
+        "9.164"
+      ],
+      "nextRefs": [
+        "9.163",
+        "9.164",
+        "9.165"
+      ]
+    }
+  ],
+  "noRefs": [
+    {
+      "path": "1.2.2",
+      "title": "The condensed meaning of the commitment to compose",
+      "heading": "2. The condensed meaning of the commitment to compose",
+      "start": 64,
+      "end": 64,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.1ab",
+        "1.1",
+        "1.1cd"
+      ]
+    },
+    {
+      "path": "1.2.3",
+      "title": "The condensed meaning of discarding pride",
+      "heading": "3. The condensed meaning of discarding pride",
+      "start": 68,
+      "end": 68,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.1ab",
+        "1.1",
+        "1.1cd"
+      ]
+    },
+    {
+      "path": "1.3.2.1",
+      "title": "Setting out the subject matter to be elaborated",
+      "heading": "1.\tSetting out the subject matter to be elaborated",
+      "start": 92,
+      "end": 92,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.3.2.1",
+      "title": "Setting out the subject matter to be elaborated",
+      "heading": "1. Setting out the subject matter to be elaborated",
+      "start": 95,
+      "end": 97,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.3.2.2",
+      "title": "Abandoning personal invention",
+      "heading": "2.\tAbandoning personal invention",
+      "start": 93,
+      "end": 93,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.3.2.2",
+      "title": "Abandoning personal invention",
+      "heading": "2. Abandoning personal invention",
+      "start": 102,
+      "end": 104,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.2",
+        "1.2",
+        "1.3ab"
+      ]
+    },
+    {
+      "path": "1.3.2.3",
+      "title": "Abandoning the fault of repetition",
+      "heading": "3.\tAbandoning the fault of repetition",
+      "start": 94,
+      "end": 94,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.3.2.3",
+      "title": "Abandoning the fault of repetition",
+      "heading": "3. Abandoning the fault of repetition",
+      "start": 105,
+      "end": 108,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.2",
+        "1.2",
+        "1.3ab"
+      ]
+    },
+    {
+      "path": "1.3.3.3",
+      "title": "Yet, in dependence upon that, there is benefit for others",
+      "heading": "3. Yet, in dependence upon that, there is benefit for others",
+      "start": 131,
+      "end": 134,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.4.1.2",
+      "title": "The condensed meaning",
+      "heading": "2.\tThe condensed meaning",
+      "start": 137,
+      "end": 137,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.4.1.2",
+      "title": "The condensed meaning",
+      "heading": "2. The condensed meaning",
+      "start": 141,
+      "end": 142,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.4.1.3",
+      "title": "The literal meaning",
+      "heading": "3.\tThe literal meaning",
+      "start": 138,
+      "end": 138,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "1.4.1.3",
+      "title": "The literal meaning",
+      "heading": "3. The literal meaning",
+      "start": 152,
+      "end": 161,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "2.1.1",
+      "title": "Their nature",
+      "heading": "1.\tTheir nature",
+      "start": 211,
+      "end": 211,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "2.1.1",
+      "title": "Their nature",
+      "heading": "1. Their nature",
+      "start": 214,
+      "end": 225,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.5ab",
+        "1.5",
+        "1.5cd"
+      ]
+    },
+    {
+      "path": "2.1.2",
+      "title": "Difficult to acquire",
+      "heading": "2.\tDifficult to acquire",
+      "start": 212,
+      "end": 212,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "2.1.2",
+      "title": "Difficult to acquire",
+      "heading": "2. Difficult to acquire",
+      "start": 226,
+      "end": 227,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.5ab",
+        "1.5",
+        "1.5cd"
+      ]
+    },
+    {
+      "path": "3.1.1.3.6",
+      "title": "Other specific examples",
+      "heading": "6. Other specific examples",
+      "start": 363,
+      "end": 372,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "1.15",
+        "1.15",
+        "1.16"
+      ]
+    },
+    {
+      "path": "3.1.3.2.2.2.1",
+      "title": "Those possessing the cause—ignorance",
+      "heading": "1.\tThose possessing the cause—ignorance",
+      "start": 541,
+      "end": 541,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.31",
+        "1.31",
+        "1.32",
+        "1.33"
+      ]
+    },
+    {
+      "path": "3.1.3.2.2.2.2",
+      "title": "Those experiencing result—destitution of happiness",
+      "heading": "2.\tThose experiencing result—destitution of happiness",
+      "start": 542,
+      "end": 542,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.31",
+        "1.31",
+        "1.32",
+        "1.33",
+        "1.32",
+        "1.33"
+      ]
+    },
+    {
+      "path": "3.1.3.2.2.2.3",
+      "title": "Those tormented by suffering",
+      "heading": "3.\tThose tormented by suffering",
+      "start": 543,
+      "end": 543,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "1.31",
+        "1.31",
+        "1.32",
+        "1.33",
+        "1.32",
+        "1.33"
+      ]
+    },
+    {
+      "path": "3.2.1.1.6",
+      "title": "Offering homage",
+      "heading": "6. Offering homage",
+      "start": 795,
+      "end": 795,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "2.23",
+        "2.23",
+        "2.24",
+        "2.25",
+        "2.24",
+        "2.25"
+      ]
+    },
+    {
+      "path": "3.2.1.2.1",
+      "title": "Classifications",
+      "heading": "1.\tClassifications",
+      "start": 829,
+      "end": 829,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.1",
+      "title": "Classifications",
+      "heading": "1. Classifications",
+      "start": 836,
+      "end": 836,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.2",
+      "title": "Explaining their distinguishing characteristics",
+      "heading": "2.\tExplaining their distinguishing characteristics",
+      "start": 830,
+      "end": 830,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.2",
+      "title": "Explaining their distinguishing characteristics",
+      "heading": "2. Explaining their distinguishing characteristics",
+      "start": 837,
+      "end": 845,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.3",
+      "title": "Nature",
+      "heading": "3.\tNature",
+      "start": 831,
+      "end": 831,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.3",
+      "title": "Nature",
+      "heading": "3. Nature",
+      "start": 846,
+      "end": 847,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.3",
+      "title": "Nature",
+      "heading": "2.\tNature",
+      "start": 6210,
+      "end": 6210,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.136ab",
+        "8.136",
+        "8.136cd",
+        "8.137"
+      ]
+    },
+    {
+      "path": "3.2.1.2.4",
+      "title": "Distinction of resultant refuge and generation of aspiration bodhicitta",
+      "heading": "4.\tDistinction of resultant refuge and generation of aspiration bodhicitta",
+      "start": 832,
+      "end": 832,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.5",
+      "title": "Purpose",
+      "heading": "5.\tPurpose",
+      "start": 833,
+      "end": 833,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.5",
+      "title": "Purpose",
+      "heading": "5. Purpose",
+      "start": 850,
+      "end": 851,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.6",
+      "title": "The meaning of the term ‘refuge’",
+      "heading": "6.\tThe meaning of the term ‘refuge’",
+      "start": 834,
+      "end": 834,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.6",
+      "title": "The meaning of the term ‘refuge’",
+      "heading": "6. The meaning of the term ‘refuge’",
+      "start": 852,
+      "end": 853,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.2.7",
+      "title": "The distinct trainings",
+      "heading": "7.\tThe distinct trainings",
+      "start": 835,
+      "end": 835,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.1.3.3.1",
+      "title": "The reasons to persevere in the antidote",
+      "heading": "1.\tThe reasons to persevere in the antidote",
+      "start": 1100,
+      "end": 1100,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "2.54",
+        "2.55",
+        "2.56",
+        "2.54",
+        "2.55",
+        "2.56"
+      ]
+    },
+    {
+      "path": "3.2.1.3.3.1",
+      "title": "The reasons to persevere in the antidote",
+      "heading": "1. The reasons to persevere in the antidote",
+      "start": 1102,
+      "end": 1102,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "2.54",
+        "2.55",
+        "2.56",
+        "2.54",
+        "2.55",
+        "2.56"
+      ]
+    },
+    {
+      "path": "3.2.1.4.2",
+      "title": "Rejoicing in the virtue of śrāvakas",
+      "heading": "2.\tRejoicing in the virtue of śrāvakas",
+      "start": 1213,
+      "end": 1213,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "3.1",
+        "3.1",
+        "3.2ab"
+      ]
+    },
+    {
+      "path": "3.2.1.4.2",
+      "title": "Rejoicing in the virtue of śrāvakas",
+      "heading": "2. Rejoicing in the virtue of śrāvakas",
+      "start": 1232,
+      "end": 1234,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "3.3",
+        "3.3",
+        "3.4",
+        "3.4",
+        "3.5"
+      ]
+    },
+    {
+      "path": "3.2.1.6",
+      "title": "Supplication",
+      "heading": "6.\tSupplication",
+      "start": 611,
+      "end": 611,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "2.1",
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5"
+      ]
+    },
+    {
+      "path": "3.2.2.2.1.1",
+      "title": "The cause—meditation on compassion",
+      "heading": "1.\tThe cause—meditation on compassion",
+      "start": 1440,
+      "end": 1440,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.1.1",
+      "title": "The cause—meditation on compassion",
+      "heading": "1. The cause—meditation on compassion",
+      "start": 1443,
+      "end": 1447,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.1.2",
+      "title": "The root—stabilizing faith",
+      "heading": "2.\tThe root—stabilizing faith",
+      "start": 1441,
+      "end": 1441,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.1.2",
+      "title": "The root—stabilizing faith",
+      "heading": "2. The root—stabilizing faith",
+      "start": 1448,
+      "end": 1452,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.1.3",
+      "title": "Other supports of bodhicitta",
+      "heading": "3.\tOther supports of bodhicitta",
+      "start": 1442,
+      "end": 1442,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.1.3",
+      "title": "Other supports of bodhicitta",
+      "heading": "3. Other supports of bodhicitta",
+      "start": 1453,
+      "end": 1468,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.1",
+      "title": "That there is a purpose to properly receiving it",
+      "heading": "1.\tThat there is a purpose to properly receiving it",
+      "start": 1470,
+      "end": 1470,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.1",
+      "title": "That there is a purpose to properly receiving it",
+      "heading": "1. That there is a purpose to properly receiving it",
+      "start": 1472,
+      "end": 1473,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.1",
+      "title": "From whom it is received",
+      "heading": "1.\tFrom whom it is received",
+      "start": 1475,
+      "end": 1475,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.1",
+      "title": "From whom it is received",
+      "heading": "1. From whom it is received",
+      "start": 1480,
+      "end": 1485,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.2",
+      "title": "Basis of receiving",
+      "heading": "2. Basis of receiving",
+      "start": 1486,
+      "end": 1487,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.3",
+      "title": "Time",
+      "heading": "3.\tTime",
+      "start": 1477,
+      "end": 1477,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.3",
+      "title": "Time",
+      "heading": "3. Time",
+      "start": 1488,
+      "end": 1491,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.4",
+      "title": "Ritual",
+      "heading": "4. Ritual",
+      "start": 1492,
+      "end": 1493,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "3.2.2.2.2.2.5",
+      "title": "Overcoming the objection that it is not possible always to maintain it",
+      "heading": "5. Overcoming the objection that it is not possible always to maintain it",
+      "start": 1494,
+      "end": 1500,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "3.25",
+        "3.26",
+        "3.25",
+        "3.26",
+        "3.27"
+      ]
+    },
+    {
+      "path": "4.1.2.3.1.2.3",
+      "title": "Developing pride",
+      "heading": "3.\tDeveloping pride",
+      "start": 1886,
+      "end": 1886,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "4.28",
+        "4.29",
+        "4.28",
+        "4.29",
+        "4.30",
+        "4.31"
+      ]
+    },
+    {
+      "path": "4.1.2.3.1.2.3",
+      "title": "Developing pride",
+      "heading": "3. Developing pride",
+      "start": 1963,
+      "end": 1963,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "4.36ab",
+        "4.36",
+        "4.36cd"
+      ]
+    },
+    {
+      "path": "4.1.2.3.2.3.3",
+      "title": "Relying on antidotes for one’s own impatience",
+      "heading": "3.\tRelying on antidotes for one’s own impatience",
+      "start": 2032,
+      "end": 2032,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "4.43ab",
+        "4.43",
+        "4.43cd"
+      ]
+    },
+    {
+      "path": "4.1.2.3.2.3.3",
+      "title": "Relying on antidotes for one’s own impatience",
+      "heading": "3. Relying on antidotes for one’s own impatience",
+      "start": 2044,
+      "end": 2046,
+      "quoteLines": 1,
+      "refs": [],
+      "nextRefs": [
+        "4.44",
+        "4.44"
+      ]
+    },
+    {
+      "path": "4.1.2.3.2.3.4",
+      "title": "Abandoning objections to that",
+      "heading": "4.\tAbandoning objections to that",
+      "start": 2033,
+      "end": 2033,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "4.43ab",
+        "4.43",
+        "4.43cd"
+      ]
+    },
+    {
+      "path": "4.2.1.1.2",
+      "title": "Showing the reverse pervasion",
+      "heading": "2.\tShowing the reverse pervasion",
+      "start": 2122,
+      "end": 2122,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.1ab",
+        "5.1",
+        "5.1cd",
+        "5.2"
+      ]
+    },
+    {
+      "path": "4.2.1.3.2",
+      "title": "Everything is accomplished by it",
+      "heading": "2.\tEverything is accomplished by it",
+      "start": 2281,
+      "end": 2281,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.18ab",
+        "5.18",
+        "5.18cd",
+        "5.19"
+      ]
+    },
+    {
+      "path": "4.2.2.3.2.1",
+      "title": "Keeping in mind the faults of its loss",
+      "heading": "1.\tKeeping in mind the faults of its loss",
+      "start": 2400,
+      "end": 2400,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.30",
+        "5.30",
+        "5.31",
+        "5.32"
+      ]
+    },
+    {
+      "path": "4.2.2.3.2.1",
+      "title": "Keeping in mind the faults of its loss",
+      "heading": "1. Keeping in mind the faults of its loss",
+      "start": 2402,
+      "end": 2405,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.30",
+        "5.30",
+        "5.31",
+        "5.32"
+      ]
+    },
+    {
+      "path": "4.2.3.1.1.3.2",
+      "title": "Referencing a scriptural source for that",
+      "heading": "2.\tReferencing a scriptural source for that",
+      "start": 2517,
+      "end": 2517,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.42ab",
+        "5.42",
+        "5.42cd",
+        "5.43"
+      ]
+    },
+    {
+      "path": "4.2.3.1.1.3.5",
+      "title": "The faults of not doing do",
+      "heading": "5.\tThe faults of not doing do",
+      "start": 2520,
+      "end": 2520,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.42ab",
+        "5.42",
+        "5.42cd",
+        "5.43"
+      ]
+    },
+    {
+      "path": "4.2.3.2.2.2.3",
+      "title": "How to respond to those who are creating merit",
+      "heading": "3.\tHow to respond to those who are creating merit",
+      "start": 2783,
+      "end": 2783,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.74",
+        "5.74",
+        "5.75ab",
+        "5.75",
+        "5.75cd"
+      ]
+    },
+    {
+      "path": "4.2.3.2.2.3.3.2",
+      "title": "Fields",
+      "heading": "2.\tFields",
+      "start": 2848,
+      "end": 2848,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.81ab",
+        "5.81",
+        "5.81cd",
+        "5.82"
+      ]
+    },
+    {
+      "path": "4.2.3.4.4.2",
+      "title": "One should rely upon him",
+      "heading": "2.\tOne should rely upon him",
+      "start": 3037,
+      "end": 3037,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "5.102ab",
+        "5.102",
+        "5.102cd",
+        "5.103"
+      ]
+    },
+    {
+      "path": "4.3.2.1.3",
+      "title": "The means of averting that cause",
+      "heading": "3.\tThe means of averting that cause",
+      "start": 3171,
+      "end": 3171,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.7",
+        "6.7",
+        "6.8",
+        "6.8",
+        "6.9",
+        "6.10"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.2.1.1",
+      "title": "Anger and the angry person do not have autonomy",
+      "heading": "1.\tAnger and the angry person do not have autonomy",
+      "start": 3324,
+      "end": 3324,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.22",
+        "6.22",
+        "6.23"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.2.1.1",
+      "title": "Anger and the angry person do not have autonomy",
+      "heading": "1. Anger and the angry person do not have autonomy",
+      "start": 3326,
+      "end": 3326,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.22",
+        "6.22",
+        "6.23"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.2.2.1",
+      "title": "Refuting the position of the Sāṃkhyas",
+      "heading": "1.\tRefuting the position of the Sāṃkhyas",
+      "start": 3372,
+      "end": 3372,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.27",
+        "6.27",
+        "6.28"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.2.2.1",
+      "title": "Refuting the position of the Sāṃkhyas",
+      "heading": "1. Refuting the position of the Sāṃkhyas",
+      "start": 3435,
+      "end": 3435,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.28ab",
+        "6.28",
+        "6.28cd"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.2.1.1.3.3.6.2",
+      "title": "Abandoning the objection that it is illogical to say one harms others",
+      "heading": "2.\tAbandoning the objection that it is illogical to say one harms others",
+      "start": 3603,
+      "end": 3603,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.50ab",
+        "6.50",
+        "6.50cd",
+        "6.51"
+      ]
+    },
+    {
+      "path": "4.3.2.1.4.3.2.2.3.1.3.5.2",
+      "title": "Different qualities",
+      "heading": "2.\tDifferent qualities",
+      "start": 4186,
+      "end": 4186,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "6.116ab",
+        "6.116",
+        "6.116cd",
+        "6.117",
+        "6.118",
+        "6.117"
+      ]
+    },
+    {
+      "path": "4.4.3.1",
+      "title": "Summarizing the opposing factors",
+      "heading": "1.\tSummarizing the opposing factors",
+      "start": 4368,
+      "end": 4368,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "7.3"
+      ]
+    },
+    {
+      "path": "4.4.3.1",
+      "title": "Summarizing the opposing factors",
+      "heading": "1. Summarizing the opposing factors",
+      "start": 4372,
+      "end": 4376,
+      "quoteLines": 3,
+      "refs": [],
+      "nextRefs": [
+        "7.3",
+        "7.3"
+      ]
+    },
+    {
+      "path": "4.4.4.2.1.2.1.1",
+      "title": "Method of not being deterred",
+      "heading": "1.\tMethod of not being deterred",
+      "start": 4752,
+      "end": 4752,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "7.47",
+        "7.47",
+        "7.48"
+      ]
+    },
+    {
+      "path": "4.4.4.2.1.2.2.3.1.5",
+      "title": "If one does not strive, one’s vows will be broken",
+      "heading": "5. If one does not strive, one’s vows will be broken",
+      "start": 4845,
+      "end": 4847,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "7.55",
+        "7.56",
+        "7.57",
+        "7.58",
+        "7.55"
+      ]
+    },
+    {
+      "path": "4.4.4.2.1.4.2",
+      "title": "Finishing rest",
+      "heading": "2. Finishing rest",
+      "start": 4963,
+      "end": 4966,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "7.68",
+        "7.68",
+        "7.69"
+      ]
+    },
+    {
+      "path": "4.5.1.2.3.1.1.3",
+      "title": "One’s misery knows no end",
+      "heading": "3.\tOne’s misery knows no end",
+      "start": 5096,
+      "end": 5096,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.5",
+        "8.5",
+        "8.6ab",
+        "8.6",
+        "8.6cd"
+      ]
+    },
+    {
+      "path": "4.5.1.2.3.1.2.1",
+      "title": "They destroy great benefits",
+      "heading": "1.\tThey destroy great benefits",
+      "start": 5131,
+      "end": 5131,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.9",
+        "8.9",
+        "8.10"
+      ]
+    },
+    {
+      "path": "4.5.1.2.3.2.1",
+      "title": "The faults of the subject with attachment",
+      "heading": "1.\tThe faults of the subject with attachment",
+      "start": 5091,
+      "end": 5091,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.5",
+        "8.5",
+        "8.6ab"
+      ]
+    },
+    {
+      "path": "4.5.1.2.3.2.1",
+      "title": "The faults of the subject with attachment",
+      "heading": "1. The faults of the subject with attachment",
+      "start": 5093,
+      "end": 5093,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.5",
+        "8.5",
+        "8.6ab"
+      ]
+    },
+    {
+      "path": "4.5.2.1",
+      "title": "Its unique preeminence",
+      "heading": "1. Its unique preeminence",
+      "start": 5730,
+      "end": 5730,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.85ab",
+        "8.85",
+        "8.85cd",
+        "8.86"
+      ]
+    },
+    {
+      "path": "4.5.3.1.3.2",
+      "title": "Establishing the pervasion of that",
+      "heading": "2.\tEstablishing the pervasion of that",
+      "start": 5821,
+      "end": 5821,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.94",
+        "8.94",
+        "8.95",
+        "8.96"
+      ]
+    },
+    {
+      "path": "4.5.3.1.4.4",
+      "title": "Disregarding the results",
+      "heading": "4.\tDisregarding the results",
+      "start": 5955,
+      "end": 5955,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.107",
+        "8.107",
+        "8.108",
+        "8.108",
+        "8.109ab"
+      ]
+    },
+    {
+      "path": "4.5.3.1.4.4",
+      "title": "Disregarding the results",
+      "heading": "3.\tDisregarding the results",
+      "start": 6040,
+      "end": 6040,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.115",
+        "8.115",
+        "8.116ab"
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.1.3",
+      "title": "Disregarding the results",
+      "heading": "4.\tDisregarding the results",
+      "start": 5955,
+      "end": 5955,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.107",
+        "8.107",
+        "8.108",
+        "8.108",
+        "8.109ab"
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.1.3",
+      "title": "Disregarding the results",
+      "heading": "3.\tDisregarding the results",
+      "start": 6040,
+      "end": 6040,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.115",
+        "8.115",
+        "8.116ab"
+      ]
+    },
+    {
+      "path": "4.5.3.2.2.2.4.2",
+      "title": "Nature",
+      "heading": "3.\tNature",
+      "start": 831,
+      "end": 831,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.5.3.2.2.2.4.2",
+      "title": "Nature",
+      "heading": "3. Nature",
+      "start": 846,
+      "end": 847,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.5.3.2.2.2.4.2",
+      "title": "Nature",
+      "heading": "2.\tNature",
+      "start": 6210,
+      "end": 6210,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.136ab",
+        "8.136",
+        "8.136cd",
+        "8.137"
+      ]
+    },
+    {
+      "path": "4.5.3.2.3.2.3.5",
+      "title": "Abandoning conceit and giving up aggression towards the learned",
+      "heading": "5.\tAbandoning conceit and giving up aggression towards the learned",
+      "start": 6300,
+      "end": 6300,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.145",
+        "8.145",
+        "8.146ab"
+      ]
+    },
+    {
+      "path": "4.5.3.2.4.2.2.2",
+      "title": "Not giving away any control",
+      "heading": "2.\tNot giving away any control",
+      "start": 6516,
+      "end": 6516,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.169ab",
+        "8.169",
+        "8.169cd",
+        "8.170"
+      ]
+    },
+    {
+      "path": "4.6.1.2",
+      "title": "Advice to strive in this",
+      "heading": "2. Advice to strive in this",
+      "start": 6696,
+      "end": 6700,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.1.1.1.1",
+      "title": "Basis of the distinction",
+      "heading": "1.\tBasis of the distinction",
+      "start": 6713,
+      "end": 6713,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.2ab",
+        "9.2",
+        "9.2cd"
+      ]
+    },
+    {
+      "path": "4.6.2.1.1.1.1",
+      "title": "Basis of the distinction",
+      "heading": "1. Basis of the distinction",
+      "start": 6722,
+      "end": 6723,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.1.1.1.2",
+      "title": "Meaning of the distinction",
+      "heading": "2.\tMeaning of the distinction",
+      "start": 6714,
+      "end": 6714,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.2ab",
+        "9.2",
+        "9.2cd"
+      ]
+    },
+    {
+      "path": "4.6.2.1.1.1.2",
+      "title": "Meaning of the distinction",
+      "heading": "2. Meaning of the distinction",
+      "start": 6724,
+      "end": 6735,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.1.1.2",
+      "title": "Their characteristics",
+      "heading": "2.\tTheir characteristics",
+      "start": 6710,
+      "end": 6710,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.2ab",
+        "9.2",
+        "9.2cd"
+      ]
+    },
+    {
+      "path": "4.6.2.1.2.3.1.2.1.2.1",
+      "title": "Scriptural reference",
+      "heading": "1. Scriptural reference",
+      "start": 7045,
+      "end": 7045,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.18",
+        "9.18"
+      ]
+    },
+    {
+      "path": "4.6.2.1.2.3.1.2.1.2.1",
+      "title": "Scriptural reference",
+      "heading": "1.\tScriptural reference",
+      "start": 7047,
+      "end": 7047,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.18",
+        "9.18"
+      ]
+    },
+    {
+      "path": "4.6.2.2.1.2.2.2",
+      "title": "Abandoning clinging to nonexistence",
+      "heading": "2.\tAbandoning clinging to nonexistence",
+      "start": 7244,
+      "end": 7244,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.32ab",
+        "9.32",
+        "9.32cd",
+        "9.33"
+      ]
+    },
+    {
+      "path": "4.6.2.2.1.2.4.3.2",
+      "title": "Presenting the reason of scriptural citation",
+      "heading": "2.\tPresenting the reason of scriptural citation",
+      "start": 7306,
+      "end": 7306,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.38ab",
+        "9.38",
+        "9.38cd",
+        "9.39"
+      ]
+    },
+    {
+      "path": "4.6.2.2.1.2.4.3.3",
+      "title": "Establishing the pervasion of that",
+      "heading": "2.\tEstablishing the pervasion of that",
+      "start": 5821,
+      "end": 5821,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "8.94",
+        "8.94",
+        "8.95",
+        "8.96"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.2",
+      "title": "The scriptural criterion for the path",
+      "heading": "2.\tThe scriptural criterion for the path",
+      "start": 7336,
+      "end": 7336,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.40ab",
+        "9.40",
+        "9.40cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.2",
+      "title": "The scriptural criterion for the path",
+      "heading": "2. The scriptural criterion for the path",
+      "start": 7353,
+      "end": 7358,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "9.41",
+        "9.42",
+        "9.41",
+        "9.42",
+        "9.43ab"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.2",
+      "title": "The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned",
+      "heading": "2.\tThe error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned",
+      "start": 7396,
+      "end": 7396,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.44ab",
+        "9.44",
+        "9.44cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.2",
+      "title": "The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned",
+      "heading": "2. The error for the śrāvaka tradition in a nirvāṇa in which suffering is abandoned",
+      "start": 7416,
+      "end": 7419,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "9.45ab",
+        "9.45",
+        "9.45cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "heading": "2. Response",
+      "start": 7227,
+      "end": 7227,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.31",
+        "9.31"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "heading": "2.\tResponse",
+      "start": 7425,
+      "end": 7425,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.45ab",
+        "9.45",
+        "9.45cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "heading": "2. Response",
+      "start": 7433,
+      "end": 7436,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.46ab",
+        "9.46",
+        "9.46cd"
+      ]
+    },
+    {
+      "path": "4.6.2.2.2.4.3.1.2",
+      "title": "Response",
+      "heading": "2. Response",
+      "start": 7815,
+      "end": 7815,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.76ab"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.2.1.1.3.2",
+      "title": "This has the same fault that was previously explained",
+      "heading": "2.\tThis has the same fault that was previously explained",
+      "start": 7635,
+      "end": 7635,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.62ab",
+        "9.62",
+        "9.62cd",
+        "9.63"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.2.1.3.2.3",
+      "title": "The general case is not established",
+      "heading": "3.\tThe general case is not established",
+      "start": 7705,
+      "end": 7705,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.67ab",
+        "9.67",
+        "9.67cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.2.1.3.2.3",
+      "title": "The general case is not established",
+      "heading": "3. The general case is not established",
+      "start": 7716,
+      "end": 7719,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "9.68",
+        "9.68",
+        "9.69ab"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.3.1.4",
+      "title": "Abandoning contradiction to scripture",
+      "heading": "4.\tAbandoning contradiction to scripture",
+      "start": 7757,
+      "end": 7757,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.70",
+        "9.70",
+        "9.71",
+        "9.71",
+        "9.72ab"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.3.2.2.1",
+      "title": "Establishing that sentient beings are designated",
+      "heading": "1.\tEstablishing that sentient beings are designated",
+      "start": 7816,
+      "end": 7816,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.76ab",
+        "9.76",
+        "9.76cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.3.2.2.1",
+      "title": "Establishing that sentient beings are designated",
+      "heading": "1. Establishing that sentient beings are designated",
+      "start": 7818,
+      "end": 7822,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.76ab",
+        "9.76",
+        "9.76cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.1.2",
+      "title": "The non-establishment of happiness as ultimate",
+      "heading": "2.\tThe non-establishment of happiness as ultimate",
+      "start": 7966,
+      "end": 7966,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.88ab",
+        "9.88",
+        "9.88cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.1.2",
+      "title": "The non-establishment of happiness as ultimate",
+      "heading": "2. The non-establishment of happiness as ultimate",
+      "start": 7977,
+      "end": 7981,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "9.89",
+        "9.89",
+        "9.90"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.2.1.2.2",
+      "title": "Establishing the reason",
+      "heading": "2.\tEstablishing the reason",
+      "start": 8051,
+      "end": 8051,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.94ab",
+        "9.94",
+        "9.94cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.2.1.2.2",
+      "title": "Establishing the reason",
+      "heading": "2. Establishing the reason",
+      "start": 8061,
+      "end": 8064,
+      "quoteLines": 1,
+      "refs": [],
+      "nextRefs": [
+        "9.95",
+        "9.95",
+        "9.96ab",
+        "9.96",
+        "9.96cd"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.2.3",
+      "title": "A composite completely refuted",
+      "heading": "3.\tA composite completely refuted",
+      "start": 8031,
+      "end": 8031,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.93",
+        "9.93"
+      ]
+    },
+    {
+      "path": "4.6.2.3.1.4.2.4.2",
+      "title": "No self-experience",
+      "heading": "2. No self-experience",
+      "start": 8131,
+      "end": 8133,
+      "quoteLines": 1,
+      "refs": [],
+      "nextRefs": [
+        "9.101",
+        "9.101"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.1.4",
+      "title": "Differences of power in relation to cause",
+      "heading": "4. Differences of power in relation to cause",
+      "start": 8368,
+      "end": 8372,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.2.1.2.1.1",
+      "title": "Effect before the cause",
+      "heading": "1.\tEffect before the cause",
+      "start": 8379,
+      "end": 8379,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.2.1.2.1.2",
+      "title": "Effect simultaneous with the cause",
+      "heading": "2.\tEffect simultaneous with the cause",
+      "start": 8380,
+      "end": 8380,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.2.1.2.1.3",
+      "title": "Effect after the cause",
+      "heading": "3.\tEffect after the cause",
+      "start": 8381,
+      "end": 8381,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.2.1.2.2.1.3.3.1",
+      "title": "Everything being an effect of Īśvara contradicts his dependence",
+      "heading": "1.\tEverything being an effect of Īśvara contradicts his dependence",
+      "start": 8478,
+      "end": 8478,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.124ab",
+        "9.124",
+        "9.124cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.2.2.1.3.3.1",
+      "title": "Everything being an effect of Īśvara contradicts his dependence",
+      "heading": "1. Everything being an effect of Īśvara contradicts his dependence",
+      "start": 8480,
+      "end": 8483,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "9.124ab",
+        "9.124",
+        "9.124cd",
+        "9.125"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.2.2.1.3.3.2.2",
+      "title": "Autonomy is violated",
+      "heading": "2.\tAutonomy is violated",
+      "start": 8486,
+      "end": 8486,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.124ab",
+        "9.124",
+        "9.124cd",
+        "9.125"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.1.3",
+      "title": "The nature of its effects",
+      "heading": "3.\tThe nature of its effects",
+      "start": 8522,
+      "end": 8522,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.127ab",
+        "9.127",
+        "9.127cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.1.3",
+      "title": "The nature of its effects",
+      "heading": "3. The nature of its effects",
+      "start": 8535,
+      "end": 8543,
+      "quoteLines": 1,
+      "refs": [],
+      "nextRefs": [
+        "9.128ab",
+        "9.128",
+        "9.128cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.2.2.4",
+      "title": "Not existing in reality",
+      "heading": "4. Not existing in reality",
+      "start": 8607,
+      "end": 8610,
+      "quoteLines": 1,
+      "refs": [],
+      "nextRefs": [
+        "9.132ab",
+        "9.132",
+        "9.132cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.3.2",
+      "title": "Gross and subtle are contradictory",
+      "heading": "2.\tGross and subtle are contradictory",
+      "start": 8613,
+      "end": 8613,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.132ab",
+        "9.132",
+        "9.132cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.2.1.3.2.4.1",
+      "title": "Presenting the position to be refuted",
+      "heading": "1.\tPresenting the position to be refuted",
+      "start": 8651,
+      "end": 8651,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.135",
+        "9.135",
+        "9.136ab"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.1",
+      "title": "Showing that dependent origination is like an illusion",
+      "heading": "1.\tShowing that dependent origination is like an illusion",
+      "start": 8751,
+      "end": 8751,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.143",
+        "9.144",
+        "9.143",
+        "9.144"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.2.1",
+      "title": "Presenting the reason",
+      "heading": "1.\tPresenting the reason",
+      "start": 8772,
+      "end": 8772,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.3.3.2.1",
+      "title": "Presenting the reason",
+      "heading": "1. Presenting the reason",
+      "start": 8777,
+      "end": 8778,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.3.3.2.2",
+      "title": "Showing the forward pervasion",
+      "heading": "2.\tShowing the forward pervasion",
+      "start": 8773,
+      "end": 8773,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.3.3.2.2",
+      "title": "Showing the forward pervasion",
+      "heading": "2. Showing the forward pervasion",
+      "start": 8779,
+      "end": 8780,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.3.3.2.3",
+      "title": "The example of that",
+      "heading": "3.\tThe example of that",
+      "start": 8774,
+      "end": 8774,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.3.3.2.3",
+      "title": "The example of that",
+      "heading": "3. The example of that",
+      "start": 8781,
+      "end": 8782,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": []
+    },
+    {
+      "path": "4.6.2.4.3.3.2.4",
+      "title": "The logic",
+      "heading": "1.\tThe logic",
+      "start": 8792,
+      "end": 8792,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.145ab",
+        "9.145",
+        "9.145cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.2.4",
+      "title": "The logic",
+      "heading": "1. The logic",
+      "start": 8794,
+      "end": 8794,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.145ab",
+        "9.145",
+        "9.145cd"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.3.1.2.3",
+      "title": "Refuting [the cessation of] the object itself",
+      "heading": "3.\tRefuting [the cessation of] the object itself",
+      "start": 8807,
+      "end": 8807,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "9.146",
+        "9.147",
+        "9.148",
+        "9.146",
+        "9.147",
+        "9.148"
+      ]
+    },
+    {
+      "path": "4.6.2.4.3.3.3.2.3",
+      "title": "The sameness of existence and pacification",
+      "heading": "3. The sameness of existence and pacification",
+      "start": 8863,
+      "end": 8869,
+      "quoteLines": 2,
+      "refs": [],
+      "nextRefs": [
+        "9.151",
+        "9.152",
+        "9.151",
+        "9.152",
+        "9.153",
+        "9.154ab"
+      ]
+    },
+    {
+      "path": "5.2.1.2.1.1.3.1",
+      "title": "Dedication for pacifying the suffering of the main hells",
+      "heading": "1. Dedication for pacifying the suffering of the main hells",
+      "start": 9110,
+      "end": 9110,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "10.6",
+        "10.7",
+        "10.8",
+        "10.9",
+        "10.10"
+      ]
+    },
+    {
+      "path": "5.2.1.2.1.1.3.1",
+      "title": "Dedication for pacifying the suffering of the main hells",
+      "heading": "1. Dedication for pacifying the suffering of the main hells",
+      "start": 9112,
+      "end": 9112,
+      "quoteLines": 0,
+      "refs": [],
+      "nextRefs": [
+        "10.6",
+        "10.7",
+        "10.8",
+        "10.9",
+        "10.10"
+      ]
+    }
+  ]
+}

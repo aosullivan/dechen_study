@@ -35,7 +35,8 @@ List<Map<String, dynamic>> parseOverviewSections(String content) {
     if (line.trim().isEmpty) continue;
     final indent = line.length - line.trimLeft().length;
     final depth = indent ~/ 4;
-    final match = RegExp(r'^(\d+(?:\.\d+)*)\.?\s*(.*)$').firstMatch(line.trim());
+    final match =
+        RegExp(r'^(\d+(?:\.\d+)*)\.?\s*(.*)$').firstMatch(line.trim());
     if (match == null) continue;
 
     final title = match.group(2)!.trim();
@@ -91,6 +92,39 @@ List<String> extractVerseRefs(String line) {
         }
       } else {
         refs.add(startBase);
+      }
+    } else {
+      refs.add(start + suffix);
+    }
+  }
+  // Also support standalone verse reference lines used in mapping prose, e.g.:
+  // "4.44", "9.101", "10.4ab", or "9.121ab-9.121cd".
+  final trimmed = line.trim();
+  final bareMatch = RegExp(
+    r'^(\d+\.\d+)([a-d]*)(?:-(\d+\.\d+)[a-d]*)?$',
+    caseSensitive: false,
+  ).firstMatch(trimmed);
+  if (bareMatch != null) {
+    final start = bareMatch.group(1)!;
+    final suffix = bareMatch.group(2) ?? '';
+    final end = bareMatch.group(3);
+    if (end != null) {
+      final startParts = start.split('.');
+      final endParts = end.split('.');
+      if (startParts.length == 2 && endParts.length == 2) {
+        final c1 = int.parse(startParts[0]);
+        final v1 = int.parse(startParts[1]);
+        final c2 = int.parse(endParts[0]);
+        final v2 = int.parse(endParts[1]);
+        for (var c = c1; c <= c2; c++) {
+          final vStart = (c == c1) ? v1 : 1;
+          final vEnd = (c == c2) ? v2 : 999;
+          for (var v = vStart; v <= vEnd; v++) {
+            refs.add('$c.$v');
+          }
+        }
+      } else {
+        refs.add(start + suffix);
       }
     } else {
       refs.add(start + suffix);

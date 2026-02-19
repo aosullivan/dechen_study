@@ -57,6 +57,29 @@ function extractVerseRefs(line) {
       refs.push(start + suffix);
     }
   }
+  // Standalone verse reference line, e.g. "10.4", "9.101", "9.121ab-9.121cd".
+  const t = line.trim();
+  const bare = /^(\d+\.\d+)([a-d]*)(?:-(\d+\.\d+)[a-d]*)?$/i.exec(t);
+  if (bare) {
+    const start = bare[1];
+    const suffix = bare[2] || '';
+    const end = bare[3];
+    if (end) {
+      const [sc, sv] = start.split('.').map((x) => parseInt(x, 10));
+      const [ec, ev] = end.split('.').map((x) => parseInt(x, 10));
+      if (Number.isFinite(sc) && Number.isFinite(sv) && Number.isFinite(ec) && Number.isFinite(ev)) {
+        for (let c = sc; c <= ec; c++) {
+          const vStart = c === sc ? sv : 1;
+          const vEnd = c === ec ? ev : 999;
+          for (let v = vStart; v <= vEnd; v++) refs.push(`${c}.${v}`);
+        }
+      } else {
+        refs.push(start + suffix);
+      }
+    } else {
+      refs.push(start + suffix);
+    }
+  }
   return refs;
 }
 
