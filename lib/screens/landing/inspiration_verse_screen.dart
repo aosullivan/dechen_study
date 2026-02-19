@@ -166,11 +166,11 @@ class _InspirationVerseScreenState extends State<InspirationVerseScreen> {
                 BcvVerseText(
                   text: _verse!.verseText,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontFamily: 'Crimson Text',
-                        fontSize: 20,
-                        height: 1.5,
-                        color: const Color(0xFF2C2416),
-                      ) ??
+                            fontFamily: 'Crimson Text',
+                            fontSize: 20,
+                            height: 1.5,
+                            color: const Color(0xFF2C2416),
+                          ) ??
                       const TextStyle(
                         fontFamily: 'Crimson Text',
                         fontSize: 20,
@@ -219,11 +219,17 @@ class _InspirationVerseScreenState extends State<InspirationVerseScreen> {
   void _openFullText() {
     final idx = _verseIndex;
     if (idx == null) return;
+    final ref = _verse?.verseRef;
+    final initialSegmentRef =
+        ref != null && BcvVerseService.segmentSuffixPattern.hasMatch(ref)
+            ? ref
+            : null;
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => BcvReadScreen(
           scrollToVerseIndex: idx,
           highlightSectionIndices: {idx},
+          initialSegmentRef: initialSegmentRef,
         ),
       ),
     );

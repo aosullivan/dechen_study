@@ -10,6 +10,7 @@ import 'bcv/bcv_collapsible_panel.dart';
 import 'bcv/bcv_inline_commentary_panel.dart';
 import 'bcv/bcv_mobile_nav_bar.dart';
 import 'bcv/bcv_read_constants.dart';
+import 'bcv/reader_nav_state.dart';
 import 'bcv/bcv_section_overlay.dart';
 import 'bcv/bcv_section_slider.dart';
 import 'bcv/bcv_verse_text.dart';
@@ -32,20 +33,29 @@ class BcvReadScreen extends StatefulWidget {
     super.key,
     this.scrollToVerseIndex,
     this.highlightSectionIndices,
+    this.initialSegmentRef,
     this.title = 'Bodhicaryavatara',
     this.onSectionNavigateForTest,
+    this.commentaryLoader,
   });
 
   final int? scrollToVerseIndex;
 
   /// When provided (e.g. from Daily "Full text"), these verses are highlighted as one section.
   final Set<int>? highlightSectionIndices;
+
+  /// Optional split-verse ref (e.g. "1.14cd") for accurate initial section and overlay.
+  /// Use when [scrollToVerseIndex] resolves from a segmented ref.
+  final String? initialSegmentRef;
   final String title;
 
   /// Test-only: called when arrow-key navigation selects a section. Receives (sectionPath, firstVerseRef).
   /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
   final void Function(String sectionPath, String firstVerseRef)?
       onSectionNavigateForTest;
+
+  /// Test seam: override commentary lookup.
+  final Future<CommentaryEntry?> Function(String ref)? commentaryLoader;
 
   @override
   State<BcvReadScreen> createState() => _BcvReadScreenState();
@@ -100,21 +110,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   final Map<String, Set<int>> _sectionVerseIndicesCache = {};
   Timer? _visibilityDebounceTimer;
 
-  /// Incremented on every programmatic navigation. Async visibility handlers check this before applying.
-  int _syncGeneration = 0;
-
-  /// True while programmatic scroll (section tap, arrow keys) is animating. Blocks visibility updates entirely.
-  bool _isProgrammaticNavigation = false;
+  /// Navigation state machine for debounce/generation/programmatic/cooldown.
+  ReaderNavState _navState = const ReaderNavState.initial();
 
   /// True when the current highlight was set intentionally (e.g. from Daily Verse, or explicit
   /// navigation). Prevents visibility-driven processing from auto-clearing the highlight.
   /// Cleared only when the user explicitly navigates to a new section (chapter tap, arrow keys,
   /// breadcrumb tap).
   bool _intentionalHighlight = false;
-
-  /// After programmatic nav clears, we still ignore visibility updates until this time.
-  /// Prevents scroll-settle visibility from overwriting the key-down highlight.
-  DateTime? _programmaticNavCooldownUntil;
 
   /// True while the user is actively scrolling (finger/wheel down). Gates visibility processing.
   bool _isUserScrolling = false;
@@ -154,6 +157,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       widget.highlightSectionIndices != null &&
       widget.highlightSectionIndices!.isNotEmpty;
 
+  int get _syncGeneration => _navState.syncGeneration;
+
   /// Index of the verse that should have the scroll key (for ensureVisible). Null if none.
   int? get _scrollTargetVerseIndex {
     if (_scrollToVerseIndexAfterTap != null) return _scrollToVerseIndexAfterTap;
@@ -165,6 +170,49 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       return widget.highlightSectionIndices!.reduce((a, b) => a < b ? a : b);
     }
     return null;
+  }
+
+  /// Returns the initial split ref only when it resolves to [verseIndex].
+  /// Prevents mismatching a stale ref to a different verse.
+  String? _initialSegmentRefForVerseIndex(int verseIndex) {
+    final ref = widget.initialSegmentRef;
+    if (ref == null || ref.isEmpty) return null;
+    final resolved = _verseService.getIndexForRefWithFallback(ref);
+    if (resolved == verseIndex) return ref;
+    return null;
+  }
+
+  void _applyNavEvent(ReaderNavEvent event, {DateTime? now}) {
+    final ts = now ?? DateTime.now();
+    final result = ReaderNavReducer.reduce(_navState, event, now: ts);
+    _navState = result.state;
+  }
+
+  void _startProgrammaticNavigation() {
+    _applyNavEvent(const ReaderProgrammaticStart());
+  }
+
+  void _markProgrammaticNavigationSettled() {
+    _applyNavEvent(
+      const ReaderProgrammaticSettled(Duration(milliseconds: 600)),
+    );
+  }
+
+  bool _isVisibilitySuppressed() {
+    _applyNavEvent(const ReaderNavTick());
+    final now = DateTime.now();
+    return _navState.isProgrammatic || _navState.isCooldownActive(now);
+  }
+
+  bool _tryAcceptArrowNav() {
+    final now = DateTime.now();
+    final result = ReaderNavReducer.reduce(
+      _navState,
+      const ReaderArrowAttempt(Duration(milliseconds: 200)),
+      now: now,
+    );
+    _navState = result.state;
+    return result.arrowAccepted;
   }
 
   @override
@@ -220,8 +268,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _verseKeys.clear();
       _verseSegmentKeys.clear();
       _commentaryEntryForSelected = null;
-      _syncGeneration = 0;
-      _isProgrammaticNavigation = false;
+      _navState = const ReaderNavState.initial();
       _intentionalHighlight = false;
       _sectionSliderScrollRequestId = 0;
       _chapterHeaderFlatIndices.clear();
@@ -260,10 +307,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           // Activate programmatic-navigation guard so visibility callbacks
           // during and after the initial scroll animation cannot clear the
           // intentional highlight before the user has a chance to see it.
-          _isProgrammaticNavigation = true;
+          _startProgrammaticNavigation();
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            _scrollToVerseWidget();
+            _scrollToVerseIndex(
+              widget.scrollToVerseIndex!,
+              segmentRef: _initialSegmentRefForVerseIndex(
+                widget.scrollToVerseIndex!,
+              ),
+            );
             _clearProgrammaticNavigationAfterScrollSettles();
           });
         }
@@ -290,9 +342,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
     // Guard: treat chapter click as programmatic navigation so visibility
     // callbacks don't overwrite the expected focus.
-    _syncGeneration++;
+    _startProgrammaticNavigation();
     final capturedGen = _syncGeneration;
-    _isProgrammaticNavigation = true;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data
@@ -348,9 +399,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (_highlightSet.isEmpty) return;
     final firstIndex =
         _minHighlightIndex ?? _highlightSet.reduce((a, b) => a < b ? a : b);
-    final ref = _verseService.getVerseRef(firstIndex);
-    if (ref == null) return;
-    final entry = await _commentaryService.getCommentaryForRef(ref);
+    final baseRef = _verseService.getVerseRef(firstIndex);
+    if (baseRef == null) return;
+    final preferredRef = _initialSegmentRefForVerseIndex(firstIndex);
+    CommentaryEntry? entry =
+        await _getCommentaryForRef(preferredRef ?? baseRef);
+    if (entry == null && preferredRef != null && preferredRef != baseRef) {
+      entry = await _getCommentaryForRef(baseRef);
+    }
     if (!mounted) return;
     setState(() {
       _commentaryEntryForSelected = entry;
@@ -382,9 +438,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (baseRef == null) return;
     final lookupRef = segmentRef ?? baseRef;
 
-    CommentaryEntry? entry = await _commentaryService.getCommentaryForRef(lookupRef);
+    CommentaryEntry? entry = await _getCommentaryForRef(lookupRef);
     if (entry == null && lookupRef != baseRef) {
-      entry = await _commentaryService.getCommentaryForRef(baseRef);
+      entry = await _getCommentaryForRef(baseRef);
     }
     if (!mounted) return;
 
@@ -395,6 +451,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _commentaryEntryForSelected = entry;
     });
     _showCommentary();
+  }
+
+  Future<CommentaryEntry?> _getCommentaryForRef(String ref) {
+    final loader = widget.commentaryLoader;
+    if (loader != null) return loader(ref);
+    return _commentaryService.getCommentaryForRef(ref);
   }
 
   /// Show commentary as a bottom sheet that gently springs up from the bottom.
@@ -444,7 +506,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _setInitialBreadcrumb() {
     final initialIndex = _scrollTargetVerseIndex ?? 0;
     if (initialIndex >= _verses.length) return;
-    _hierarchyService.getHierarchyForVerseIndex(initialIndex).then((hierarchy) {
+    final initialSegmentRef = _initialSegmentRefForVerseIndex(initialIndex);
+    final hierarchyFuture = initialSegmentRef != null
+        ? _hierarchyService.getHierarchyForVerse(initialSegmentRef)
+        : _hierarchyService.getHierarchyForVerseIndex(initialIndex);
+    hierarchyFuture.then((hierarchy) {
       if (!mounted) return;
       final sectionPath = hierarchy.isNotEmpty
           ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
@@ -456,13 +522,13 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       final indicesWithVisible = {...indices, initialIndex};
       // When opening from Daily "Full text", use the highlight set as the section
       // so the overlay box is drawn around those verses (not a hierarchy superset).
-      final sectionIndices = _highlightSet.isNotEmpty
-          ? _highlightSet
-          : indicesWithVisible;
+      final sectionIndices =
+          _highlightSet.isNotEmpty ? _highlightSet : indicesWithVisible;
       _applySectionState(
         hierarchy: hierarchy,
         verseIndices: sectionIndices,
         verseIndex: initialIndex,
+        segmentRef: initialSegmentRef,
       );
     });
   }
@@ -546,7 +612,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ancestor: stackBox,
       );
       final verseRect = Rect.fromPoints(topLeft, bottomRight);
-      measured = measured == null ? verseRect : measured.expandToInclude(verseRect);
+      measured =
+          measured == null ? verseRect : measured.expandToInclude(verseRect);
     }
     if (measured == null) {
       if (_sectionOverlayMeasureRetries <
@@ -632,8 +699,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final section = item['section'] ?? item['path'] ?? '';
     if (section.isEmpty) return;
 
-    _syncGeneration++;
-    _isProgrammaticNavigation = true;
+    _startProgrammaticNavigation();
     _intentionalHighlight = false;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
@@ -680,7 +746,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _scrollToVerseIndex(int index, {String? segmentRef}) {
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
-    _isProgrammaticNavigation = true;
+    _startProgrammaticNavigation();
     _verseVisibility.clear(); // Discard stale visibility data
     // For split verses, prefer the specific segment key (e.g. cd half)
     // over the default verse key which always points to the ab half.
@@ -714,7 +780,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     });
   }
 
-  /// Clears _isProgrammaticNavigation only after the scroll animation finishes and
+  /// Clears programmatic-navigation mode only after the scroll animation finishes and
   /// visibility callbacks have settled. Prevents race where visibility updates
   /// overwrite the key-nav highlight.
   void _clearProgrammaticNavigationAfterScrollSettles() {
@@ -723,12 +789,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       // Cancel any pending visibility timer
       _visibilityDebounceTimer?.cancel();
       _visibilityDebounceTimer = null;
-      _isProgrammaticNavigation = false;
-      // Cooldown: keep ignoring visibility-driven highlights after scroll
-      // settles. Prevents scroll-settle callbacks from overwriting key-nav
-      // or chapter-click highlight.
-      _programmaticNavCooldownUntil =
-          DateTime.now().add(const Duration(milliseconds: 600));
+      // Keep ignoring visibility-driven highlights briefly after settling.
+      _markProgrammaticNavigationSettled();
       _measureAndUpdateSectionOverlay();
     }
 
@@ -768,11 +830,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
       {String? segmentRef}) {
-    if (_isProgrammaticNavigation) return;
-    if (_programmaticNavCooldownUntil != null &&
-        DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
-      return;
-    }
+    if (_isVisibilitySuppressed()) return;
     final key =
         segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
     if (visibility < 0.05) {
@@ -791,11 +849,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Core visibility processing: pick the best verse, look up hierarchy, apply section state.
   void _processVisibility() {
-    if (!mounted || _verseVisibility.isEmpty || _isProgrammaticNavigation) {
-      return;
-    }
-    if (_programmaticNavCooldownUntil != null &&
-        DateTime.now().isBefore(_programmaticNavCooldownUntil!)) {
+    if (!mounted || _verseVisibility.isEmpty || _isVisibilitySuppressed()) {
       return;
     }
     final capturedGen = _syncGeneration;
@@ -1010,9 +1064,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
-  /// Last time we handled arrow navigation. Used to debounce key repeat / double-fire.
-  DateTime? _lastArrowNavTime;
-
   /// Handler for reader pane: arrow keys for section nav, Enter/Space to show commentary.
   KeyEventResult _handleReaderKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
@@ -1027,7 +1078,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (event.logicalKey == LogicalKeyboardKey.enter ||
         event.logicalKey == LogicalKeyboardKey.space) {
       final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-      if (visibleIdx != null) _onVerseTap(visibleIdx, segmentRef: _currentSegmentRef);
+      if (visibleIdx != null)
+        _onVerseTap(visibleIdx, segmentRef: _currentSegmentRef);
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -1110,12 +1162,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   /// Run [fn] only if enough time has passed since last arrow nav (debounce 200ms).
   void _debouncedArrowNav(void Function() fn) {
-    final now = DateTime.now();
-    if (_lastArrowNavTime != null &&
-        now.difference(_lastArrowNavTime!).inMilliseconds < 200) {
-      return;
-    }
-    _lastArrowNavTime = now;
+    if (!_tryAcceptArrowNav()) return;
     fn();
   }
 
@@ -1163,8 +1210,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final section = leafOrdered[newIdx];
 
     // Fully synchronous path — no async gaps that let the next key press race.
-    _syncGeneration++;
-    _isProgrammaticNavigation = true;
+    _startProgrammaticNavigation();
     _intentionalHighlight = false;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
@@ -1322,8 +1368,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// After closing a nav pane, ignore visibility-driven section updates briefly
   /// so the highlighted verse doesn't jump when the viewport resizes.
   void _cooldownAfterPanelClose() {
-    _programmaticNavCooldownUntil =
-        DateTime.now().add(const Duration(milliseconds: 500));
+    _applyNavEvent(
+      const ReaderProgrammaticSettled(Duration(milliseconds: 500)),
+    );
   }
 
   Widget _buildPanelsColumn() {
@@ -1466,11 +1513,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               _isUserScrolling = false;
               // Process deferred visibility now that scroll settled — but only
               // if we're not in programmatic navigation or its cooldown period.
-              final inCooldown = _programmaticNavCooldownUntil != null &&
-                  DateTime.now().isBefore(_programmaticNavCooldownUntil!);
-              if (_verseVisibility.isNotEmpty &&
-                  !_isProgrammaticNavigation &&
-                  !inCooldown) {
+              if (_verseVisibility.isNotEmpty && !_isVisibilitySuppressed()) {
                 _visibilityDebounceTimer?.cancel();
                 _visibilityDebounceTimer =
                     Timer(const Duration(milliseconds: 100), () {
@@ -1491,300 +1534,318 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                 LayoutBuilder(
                   builder: (context, constraints) {
                     const overlayHorizontalMargin = 32.0;
-                    final contentMaxWidth = (constraints.maxWidth - overlayHorizontalMargin).clamp(0.0, double.infinity);
+                    final contentMaxWidth =
+                        (constraints.maxWidth - overlayHorizontalMargin)
+                            .clamp(0.0, double.infinity);
                     return ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: contentMaxWidth),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: _chapters.map((ch) {
-                    final key = _chapterKeys[ch.number];
-                    final verseTexts = ch.startVerseIndex < _verses.length
-                        ? _verses.sublist(ch.startVerseIndex,
-                            ch.endVerseIndex.clamp(0, _verses.length))
-                        : <String>[];
-                    return RepaintBoundary(
-                      child: Column(
-                        key: key,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Chapter ${ch.number}: ${ch.title}',
-                            style: _chapterTitleStyle,
-                          ),
-                          const SizedBox(height: 24),
-                          ...() {
-                            final verseStyle = _verseStyle;
-
-                            Widget buildVerseContent(int idx, String text,
-                                {List<int>? lineRange,
-                                int? segmentIndex,
-                                String? segmentRef}) {
-                              final lines = text.split('\n');
-                              final displayText = lineRange != null &&
-                                      lineRange.length == 2 &&
-                                      lineRange[0] >= 0 &&
-                                      lineRange[1] < lines.length
-                                  ? lines
-                                      .sublist(lineRange[0], lineRange[1] + 1)
-                                      .join('\n')
-                                  : text;
-                              final isSplitSegment =
-                                  segmentIndex != null && segmentIndex > 0;
-                              if (!isSplitSegment) {
-                                _verseKeys[idx] ??= GlobalKey();
-                              } else {
-                                _verseSegmentKeys['${idx}_$segmentIndex'] ??=
-                                    GlobalKey();
-                              }
-                              final isTargetVerse =
-                                  _scrollTargetVerseIndex != null &&
-                                      _scrollTargetVerseIndex == idx &&
-                                      _scrollToVerseKey != null &&
-                                      (segmentIndex ?? 0) == 0;
-                              final effectiveStyle = verseStyle ??
-                                  Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                        fontFamily: 'Crimson Text',
-                                        fontSize: 18,
-                                        height: 1.5,
-                                        color: AppColors.textDark,
-                                      );
-                              final ref = _verseService.getVerseRef(idx);
-                              Widget refWidget = const SizedBox.shrink();
-                              if (ref != null &&
-                                  (segmentIndex == null || segmentIndex == 0)) {
-                                refWidget = Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                  child: Text(
-                                    'Verse $ref',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
-                                        ?.copyWith(
-                                          fontFamily: 'Lora',
-                                          color: AppColors.primary,
-                                        ),
-                                  ),
-                                );
-                              }
-                              final inner = Padding(
-                                padding: const EdgeInsets.fromLTRB(28, 0, 28, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    refWidget,
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                                      child: BcvVerseText(
-                                        text: displayText,
-                                        style: effectiveStyle,
-                                      ),
-                                    ),
-                                  ],
+                          final key = _chapterKeys[ch.number];
+                          final verseTexts = ch.startVerseIndex < _verses.length
+                              ? _verses.sublist(ch.startVerseIndex,
+                                  ch.endVerseIndex.clamp(0, _verses.length))
+                              : <String>[];
+                          return RepaintBoundary(
+                            child: Column(
+                              key: key,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Chapter ${ch.number}: ${ch.title}',
+                                  style: _chapterTitleStyle,
                                 ),
-                              );
-                              Widget w = inner;
-                              if (isTargetVerse) {
-                                w = KeyedSubtree(
-                                    key: _scrollToVerseKey, child: w);
-                              }
-                              w = SizedBox(
-                                width: double.infinity,
-                                child: InkWell(
-                                  onTap: () => _onVerseTap(idx, segmentRef: segmentRef),
-                                  hoverColor: Colors.transparent,
-                                  child: w,
-                                ),
-                              );
-                              final subtreeKey = isSplitSegment
-                                  ? _verseSegmentKeys['${idx}_$segmentIndex']
-                                  : _verseKeys[idx];
-                              final key = subtreeKey ??
-                                  ValueKey('verse_${idx}_seg_$segmentIndex');
-                              return VisibilityDetector(
-                                key: ValueKey(
-                                    'verse_${idx}_${lineRange ?? 'full'}'),
-                                onVisibilityChanged: (info) =>
-                                    _onVerseVisibilityChanged(
-                                        idx, info.visibleFraction,
-                                        segmentRef: segmentRef),
-                                child: KeyedSubtree(
-                                  key: key,
-                                  child: w,
-                                ),
-                              );
-                            }
+                                const SizedBox(height: 24),
+                                ...() {
+                                  final verseStyle = _verseStyle;
 
-                            /// For ab/cd split: ab = first half of lines, cd = second half.
-                            List<int>? lineRangeForSegment(
-                                int segmentIndex, int lineCount) {
-                              if (lineCount < 2 || segmentIndex > 1) {
-                                return null;
-                              }
-                              final half = lineCount ~/ 2;
-                              if (segmentIndex == 0) {
-                                return [0, half - 1];
-                              }
-                              return [half, lineCount - 1];
-                            }
-
-                            final children = <Widget>[];
-                            final highlightRuns = _getHighlightRuns();
-                            final usedInRun = <int>{};
-
-                            List<int>? runContaining(
-                                int idx, List<List<int>> runList) {
-                              for (final r in runList) {
-                                if (r.contains(idx)) return r;
-                              }
-                              return null;
-                            }
-
-                            for (final entry in verseTexts.asMap().entries) {
-                              final localIndex = entry.key;
-                              final verse = entry.value;
-                              final globalIndex =
-                                  ch.startVerseIndex + localIndex;
-
-                              if (usedInRun.contains(globalIndex)) continue;
-
-                              final highlightRun =
-                                  runContaining(globalIndex, highlightRuns);
-                              if (highlightRun != null &&
-                                  highlightRun.first == globalIndex) {
-                                for (final idx in highlightRun) {
-                                  usedInRun.add(idx);
-                                }
-                                // Render highlighted verses without the light box; overlay draws the border.
-                                for (final idx in highlightRun) {
-                                  final text =
-                                      idx < _verses.length ? _verses[idx] : '';
-                                  final ref =
-                                      _verseService.getVerseRef(idx);
-                                  final isSplit = ref != null &&
-                                      BcvVerseService.baseVerseRefPattern
-                                          .hasMatch(ref) &&
-                                      _hierarchyService
-                                              .getSplitVerseSegmentsSync(ref)
-                                              .length >=
-                                          2;
-                                  if (isSplit) {
-                                    final segments = _hierarchyService
-                                        .getSplitVerseSegmentsSync(ref);
+                                  Widget buildVerseContent(int idx, String text,
+                                      {List<int>? lineRange,
+                                      int? segmentIndex,
+                                      String? segmentRef}) {
                                     final lines = text.split('\n');
-                                    if (lines.length >= 2) {
-                                      for (var i = 0;
-                                          i < segments.length;
-                                          i++) {
-                                        final range =
-                                            lineRangeForSegment(
-                                                i, lines.length);
-                                        if (range != null) {
+                                    final displayText = lineRange != null &&
+                                            lineRange.length == 2 &&
+                                            lineRange[0] >= 0 &&
+                                            lineRange[1] < lines.length
+                                        ? lines
+                                            .sublist(
+                                                lineRange[0], lineRange[1] + 1)
+                                            .join('\n')
+                                        : text;
+                                    final isSplitSegment =
+                                        segmentIndex != null &&
+                                            segmentIndex > 0;
+                                    if (!isSplitSegment) {
+                                      _verseKeys[idx] ??= GlobalKey();
+                                    } else {
+                                      _verseSegmentKeys[
+                                              '${idx}_$segmentIndex'] ??=
+                                          GlobalKey();
+                                    }
+                                    final isTargetVerse =
+                                        _scrollTargetVerseIndex != null &&
+                                            _scrollTargetVerseIndex == idx &&
+                                            _scrollToVerseKey != null &&
+                                            (segmentIndex ?? 0) == 0;
+                                    final effectiveStyle = verseStyle ??
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(
+                                              fontFamily: 'Crimson Text',
+                                              fontSize: 18,
+                                              height: 1.5,
+                                              color: AppColors.textDark,
+                                            );
+                                    final ref = _verseService.getVerseRef(idx);
+                                    Widget refWidget = const SizedBox.shrink();
+                                    if (ref != null &&
+                                        (segmentIndex == null ||
+                                            segmentIndex == 0)) {
+                                      refWidget = Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 0, 0, 8),
+                                        child: Text(
+                                          'Verse $ref',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(
+                                                fontFamily: 'Lora',
+                                                color: AppColors.primary,
+                                              ),
+                                        ),
+                                      );
+                                    }
+                                    final inner = Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          28, 0, 28, 0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          refWidget,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 0, 20),
+                                            child: BcvVerseText(
+                                              text: displayText,
+                                              style: effectiveStyle,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    Widget w = inner;
+                                    if (isTargetVerse) {
+                                      w = KeyedSubtree(
+                                          key: _scrollToVerseKey, child: w);
+                                    }
+                                    w = SizedBox(
+                                      width: double.infinity,
+                                      child: InkWell(
+                                        onTap: () => _onVerseTap(idx,
+                                            segmentRef: segmentRef),
+                                        hoverColor: Colors.transparent,
+                                        child: w,
+                                      ),
+                                    );
+                                    final subtreeKey = isSplitSegment
+                                        ? _verseSegmentKeys[
+                                            '${idx}_$segmentIndex']
+                                        : _verseKeys[idx];
+                                    final key = subtreeKey ??
+                                        ValueKey(
+                                            'verse_${idx}_seg_$segmentIndex');
+                                    return VisibilityDetector(
+                                      key: ValueKey(
+                                          'verse_${idx}_${lineRange ?? 'full'}'),
+                                      onVisibilityChanged: (info) =>
+                                          _onVerseVisibilityChanged(
+                                              idx, info.visibleFraction,
+                                              segmentRef: segmentRef),
+                                      child: KeyedSubtree(
+                                        key: key,
+                                        child: w,
+                                      ),
+                                    );
+                                  }
+
+                                  /// For ab/cd split: ab = first half of lines, cd = second half.
+                                  List<int>? lineRangeForSegment(
+                                      int segmentIndex, int lineCount) {
+                                    if (lineCount < 2 || segmentIndex > 1) {
+                                      return null;
+                                    }
+                                    final half = lineCount ~/ 2;
+                                    if (segmentIndex == 0) {
+                                      return [0, half - 1];
+                                    }
+                                    return [half, lineCount - 1];
+                                  }
+
+                                  final children = <Widget>[];
+                                  final highlightRuns = _getHighlightRuns();
+                                  final usedInRun = <int>{};
+
+                                  List<int>? runContaining(
+                                      int idx, List<List<int>> runList) {
+                                    for (final r in runList) {
+                                      if (r.contains(idx)) return r;
+                                    }
+                                    return null;
+                                  }
+
+                                  for (final entry
+                                      in verseTexts.asMap().entries) {
+                                    final localIndex = entry.key;
+                                    final verse = entry.value;
+                                    final globalIndex =
+                                        ch.startVerseIndex + localIndex;
+
+                                    if (usedInRun.contains(globalIndex))
+                                      continue;
+
+                                    final highlightRun = runContaining(
+                                        globalIndex, highlightRuns);
+                                    if (highlightRun != null &&
+                                        highlightRun.first == globalIndex) {
+                                      for (final idx in highlightRun) {
+                                        usedInRun.add(idx);
+                                      }
+                                      // Render highlighted verses without the light box; overlay draws the border.
+                                      for (final idx in highlightRun) {
+                                        final text = idx < _verses.length
+                                            ? _verses[idx]
+                                            : '';
+                                        final ref =
+                                            _verseService.getVerseRef(idx);
+                                        final isSplit = ref != null &&
+                                            BcvVerseService.baseVerseRefPattern
+                                                .hasMatch(ref) &&
+                                            _hierarchyService
+                                                    .getSplitVerseSegmentsSync(
+                                                        ref)
+                                                    .length >=
+                                                2;
+                                        if (isSplit) {
+                                          final segments = _hierarchyService
+                                              .getSplitVerseSegmentsSync(ref);
+                                          final lines = text.split('\n');
+                                          if (lines.length >= 2) {
+                                            for (var i = 0;
+                                                i < segments.length;
+                                                i++) {
+                                              final range = lineRangeForSegment(
+                                                  i, lines.length);
+                                              if (range != null) {
+                                                children.add(
+                                                  SizedBox(
+                                                    width: double.infinity,
+                                                    child: buildVerseContent(
+                                                      idx,
+                                                      text,
+                                                      lineRange: range,
+                                                      segmentIndex: i,
+                                                      segmentRef:
+                                                          segments[i].ref,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          } else {
+                                            children.add(
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: buildVerseContent(
+                                                    idx, text),
+                                              ),
+                                            );
+                                          }
+                                        } else {
                                           children.add(
                                             SizedBox(
                                               width: double.infinity,
-                                              child: buildVerseContent(
-                                                idx,
-                                                text,
-                                                lineRange: range,
-                                                segmentIndex: i,
-                                                segmentRef: segments[i].ref,
-                                              ),
+                                              child:
+                                                  buildVerseContent(idx, text),
                                             ),
                                           );
                                         }
+                                      }
+                                      continue;
+                                    }
+
+                                    // Section highlight is drawn via animated overlay.
+                                    // For split verses, render as two blocks so overlay can highlight each segment.
+                                    final ref =
+                                        _verseService.getVerseRef(globalIndex);
+                                    final isSplit = ref != null &&
+                                        BcvVerseService.baseVerseRefPattern
+                                            .hasMatch(ref) &&
+                                        _hierarchyService
+                                                .getSplitVerseSegmentsSync(ref)
+                                                .length >=
+                                            2;
+                                    if (isSplit) {
+                                      final segments = _hierarchyService
+                                          .getSplitVerseSegmentsSync(ref);
+                                      final lines = verse.split('\n');
+                                      if (lines.length >= 2) {
+                                        for (var i = 0;
+                                            i < segments.length;
+                                            i++) {
+                                          final range = lineRangeForSegment(
+                                              i, lines.length);
+                                          if (range != null) {
+                                            children.add(
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: buildVerseContent(
+                                                  globalIndex,
+                                                  verse,
+                                                  lineRange: range,
+                                                  segmentIndex: i,
+                                                  segmentRef: segments[i].ref,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      } else {
+                                        children.add(
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: buildVerseContent(
+                                                globalIndex, verse),
+                                          ),
+                                        );
                                       }
                                     } else {
                                       children.add(
                                         SizedBox(
                                           width: double.infinity,
-                                          child:
-                                              buildVerseContent(idx, text),
-                                        ),
-                                      );
-                                    }
-                                  } else {
-                                    children.add(
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child:
-                                            buildVerseContent(idx, text),
-                                      ),
-                                    );
-                                  }
-                                }
-                                continue;
-                              }
-
-                              // Section highlight is drawn via animated overlay.
-                              // For split verses, render as two blocks so overlay can highlight each segment.
-                              final ref =
-                                  _verseService.getVerseRef(globalIndex);
-                              final isSplit = ref != null &&
-                                  BcvVerseService.baseVerseRefPattern
-                                      .hasMatch(ref) &&
-                                  _hierarchyService
-                                          .getSplitVerseSegmentsSync(ref)
-                                          .length >=
-                                      2;
-                              if (isSplit) {
-                                final segments = _hierarchyService
-                                    .getSplitVerseSegmentsSync(ref);
-                                final lines = verse.split('\n');
-                                if (lines.length >= 2) {
-                                  for (var i = 0; i < segments.length; i++) {
-                                    final range =
-                                        lineRangeForSegment(i, lines.length);
-                                    if (range != null) {
-                                      children.add(
-                                        SizedBox(
-                                          width: double.infinity,
                                           child: buildVerseContent(
-                                            globalIndex,
-                                            verse,
-                                            lineRange: range,
-                                            segmentIndex: i,
-                                            segmentRef: segments[i].ref,
-                                          ),
+                                              globalIndex, verse),
                                         ),
                                       );
                                     }
                                   }
-                                } else {
-                                  children.add(
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child:
-                                          buildVerseContent(globalIndex, verse),
-                                    ),
-                                  );
-                                }
-                              } else {
-                                children.add(
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child:
-                                        buildVerseContent(globalIndex, verse),
-                                  ),
-                                );
-                              }
-                            }
-                            return children;
-                          }(),
-                          const SizedBox(height: 32),
-                        ],
+                                  return children;
+                                }(),
+                                const SizedBox(height: 32),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
                     );
-                  }).toList(),
-                        ),
-                      );
-                },
-              ),
-              Positioned.fill(
+                  },
+                ),
+                Positioned.fill(
                   child: ListenableBuilder(
                     listenable: _sectionChangeNotifier,
                     builder: (_, __) {

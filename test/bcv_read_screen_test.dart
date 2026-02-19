@@ -18,13 +18,17 @@ void main() {
 
   late int verseIndex237;
   late int verseIndex649;
+  late int firstLeafVerseIndex;
+  late int lastLeafVerseIndex;
+  late List<({String path, String title, int depth})> leafOrdered;
 
   setUp(() {
     VisibilityDetectorController.instance.updateInterval = Duration.zero;
   });
 
   tearDown(() {
-    VisibilityDetectorController.instance.updateInterval = const Duration(milliseconds: 500);
+    VisibilityDetectorController.instance.updateInterval =
+        const Duration(milliseconds: 500);
   });
 
   setUpAll(() async {
@@ -34,14 +38,42 @@ void main() {
     await hierarchyService.getHierarchyForVerse('1.1');
     verseIndex237 = verseService.getIndexForRef('2.37') ?? -1;
     verseIndex649 = verseService.getIndexForRef('6.49') ?? -1;
-    expect(verseIndex237, greaterThanOrEqualTo(0), reason: 'Verse 2.37 must exist');
-    expect(verseIndex649, greaterThanOrEqualTo(0), reason: 'Verse 6.49 must exist');
+    leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
+    firstLeafVerseIndex = -1;
+    for (final s in leafOrdered) {
+      final ref = hierarchyService.getFirstVerseForSectionSync(s.path);
+      final idx =
+          ref == null ? null : verseService.getIndexForRefWithFallback(ref);
+      if (idx != null) {
+        firstLeafVerseIndex = idx;
+        break;
+      }
+    }
+    lastLeafVerseIndex = -1;
+    for (final s in leafOrdered.reversed) {
+      final ref = hierarchyService.getFirstVerseForSectionSync(s.path);
+      final idx =
+          ref == null ? null : verseService.getIndexForRefWithFallback(ref);
+      if (idx != null) {
+        lastLeafVerseIndex = idx;
+        break;
+      }
+    }
+    expect(verseIndex237, greaterThanOrEqualTo(0),
+        reason: 'Verse 2.37 must exist');
+    expect(verseIndex649, greaterThanOrEqualTo(0),
+        reason: 'Verse 6.49 must exist');
+    expect(firstLeafVerseIndex, greaterThanOrEqualTo(0),
+        reason: 'First leaf verse must resolve');
+    expect(lastLeafVerseIndex, greaterThanOrEqualTo(0),
+        reason: 'Last leaf verse must resolve');
   });
 
   Future<void> pumpBcvReadScreen(
     WidgetTester tester, {
     int? scrollToVerseIndex,
-    void Function(String sectionPath, String firstVerseRef)? onSectionNavigateForTest,
+    void Function(String sectionPath, String firstVerseRef)?
+        onSectionNavigateForTest,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -59,7 +91,8 @@ void main() {
     );
   }
 
-  Future<void> simulateKeyTap(WidgetTester tester, LogicalKeyboardKey key) async {
+  Future<void> simulateKeyTap(
+      WidgetTester tester, LogicalKeyboardKey key) async {
     await tester.sendKeyDownEvent(key);
     await tester.pump();
     await tester.sendKeyUpEvent(key);
@@ -67,7 +100,8 @@ void main() {
   }
 
   group('BcvReadScreen key-down navigation', () {
-    testWidgets('key down from 2.37 navigates to 2.38 then 2.40', (WidgetTester tester) async {
+    testWidgets('key down from 2.37 navigates to 2.38 then 2.40',
+        (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -90,7 +124,8 @@ void main() {
     });
 
     /// Regression: from 6.49, key down must go to 6.50 (6.50ab), NOT skip to 6.52.
-    testWidgets('key down from 6.49 goes to 6.50 not 6.52', (WidgetTester tester) async {
+    testWidgets('key down from 6.49 goes to 6.50 not 6.52',
+        (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -111,12 +146,15 @@ void main() {
       expect(find.text('No chapters available.'), findsNothing);
 
       // Ensure 6.49 is scrolled into view so visibility sets _visibleVerseIndex to 6.49.
-      await tester.ensureVisible(find.textContaining('It is wrong of you, mind, to be angry'));
+      await tester.ensureVisible(
+          find.textContaining('It is wrong of you, mind, to be angry'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
 
       // Tap reader content to give it focus (section panel would nav from wrong section).
-      await tester.tap(find.textContaining('It is wrong of you, mind, to be angry'), warnIfMissed: false);
+      await tester.tap(
+          find.textContaining('It is wrong of you, mind, to be angry'),
+          warnIfMissed: false);
       await tester.pump();
 
       await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
@@ -130,8 +168,10 @@ void main() {
       // Next leaf after 6.49 may be 6.50/6.50ab/6.50cd or 6.51 depending on hierarchy; must not skip to 6.52.
       expect(
         capturedFirstRef,
-        anyOf(equals('6.50ab'), equals('6.50cd'), equals('6.50'), equals('6.51')),
-        reason: 'From 6.49 next must be 6.50/6.50ab/6.50cd/6.51, not 6.52. Got: $capturedFirstRef',
+        anyOf(
+            equals('6.50ab'), equals('6.50cd'), equals('6.50'), equals('6.51')),
+        reason:
+            'From 6.49 next must be 6.50/6.50ab/6.50cd/6.51, not 6.52. Got: $capturedFirstRef',
       );
       expect(
         capturedFirstRef,
@@ -141,6 +181,104 @@ void main() {
 
       // Let programmatic-navigation timers complete
       await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('key tap dispatches exactly one navigation (keyup ignored)',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      int navCount = 0;
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex237,
+        onSectionNavigateForTest: (_, __) => navCount++,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(
+        navCount,
+        1,
+        reason: 'One key tap (down+up) should navigate once, never twice.',
+      );
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('arrow up at first leaf does not navigate',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      int navCount = 0;
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: firstLeafVerseIndex,
+        onSectionNavigateForTest: (_, __) => navCount++,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowUp);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(navCount, 0, reason: 'At first leaf, ArrowUp should be a no-op');
+    });
+
+    testWidgets('arrow down at last leaf does not navigate',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      int navCount = 0;
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: lastLeafVerseIndex,
+        onSectionNavigateForTest: (_, __) => navCount++,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(navCount, 0, reason: 'At last leaf, ArrowDown should be a no-op');
+    });
+
+    testWidgets(
+        'section-list auto-scroll does not trigger extra section navigation',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      int navCount = 0;
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex649,
+        onSectionNavigateForTest: (_, __) => navCount++,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await tester.tap(
+        find.textContaining('It is wrong of you, mind, to be angry'),
+        warnIfMissed: false,
+      );
+      await tester.pump();
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(navCount, 1, reason: 'First keydown should navigate once');
+
+      // Let section slider auto-scroll/cooldown settle. No extra navigation
+      // should happen without another key press.
+      await tester.pump(const Duration(seconds: 2));
+      expect(
+        navCount,
+        1,
+        reason:
+            'Auto-scrolling section list must not trigger another section navigation.',
+      );
     });
   });
 }

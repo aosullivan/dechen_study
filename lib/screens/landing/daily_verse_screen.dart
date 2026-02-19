@@ -9,19 +9,39 @@ import 'bcv_read_screen.dart';
 /// Full-screen display of a random section (one or more verses) from the commentary mapping,
 /// with "Another section" and "Full text" link that jumps to Read with the section highlighted.
 class DailyVerseScreen extends StatefulWidget {
-  const DailyVerseScreen({super.key});
+  const DailyVerseScreen({
+    super.key,
+    this.verseService,
+    this.commentaryService,
+    this.randomSectionLoader,
+    this.verseIndexForRef,
+    this.verseTextForIndex,
+  });
+
+  final BcvVerseService? verseService;
+  final CommentaryService? commentaryService;
+
+  /// Test seam: override random-section loading to make widget tests deterministic.
+  final Future<CommentaryEntry?> Function()? randomSectionLoader;
+
+  /// Test seam: override verse index lookup by ref.
+  final int? Function(String ref)? verseIndexForRef;
+
+  /// Test seam: override verse text lookup by index.
+  final String? Function(int index)? verseTextForIndex;
 
   @override
   State<DailyVerseScreen> createState() => _DailyVerseScreenState();
 }
 
 class _DailyVerseScreenState extends State<DailyVerseScreen> {
-  final _verseService = BcvVerseService.instance;
-  final _commentaryService = CommentaryService.instance;
+  late final BcvVerseService _verseService;
+  late final CommentaryService _commentaryService;
 
   /// Current section: refs and their verse texts (in order).
   List<String> _sectionRefs = [];
   List<String> _sectionVerseTexts = [];
+
   /// Verse indices in the flat list for deep link and highlight.
   Set<int> _sectionVerseIndices = {};
   bool _loading = true;
@@ -30,7 +50,26 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
   @override
   void initState() {
     super.initState();
+    _verseService = widget.verseService ?? BcvVerseService.instance;
+    _commentaryService = widget.commentaryService ?? CommentaryService.instance;
     _loadSection();
+  }
+
+  String _segmentTextForRef(String ref, String fullText) {
+    final m = RegExp(r'^(\d+\.\d+)([a-d]+)$').firstMatch(ref);
+    if (m == null) return fullText;
+    final suffix = m.group(2) ?? '';
+    final lines = fullText.split('\n');
+    if (lines.length < 2) return fullText;
+    final half = lines.length ~/ 2;
+    if (half <= 0) return fullText;
+    if (suffix == 'ab' || suffix == 'a') {
+      return lines.sublist(0, half).join('\n');
+    }
+    if (suffix == 'cd' || suffix == 'bcd') {
+      return lines.sublist(half).join('\n');
+    }
+    return fullText;
   }
 
   Future<void> _loadSection() async {
@@ -42,7 +81,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
       _sectionVerseIndices = {};
     });
     try {
-      final section = await _commentaryService.getRandomSection();
+      final sectionLoader =
+          widget.randomSectionLoader ?? _commentaryService.getRandomSection;
+      final section = await sectionLoader();
       if (section == null || section.refsInBlock.isEmpty) {
         if (mounted) {
           setState(() {
@@ -52,16 +93,25 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
         }
         return;
       }
-      await _verseService.getChapters();
+      final indexForRef =
+          widget.verseIndexForRef ?? _verseService.getIndexForRefWithFallback;
+      final textForIndex = widget.verseTextForIndex ?? _verseService.getVerseAt;
+      final usingCustomResolvers =
+          widget.verseIndexForRef != null && widget.verseTextForIndex != null;
+      if (!usingCustomResolvers) {
+        await _verseService.getChapters();
+      }
       final refs = section.refsInBlock;
       final texts = <String>[];
       final indices = <int>{};
       for (final ref in refs) {
-        final idx = _verseService.getIndexForRef(ref);
+        final idx = indexForRef(ref);
         if (idx != null) {
           indices.add(idx);
-          final text = _verseService.getVerseAt(idx);
-          texts.add(text ?? '');
+          final text = textForIndex(idx);
+          texts.add(_segmentTextForRef(ref, text ?? ''));
+        } else {
+          texts.add('');
         }
       }
       if (mounted) {
@@ -95,7 +145,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     final cFirst = first.split('.').firstOrNull ?? '';
     final cLast = last.split('.').firstOrNull ?? '';
     if (cFirst != cLast) return 'Verses ${_sectionRefs.join(', ')}';
-    final verseNums = _sectionRefs.map((r) => int.tryParse(r.split('.').lastOrNull ?? '') ?? 0).toList();
+    final verseNums = _sectionRefs
+        .map((r) => int.tryParse(r.split('.').lastOrNull ?? '') ?? 0)
+        .toList();
     final contiguous = verseNums.length > 1 &&
         (verseNums.last - verseNums.first + 1) == verseNums.length;
     if (contiguous) {
@@ -200,27 +252,29 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                         if (ref != null) ...[
                           Text(
                             'Verse $ref',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  fontFamily: 'Lora',
-                                  color: AppColors.primary,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      fontFamily: 'Lora',
+                                      color: AppColors.primary,
+                                    ),
                           ),
                           const SizedBox(height: 6),
                         ],
                         BcvVerseText(
                           text: text,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontFamily: 'Crimson Text',
-                                fontSize: 20,
-                                height: 1.5,
-                                color: const Color(0xFF2C2416),
-                              ) ??
-                              const TextStyle(
-                                fontFamily: 'Crimson Text',
-                                fontSize: 20,
-                                height: 1.5,
-                                color: AppColors.textDark,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                        fontFamily: 'Crimson Text',
+                                        fontSize: 20,
+                                        height: 1.5,
+                                        color: const Color(0xFF2C2416),
+                                      ) ??
+                                  const TextStyle(
+                                    fontFamily: 'Crimson Text',
+                                    fontSize: 20,
+                                    height: 1.5,
+                                    color: AppColors.textDark,
+                                  ),
                         ),
                       ],
                     ),
@@ -247,7 +301,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _sectionVerseIndices.isEmpty ? null : _openFullText,
+                  onPressed:
+                      _sectionVerseIndices.isEmpty ? null : _openFullText,
                   icon: const Icon(Icons.book, size: 20),
                   label: const Text('Full text'),
                   style: OutlinedButton.styleFrom(
@@ -268,13 +323,31 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     if (_sectionVerseIndices.isEmpty) return;
     final sorted = _sectionVerseIndices.toList()..sort();
     final firstIndex = sorted.first;
+    final initialSegmentRef = _initialSegmentRefForFirstIndex(firstIndex);
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => BcvReadScreen(
           scrollToVerseIndex: firstIndex,
           highlightSectionIndices: _sectionVerseIndices,
+          initialSegmentRef: initialSegmentRef,
         ),
       ),
     );
+  }
+
+  String? _initialSegmentRefForFirstIndex(int firstIndex) {
+    if (_sectionRefs.isEmpty) return null;
+    final indexForRef =
+        widget.verseIndexForRef ?? _verseService.getIndexForRefWithFallback;
+    String? firstMatchingRef;
+    for (final ref in _sectionRefs) {
+      final idx = indexForRef(ref);
+      if (idx != firstIndex) continue;
+      firstMatchingRef ??= ref;
+      if (BcvVerseService.segmentSuffixPattern.hasMatch(ref)) {
+        return ref;
+      }
+    }
+    return firstMatchingRef;
   }
 }
