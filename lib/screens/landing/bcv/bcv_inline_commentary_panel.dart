@@ -295,6 +295,8 @@ class _SegmentBody extends StatelessWidget {
 
     void flushVerse() {
       if (verseBuffer.isEmpty) return;
+      // Space between commentary (or ref) above and verse block below, matching verse->commentary spacing.
+      if (children.isNotEmpty) children.add(const SizedBox(height: 12));
       children.add(Padding(
         padding: const EdgeInsets.only(left: 24),
         child: BcvVerseText(

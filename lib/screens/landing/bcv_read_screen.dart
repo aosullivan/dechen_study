@@ -375,12 +375,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return runs;
   }
 
-  Future<void> _onVerseTap(int globalIndex) async {
-    // Get the verse ref and load commentary
-    final ref = _verseService.getVerseRef(globalIndex);
-    if (ref == null) return;
+  Future<void> _onVerseTap(int globalIndex, {String? segmentRef}) async {
+    // Prefer the segment ref (e.g. "9.66ab") so split verses each get their own commentary.
+    // Fall back to the base ref if the segment ref has no commentary of its own.
+    final baseRef = _verseService.getVerseRef(globalIndex);
+    if (baseRef == null) return;
+    final lookupRef = segmentRef ?? baseRef;
 
-    final entry = await _commentaryService.getCommentaryForRef(ref);
+    CommentaryEntry? entry = await _commentaryService.getCommentaryForRef(lookupRef);
+    if (entry == null && lookupRef != baseRef) {
+      entry = await _commentaryService.getCommentaryForRef(baseRef);
+    }
     if (!mounted) return;
 
     // No commentary for this verse — do nothing.
@@ -1022,7 +1027,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (event.logicalKey == LogicalKeyboardKey.enter ||
         event.logicalKey == LogicalKeyboardKey.space) {
       final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-      if (visibleIdx != null) _onVerseTap(visibleIdx);
+      if (visibleIdx != null) _onVerseTap(visibleIdx, segmentRef: _currentSegmentRef);
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -1590,7 +1595,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                               w = SizedBox(
                                 width: double.infinity,
                                 child: InkWell(
-                                  onTap: () => _onVerseTap(idx),
+                                  onTap: () => _onVerseTap(idx, segmentRef: segmentRef),
                                   hoverColor: Colors.transparent,
                                   child: w,
                                 ),
