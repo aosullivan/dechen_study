@@ -20,9 +20,10 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   final _commentaryService = CommentaryService.instance;
 
   bool _isLoading = true;
-  String _sectionText = '';
+  List<String> _sectionRefs = [];
+  List<String> _sectionVerseTexts = [];
   int _correctChapterNumber = 0;
-  String? _correctVerseNum;
+  String? _correctVerseRef;
   List<BcvChapter> _chapters = [];
   int? _selectedChapter;
   bool _showAnswer = false;
@@ -121,7 +122,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
     setState(() {
       _isLoading = true;
       _error = null;
-      _sectionText = '';
+      _sectionRefs = [];
+      _sectionVerseTexts = [];
       _correctChapterNumber = 0;
       _selectedChapter = null;
       _showAnswer = false;
@@ -129,34 +131,23 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
       _correctAnswerMessage = null;
     });
     try {
-      final section = await _commentaryService.getRandomSection();
-      if (section == null || section.refsInBlock.isEmpty) {
+      final chapters = await _verseService.getChapters();
+      final section = await _pickRenderableSection();
+      if (section == null) {
         if (mounted) {
           setState(() {
             _isLoading = false;
-            _error = 'No sections available';
+            _error = 'No renderable sections available';
           });
         }
         return;
       }
-      await _verseService.getChapters();
-      final refs = section.refsInBlock;
-      final texts = <String>[];
-      for (final ref in refs) {
-        final idx = _verseService.getIndexForRef(ref);
-        if (idx != null) {
-          final text = _verseService.getVerseAt(idx) ?? '';
-          texts.add(text);
-        }
-      }
-      final chapterNum = int.tryParse(refs.first.split('.').first) ?? 1;
-      final verseNum = refs.first.split('.').last;
-      final chapters = await _verseService.getChapters();
       if (mounted) {
         setState(() {
-          _sectionText = texts.join('\n\n');
-          _correctChapterNumber = chapterNum;
-          _correctVerseNum = verseNum;
+          _sectionRefs = section.refs;
+          _sectionVerseTexts = section.verseTexts;
+          _correctChapterNumber = section.chapterNumber;
+          _correctVerseRef = section.verseRef;
           _chapters = chapters;
           _isLoading = false;
         });
@@ -169,6 +160,64 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
         });
       }
     }
+  }
+
+  Future<_QuizSectionData?> _pickRenderableSection() async {
+    for (var attempt = 0; attempt < 40; attempt++) {
+      final section = await _commentaryService.getRandomSection();
+      if (section == null || section.refsInBlock.isEmpty) continue;
+      final data = _buildSectionData(section);
+      if (data != null) return data;
+    }
+    return null;
+  }
+
+  _QuizSectionData? _buildSectionData(CommentaryEntry section) {
+    final normalizedRefs = _normalizeWholeVerseRefs(section.refsInBlock);
+    if (normalizedRefs.isEmpty) return null;
+
+    final refs = <String>[];
+    final texts = <String>[];
+    for (final ref in normalizedRefs) {
+      final idx = _verseService.getIndexForRef(ref);
+      if (idx == null) continue;
+      final text = _verseService.getVerseAt(idx);
+      if (text == null || text.trim().isEmpty) continue;
+      refs.add(ref);
+      texts.add(text);
+    }
+    if (refs.isEmpty) return null;
+
+    final chapterNumber = int.tryParse(refs.first.split('.').first);
+    if (chapterNumber == null) return null;
+    final sameChapter = refs.every((r) => r.startsWith('$chapterNumber.'));
+    if (!sameChapter) return null;
+
+    return _QuizSectionData(
+      refs: refs,
+      verseTexts: texts,
+      chapterNumber: chapterNumber,
+    );
+  }
+
+  List<String> _normalizeWholeVerseRefs(List<String> refsInBlock) {
+    final seen = <String>{};
+    final normalized = <String>[];
+    for (final ref in refsInBlock) {
+      final baseRef = ref.replaceAll(BcvVerseService.segmentSuffixPattern, '');
+      if (!BcvVerseService.baseVerseRefPattern.hasMatch(baseRef)) continue;
+      if (!seen.add(baseRef)) continue;
+      normalized.add(baseRef);
+    }
+    return normalized;
+  }
+
+  String _formattedAnswer(BcvChapter chapter, String? verseRef) {
+    final verse = verseRef?.trim();
+    if (verse == null || verse.isEmpty) {
+      return 'Chapter ${chapter.number}: ${chapter.title}';
+    }
+    return 'Chapter ${chapter.number}: ${chapter.title} - verse $verse';
   }
 
   /// Star path for confetti particles (5-pointed star centered in [size]).
@@ -277,73 +326,92 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Score display
-                if (_totalAnswers > 0)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                          color: AppColors.border.withValues(alpha: 0.6)),
-                    ),
-                    child: Text(
-                      '$_correctAnswers / $_totalAnswers',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                      textAlign: TextAlign.end,
-                    ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    '$_correctAnswers/$_totalAnswers',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: _totalAnswers == 0
+                              ? AppColors.primary.withValues(alpha: 0.55)
+                              : AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
+                ),
                 const SizedBox(height: 10),
-
-                // Section text – compact box, larger readable text
                 ConstrainedBox(
-                  constraints: const BoxConstraints(maxHeight: 200),
+                  constraints: const BoxConstraints(maxHeight: 220),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 10),
+                    padding: const EdgeInsets.fromLTRB(22, 18, 18, 18),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBeige,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: _showAnswer
                             ? (_selectedChapter == _correctChapterNumber
                                 ? Colors.green
                                 : AppColors.wrong)
-                            : AppColors.border,
+                            : AppColors.borderLight,
                         width: _showAnswer ? 2 : 1,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.04),
-                          blurRadius: 3,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
                     ),
                     child: SingleChildScrollView(
-                      child: BcvVerseText(
-                        text: _sectionText,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  fontFamily: 'Crimson Text',
-                                  fontSize: 18,
-                                  height: 1.65,
-                                ) ??
-                            const TextStyle(
-                              fontFamily: 'Crimson Text',
-                              fontSize: 18,
-                              height: 1.65,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:
+                            _sectionVerseTexts.asMap().entries.map((entry) {
+                          final i = entry.key;
+                          final text = entry.value;
+                          final ref =
+                              i < _sectionRefs.length ? _sectionRefs[i] : null;
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom:
+                                  i == _sectionVerseTexts.length - 1 ? 0 : 20,
                             ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (ref != null) ...[
+                                  Text(
+                                    'Verse $ref',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                          fontFamily: 'Lora',
+                                          color: AppColors.primary,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                ],
+                                BcvVerseText(
+                                  text: text,
+                                  style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontFamily: 'Crimson Text',
+                                            fontSize: 20,
+                                            height: 1.5,
+                                            color: const Color(0xFF2C2416),
+                                          ) ??
+                                      const TextStyle(
+                                        fontFamily: 'Crimson Text',
+                                        fontSize: 20,
+                                        height: 1.5,
+                                        color: AppColors.textDark,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-
-                // Question
                 Text(
                   'To which chapter does this belong?',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -352,13 +420,11 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                       ),
                 ),
                 const SizedBox(height: 8),
-
-                // Chapter options: 2 neat rows of 5 (number + title per cell)
                 LayoutBuilder(
                   builder: (context, constraints) {
                     const crossAxisCount = 5;
-                    const spacing = 12.0;
-                    const rowHeight = 72.0;
+                    const spacing = 10.0;
+                    const rowHeight = 64.0;
                     final cellWidth = (constraints.maxWidth -
                             (spacing * (crossAxisCount - 1))) /
                         crossAxisCount;
@@ -403,23 +469,22 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                             _correctChapterNumber;
                                         String? wrongMsg;
                                         String? correctMsg;
+                                        final correctChapter =
+                                            _chapters.firstWhere((c) =>
+                                                c.number ==
+                                                _correctChapterNumber);
+                                        final formattedAnswer =
+                                            _formattedAnswer(correctChapter,
+                                                _correctVerseRef);
 
                                         if (!correct) {
                                           _consecutiveCorrect = 0;
-                                          final correctChapter =
-                                              _chapters.firstWhere((c) =>
-                                                  c.number ==
-                                                  _correctChapterNumber);
-                                          final verseStr =
-                                              _correctVerseNum ?? '';
-                                          final chapterStr =
-                                              'Chapter ${correctChapter.number}${verseStr.isNotEmpty ? ', verse $verseStr' : ''}: ${correctChapter.title}';
                                           final template =
                                               _wrongAnswerTemplates[Random()
                                                   .nextInt(_wrongAnswerTemplates
                                                       .length)];
                                           wrongMsg = template.replaceFirst(
-                                              '%s', chapterStr);
+                                              '%s', formattedAnswer);
                                         } else {
                                           _consecutiveCorrect++;
                                           if (_consecutiveCorrect == 10) {
@@ -443,12 +508,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                                     _correctAnswerMessages
                                                         .length)];
                                           }
-                                          final verseStr =
-                                              _correctVerseNum ?? '';
-                                          if (verseStr.isNotEmpty) {
-                                            correctMsg =
-                                                '$correctMsg It was Chapter $_correctChapterNumber, verse $verseStr.';
-                                          }
+                                          correctMsg =
+                                              '$correctMsg It was $formattedAnswer.';
                                         }
 
                                         setState(() {
@@ -468,7 +529,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                 child: Container(
                                   margin: const EdgeInsets.all(0),
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 8),
+                                      horizontal: 4, vertical: 8),
                                   decoration: BoxDecoration(
                                     color: isCorrect
                                         ? Colors.green.withValues(alpha: 0.2)
@@ -498,48 +559,27 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                     ],
                                   ),
                                   alignment: Alignment.center,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        '${chapter.number}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w800,
-                                              color: isCorrect
-                                                  ? Colors.green.shade800
-                                                  : (isWrong
-                                                      ? AppColors.wrong
-                                                      : AppColors.textDark),
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        chapter.title,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(
-                                              fontSize: 14,
-                                              height: 1.25,
-                                              color: isCorrect
-                                                  ? Colors.green.shade800
-                                                  : (isWrong
-                                                      ? AppColors.wrong
-                                                      : AppColors.textDark),
-                                            ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
+                                  child: Tooltip(
+                                    message:
+                                        'Chapter ${chapter.number}: ${chapter.title}',
+                                    child: Text(
+                                      '${chapter.number}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                            color: isCorrect
+                                                ? Colors.green.shade800
+                                                : (isWrong
+                                                    ? AppColors.wrong
+                                                    : AppColors.textDark),
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -550,8 +590,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                     );
                   },
                 ),
-
-                // Answer feedback (always visible when answered – no scroll needed)
                 if (_showAnswer) ...[
                   const SizedBox(height: 10),
                   Container(
@@ -596,8 +634,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                           ? Colors.green.shade800
                                           : AppColors.darkBrown,
                                 ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -648,4 +684,18 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
       ),
     );
   }
+}
+
+class _QuizSectionData {
+  const _QuizSectionData({
+    required this.refs,
+    required this.verseTexts,
+    required this.chapterNumber,
+  });
+
+  final List<String> refs;
+  final List<String> verseTexts;
+  final int chapterNumber;
+
+  String get verseRef => refs.first;
 }

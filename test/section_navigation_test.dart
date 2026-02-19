@@ -51,7 +51,8 @@ void main() {
       );
     });
 
-    test('leaf sections order split verses 8.136ab before 8.136cd for keydown', () {
+    test('leaf sections order split verses 8.136ab before 8.136cd for keydown',
+        () {
       final leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
       final abIdx = leafOrdered.indexWhere((s) {
         final ref = hierarchyService.getFirstVerseForSectionSync(s.path);
@@ -63,7 +64,8 @@ void main() {
       });
       if (abIdx >= 0 && cdIdx >= 0) {
         expect(abIdx, lessThan(cdIdx),
-            reason: '8.136ab section should come before 8.136cd so keydown goes ab -> cd');
+            reason:
+                '8.136ab section should come before 8.136cd so keydown goes ab -> cd');
       }
     });
 
@@ -97,6 +99,21 @@ void main() {
           bases.add(base);
         }
       }
+    });
+
+    test('contemplating the faults of that leaf maps to 8.172 and 8.173', () {
+      const path = '4.5.3.2.4.2.2.5';
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, contains('8.172'));
+      expect(refs, contains('8.173'));
+      expect(hierarchyService.getFirstVerseForSectionSync(path), '8.172');
+
+      final path172 = hierarchyService.getHierarchyForVerseSync('8.172');
+      final path173 = hierarchyService.getHierarchyForVerseSync('8.173');
+      expect(path172, isNotEmpty);
+      expect(path173, isNotEmpty);
+      expect(path172.last['section'], path);
+      expect(path173.last['section'], path);
     });
   });
 
@@ -496,7 +513,9 @@ void main() {
         reason:
             'verse_hierarchy_map.json: ${nonConsecutive.length} non-consecutive\n$report',
       );
-    }, skip: 'verse_hierarchy_map.json has missing verses; enable when map is updated');
+    },
+        skip:
+            'verse_hierarchy_map.json has missing verses; enable when map is updated');
   });
 
   group('Verse-order (deduplicated) navigation', () {

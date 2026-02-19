@@ -1,0 +1,215 @@
+# Empty Leaf Audit
+
+Generated: 2026-02-19T03:08:14.780Z
+
+## Summary
+
+- Total leaves: 744
+- Empty leaves: 86
+- Suspicious misassigned: 8
+- Ambiguous: 10
+- Expected empty: 68
+- Index inconsistencies: 0
+
+## Suspicious Misassigned (8)
+
+- 3.2.1.1.6 | Offering homage
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 2.1 -> 3.2.1.1.1
+- 3.2.2.1.2.1 | General explanation
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 3.16 -> 3.2.2.1.2.2
+- 4.1.2.3.2.3.2 | Dedication in this
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 4.43cd -> 4.1.2.3.2.3.3
+- 4.3.2.1.4.2.1.1.2.1.1.2 | General explanation of the sameness of their qualities by example
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 6.24 -> 4.3.2.1.4.2.1.1.2.1.1.1
+- 4.4.4.2.1.2.2.2.1 | Briefly
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 4.1ab, 4.1cd, 7.31 -> 4.4.4.1, 7.32 -> 4.4.4.1, 7.50 -> 4.4.4.2.1.2.2.2.2
+- 4.5.3.2.3.2.3.2 | Having patience with the harm they may cause
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 8.145 -> 4.5.3.2.3.2.3.3
+- 4.6.2.3.1.4.2.1.1 | The non-establishment of suffering as ultimate
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 9.88ab -> 4.6.2.3.1.4.4.2.2.2, 9.88cd -> 4.6.2.3.1.4.4.2.2.2
+- 4.6.2.4.2.1.3.1.2 | The nature of the primal substance
+  - Reason: Mapping refs for this heading exist with matching ancestor context, but are assigned to other leaves
+  - Sample refs: 9.127cd -> 4.6.2.4.2.1.3.1.3
+
+## Ambiguous Empty (10)
+
+- 3.2.1.2.3 | Nature
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 8.137 -> 4.5.3.2.2.2.4.3
+- 4.2.1.2.1.3 | Conclusion
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 7.46cd, 9.96ab -> 4.6.2.3.1.4.2.2.2
+- 4.3.2.1.4.2.1.1.2.1.1.3 | Connecting with the meaning
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 6.25 -> 4.3.2.1.4.2.1.1.2.4
+- 4.3.2.1.4.2.1.1.2.1.1.4 | Summary
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 6.26 -> 4.3.2.1.4.2.1.1.2.1.2, 8.134 -> 4.5.3.2.2.2.3.2.4, 8.135 -> 4.5.3.2.2.2.3.2.4
+- 4.3.2.1.4.2.1.2.3.6 | Establishing the purpose
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 6.62 -> 4.3.2.1.4.2.1.2.4, 6.63 -> 4.3.2.1.4.2.1.2.4
+- 4.4.4.2.1.2.2.3.2.3 | Developing enthusiasm by praising antidotal pride
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 7.60 -> 4.4.4.2.1.2.2.3.2.4, 7.61 -> 4.4.4.2.1.2.2.3.2.4, 7.62 -> 4.4.4.2.1.2.2.3.2.4
+- 4.5.1.3.2.1.2 | It is nothing other than what is discarded in the burial ground
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 8.45 -> 4.5.1.3.2.1.3
+- 4.6.2.1.2.3.1.2.1.2.3 | Conclusion
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 7.46cd, 9.96ab -> 4.6.2.3.1.4.2.2.2
+- 4.6.2.3.1.4.2.2.1.2.3 | Establishing the pervasion
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 9.69cd -> 4.6.2.3.1.2.2.3, 9.95
+- 4.6.2.3.1.4.2.2.1.2.4 | Conclusion
+  - Reason: Matching heading exists but context did not reliably match this leaf
+  - Sample refs: 7.46cd, 9.96ab -> 4.6.2.3.1.4.2.2.2
+
+## Expected Empty (68)
+
+- 1.1.1 | The purpose of homage and praise
+  - Reason: No direct mapping heading found for this leaf title
+- 1.1.2 | The purpose of commitment to compose
+  - Reason: No direct mapping heading found for this leaf title
+- 1.1.3 | The purpose of discarding pride
+  - Reason: No direct mapping heading found for this leaf title
+- 1.2.1 | The condensed meaning of homage and praise
+  - Reason: No direct mapping heading found for this leaf title
+- 1.2.2 | The condensed meaning of the commitment to compose
+  - Reason: No direct mapping heading found for this leaf title
+- 1.4.1.2 | The condensed meaning
+  - Reason: No direct mapping heading found for this leaf title
+- 1.4.1.3 | The literal meaning
+  - Reason: No direct mapping heading found for this leaf title
+- 2.1.2 | Difficult to acquire
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.1.2.2 | Explaining their distinguishing characteristics
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.1.2.4 | Distinction of resultant refuge and generation of aspiration bodhicitta
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.1.2.5 | Purpose
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.1.2.6 | The meaning of the term ‘refuge’
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.1.2.7 | The distinct trainings
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.1.6 | Supplication
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.1.1 | The cause—meditation on compassion
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.1.2 | The root—stabilizing faith
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.1.3 | Other supports of bodhicitta
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.2.1 | That there is a purpose to properly receiving it
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.2.2.1 | From whom it is received
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.2.2.2 | Basis of receiving
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.2.2.3 | Time
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.2.2.4 | Ritual
+  - Reason: No direct mapping heading found for this leaf title
+- 3.2.2.2.2.2.5 | Overcoming the objection that it is not possible always to maintain it
+  - Reason: No direct mapping heading found for this leaf title
+- 4.1.2.2.3.4.3 | It is only logical, therefore, to persevere
+  - Reason: No direct mapping heading found for this leaf title
+- 4.1.2.3.2.3.5 | No obedience to the defilements
+  - Reason: No direct mapping heading found for this leaf title
+- 4.2.2.3.3 | How to definitively generate clear comprehension through mindfulness
+  - Reason: No direct mapping heading found for this leaf title
+- 4.2.3.1.1.1.4 | Preparing and checking oneself
+  - Reason: No direct mapping heading found for this leaf title
+- 4.2.3.1.1.3.6 | Concluding summary
+  - Reason: No direct mapping heading found for this leaf title
+- 4.3.2.1.4.3.2.1.1.3 | Misconceived grasping for meaning
+  - Reason: No direct mapping heading found for this leaf title
+- 4.5.3.2.3.2.3.1 | Developing the perspective of the assumed self
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.1.1.1.2 | Meaning of the distinction
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.1.1.1.3 | Ascertaining the number
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.1.1.2 | Their characteristics
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.1.2.2.4 | To do with the distinction between saṃsāra and nirvāṇa
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.3.1.4.1.2.5.3 | General summary
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.3.1.4.2.1.2 | The non-establishment of happiness as ultimate
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.3.1.4.2.3 | The non-establishment of the object of sensation
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.3.1.4.2.4.4 | Concluding summary
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.3.1.4.4.1 | Establishing all as non-arising
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.2.1.2.1.1 | Effect before the cause
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.2.1.2.1.2 | Effect simultaneous with the cause
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.2.1.2.1.3 | Effect after the cause
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.2.1.2.2.1.1.3 | Refuting Īśvara as self
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.3.3.2.1 | Presenting the reason
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.3.3.2.2 | Showing the forward pervasion
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.3.3.2.3 | The example of that
+  - Reason: No direct mapping heading found for this leaf title
+- 4.6.2.4.3.3.2.4 | The logic
+  - Reason: No direct mapping heading found for this leaf title
+- 5.1 | Dedication related to the means
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.1 | General dedication
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.1.1 | Dedication for general pacification
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.1.2 | Dedication for pacifying the cold hells
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.1.3.1 | Dedication for pacifying the suffering of the main hells
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.1.3.2 | Dedication for pacifying the neighbouring hells
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.2.1 | Pacification by Vajrapāṇi’s power
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.2.2 | Pacification by Padmapāṇi’s compassion
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.2.3 | Pacification by Mañjughoṣa’s emanation
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.1.2.4 | Pacification by the force of the other bodhisattvas’ proximity
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.2 | Dedication for the benefit of animals
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.2.3 | Dedication for the benefit of ghosts
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.3.1 | Freedom from suffering
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.3.2.1.1 | Attaining wealth and possessions
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.3.2.1.2 | Entering the path of perfection
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.3.2.1.3 | Attaining worldly happiness
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.1.3.2.2 | Dedication specific to monastics
+  - Reason: No direct mapping heading found for this leaf title
+- 5.2.2 | Dedication for transcendental benefit
+  - Reason: No direct mapping heading found for this leaf title
+- 5.3 | Dedication for the benefit of self
+  - Reason: No direct mapping heading found for this leaf title
+- 5.4 | Dedication for the teachings to remain as a source of happiness
+  - Reason: No direct mapping heading found for this leaf title
+- 5.5 | Homage of remembrance of kind ones
+  - Reason: No direct mapping heading found for this leaf title
+
+## Index Inconsistency (0)
+
+None.

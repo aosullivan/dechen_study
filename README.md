@@ -131,6 +131,29 @@ The app loads text from bundled assets:
 - `texts/verse_hierarchy_map.json` – Section hierarchy (paths, first verses)
 - `texts/verse_commentary_mapping.txt` – Verse-to-commentary mapping (includes commentary text)
 
+## Hierarchy Maintenance
+
+When you change hierarchy logic or verse-section assignments, use this sequence:
+
+```bash
+# 1) Rebuild hierarchy from overview + commentary mapping
+dart run tools/build_verse_hierarchy.dart
+
+# 2) Rebuild indices from the hierarchy tree
+python3 script/rebuild_verse_indices.py
+
+# 3) Audit empty leaf sections
+node tools/audit_empty_leaves.js
+
+# 4) Optional mismatch scan
+dart run tools/audit_section_mismatches.dart
+```
+
+Audit outputs:
+
+- `texts/empty_leaf_audit.md` – human-readable summary
+- `texts/empty_leaf_audit.json` – machine-readable details
+
 ## Tests
 
 ```bash

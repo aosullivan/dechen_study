@@ -67,7 +67,8 @@ OverviewNode parseOverview(String content) {
     final depth = indent ~/ 4;
 
     // Extract number prefix and title. Match "1." or "1.2" or "1.2.3" at start
-    final match = RegExp(r'^(\d+(?:\.\d+)*)\.?\s*(.*)$').firstMatch(line.trim());
+    final match =
+        RegExp(r'^(\d+(?:\.\d+)*)\.?\s*(.*)$').firstMatch(line.trim());
     if (match == null) continue;
 
     final title = match.group(2)!.trim();
@@ -79,7 +80,9 @@ OverviewNode parseOverview(String content) {
     }
 
     final parent = stack.last;
-    final path = parent.path.isEmpty ? match.group(1)! : '${parent.path}.${match.group(1)}';
+    final path = parent.path.isEmpty
+        ? match.group(1)!
+        : '${parent.path}.${match.group(1)}';
     final node = OverviewNode(
       title: title,
       path: path,
@@ -102,6 +105,7 @@ Map<String, List<OverviewNode>> buildTitleLookup(OverviewNode root) {
     }
     for (final c in n.children) visit(c);
   }
+
   visit(root);
   return lookup;
 }
@@ -121,11 +125,15 @@ bool _contextMatchesTitle(Set<String> contextWords, String title) {
 
 /// When multiple nodes share the same title, pick the one whose parent or sibling
 /// matches the context headings from the mapping. On tie, use verse proximity if [ref] given.
-OverviewNode? _disambiguateByContext(List<OverviewNode> candidates, List<String> context,
+OverviewNode? _disambiguateByContext(
+    List<OverviewNode> candidates, List<String> context,
     {String? ref}) {
   if (context.isEmpty) return null;
-  final contextNorm = context.map((h) => normalize(stripNumberPrefix(h))).toSet();
-  final contextWords = contextNorm.expand((s) => s.split(RegExp(r'\s+')).where((w) => w.length >= 3)).toSet();
+  final contextNorm =
+      context.map((h) => normalize(stripNumberPrefix(h))).toSet();
+  final contextWords = contextNorm
+      .expand((s) => s.split(RegExp(r'\s+')).where((w) => w.length >= 3))
+      .toSet();
 
   int score(OverviewNode n) {
     var s = 0;
@@ -135,14 +143,16 @@ OverviewNode? _disambiguateByContext(List<OverviewNode> candidates, List<String>
       final parentNorm = normalize(stripNumberPrefix(n.parent!.title));
       if (contextNorm.contains(parentNorm)) {
         s += 2;
-      } else if (_contextMatchesTitle(contextWords, stripNumberPrefix(n.parent!.title))) {
+      } else if (_contextMatchesTitle(
+          contextWords, stripNumberPrefix(n.parent!.title))) {
         s += 1;
       }
     }
     // Sibling match (also strong - e.g. "Elaboration" vs "Accomplishing it")
     final siblings = n.parent?.children ?? [];
     for (final sib in siblings) {
-      if (sib != n && contextNorm.contains(normalize(stripNumberPrefix(sib.title)))) {
+      if (sib != n &&
+          contextNorm.contains(normalize(stripNumberPrefix(sib.title)))) {
         s += 1;
         break;
       }
@@ -164,12 +174,11 @@ OverviewNode? _disambiguateByContext(List<OverviewNode> candidates, List<String>
   return tied.first;
 }
 
-
 /// When the target heading has no matching node under the context's parent (overview flatter
 /// than mapping), try matching a parent heading from context instead (e.g. "Its unique preeminence").
 /// Do not match a node that is a sibling of any candidate (would wrongly merge Objection/Response).
-OverviewNode? _matchContextParent(Map<String, List<OverviewNode>> lookup, List<String> context,
-    List<OverviewNode> candidates) {
+OverviewNode? _matchContextParent(Map<String, List<OverviewNode>> lookup,
+    List<String> context, List<OverviewNode> candidates) {
   final candidateSiblingTitles = <String>{};
   for (final c in candidates) {
     for (final sib in c.parent?.children ?? []) {
@@ -206,9 +215,8 @@ int _pathPrefixLength(String a, String b) {
 /// When multiple candidates share a title, prefer the one whose path shares
 /// the longest prefix with the last path we assigned for this chapter.
 /// Verses in the same chapter appear in document order, so continuity helps.
-OverviewNode? _disambiguateByPathContinuity(
-    List<OverviewNode> candidates, String ref,
-    Map<int, String> lastPathByChapter) {
+OverviewNode? _disambiguateByPathContinuity(List<OverviewNode> candidates,
+    String ref, Map<int, String> lastPathByChapter) {
   final (ch, _) = _parseVerseRef(ref);
   if (ch == 0) return null;
   final lastPath = lastPathByChapter[ch];
@@ -240,48 +248,91 @@ double _verseProximity(String ref, OverviewNode node) {
   return best;
 }
 
+/// Normalized heading variants used for robust section matching.
+/// Handles explanatory tails like ", i.e. ..." in mapping headings.
+List<String> _headingNormVariants(String headingTitle) {
+  final raw = <String>[];
+
+  void addRaw(String s) {
+    final t = s.trim();
+    if (t.isEmpty) return;
+    if (!raw.contains(t)) raw.add(t);
+  }
+
+  addRaw(headingTitle);
+
+  final withoutExplanatoryTail = headingTitle.replaceFirst(
+    RegExp(r',\s*(?:i\.e\.|e\.g\.|ie|eg|namely)\b.*$', caseSensitive: false),
+    '',
+  );
+  addRaw(withoutExplanatoryTail);
+
+  final comma = headingTitle.indexOf(',');
+  if (comma > 0) {
+    final leftClause = headingTitle.substring(0, comma).trim();
+    if (leftClause.length >= 8) addRaw(leftClause);
+  }
+
+  final out = <String>[];
+  for (final r in raw) {
+    final n = normalize(r);
+    if (n.isEmpty) continue;
+    if (!out.contains(n)) out.add(n);
+  }
+  return out;
+}
+
 /// Match mapping heading to overview node. Returns (node, needsReview).
 /// [context] = section headings from preceding mapping lines, for disambiguating repeated titles.
 /// [ref] = verse ref for proximity tiebreaker (e.g. "9.30").
 /// [lastPathByChapter] = path last assigned per chapter; used for path-continuity disambiguation.
-(OverviewNode?, bool) matchToOverview(String heading, Map<String, List<OverviewNode>> lookup,
-    {List<String> context = const [], String? ref, Map<int, String>? lastPathByChapter}) {
+(OverviewNode?, bool) matchToOverview(
+    String heading, Map<String, List<OverviewNode>> lookup,
+    {List<String> context = const [],
+    String? ref,
+    Map<int, String>? lastPathByChapter}) {
   // Strip number prefix: "1. The purpose of X" -> "The purpose of X"
-  var headingTitle = heading.replaceFirst(RegExp(r'^\d+(\.\d+)*\.\s*'), '').trim();
+  var headingTitle =
+      heading.replaceFirst(RegExp(r'^\d+(\.\d+)*\.\s*'), '').trim();
   // Strip trailing suffixes like "comprises lines 1ab:", " - line 1c", etc.
   headingTitle = headingTitle
-      .replaceFirst(RegExp(r'\s*comprises lines \d+[a-d]*\s*$', caseSensitive: false), '')
+      .replaceFirst(
+          RegExp(r'\s*comprises lines \d+[a-d]*\s*$', caseSensitive: false), '')
       .replaceFirst(RegExp(r'\s*:?\s*$'), '')
       .replaceFirst(RegExp(r'\s*[-–—].*$'), '')
       .trim();
-  final norm = normalize(headingTitle);
+  final normVariants = _headingNormVariants(headingTitle);
+  final norm = normVariants.first;
 
-  final exact = lookup[norm];
-  if (exact != null && exact.length == 1) {
-    return (exact.single, false);
-  }
-  if (exact != null && exact.length > 1) {
-    // Disambiguate using context: parent/sibling titles from mapping
-    final disambiguated = _disambiguateByContext(exact, context, ref: ref);
-    if (disambiguated != null) return (disambiguated, false);
-    // Verse proximity: prefer candidate whose verses are closest (same chapter, nearby verses)
-    if (ref != null) {
-      final byProximity = exact
-          .map((n) => (n, _verseProximity(ref, n)))
-          .toList();
-      final bestProx = byProximity.reduce(
-          (a, b) => a.$2 <= b.$2 ? a : b);
-      if (bestProx.$2 < double.infinity) return (bestProx.$1, false);
+  for (final candidateNorm in normVariants) {
+    final exact = lookup[candidateNorm];
+    if (exact != null && exact.length == 1) {
+      return (exact.single, false);
     }
-    // Path continuity: prefer candidate whose path shares prefix with last path for this chapter
-    if (ref != null && lastPathByChapter != null && lastPathByChapter.isNotEmpty) {
-      final byPath = _disambiguateByPathContinuity(exact, ref, lastPathByChapter);
-      if (byPath != null) return (byPath, false);
+    if (exact != null && exact.length > 1) {
+      // Disambiguate using context: parent/sibling titles from mapping
+      final disambiguated = _disambiguateByContext(exact, context, ref: ref);
+      if (disambiguated != null) return (disambiguated, false);
+      // Verse proximity: prefer candidate whose verses are closest (same chapter, nearby verses)
+      if (ref != null) {
+        final byProximity =
+            exact.map((n) => (n, _verseProximity(ref, n))).toList();
+        final bestProx = byProximity.reduce((a, b) => a.$2 <= b.$2 ? a : b);
+        if (bestProx.$2 < double.infinity) return (bestProx.$1, false);
+      }
+      // Path continuity: prefer candidate whose path shares prefix with last path for this chapter
+      if (ref != null &&
+          lastPathByChapter != null &&
+          lastPathByChapter.isNotEmpty) {
+        final byPath =
+            _disambiguateByPathContinuity(exact, ref, lastPathByChapter);
+        if (byPath != null) return (byPath, false);
+      }
+      // Fallback: try matching a parent heading from context (overview may be flatter than mapping)
+      final parentMatch = _matchContextParent(lookup, context, exact);
+      if (parentMatch != null) return (parentMatch, false);
+      return (exact.first, true); // still ambiguous
     }
-    // Fallback: try matching a parent heading from context (overview may be flatter than mapping)
-    final parentMatch = _matchContextParent(lookup, context, exact);
-    if (parentMatch != null) return (parentMatch, false);
-    return (exact.first, true); // still ambiguous
   }
 
   // Try prefix match: prefer overview titles at least as specific as our heading.
@@ -290,9 +341,11 @@ double _verseProximity(String ref, OverviewNode node) {
   OverviewNode? prefixMatch;
   for (final entry in lookup.entries) {
     if (norm.contains(entry.key)) {
-      if (entry.key.length < norm.length) continue; // skip: overview is less specific
+      if (entry.key.length < norm.length)
+        continue; // skip: overview is less specific
     } else if (!entry.key.contains(norm)) continue;
-    if (prefixMatch == null || entry.key.length > normalize(prefixMatch.title).length) {
+    if (prefixMatch == null ||
+        entry.key.length > normalize(prefixMatch.title).length) {
       prefixMatch = entry.value.first;
     }
   }
@@ -325,7 +378,8 @@ double _similarity(String a, String b) {
 /// Serialize node to JSON (title, verses, children). Skips root.
 Map<String, dynamic> nodeToJson(OverviewNode node) {
   final verses = List<String>.from(node.verses)..sort(compareVerseRefs);
-  final needsReview = List<String>.from(node.needsReviewVerses)..sort(compareVerseRefs);
+  final needsReview = List<String>.from(node.needsReviewVerses)
+    ..sort(compareVerseRefs);
   final children = node.children.map(nodeToJson).toList();
 
   final out = <String, dynamic>{
@@ -340,7 +394,6 @@ Map<String, dynamic> nodeToJson(OverviewNode node) {
   return out;
 }
 
-
 void main() async {
   final overviewContent = await File(overviewPath).readAsString();
   final mappingContent = await File(mappingPath).readAsString();
@@ -348,15 +401,29 @@ void main() async {
   final root = parseOverview(overviewContent);
   final lookup = buildTitleLookup(root);
 
-  // Parse mapping: refs on a line belong to the section heading on the NEXT line (not current).
-  // Pattern: "[8.20]" or "[8.22] [8.23] [8.24]" followed by "1. Volatility" etc.
+  // Parse mapping and associate verse refs to nearby section headings.
+  // Heuristic:
+  // - refs between two heading lines usually introduce the next heading
+  // - refs after quoted/explanatory lines belong to the current heading
   // Also collect context (headings from preceding lines) for disambiguating repeated titles.
   final verseToHeading = <String, String>{};
   final verseToContext = <String, List<String>>{};
   final mappingLines = mappingContent.split('\n');
+  String? currentHeading;
+
+  String? previousNonEmptyLine(int idx) {
+    for (var j = idx - 1; j >= 0; j--) {
+      final t = mappingLines[j].trim();
+      if (t.isNotEmpty) return mappingLines[j];
+    }
+    return null;
+  }
 
   for (var i = 0; i < mappingLines.length; i++) {
     final line = mappingLines[i];
+    if (isSectionHeading(line)) {
+      currentHeading = extractHeading(line);
+    }
     final refs = extractVerseRefs(line);
     if (refs.isEmpty) continue;
 
@@ -364,11 +431,19 @@ void main() async {
     if (isSectionHeading(line)) {
       targetHeading = extractHeading(line);
     } else {
-      // Lookahead: refs on a line by themselves belong to the heading on the next line
       final nextIdx = i + 1;
-      if (nextIdx < mappingLines.length && isSectionHeading(mappingLines[nextIdx])) {
+      final nextIsHeading = nextIdx < mappingLines.length &&
+          isSectionHeading(mappingLines[nextIdx]);
+      final prevNonEmpty = previousNonEmptyLine(i);
+      final prevIsHeading =
+          prevNonEmpty != null && isSectionHeading(prevNonEmpty);
+
+      if (nextIsHeading && prevIsHeading) {
         targetHeading = extractHeading(mappingLines[nextIdx]);
       } else {
+        targetHeading = currentHeading;
+      }
+      if (targetHeading == null) {
         // Fallback: look back for last heading (refs mid-content)
         for (var j = i - 1; j >= 0; j--) {
           if (isSectionHeading(mappingLines[j])) {
@@ -395,10 +470,12 @@ void main() async {
 
   // Manual overrides when automatic matching assigns verses to wrong sections.
   final verseToSectionOverride = <String, String>{
-    '7.75': '4.4.4.2.3', // Self-control (was wrongly matching four foundations of mindfulness)
+    '7.75':
+        '4.4.4.2.3', // Self-control (was wrongly matching four foundations of mindfulness)
     '1.7ab': '3.1.1.1.2', // It benefits oneself
     '1.7cd': '3.1.1.1.3', // It has the power to benefit others
-    '6.124': '4.3.2.1.4.3.2.2.3.2.1.5', // Confessing needless faults before the Sage
+    '6.124':
+        '4.3.2.1.4.3.2.2.3.2.1.5', // Confessing needless faults before the Sage
     '7.7ab': '4.4.3.2.2.4', // Impossible to hold back time
     '7.7cd': '4.4.3.2.2.5', // The time of death is too late
   };
@@ -420,17 +497,16 @@ void main() async {
 
   // Map each verse to its overview node and add to that node.
   // Process in document order (by verse ref) so verse-proximity and path-continuity work.
-  final sortedRefs = verseToHeading.keys.toList()
-    ..sort(compareVerseRefs);
+  final sortedRefs = verseToHeading.keys.toList()..sort(compareVerseRefs);
   var needsReviewCount = 0;
   final lastPathByChapter = <int, String>{};
   for (final ref in sortedRefs) {
-    if (verseToSectionOverride.containsKey(ref)) continue; // handle in override step
+    if (verseToSectionOverride.containsKey(ref))
+      continue; // handle in override step
     final heading = verseToHeading[ref]!;
     final context = verseToContext[ref] ?? [];
 
-    var (node, needsReview) = matchToOverview(
-        heading, lookup,
+    var (node, needsReview) = matchToOverview(heading, lookup,
         context: context, ref: ref, lastPathByChapter: lastPathByChapter);
 
     // When target heading has no match (e.g. mapping has subsections not in overview),
@@ -469,6 +545,7 @@ void main() async {
     }
     for (final c in n.children) collectPaths(c);
   }
+
   collectPaths(root);
 
   // sectionToFirstVerse: for each section path, the first verse ref (for breadcrumb navigation).
@@ -479,6 +556,7 @@ void main() async {
       all.addAll(node.verses);
       for (final c in node.children) collect(c);
     }
+
     collect(n);
     if (all.isEmpty) return null;
     // Group by chapter, pick chapter with most verses, return its minimum verse
@@ -499,6 +577,7 @@ void main() async {
     dominant.value.sort(compareVerseRefs);
     return dominant.value.first;
   }
+
   final sectionToFirstVerse = <String, String>{};
   void collectSectionFirstVerse(OverviewNode n) {
     if (n.title.isNotEmpty) {
@@ -507,6 +586,7 @@ void main() async {
     }
     for (final c in n.children) collectSectionFirstVerse(c);
   }
+
   collectSectionFirstVerse(root);
 
   // Convert to JSON-serializable format
