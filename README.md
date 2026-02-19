@@ -160,14 +160,14 @@ Notes:
 
 Latest audit snapshot (from generated files):
 
-- Generated: `2026-02-19T03:24:34.503Z`
+- Generated: `2026-02-19T04:00:09.818Z`
 - Total leaves: `738`
-- Empty leaves: `140`
-- Expected empty: `115`
-- Suspicious misassigned: `10`
-- Ambiguous empty: `15`
+- Empty leaves: `98`
+- Suspicious misassigned: `3`
+- Ambiguous empty: `13`
+- Expected empty: `82`
 - Index inconsistencies: `0`
-- Quoted-heading follow-up candidates: `16` (see `texts/expected_empty_quoted_candidates.json`)
+- Quoted-heading follow-up candidates: `0` (see `texts/expected_empty_quoted_candidates.json`)
 
 ## Tests
 

@@ -149,6 +149,52 @@ void main() {
       expect(path145ab.last['section'], path1);
       expect(path145cd.last['section'], path2);
     });
+
+    test('means of averting that cause leaf maps to 6.9 and 6.10', () {
+      const path = '4.3.2.1.3';
+      const siblingPath = '4.3.2.1.4';
+
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, contains('6.9'));
+      expect(refs, contains('6.10'));
+
+      final siblingRefs =
+          hierarchyService.getVerseRefsForSectionSync(siblingPath);
+      expect(siblingRefs, isNot(contains('6.9')));
+      expect(siblingRefs, isNot(contains('6.10')));
+
+      final path69 = hierarchyService.getHierarchyForVerseSync('6.9');
+      final path610 = hierarchyService.getHierarchyForVerseSync('6.10');
+      expect(path69, isNotEmpty);
+      expect(path610, isNotEmpty);
+      expect(path69.last['section'], path);
+      expect(path610.last['section'], path);
+    });
+
+    test('5.1/5.2 split maps to first three children under guarding the mind', () {
+      const path1 = '4.2.1.1.1';
+      const path2 = '4.2.1.1.2';
+      const path3 = '4.2.1.1.3';
+
+      final refs1 = hierarchyService.getVerseRefsForSectionSync(path1);
+      final refs2 = hierarchyService.getVerseRefsForSectionSync(path2);
+      final refs3 = hierarchyService.getVerseRefsForSectionSync(path3);
+
+      expect(refs1, contains('5.1ab'));
+      expect(refs2, contains('5.1cd'));
+      expect(refs3, contains('5.2'));
+      expect(refs2, isNot(contains('5.1ab')));
+
+      final path51ab = hierarchyService.getHierarchyForVerseSync('5.1ab');
+      final path51cd = hierarchyService.getHierarchyForVerseSync('5.1cd');
+      final path52 = hierarchyService.getHierarchyForVerseSync('5.2');
+      expect(path51ab, isNotEmpty);
+      expect(path51cd, isNotEmpty);
+      expect(path52, isNotEmpty);
+      expect(path51ab.last['section'], path1);
+      expect(path51cd.last['section'], path2);
+      expect(path52.last['section'], path3);
+    });
   });
 
   group('Adjacent section navigation (8.114 -> 8.115, not 8.117)', () {

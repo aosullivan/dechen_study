@@ -101,13 +101,25 @@ Map<String, List<OverviewNode>> buildTitleLookup(OverviewNode root) {
   final lookup = <String, List<OverviewNode>>{};
   void visit(OverviewNode n) {
     if (n.title.isNotEmpty) {
-      lookup.putIfAbsent(normalize(n.title), () => []).add(n);
+      for (final key in _titleLookupNormVariants(n.title)) {
+        final bucket = lookup.putIfAbsent(key, () => []);
+        if (!bucket.contains(n)) bucket.add(n);
+      }
     }
     for (final c in n.children) visit(c);
   }
 
   visit(root);
   return lookup;
+}
+
+List<String> _titleLookupNormVariants(String title) {
+  final base = stripNumberPrefix(title);
+  final out = <String>[];
+  for (final v in _headingNormVariants(base)) {
+    if (!out.contains(v)) out.add(v);
+  }
+  return out;
 }
 
 /// Word set for flexible matching (words of length 3+).
@@ -126,9 +138,15 @@ bool _contextMatchesTitle(Set<String> contextWords, String title) {
 /// When multiple nodes share the same title, pick the one whose parent or sibling
 /// matches the context headings from the mapping. On tie, use verse proximity if [ref] given.
 OverviewNode? _disambiguateByContext(
-    List<OverviewNode> candidates, List<String> context,
-    {String? ref}) {
-  if (context.isEmpty) return null;
+  List<OverviewNode> candidates,
+  List<String> context, {
+  String? ref,
+  String? localHeadingNumber,
+}) {
+  if (context.isEmpty &&
+      (localHeadingNumber == null || localHeadingNumber.isEmpty)) {
+    return null;
+  }
   final contextNorm =
       context.map((h) => normalize(stripNumberPrefix(h))).toSet();
   final contextWords = contextNorm
@@ -156,6 +174,13 @@ OverviewNode? _disambiguateByContext(
         s += 1;
         break;
       }
+    }
+    // Local heading number in mapping ("3. Foo") often corresponds to the
+    // last path segment in overview ("... .3").
+    if (localHeadingNumber != null && localHeadingNumber.isNotEmpty) {
+      final pathBits = n.path.split('.');
+      final localPathNumber = pathBits.isEmpty ? '' : pathBits.last;
+      if (localPathNumber == localHeadingNumber) s += 2;
     }
     return s;
   }
@@ -273,6 +298,22 @@ List<String> _headingNormVariants(String headingTitle) {
     if (leftClause.length >= 8) addRaw(leftClause);
   }
 
+  String stripBracketed(String s) => s
+      .replaceAll(RegExp(r'\[[^\]]+\]'), ' ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+  String dropDeterminers(String s) => s
+      .replaceAll(
+          RegExp(r'\b(?:the|that|this|these|those)\b', caseSensitive: false),
+          ' ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+
+  final withoutBracketed = stripBracketed(headingTitle);
+  addRaw(withoutBracketed);
+  addRaw(dropDeterminers(headingTitle));
+  addRaw(dropDeterminers(withoutBracketed));
+
   final out = <String>[];
   for (final r in raw) {
     final n = normalize(r);
@@ -291,6 +332,14 @@ List<String> _headingNormVariants(String headingTitle) {
     {List<String> context = const [],
     String? ref,
     Map<int, String>? lastPathByChapter}) {
+  final headingNumberMatch =
+      RegExp(r'^(\d+(?:\.\d+)*)\.\s*').firstMatch(heading.trim());
+  String? localHeadingNumber;
+  if (headingNumberMatch != null) {
+    final bits = headingNumberMatch.group(1)!.split('.');
+    if (bits.isNotEmpty) localHeadingNumber = bits.last;
+  }
+
   // Strip number prefix: "1. The purpose of X" -> "The purpose of X"
   var headingTitle =
       heading.replaceFirst(RegExp(r'^\d+(\.\d+)*\.\s*'), '').trim();
@@ -311,7 +360,12 @@ List<String> _headingNormVariants(String headingTitle) {
     }
     if (exact != null && exact.length > 1) {
       // Disambiguate using context: parent/sibling titles from mapping
-      final disambiguated = _disambiguateByContext(exact, context, ref: ref);
+      final disambiguated = _disambiguateByContext(
+        exact,
+        context,
+        ref: ref,
+        localHeadingNumber: localHeadingNumber,
+      );
       if (disambiguated != null) return (disambiguated, false);
       // Verse proximity: prefer candidate whose verses are closest (same chapter, nearby verses)
       if (ref != null) {
@@ -338,31 +392,82 @@ List<String> _headingNormVariants(String headingTitle) {
   // Try prefix match: prefer overview titles at least as specific as our heading.
   // Reject when norm contains entry.key but entry.key is shorter—avoids matching
   // "Showing through the scriptures..." to generic "Scripture".
-  OverviewNode? prefixMatch;
+  final prefixCandidates = <OverviewNode>{};
+  var bestPrefixLen = 0;
   for (final entry in lookup.entries) {
     if (norm.contains(entry.key)) {
       if (entry.key.length < norm.length)
         continue; // skip: overview is less specific
     } else if (!entry.key.contains(norm)) continue;
-    if (prefixMatch == null ||
-        entry.key.length > normalize(prefixMatch.title).length) {
-      prefixMatch = entry.value.first;
+    if (entry.key.length > bestPrefixLen) {
+      bestPrefixLen = entry.key.length;
+      prefixCandidates
+        ..clear()
+        ..addAll(entry.value);
+    } else if (entry.key.length == bestPrefixLen) {
+      prefixCandidates.addAll(entry.value);
     }
   }
-  if (prefixMatch != null) return (prefixMatch, true);
+  if (prefixCandidates.isNotEmpty) {
+    final prefixList = prefixCandidates.toList()
+      ..sort((a, b) => a.path.compareTo(b.path));
+    if (prefixList.length == 1) return (prefixList.first, true);
+    final disambiguated = _disambiguateByContext(
+      prefixList,
+      context,
+      ref: ref,
+      localHeadingNumber: localHeadingNumber,
+    );
+    if (disambiguated != null) return (disambiguated, true);
+    if (ref != null) {
+      final byProximity =
+          prefixList.map((n) => (n, _verseProximity(ref, n))).toList();
+      final bestProx = byProximity.reduce((a, b) => a.$2 <= b.$2 ? a : b);
+      if (bestProx.$2 < double.infinity) return (bestProx.$1, true);
+    }
+    if (ref != null &&
+        lastPathByChapter != null &&
+        lastPathByChapter.isNotEmpty) {
+      final byPath =
+          _disambiguateByPathContinuity(prefixList, ref, lastPathByChapter);
+      if (byPath != null) return (byPath, true);
+    }
+    return (prefixList.first, true);
+  }
 
   // Try fuzzy match
   double bestScore = 0;
-  OverviewNode? best;
+  final bestNodes = <OverviewNode>[];
   for (final node in lookup.values.expand((e) => e)) {
     final nodeNorm = normalize(node.title);
     final score = _similarity(norm, nodeNorm);
     if (score > bestScore && score > 0.5) {
       bestScore = score;
-      best = node;
+      bestNodes
+        ..clear()
+        ..add(node);
+    } else if ((score - bestScore).abs() < 0.0001 && score > 0.5) {
+      if (!bestNodes.contains(node)) bestNodes.add(node);
     }
   }
-  if (best != null) return (best, true);
+  if (bestNodes.isNotEmpty) {
+    if (bestNodes.length == 1) return (bestNodes.first, true);
+    final disambiguated = _disambiguateByContext(
+      bestNodes,
+      context,
+      ref: ref,
+      localHeadingNumber: localHeadingNumber,
+    );
+    if (disambiguated != null) return (disambiguated, true);
+    if (ref != null &&
+        lastPathByChapter != null &&
+        lastPathByChapter.isNotEmpty) {
+      final byPath =
+          _disambiguateByPathContinuity(bestNodes, ref, lastPathByChapter);
+      if (byPath != null) return (byPath, true);
+    }
+    return (bestNodes.first, true);
+  }
   return (null, true);
 }
 
@@ -472,8 +577,37 @@ void main() async {
   final verseToSectionOverride = <String, String>{
     '7.75':
         '4.4.4.2.3', // Self-control (was wrongly matching four foundations of mindfulness)
-    '1.7ab': '3.1.1.1.2', // It benefits oneself
+    '1.2':
+        '1.3.3.3', // Yet, in dependence upon that, there is benefit for others
+    '1.7ab': '3.1.1.1.1.2', // How bodhicitta overcomes nonvirtue
     '1.7cd': '3.1.1.1.3', // It has the power to benefit others
+    // Shared-verse splits for adjacent heading blocks.
+    '1.15ab': '3.1.1.3.6', // Other specific examples
+    '1.15cd': '3.1.2.1', // Divisions
+    // Chapter 2 heading audit (Chapter-02.pdf).
+    '2.10': '3.2.1.1.4.1', // Bathing
+    '2.11': '3.2.1.1.4.1', // Bathing
+    '2.12': '3.2.1.1.4.1', // Bathing
+    '2.13': '3.2.1.1.4.2', // Robes and ornaments
+    '2.14': '3.2.1.1.4.3', // Scented oils
+    '2.15': '3.2.1.1.4.4', // Flowers
+    '2.16ab': '3.2.1.1.4.5', // Incense
+    '2.16cd': '3.2.1.1.4.6', // Food
+    '2.17': '3.2.1.1.4.7', // Lamps
+    '2.18': '3.2.1.1.4.8', // Palaces
+    '2.19': '3.2.1.1.4.9', // Articles worthy of great beings
+    '2.20': '3.2.1.1.4.9', // Articles worthy of great beings
+    '2.21': '3.2.1.1.4.10', // Uninterrupted stream of veneration
+    '2.23': '3.2.1.1.6.1', // Praise
+    '2.24': '3.2.1.1.6.2', // Prostration to the sources of refuge
+    '2.25': '3.2.1.1.6.2', // Prostration to the sources of refuge
+    '2.26ab': '3.2.1.2', // Taking refuge
+    '2.26cd': '3.2.1.2', // Taking refuge
+    '2.39':
+        '3.2.1.3.1.4.1', // The inevitable result: the transmigration to another rebirth
+    '2.60': '3.2.1.3.4.1.1', // Fearing the consequences
+    '2.61': '3.2.1.3.4.1.1', // Fearing the consequences
+    '2.62': '3.2.1.3.4.1.2', // Speciality of the intention to abandon
     '6.124':
         '4.3.2.1.4.3.2.2.3.2.1.5', // Confessing needless faults before the Sage
     '7.7ab': '4.4.3.2.2.4', // Impossible to hold back time
@@ -481,29 +615,116 @@ void main() async {
     // 4.27 is split across two sibling leaves in commentary prose.
     '4.27ab': '4.1.2.2.3.4.2', // One has clearly distinguished good from bad
     '4.27cd': '4.1.2.2.3.4.3', // It is only logical, therefore, to persevere
+    // 4.36 belongs under "Developing pride" (4.1 branch), not chapter-9 objection headings.
+    // Commentary splits this verse internally as Meaning (ab) / Example (cd), but the
+    // current overview tree models it as a single leaf.
+    '4.36ab': '4.1.2.3.1.2.3', // Developing pride
+    '4.36cd': '4.1.2.3.1.2.3', // Developing pride
+    '4.36': '4.1.2.3.1.2.3', // Developing pride
     // 8.145 is split across two sibling leaves.
     '8.145ab':
         '4.5.3.2.3.2.3.1', // Developing the perspective of the assumed self
     '8.145cd':
         '4.5.3.2.3.2.3.2', // Having patience with the harm they may cause
+    // 5.1 is split across adjacent children under "By guarding the mind..."
+    '5.1ab': '4.2.1.1.1', // Showing this with a forward pervasion
+    '5.1cd': '4.2.1.1.2', // Showing the reverse pervasion
     // Leaf-level remaps found in empty-leaf audits.
-    '5.33': '4.2.2.3.2.3', // An additional benefit
+    '5.33':
+        '4.2.2.3.3', // How to definitively generate clear comprehension through mindfulness
     '5.39': '4.2.3.1.1.1.3', // In relation to other situations
+    '5.43': '4.2.3.1.1.3.2', // Referencing a scriptural source for that
+    '3.5': '3.2.1.4.2', // Rejoicing in the virtue of śrāvakas
     '6.92': '4.3.2.1.4.3.2.1.1.2', // Mere joy is not meaningful
-    '6.93': '4.3.2.1.4.3.2.1.1.2', // Mere joy is not meaningful
-    '7.59': '4.4.4.2.1.2.2.3.2.2', // 'Pride' here does not mean defiled pride
+    '6.93': '4.3.2.1.4.3.2.1.1.3', // Misconceived grasping for meaning
+    '6.27': '4.3.2.1.4.2.1.1.2.2.1', // Refuting the position of the Sāṃkhyas
+    '6.117': '4.3.2.1.4.3.2.2.3.1.3.5.2', // Different qualities
+    '4.44ab': '4.1.2.3.2.3.3', // Relying on antidotes for one's own impatience
+    '4.44cd': '4.1.2.3.2.3.5', // No obedience to the defilements
+    '4.45ab':
+        '4.1.2.3.3.1.4', // The essential characteristic of their not returning
+    '7.3ab':
+        '4.4.3.2.1', // Examining the cause of non-application and averting it
+    '7.3cd':
+        '4.4.3.2.1', // Examining the cause of non-application and averting it
+    '7.49cd': '4.4.4.2.1.2.2.2', // Pride in actions
+    '7.68ab': '4.4.4.2.2.1', // Dedication to concern
+    '7.68cd': '4.4.4.2.2.1', // Dedication to concern
+    '7.59':
+        '4.4.4.2.1.2.2.3.2.3', // Developing enthusiasm by praising antidotal pride
+    '7.56': '4.4.4.2.1.2.2.3.2.2', // 'Pride' here does not mean defiled pride
+    '7.76': '4.4.4.2.3', // Self-control
+    '8.34': '4.5.1.2.5.5', // Non-distraction
+    '8.35': '4.5.1.2.5.5', // Non-distraction
+    '8.36': '4.5.1.2.5.5', // Non-distraction
+    '8.37': '4.5.1.2.5.5', // Non-distraction
+    '8.86': '4.5.2.1.3', // Supporting conditions
+    '8.145ab':
+        '4.5.3.2.3.2.3.2', // Having patience with the harm they may cause
     '8.43': '4.5.1.3.2.1.1.2', // Obstructing the door to liberation
     '8.44': '4.5.1.3.2.1.1.2', // Obstructing the door to liberation
+    '8.7': '4.5.1.2.3.1.1.3', // One's misery knows no end
+    '8.147':
+        '4.5.3.2.3.2.3.5', // Abandoning conceit and giving up aggression towards the learned
+    '9.1ab': '4.6.1.2', // Advice to strive in this
     '9.2ab': '4.6.2.1.1.1.3', // Ascertaining the number
-    '9.9':
+    // 9.9 is used across sibling subheadings in this outline branch.
+    '9.9ab': '4.6.2.1.2.2.1', // To do with the bases of accumulation
+    '9.9cd':
         '4.6.2.1.2.2.4', // To do with the distinction between saṃsāra and nirvāṇa
-    '9.78': '4.6.2.3.1.4.1.2.5.3', // General summary
+    '9.14': '4.6.2.1.2.2.4', // To do with the distinction between saṃsāra and nirvāṇa
+    '9.15': '4.6.2.1.2.2.4', // To do with the distinction between saṃsāra and nirvāṇa
+    '9.29ab': '4.6.2.2.1.2.4.3.2', // The logic which refutes the objection
+    '9.29cd': '4.6.2.2.1.2.4.3.3', // A counter objection
+    '9.78': '4.6.2.3.1.4.1.1', // The individual parts are not the body
     '9.79': '4.6.2.3.1.4.1.2.5.3', // General summary
-    '9.101': '4.6.2.3.1.4.2.4.3', // No experiencer apart from those
-    '9.106': '4.6.2.3.1.4.4.1', // Establishing all as non-arising
-    '9.107': '4.6.2.3.1.4.4.1', // Establishing all as non-arising
-    '9.121ab': '4.6.2.4.2.1.2.2.1.1.3', // Refuting Īśvara as self
-    '9.121cd': '4.6.2.4.2.1.2.2.1.1.3', // Refuting Īśvara as self
+    // 9.88 / 9.101 are shared across adjacent subheadings; split to preserve both.
+    '9.88ab':
+        '4.6.2.3.1.4.2.1.1', // The non-establishment of suffering as ultimate
+    '9.88':
+        '4.6.2.3.1.4.2.1.1', // The non-establishment of suffering as ultimate
+    '9.88cd':
+        '4.6.2.3.1.4.2.1.2', // The non-establishment of happiness as ultimate
+    '9.39':
+        '4.6.2.2.1.2.4.3.4', // Establishing the pervasion for the counter objection
+    '9.41':
+        '4.6.2.2.2.3.1', // We have the same criteria for accepting [texts as scriptures]
+    '9.45ab':
+        '4.6.2.2.2.4.3.1.1', // Objection
+    '9.53': '4.6.2.2.2.6.3.2', // Therefore you have no objections to our position
+    '9.68':
+        '4.6.2.3.1.2.2.1', // Showing the consequence which refutes a self with a material nature
+    '9.63':
+        '4.6.2.3.1.2.1.1.3.2', // This has the same fault that was previously explained
+    '9.76ab': '4.6.2.3.1.3.2.2.4', // Abandoning that they are the same
+    '9.99': '4.6.2.3.1.4.2.3', // The non-establishment of the object of sensation
+    '9.100cd': '4.6.2.3.1.4.2.4.2', // No self-experience
+    '9.96': '4.6.2.3.1.4.2.2.1.2.2', // Establishing the reason
+    '9.101ab': '4.6.2.3.1.4.2.4.3', // No experiencer apart from those
+    '9.101cd': '4.6.2.3.1.4.2.4.4', // Concluding summary
+    '9.106': '4.6.2.3.1.4.4.2.1', // Abandoning the objection that there is no relative
+    '9.107':
+        '4.6.2.3.1.4.4.2.1', // Abandoning the objection that there is no relative
+    '9.111': '4.6.2.4.1.1', // General presentation
+    '9.112': '4.6.2.4.1.2.1.1', // There is neither one
+    '9.113': '4.6.2.4.1.2.1.2', // Applying the reason with an example
+    '9.114': '4.6.2.4.1.2.2', // Refuting the reason of cognition of the effect
+    '9.115': '4.6.2.4.1.2.2', // Refuting the reason of cognition of the effect
+    '9.121ab': '4.6.2.4.2.1.2.2.1.1.4', // Refuting Īśvara as inconceivable
+    '9.121cd': '4.6.2.4.2.1.2.2.1.2', // Effects are impossible
+    '9.124ab':
+        '4.6.2.4.2.1.2.2.1.3.3.1', // Everything being an effect of Īśvara contradicts his dependence
+    '9.128ab': '4.6.2.4.2.1.3.1.3', // The nature of its effects
+    '9.132ab': '4.6.2.4.2.1.3.2.2.2.4', // Not existing in reality
+    '9.116ab': '4.6.2.4.2.1.1.4', // Differences of power in relation to cause
+    '9.125': '4.6.2.4.2.1.2.2.1.3.3.2.2', // Autonomy is violated
+    '9.133': '4.6.2.4.2.1.3.2.3.2', // Gross and subtle are contradictory
+    '9.135': '4.6.2.4.2.1.3.2.4.1', // Presenting the position to be refuted
+    '9.143':
+        '4.6.2.4.3.3.1', // Showing that dependent origination is like an illusion
+    '9.146': '4.6.2.4.3.3.3.1.2.1', // Presenting the logic in brief
+    '9.138ab': '4.6.2.4.2.2.1', // Setting out the objections
+    '9.138cd': '4.6.2.4.2.2.1', // Setting out the objections
     '9.151':
         '4.6.2.5.1.1.1', // The non-establishment of the eight worldly dharmas...
     '9.152':
@@ -514,8 +735,16 @@ void main() async {
         '4.6.2.5.1.1.1', // The non-establishment of the eight worldly dharmas...
   };
   final baseRefsToDropWhenSplit = <String>[
+    '1.15',
+    '5.1',
     '4.27',
+    '4.44',
+    '7.3',
+    '7.68',
     '8.145',
+    '9.9',
+    '9.138',
+    '9.101',
   ];
 
   OverviewNode? findNodeByPath(OverviewNode n, String path) {

@@ -267,8 +267,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 34,
-                      height: 34,
+                      width: 30,
+                      height: 30,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.08),
@@ -278,7 +278,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                         '${chapter.number}',
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontSize: 17,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                   color: textColor,
                                   height: 1.0,
@@ -293,7 +293,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                       softWrap: true,
                       overflow: TextOverflow.fade,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: 11.5,
+                            fontSize: 10.5,
                             height: 1.05,
                             fontWeight: FontWeight.w600,
                             color: textColor,
@@ -305,7 +305,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                   child: Text(
                     '${chapter.number}',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontSize: 34,
+                          fontSize: 30,
                           fontWeight: FontWeight.w700,
                           color: textColor,
                           height: 1.0,
@@ -561,212 +561,219 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
       ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
-            child: LayoutBuilder(
-              builder: (context, viewport) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '$_correctAnswers/$_totalAnswers',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: _totalAnswers == 0
-                                        ? AppColors.primary
-                                            .withValues(alpha: 0.55)
-                                        : AppColors.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                              decoration: BoxDecoration(
-                                color: AppColors.cardBeige,
-                                borderRadius: BorderRadius.circular(8),
-                                border:
-                                    Border.all(color: AppColors.borderLight),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+              child: LayoutBuilder(
+                builder: (context, viewport) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        flex: 10,
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '$_correctAnswers/$_totalAnswers',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: _totalAnswers == 0
+                                          ? AppColors.primary
+                                              .withValues(alpha: 0.55)
+                                          : AppColors.primary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                               ),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: _sectionVerseTexts
-                                      .asMap()
-                                      .entries
-                                      .map((entry) {
-                                    final i = entry.key;
-                                    final text = entry.value;
-                                    final ref = i < _sectionRefs.length
-                                        ? _sectionRefs[i]
-                                        : null;
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (ref != null) ...[
-                                          Text(
-                                            'Verse $ref',
+                            ),
+                            const SizedBox(height: 6),
+                            Expanded(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.cardBeige,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border:
+                                      Border.all(color: AppColors.borderLight),
+                                ),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: _sectionVerseTexts
+                                        .asMap()
+                                        .entries
+                                        .map((entry) {
+                                      final i = entry.key;
+                                      final text = entry.value;
+                                      final ref = i < _sectionRefs.length
+                                          ? _sectionRefs[i]
+                                          : null;
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (ref != null) ...[
+                                            Text(
+                                              'Verse $ref',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    fontFamily: 'Lora',
+                                                    color: AppColors.primary,
+                                                    fontSize: 11,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 2),
+                                          ],
+                                          BcvVerseText(
+                                            text: text,
                                             style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall
-                                                ?.copyWith(
-                                                  fontFamily: 'Lora',
-                                                  color: AppColors.primary,
-                                                  fontSize: 11,
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      fontFamily:
+                                                          'Crimson Text',
+                                                      fontSize: 19,
+                                                      height: 1.45,
+                                                      color: const Color(
+                                                          0xFF2C2416),
+                                                    ) ??
+                                                const TextStyle(
+                                                  fontFamily: 'Crimson Text',
+                                                  fontSize: 19,
+                                                  height: 1.45,
+                                                  color: AppColors.textDark,
                                                 ),
                                           ),
-                                          const SizedBox(height: 2),
                                         ],
-                                        BcvVerseText(
-                                          text: text,
-                                          style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge
-                                                  ?.copyWith(
-                                                    fontFamily: 'Crimson Text',
-                                                    fontSize: 16,
-                                                    height: 1.35,
-                                                    color:
-                                                        const Color(0xFF2C2416),
-                                                  ) ??
-                                              const TextStyle(
-                                                fontFamily: 'Crimson Text',
-                                                fontSize: 16,
-                                                height: 1.35,
-                                                color: AppColors.textDark,
-                                              ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'To which chapter does this belong?',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.textDark,
                                         ),
-                                      ],
-                                    );
-                                  }).toList(),
+                                  ),
                                 ),
-                              ),
+                                TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      _showChapterLabels = !_showChapterLabels;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    _showChapterLabels
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                    size: 16,
+                                  ),
+                                  label: Text(
+                                    _showChapterLabels
+                                        ? 'Hide names'
+                                        : 'Show names',
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'To which chapter does this belong?',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                        color: AppColors.textDark,
-                                      ),
-                                ),
-                              ),
-                              TextButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    _showChapterLabels = !_showChapterLabels;
-                                  });
-                                },
-                                icon: Icon(
-                                  _showChapterLabels
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                  size: 16,
-                                ),
-                                label: Text(
-                                  _showChapterLabels
-                                      ? 'Hide names'
-                                      : 'Show names',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, pad) {
-                          return GridView.builder(
-                            padding: EdgeInsets.zero,
-                            physics: _showChapterLabels
-                                ? const ClampingScrollPhysics()
-                                : const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 8,
-                              childAspectRatio:
-                                  _showChapterLabels ? 0.88 : 1.22,
-                            ),
-                            itemCount: 12,
-                            itemBuilder: (context, index) {
-                              if (index < 9) {
-                                final number = index + 1;
-                                return _buildChapterPadKey(
-                                  context: context,
-                                  chapter: _chapters
-                                      .firstWhere((c) => c.number == number),
-                                  isSelected: _selectedChapter == number,
-                                  isCorrect: _showAnswer &&
-                                      _correctChapterNumber == number,
-                                  isWrong: _showAnswer &&
-                                      _selectedChapter == number &&
-                                      _correctChapterNumber != number,
-                                  showLabel: _showChapterLabels,
-                                );
-                              }
-                              if (index == 9) {
+                      const SizedBox(height: 8),
+                      Expanded(
+                        flex: 10,
+                        child: LayoutBuilder(
+                          builder: (context, pad) {
+                            return GridView.builder(
+                              padding: EdgeInsets.zero,
+                              physics: const ClampingScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: 6,
+                                crossAxisSpacing: 6,
+                                childAspectRatio:
+                                    _showChapterLabels ? 1.02 : 1.60,
+                              ),
+                              itemCount: 12,
+                              itemBuilder: (context, index) {
+                                if (index < 9) {
+                                  final number = index + 1;
+                                  return _buildChapterPadKey(
+                                    context: context,
+                                    chapter: _chapters
+                                        .firstWhere((c) => c.number == number),
+                                    isSelected: _selectedChapter == number,
+                                    isCorrect: _showAnswer &&
+                                        _correctChapterNumber == number,
+                                    isWrong: _showAnswer &&
+                                        _selectedChapter == number &&
+                                        _correctChapterNumber != number,
+                                    showLabel: _showChapterLabels,
+                                  );
+                                }
+                                if (index == 9) {
+                                  return _buildActionPadKey(
+                                    context: context,
+                                    label: 'Reveal',
+                                    icon: Icons.visibility_outlined,
+                                    onTap: _showAnswer ? null : _revealAnswer,
+                                    filled: false,
+                                  );
+                                }
+                                if (index == 10) {
+                                  return _buildChapterPadKey(
+                                    context: context,
+                                    chapter: _chapters
+                                        .firstWhere((c) => c.number == 10),
+                                    isSelected: _selectedChapter == 10,
+                                    isCorrect: _showAnswer &&
+                                        _correctChapterNumber == 10,
+                                    isWrong: _showAnswer &&
+                                        _selectedChapter == 10 &&
+                                        _correctChapterNumber != 10,
+                                    showLabel: _showChapterLabels,
+                                  );
+                                }
                                 return _buildActionPadKey(
                                   context: context,
-                                  label: 'Reveal',
-                                  icon: Icons.visibility_outlined,
-                                  onTap: _showAnswer ? null : _revealAnswer,
-                                  filled: false,
+                                  label: _showAnswer ? 'Next' : 'Skip',
+                                  icon: _showAnswer
+                                      ? Icons.arrow_forward
+                                      : Icons.skip_next,
+                                  onTap:
+                                      _showAnswer ? _nextQuestion : _loadQuiz,
+                                  filled: true,
                                 );
-                              }
-                              if (index == 10) {
-                                return _buildChapterPadKey(
-                                  context: context,
-                                  chapter: _chapters
-                                      .firstWhere((c) => c.number == 10),
-                                  isSelected: _selectedChapter == 10,
-                                  isCorrect: _showAnswer &&
-                                      _correctChapterNumber == 10,
-                                  isWrong: _showAnswer &&
-                                      _selectedChapter == 10 &&
-                                      _correctChapterNumber != 10,
-                                  showLabel: _showChapterLabels,
-                                );
-                              }
-                              return _buildActionPadKey(
-                                context: context,
-                                label: _showAnswer ? 'Next' : 'Skip',
-                                icon: _showAnswer
-                                    ? Icons.arrow_forward
-                                    : Icons.skip_next,
-                                onTap: _showAnswer ? _nextQuestion : _loadQuiz,
-                                filled: true,
-                              );
-                            },
-                          );
-                        },
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
           ),
           Align(
