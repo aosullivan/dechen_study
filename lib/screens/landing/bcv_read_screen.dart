@@ -123,10 +123,12 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _isUserScrolling = false;
 
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
-  final Map<String, double> _verseVisibility = {};
+  final Map<(int, String?), double> _verseVisibility = {};
 
   final Map<int, GlobalKey> _verseKeys = {};
-  final Map<String, GlobalKey> _verseSegmentKeys = {};
+  final Map<(int, int), GlobalKey> _verseSegmentKeys = {};
+  final Map<int, List<({String ref, String sectionPath})>> _splitSegmentsCache =
+      {};
   final GlobalKey _scrollContentKey = GlobalKey();
   final _sectionChangeNotifier = _SectionChangeNotifier();
   final ScrollController _mainScrollController = ScrollController();
@@ -267,6 +269,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       _verseVisibility.clear();
       _verseKeys.clear();
       _verseSegmentKeys.clear();
+      _splitSegmentsCache.clear();
       _commentaryEntryForSelected = null;
       _navState = const ReaderNavState.initial();
       _intentionalHighlight = false;
@@ -599,7 +602,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (segRef != null) {
         final segIdx = _segmentIndexForRef(idx, segRef);
         if (segIdx > 0) {
-          key = _verseSegmentKeys['${idx}_$segIdx'];
+          key = _verseSegmentKeys[(idx, segIdx)];
         }
       }
       key ??= _verseKeys[idx];
@@ -754,7 +757,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (segmentRef != null) {
       final segIdx = _segmentIndexForRef(index, segmentRef);
       if (segIdx > 0) {
-        keyToUse = _verseSegmentKeys['${index}_$segIdx'];
+        keyToUse = _verseSegmentKeys[(index, segIdx)];
       }
     }
     keyToUse ??= _verseKeys[index];
@@ -831,8 +834,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _onVerseVisibilityChanged(int verseIndex, double visibility,
       {String? segmentRef}) {
     if (_isVisibilitySuppressed()) return;
-    final key =
-        segmentRef != null ? '${verseIndex}_$segmentRef' : '$verseIndex';
+    final key = (verseIndex, segmentRef);
     if (visibility < 0.05) {
       _verseVisibility.remove(key);
       return;
@@ -900,10 +902,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (pos == null) {
       final best =
           _verseVisibility.entries.reduce((a, b) => a.value >= b.value ? a : b);
-      final parts = best.key.split('_');
-      final verseToUse = int.tryParse(parts.first) ?? 0;
-      final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
-      return (verseToUse, segRef);
+      return best.key;
     }
     final scrollOffset = pos.pixels;
     final viewportHeight = pos.viewportDimension;
@@ -914,17 +913,15 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final stackBox = stackContext.findRenderObject() as RenderBox?;
     if (stackBox == null || !stackBox.hasSize) return null;
 
-    String? bestKey;
+    (int, String?)? bestKey;
     double bestDist = double.infinity;
 
     for (final entry in _verseVisibility.entries) {
       if (entry.value < 0.05) continue;
-      final parts = entry.key.split('_');
-      final idx = int.tryParse(parts.first);
-      if (idx == null) continue;
-      final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
+      final idx = entry.key.$1;
+      final segRef = entry.key.$2;
       GlobalKey? gk = segRef != null
-          ? _verseSegmentKeys['${idx}_${_segmentIndexForRef(idx, segRef)}']
+          ? _verseSegmentKeys[(idx, _segmentIndexForRef(idx, segRef))]
           : _verseKeys[idx];
       gk ??= _verseKeys[idx];
       if (gk?.currentContext == null) continue;
@@ -939,16 +936,25 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       }
     }
     if (bestKey == null) return null;
-    final parts = bestKey.split('_');
-    final verseToUse = int.tryParse(parts.first) ?? 0;
-    final segRef = parts.length > 1 ? parts.sublist(1).join('_') : null;
-    return (verseToUse, segRef);
+    return bestKey;
+  }
+
+  List<({String ref, String sectionPath})> _splitSegmentsForVerseIndex(
+      int verseIndex) {
+    final cached = _splitSegmentsCache[verseIndex];
+    if (cached != null) return cached;
+    final ref = _verseService.getVerseRef(verseIndex);
+    if (ref == null || !BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
+      return _splitSegmentsCache[verseIndex] =
+          <({String ref, String sectionPath})>[];
+    }
+    final segments = _hierarchyService.getSplitVerseSegmentsSync(ref);
+    _splitSegmentsCache[verseIndex] = segments;
+    return segments;
   }
 
   int _segmentIndexForRef(int verseIndex, String segmentRef) {
-    final ref = _verseService.getVerseRef(verseIndex);
-    if (ref == null) return 0;
-    final segments = _hierarchyService.getSplitVerseSegmentsSync(ref);
+    final segments = _splitSegmentsForVerseIndex(verseIndex);
     for (var i = 0; i < segments.length; i++) {
       if (segments[i].ref == segmentRef) return i;
     }
@@ -1078,8 +1084,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (event.logicalKey == LogicalKeyboardKey.enter ||
         event.logicalKey == LogicalKeyboardKey.space) {
       final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-      if (visibleIdx != null)
+      if (visibleIdx != null) {
         _onVerseTap(visibleIdx, segmentRef: _currentSegmentRef);
+      }
       return KeyEventResult.handled;
     }
     return KeyEventResult.ignored;
@@ -1581,8 +1588,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                     if (!isSplitSegment) {
                                       _verseKeys[idx] ??= GlobalKey();
                                     } else {
-                                      _verseSegmentKeys[
-                                              '${idx}_$segmentIndex'] ??=
+                                      _verseSegmentKeys[(idx, segmentIndex)] ??=
                                           GlobalKey();
                                     }
                                     final isTargetVerse =
@@ -1654,8 +1660,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                       ),
                                     );
                                     final subtreeKey = isSplitSegment
-                                        ? _verseSegmentKeys[
-                                            '${idx}_$segmentIndex']
+                                        ? _verseSegmentKeys[(idx, segmentIndex)]
                                         : _verseKeys[idx];
                                     final key = subtreeKey ??
                                         ValueKey(
@@ -1689,15 +1694,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
                                   final children = <Widget>[];
                                   final highlightRuns = _getHighlightRuns();
-                                  final usedInRun = <int>{};
-
-                                  List<int>? runContaining(
-                                      int idx, List<List<int>> runList) {
-                                    for (final r in runList) {
-                                      if (r.contains(idx)) return r;
-                                    }
-                                    return null;
-                                  }
+                                  final highlightRunByStart = {
+                                    for (final run in highlightRuns)
+                                      run.first: run,
+                                  };
+                                  final highlightIndices = _highlightSet;
 
                                   for (final entry
                                       in verseTexts.asMap().entries) {
@@ -1706,34 +1707,26 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                     final globalIndex =
                                         ch.startVerseIndex + localIndex;
 
-                                    if (usedInRun.contains(globalIndex))
+                                    if (highlightIndices
+                                            .contains(globalIndex) &&
+                                        !highlightRunByStart
+                                            .containsKey(globalIndex)) {
                                       continue;
+                                    }
 
-                                    final highlightRun = runContaining(
-                                        globalIndex, highlightRuns);
+                                    final highlightRun =
+                                        highlightRunByStart[globalIndex];
                                     if (highlightRun != null &&
                                         highlightRun.first == globalIndex) {
-                                      for (final idx in highlightRun) {
-                                        usedInRun.add(idx);
-                                      }
                                       // Render highlighted verses without the light box; overlay draws the border.
                                       for (final idx in highlightRun) {
                                         final text = idx < _verses.length
                                             ? _verses[idx]
                                             : '';
-                                        final ref =
-                                            _verseService.getVerseRef(idx);
-                                        final isSplit = ref != null &&
-                                            BcvVerseService.baseVerseRefPattern
-                                                .hasMatch(ref) &&
-                                            _hierarchyService
-                                                    .getSplitVerseSegmentsSync(
-                                                        ref)
-                                                    .length >=
-                                                2;
+                                        final segments =
+                                            _splitSegmentsForVerseIndex(idx);
+                                        final isSplit = segments.length >= 2;
                                         if (isSplit) {
-                                          final segments = _hierarchyService
-                                              .getSplitVerseSegmentsSync(ref);
                                           final lines = text.split('\n');
                                           if (lines.length >= 2) {
                                             for (var i = 0;
@@ -1781,18 +1774,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
                                     // Section highlight is drawn via animated overlay.
                                     // For split verses, render as two blocks so overlay can highlight each segment.
-                                    final ref =
-                                        _verseService.getVerseRef(globalIndex);
-                                    final isSplit = ref != null &&
-                                        BcvVerseService.baseVerseRefPattern
-                                            .hasMatch(ref) &&
-                                        _hierarchyService
-                                                .getSplitVerseSegmentsSync(ref)
-                                                .length >=
-                                            2;
+                                    final segments =
+                                        _splitSegmentsForVerseIndex(
+                                            globalIndex);
+                                    final isSplit = segments.length >= 2;
                                     if (isSplit) {
-                                      final segments = _hierarchyService
-                                          .getSplitVerseSegmentsSync(ref);
                                       final lines = verse.split('\n');
                                       if (lines.length >= 2) {
                                         for (var i = 0;

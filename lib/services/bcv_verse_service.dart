@@ -25,6 +25,7 @@ class BcvVerseService {
   List<String>? _verses;
   List<String?>? _captions;
   List<String?>? _refs;
+  Map<String, int>? _refToIndex;
   List<BcvChapter>? _chapters;
   static const String _assetPath = 'texts/bcv_parsed.json';
 
@@ -49,6 +50,14 @@ class BcvVerseService {
     _refs = (json['refs'] as List<dynamic>)
         .map((e) => e == null ? null : e as String)
         .toList();
+    final refToIndex = <String, int>{};
+    for (var i = 0; i < _refs!.length; i++) {
+      final ref = _refs![i];
+      if (ref != null && ref.isNotEmpty) {
+        refToIndex[ref] = i;
+      }
+    }
+    _refToIndex = refToIndex;
     final chList = json['chapters'] as List<dynamic>;
     _chapters = chList
         .map((c) => BcvChapter(
@@ -71,7 +80,9 @@ class BcvVerseService {
 
   /// Returns the caption for the verse at [index] (e.g. "Chapter 1, Verse 1"), or null.
   String? getVerseCaption(int index) {
-    if (_captions == null || index < 0 || index >= _captions!.length) return null;
+    if (_captions == null || index < 0 || index >= _captions!.length) {
+      return null;
+    }
     return _captions![index];
   }
 
@@ -83,11 +94,7 @@ class BcvVerseService {
 
   /// Returns the first verse index whose ref equals [ref] (e.g. "1.5"), or null.
   int? getIndexForRef(String ref) {
-    if (_refs == null) return null;
-    for (var i = 0; i < _refs!.length; i++) {
-      if (_refs![i] == ref) return i;
-    }
-    return null;
+    return _refToIndex?[ref];
   }
 
   /// Like [getIndexForRef] but also tries stripping segment suffixes (ab, cd, etc.)
@@ -120,7 +127,9 @@ class BcvVerseService {
   Future<BcvVerseResult> getRandomVerseWithCaption() async {
     await _ensureLoaded();
     final list = _verses!;
-    if (list.isEmpty) return BcvVerseResult(verse: '', caption: null, verseIndex: null);
+    if (list.isEmpty) {
+      return BcvVerseResult(verse: '', caption: null, verseIndex: null);
+    }
     final index = Random().nextInt(list.length);
     return BcvVerseResult(
       verse: list[index],
