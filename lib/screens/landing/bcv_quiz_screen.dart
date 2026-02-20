@@ -576,8 +576,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                 builder: (context, viewport) {
                   final hasMultipleVerses = _sectionVerseTexts.length > 1;
                   final versePanelHeight = hasMultipleVerses
-                      ? (viewport.maxHeight * 0.33).clamp(180.0, 300.0)
-                      : (viewport.maxHeight * 0.24).clamp(120.0, 220.0);
+                      ? (viewport.maxHeight * 0.38).clamp(210.0, 340.0)
+                      : (viewport.maxHeight * 0.30).clamp(150.0, 260.0);
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
