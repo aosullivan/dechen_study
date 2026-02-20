@@ -7,7 +7,7 @@ import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
 import 'bcv/bcv_verse_text.dart';
 
-/// Quiz: guess which chapter a random section belongs to. Uses BCV assets.
+/// Guess the Chapter: pick which chapter a random section belongs to.
 class BcvQuizScreen extends StatefulWidget {
   const BcvQuizScreen({super.key});
 
@@ -506,7 +506,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
-            'Quiz',
+            'Guess the Chapter',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
@@ -525,7 +525,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
-            'Quiz',
+            'Guess the Chapter',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
@@ -562,7 +562,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Quiz',
+          'Guess the Chapter',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,

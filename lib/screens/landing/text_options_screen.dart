@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import 'bcv_file_quiz_screen.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
 import 'inspiration_screen.dart';
 import 'textual_overview_screen.dart';
 
-/// Shows Daily / Quiz / Read for a given text. Daily opens random verse; Quiz guesses chapter.
+/// Shows top-level study modes for a text.
 class TextOptionsScreen extends StatefulWidget {
   const TextOptionsScreen({
     super.key,
@@ -69,6 +70,11 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           ),
           _OptionTile(
             icon: Icons.quiz_outlined,
+            label: 'Guess the Chapter',
+            onTap: () => _openGuessTheChapter(context),
+          ),
+          _OptionTile(
+            icon: Icons.fact_check_outlined,
             label: 'Quiz',
             onTap: () => _openQuiz(context),
           ),
@@ -123,11 +129,23 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     }
   }
 
-  void _openQuiz(BuildContext context) {
+  void _openGuessTheChapter(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => const BcvQuizScreen(),
+        ),
+      );
+    } else {
+      _showComingSoon(context, 'Guess the Chapter');
+    }
+  }
+
+  void _openQuiz(BuildContext context) {
+    if (textId == 'bodhicaryavatara') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => const BcvFileQuizScreen(),
         ),
       );
     } else {
