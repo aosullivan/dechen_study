@@ -305,7 +305,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                   child: Text(
                     '${chapter.number}',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontSize: 30,
+                          fontSize: 24,
                           fontWeight: FontWeight.w700,
                           color: textColor,
                           height: 1.0,
@@ -712,8 +712,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                 crossAxisCount: 3,
                                 mainAxisSpacing: 6,
                                 crossAxisSpacing: 6,
-                                childAspectRatio:
-                                    _showChapterLabels ? 1.02 : 1.60,
+                                mainAxisExtent: _showChapterLabels ? 84 : 62,
                               ),
                               itemCount: 12,
                               itemBuilder: (context, index) {

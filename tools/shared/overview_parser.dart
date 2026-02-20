@@ -1,4 +1,4 @@
-// Shared overview and verse-ref parsing for build_verse_hierarchy and audit_section_mismatches.
+// Shared overview and verse-ref parsing for audit/analysis tools.
 // Use: import 'shared/overview_parser.dart';
 
 /// Normalize title for matching: lowercase, trim, collapse whitespace, remove trailing punctuation.

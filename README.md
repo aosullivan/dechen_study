@@ -128,24 +128,23 @@ lib/
 The app loads text from bundled assets:
 
 - `texts/bcv-root` – Source root text (chapters, verses). Run `dart run tools/build_bcv_parsed.dart` to regenerate `texts/bcv_parsed.json` after changes.
-- `texts/verse_hierarchy_map.json` – Section hierarchy (paths, first verses)
+- `texts/verse_hierarchy_map.json` – Canonical section hierarchy and verse mapping (source of truth; edit directly)
 - `texts/verse_commentary_mapping.txt` – Verse-to-commentary mapping (includes commentary text)
 
 ## Hierarchy Maintenance
 
-When you change hierarchy logic or verse-section assignments, use this sequence:
+`texts/verse_hierarchy_map.json` is the source of truth. It is not generated in this repo.
+
+When you change verse-section assignments, use this sequence:
 
 ```bash
-# 1) Rebuild hierarchy from overview + commentary mapping
-dart run tools/build_verse_hierarchy.dart
-
-# 2) Rebuild indices from the hierarchy tree
+# 1) Rebuild indices from the hierarchy tree
 python3 script/rebuild_verse_indices.py
 
-# 3) Audit empty leaf sections
+# 2) Audit empty leaf sections
 node tools/audit_empty_leaves.js
 
-# 4) Optional mismatch scan
+# 3) Optional mismatch scan
 dart run tools/audit_section_mismatches.dart
 ```
 
@@ -155,8 +154,7 @@ Audit outputs:
 - `texts/empty_leaf_audit.json` – machine-readable details
 
 Notes:
-
-- `tools/build_verse_hierarchy.dart` parses both bracketed refs (e.g. `[9.101]`) and standalone ref lines (e.g. `9.101`).
+- `texts/overviews-pages (EOS).txt` and `texts/verse_commentary_mapping.txt` remain useful for audit/comparison tooling.
 
 Latest audit snapshot (from generated files):
 

@@ -13,7 +13,7 @@ class _ParsedHierarchy {
 }
 
 /// Loads verse hierarchy mapping and provides section path for each verse.
-/// Hierarchy comes from overviews-pages (EOS).txt (definitive source).
+/// Hierarchy source of truth is texts/verse_hierarchy_map.json.
 class VerseHierarchyService {
   VerseHierarchyService._();
   static final VerseHierarchyService _instance = VerseHierarchyService._();
