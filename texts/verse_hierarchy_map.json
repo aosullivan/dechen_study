@@ -1599,14 +1599,17 @@
                             {
                               "title": "One has clearly distinguished good from bad",
                               "path": "4.1.2.2.3.4.2",
-                              "verses": [],
+                              "verses": [
+                                "4.27ab"
+                              ],
                               "children": []
                             },
                             {
                               "title": "It is only logical, therefore, to persevere",
                               "path": "4.1.2.2.3.4.3",
                               "verses": [
-                                "4.27"
+                                "4.27",
+                                "4.27cd"
                               ],
                               "children": []
                             }
@@ -5520,13 +5523,17 @@
                                 {
                                   "title": "Developing the perspective of the assumed self",
                                   "path": "4.5.3.2.3.2.3.1",
-                                  "verses": [],
+                                  "verses": [
+                                    "8.145ab"
+                                  ],
                                   "children": []
                                 },
                                 {
                                   "title": "Having patience with the harm they may cause",
                                   "path": "4.5.3.2.3.2.3.2",
-                                  "verses": [],
+                                  "verses": [
+                                    "8.145cd"
+                                  ],
                                   "children": []
                                 },
                                 {
@@ -5757,16 +5764,17 @@
                                   "title": "The fault of not abandoning",
                                   "path": "4.5.3.2.4.2.2.4",
                                   "verses": [
-                                    "8.171",
-                                    "8.172",
-                                    "8.173"
+                                    "8.171"
                                   ],
                                   "children": []
                                 },
                                 {
                                   "title": "Contemplating the faults of that",
                                   "path": "4.5.3.2.4.2.2.5",
-                                  "verses": [],
+                                  "verses": [
+                                    "8.172",
+                                    "8.173"
+                                  ],
                                   "children": []
                                 }
                               ]
@@ -16395,8 +16403,8 @@
         "title": "Preventing the characteristics of anger"
       },
       {
-        "section": "4.3.2.1.4",
-        "title": "Keeping in mind the means of averting the cause of the cause"
+        "section": "4.3.2.1.3",
+        "title": "The means of averting that cause"
       }
     ],
     "6.100": [
@@ -21521,8 +21529,8 @@
         "title": "Preventing the characteristics of anger"
       },
       {
-        "section": "4.3.2.1.4",
-        "title": "Keeping in mind the means of averting the cause of the cause"
+        "section": "4.3.2.1.3",
+        "title": "The means of averting that cause"
       }
     ],
     "6.90": [
@@ -27025,8 +27033,8 @@
         "title": "The faults of activities for one’s own sake"
       },
       {
-        "section": "4.5.3.2.4.2.2.4",
-        "title": "The fault of not abandoning"
+        "section": "4.5.3.2.4.2.2.5",
+        "title": "Contemplating the faults of that"
       }
     ],
     "8.173": [
@@ -27059,8 +27067,8 @@
         "title": "The faults of activities for one’s own sake"
       },
       {
-        "section": "4.5.3.2.4.2.2.4",
-        "title": "The fault of not abandoning"
+        "section": "4.5.3.2.4.2.2.5",
+        "title": "Contemplating the faults of that"
       }
     ],
     "8.174": [
@@ -39812,6 +39820,134 @@
         "section": "5.2.1.2.3",
         "title": "Dedication for the benefit of ghosts"
       }
+    ],
+    "4.27ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.1",
+        "title": "Concern"
+      },
+      {
+        "section": "4.1.2",
+        "title": "Concern for training"
+      },
+      {
+        "section": "4.1.2.2",
+        "title": "Concern to cultivate virtue"
+      },
+      {
+        "section": "4.1.2.2.3",
+        "title": "Therefore, one should strive in virtue, the antidote"
+      },
+      {
+        "section": "4.1.2.2.3.4",
+        "title": "Advice in overcoming that with an admonition"
+      },
+      {
+        "section": "4.1.2.2.3.4.2",
+        "title": "One has clearly distinguished good from bad"
+      }
+    ],
+    "4.27cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.1",
+        "title": "Concern"
+      },
+      {
+        "section": "4.1.2",
+        "title": "Concern for training"
+      },
+      {
+        "section": "4.1.2.2",
+        "title": "Concern to cultivate virtue"
+      },
+      {
+        "section": "4.1.2.2.3",
+        "title": "Therefore, one should strive in virtue, the antidote"
+      },
+      {
+        "section": "4.1.2.2.3.4",
+        "title": "Advice in overcoming that with an admonition"
+      },
+      {
+        "section": "4.1.2.2.3.4.3",
+        "title": "It is only logical, therefore, to persevere"
+      }
+    ],
+    "8.145ab": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.2",
+        "title": "Exchanging oneself and others"
+      },
+      {
+        "section": "4.5.3.2.3",
+        "title": "Detailed explanation of the practices related to aspiration"
+      },
+      {
+        "section": "4.5.3.2.3.2",
+        "title": "Meditation on envy"
+      },
+      {
+        "section": "4.5.3.2.3.2.3",
+        "title": "The outcome of meditating like this"
+      },
+      {
+        "section": "4.5.3.2.3.2.3.1",
+        "title": "Developing the perspective of the assumed self"
+      }
+    ],
+    "8.145cd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.5",
+        "title": "Meditation"
+      },
+      {
+        "section": "4.5.3",
+        "title": "Focussing the mind on samatha"
+      },
+      {
+        "section": "4.5.3.2",
+        "title": "Exchanging oneself and others"
+      },
+      {
+        "section": "4.5.3.2.3",
+        "title": "Detailed explanation of the practices related to aspiration"
+      },
+      {
+        "section": "4.5.3.2.3.2",
+        "title": "Meditation on envy"
+      },
+      {
+        "section": "4.5.3.2.3.2.3",
+        "title": "The outcome of meditating like this"
+      },
+      {
+        "section": "4.5.3.2.3.2.3.2",
+        "title": "Having patience with the harm they may cause"
+      }
     ]
   },
   "sectionToFirstVerse": {
@@ -40029,8 +40165,8 @@
     "4.1.2.2.3.3": "4.25",
     "4.1.2.2.3.4": "4.26",
     "4.1.2.2.3.4.1": "4.26",
-    "4.1.2.2.3.4.2": "4.26",
-    "4.1.2.2.3.4.3": "4.27",
+    "4.1.2.2.3.4.2": "4.27ab",
+    "4.1.2.2.3.4.3": "4.27cd",
     "4.1.2.3": "4.28",
     "4.1.2.3.1": "4.28",
     "4.1.2.3.1.1": "4.28",
@@ -40192,8 +40328,8 @@
     "4.3.2.1": "6.7",
     "4.3.2.1.1": "6.7",
     "4.3.2.1.2": "6.8",
-    "4.3.2.1.3": "6.7",
-    "4.3.2.1.4": "6.9",
+    "4.3.2.1.3": "6.9",
+    "4.3.2.1.4": "6.11",
     "4.3.2.1.4.1": "6.11",
     "4.3.2.1.4.2": "6.12",
     "4.3.2.1.4.2.1": "6.12",
@@ -40517,8 +40653,8 @@
     "4.5.3.2.3.2.1": "8.141",
     "4.5.3.2.3.2.2": "8.142",
     "4.5.3.2.3.2.3": "8.145",
-    "4.5.3.2.3.2.3.1": "8.145",
-    "4.5.3.2.3.2.3.2": "8.145",
+    "4.5.3.2.3.2.3.1": "8.145ab",
+    "4.5.3.2.3.2.3.2": "8.145cd",
     "4.5.3.2.3.2.3.3": "8.145",
     "4.5.3.2.3.2.3.4": "8.146ab",
     "4.5.3.2.3.2.3.5": "8.146cd",
@@ -40548,7 +40684,7 @@
     "4.5.3.2.4.2.2.2": "8.169cd",
     "4.5.3.2.4.2.2.3": "8.170",
     "4.5.3.2.4.2.2.4": "8.171",
-    "4.5.3.2.4.2.2.5": "8.169ab",
+    "4.5.3.2.4.2.2.5": "8.172",
     "4.5.3.2.4.2.3": "8.174",
     "4.5.3.2.4.2.3.1": "8.174",
     "4.5.3.2.4.2.3.1.1": "8.174",

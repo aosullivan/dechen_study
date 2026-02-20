@@ -156,17 +156,6 @@ Audit outputs:
 Notes:
 - `texts/overviews-pages (EOS).txt` and `texts/verse_commentary_mapping.txt` remain useful for audit/comparison tooling.
 
-Latest audit snapshot (from generated files):
-
-- Generated: `2026-02-19T04:00:09.818Z`
-- Total leaves: `738`
-- Empty leaves: `98`
-- Suspicious misassigned: `3`
-- Ambiguous empty: `13`
-- Expected empty: `82`
-- Index inconsistencies: `0`
-- Quoted-heading follow-up candidates: `0` (see `texts/expected_empty_quoted_candidates.json`)
-
 ## Tests
 
 ```bash
