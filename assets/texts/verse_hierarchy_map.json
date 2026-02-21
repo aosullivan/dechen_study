@@ -5973,14 +5973,14 @@
                         {
                           "title": "Distinguishing the two truths",
                           "path": "4.6.2.1.1.1",
-                          "verses": [],
+                          "verses": [
+                            "9.2a"
+                          ],
                           "children": [
                             {
                               "title": "Basis of the distinction",
                               "path": "4.6.2.1.1.1.1",
-                              "verses": [
-                                "9.2cd"
-                              ],
+                              "verses": [],
                               "children": []
                             },
                             {
@@ -5998,9 +5998,7 @@
                             {
                               "title": "Definitions",
                               "path": "4.6.2.1.1.1.4",
-                              "verses": [
-                                "9.2ab"
-                              ],
+                              "verses": [],
                               "children": []
                             }
                           ]
@@ -6014,7 +6012,9 @@
                         {
                           "title": "The valid cognitions which ascertain those characteristics",
                           "path": "4.6.2.1.1.3",
-                          "verses": [],
+                          "verses": [
+                            "9.2bcd"
+                          ],
                           "children": [
                             {
                               "title": "Distinguishing the types of conceptual thought",
@@ -6029,7 +6029,7 @@
                               "path": "4.6.2.1.1.3.2",
                               "verses": [
                                 "9.3cd",
-                                "9.4ab"
+                                "9.4abc"
                               ],
                               "children": []
                             },
@@ -6042,7 +6042,7 @@
                                   "title": "Abandoning the objection that practice is meaningless",
                                   "path": "4.6.2.1.1.3.3.1",
                                   "verses": [
-                                    "9.4cd"
+                                    "9.4d"
                                   ],
                                   "children": []
                                 },
@@ -6050,8 +6050,7 @@
                                   "title": "Abandoning the objection that there are no distinctions in understanding",
                                   "path": "4.6.2.1.1.3.3.2",
                                   "verses": [
-                                    "9.5ab",
-                                    "9.5cd"
+                                    "9.5"
                                   ],
                                   "children": []
                                 }
@@ -7682,8 +7681,7 @@
                                       "title": "Refuting the Vaiśeṣika tradition of arising from sempiternal particles",
                                       "path": "4.6.2.4.2.1.2.2.2",
                                       "verses": [
-                                        "9.126ab",
-                                        "9.126cd"
+                                        "9.126ab"
                                       ],
                                       "children": []
                                     }
@@ -7704,14 +7702,16 @@
                                     {
                                       "title": "A general explanation",
                                       "path": "4.6.2.4.2.1.3.1.1",
-                                      "verses": [],
+                                      "verses": [
+                                        "9.126cd"
+                                      ],
                                       "children": []
                                     },
                                     {
                                       "title": "The nature of the primal substance",
                                       "path": "4.6.2.4.2.1.3.1.2",
                                       "verses": [
-                                        "9.127ab"
+                                        "9.127abc"
                                       ],
                                       "children": []
                                     },
@@ -7719,7 +7719,7 @@
                                       "title": "The nature of its effects",
                                       "path": "4.6.2.4.2.1.3.1.3",
                                       "verses": [
-                                        "9.127cd"
+                                        "9.127d"
                                       ],
                                       "children": []
                                     }
@@ -34652,66 +34652,6 @@
         "title": "Non-establishment of the basis"
       }
     ],
-    "9.2ab": [
-      {
-        "section": "4",
-        "title": "The cooperating condition: subsequently accomplishing the training"
-      },
-      {
-        "section": "4.6",
-        "title": "Wisdom"
-      },
-      {
-        "section": "4.6.2",
-        "title": "It is the wisdom of the emptiness of intrinsic nature"
-      },
-      {
-        "section": "4.6.2.1",
-        "title": "Establishing the object as empty"
-      },
-      {
-        "section": "4.6.2.1.1",
-        "title": "The nature of the two truths in our tradition"
-      },
-      {
-        "section": "4.6.2.1.1.1",
-        "title": "Distinguishing the two truths"
-      },
-      {
-        "section": "4.6.2.1.1.1.4",
-        "title": "Definitions"
-      }
-    ],
-    "9.2cd": [
-      {
-        "section": "4",
-        "title": "The cooperating condition: subsequently accomplishing the training"
-      },
-      {
-        "section": "4.6",
-        "title": "Wisdom"
-      },
-      {
-        "section": "4.6.2",
-        "title": "It is the wisdom of the emptiness of intrinsic nature"
-      },
-      {
-        "section": "4.6.2.1",
-        "title": "Establishing the object as empty"
-      },
-      {
-        "section": "4.6.2.1.1",
-        "title": "The nature of the two truths in our tradition"
-      },
-      {
-        "section": "4.6.2.1.1.1",
-        "title": "Distinguishing the two truths"
-      },
-      {
-        "section": "4.6.2.1.1.1.1",
-        "title": "Basis of the distinction"
-      }
-    ],
     "9.30": [
       {
         "section": "4",
@@ -40009,6 +39949,58 @@
         "section": "4.5.3.2.3.2.3.2",
         "title": "Having patience with the harm they may cause"
       }
+    ],
+    "9.2a": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.1",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.1.1",
+        "title": "The nature of the two truths in our tradition"
+      },
+      {
+        "section": "4.6.2.1.1.1",
+        "title": "Distinguishing the two truths"
+      }
+    ],
+    "9.2bcd": [
+      {
+        "section": "4",
+        "title": "The cooperating condition: subsequently accomplishing the training"
+      },
+      {
+        "section": "4.6",
+        "title": "Wisdom"
+      },
+      {
+        "section": "4.6.2",
+        "title": "It is the wisdom of the emptiness of intrinsic nature"
+      },
+      {
+        "section": "4.6.2.1",
+        "title": "Establishing the object as empty"
+      },
+      {
+        "section": "4.6.2.1.1",
+        "title": "The nature of the two truths in our tradition"
+      },
+      {
+        "section": "4.6.2.1.1.3",
+        "title": "The valid cognitions which ascertain those characteristics"
+      }
     ]
   },
   "sectionToFirstVerse": {
@@ -40766,18 +40758,18 @@
     "4.6.2": "9.2cd",
     "4.6.2.1": "9.2cd",
     "4.6.2.1.1": "9.2cd",
-    "4.6.2.1.1.1": "9.2cd",
-    "4.6.2.1.1.1.1": "9.2cd",
-    "4.6.2.1.1.1.2": "9.2cd",
-    "4.6.2.1.1.1.3": "9.2cd",
-    "4.6.2.1.1.1.4": "9.2ab",
+    "4.6.2.1.1.1": "9.2a",
+    "4.6.2.1.1.1.1": "9.2a",
+    "4.6.2.1.1.1.2": "9.2a",
+    "4.6.2.1.1.1.3": "9.2a",
+    "4.6.2.1.1.1.4": "9.2a",
     "4.6.2.1.1.2": "9.2cd",
-    "4.6.2.1.1.3": "9.3ab",
+    "4.6.2.1.1.3": "9.2bcd",
     "4.6.2.1.1.3.1": "9.3ab",
     "4.6.2.1.1.3.2": "9.3cd",
-    "4.6.2.1.1.3.3": "9.4cd",
-    "4.6.2.1.1.3.3.1": "9.4cd",
-    "4.6.2.1.1.3.3.2": "9.5ab",
+    "4.6.2.1.1.3.3": "9.4d",
+    "4.6.2.1.1.3.3.1": "9.4d",
+    "4.6.2.1.1.3.3.2": "9.5",
     "4.6.2.1.2": "9.6",
     "4.6.2.1.2.1": "9.6",
     "4.6.2.1.2.1.1": "9.6",
@@ -40989,10 +40981,10 @@
     "4.6.2.4.2.1.2.2.1.3.3.2.3": "9.125",
     "4.6.2.4.2.1.2.2.2": "9.126ab",
     "4.6.2.4.2.1.3": "9.126cd",
-    "4.6.2.4.2.1.3.1": "9.127ab",
-    "4.6.2.4.2.1.3.1.1": "9.127ab",
-    "4.6.2.4.2.1.3.1.2": "9.127ab",
-    "4.6.2.4.2.1.3.1.3": "9.127cd",
+    "4.6.2.4.2.1.3.1": "9.126cd",
+    "4.6.2.4.2.1.3.1.1": "9.126cd",
+    "4.6.2.4.2.1.3.1.2": "9.127abc",
+    "4.6.2.4.2.1.3.1.3": "9.127d",
     "4.6.2.4.2.1.3.2": "6.28ab",
     "4.6.2.4.2.1.3.2.1": "6.28ab",
     "4.6.2.4.2.1.3.2.1.1": "6.28ab",
