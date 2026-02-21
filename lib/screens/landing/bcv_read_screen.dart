@@ -31,6 +31,7 @@ class _SectionChangeNotifier extends ChangeNotifier {
 class BcvReadScreen extends StatefulWidget {
   const BcvReadScreen({
     super.key,
+    this.initialChapterNumber,
     this.scrollToVerseIndex,
     this.highlightSectionIndices,
     this.initialSegmentRef,
@@ -39,6 +40,9 @@ class BcvReadScreen extends StatefulWidget {
     this.commentaryLoader,
   });
 
+  /// Optional starting chapter when opening from the text menu.
+  /// The full document still loads; this only changes initial scroll position.
+  final int? initialChapterNumber;
   final int? scrollToVerseIndex;
 
   /// When provided (e.g. from Daily "Full text"), these verses are highlighted as one section.
@@ -173,6 +177,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Deep-link style open (e.g. Daily -> Full text): prioritize getting to verse first.
   bool get _isDeepLinkOpen =>
       widget.scrollToVerseIndex != null || _hasInitialHighlight;
+
+  int? get _initialChapterStartVerseIndex {
+    if (_isDeepLinkOpen) return null;
+    final chapterNumber = widget.initialChapterNumber;
+    if (chapterNumber == null) return null;
+    for (final chapter in _chapters) {
+      if (chapter.number == chapterNumber) return chapter.startVerseIndex;
+    }
+    return null;
+  }
 
   int get _syncGeneration => _navState.syncGeneration;
 
@@ -365,6 +379,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
               _highlightSet.isNotEmpty) {
             _loadCommentaryForHighlightedSection();
           }
+          _scheduleInitialChapterScroll();
           _hierarchyService
               .getHierarchyForVerse('1.1'); // Preload hierarchy map
           _setInitialBreadcrumb();
@@ -570,7 +585,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   }
 
   void _setInitialBreadcrumb() {
-    final initialIndex = _scrollTargetVerseIndex ?? 0;
+    final initialIndex =
+        _scrollTargetVerseIndex ?? _initialChapterStartVerseIndex ?? 0;
     if (initialIndex >= _verses.length) return;
     final initialSegmentRef = _initialSegmentRefForVerseIndex(initialIndex);
     final hierarchyFuture = initialSegmentRef != null
@@ -595,6 +611,35 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         verseIndices: sectionIndices,
         verseIndex: initialIndex,
         segmentRef: initialSegmentRef,
+      );
+    });
+  }
+
+  void _scheduleInitialChapterScroll() {
+    final chapterNumber = widget.initialChapterNumber;
+    if (_isDeepLinkOpen || chapterNumber == null) return;
+    if (!_chapters.any((chapter) => chapter.number == chapterNumber)) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _scrollToInitialChapterWhenReady(chapterNumber, remainingAttempts: 8);
+    });
+  }
+
+  void _scrollToInitialChapterWhenReady(
+    int chapterNumber, {
+    required int remainingAttempts,
+  }) {
+    final key = _chapterKeys[chapterNumber];
+    if (key?.currentContext != null) {
+      _scrollToChapter(chapterNumber);
+      return;
+    }
+    if (remainingAttempts <= 0) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _scrollToInitialChapterWhenReady(
+        chapterNumber,
+        remainingAttempts: remainingAttempts - 1,
       );
     });
   }

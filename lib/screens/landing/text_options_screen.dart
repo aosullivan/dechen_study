@@ -99,11 +99,11 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     }
   }
 
-  void _openRead(BuildContext context) {
+  Future<void> _openRead(BuildContext context) async {
     if (textId == 'bodhicaryavatara') {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (_) => BcvReadScreen(title: title),
+          builder: (_) => _ReadChapterSelectionScreen(title: title),
         ),
       );
     } else {
@@ -184,6 +184,155 @@ class _OptionTile extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         onTap: onTap,
+      ),
+    );
+  }
+}
+
+class _ReadChapterSelectionScreen extends StatefulWidget {
+  const _ReadChapterSelectionScreen({
+    required this.title,
+  });
+
+  final String title;
+
+  @override
+  State<_ReadChapterSelectionScreen> createState() =>
+      _ReadChapterSelectionScreenState();
+}
+
+class _ReadChapterSelectionScreenState
+    extends State<_ReadChapterSelectionScreen> {
+  late final Future<List<BcvChapter>> _chaptersFuture =
+      BcvVerseService.instance.getChapters();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Read',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        centerTitle: true,
+      ),
+      body: FutureBuilder<List<BcvChapter>>(
+        future: _chaptersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+            );
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Could not load chapters.',
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute<void>(
+                          builder: (_) => BcvReadScreen(title: widget.title),
+                        ));
+                      },
+                      child: const Text('Open Read'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          final chapters = snapshot.data ?? const <BcvChapter>[];
+          if (chapters.isEmpty) {
+            return Center(
+              child: Text(
+                'No chapters available.',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 20),
+            itemCount: chapters.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              final chapter = chapters[index];
+              return Card(
+                margin: EdgeInsets.zero,
+                color: AppColors.cardBeige,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: const BorderSide(color: AppColors.borderLight),
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute<void>(
+                      builder: (_) => BcvReadScreen(
+                        title: widget.title,
+                        initialChapterNumber: chapter.number,
+                      ),
+                    ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 36,
+                          child: Text(
+                            '${chapter.number}.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(height: 1.25),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            chapter.title,
+                            softWrap: true,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(height: 1.25),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
