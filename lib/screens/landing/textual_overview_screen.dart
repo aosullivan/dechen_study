@@ -70,6 +70,11 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
     return dot >= 0 ? path.substring(dot + 1) : path;
   }
 
+  static int _pathOrderValue(String path) {
+    final first = path.split('.').first;
+    return int.tryParse(first) ?? 999;
+  }
+
   void _onPickerChanged(int depth, String? path) {
     setState(() {
       // Truncate selections beyond this depth.
@@ -205,6 +210,29 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
   Widget _buildBody(BuildContext context) {
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
+    final topSections = _childrenOf('')
+      ..sort(
+          (a, b) => _pathOrderValue(a.path).compareTo(_pathOrderValue(b.path)));
+
+    if (_pickerSelections.isEmpty) {
+      return Column(
+        children: [
+          _buildTopSectionPicker(topSections.take(5).toList()),
+          const Expanded(
+            child: Center(
+              child: Text(
+                'Choose a top section to begin.',
+                style: TextStyle(
+                  fontFamily: 'Lora',
+                  fontSize: 16,
+                  color: AppColors.mutedBrown,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
 
     return Column(
       children: [
@@ -249,6 +277,61 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
                 ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTopSectionPicker(
+      List<({String path, String title, int depth})> topSections) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: const BoxDecoration(
+        color: AppColors.cardBeige,
+        border: Border(bottom: BorderSide(color: AppColors.borderLight)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Choose Top Section',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontFamily: 'Lora',
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textDark,
+                ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              for (var i = 0; i < topSections.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => _onPickerChanged(0, topSections[i].path),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.textDark,
+                      side: BorderSide(
+                          color: AppColors.border.withValues(alpha: 0.75)),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      _shortNum(topSections[i].path),
+                      style: const TextStyle(
+                        fontFamily: 'Lora',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
