@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../services/bcv_verse_service.dart';
 import '../../../services/verse_hierarchy_service.dart';
 import '../../../utils/app_theme.dart';
-import '../bcv/bcv_verse_text.dart';
 
 /// Shows the verses belonging to a single section in a scrollable panel.
 /// Used as a persistent side panel on desktop and a bottom sheet on mobile.
@@ -126,14 +125,15 @@ class OverviewVersePanel extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          BcvVerseText(
-                            text: v.text,
+                          Text(
+                            v.text,
                             style: const TextStyle(
                               fontFamily: 'Lora',
                               fontSize: 15,
                               height: 1.6,
                               color: AppColors.bodyText,
                             ),
+                            softWrap: true,
                           ),
                         ],
                       );

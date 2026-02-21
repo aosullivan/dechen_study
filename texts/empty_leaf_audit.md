@@ -36,7 +36,6 @@ Leaf nodes in `verse_hierarchy_map.json` that have no verses assigned.
 | 4.6.2.4.2.1.2.1.1 | Effect before the cause |
 | 4.6.2.4.2.1.2.1.2 | Effect simultaneous with the cause |
 | 4.6.2.4.2.1.2.1.3 | Effect after the cause |
-| 4.6.2.4.2.1.3.1.1 | A general explanation |
 | 4.6.2.4.3.3.2.1 | Presenting the reason |
 | 4.6.2.4.3.3.2.2 | Showing the forward pervasion |
 | 4.6.2.4.3.3.2.3 | The example of that |

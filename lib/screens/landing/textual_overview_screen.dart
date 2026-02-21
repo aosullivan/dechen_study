@@ -292,37 +292,64 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Choose Top Section',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontFamily: 'Lora',
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textDark,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Row(
+          Column(
             children: [
               for (var i = 0; i < topSections.length; i++) ...[
-                if (i > 0) const SizedBox(width: 8),
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => _onPickerChanged(0, topSections[i].path),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.textDark,
-                      side: BorderSide(
-                          color: AppColors.border.withValues(alpha: 0.75)),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                if (i > 0) const SizedBox(height: 8),
+                Card(
+                  margin: EdgeInsets.zero,
+                  color: AppColors.cardBeige,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(color: AppColors.borderLight),
+                  ),
+                  child: InkWell(
+                    onTap: () => _onPickerChanged(0, topSections[i].path),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
                       ),
-                    ),
-                    child: Text(
-                      _shortNum(topSections[i].path),
-                      style: const TextStyle(
-                        fontFamily: 'Lora',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 34,
+                            child: Text(
+                              '${_shortNum(topSections[i].path)}.',
+                              style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(height: 1.25) ??
+                                  const TextStyle(
+                                    fontFamily: 'Crimson Text',
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.textDark,
+                                    height: 1.25,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              topSections[i].title,
+                              softWrap: true,
+                              style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(height: 1.25) ??
+                                  const TextStyle(
+                                    fontFamily: 'Crimson Text',
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.textDark,
+                                    height: 1.25,
+                                  ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
