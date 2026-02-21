@@ -133,12 +133,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     return _questions[index];
   }
 
-  String get _difficultyLabel {
-    return _difficulty == BcvFileQuizDifficulty.beginner
-        ? 'Beginner'
-        : 'Advanced';
-  }
-
   void _nextQuestion() {
     if (_questions.isEmpty) return;
     if (_orderCursor >= _order.length) {
@@ -165,27 +159,28 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
       ];
     }
 
-    final results = <_ResolvedVerse>[];
     for (final ref in refs) {
       final index = _verseService.getIndexForRefWithFallback(ref);
-      if (index == null) {
-        results.add(
-          _ResolvedVerse(
-              ref: ref, text: 'Verse text not found for this reference.'),
-        );
-        continue;
-      }
+      if (index == null) continue;
       final text = _verseService.getVerseAt(index);
-      if (text == null || text.trim().isEmpty) {
-        results.add(
-          _ResolvedVerse(
-              ref: ref, text: 'Verse text not found for this reference.'),
-        );
-      } else {
-        results.add(_ResolvedVerse(ref: ref, text: text));
-      }
+      if (text == null || text.trim().isEmpty) continue;
+      return [_ResolvedVerse(ref: ref, text: text)];
     }
-    return results;
+
+    return [
+      _ResolvedVerse(
+        ref: refs.first,
+        text: 'Verse text not found for this reference.',
+      ),
+    ];
+  }
+
+  String? _beginnerChapterHint(List<String> refs) {
+    if (_difficulty != BcvFileQuizDifficulty.beginner) return null;
+    if (refs.isEmpty) return null;
+    final chapter = int.tryParse(refs.first.split('.').first);
+    if (chapter == null) return null;
+    return 'Chapter $chapter';
   }
 
   void _revealAnswer() {
@@ -427,15 +422,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Underlying Verse${verses.length == 1 ? '' : 's'}',
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textDark,
-                ),
-              ),
-              const SizedBox(height: 8),
               for (var i = 0; i < verses.length; i++) ...[
                 if (i > 0)
                   const Padding(
@@ -446,7 +432,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(
-                      verses[i].ref,
+                      'Verse ${verses[i].ref}',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -528,6 +514,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     }
 
     final orderedKeys = question.options.keys.toList()..sort();
+    final beginnerChapterHint = _beginnerChapterHint(question.verseRefs);
 
     return Scaffold(
       appBar: AppBar(
@@ -552,14 +539,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            _difficultyLabel,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                          ),
                           const Spacer(),
                           Text(
                             '$_correctAnswers/$_totalAnswers',
@@ -607,17 +586,19 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Question ${question.number}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
-                                  ?.copyWith(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                            ),
-                            const SizedBox(height: 6),
+                            if (beginnerChapterHint != null) ...[
+                              Text(
+                                beginnerChapterHint,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                              ),
+                              const SizedBox(height: 6),
+                            ],
                             Text(
                               question.prompt,
                               style: Theme.of(context)

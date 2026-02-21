@@ -15,7 +15,7 @@ VERSE TEXT:
 [1.1] To the Sugatas, the dharmakāya they have mastered, and their sons,
 And to all those worthy of prostration, I respectfully prostrate.
 In accord with the tradition, I will now briefly explain
-How to enter the vow of the Sugatas’ sons.
+How to enter the vow of the Sugatas' sons.
 
 Q2. What reason does Śāntideva give for composing the text?
 a) To benefit all sentient beings
@@ -44,10 +44,10 @@ But if others, similar in fortune to me,
 Should see it, that is also of benefit.
 
 Q4. How is the difficulty of acquiring a human birth illustrated in the text?
-a) Like finding a needle in a haystack
+a) Like finding a needle in a haystack of infinite proportions
 b) Like a turtle putting its neck through a wooden yoke afloat on an ocean
-c) Like catching a rainbow
-d) Like counting grains of sand
+c) Like catching a rainbow that appears only once in a thousand years
+d) Like counting every grain of sand on all the beaches of the world
 ANSWER: b
 VERSE REF(S): 1.4, 4.20
 VERSE TEXT:
@@ -61,10 +61,10 @@ Is like a turtle putting its neck through
 A wooden yoke adrift on a great ocean.
 
 Q5. What analogy is used for the rare arising of merit and intelligence in the world?
-a) A shooting star across the sky
-b) Rain in the desert
+a) A shooting star that briefly illuminates the dark night sky
+b) Rain falling in the vast desert where water is never found
 c) Lightning flashing through dark, black clouds of the night
-d) A flower blooming in winter
+d) A flower blooming in the dead of the coldest winter season
 ANSWER: c
 VERSE REF(S): 1.5
 VERSE TEXT:
@@ -96,7 +96,7 @@ VERSE REF(S): 1.9
 VERSE TEXT:
 [1.9] The very instant bodhicitta arises
 In someone tormented in the prison of saṃsāra,
-They will be called an ‘heir of the Sugatas’,
+They will be called an 'heir of the Sugatas',
 And be praised by gods and men.
 
 Q8. To what is bodhicitta compared in its ability to transform the impure body?
@@ -110,13 +110,13 @@ VERSE TEXT:
 [1.10] Like a supreme alchemical elixir,
 Having imbibed it, the impure body is transformed
 Into the priceless jewel of the kāya of a conqueror.
-So, firmly take hold of what is called ‘bodhicitta’.
+So, firmly take hold of what is called 'bodhicitta'.
 
 Q9. How are other virtues compared to bodhicitta using the analogy of trees?
-a) Other virtues are like oak trees, bodhicitta like a redwood
+a) Other virtues are like oak trees that grow tall but eventually fall, bodhicitta like a redwood that endures
 b) Other virtues are like plantain trees (exhausted after producing fruit), bodhicitta like a perennial tree
-c) Other virtues are like saplings, bodhicitta like a mature tree
-d) Other virtues are like dead trees, bodhicitta like a living tree
+c) Other virtues are like saplings that may or may not reach maturity, bodhicitta like a fully mature tree
+d) Other virtues are like dead trees that cannot bear any more fruit, bodhicitta like a living and growing tree
 ANSWER: b
 VERSE REF(S): 1.12
 VERSE TEXT:
@@ -165,10 +165,10 @@ So the wise should understand the difference
 Between these two, respectively.
 
 Q13. What happens from the moment one adopts the irreversible intent to liberate beings, even when asleep or distracted?
-a) One receives visions of the Buddhas
+a) One receives visions of the Buddhas and their pure lands
 b) An uninterrupted stream of merit as vast as space arises
-c) All defilements are instantly purified
-d) One spontaneously teaches dharma
+c) All defilements are instantly purified without any effort
+d) One spontaneously teaches dharma to all sentient beings
 ANSWER: b
 VERSE REF(S): 1.19
 VERSE TEXT:
@@ -191,10 +191,10 @@ In the Sutra Requested by Subahu
 For the sake of those inclined to lesser paths.
 
 Q15. What does the text say about those who develop a malevolent intention towards the sons of the conquerors?
-a) They will be forgiven if they repent
+a) They will be forgiven if they repent sincerely and confess before the Buddhas
 b) They will remain in the hells for as many aeons as malevolent thoughts developed
-c) They will lose their merit temporarily
-d) They will be reborn as animals
+c) They will lose their merit temporarily but can regain it through further practice
+d) They will be reborn as animals for a period proportionate to their ill will
 ANSWER: b
 VERSE REF(S): 1.34
 VERSE TEXT:
@@ -206,10 +206,10 @@ For as many aeons as malevolent thoughts developed.
 CHAPTER 2: CONFESSION OF FAULTS
 
 Q16. What are the three karmic obscurations that must be eliminated to become a suitable vessel?
-a) Ignorance, attachment, aversion
+a) Ignorance, attachment, and aversion — the three root poisons that bind beings to saṃsāra
 b) Greed (by offerings), pride (by praising), nonvirtuous actions of body/speech/mind (by confession)
-c) Body, speech, and mind obscurations
-d) Past, present, and future obscurations
+c) Body, speech, and mind obscurations that accumulate throughout beginningless saṃsāric existence
+d) Past, present, and future obscurations accumulated over the course of countless previous lifetimes
 ANSWER: b
 VERSE REF(S): 2.1, 2.24, 2.65
 VERSE TEXT:
@@ -227,10 +227,10 @@ They lack any goodness at all.
 From now on, I will not do them anymore.
 
 Q17. Why is the overall second chapter called 'Confession of Faults'?
-a) Because it is the longest section
+a) Because it is the longest section of the text and covers the most topics
 b) Because confession is the principal of the three purification practices
-c) Because Śāntideva had many faults to confess
-d) Because confession is the easiest practice
+c) Because Śāntideva had many personal faults that he needed to confess
+d) Because confession is the easiest practice among all the purifications
 ANSWER: b
 VERSE REF(S): 2.65
 VERSE TEXT:
@@ -266,10 +266,10 @@ Merit alone will protect me then,
 But I have never really relied on it.
 
 Q20. Complete the verse: "Like experiences in dreams, we get involved with this and that, but these will become only ___"
-a) "dust"
+a) "dust in the wind, scattered and forgotten forever"
 b) "memories, for whatever has passed will never be seen again"
-c) "illusions"
-d) "shadows"
+c) "illusions that fade the moment one awakens from sleep"
+d) "shadows that disappear when the light of wisdom shines"
 ANSWER: b
 VERSE REF(S): 2.36
 VERSE TEXT:
@@ -293,22 +293,22 @@ Begging him to protect me, someone so burdened with nonvirtue.
 
 Q22. What analogy is used for the defilements in relation to a physician's advice?
 a) Being constantly sick with the hundred faults of desire
-b) Having a broken leg that won't heal
-c) Being poisoned by a snake
-d) Having a wound that keeps reopening
+b) Having a broken leg that refuses to heal despite treatment
+c) Being poisoned by a snake whose venom spreads through the body
+d) Having a wound that keeps reopening no matter what is done
 ANSWER: a
 VERSE REF(S): 2.54
 VERSE TEXT:
-[2.54] If I need to follow the doctor’s advice
+[2.54] If I need to follow the doctor's advice
 Out of fear of just a common illness,
 What can be said of being constantly sick
 With the hundred faults of desire and so forth.
 
 Q23. What does "plummeting for a thousand miles" indicate in the text?
-a) Falling from a mountain
+a) Falling from a towering mountain into a deep and endless chasm
 b) Wandering in the depths of saṃsāra without beginning or end
-c) The distance to the hells
-d) The vastness of space
+c) The immeasurable distance from the human realm to the hells
+d) The vastness of space that extends beyond all comprehension
 ANSWER: b
 VERSE REF(S): 2.57
 VERSE TEXT:
@@ -333,10 +333,10 @@ And places those who are suffering in happiness,
 I gladly rejoice.
 
 Q25. What does Śāntideva wish to become for sick beings?
-a) A healer and sage
+a) A healer and sage who cures all diseases of mind and body
 b) Their medicine, their doctor, and their nurse
-c) A Buddha
-d) A prayer wheel
+c) A fully awakened Buddha who liberates them from all illness
+d) A prayer wheel that generates merit and dispels their suffering
 ANSWER: b
 VERSE REF(S): 3.8
 VERSE TEXT:
@@ -372,10 +372,10 @@ May I be the ground which supports
 The countless lives of sentient beings.
 
 Q28. What verse does Śāntideva use to formally generate bodhicitta?
-a) "I take refuge in the Buddha, dharma, and sangha"
+a) "I take refuge in the Buddha, dharma, and sangha for the benefit of all sentient beings"
 b) "Just as the Sugatas of the past generated bodhicitta... likewise I now generate bodhicitta"
-c) "May all beings be happy and free from suffering"
-d) "I vow to attain enlightenment for all beings"
+c) "May all beings be happy and free from suffering throughout all of their future lives"
+d) "I vow to attain enlightenment for all beings and to practise the six perfections"
 ANSWER: b
 VERSE REF(S): 3.23, 3.24
 VERSE TEXT:
@@ -399,7 +399,7 @@ VERSE TEXT:
 [3.26] Now, my life is fruitful.
 I have properly attained human existence.
 Today, born into the family of the Buddhas,
-I have become a Buddha’s child.
+I have become a Buddha's child.
 
 Q30. What analogy is used for the accidental arising of bodhicitta?
 a) Like the sun breaking through clouds
@@ -417,10 +417,10 @@ Has arisen in me.
 CHAPTER 4: CONCERN
 
 Q31. What happens if one has made the commitment of bodhicitta but does not act to fulfill it?
-a) One merely delays progress
+a) One merely delays progress on the path by a single lifetime
 b) One deceives all sentient beings and takes a bad rebirth
-c) One can try again in the next life
-d) There are no consequences
+c) One can try again in the next life without lasting consequence
+d) There are no consequences since the intention alone was pure
 ANSWER: b
 VERSE REF(S): 4.4
 VERSE TEXT:
@@ -457,9 +457,9 @@ The benefit of all beings is discarded.
 
 Q34. What analogy is used for the condition of someone who has acquired the freedoms but does not cultivate virtue?
 a) There could be no greater deception, and no greater delusion
-b) Like a fish out of water
-c) Like a bird with broken wings
-d) Like gold thrown into the ocean
+b) Like a fish out of water, gasping for breath without any hope
+c) Like a bird with broken wings, unable to ever fly again
+d) Like gold thrown into the ocean, lost forever beyond all reach
 ANSWER: a
 VERSE REF(S): 4.23
 VERSE TEXT:
@@ -469,23 +469,23 @@ There could be no greater deception,
 And no greater delusion.
 
 Q35. What does Śāntideva call the defilements such as hatred and craving?
-a) Minor obstacles
+a) Minor obstacles that can be overcome with a small amount of effort and determination
 b) Enemies without hands or feet, not courageous or intelligent, yet one acts like their slave
-c) Temporary visitors to the mind
-d) Teachers in disguise
+c) Temporary visitors to the mind that come and go without any lasting harmful effect
+d) Teachers in disguise who ultimately lead the practitioner to greater wisdom and insight
 ANSWER: b
 VERSE REF(S): 4.28
 VERSE TEXT:
 [4.28] Enemies such as hatred and craving,
-Don’t have hands or feet,
-Aren’t courageous or intelligent,
+Don't have hands or feet,
+Aren't courageous or intelligent,
 And yet I act like their slave.
 
 Q36. How does the text contrast ordinary enemies with the defilements?
-a) Ordinary enemies can be reasoned with; defilements cannot
+a) Ordinary enemies can be reasoned with and eventually pacified; defilements can never be reasoned with
 b) Ordinary enemies cannot lead one to the Avīci Hell, but the mighty defilements can put one there in an instant
-c) Ordinary enemies are visible; defilements are invisible
-d) Ordinary enemies cause physical harm; defilements cause mental harm only
+c) Ordinary enemies are visible and can be identified; defilements are invisible and impossible to detect
+d) Ordinary enemies cause only physical harm to the body; defilements cause lasting mental harm to the mind
 ANSWER: b
 VERSE REF(S): 4.30, 4.31
 VERSE TEXT:
@@ -499,10 +499,10 @@ Where Mount Meru and even its very ashes
 Are consumed on contact.
 
 Q37. What happens to defilements when they are "cast out by the eye of wisdom"?
-a) They transform into virtues
-b) They return stronger
+a) They transform into virtues and become a source of merit for the practitioner
+b) They return even stronger and more difficult to overcome the next time
 c) They are pathetic and have nowhere to go or settle to hurt one again
-d) They merge back into the mind
+d) They merge back into the mind and lie dormant until conditions bring them out
 ANSWER: c
 VERSE REF(S): 4.46
 VERSE TEXT:
@@ -514,10 +514,10 @@ And yet, weak-willed, I give up without even trying.
 CHAPTER 5: CLEAR COMPREHENSION
 
 Q38. What analogy is used for the unguarded mind?
-a) A ship without a rudder
+a) A ship without a rudder, drifting helplessly across the vast ocean
 b) A rampaging elephant creating the ravages of the Avīci Hell
-c) A forest fire out of control
-d) A river overflowing its banks
+c) A forest fire out of control, burning everything in its wild path
+d) A river overflowing its banks and flooding all the surrounding land
 ANSWER: b
 VERSE REF(S): 5.2
 VERSE TEXT:
@@ -540,23 +540,23 @@ All troubles subside,
 And all virtues fall into my hands.
 
 Q40. According to the text, what is the perfection of giving?
-a) Dispelling the poverty of all beings
+a) Dispelling the poverty of all beings by providing them with everything they need for their survival
 b) The intention to give to all beings all of one's possessions, along with the results of doing so — i.e., mind itself
-c) Building monasteries and temples
-d) Giving away all material possessions
+c) Building monasteries and temples where practitioners can gather to study, meditate, and practise
+d) Giving away all material possessions and living without any worldly attachment or belongings
 ANSWER: b
 VERSE REF(S): 5.10
 VERSE TEXT:
 [5.10] It is taught that the perfection of giving
 Is the intention to give to all beings
-All of one’s possessions, along with the results of doing so.
+All of one's possessions, along with the results of doing so.
 In that sense, it is mind itself.
 
 Q41. What analogy illustrates that one doesn't need to change all external things?
-a) Building a dam to stop a river
+a) Building a great dam to stop a river from flooding the surrounding villages
 b) If I just put leather on my shoes, it is as if the whole world is covered
-c) Painting every wall in the world white
-d) Planting trees to cover the earth
+c) Painting every wall in the world white to make all the buildings uniform
+d) Planting trees to cover the entire earth so that the ground is never seen
 ANSWER: b
 VERSE REF(S): 5.13
 VERSE TEXT:
@@ -566,10 +566,10 @@ But if I just put leather on my shoes,
 It is as if the whole world is covered.
 
 Q42. What does the text say about the "secret of mind, the supreme lord of dharmas"?
-a) It is easy to understand for all
+a) It is easy to understand for all who have studied the dharma and practised the path with diligence
 b) It is the reality of mind — emptiness itself — not comprehended by those of inferior fortune
-c) It is revealed only in secret teachings
-d) It is the same as concentration
+c) It is revealed only in secret teachings that are transmitted from master to qualified student alone
+d) It is the same as concentration and can be attained through ordinary calm abiding meditation practice
 ANSWER: b
 VERSE REF(S): 5.17
 VERSE TEXT:
@@ -579,10 +579,10 @@ May wish to have happiness and end their suffering,
 But their wishes are futile and they will wander in vain.
 
 Q43. When should one "remain like a block of wood" according to the text?
-a) During meditation only
+a) During meditation only, when the mind needs complete stillness
 b) When one's mind is desirous or angry and wants to react
-c) When sleeping
-d) When in the presence of a teacher
+c) When sleeping, so that the mind remains undisturbed by dreams
+d) When in the presence of a teacher, as a sign of deep respect
 ANSWER: b
 VERSE REF(S): 5.48, 5.49, 5.50, 5.51, 5.52, 5.53
 VERSE TEXT:
@@ -611,10 +611,10 @@ Or preferential to my own side,
 That is when I should remain like a block of wood.
 
 Q44. What does Śāntideva compare to cranes, cats and thieves?
-a) The defilements that sneak into the mind
+a) The defilements that sneak silently into the unguarded mind
 b) The wise, who should move silently and get what they want
-c) Enemies who attack unexpectedly
-d) Animals that are cunning
+c) Enemies who attack unexpectedly from hidden ambush positions
+d) Animals that are cunning and resourceful in all their pursuits
 ANSWER: b
 VERSE REF(S): 5.73
 VERSE TEXT:
@@ -637,10 +637,10 @@ Pacify the residual downfalls
 By relying upon the conquerors and bodhicitta.
 
 Q46. What question does Śāntideva end Chapter 5 with?
-a) "What is the meaning of life?"
+a) "What is the meaning of life and why must all beings suffer?"
 b) "Are sicknesses cured just by reading about the treatment?"
-c) "When will enlightenment come?"
-d) "Who am I?"
+c) "When will enlightenment come for all who practise the path?"
+d) "Who am I, and what is the true nature of the self we cling to?"
 ANSWER: b
 VERSE REF(S): 5.109
 VERSE TEXT:
@@ -686,15 +686,15 @@ ANSWER: c
 VERSE REF(S): 6.10
 VERSE TEXT:
 [6.10] If something can be done,
-What’s the point of being unhappy?
+What's the point of being unhappy?
 If nothing can be done,
 What good is it to be unhappy?
 
 Q50. What example do the devotees of Gaurī and practitioners of Karna endure?
-a) Long periods of fasting
+a) Long periods of fasting and going without any food or water
 b) Burns, cuts and so forth, patiently for no benefit
-c) Cold water immersion
-d) Silence for years
+c) Cold water immersion in freezing rivers during the harshest winter
+d) Silence for years and complete isolation from all other people
 ANSWER: b
 VERSE REF(S): 6.13
 VERSE TEXT:
@@ -704,10 +704,10 @@ Enduring them patiently for no benefit. Yet, for the sake
 Of liberation, why do I have no courage?
 
 Q51. What does the text say about habituation to small difficulties?
-a) It leads to greater suffering
-b) It makes one weaker over time
+a) It leads to greater suffering and should be avoided on the spiritual path
+b) It makes one weaker over time, gradually eroding the capacity for endurance
 c) By habituation to small difficulties, one will have patience for great difficulties
-d) It is unnecessary for spiritual practice
+d) It is unnecessary for spiritual practice and has no bearing on attaining patience
 ANSWER: c
 VERSE REF(S): 6.14
 VERSE TEXT:
@@ -717,10 +717,10 @@ Therefore, by habituation to small difficulties,
 I will have the patience for great difficulties.
 
 Q52. What good qualities does suffering bring according to the text?
-a) Fame and recognition
+a) Fame and recognition among those who observe one's ability to endure hardship and not complain
 b) Sadness dispels arrogance, compassion arises, one avoids nonvirtue and delights in virtue
-c) Patience and endurance only
-d) Wisdom and concentration
+c) Patience and endurance, but only these qualities without any deeper spiritual transformation
+d) Wisdom and concentration that develop naturally when the mind is focused through bearing pain
 ANSWER: b
 VERSE REF(S): 6.21
 VERSE TEXT:
@@ -730,10 +730,10 @@ One feels compassion for those in saṃsāra,
 Avoids nonvirtue and delights in virtue.
 
 Q53. Why should one not be angry with harm-doers according to one argument?
-a) Because they are too powerful
-b) Because anger is a sign of weakness
+a) Because they are too powerful to be defeated by anger and one should simply avoid them
+b) Because anger is a sign of weakness that reveals our inability to control the mind
 c) All negative actions arise through the power of conditions — they are not autonomous
-d) Because the Buddha forbids it
+d) Because the Buddha forbids it and one who breaks this precept will fall to the lower realms
 ANSWER: c
 VERSE REF(S): 6.25
 VERSE TEXT:
@@ -743,16 +743,16 @@ Arise through the power of conditions.
 They are not autonomous.
 
 Q54. What analogy is used for someone who returns harm rather than practicing patience?
-a) It's like adding fuel to a fire
+a) It's like adding fuel to a fire, causing the flames of suffering to blaze up higher and consume even more completely
 b) It is better for a man to have his hand chopped off than to be executed — better to experience human suffering than the hells
-c) It's like trying to fight the ocean
-d) It's like breaking a mirror to avoid a reflection
+c) It's like trying to fight the ocean with bare hands, since waves of anger will simply keep coming back without ceasing
+d) It's like breaking a mirror to avoid a reflection — the problem remains untouched and will simply appear somewhere else
 ANSWER: b
 VERSE REF(S): 6.72
 VERSE TEXT:
-[6.72] Isn’t it better for a man to be freed with his hand chopped off
+[6.72] Isn't it better for a man to be freed with his hand chopped off
 Than for him to be executed?
-Isn’t it better, then, to experience human suffering
+Isn't it better, then, to experience human suffering
 If it spares me from the hells?
 
 Q55. Why does the text say enemies should be treated like treasures?
@@ -769,10 +769,10 @@ They help me practise the bodhisattva conduct,
 So I should take joy in enemies.
 
 Q56. How does the text equate sentient beings with the Buddhas?
-a) They are identical in nature
+a) They are identical in nature, sharing the same buddha-nature that manifests equally in all beings without exception
 b) The Buddha qualities are established through sentient beings and Buddhas alike — they are equal in producing Buddha qualities
-c) Sentient beings are superior to Buddhas
-d) They share the same physical form
+c) Sentient beings are superior to Buddhas because without them the path to enlightenment could never be practised
+d) They share the same physical form when viewed from the perspective of ultimate truth and the emptiness of phenomena
 ANSWER: b
 VERSE REF(S): 6.113
 VERSE TEXT:
@@ -797,10 +797,10 @@ Laziness, attachment to the negative
 And the despondency of self-loathing.
 
 Q58. What are the three opposing factors to effort?
-a) Ignorance, attachment, aversion
+a) Ignorance, attachment, and aversion — the three root poisons of the mind
 b) Laziness, attachment to the negative, and the despondency of self-loathing
-c) Sleep, food, and comfort
-d) Doubt, fear, and confusion
+c) Sleep, food, and comfort — the three distractions that prevent practice
+d) Doubt, fear, and confusion — the three obstacles to developing wisdom
 ANSWER: b
 VERSE REF(S): 7.2
 VERSE TEXT:
@@ -836,10 +836,10 @@ If they could develop the power of effort,
 Would attain unsurpassable enlightenment, so hard to attain.
 
 Q61. What analogy describes the supreme physician's (Buddha's) treatment method?
-a) Harsh medicine that cures quickly
+a) Harsh medicine that cures quickly but causes great pain in the process
 b) Extremely gentle practice that cures limitless great sicknesses
-c) Surgery and incision
-d) A strict regimen of fasting
+c) Surgery and incision that removes the root cause of all disease
+d) A strict regimen of fasting and austerity that purifies body and mind
 ANSWER: b
 VERSE REF(S): 7.24
 VERSE TEXT:
@@ -849,10 +849,10 @@ With his extremely gentle practice,
 He cures the limitless number of great sicknesses.
 
 Q62. What does the text say the guide (Buddha) first has practitioners give away?
-a) Their bodies
-b) Their possessions
+a) Their bodies, as the ultimate offering to all sentient beings
+b) Their possessions, starting with whatever they value the most
 c) A few vegetables, etc., and eventually even their own flesh
-d) Their time
+d) Their time, dedicating every moment to the service of others
 ANSWER: c
 VERSE REF(S): 7.25
 VERSE TEXT:
@@ -875,10 +875,10 @@ Motivation is developed through fear of suffering
 And considering its benefits.
 
 Q64. According to the Vajradhvaja practice, what should one cultivate from the outset?
-a) Humility
-b) Compassion
+a) Humility and a sense of one's own limitations on the path
+b) Compassion for all beings who are suffering in saṃsāra
 c) Pride (in one's ability to practice)
-d) Detachment
+d) Detachment from worldly concerns and all material possessions
 ANSWER: c
 VERSE REF(S): 7.46
 VERSE TEXT:
@@ -888,10 +888,10 @@ I should cultivate pride from the outset
 According to the practice of Vajradhvaja.
 
 Q65. What does the text say about someone defeated by their defilements who claims to be proud?
-a) They are truly brave
+a) They are truly brave and their confidence will eventually carry them to enlightenment
 b) They are wretches — their pride leads them to the lower realms, steals their human life
-c) They are moderately successful
-d) They should try harder
+c) They are moderately successful but will need to refine their practice over many lifetimes
+d) They should try harder and increase their effort until their defilements are fully overcome
 ANSWER: b
 VERSE REF(S): 7.57
 VERSE TEXT:
@@ -903,10 +903,10 @@ And leaves them a slave, begging food from others,
 CHAPTER 8: MEDITATION
 
 Q66. Why should one place the mind in samādhi?
-a) To have pleasant experiences
+a) To have pleasant experiences of peace and bliss during formal meditation sessions
 b) Someone whose mind is distracted lives between the jaws of the defilements
-c) To develop psychic powers
-d) To sleep better
+c) To develop psychic powers and supernatural abilities that benefit sentient beings
+d) To sleep better and recover from the exhaustion of daily practice and study
 ANSWER: b
 VERSE REF(S): 8.1
 VERSE TEXT:
@@ -916,10 +916,10 @@ Someone whose mind is distracted
 Lives between the jaws of the defilements.
 
 Q67. What does the text say should be sought first before insight?
-a) Moral conduct
+a) Moral conduct and the restraint of body, speech, and mind from all nonvirtue
 b) Calm abiding, achieved through the joy of having no worldly attachment
-c) Generosity
-d) Intellectual understanding
+c) Generosity and the practice of giving away one's possessions to other beings
+d) Intellectual understanding of the scriptures gained through extensive study
 ANSWER: b
 VERSE REF(S): 8.4
 VERSE TEXT:
@@ -929,10 +929,10 @@ I should seek calm abiding first,
 And that is achieved through the joy of freedom from worldly attachment.
 
 Q68. What is described about associating with childish people?
-a) It always brings benefit
+a) It always brings benefit because one can teach them the dharma and help them find the right path
 b) When associating with the childish, nonvirtues like discussing the joys of saṃsāra inevitably occur
-c) It has no effect
-d) It makes one wiser
+c) It has no effect on one's practice because a strong practitioner can remain uninfluenced by others
+d) It makes one wiser through contrast, since observing their faults teaches one what to avoid on the path
 ANSWER: b
 VERSE REF(S): 8.13
 VERSE TEXT:
@@ -942,10 +942,10 @@ And nonvirtues, like discussing
 The joys of saṃsāra, inevitably occur.
 
 Q69. What does Śāntideva aspire to in the forest?
-a) To build a monastery
+a) To build a monastery where others can come to study and practise the dharma
 b) Living alone, free from attachment, with few problems, happy and content
-c) To become a hermit forever
-d) To grow food
+c) To become a hermit forever and cut all ties to the world and its concerns
+d) To grow food and sustain himself while he continues his practice in solitude
 ANSWER: b
 VERSE REF(S): 8.37
 VERSE TEXT:
@@ -955,23 +955,23 @@ With few problems, happy and content,
 All disturbances will be pacified.
 
 Q70. Complete: "Whatever happiness there is in this world all comes from ___. Whatever suffering there is in this world all comes from ___."
-a) "meditation... ignorance"
+a) "meditation and calm abiding... ignorance and lack of awareness"
 b) "wanting others to be happy... wanting one's own happiness"
-c) "generosity... greed"
-d) "wisdom... delusion"
+c) "generosity and the practice of giving... greed and attachment"
+d) "wisdom and insight into the truth... delusion and wrong views"
 ANSWER: b
 VERSE REF(S): 8.129
 VERSE TEXT:
 [8.129] Whatever happiness there is in this world
 All comes from wanting others to be happy.
 Whatever suffering there is in this world
-All comes from wanting one’s own happiness.
+All comes from wanting one's own happiness.
 
 Q71. What does the text say about someone who develops a high status for themselves vs. wishing it for others?
-a) Both lead to happiness
+a) Both lead to happiness, since any positive aspiration creates the conditions for a fortunate rebirth in future lives
 b) Desiring high status for oneself leads to lower realms; wishing it for others brings a happy rebirth and every honour
-c) It makes no difference
-d) Both lead to the lower realms
+c) It makes no difference, since the intention behind the wish does not affect the karmic result one experiences
+d) Both lead to the lower realms, since any attachment to status is a form of craving that perpetuates suffering
 ANSWER: b
 VERSE REF(S): 8.127
 VERSE TEXT:
@@ -994,10 +994,10 @@ Should practise the holy secret:
 Exchanging self and others.
 
 Q73. What does the text compare self-grasping to?
-a) A friend
+a) A friend that supports us on the path and protects us from external harm
 b) A great demon — "all dangerous forces in the world come from self-grasping"
-c) A useful tool
-d) A protective shield
+c) A useful tool that helps us navigate the difficulties of worldly existence
+d) A protective shield that guards us from the attacks of our many enemies
 ANSWER: b
 VERSE REF(S): 8.134
 VERSE TEXT:
@@ -1007,10 +1007,10 @@ Come from self-grasping,
 So what good is this great demon to me?
 
 Q74. In the equalizing of self and others, what argument is made about the suffering of others?
-a) It is irrelevant to oneself
+a) It is irrelevant to oneself and should not be a concern for practitioners
 b) I should expel it because it is suffering, like my own suffering
-c) It is less important than one's own
-d) One can only address it after enlightenment
+c) It is less important than one's own and should be addressed only later
+d) One can only address it after enlightenment, not during the path itself
 ANSWER: b
 VERSE REF(S): 8.94
 VERSE TEXT:
@@ -1020,14 +1020,14 @@ And I should benefit others
 Because they are sentient beings, like I am.
 
 Q75. What analogy is used for the falseness of a "stream of being" and a "composite"?
-a) Like dreams and rainbows
+a) Like dreams and rainbows that appear vividly but have no real substance behind them
 b) Like a string of beads or an army — grasped as singular but actually multiple
-c) Like clouds and mist
-d) Like shadows and echoes
+c) Like clouds and mist that seem solid from a distance but dissolve upon approach
+d) Like shadows and echoes that merely reflect something else without existing on their own
 ANSWER: b
 VERSE REF(S): 8.101
 VERSE TEXT:
-[8.101] A ‘stream’ and a ‘composite’ are false,
+[8.101] A 'stream' and a 'composite' are false,
 Like a string of beads or an army.
 Suffering is not owned by anyone,
 So, who should be the one to remove it?
@@ -1087,10 +1087,10 @@ It is fabricated, like a reflection.
 How can there be reality in that?
 
 Q80. What is the Mādhyamika response to the claim that the Mahāyāna is not established as the Buddha's word?
-a) It was verified by historical records
+a) It was verified by historical records and the testimony of many generations of authenticated scholars
 b) Whatever conditions gave you confidence in your own scriptures, we have them in the Mahāyāna too
-c) It was directly revealed in visions
-d) Ancient masters confirmed it
+c) It was directly revealed in visions to the great masters who then transmitted it through oral tradition
+d) Ancient masters confirmed it through their personal realisation and passed their certainty to their students
 ANSWER: b
 VERSE REF(S): 9.42
 VERSE TEXT:
@@ -1100,35 +1100,35 @@ If truth is the belief of any two others,
 The Vedas and so forth would also be true.
 
 Q81. What does the text say about the blade of a sword in relation to the mind?
-a) The mind is as sharp as a sword
+a) The mind is as sharp as a sword and can cut through any defilement placed before it
 b) Just as the blade of a sword cannot cut itself, so mind cannot see mind (refuting self-awareness)
-c) The mind should be as focused as a sword
-d) Swords and minds are both made of the same substance
+c) The mind should be as focused as a sword, directed at a single point of concentration
+d) Swords and minds are both made of the same substance when viewed from the ultimate perspective
 ANSWER: b
 VERSE REF(S): 9.18
 VERSE TEXT:
 [9.18] Just as the blade of a sword
 Cannot cut itself, so it is with the mind.
-‘It is like a lamp—self-illuminating.’
+'It is like a lamp—self-illuminating.'
 
 Q82. How does the text refute the claim that self-awareness exists because of memory?
-a) Memory is not reliable
+a) Memory is not reliable and cannot be trusted as evidence for the existence of self-awareness
 b) Memory comes from its connection to another experience, like deducing a rat bite from an infection
-c) Memory is an illusion
-d) Memory proves the self exists
+c) Memory is an illusion that arises from causes and conditions without proving anything about the self
+d) Memory proves the self exists because only a truly existent self could recall past experiences
 ANSWER: b
 VERSE REF(S): 9.23
 VERSE TEXT:
-[9.23] ‘If self-awareness did not exist,
-How could consciousness be remembered?’
+[9.23] 'If self-awareness did not exist,
+How could consciousness be remembered?'
 Memory comes from its connection to another experience,
 Like deducing a rat bite from an infection.
 
 Q83. What does the text say about the non-self of the individual and the body?
-a) The body is the self
+a) The body is the self, and this can be proven by examining the relationship between physical sensation and consciousness
 b) The body is neither the feet, calves, thighs, head, nor any individual part — when searched, the self is no more real than a banana tree
-c) The body contains the self in the heart
-d) The self is in the brain
+c) The body contains the self in the heart, where consciousness resides and from which it directs all bodily functions
+d) The self is in the brain, which is the seat of awareness and the controller of all physical and mental activities
 ANSWER: b
 VERSE REF(S): 9.74, 9.78
 VERSE TEXT:
@@ -1142,10 +1142,10 @@ Abdomen or back,
 Chest or shoulders,
 
 Q84. According to the text, what happens when neither existence nor nonexistence remain before the mind?
-a) Confusion arises
+a) Confusion arises and the mind becomes agitated and disturbed
 b) Complete non-conceptual pacification
-c) One falls asleep
-d) New concepts arise
+c) One falls asleep and enters a state of deep unconsciousness
+d) New concepts arise to replace the ones that have been abandoned
 ANSWER: b
 VERSE REF(S): 9.34
 VERSE TEXT:
@@ -1155,10 +1155,10 @@ Since there is no other category at that time,
 There is a complete non-conceptual pacification.
 
 Q85. How do the Conquerors appear after attaining buddhahood without conceptual discrimination?
-a) Through their own will
+a) Through their own will and the deliberate exercise of their omniscient awareness and compassion
 b) By the power of trainees and aspiration prayers, like wish-granting jewels fulfilling hopes
-c) Through magical powers
-d) By force of habit
+c) Through magical powers acquired during the path that allow them to manifest in any desired form
+d) By force of habit accumulated over countless lifetimes of practising for the benefit of other beings
 ANSWER: b
 VERSE REF(S): 9.35
 VERSE TEXT:
@@ -1168,10 +1168,10 @@ So, too, the conquerors appear
 By the power of trainees and aspiration prayers.
 
 Q86. What is the analogy of the shrine of Garuḍa meant to illustrate?
-a) That physical objects are sacred
+a) That physical objects are sacred and should be venerated by all practitioners
 b) Even after the bodhisattva's nirvāṇa, the benefit of others continues
-c) That shrines should be built everywhere
-d) That death ends all activity
+c) That shrines should be built everywhere to serve as reminders of the dharma
+d) That death ends all activity and nothing further can be accomplished afterward
 ANSWER: b
 VERSE REF(S): 9.36, 9.37
 VERSE TEXT:
@@ -1181,14 +1181,14 @@ The shrine still pacified poisons and so on,
 Long after his death.
 [9.37] By holding the bodhisattva conduct,
 The shrine of the Conqueror is built,
-So even after the bodhisattva’s nirvāṇa,
+So even after the bodhisattva's nirvāṇa,
 The benefit of others continues.
 
 Q87. What does the text teach about meditation on emptiness and the imprints of reality?
-a) The imprints of reality can never be abandoned
+a) The imprints of reality can never be abandoned through meditation or any other practice
 b) By meditating on the imprints of emptiness, the imprints of reality will be abandoned
-c) Only special practitioners can abandon them
-d) The imprints of reality are beneficial
+c) Only special practitioners with the highest faculties can abandon the imprints of reality
+d) The imprints of reality are beneficial and should be cultivated rather than abandoned
 ANSWER: b
 VERSE REF(S): 9.32
 VERSE TEXT:
@@ -1198,10 +1198,10 @@ By meditating it is nothing whatsoever,
 That, too, will then be abandoned,
 
 Q88. According to the text, what is the relationship between conditioned existence and truth?
-a) Conditioned existence contains truth
+a) Conditioned existence contains truth within it, hidden beneath layers of delusion
 b) Where there is conditioned existence there is no truth, for they are incompatible
-c) They coexist peacefully
-d) Truth creates conditioned existence
+c) They coexist peacefully and are simply two aspects of the same ultimate reality
+d) Truth creates conditioned existence through a process of manifestation and display
 ANSWER: b
 VERSE REF(S): 9.157
 VERSE TEXT:
@@ -1211,23 +1211,23 @@ Where there is conditioned existence, there is no reality,
 For they are incompatible.
 
 Q89. How does the text refute that Īśvara (God) is the creator of beings?
-a) By proving another god exists
+a) By proving another god exists who is more powerful and who actually controls all creation throughout the three realms
 b) If Īśvara creates without wanting to, he is affected by external power; if he creates when wanting to, the effect depends on his wishes — so he is not truly almighty
-c) By denying the existence of any deity
-d) By citing other scriptures
+c) By denying the existence of any deity whatsoever and asserting that the world arises solely from impersonal causes and conditions
+d) By citing other scriptures from the Buddhist canon that refute the existence of a creator god through logical arguments
 ANSWER: b
 VERSE REF(S): 9.125
 VERSE TEXT:
 [9.125] If Īśvara creates without wanting to,
 He is affected by an external power.
 If he creates only when he wishes, the effect depends on his wishes.
-How then is he ‘The Almighty’ [Īśvara]?
+How then is he 'The Almighty' [Īśvara]?
 
 Q90. What is the text's conclusion about all dharmas?
-a) They are permanent
+a) They are permanent and endure unchanged throughout all time without beginning or end
 b) They are non-arising — in suchness, there is no distinction between nirvāṇa and non-nirvāṇa
-c) They are created by God
-d) They exist independently
+c) They are created by God and depend upon his will for their continued existence and function
+d) They exist independently, each possessing its own inherent nature separate from all others
 ANSWER: b
 VERSE REF(S): 9.149, 9.150
 VERSE TEXT:
@@ -1241,10 +1241,10 @@ In suchness, there is no distinction
 Between nirvāṇa and non-nirvāṇa.
 
 Q91. How are particles refuted in the text?
-a) They are too small to matter
+a) They are too small to matter and have no relevance to the question of the existence of phenomena
 b) They have no capacity to impose upon other particles and partless particles cannot make contact
-c) They are imaginary
-d) They were disproven by science
+c) They are imaginary constructs invented by philosophers who misunderstand the nature of matter
+d) They were disproven by science and can no longer be seriously maintained as an explanation
 ANSWER: b
 VERSE REF(S): 9.94, 9.95
 VERSE TEXT:
@@ -1252,16 +1252,16 @@ VERSE TEXT:
 For they are identical in having no capacity.
 Without imposition, they cannot combine.
 Without combining, they cannot make contact.
-[9.95] ‘They make contact despite being partless.’
+[9.95] 'They make contact despite being partless.'
 How does this make any sense?
 Making contact with something partless:
 When you see it, will you show me?
 
 Q92. What does the text say about sensation and the self?
-a) Sensation proves the self exists
+a) Sensation proves the self exists because only a truly existent self could have the experience of feeling
 b) There is nothing existent that experiences sensations — therefore there are no inherently existent sensations
-c) Sensations are the self
-d) Sensations create the self
+c) Sensations are the self and provide direct evidence of inherent existence through their vivid appearance
+d) Sensations create the self through repeated experience, gradually building up the sense of an enduring person
 ANSWER: b
 VERSE REF(S): 9.101
 VERSE TEXT:
@@ -1286,10 +1286,10 @@ May all those living creatures
 Have the bliss and joy of Sukhāvatī.
 
 Q94. What does Śāntideva wish for the forests of razors in hell?
-a) That they grow taller
+a) That they grow taller and become impassable barriers around the realms of hell
 b) That they become divine groves and wish fulfilling trees
-c) That they be burned down
-d) That they be avoided
+c) That they be burned down so that no being ever encounters their blades
+d) That they be avoided by all beings through the power of accumulated merit
 ANSWER: b
 VERSE REF(S): 10.6
 VERSE TEXT:
@@ -1319,7 +1319,7 @@ d) The seventh bhūmi
 ANSWER: c
 VERSE REF(S): 10.51
 VERSE TEXT:
-[10.51] Until I have reached the ‘Joyous’ bhūmi,
+[10.51] Until I have reached the 'Joyous' bhūmi,
 Through the kindness of Mañjughoṣa,
 May I remember my previous lives
 And attain ordination.
@@ -1338,10 +1338,10 @@ May I see the protector
 Mañjughoṣa himself, without any hindrance.
 
 Q98. What is the famous final aspiration of the text?
-a) "May all beings be liberated instantly"
+a) "May all beings be liberated instantly from the suffering of saṃsāra and attain the state of perfect peace"
 b) "As long as space endures, there will be living beings. For that long may I remain to dispel their suffering."
-c) "May I attain enlightenment in this very life"
-d) "May the world be at peace forever"
+c) "May I attain enlightenment in this very life through the power of accumulated merit and unwavering effort"
+d) "May the world be at peace forever and may all conflict cease throughout every realm of existence"
 ANSWER: b
 VERSE REF(S): 10.55
 VERSE TEXT:
@@ -1351,10 +1351,10 @@ For that long may I remain
 To dispel their suffering.
 
 Q99. What does Śāntideva call the teachings at the very end of the text?
-a) The greatest achievement
+a) The greatest achievement of all the Buddhas throughout the three times
 b) The only medicine for suffering and the source of all happiness
-c) The ancient wisdom
-d) The path of the wise
+c) The ancient wisdom passed down from teacher to student since the Buddha
+d) The path of the wise that leads to liberation from all suffering
 ANSWER: b
 VERSE REF(S): 10.57
 VERSE TEXT:
@@ -1364,10 +1364,10 @@ Be honoured and respected,
 And may they long remain.
 
 Q100. To whom does Śāntideva prostrate in the final verses?
-a) The Buddha only
+a) The Buddha only, as the supreme teacher who turned the wheel of dharma in this world
 b) Mañjughoṣa, by whose kindness his mind turned to virtue, and his spiritual masters
-c) All sentient beings
-d) The bodhisattvas of the ten directions
+c) All sentient beings, who serve as the field for cultivating the merit of a bodhisattva
+d) The bodhisattvas of the ten directions, who have dedicated their lives to helping others
 ANSWER: b
 VERSE REF(S): 10.58
 VERSE TEXT:
@@ -1376,17 +1376,18 @@ By whose kindness my mind turned to virtue,
 And I prostrate to my spiritual masters,
 By whose kindness I matured.
 
+
 ADDITIONAL 100 MULTIPLE CHOICE QUESTIONS (NEW SET)
 ==================================================
 
 CHAPTER 1: IN PRAISE OF BODHICITTA (NEW SET)
 
-Q101. According to the text, what is taught in this verse?
-a) Those wishing to end the many sufferings of conditioned existence
-b) The mighty sages, who have known it for many aeons have seen that only bodhicitta has this power
-c) For those wandering in saṃsāra great results arise from aspiration bodhicitta
-d) What can one say then of the wish to dispel the endless unhappiness of each sentient being
-ANSWER: b
+Q101. According to the text, who has seen that bodhicitta alone has the power to overcome nonvirtue?
+a) Ordinary practitioners who have studied it over many lifetimes of meditation
+b) Śāntideva through his own meditation and personal contemplation
+c) The mighty sages, who have known it for many aeons
+d) The śrāvakas and pratyekabuddhas who attained individual liberation
+ANSWER: c
 VERSE REF(S): 1.7
 VERSE TEXT:
 [1.7] The mighty sages, who have known it for many aeons,
@@ -1394,12 +1395,12 @@ Have seen that only bodhicitta has this power.
 With bodhicitta, limitless multitudes
 Will easily attain the supreme bliss.
 
-Q102. What point does Śāntideva make here?
-a) Those beings never before even in their dreams
-b) Those wishing to end the many sufferings of conditioned existence
-c) If the only guides of beings have, with unfettered minds
-d) For whoever embraces this incontrovertible intent to liberate
-ANSWER: b
+Q102. According to Śāntideva, what should never be abandoned by those who want to end suffering and create happiness?
+a) The practice of meditation and calm abiding
+b) Moral discipline and the vows of restraint
+c) Offerings to the Buddha, dharma, and sangha
+d) Bodhicitta
+ANSWER: d
 VERSE REF(S): 1.8
 VERSE TEXT:
 [1.8] Those wishing to end the many sufferings of conditioned existence,
@@ -1407,12 +1408,12 @@ Those wishing to dispel the unhappiness of beings,
 And those wishing for many happinesses,
 Should never abandon this bodhicitta.
 
-Q103. Which statement best matches this verse?
-a) It is the cause of joy in all wandering beings it is the elixir remedying the suffering of sentient beings
-b) Even if one wishes to dispel merely the head pains of beings
-c) If the only guides of beings have, with unfettered minds
-d) For those wandering in saṃsāra great results arise from aspiration bodhicitta
-ANSWER: c
+Q103. What does the text say about the "guides of beings" and their examination of bodhicitta?
+a) They have seen its value in consummate examination with unfettered minds
+b) They examined it only briefly before moving on to other practices
+c) They could not determine its true worth through their analysis
+d) They relied on the testimony of others to understand its nature
+ANSWER: a
 VERSE REF(S): 1.11
 VERSE TEXT:
 [1.11] If the only guides of beings have, with unfettered minds,
@@ -1420,12 +1421,12 @@ Seen its value in consummate examination,
 Those of us who want to be free from wandering
 Should firmly grasp the precious bodhicitta.
 
-Q104. What is emphasized in this verse?
-a) For those wandering in saṃsāra great results arise from aspiration bodhicitta
-b) If one who repays a helpful deed is worthy of some praise
-c) What can one say then of the wish to dispel the endless unhappiness of each sentient being
-d) For whoever embraces this incontrovertible intent to liberate
-ANSWER: a
+Q104. What distinction does the text make between aspiration and application bodhicitta regarding merit?
+a) Both types produce equal and ceaseless streams of merit at all stages of the path
+b) Aspiration bodhicitta produces great results, but only application bodhicitta produces a ceaseless stream of merits
+c) Only application bodhicitta produces any merit at all, while aspiration bodhicitta generates none
+d) Aspiration bodhicitta produces a ceaseless stream of merits, while application produces only limited results
+ANSWER: b
 VERSE REF(S): 1.17
 VERSE TEXT:
 [1.17] For those wandering in saṃsāra,
@@ -1433,11 +1434,11 @@ Great results arise from aspiration bodhicitta,
 But a ceaseless stream of merits does not arise
 As it does for application bodhicitta.
 
-Q105. According to this verse, what is the key message?
-a) The mighty sages, who have known it for many aeons have seen that only bodhicitta has this power
-b) Even if one wishes to dispel merely the head pains of beings
-c) For whoever embraces this incontrovertible intent to liberate
-d) Those beings never before even in their dreams
+Q105. What does the text describe as "incontrovertible intent" applied to limitless realms of beings?
+a) The practice of deep meditation on the emptiness of all phenomena
+b) The perfection of moral discipline and the restraint of the senses
+c) The intent of application bodhicitta to liberate all beings
+d) The dedication of merit to all sentient beings throughout space
 ANSWER: c
 VERSE REF(S): 1.18
 VERSE TEXT:
@@ -1446,12 +1447,12 @@ This incontrovertible intent to liberate
 Limitless realms of beings,
 By the perfect adoption of that intent,
 
-Q106. According to the text, what is taught in this verse?
-a) Even if one wishes to dispel merely the head pains of beings
-b) Those wishing to end the many sufferings of conditioned existence
-c) It is the cause of joy in all wandering beings it is the elixir remedying the suffering of sentient beings
-d) What can one say then of the wish to dispel the endless unhappiness of each sentient being
-ANSWER: a
+Q106. What does the text say about someone who merely wishes to dispel the headaches of others?
+a) They accumulate negative karma for interfering with others' ripening
+b) Their intention is without benefit unless accompanied by action
+c) They gain only temporary merit that is quickly exhausted by nonvirtue
+d) They are endowed with boundless merit
+ANSWER: d
 VERSE REF(S): 1.21
 VERSE TEXT:
 [1.21] Even if one wishes to dispel merely
@@ -1459,11 +1460,11 @@ The head pains of beings,
 The possession of that beneficial intention
 Is endowed with boundless merit.
 
-Q107. What point does Śāntideva make here?
-a) If the only guides of beings have, with unfettered minds
-b) Those beings never before even in their dreams
-c) What can one say then of the wish to dispel the endless unhappiness of each sentient being
-d) If one who repays a helpful deed is worthy of some praise
+Q107. What rhetorical question does Śāntideva ask about the wish to dispel the suffering of each sentient being?
+a) "How can such a wish to help all beings ever be fulfilled in this world?"
+b) "Is it even possible for one single person to bring this about for all others?"
+c) "What can one say then of the wish to dispel the endless unhappiness of each sentient being?"
+d) "Does this aspiration have any practical value for those who are trapped in suffering?"
 ANSWER: c
 VERSE REF(S): 1.22
 VERSE TEXT:
@@ -1472,12 +1473,12 @@ The endless unhappiness of each sentient being,
 Wishing to establish every single one of them
 In limitless qualities?
 
-Q108. Which statement best matches this verse?
-a) The mighty sages, who have known it for many aeons have seen that only bodhicitta has this power
-b) It is the cause of joy in all wandering beings it is the elixir remedying the suffering of sentient beings
-c) For those wandering in saṃsāra great results arise from aspiration bodhicitta
-d) Those beings never before even in their dreams
-ANSWER: d
+Q108. What does the text say about sentient beings who have never had the wish for enlightenment, even for their own benefit?
+a) They have always had this wish but forgotten it over many lifetimes of delusion
+b) Such beings never even in their dreams had an intention like this for their own sake
+c) They are naturally close to developing such an intention through their innate goodness
+d) They developed it in previous lives but lost it through the power of their obscurations
+ANSWER: b
 VERSE REF(S): 1.24
 VERSE TEXT:
 [1.24] Those beings never before,
@@ -1485,12 +1486,12 @@ Even in their dreams,
 Had an intention like this, even for their own sake.
 How could it arise then for the sake of others?
 
-Q109. What is emphasized in this verse?
-a) If one who repays a helpful deed is worthy of some praise
-b) Those wishing to end the many sufferings of conditioned existence
-c) For whoever embraces this incontrovertible intent to liberate
-d) It is the cause of joy in all wandering beings it is the elixir remedying the suffering of sentient beings
-ANSWER: d
+Q109. What two things does the text call bodhicitta in relation to wandering beings and their suffering?
+a) The path to liberation and the ultimate goal of all spiritual practice
+b) The beginning of the journey and the final end of all suffering
+c) The cause of joy and the elixir remedying suffering
+d) The teacher of all beings and the teaching that transforms them
+ANSWER: c
 VERSE REF(S): 1.26
 VERSE TEXT:
 [1.26] It is the cause of joy in all wandering beings.
@@ -1498,11 +1499,11 @@ It is the elixir remedying the suffering of sentient beings.
 How can the merit of this treasure of mind
 Even begin to be measured or quantified?
 
-Q110. According to this verse, what is the key message?
-a) Even if one wishes to dispel merely the head pains of beings
-b) If the only guides of beings have, with unfettered minds
-c) The mighty sages, who have known it for many aeons have seen that only bodhicitta has this power
-d) If one who repays a helpful deed is worthy of some praise
+Q110. How does Śāntideva describe the deeds of a bodhisattva compared to someone who repays a helpful deed?
+a) A bodhisattva's deeds are equal in value to those who repay kindness they received
+b) Repaying a helpful deed is more praiseworthy because it fulfils an existing obligation
+c) A bodhisattva only acts when directly asked to help by those who are suffering
+d) A bodhisattva's excellent deeds are unsolicited, far surpassing someone who merely repays kindness
 ANSWER: d
 VERSE REF(S): 1.31
 VERSE TEXT:
@@ -1513,12 +1514,12 @@ Whose excellent deeds are unsolicited?
 
 CHAPTER 2: CONFESSION OF FAULTS (NEW SET)
 
-Q111. According to the text, what is taught in this verse?
-a) One is without merit and completely destitute I have no other wealth to give
-b) Just as Mañjughoṣa and others made offerings to the conquerors
-c) I offer every flower and fruit there is every kind of restorative
-d) Likewise, I offer bejewelled mountains secluded and delightful forest groves
-ANSWER: c
+Q111. What types of offerings does Śāntideva make at the beginning of Chapter 2?
+a) Every flower and fruit, every kind of restorative, and all the wealth in the world
+b) Only gold, precious gems, and jewels gathered from throughout the earth
+c) His own body and possessions along with all his accumulated merit
+d) Prayers, mantras, and recitations of the sacred dharma scriptures
+ANSWER: a
 VERSE REF(S): 2.2
 VERSE TEXT:
 [2.2] I offer every flower and fruit there is,
@@ -1526,12 +1527,12 @@ Every kind of restorative,
 All the wealth in the world,
 And all the clear, refreshing waters.
 
-Q112. What point does Śāntideva make here?
-a) To the conquerors and their sons, I offer all one's bodies. Sublime beings
-b) I prostrate to the bases of bodhicitta and to the stupas
-c) Thinking of these, I offer them properly to the sages, supreme among men, and their sons
-d) Likewise, I offer bejewelled mountains secluded and delightful forest groves
-ANSWER: d
+Q112. What natural settings does Śāntideva describe offering to the Buddhas?
+a) Rivers, lakes, and oceans with their clear and refreshing waters
+b) Bejewelled mountains, secluded forest groves, and trees rich with blossoming flowers
+c) Snow-capped mountains, vast glaciers, and the highest peaks of the world
+d) Great plains and valleys adorned with precious stones and fragrant flowers
+ANSWER: b
 VERSE REF(S): 2.3
 VERSE TEXT:
 [2.3] Likewise, I offer bejewelled mountains,
@@ -1539,12 +1540,12 @@ Secluded and delightful forest groves,
 Trees of paradise rich with blossoming flowers,
 Many trees with branches laden with excellent fruit,
 
-Q113. Which statement best matches this verse?
-a) Thinking of these, I offer them properly to the sages, supreme among men, and their sons
-b) One is without merit and completely destitute I have no other wealth to give
-c) Everything must be left behind and I must go, too yet, without understanding this
-d) To the Tathāgatas and their sons with many precious vases, filled with
-ANSWER: a
+Q113. How does Śāntideva address the Buddhas when offering, and what does he ask?
+a) He demands they accept his offerings as payment for his liberation from all suffering
+b) He leaves the offerings without any request, trusting they will be naturally accepted
+c) He asks them to multiply his offerings and distribute them to all the realms of beings
+d) He offers them properly and asks the holy recipients to accept out of compassion
+ANSWER: d
 VERSE REF(S): 2.6
 VERSE TEXT:
 [2.6] Thinking of these, I offer them properly
@@ -1552,11 +1553,11 @@ To the sages, supreme among men, and their sons.
 Holy recipients, out of your compassion,
 Please accept my offerings and think of me with kindness.
 
-Q114. What is emphasized in this verse?
-a) ‘Suffering comes from nonvirtue how can I be definitively freed from that?’
-b) Just as Mañjughoṣa and others made offerings to the conquerors
-c) One is without merit and completely destitute I have no other wealth to give
-d) To the conquerors and their sons, I offer all one's bodies. Sublime beings
+Q114. Why does Śāntideva say the protectors should accept his offerings?
+a) Because his offerings are extremely valuable and worthy of the highest Buddhas
+b) Because he has more than enough merit and wealth to share with all other beings
+c) Because he is without merit and completely destitute, with no other wealth to give
+d) Because it would dishonour them to refuse and create obstacles on the path
 ANSWER: c
 VERSE REF(S): 2.7
 VERSE TEXT:
@@ -1565,12 +1566,12 @@ I have no other wealth to give.
 Therefore, protectors, you who think only of the benefit of others,
 Please accept these for my benefit.
 
-Q115. According to this verse, what is the key message?
-a) I offer every flower and fruit there is every kind of restorative
-b) I prostrate to the bases of bodhicitta and to the stupas
-c) To the Tathāgatas and their sons with many precious vases, filled with
-d) To the conquerors and their sons, I offer all one's bodies. Sublime beings
-ANSWER: d
+Q115. What does Śāntideva offer to the conquerors and their sons, and what does he promise?
+a) His possessions, promising to retrieve them later when he needs them again
+b) All his bodies, promising to be their devoted servant
+c) His voice, promising to chant praises for them throughout all his future lives
+d) His mind, promising never to engage in unwholesome thoughts again
+ANSWER: b
 VERSE REF(S): 2.8
 VERSE TEXT:
 [2.8] To the conquerors and their sons, I offer
@@ -1578,25 +1579,25 @@ All my bodies. Sublime beings,
 Please always accept them,
 And I will be your devoted servant.
 
-Q116. According to the text, what is taught in this verse?
-a) Everything must be left behind and I must go, too yet, without understanding this
-b) Just as Mañjughoṣa and others made offerings to the conquerors
-c) To the Tathāgatas and their sons with many precious vases, filled with
-d) Likewise, I offer bejewelled mountains secluded and delightful forest groves
-ANSWER: c
+Q116. What does Śāntideva offer to the Tathāgatas while requesting to bathe the Buddhas' forms?
+a) Many precious vases filled with scented water, many songs, and music
+b) Simple water from a well, offered with single-pointed devotion and faith
+c) Incense, candles, and lamps arranged in elaborate and beautiful patterns
+d) Flowers, garlands, and fragrant herbs gathered from the surrounding forest
+ANSWER: a
 VERSE REF(S): 2.11
 VERSE TEXT:
 [2.11] To the Tathāgatas and their sons
 With many precious vases, filled with
 Scented water that delights the senses, and with many songs
-And music, I request to bathe the Buddhas’ forms.
+And music, I request to bathe the Buddhas' forms.
 
-Q117. What point does Śāntideva make here?
-a) I prostrate to the bases of bodhicitta and to the stupas
-b) Thinking of these, I offer them properly to the sages, supreme among men, and their sons
-c) ‘Suffering comes from nonvirtue how can I be definitively freed from that?’
-d) Just as Mañjughoṣa and others made offerings to the conquerors
-ANSWER: d
+Q117. Whose example does Śāntideva follow in making offerings to the conquerors?
+a) King Aśoka's generosity to monasteries across all lands
+b) Ānanda's devoted and lifelong service to the Buddha
+c) Mañjughoṣa's and others'
+d) Nāgārjuna's philosophical offerings to the tradition
+ANSWER: c
 VERSE REF(S): 2.22
 VERSE TEXT:
 [2.22] Just as Mañjughoṣa and others
@@ -1604,12 +1605,12 @@ Made offerings to the conquerors,
 Likewise I make offerings
 To the Tathāgatas and their sons.
 
-Q118. Which statement best matches this verse?
-a) Everything must be left behind and I must go, too yet, without understanding this
-b) One is without merit and completely destitute I have no other wealth to give
-c) I prostrate to the bases of bodhicitta and to the stupas
-d) I offer every flower and fruit there is every kind of restorative
-ANSWER: c
+Q118. To what does Śāntideva prostrate besides the preceptors and ācāryas?
+a) The altars, temples, and sacred places where dharma is practised
+b) Sacred mountains, rivers, and all naturally holy sites of pilgrimage
+c) The scriptures, commentaries, and all written records of the dharma
+d) The bases of bodhicitta and the stupas
+ANSWER: d
 VERSE REF(S): 2.25
 VERSE TEXT:
 [2.25] I prostrate to the bases of bodhicitta,
@@ -1617,12 +1618,12 @@ And to the stupas,
 And I prostrate to preceptors, ācāryas,
 And the supreme practitioners.
 
-Q119. What is emphasized in this verse?
-a) ‘Suffering comes from nonvirtue how can I be definitively freed from that?’
-b) Likewise, I offer bejewelled mountains secluded and delightful forest groves
-c) To the conquerors and their sons, I offer all one's bodies. Sublime beings
-d) Everything must be left behind and I must go, too yet, without understanding this
-ANSWER: d
+Q119. Why does the text say one has "carried out all kinds of nonvirtue"?
+a) Because of fundamental ignorance about the empty nature of mind and all phenomena
+b) Because of friends and foes, without understanding that everything must be left behind
+c) Because of laziness and procrastination in practising the dharma over many lifetimes
+d) Because of holding wrong views about karma, its causes, and its ripening results
+ANSWER: b
 VERSE REF(S): 2.34
 VERSE TEXT:
 [2.34] Everything must be left behind and I must go, too.
@@ -1630,27 +1631,27 @@ Yet, without understanding this,
 Because of friends and foes,
 I have carried out all kinds of nonvirtue.
 
-Q120. According to this verse, what is the key message?
-a) I offer every flower and fruit there is every kind of restorative
-b) To the Tathāgatas and their sons with many precious vases, filled with
-c) Thinking of these, I offer them properly to the sages, supreme among men, and their sons
-d) ‘Suffering comes from nonvirtue how can I be definitively freed from that?’
-ANSWER: d
+Q120. What question does Śāntideva say one should constantly consider day and night?
+a) "How can I be definitively freed from suffering that comes from nonvirtue?"
+b) "When will I attain enlightenment and be liberated from all of this suffering?"
+c) "What offerings and practices should I undertake for purification of faults?"
+d) "Who is the teacher that will guide me on the path towards liberation?"
+ANSWER: a
 VERSE REF(S): 2.62
 VERSE TEXT:
-[2.62] ‘Suffering comes from nonvirtue.
-How can I be definitively freed from that?’
+[2.62] 'Suffering comes from nonvirtue.
+How can I be definitively freed from that?'
 Day and night, I should constantly consider
 Nothing but this very thought.
 
 CHAPTER 3: FULLY HOLDING BODHICITTA (NEW SET)
 
-Q121. According to the text, what is taught in this verse?
-a) In the ocean of virtue in generating the resolution to bring happiness to all sentient beings
-b) In the gathering of virtue which causes enlightenment, I rejoice
-c) Folding one's hands, I implore the conquerors who wish to pass beyond torment
-d) In order to bring benefit to all beings I will, without any hesitation, give up
-ANSWER: b
+Q121. In what does Śāntideva rejoice at the start of Chapter 3?
+a) In his own spiritual achievements and the merit he has accumulated over many lifetimes
+b) In the generous offerings made by others to all the Buddhas and bodhisattvas
+c) In the gathering of virtue which causes enlightenment and the complete liberation from saṃsāric birth
+d) In the attainment of worldly pleasures and the temporary cessation of all suffering
+ANSWER: c
 VERSE REF(S): 3.2
 VERSE TEXT:
 [3.2] In the gathering of virtue
@@ -1658,12 +1659,12 @@ Which causes enlightenment, I rejoice.
 In the complete liberation
 From the suffering of saṃsāric birth, I rejoice.
 
-Q122. What point does Śāntideva make here?
-a) In the ocean of virtue in generating the resolution to bring happiness to all sentient beings
-b) Aspiration that deluges of food and drink eliminate the sufferings of hunger and thirst
-c) Nirvāṇa is attained by giving everything up nirvāṇa is one's goal
-d) Folding one's hands, I implore the Buddhas in all directions
-ANSWER: a
+Q122. What does Śāntideva describe as an "ocean of virtue"?
+a) The practice of meditation in solitude, far from all worldly distractions
+b) Making offerings to the Buddhas with heartfelt devotion and unwavering faith
+c) Studying the scriptures extensively to gain vast knowledge and deep wisdom
+d) Generating the resolution to bring happiness to all sentient beings
+ANSWER: d
 VERSE REF(S): 3.4
 VERSE TEXT:
 [3.4] In the ocean of virtue in generating the resolution
@@ -1671,11 +1672,11 @@ To bring happiness to all sentient beings,
 And in the virtuous deeds for the benefit
 Of sentient beings, I rejoice.
 
-Q123. Which statement best matches this verse?
-a) Aspiration that I become an inexhaustible supply of riches for beings in deprivation and poverty
-b) Folding one's hands, I implore the Buddhas in all directions
-c) Folding one's hands, I implore the conquerors who wish to pass beyond torment
-d) Having seen me, regardless of whether they develop an angry or a respectful attitude
+Q123. What does Śāntideva implore the Buddhas in all directions to do?
+a) Grant him the wisdom and power to overcome all of his defilements
+b) Shine the light of dharma for sentient beings suffering in darkness
+c) Destroy all enemies of the dharma and all obstacles to liberation
+d) Accept his heartfelt offerings immediately and bestow their blessings
 ANSWER: b
 VERSE REF(S): 3.5
 VERSE TEXT:
@@ -1684,12 +1685,12 @@ The Buddhas in all directions:
 Please shine the light of dharma
 For sentient beings suffering in darkness.
 
-Q124. What is emphasized in this verse?
-a) Aspiration that deluges of food and drink eliminate the sufferings of hunger and thirst
-b) In order to bring benefit to all beings I will, without any hesitation, give up
-c) Folding one's hands, I implore the conquerors who wish to pass beyond torment
-d) It is the supreme remedy relieving the sicknesses of beings
-ANSWER: c
+Q124. What does Śāntideva implore the conquerors who wish to pass beyond torment to do?
+a) Not leave these creatures to their blindness but stay for countless aeons
+b) Take him with them to nirvāṇa and liberate him from all of his suffering
+c) Destroy the forces of Māra and all obstacles on the dharma path
+d) Reveal the secret teachings that lead the most fortunate to enlightenment
+ANSWER: a
 VERSE REF(S): 3.6
 VERSE TEXT:
 [3.6] Folding my hands, I implore
@@ -1697,11 +1698,11 @@ The conquerors who wish to pass beyond torment:
 Please do not leave these creatures to their blindness
 But stay here for countless aeons.
 
-Q125. According to this verse, what is the key message?
-a) In the gathering of virtue which causes enlightenment, I rejoice
-b) Aspiration that I become an inexhaustible supply of riches for beings in deprivation and poverty
-c) Nirvāṇa is attained by giving everything up nirvāṇa is one's goal
-d) Aspiration that deluges of food and drink eliminate the sufferings of hunger and thirst
+Q125. What does Śāntideva aspire to become during ages of famine?
+a) A wealthy donor who gives generously to the poor and destitute
+b) A teacher of agriculture who shows them how to grow their own crops
+c) A powerful ruler who distributes food to everyone in his kingdom
+d) Food and drink for those suffering hunger and thirst
 ANSWER: d
 VERSE REF(S): 3.9
 VERSE TEXT:
@@ -1710,12 +1711,12 @@ Eliminate the sufferings of hunger and thirst
 And, during ages of famine,
 May I become food and drink.
 
-Q126. According to the text, what is taught in this verse?
-a) In the ocean of virtue in generating the resolution to bring happiness to all sentient beings
-b) Having seen me, regardless of whether they develop an angry or a respectful attitude
-c) In order to bring benefit to all beings I will, without any hesitation, give up
-d) Aspiration that I become an inexhaustible supply of riches for beings in deprivation and poverty
-ANSWER: d
+Q126. What does Śāntideva aspire to become for beings in deprivation and poverty?
+a) A charitable patron who gives occasionally from his accumulated surplus wealth
+b) An inexhaustible supply of riches, right there in their presence as all kinds of provisions
+c) A spiritual guide who helps them accept their situation and find inner contentment
+d) A powerful ruler who redistributes the wealth of the kingdom among all his citizens
+ANSWER: b
 VERSE REF(S): 3.10
 VERSE TEXT:
 [3.10] May I become an inexhaustible supply of riches
@@ -1723,12 +1724,12 @@ For beings in deprivation and poverty,
 And may I be right there in their presence,
 As all kinds of provisions and necessities.
 
-Q127. What point does Śāntideva make here?
-a) It is the supreme remedy relieving the sicknesses of beings
-b) In order to bring benefit to all beings I will, without any hesitation, give up
-c) Nirvāṇa is attained by giving everything up nirvāṇa is one's goal
-d) Folding one's hands, I implore the Buddhas in all directions
-ANSWER: b
+Q127. What does Śāntideva pledge to give up without hesitation for the benefit of all beings?
+a) Only his material possessions and the worldly wealth he has gathered in this life
+b) His meditation practice and the concentration he has carefully cultivated in solitude
+c) His body, its pleasures, and all his merits of the past, present, and future
+d) His place in the sangha and the respect he has earned from the other practitioners
+ANSWER: c
 VERSE REF(S): 3.11
 VERSE TEXT:
 [3.11] In order to bring benefit to all beings,
@@ -1736,12 +1737,12 @@ I will, without any hesitation, give up
 My body, its pleasures,
 And all my merits of the past, present and future.
 
-Q128. Which statement best matches this verse?
-a) In the gathering of virtue which causes enlightenment, I rejoice
-b) Having seen me, regardless of whether they develop an angry or a respectful attitude
-c) Nirvāṇa is attained by giving everything up nirvāṇa is one's goal
-d) Folding one's hands, I implore the conquerors who wish to pass beyond torment
-ANSWER: c
+Q128. How does the text connect giving everything away to the attainment of nirvāṇa?
+a) Nirvāṇa is attained by giving everything up, and giving everything at once to sentient beings is the supreme giving
+b) Giving everything away actually prevents nirvāṇa, since one needs possessions to make further offerings
+c) Nirvāṇa has nothing to do with generosity, but depends solely on the practice of wisdom and meditation
+d) Only partial and measured giving is required for nirvāṇa, since the Buddha himself kept his robes and bowl
+ANSWER: a
 VERSE REF(S): 3.12
 VERSE TEXT:
 [3.12] Nirvāṇa is attained by giving everything up.
@@ -1749,12 +1750,12 @@ Nirvāṇa is my goal,
 And to give everything at once
 To sentient beings is the supreme giving.
 
-Q129. What is emphasized in this verse?
-a) It is the supreme remedy relieving the sicknesses of beings
-b) In the ocean of virtue in generating the resolution to bring happiness to all sentient beings
-c) Having seen me, regardless of whether they develop an angry or a respectful attitude
-d) Aspiration that deluges of food and drink eliminate the sufferings of hunger and thirst
-ANSWER: c
+Q129. What does Śāntideva aspire about those who see him, whether with anger or respect?
+a) That only the respectful ones will benefit, since anger blocks the receipt of blessings
+b) That those who are angry will be purified of their negativity through the encounter
+c) That they will immediately generate bodhicitta and enter the path to enlightenment
+d) That it always becomes a cause of fulfilling the benefit of all
+ANSWER: d
 VERSE REF(S): 3.16
 VERSE TEXT:
 [3.16] Having seen me, regardless of whether they develop
@@ -1762,12 +1763,12 @@ An angry or a respectful attitude,
 May that always become a cause
 Of fulfilling the benefit of all.
 
-Q130. According to this verse, what is the key message?
-a) It is the supreme remedy relieving the sicknesses of beings
-b) In the gathering of virtue which causes enlightenment, I rejoice
-c) Aspiration that I become an inexhaustible supply of riches for beings in deprivation and poverty
-d) Folding one's hands, I implore the Buddhas in all directions
-ANSWER: a
+Q130. What does the text call bodhicitta in relation to beings exhausted from wandering saṃsāric paths?
+a) A brief respite from the exhaustion of wandering endlessly in saṃsāra
+b) The supreme remedy relieving sicknesses and a tree to rest under
+c) An unnecessary burden added to the already heavy load of suffering beings
+d) A distant promise of future happiness that may never actually be fulfilled
+ANSWER: b
 VERSE REF(S): 3.30
 VERSE TEXT:
 [3.30] It is the supreme remedy,
@@ -1777,38 +1778,38 @@ Who are wandering and exhausted on saṃsāric paths.
 
 CHAPTER 4: CONCERN (NEW SET)
 
-Q131. According to the text, what is taught in this verse?
-a) Should someone even for a moment interrupt or prevent this merit
-b) Whatever I have undertaken rashly or not properly thought through
-c) Having firmly grasped bodhicitta in this way, a conqueror’s son
-d) The arising of a Tathāgata faith, obtaining a human birth
-ANSWER: c
+Q131. What does the text say a conqueror's son should never do after firmly grasping bodhicitta?
+a) Engage in worldly activities that distract from the practice of dharma
+b) Study non-Buddhist texts that might lead to developing wrong views
+c) Associate with ordinary people who have no interest in the spiritual path
+d) Neglect the training or fail to strive to uphold it
+ANSWER: d
 VERSE REF(S): 4.1
 VERSE TEXT:
 [4.1] Having firmly grasped bodhicitta
-In this way, a conqueror’s son
+In this way, a conqueror's son
 Should never neglect it,
 But instead strive never to violate the training.
 
-Q132. What point does Śāntideva make here?
-a) The Buddhas and their sons examine things with their great wisdom
-b) If destroying the happiness of even one sentient being
-c) Whatever I have undertaken rashly or not properly thought through
-d) Today, at least, one is not sick I have food to eat and am not afflicted
-ANSWER: c
+Q132. What does Śāntideva advise about undertakings that were done rashly or without proper thought?
+a) One should reconsider, asking oneself "Should I stop?"
+b) One should continue them regardless of consequences, since all commitments are binding
+c) One should never question any commitment, as doubt itself creates obstacles
+d) One should seek a teacher's advice before making any decision to stop or continue
+ANSWER: a
 VERSE REF(S): 4.2
 VERSE TEXT:
 [4.2] Whatever I have undertaken rashly
 Or not properly thought through,
 Even if I have promised to do it,
-I should reconsider, asking myself, ‘Should I stop?’
+I should reconsider, asking myself, 'Should I stop?'
 
-Q133. Which statement best matches this verse?
-a) Thus, when vacillating in saṃsāra sometimes with the power of downfalls
-b) The Buddhas and their sons examine things with their great wisdom
-c) If just a moment of nonvirtue can lead to an aeon in the Avīci Hell
-d) Should someone even for a moment interrupt or prevent this merit
-ANSWER: b
+Q133. Who examines things with their great wisdom, giving Śāntideva confidence to examine his own commitments?
+a) His personal teachers and mentors who have guided him on the path
+b) The śrāvaka arhats who have attained their own individual liberation
+c) The Buddhas and their sons
+d) The worldly philosophers who are skilled in the analysis of concepts
+ANSWER: c
 VERSE REF(S): 4.3
 VERSE TEXT:
 [4.3] The Buddhas and their sons
@@ -1816,12 +1817,12 @@ Examine things with their great wisdom,
 And even I can examine them,
 So why would I hesitate in doing so?
 
-Q134. What is emphasized in this verse?
-a) The defilements are not within objects, nor within the senses
-b) If destroying the happiness of even one sentient being
-c) The arising of a Tathāgata faith, obtaining a human birth
-d) Should someone even for a moment interrupt or prevent this merit
-ANSWER: d
+Q134. What happens to someone who interrupts or prevents the merit of bodhicitta, even for a moment?
+a) They receive a minor setback that can be easily overcome through confession and purification
+b) Nothing can stop them going to the lower realms, since the benefit of beings is diminished
+c) They lose only temporary merit but retain the deeper roots of their accumulated virtue
+d) They can easily recover by making confession and performing additional virtuous actions
+ANSWER: b
 VERSE REF(S): 4.9
 VERSE TEXT:
 [4.9] Should someone even for a moment
@@ -1829,11 +1830,11 @@ Interrupt or prevent this merit,
 Since the benefit of beings is diminished,
 Nothing can stop him going to the lower realms.
 
-Q135. According to this verse, what is the key message?
-a) Today, at least, one is not sick I have food to eat and am not afflicted
-b) Thus, when vacillating in saṃsāra sometimes with the power of downfalls
-c) Having firmly grasped bodhicitta in this way, a conqueror’s son
-d) If destroying the happiness of even one sentient being
+Q135. What rhetorical argument does the text make about destroying the happiness of even one sentient being?
+a) It is a minor fault that can be easily purified through the practice of confession and offering
+b) It only matters if done intentionally, since unintentional harm does not produce karmic results
+c) It affects only the person harmed, not the perpetrator, so there is no personal consequence
+d) If harming even one being causes harm, what need to mention destroying the happiness of all beings as vast as space?
 ANSWER: d
 VERSE REF(S): 4.10
 VERSE TEXT:
@@ -1842,12 +1843,12 @@ Will harm me,
 What need to mention destroying
 The happiness of all beings, as vast as space?
 
-Q136. According to the text, what is taught in this verse?
-a) The arising of a Tathāgata faith, obtaining a human birth
-b) Whatever I have undertaken rashly or not properly thought through
-c) If just a moment of nonvirtue can lead to an aeon in the Avīci Hell
-d) Thus, when vacillating in saṃsāra sometimes with the power of downfalls
-ANSWER: d
+Q136. What happens when someone vacillates between downfalls and bodhicitta in saṃsāra?
+a) The attainment of the bhūmis is obstructed for a long time
+b) They progress slowly but steadily towards the bhūmis despite their fluctuation
+c) They achieve a special form of patience through enduring the ups and downs
+d) Their merit increases through the contrast between virtue and nonvirtue
+ANSWER: a
 VERSE REF(S): 4.11
 VERSE TEXT:
 [4.11] Thus, when vacillating in saṃsāra,
@@ -1855,11 +1856,11 @@ Sometimes with the power of downfalls,
 Sometimes with the power of bodhicitta,
 The attainment of the bhūmis will be obstructed for a long time.
 
-Q137. What point does Śāntideva make here?
-a) The Buddhas and their sons examine things with their great wisdom
-b) The defilements are not within objects, nor within the senses
-c) The arising of a Tathāgata faith, obtaining a human birth
-d) Today, at least, one is not sick I have food to eat and am not afflicted
+Q137. What conditions does the text describe as very rare and hard to attain again?
+a) Wealth, fame, and social status sufficient to support extensive dharma practice
+b) A good teacher who is compassionate and a favourable climate for sustained meditation
+c) The arising of a Tathāgata, faith, obtaining a human birth, and conditions for cultivating virtue
+d) Access to authentic scriptures, a well-established monastery, and supportive companions
 ANSWER: c
 VERSE REF(S): 4.15
 VERSE TEXT:
@@ -1868,12 +1869,12 @@ Faith, obtaining a human birth
 And the conditions for cultivating virtue
 Are very rare. When will they be attained again?
 
-Q138. Which statement best matches this verse?
-a) Today, at least, one is not sick I have food to eat and am not afflicted
-b) If just a moment of nonvirtue can lead to an aeon in the Avīci Hell
-c) Having firmly grasped bodhicitta in this way, a conqueror’s son
-d) Should someone even for a moment interrupt or prevent this merit
-ANSWER: a
+Q138. What does Śāntideva say about his current health and the nature of this life?
+a) His health will remain stable throughout his life if he practises dharma with diligence
+b) Today at least he is not sick and has food, but this life is fleeting, deceptive, and the body is on loan
+c) He should not worry about his health because the dharma will protect him from illness
+d) His body is permanently his to keep and should be carefully preserved for dharma practice
+ANSWER: b
 VERSE REF(S): 4.16
 VERSE TEXT:
 [4.16] Today, at least, I am not sick.
@@ -1881,11 +1882,11 @@ I have food to eat and am not afflicted.
 But this life is fleeting and deceptive,
 And this body is on loan only for a little while.
 
-Q139. What is emphasized in this verse?
-a) If destroying the happiness of even one sentient being
-b) Whatever I have undertaken rashly or not properly thought through
-c) The defilements are not within objects, nor within the senses
-d) If just a moment of nonvirtue can lead to an aeon in the Avīci Hell
+Q139. What does the text teach about a single moment of nonvirtue in relation to the Avīci Hell?
+a) A single moment of nonvirtue has no serious consequence if one confesses immediately
+b) Only repeated and habitual nonvirtue over many lifetimes leads to rebirth in the hells
+c) The Avīci Hell is only a metaphorical warning and not an actual realm of existence
+d) Just a moment of nonvirtue can lead to an aeon in the Avīci Hell
 ANSWER: d
 VERSE REF(S): 4.21
 VERSE TEXT:
@@ -1894,12 +1895,12 @@ Can lead to an aeon in the Avīci Hell,
 What need to mention my not proceeding to a happy rebirth,
 With nonvirtues collected since beginningless time in saṃsāra?
 
-Q140. According to this verse, what is the key message?
-a) The Buddhas and their sons examine things with their great wisdom
-b) The defilements are not within objects, nor within the senses
-c) Having firmly grasped bodhicitta in this way, a conqueror’s son
-d) Thus, when vacillating in saṃsāra sometimes with the power of downfalls
-ANSWER: b
+Q140. Where does the text say defilements reside, and what is their nature?
+a) They are not within objects, nor within the senses, yet they harm all beings — they are like illusions
+b) They reside permanently in the body and can only be removed by means of physical austerities
+c) They exist only within the mind and, once established, can never be completely removed
+d) They come from external forces beyond our control, imposed on us by the power of karma
+ANSWER: a
 VERSE REF(S): 4.47
 VERSE TEXT:
 [4.47] The defilements are not within objects, nor within the senses,
@@ -1909,12 +1910,12 @@ Why should I be tormented in places like the hells for no reason?
 
 CHAPTER 5: CLEAR COMPREHENSION (NEW SET)
 
-Q141. According to the text, what is taught in this verse?
-a) Tigers, lions, elephants, bears snakes, every kind of enemy
-b) ‘Where has the killing of fish and other creatures been eradicated?’
-c) In this way, the teacher of perfect truth himself said
-d) Those who want to guard the training must always carefully guard their minds
-ANSWER: d
+Q141. What does Śāntideva say is impossible without guarding the mind?
+a) Guarding the training
+b) Achieving any kind of worldly or spiritual success
+c) Making proper offerings to the Buddhas and bodhisattvas
+d) Understanding the meaning of the sacred scriptures
+ANSWER: a
 VERSE REF(S): 5.1
 VERSE TEXT:
 [5.1] Those who want to guard the training
@@ -1922,11 +1923,11 @@ Must always carefully guard their minds.
 If one fails to guard the mind,
 It is impossible to guard the training.
 
-Q142. What point does Śāntideva make here?
-a) Unpleasant beings are as vast as space defeating them would take forever
-b) Did anyone deliberately make the weapons of the hell-beings?
-c) Tigers, lions, elephants, bears snakes, every kind of enemy
-d) Will all be restrained by restraining mind alone
+Q142. What dangerous beings does the text list that can all be subdued by restraining mind alone?
+a) Only demons, ogres, and the supernatural enemies of the dharma
+b) Only wild animals and the dangerous creatures that threaten the body
+c) Tigers, lions, elephants, bears, snakes, hell guards, demons, and ogres
+d) Only human enemies, thieves, and those who would do physical harm
 ANSWER: c
 VERSE REF(S): 5.4
 VERSE TEXT:
@@ -1935,11 +1936,11 @@ Snakes, every kind of enemy,
 The prison guards of the hells,
 Demons and ogres,
 
-Q143. Which statement best matches this verse?
-a) In this way, the teacher of perfect truth himself said
-b) Will all be restrained by restraining mind alone
-c) The Sage has taught that all these things come from a nonvirtuous mind
-d) While simply cultivating a clear mind results in rebirth in realms like that of Brahmā
+Q143. What does the text teach about the power of restraining the mind in relation to all enemies and dangers?
+a) Mind restraint only works against some enemies, while others require physical force
+b) All will be restrained and subjugated by restraining and subjugating mind alone
+c) Physical strength is also needed alongside mental restraint to overcome all enemies
+d) External protections and rituals are more effective than mental restraint alone
 ANSWER: b
 VERSE REF(S): 5.5
 VERSE TEXT:
@@ -1948,11 +1949,11 @@ By restraining mind alone,
 And will all be subjugated
 By subjugating mind alone.
 
-Q144. What is emphasized in this verse?
-a) ‘Where has the killing of fish and other creatures been eradicated?’
-b) All recitations and austerities even if performed extensively
-c) Did anyone deliberately make the weapons of the hell-beings?
-d) In this way, the teacher of perfect truth himself said
+Q144. According to the teacher of perfect truth, what is the source of all dangers and infinite sufferings?
+a) External enemies, harmful conditions, and unfavourable circumstances
+b) Past-life karma accumulated over beginningless time in saṃsāra
+c) The influence of Māra and the many classes of harmful spirits
+d) The mind
 ANSWER: d
 VERSE REF(S): 5.6
 VERSE TEXT:
@@ -1961,12 +1962,12 @@ That all dangers,
 And all the infinite sufferings
 Arise from mind.
 
-Q145. According to this verse, what is the key message?
-a) Unpleasant beings are as vast as space defeating them would take forever
-b) The Sage has taught that all these things come from a nonvirtuous mind
-c) Did anyone deliberately make the weapons of the hell-beings?
-d) Those who want to guard the training must always carefully guard their minds
-ANSWER: c
+Q145. What provocative question does Śāntideva ask about the weapons and molten iron ground of hell?
+a) "Where are they stored between the destruction and creation of worlds?"
+b) "Did anyone deliberately make them?"
+c) "How long do they last before they are renewed by the force of karma?"
+d) "Can they be destroyed through the power of merit and aspiration prayers?"
+ANSWER: b
 VERSE REF(S): 5.7
 VERSE TEXT:
 [5.7] Did anyone deliberately make
@@ -1974,12 +1975,12 @@ The weapons of the hell-beings?
 Who made the molten iron ground?
 Where did these hosts of women come from?
 
-Q146. According to the text, what is taught in this verse?
-a) While simply cultivating a clear mind results in rebirth in realms like that of Brahmā
-b) ‘Where has the killing of fish and other creatures been eradicated?’
-c) Tigers, lions, elephants, bears snakes, every kind of enemy
-d) The Sage has taught that all these things come from a nonvirtuous mind
-ANSWER: d
+Q146. According to the Sage, what is there nothing to fear apart from in the three realms?
+a) External enemies and the forces of nature that threaten beings
+b) The Lord of Death who comes without warning to seize all beings
+c) Mind
+d) Natural disasters and the destruction that occurs at the end of each aeon
+ANSWER: c
 VERSE REF(S): 5.8
 VERSE TEXT:
 [5.8] The Sage has taught that all these things
@@ -1987,25 +1988,25 @@ Come from a nonvirtuous mind.
 Thus, in the three realms,
 There is nothing to fear apart from mind.
 
-Q147. What point does Śāntideva make here?
-a) All recitations and austerities even if performed extensively
-b) Will all be restrained by restraining mind alone
-c) ‘Where has the killing of fish and other creatures been eradicated?’
-d) Unpleasant beings are as vast as space defeating them would take forever
-ANSWER: c
+Q147. What does the text say about the Sage's teaching on the perfection of moral conduct in relation to killing?
+a) All killing must be physically prevented before moral conduct can be perfected in the world
+b) Only ordained monks and nuns need to observe the strict precept of non-killing of beings
+c) Moral conduct requires the complete eradication of killing throughout all the realms of the world
+d) The intention to abandon killing is the perfection of moral conduct, since killing has not been eradicated everywhere
+ANSWER: d
 VERSE REF(S): 5.11
 VERSE TEXT:
-[5.11] ‘Where has the killing of fish
-And other creatures been eradicated?’
+[5.11] 'Where has the killing of fish
+And other creatures been eradicated?'
 The Sage has taught that the intention to abandon this
 Is the perfection of moral conduct.
 
-Q148. Which statement best matches this verse?
-a) Unpleasant beings are as vast as space defeating them would take forever
-b) Those who want to guard the training must always carefully guard their minds
-c) While simply cultivating a clear mind results in rebirth in realms like that of Brahmā
-d) In this way, the teacher of perfect truth himself said
-ANSWER: a
+Q148. What happens if one overcomes just the one angry mind, according to the text?
+a) One becomes a powerful warrior who can subdue any external enemy encountered
+b) One achieves only temporary peace that will not last beyond the present lifetime
+c) One must still defeat each enemy individually through specific practices and methods
+d) It would be like defeating all enemies, since unpleasant beings are as vast as space
+ANSWER: d
 VERSE REF(S): 5.12
 VERSE TEXT:
 [5.12] Unpleasant beings are as vast as space;
@@ -2013,12 +2014,12 @@ Defeating them would take forever.
 But if I overcome this one angry mind,
 It would be like defeating all enemies.
 
-Q149. What is emphasized in this verse?
-a) Tigers, lions, elephants, bears snakes, every kind of enemy
-b) While simply cultivating a clear mind results in rebirth in realms like that of Brahmā
-c) All recitations and austerities even if performed extensively
-d) Did anyone deliberately make the weapons of the hell-beings?
-ANSWER: b
+Q149. What results from simply cultivating a clear mind, according to the text?
+a) One becomes more intelligent and skilled in worldly matters and analysis
+b) One achieves immediate and complete liberation from all suffering in saṃsāra
+c) Rebirth in realms like that of Brahmā, which not even many acts of body and mind can achieve
+d) Better health and greater physical vitality throughout the rest of this present life
+ANSWER: c
 VERSE REF(S): 5.15
 VERSE TEXT:
 [5.15] While simply cultivating a clear mind
@@ -2026,12 +2027,12 @@ Results in rebirth in realms like that of Brahmā,
 Not even a great many acts of body and mind,
 Being of lesser modes of conduct, can result in this.
 
-Q150. According to this verse, what is the key message?
-a) Will all be restrained by restraining mind alone
-b) The Sage has taught that all these things come from a nonvirtuous mind
-c) Those who want to guard the training must always carefully guard their minds
-d) All recitations and austerities even if performed extensively
-ANSWER: d
+Q150. What does the Omniscient One teach about recitations and austerities practised with a wavering mind?
+a) They produce half the normal merit compared to practice with full concentration
+b) They are useless
+c) They still produce some benefit, though less than practice with focused attention
+d) They should be repeated until the mind settles and full concentration is achieved
+ANSWER: b
 VERSE REF(S): 5.16
 VERSE TEXT:
 [5.16] All recitations and austerities,
@@ -2041,12 +2042,12 @@ If practised with a wavering mind.
 
 CHAPTER 6: PATIENCE (NEW SET)
 
-Q151. According to the text, what is taught in this verse?
-a) If I hold on to thoughts afflicted by anger one's mind will know no peace
-b) Friends and relatives will become fed up with him and
-c) Whatever may befall me one's joyful disposition will not be disturbed
-d) There is no nonvirtue like anger and no austerity like patience
-ANSWER: d
+Q151. How does the text compare anger and patience?
+a) Anger is natural and patience is forced, making patience inferior to other virtues
+b) There is no nonvirtue like anger and no austerity like patience
+c) Both are equal obstacles to practice that must be overcome through meditation
+d) Patience is more difficult than anger but ultimately less important for progress
+ANSWER: b
 VERSE REF(S): 6.2
 VERSE TEXT:
 [6.2] There is no nonvirtue like anger,
@@ -2054,12 +2055,12 @@ And no austerity like patience.
 Therefore, in the various ways,
 I should persevere in developing patience.
 
-Q152. What point does Śāntideva make here?
-a) It is the enemy, anger, which creates sufferings like these
-b) If I hold on to thoughts afflicted by anger one's mind will know no peace
-c) For oneself and one's friends I want no suffering, no disrespect
-d) Some may depend on his favour for wealth and status
-ANSWER: b
+Q152. What happens to someone who holds on to thoughts afflicted by anger?
+a) They become stronger and more focused in their determination to overcome obstacles
+b) They will eventually overcome their problems through the force of their righteous indignation
+c) Nothing significant happens, since anger is a natural emotion that passes on its own
+d) Their mind will know no peace, and they will have no happiness, be unsettled and unable to sleep
+ANSWER: d
 VERSE REF(S): 6.3
 VERSE TEXT:
 [6.3] If I hold on to thoughts afflicted by anger,
@@ -2067,11 +2068,11 @@ My mind will know no peace.
 Having no happiness or pleasure,
 I will be unsettled and unable to sleep.
 
-Q153. Which statement best matches this verse?
-a) Some may depend on his favour for wealth and status
-b) While the causes of happiness are few the causes of suffering are many
-c) Therefore, one should completely eliminate the sustenance of this enemy—
-d) Friends and relatives will become fed up with him and
+Q153. What happens to a master who is filled with hatred, even if people depend on him for wealth and status?
+a) Even they will turn against him and kill him
+b) His servants remain loyal despite his anger, out of fear and dependence on his generosity
+c) They will simply ignore his anger and continue to serve him for the sake of their wages
+d) He becomes more powerful through their fear and can command even greater obedience
 ANSWER: a
 VERSE REF(S): 6.4
 VERSE TEXT:
@@ -2080,11 +2081,11 @@ For wealth and status,
 But even they will turn against
 A hateful master and kill him.
 
-Q154. What is emphasized in this verse?
-a) It is the enemy, anger, which creates sufferings like these
-b) Whatever may befall me one's joyful disposition will not be disturbed
-c) Friends and relatives will become fed up with him and
-d) Having disregarded all sufferings enemies like aggression will be overcome
+Q154. What happens with friends, relatives, and generosity for someone who stays angry?
+a) Friends and relatives remain supportive regardless, since they understand anger is temporary
+b) His generosity increases to compensate, and people are drawn even more to his wealth
+c) Friends and relatives become fed up, and though drawn by his generosity, will not want to be around him
+d) Only strangers are affected by his anger, while those close to him learn to tolerate it
 ANSWER: c
 VERSE REF(S): 6.5
 VERSE TEXT:
@@ -2093,12 +2094,12 @@ Though drawn by his generosity, will not want to be around him.
 In short, someone who stays angry
 Will never be happy.
 
-Q155. According to this verse, what is the key message?
-a) There is no nonvirtue like anger and no austerity like patience
-b) For oneself and one's friends I want no suffering, no disrespect
-c) It is the enemy, anger, which creates sufferings like these
-d) Therefore, one should completely eliminate the sustenance of this enemy—
-ANSWER: c
+Q155. What does the text say about whoever takes control and destroys anger?
+a) They will have temporary peace that lasts only until the next provocation arises
+b) They will be happy in this life and future lives
+c) They will become emotionless and detached from all worldly experience
+d) They will still face suffering from other defilements like attachment and ignorance
+ANSWER: b
 VERSE REF(S): 6.6
 VERSE TEXT:
 [6.6] It is the enemy, anger, which creates
@@ -2106,12 +2107,12 @@ Sufferings like these.
 But whoever takes control and destroys anger
 Will be happy in this life and future lives.
 
-Q156. According to the text, what is taught in this verse?
-a) If I hold on to thoughts afflicted by anger one's mind will know no peace
-b) While the causes of happiness are few the causes of suffering are many
-c) Therefore, one should completely eliminate the sustenance of this enemy—
-d) Whatever may befall me one's joyful disposition will not be disturbed
-ANSWER: c
+Q156. How does the text describe the enemy of anger, and what should be done about it?
+a) Anger is sometimes beneficial and should not be eliminated entirely from the mind
+b) It is a powerful force that cannot be overcome by any ordinary person's efforts
+c) It is a useful motivation that should be channelled into the energy for spiritual practice
+d) It is an enemy that does nothing but harm, and its sustenance should be completely eliminated
+ANSWER: d
 VERSE REF(S): 6.8
 VERSE TEXT:
 [6.8] Therefore, I should completely eliminate
@@ -2119,25 +2120,25 @@ The sustenance of this enemy—
 An enemy which does nothing
 But harm me.
 
-Q157. What point does Śāntideva make here?
-a) Having disregarded all sufferings enemies like aggression will be overcome
-b) For oneself and one's friends I want no suffering, no disrespect
-c) Whatever may befall me one's joyful disposition will not be disturbed
-d) Some may depend on his favour for wealth and status
-ANSWER: c
+Q157. What does Śāntideva resolve about his joyful disposition regardless of what happens?
+a) Whatever befalls him, his joyful disposition will not be disturbed
+b) He will maintain his joyful disposition only during meditation and formal practice
+c) He will try to be happy most of the time but allow for natural sadness
+d) He will wait until external conditions improve before cultivating happiness
+ANSWER: a
 VERSE REF(S): 6.9
 VERSE TEXT:
 [6.9] Whatever may befall me,
 My joyful disposition will not be disturbed.
-Being unhappy won’t accomplish any of my wishes
+Being unhappy won't accomplish any of my wishes
 And my virtues will only deteriorate.
 
-Q158. Which statement best matches this verse?
-a) Friends and relatives will become fed up with him and
-b) While the causes of happiness are few the causes of suffering are many
-c) There is no nonvirtue like anger and no austerity like patience
-d) For oneself and one's friends I want no suffering, no disrespect
-ANSWER: d
+Q158. What contrasting attitudes does Śāntideva describe for himself/friends versus enemies?
+a) He treats everyone exactly the same, with equal compassion and equanimity
+b) He only cares about his friends and ignores what happens to all other beings
+c) For himself and friends, no suffering or disrespect; for enemies, the opposite
+d) He wishes suffering on no one at all, including those who are his enemies
+ANSWER: c
 VERSE REF(S): 6.11
 VERSE TEXT:
 [6.11] For myself and my friends,
@@ -2145,12 +2146,12 @@ I want no suffering, no disrespect,
 No criticism and nothing unpleasant.
 For my enemies, I want the opposite.
 
-Q159. What is emphasized in this verse?
-a) While the causes of happiness are few the causes of suffering are many
-b) It is the enemy, anger, which creates sufferings like these
-c) If I hold on to thoughts afflicted by anger one's mind will know no peace
-d) Having disregarded all sufferings enemies like aggression will be overcome
-ANSWER: a
+Q159. Why does the text say suffering is necessary, and what attitude should the mind take?
+a) Suffering is meaningless and should be avoided at all costs through skilful practice
+b) Without suffering there is no renunciation, so the mind should remain steady
+c) Suffering only builds character but does not contribute to the spiritual path directly
+d) One should seek out suffering deliberately in order to accelerate spiritual progress
+ANSWER: b
 VERSE REF(S): 6.12
 VERSE TEXT:
 [6.12] While the causes of happiness are few,
@@ -2158,11 +2159,11 @@ The causes of suffering are many.
 Without suffering, there is no renunciation.
 Therefore, mind, remain steady.
 
-Q160. According to this verse, what is the key message?
-a) There is no nonvirtue like anger and no austerity like patience
-b) Some may depend on his favour for wealth and status
-c) Therefore, one should completely eliminate the sustenance of this enemy—
-d) Having disregarded all sufferings enemies like aggression will be overcome
+Q160. Who does the text call "real conquering heroes" in contrast to those who just "butcher corpses"?
+a) Warriors who win physical battles through superior skill and military strategy
+b) Kings and rulers who conquer vast territories and subdue their many opponents
+c) Those who defeat the most enemies in battle using weapons and armed force
+d) Those who have disregarded all sufferings and overcome enemies like aggression
 ANSWER: d
 VERSE REF(S): 6.20
 VERSE TEXT:
@@ -2173,12 +2174,12 @@ The rest are just butchering corpses.
 
 CHAPTER 7: EFFORT (NEW SET)
 
-Q161. According to the text, what is taught in this verse?
-a) With such patience, one should undertake effort for there is enlightenment in effort
-b) With the sweet taste of inactivity and the craving for sleep
-c) When I eventually come to regard one's own body as like those vegetables, etc
-d) When I haven’t done this, have just started this am in the middle of this…
-ANSWER: a
+Q161. What analogy does the text use to show that merit requires effort?
+a) Like fire without fuel, which cannot burn or produce any warmth or light
+b) Just as there is no movement without wind, there is no merit without effort
+c) Like water without a source, which cannot flow or nourish any living thing
+d) Like a tree without sunlight, which cannot grow or produce fruit or flowers
+ANSWER: b
 VERSE REF(S): 7.1
 VERSE TEXT:
 [7.1] With such patience, I should undertake effort,
@@ -2186,12 +2187,12 @@ For there is enlightenment in effort.
 Just as there is no movement without wind,
 So there is no merit without effort.
 
-Q162. What point does Śāntideva make here?
-a) With the sweet taste of inactivity and the craving for sleep
-b) Having blocked off all paths the Lord of Death is now looking for you
-c) If, in this life, you are terrified like a fish flipping about out of water
-d) Therefore, riding the chariot of bodhicitta which relieves all discouragement and fatigue
-ANSWER: a
+Q162. What causes laziness to arise according to the text?
+a) Physical exhaustion from overwork and the strain of difficult practice over many years
+b) Lack of proper instruction from a qualified teacher and the absence of supportive companions
+c) The sweet taste of inactivity and the craving for sleep, combined with not yet being tired of saṃsāra's sufferings
+d) An excess of virtue that leads to complacency and a false sense of accomplishment on the path
+ANSWER: c
 VERSE REF(S): 7.3
 VERSE TEXT:
 [7.3] With the sweet taste of inactivity
@@ -2199,12 +2200,12 @@ And the craving for sleep,
 I am not yet tired of the sufferings of saṃsāra,
 So laziness arises.
 
-Q163. Which statement best matches this verse?
-a) Motivation is the source of all virtuous pursuits, as the Sage has said
-b) Cross the great river of suffering using the boat of human life
-c) When I haven’t done this, have just started this am in the middle of this…
-d) Having blocked off all paths the Lord of Death is now looking for you
-ANSWER: d
+Q163. What warning does the text give about the Lord of Death?
+a) He only comes for the old and sick who have not practised the dharma diligently
+b) He has blocked off all paths and is looking for you, so how can you enjoy food or sleep?
+c) He can be bargained with if one has accumulated sufficient merit and virtuous actions
+d) He gives advance warning before arriving, so there is always time to prepare oneself
+ANSWER: b
 VERSE REF(S): 7.6
 VERSE TEXT:
 [7.6] Having blocked off all paths,
@@ -2212,25 +2213,25 @@ The Lord of Death is now looking for you.
 How can you enjoy food?
 How can you enjoy sleep?
 
-Q164. What is emphasized in this verse?
-a) When I haven’t done this, have just started this am in the middle of this…
-b) If, in this life, you are terrified like a fish flipping about out of water
-c) For one who keeps a virtuous intent in mind no matter where he goes
-d) When I eventually come to regard one's own body as like those vegetables, etc
-ANSWER: a
+Q164. What cry does the text say one will make when the Lord of Death arrives unexpectedly?
+a) "I am ready and prepared because I have practised the dharma throughout my life!"
+b) "Give me one more year to complete my practice and purify all my remaining faults!"
+c) "I have no regrets because I have lived a life devoted to virtue and the benefit of others!"
+d) "Oh please no! It's over!" — when one hasn't finished, has just started, or is in the middle of things
+ANSWER: d
 VERSE REF(S): 7.8
 VERSE TEXT:
-[7.8] When I haven’t done this, have just started this,
+[7.8] When I haven't done this, have just started this,
 Am in the middle of this…
 Suddenly the Lord of Death will come,
-And I will cry, ‘Oh please no! It’s over!’
+And I will cry, 'Oh please no! It's over!'
 
-Q165. According to this verse, what is the key message?
-a) Cross the great river of suffering using the boat of human life
-b) If, in this life, you are terrified like a fish flipping about out of water
-c) Therefore, riding the chariot of bodhicitta which relieves all discouragement and fatigue
-d) With such patience, one should undertake effort for there is enlightenment in effort
-ANSWER: b
+Q165. What does the text say about the unbearable sufferings of hell created by one's own nonvirtues?
+a) They are easier to bear than worldly suffering because they are temporary and will eventually end
+b) They are temporary and quickly resolved through the power of confession and purification practices
+c) If in this life one is already terrified like a fish out of water, what can be said of the unbearable sufferings of hell?
+d) They affect only the body but not the mind, which remains untouched throughout the experience
+ANSWER: c
 VERSE REF(S): 7.11
 VERSE TEXT:
 [7.11] If, in this life, you are terrified,
@@ -2238,11 +2239,11 @@ Like a fish flipping about out of water,
 What can be said of the unbearable sufferings
 Of hell, created by your own nonvirtues?
 
-Q166. According to the text, what is taught in this verse?
-a) With the sweet taste of inactivity and the craving for sleep
-b) Cross the great river of suffering using the boat of human life
-c) When I eventually come to regard one's own body as like those vegetables, etc
-d) Motivation is the source of all virtuous pursuits, as the Sage has said
+Q166. What does the text call the human life, and what warning accompanies it?
+a) A permanent dwelling place where one can practise the dharma at leisure over many years
+b) A boat for crossing the great river of suffering — very difficult to find again, so now is not the time for sleeping
+c) A temporary shelter from the storm of saṃsāra, providing brief relief from the elements of suffering
+d) A burden that must be endured with patience until the causes for a better rebirth are established
 ANSWER: b
 VERSE REF(S): 7.14
 VERSE TEXT:
@@ -2251,12 +2252,12 @@ Using the boat of human life.
 Since this boat will be very difficult to find again,
 Now is not the time for sleeping, you fool!
 
-Q167. What point does Śāntideva make here?
-a) Therefore, riding the chariot of bodhicitta which relieves all discouragement and fatigue
-b) For one who keeps a virtuous intent in mind no matter where he goes
-c) When I eventually come to regard one's own body as like those vegetables, etc
-d) Having blocked off all paths the Lord of Death is now looking for you
-ANSWER: c
+Q167. What does Śāntideva say will happen when he comes to regard his own body as like vegetables?
+a) It will not be difficult to give away its flesh
+b) He will lose all motivation for practising the dharma
+c) He will become depressed and unable to continue on the path
+d) He will need to eat more carefully to maintain his health
+ANSWER: a
 VERSE REF(S): 7.26
 VERSE TEXT:
 [7.26] When I eventually come to regard my own body
@@ -2264,12 +2265,12 @@ As like those vegetables, etc.
 Why would it be difficult
 To give away its flesh?
 
-Q168. Which statement best matches this verse?
-a) Therefore, riding the chariot of bodhicitta which relieves all discouragement and fatigue
-b) Motivation is the source of all virtuous pursuits, as the Sage has said
-c) With such patience, one should undertake effort for there is enlightenment in effort
-d) When I haven’t done this, have just started this am in the middle of this…
-ANSWER: a
+Q168. What qualities of the chariot of bodhicitta does the text describe?
+a) It is slow and steady, requiring great patience to see any results from travelling in it
+b) It requires constant maintenance through effort and the accumulation of merit and wisdom
+c) It only carries the most worthy practitioners who have purified all their karmic obscurations
+d) It relieves all discouragement and fatigue and takes one from happiness to happiness
+ANSWER: d
 VERSE REF(S): 7.30
 VERSE TEXT:
 [7.30] Therefore, riding the chariot of bodhicitta,
@@ -2277,12 +2278,12 @@ Which relieves all discouragement and fatigue,
 And takes one from happiness to happiness,
 What thinking person would be despondent?
 
-Q169. What is emphasized in this verse?
-a) If, in this life, you are terrified like a fish flipping about out of water
-b) For one who keeps a virtuous intent in mind no matter where he goes
-c) With the sweet taste of inactivity and the craving for sleep
-d) Motivation is the source of all virtuous pursuits, as the Sage has said
-ANSWER: d
+Q169. What does the Sage say about motivation, and what is its source?
+a) Motivation comes from external encouragement and the inspiration of one's teachers and companions
+b) Motivation fades with time and cannot be sustained without constant external reinforcement
+c) Motivation is the source of all virtuous pursuits, and its source is continual meditation on the ripening of results
+d) Motivation is less important than discipline and should not be relied upon for lasting practice
+ANSWER: c
 VERSE REF(S): 7.40
 VERSE TEXT:
 [7.40] Motivation is the source
@@ -2290,11 +2291,11 @@ Of all virtuous pursuits, as the Sage has said.
 The source of motivation is continual meditation
 On the ripening of results.
 
-Q170. According to this verse, what is the key message?
-a) Having blocked off all paths the Lord of Death is now looking for you
-b) For one who keeps a virtuous intent in mind no matter where he goes
-c) With such patience, one should undertake effort for there is enlightenment in effort
-d) Cross the great river of suffering using the boat of human life
+Q170. What does the text say about someone who keeps a virtuous intent in mind, wherever he goes?
+a) He will be praised by others and gain worldly recognition for his spiritual qualities
+b) His merit will present offerings to him with the gifts of ripening results
+c) He will face no obstacles on the path and all conditions will be favourable
+d) He will find worldly success and prosperity as a reward for his good intentions
 ANSWER: b
 VERSE REF(S): 7.42
 VERSE TEXT:
@@ -2305,12 +2306,12 @@ With the gifts of ripening results.
 
 CHAPTER 8: MEDITATION (NEW SET)
 
-Q171. According to the text, what is taught in this verse?
-a) To associate with others like this only brings loss
-b) Thinking solely of them this life passes by without any meaning
-c) With the isolation of body and mind there are no distractions
-d) Which impermanent person would have attachment to another impermanent person?
-ANSWER: c
+Q171. What benefit comes from the isolation of body and mind?
+a) One becomes physically stronger and more resilient to the hardships of practice
+b) One achieves immediate enlightenment without the need for gradual practice
+c) One becomes more creative and productive in all worldly and spiritual activities
+d) There are no distractions, so one should abandon the world and give up conceptual discrimination
+ANSWER: d
 VERSE REF(S): 8.2
 VERSE TEXT:
 [8.2] With the isolation of body and mind,
@@ -2318,12 +2319,12 @@ There are no distractions.
 Therefore, I should abandon this world,
 And give up all conceptual discrimination.
 
-Q172. What point does Śāntideva make here?
-a) If I act like a fool I will surely go to the lower realms
-b) One should stay far away from childish people when I come across them, one should be happy to please them
-c) One is unhappy when I don’t see them and one's mind will not settle
-d) Which impermanent person would have attachment to another impermanent person?
-ANSWER: d
+Q172. What does the text say about attachment between impermanent beings?
+a) It creates lasting happiness that endures through all future lives and across many births
+b) Which impermanent person would have attachment to another? One will not see their loved one again for thousands of lifetimes
+c) It is natural and should be encouraged as a foundation for developing compassion for others
+d) It only applies to romantic relationships and not to the bonds between family and friends
+ANSWER: b
 VERSE REF(S): 8.5
 VERSE TEXT:
 [8.5] Which impermanent person would have attachment
@@ -2331,25 +2332,25 @@ To another impermanent person?
 He will not see his loved one again
 For thousands of lifetimes.
 
-Q173. Which statement best matches this verse?
-a) Thinking solely of them this life passes by without any meaning
-b) One is unhappy when I don’t see them and one's mind will not settle
-c) One second they are friends but, in an instant, they become enemies
-d) Like a bee taking nectar from a flower I should accept only what is for the dharma
-ANSWER: b
+Q173. What happens when one doesn't see the object of attachment, and what happens when one does?
+a) Not seeing causes unhappiness and unsettled mind; even seeing doesn't satisfy but torments with craving as before
+b) Not seeing causes indifference and detachment; seeing causes temporary happiness and contentment
+c) Both situations bring peace because the mind naturally settles when left undisturbed
+d) Not seeing is painful but leads to growth; seeing resolves the craving completely and brings joy
+ANSWER: a
 VERSE REF(S): 8.6
 VERSE TEXT:
-[8.6] I am unhappy when I don’t see them
+[8.6] I am unhappy when I don't see them
 And my mind will not settle.
 Yet, even when I see them, I am not satisfied,
 But just as tormented by craving as before.
 
-Q174. What is emphasized in this verse?
-a) If I act like a fool I will surely go to the lower realms
-b) ‘I have lots of possessions and respect I am really popular.’
-c) To associate with others like this only brings loss
-d) Thinking solely of them this life passes by without any meaning
-ANSWER: d
+Q174. What does the text say about thinking solely of transient friends?
+a) It strengthens one's dharma practice by providing emotional support and inspiration
+b) It creates good karma for future lives through the force of genuine loving kindness
+c) This life passes by without any meaning, and the unchanging dharma is lost
+d) It has no effect on spiritual practice, being neither beneficial nor harmful to the path
+ANSWER: c
 VERSE REF(S): 8.8
 VERSE TEXT:
 [8.8] Thinking solely of them,
@@ -2357,12 +2358,12 @@ This life passes by without any meaning.
 The unchanging dharma
 Is lost through transient friends.
 
-Q175. According to this verse, what is the key message?
-a) With the isolation of body and mind there are no distractions
-b) One second they are friends but, in an instant, they become enemies
-c) If I act like a fool I will surely go to the lower realms
-d) One should stay far away from childish people when I come across them, one should be happy to please them
-ANSWER: c
+Q175. What does Śāntideva warn about acting like a fool?
+a) Others will simply laugh at him and he will lose the respect of the community
+b) He can easily recover in the next life and make up for any time that was lost
+c) He will only lose friends temporarily but can win them back through generosity
+d) He will surely go to the lower realms, so why would he follow such fools?
+ANSWER: d
 VERSE REF(S): 8.9
 VERSE TEXT:
 [8.9] If I act like a fool,
@@ -2370,12 +2371,12 @@ I will surely go to the lower realms.
 If they are leading me to that different end,
 Why would I follow such fools?
 
-Q176. According to the text, what is taught in this verse?
-a) To associate with others like this only brings loss
-b) One second they are friends but, in an instant, they become enemies
-c) Which impermanent person would have attachment to another impermanent person?
-d) Like a bee taking nectar from a flower I should accept only what is for the dharma
-ANSWER: b
+Q176. How quickly can friends become enemies according to the text?
+a) One second they are friends, but in an instant they become enemies — they get angry even in joyful situations
+b) It takes many years for friendships to deteriorate, as trust is slowly eroded over a long period
+c) It only happens during arguments and disputes, but quickly resolves once the disagreement passes
+d) True friends never become enemies, since genuine friendship is immune to all worldly changes
+ANSWER: a
 VERSE REF(S): 8.10
 VERSE TEXT:
 [8.10] One second they are friends
@@ -2383,12 +2384,12 @@ But, in an instant, they become enemies.
 Since they get angry even in joyful situations,
 People are very hard to please.
 
-Q177. What point does Śāntideva make here?
-a) To associate with others like this only brings loss
-b) One is unhappy when I don’t see them and one's mind will not settle
-c) ‘I have lots of possessions and respect I am really popular.’
-d) One should stay far away from childish people when I come across them, one should be happy to please them
-ANSWER: a
+Q177. What conclusion does Śāntideva draw about associating with others who bring neither mutual benefit?
+a) One should try harder to benefit them through increased generosity and compassion
+b) The relationship will improve with time if both parties develop patience and understanding
+c) To associate with others like this only brings loss
+d) One should increase contact to build a stronger connection and deeper understanding
+ANSWER: c
 VERSE REF(S): 8.14
 VERSE TEXT:
 [8.14] To associate with others like this
@@ -2396,12 +2397,12 @@ Only brings loss.
 Therefore, since I will not benefit them,
 And they will not benefit me,
 
-Q178. Which statement best matches this verse?
-a) Like a bee taking nectar from a flower I should accept only what is for the dharma
-b) With the isolation of body and mind there are no distractions
-c) Thinking solely of them this life passes by without any meaning
-d) One should stay far away from childish people when I come across them, one should be happy to please them
-ANSWER: d
+Q178. How should one treat childish people according to the text?
+a) One should avoid them completely and permanently, severing all contact without exception
+b) One should criticize and correct their behaviour whenever one encounters their faults
+c) Stay far away, but when encountering them, be happy to please them and treat them well without being very familiar
+d) One should have deep, intimate relationships with them to transform their character from within
+ANSWER: c
 VERSE REF(S): 8.15
 VERSE TEXT:
 [8.15] I should stay far away from childish people.
@@ -2409,12 +2410,12 @@ When I come across them, I should be happy to please them.
 Without being very familiar,
 I should treat them well just like any ordinary person.
 
-Q179. What is emphasized in this verse?
-a) Like a bee taking nectar from a flower I should accept only what is for the dharma
-b) Which impermanent person would have attachment to another impermanent person?
-c) If I act like a fool I will surely go to the lower realms
-d) ‘I have lots of possessions and respect I am really popular.’
-ANSWER: a
+Q179. What analogy does the text use for how one should accept only what is needed for dharma?
+a) Like a farmer harvesting only the ripest crops and leaving the rest in the field
+b) Like a merchant carefully selecting only the finest goods from all that is offered
+c) Like a student reading only the most essential books from the vast library of knowledge
+d) Like a bee taking nectar from a flower, remaining unfamiliar
+ANSWER: d
 VERSE REF(S): 8.16
 VERSE TEXT:
 [8.16] Like a bee taking nectar from a flower,
@@ -2422,26 +2423,26 @@ I should accept only what is for the dharma.
 I should remain unfamiliar,
 As if they were someone I had never met before.
 
-Q180. According to this verse, what is the key message?
-a) With the isolation of body and mind there are no distractions
-b) ‘I have lots of possessions and respect I am really popular.’
-c) One is unhappy when I don’t see them and one's mind will not settle
-d) One second they are friends but, in an instant, they become enemies
-ANSWER: b
+Q180. What does the text warn about holding on to thoughts of having many possessions and being popular?
+a) If one holds on to such thoughts, death will be horrible
+b) Such thoughts are a sign of success and should be cultivated further
+c) Such thoughts are natural and harmless when kept in proper perspective
+d) They help build confidence and self-esteem needed for practice
+ANSWER: a
 VERSE REF(S): 8.17
 VERSE TEXT:
-[8.17] ‘I have lots of possessions and respect.
-I am really popular.’
+[8.17] 'I have lots of possessions and respect.
+I am really popular.'
 If I hold on to such thoughts,
 My death will be horrible.
 
 CHAPTER 9: WISDOM (NEW SET)
 
-Q181. According to the text, what is taught in this verse?
-a) The Buddhists, too, have distinct schools of conceptual thought
-b) The merit in relation to the illusion-like Conqueror
-c) All of these factors were taught by the Sage for the sake of wisdom
-d) When there is perception of forms and so forth that is a consensus, not a valid cognition
+Q181. For what purpose did the Sage teach all the preceding factors (generosity, patience, etc.)?
+a) For gaining worldly benefits and prosperity in this life
+b) For accumulating merit only, not for the development of insight
+c) For the sake of wisdom
+d) For training the body and developing physical endurance
 ANSWER: c
 VERSE REF(S): 9.1
 VERSE TEXT:
@@ -2450,11 +2451,11 @@ By the Sage for the sake of wisdom.
 Therefore, those who wish to pacify sufferings
 Should develop wisdom.
 
-Q182. What point does Śāntideva make here?
-a) The Buddhists, too, have distinct schools of conceptual thought
-b) Worldly people see objects as existent and discriminate them as reality
-c) For the sake of introducing the worldly the protector taught in terms of existence
-d) For as long as the conditions are assembled even an illusion will continue to arise
+Q182. What does the text say about the distinct schools within Buddhism?
+a) They are higher and lower schools that debate and agree upon examples without abandoning conceptual thought
+b) All Buddhist schools agree completely on every point of doctrine and practice
+c) They have nothing in common with one another and hold entirely contradictory views
+d) Only one school is correct while all others have deviated from the authentic teaching
 ANSWER: a
 VERSE REF(S): 9.4
 VERSE TEXT:
@@ -2463,12 +2464,12 @@ Of which there are higher and lower,
 Who debate and agree upon examples,
 While not abandoning conceptual thought in order to achieve the results.
 
-Q183. Which statement best matches this verse?
-a) When there is perception of forms and so forth that is a consensus, not a valid cognition
-b) Worldly people see objects as existent and discriminate them as reality
-c) When illusory beings are killed there is no nonvirtue, because there was no mind
-d) There is no error, for it is the Buddhist’s relative
-ANSWER: b
+Q183. On what point do Buddhists and ordinary worldly people disagree?
+a) Whether suffering exists and whether it can be overcome through practice
+b) Whether the historical Buddha actually existed and taught the dharma
+c) Whether morality matters and whether ethical conduct produces future results
+d) Whether objects are existent and real or illusion-like
+ANSWER: d
 VERSE REF(S): 9.5
 VERSE TEXT:
 [9.5] Worldly people see objects as existent
@@ -2476,12 +2477,12 @@ And discriminate them as reality,
 Not as illusion-like. Therefore, on this,
 Buddhists and worldly people are in dispute.
 
-Q184. What is emphasized in this verse?
-a) The merit in relation to the illusion-like Conqueror
-b) Since mantras and so on do not have that power illusory minds do not arise from them
-c) For the sake of introducing the worldly the protector taught in terms of existence
-d) When there is perception of forms and so forth that is a consensus, not a valid cognition
-ANSWER: d
+Q184. How does the text characterize the perception of forms and so forth?
+a) As a perfectly valid cognition that accurately reveals the true nature of reality
+b) As a consensus, not a valid cognition — if consensus made unclean things clean, that would be a delusion
+c) As completely false in all respects, with no connection whatsoever to any form of truth
+d) As reliable for practical purposes only but not for ultimate philosophical analysis
+ANSWER: b
 VERSE REF(S): 9.6
 VERSE TEXT:
 [9.6] When there is perception of forms and so forth,
@@ -2489,51 +2490,51 @@ That is a consensus, not a valid cognition.
 If the consensus is that something unclean is clean,
 Then it is a delusion to accord it.
 
-Q185. According to this verse, what is the key message?
-a) For as long as the conditions are assembled even an illusion will continue to arise
-b) All of these factors were taught by the Sage for the sake of wisdom
-c) For the sake of introducing the worldly the protector taught in terms of existence
-d) There is no error, for it is the Buddhist’s relative
+Q185. Why did the protector teach in terms of existence, and what is the reality in suchness?
+a) Because existence is the ultimate truth that cannot be refuted by analysis or reasoning
+b) Because nonexistence is too difficult to understand for anyone other than the Buddhas
+c) For the sake of introducing the worldly; in suchness, there is not even momentary existence
+d) Because the worldly would not listen otherwise, though existence is ultimately established
 ANSWER: c
 VERSE REF(S): 9.7
 VERSE TEXT:
 [9.7] For the sake of introducing the worldly,
 The protector taught in terms of existence.
 In suchness, there is not even momentary existence.
-‘Then momentariness cannot be a relative truth.’
+'Then momentariness cannot be a relative truth.'
 
-Q186. According to the text, what is taught in this verse?
-a) There is no error, for it is the Buddhist’s relative
-b) The merit in relation to the illusion-like Conqueror
-c) When illusory beings are killed there is no nonvirtue, because there was no mind
-d) The Buddhists, too, have distinct schools of conceptual thought
-ANSWER: a
+Q186. What does the text say about the Buddhist's relative truth in comparison to the worldly?
+a) The Buddhist's relative is identical to the worldly view in every important respect
+b) It is inferior to the worldly understanding, which is closer to how things really are
+c) There is no error in it, for it is seeing reality compared to the worldly
+d) It has no practical application and is useful only for philosophical debate
+ANSWER: c
 VERSE REF(S): 9.8
 VERSE TEXT:
-[9.8] There is no error, for it is the Buddhist’s relative.
+[9.8] There is no error, for it is the Buddhist's relative.
 In comparison to the worldly, it is seeing reality.
 Otherwise, the ascertainment that women are impure
 Would be refuted by the worldly.
 
-Q187. What point does Śāntideva make here?
-a) Since mantras and so on do not have that power illusory minds do not arise from them
-b) The merit in relation to the illusion-like Conqueror
-c) Worldly people see objects as existent and discriminate them as reality
-d) For as long as the conditions are assembled even an illusion will continue to arise
+Q187. How does the text respond to the question "If sentient beings are illusory, how are they reborn?"
+a) Rebirth proves that beings are not illusory and must be truly existent after all
+b) Merit in relation to the illusion-like Conqueror is just as if he really existed
+c) Rebirth is also an illusion, so the question itself is based on a false assumption
+d) The question is not addressed because it falls outside the scope of this discussion
 ANSWER: b
 VERSE REF(S): 9.9
 VERSE TEXT:
 [9.9] The merit in relation to the illusion-like Conqueror
 Is just as if he really existed.
-‘If sentient beings are illusory,
-How are they reborn after death?’
+'If sentient beings are illusory,
+How are they reborn after death?'
 
-Q188. Which statement best matches this verse?
-a) When there is perception of forms and so forth that is a consensus, not a valid cognition
-b) For as long as the conditions are assembled even an illusion will continue to arise
-c) When illusory beings are killed there is no nonvirtue, because there was no mind
-d) All of these factors were taught by the Sage for the sake of wisdom
-ANSWER: b
+Q188. How does the text answer the claim that sentient beings must be really existent because their continuity lasts a long time?
+a) The continuity proves existence, since only truly existent things can persist over extended periods
+b) Duration has nothing to do with existence and the argument is entirely beside the point
+c) Only short-lived phenomena are illusory, while those that persist must have some basis in reality
+d) As long as conditions are assembled, even an illusion continues to arise — a long-lasting continuity doesn't make beings truly existent
+ANSWER: d
 VERSE REF(S): 9.10
 VERSE TEXT:
 [9.10] For as long as the conditions are assembled,
@@ -2541,12 +2542,12 @@ Even an illusion will continue to arise.
 So how could sentient beings really be existent
 Just because their continuity lasts for a long time?
 
-Q189. What is emphasized in this verse?
-a) When illusory beings are killed there is no nonvirtue, because there was no mind
-b) Since mantras and so on do not have that power illusory minds do not arise from them
-c) The Buddhists, too, have distinct schools of conceptual thought
-d) For the sake of introducing the worldly the protector taught in terms of existence
-ANSWER: a
+Q189. What does the text teach about killing illusory beings and the origin of merit and nonvirtue?
+a) Killing any being is always nonvirtuous, regardless of whether they are real or illusory in nature, because the act itself generates karma
+b) All killing is equally sinful, and the distinction between illusory and real beings makes no difference to the karmic result produced
+c) When illusory beings are killed, there is no nonvirtue because there was no mind — merit and nonvirtue originate with those possessing an illusory mind
+d) Illusory beings cannot be killed because they have no real existence that can be destroyed, so the question is meaningless
+ANSWER: c
 VERSE REF(S): 9.11
 VERSE TEXT:
 [9.11] When illusory beings are killed,
@@ -2554,12 +2555,12 @@ There is no nonvirtue, because there was no mind.
 Merit and nonvirtue originate
 With those who possess an illusory mind.
 
-Q190. According to this verse, what is the key message?
-a) Worldly people see objects as existent and discriminate them as reality
-b) All of these factors were taught by the Sage for the sake of wisdom
-c) There is no error, for it is the Buddhist’s relative
-d) Since mantras and so on do not have that power illusory minds do not arise from them
-ANSWER: d
+Q190. Why do illusory minds not arise from mantras and so on?
+a) Because mantras and so on do not have the power to produce illusory minds — illusions arise from a variety of conditions and therefore vary
+b) Because mantras are too weak and lack sufficient power to generate the necessary conditions for producing minds
+c) Because mantras are not real things and therefore cannot produce any effects whatsoever on sentient beings
+d) Because minds cannot be illusory in nature, since consciousness is always genuinely existent and not conditioned
+ANSWER: a
 VERSE REF(S): 9.12
 VERSE TEXT:
 [9.12] Since mantras and so on do not have that power,
@@ -2569,12 +2570,12 @@ Illusions will vary too,
 
 CHAPTER 10: DEDICATION (NEW SET)
 
-Q191. According to the text, what is taught in this verse?
-a) By whatever virtue there is in one's undertaking
-b) By one's merit may all those in all directions
-c) Aspiration that those tormented by the cold find warmth and may boundless waters pour
-d) Aspiration that its showers of embers, burning rocks and fiery razors
-ANSWER: a
+Q191. What does Śāntideva wish for all beings through the virtue of undertaking the bodhisattva conduct?
+a) That they achieve worldly success and prosperity in all their future lives
+b) That they find temporary happiness and relief from the worst of their sufferings
+c) That they become wealthy enough to make abundant offerings to the three jewels
+d) That all beings may enter the bodhisattva conduct
+ANSWER: d
 VERSE REF(S): 10.1
 VERSE TEXT:
 [10.1] By whatever virtue there is
@@ -2582,12 +2583,12 @@ In my undertaking
 To enter the bodhisattva conduct,
 May all beings enter the bodhisattva conduct.
 
-Q192. What point does Śāntideva make here?
-a) By one's merit may all those in all directions
-b) As long as they remain in saṃsāra may their happiness never fail
-c) Aspiration that the realms of hell become places of joy covered with vast pools, fragrant with lotus flowers
-d) Aspiration that those submerged in the torrents of hell their flesh completely incinerated from their lily-white bones
-ANSWER: a
+Q192. What does Śāntideva dedicate his merit to achieve for those afflicted with suffering?
+a) Temporary relief from their pain and a brief respite from the cycle of their suffering
+b) Oceans of happiness and joy for all those in all directions afflicted with physical and mental suffering
+c) Better conditions in their current lives and more favourable circumstances for practice
+d) Quick passage to the next life where they might encounter the dharma and a teacher
+ANSWER: b
 VERSE REF(S): 10.2
 VERSE TEXT:
 [10.2] By my merit,
@@ -2595,12 +2596,12 @@ May all those in all directions
 Afflicted with physical and mental suffering
 Attain oceans of happiness and joy.
 
-Q193. Which statement best matches this verse?
-a) Aspiration that its burning pyres become heaps of jewels may its molten earth become a clear, crystal floor
-b) Aspiration that those tormented by the cold find warmth and may boundless waters pour
-c) As long as they remain in saṃsāra may their happiness never fail
-d) ‘Why are the servants of the Lord of Death and his dreadful crows and vultures suddenly afraid?
-ANSWER: c
+Q193. What does Śāntideva wish for beings throughout the duration of saṃsāra?
+a) That their happiness may never fail, and that they attain the uninterrupted happiness of a bodhisattva
+b) Quick liberation from saṃsāra through sudden awakening to the nature of all phenomena
+c) That they avoid the worst rebirths and always find themselves in more favourable conditions
+d) That they develop strong renunciation and turn their minds away from all worldly concerns
+ANSWER: a
 VERSE REF(S): 10.3
 VERSE TEXT:
 [10.3] As long as they remain in saṃsāra,
@@ -2608,11 +2609,11 @@ May their happiness never fail.
 May beings attain the uninterrupted
 Happiness of a bodhisattva.
 
-Q194. What is emphasized in this verse?
-a) Aspiration that its showers of embers, burning rocks and fiery razors
-b) Aspiration that the realms of hell become places of joy covered with vast pools, fragrant with lotus flowers
-c) Aspiration that those tormented by the cold find warmth and may boundless waters pour
-d) Seeing the glittering fires of hell extinguished by rains of flowers mixed with scented water
+Q194. What does Śāntideva wish for those tormented by cold and heat in the hells?
+a) Quick rebirth in the human realm where they can practise the dharma and accumulate merit
+b) That they simply endure their suffering with patience, knowing it will eventually come to its end
+c) That those tormented by the cold find warmth, and that boundless waters from bodhisattva clouds cool those tormented by heat
+d) That they find strength through prayer and the power of their own remaining positive karma
 ANSWER: c
 VERSE REF(S): 10.5
 VERSE TEXT:
@@ -2621,12 +2622,12 @@ And may boundless waters pour
 From the clouds of bodhisattvas,
 Cooling those tormented by the heat.
 
-Q195. According to this verse, what is the key message?
-a) Aspiration that those submerged in the torrents of hell their flesh completely incinerated from their lily-white bones
-b) Aspiration that the realms of hell become places of joy covered with vast pools, fragrant with lotus flowers
-c) Aspiration that its burning pyres become heaps of jewels may its molten earth become a clear, crystal floor
-d) By whatever virtue there is in one's undertaking
-ANSWER: b
+Q195. What does Śāntideva wish the realms of hell to become?
+a) Empty and desolate, with all beings liberated to higher realms of existence
+b) Permanent places of purification where beings can quickly exhaust their negative karma
+c) Testing grounds for spiritual practitioners to develop their patience and endurance
+d) Places of joy covered with vast pools, fragrant with lotus flowers, with gentle calls of wild ducks, geese, and swans
+ANSWER: d
 VERSE REF(S): 10.7
 VERSE TEXT:
 [10.7] May the realms of hell become places of joy,
@@ -2634,11 +2635,11 @@ Covered with vast pools, fragrant with lotus flowers,
 With calls of wild ducks, geese and swans
 Resounding gently in the air.
 
-Q196. According to the text, what is taught in this verse?
-a) Aspiration that its burning pyres become heaps of jewels may its molten earth become a clear, crystal floor
-b) ‘Why are the servants of the Lord of Death and his dreadful crows and vultures suddenly afraid?
-c) By one's merit may all those in all directions
-d) Aspiration that its showers of embers, burning rocks and fiery razors
+Q196. What does Śāntideva aspire for the burning pyres, molten earth, and crushing mountains of hell?
+a) That burning pyres become heaps of jewels, molten earth become a crystal floor, and crushing mountains become celestial palaces filled with Buddhas
+b) That they be permanently destroyed and dissolved so that no being ever has to experience their torment in any future aeon
+c) That they only exist temporarily and vanish the moment a being's accumulated negative karma has been exhausted completely
+d) That they be moved elsewhere to a remote location, far from the places where the majority of suffering beings are reborn
 ANSWER: a
 VERSE REF(S): 10.8
 VERSE TEXT:
@@ -2647,11 +2648,11 @@ May its molten earth become a clear, crystal floor.
 May its crushing mountains become
 Celestial palaces of worship, filled with Buddhas.
 
-Q197. What point does Śāntideva make here?
-a) As long as they remain in saṃsāra may their happiness never fail
-b) Aspiration that its showers of embers, burning rocks and fiery razors
-c) Aspiration that those submerged in the torrents of hell their flesh completely incinerated from their lily-white bones
-d) Seeing the glittering fires of hell extinguished by rains of flowers mixed with scented water
+Q197. What does Śāntideva wish to happen to the showers of embers, burning rocks, and fiery razors in hell?
+a) That they fall more gently and cause less pain to the beings who must endure them
+b) That from now on they become a rain of flowers and that armed violence become a casting of flowers
+c) That they be extinguished by water pouring down from the compassion of the bodhisattvas
+d) That they only affect those with the heaviest karma while sparing beings with lesser faults
 ANSWER: b
 VERSE REF(S): 10.9
 VERSE TEXT:
@@ -2660,12 +2661,12 @@ From now on be a rain of flowers.
 May the conflict of armed violence
 From now on be a casting of flowers.
 
-Q198. Which statement best matches this verse?
-a) Aspiration that those tormented by the cold find warmth and may boundless waters pour
-b) ‘Why are the servants of the Lord of Death and his dreadful crows and vultures suddenly afraid?
-c) By whatever virtue there is in one's undertaking
-d) Aspiration that those submerged in the torrents of hell their flesh completely incinerated from their lily-white bones
-ANSWER: d
+Q198. What does Śāntideva wish for those submerged in the torrents of hell with their flesh incinerated?
+a) That their suffering be shortened and the duration of their torment reduced by half
+b) That they be reborn as humans with the opportunity to practise dharma and purify karma
+c) That from this virtue they attain the bodies of gods and dwell among goddesses in gentle, divine rivers
+d) That their pain be reduced but not eliminated, so they can still exhaust their negative karma
+ANSWER: c
 VERSE REF(S): 10.10
 VERSE TEXT:
 [10.10] May those submerged in the torrents of hell,
@@ -2673,24 +2674,24 @@ Their flesh completely incinerated from their lily-white bones,
 Attain, from this virtue, the bodies of gods,
 And dwell among goddesses in gentle, divine rivers.
 
-Q199. What is emphasized in this verse?
-a) Aspiration that the realms of hell become places of joy covered with vast pools, fragrant with lotus flowers
-b) ‘Why are the servants of the Lord of Death and his dreadful crows and vultures suddenly afraid?
-c) Seeing the glittering fires of hell extinguished by rains of flowers mixed with scented water
-d) By one's merit may all those in all directions
-ANSWER: b
+Q199. What does Śāntideva aspire for the hell-beings when they look up and see the blazing form of Vajrapāṇi?
+a) That they feel more fear so that they are motivated to purify their accumulated negative karma
+b) That they bow down in reverence and make prayers to be reborn in a more fortunate realm
+c) That they immediately attain nirvāṇa and are completely freed from all further suffering
+d) That they wonder whose power clears away the darkness and, through intense joy, clear away all negativities and go to join him
+ANSWER: d
 VERSE REF(S): 10.11
 VERSE TEXT:
-[10.11] ‘Why are the servants of the Lord of Death and his dreadful crows and vultures suddenly afraid?
-Whose power clears away the enveloping darkness, bringing joy and happiness?’
+[10.11] 'Why are the servants of the Lord of Death and his dreadful crows and vultures suddenly afraid?
+Whose power clears away the enveloping darkness, bringing joy and happiness?'
 When they look up, may they see the blazing form of Vajrapāṇi in the sky,
 And the power of their intense joy clearing away all negativities, may they go to join him.
 
-Q200. According to this verse, what is the key message?
-a) Aspiration that its burning pyres become heaps of jewels may its molten earth become a clear, crystal floor
-b) Seeing the glittering fires of hell extinguished by rains of flowers mixed with scented water
-c) As long as they remain in saṃsāra may their happiness never fail
-d) By whatever virtue there is in one's undertaking
+Q200. What does Śāntideva aspire happens when the hell-beings see the fires of hell extinguished?
+a) That they immediately forget their suffering and lose all memory of the torments they endured
+b) That they wonder what could have brought such happiness, and see Padmapāṇi himself
+c) That they fall asleep peacefully and awaken in a higher realm free from all suffering
+d) That they are reborn instantly in the pure land without any intermediate state of existence
 ANSWER: b
 VERSE REF(S): 10.12
 VERSE TEXT:
