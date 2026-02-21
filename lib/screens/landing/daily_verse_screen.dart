@@ -56,20 +56,10 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
   }
 
   String _segmentTextForRef(String ref, String fullText) {
-    final m = RegExp(r'^(\d+\.\d+)([a-d]+)$').firstMatch(ref);
-    if (m == null) return fullText;
-    final suffix = m.group(2) ?? '';
     final lines = fullText.split('\n');
-    if (lines.length < 2) return fullText;
-    final half = lines.length ~/ 2;
-    if (half <= 0) return fullText;
-    if (suffix == 'ab' || suffix == 'a') {
-      return lines.sublist(0, half).join('\n');
-    }
-    if (suffix == 'cd' || suffix == 'bcd') {
-      return lines.sublist(half).join('\n');
-    }
-    return fullText;
+    final range = BcvVerseService.lineRangeForSegmentRef(ref, lines.length);
+    if (range == null) return fullText;
+    return lines.sublist(range[0], range[1] + 1).join('\n');
   }
 
   Future<void> _loadSection() async {
@@ -145,10 +135,15 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     final cFirst = first.split('.').firstOrNull ?? '';
     final cLast = last.split('.').firstOrNull ?? '';
     if (cFirst != cLast) return 'Verses ${_sectionRefs.join(', ')}';
-    final verseNums = _sectionRefs
-        .map((r) => int.tryParse(r.split('.').lastOrNull ?? '') ?? 0)
-        .toList();
-    final contiguous = verseNums.length > 1 &&
+    int? verseNumber(String ref) {
+      final m = RegExp(r'^\d+\.(\d+)').firstMatch(ref);
+      if (m == null) return null;
+      return int.tryParse(m.group(1)!);
+    }
+
+    final verseNums = _sectionRefs.map(verseNumber).whereType<int>().toList();
+    final contiguous = verseNums.length == _sectionRefs.length &&
+        verseNums.length > 1 &&
         (verseNums.last - verseNums.first + 1) == verseNums.length;
     if (contiguous) {
       return 'Chapter $cFirst, Verses ${verseNums.first}–${verseNums.last}';

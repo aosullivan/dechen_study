@@ -35,6 +35,53 @@ class BcvVerseService {
   /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd".
   static final RegExp segmentSuffixPattern = RegExp(r'[a-d]+$');
 
+  /// Returns the inclusive line range for a segmented ref.
+  ///
+  /// For canonical 4-line verses:
+  /// - `a` -> line 1
+  /// - `ab` -> lines 1-2
+  /// - `cd` -> lines 3-4
+  /// - `bcd` -> lines 2-4
+  ///
+  /// Falls back to proportional splits for shorter lines.
+  static List<int>? lineRangeForSegmentRef(String ref, int lineCount) {
+    if (lineCount <= 0) return null;
+    final m = RegExp(r'([a-d]+)$', caseSensitive: false).firstMatch(ref);
+    if (m == null) return null;
+    final suffix = m.group(1)!.toLowerCase();
+
+    int start = 0;
+    int end = lineCount - 1;
+
+    switch (suffix) {
+      case 'a':
+        end = 0;
+        break;
+      case 'bcd':
+        start = lineCount > 1 ? 1 : 0;
+        break;
+      case 'ab':
+        if (lineCount >= 4) {
+          end = 1;
+        } else {
+          end = ((lineCount / 2).ceil() - 1).clamp(0, lineCount - 1);
+        }
+        break;
+      case 'cd':
+        if (lineCount >= 4) {
+          start = 2;
+        } else {
+          start = (lineCount / 2).ceil().clamp(0, lineCount - 1);
+        }
+        break;
+      default:
+        return null;
+    }
+
+    if (start > end) return null;
+    return [start, end];
+  }
+
   /// Pre-warm: start loading and parsing the asset so it's ready when the read screen opens.
   Future<void> preload() => _ensureLoaded();
 

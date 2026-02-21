@@ -68,13 +68,15 @@ class VerseHierarchyService {
     final verseToPath = _map?['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return null;
     var path = verseToPath[ref];
-    if ((path == null || path is! List) && BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
+    if ((path == null || path is! List) &&
+        BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
       for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
         path = verseToPath['$ref$suffix'];
         if (path is List && path.isNotEmpty) break;
       }
     }
-    if ((path == null || path is! List) && BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
+    if ((path == null || path is! List) &&
+        BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
       path = _pathFromAdjacentVerse(verseToPath, ref);
     }
     if (path is! List) return null;
@@ -129,7 +131,8 @@ class VerseHierarchyService {
   String? getFirstVerseForSectionSync(String sectionPath) {
     final refs = getVerseRefsForSectionSync(sectionPath);
     if (refs.isEmpty) return null;
-    final sorted = refs.toList()..sort(_compareVerseRefs);
+    // Use full-ref ordering so split refs are deterministic (e.g. 7.2a before 7.2bcd).
+    final sorted = refs.toList()..sort(_compareVerseRefsFull);
     return sorted.first;
   }
 
@@ -142,20 +145,18 @@ class VerseHierarchyService {
     if (refs.isEmpty) return getFirstVerseForSectionSync(sectionPath);
 
     if (preferredChapter != null) {
-      final inChapter = refs
-          .where((r) {
-            final parts = r.split('.');
-            if (parts.length != 2) return false;
-            final ch = int.tryParse(parts[0]);
-            return ch == preferredChapter;
-          })
-          .toList();
+      final inChapter = refs.where((r) {
+        final parts = r.split('.');
+        if (parts.length != 2) return false;
+        final ch = int.tryParse(parts[0]);
+        return ch == preferredChapter;
+      }).toList();
       if (inChapter.isNotEmpty) {
-        inChapter.sort(_compareVerseRefs);
+        inChapter.sort(_compareVerseRefsFull);
         return inChapter.first;
       }
     }
-    final sorted = refs.toList()..sort(_compareVerseRefs);
+    final sorted = refs.toList()..sort(_compareVerseRefsFull);
     return sorted.first;
   }
 
@@ -194,18 +195,21 @@ class VerseHierarchyService {
   /// Leaf sections only (no children), sorted by first verse. For reader arrow-key navigation.
   /// Ensures each key down moves exactly one "lowest level" section forward.
   /// Result is cached after first computation.
-  List<({String path, String title, int depth})> getLeafSectionsByVerseOrderSync() {
+  List<({String path, String title, int depth})>
+      getLeafSectionsByVerseOrderSync() {
     if (_cachedLeafSections != null) return _cachedLeafSections!;
     final flat = getFlatSectionsSync();
     final pathSet = flat.map((s) => s.path).toSet();
     final leaves = flat.where((s) {
       return !pathSet.any((p) => p != s.path && p.startsWith('${s.path}.'));
     }).toList();
-    final withFirst = <({String path, String title, int depth, String firstRef})>[];
+    final withFirst =
+        <({String path, String title, int depth, String firstRef})>[];
     for (final s in leaves) {
       final ref = getFirstVerseForSectionSync(s.path);
       if (ref != null && ref.isNotEmpty) {
-        withFirst.add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
+        withFirst
+            .add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
       }
     }
     withFirst.sort((a, b) => _compareVerseRefsFull(a.firstRef, b.firstRef));
@@ -220,22 +224,29 @@ class VerseHierarchyService {
   /// so we don't step through each split-verse segment.
   /// Result is cached after first computation.
   List<({String path, String title, int depth})> getSectionsByVerseOrderSync() {
-    if (_cachedSectionsByVerseOrder != null) return _cachedSectionsByVerseOrder!;
+    if (_cachedSectionsByVerseOrder != null) {
+      return _cachedSectionsByVerseOrder!;
+    }
     final flat = getFlatSectionsSync();
-    final withFirst = <({String path, String title, int depth, String firstRef})>[];
+    final withFirst =
+        <({String path, String title, int depth, String firstRef})>[];
     for (final s in flat) {
       final ref = getFirstVerseForSectionSync(s.path);
       if (ref != null && ref.isNotEmpty) {
-        withFirst.add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
+        withFirst
+            .add((path: s.path, title: s.title, depth: s.depth, firstRef: ref));
       }
     }
-    withFirst.sort((a, b) => _compareVerseRefs(a.firstRef, b.firstRef));
+    // Full ordering makes same-base split refs deterministic before dedupe.
+    withFirst.sort((a, b) => _compareVerseRefsFull(a.firstRef, b.firstRef));
     // Keep one section per (chapter, verse) - skip 9.1cd when we already have 9.1ab
     final deduped = <({String path, String title, int depth})>[];
     (int, int)? prevBase;
     for (final e in withFirst) {
       final base = _baseVerse(e.firstRef);
-      if (prevBase != null && base.$1 == prevBase.$1 && base.$2 == prevBase.$2) {
+      if (prevBase != null &&
+          base.$1 == prevBase.$1 &&
+          base.$2 == prevBase.$2) {
         continue;
       }
       prevBase = base;
@@ -354,6 +365,7 @@ class VerseHierarchyService {
         }
       }
     }
+
     for (final s in sections) {
       visit(s, 0);
     }
@@ -366,7 +378,8 @@ class VerseHierarchyService {
   /// Empty if ref is not split or not found.
   List<({String ref, String sectionPath})> getSplitVerseSegmentsSync(
       String baseRef) {
-    if (_map == null || !BcvVerseService.baseVerseRefPattern.hasMatch(baseRef)) {
+    if (_map == null ||
+        !BcvVerseService.baseVerseRefPattern.hasMatch(baseRef)) {
       return [];
     }
     final verseToPath = _map!['verseToPath'];

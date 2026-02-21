@@ -135,15 +135,18 @@ List<String> extractVerseRefs(String line) {
 
 /// Compare two verse refs (e.g. "1.5" vs "2.3"). For sorting by chapter then verse.
 int compareVerseRefs(String a, String b) {
-  final ap = a.split('.');
-  final bp = b.split('.');
-  if (ap.length != 2 || bp.length != 2) return a.compareTo(b);
-  final ac = int.tryParse(ap[0]) ?? 0;
-  final av = int.tryParse(ap[1]) ?? 0;
-  final bc = int.tryParse(bp[0]) ?? 0;
-  final bv = int.tryParse(bp[1]) ?? 0;
-  if (ac != bc) return ac.compareTo(bc);
-  return av.compareTo(bv);
+  (int, int)? parseBase(String ref) {
+    final m = RegExp(r'^(\d+)\.(\d+)').firstMatch(ref);
+    if (m == null) return null;
+    return (int.parse(m.group(1)!), int.parse(m.group(2)!));
+  }
+
+  final pa = parseBase(a);
+  final pb = parseBase(b);
+  if (pa == null || pb == null) return a.compareTo(b);
+  if (pa.$1 != pb.$1) return pa.$1.compareTo(pb.$1);
+  if (pa.$2 != pb.$2) return pa.$2.compareTo(pb.$2);
+  return a.compareTo(b);
 }
 
 bool isSectionHeading(String line) {

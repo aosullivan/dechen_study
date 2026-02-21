@@ -1754,9 +1754,17 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                     );
                                   }
 
-                                  /// For ab/cd split: ab = first half of lines, cd = second half.
                                   List<int>? lineRangeForSegment(
-                                      int segmentIndex, int lineCount) {
+                                    String segmentRef,
+                                    int segmentIndex,
+                                    int lineCount,
+                                  ) {
+                                    final exact =
+                                        BcvVerseService.lineRangeForSegmentRef(
+                                      segmentRef,
+                                      lineCount,
+                                    );
+                                    if (exact != null) return exact;
                                     if (lineCount < 2 || segmentIndex > 1) {
                                       return null;
                                     }
@@ -1808,7 +1816,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                                 i < segments.length;
                                                 i++) {
                                               final range = lineRangeForSegment(
-                                                  i, lines.length);
+                                                  segments[i].ref,
+                                                  i,
+                                                  lines.length);
                                               if (range != null) {
                                                 children.add(
                                                   SizedBox(
@@ -1860,7 +1870,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                             i < segments.length;
                                             i++) {
                                           final range = lineRangeForSegment(
-                                              i, lines.length);
+                                              segments[i].ref, i, lines.length);
                                           if (range != null) {
                                             children.add(
                                               SizedBox(

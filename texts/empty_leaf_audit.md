@@ -31,20 +31,11 @@ Leaf nodes in `verse_hierarchy_map.json` that have no verses assigned.
 | 4.6.2.1.1.1.2 | Meaning of the distinction |
 | 4.6.2.1.1.1.3 | Ascertaining the number |
 | 4.6.2.1.1.2 | Their characteristics |
-| 4.6.2.1.2.2.4 | To do with the distinction between saṃsāra and nirvāṇa |
 | 4.6.2.1.2.3.1.2.1.2.3 | Conclusion |
 | 4.6.2.3.1.4.1.2.5.3 | General summary |
-| 4.6.2.3.1.4.2.1.1 | The non-establishment of suffering as ultimate |
-| 4.6.2.3.1.4.2.1.2 | The non-establishment of happiness as ultimate |
-| 4.6.2.3.1.4.2.2.1.2.3 | Establishing the pervasion |
-| 4.6.2.3.1.4.2.2.1.2.4 | Conclusion |
-| 4.6.2.3.1.4.2.3 | The non-establishment of the object of sensation |
-| 4.6.2.3.1.4.2.4.3 | No experiencer apart from those |
-| 4.6.2.3.1.4.4.1 | Establishing all as non-arising |
 | 4.6.2.4.2.1.2.1.1 | Effect before the cause |
 | 4.6.2.4.2.1.2.1.2 | Effect simultaneous with the cause |
 | 4.6.2.4.2.1.2.1.3 | Effect after the cause |
-| 4.6.2.4.2.1.2.2.1.1.3 | Refuting Īśvara as self |
 | 4.6.2.4.2.1.3.1.1 | A general explanation |
 | 4.6.2.4.3.3.2.1 | Presenting the reason |
 | 4.6.2.4.3.3.2.2 | Showing the forward pervasion |

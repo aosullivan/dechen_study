@@ -13,22 +13,51 @@ class CommentaryEntry {
 }
 
 /// Top-level so it can run in a compute isolate.
-({Map<String, List<String>> refToRefsInBlock, Map<String, String> refToCommentary, List<CommentaryEntry> allSections}) _parseCommentary(String content) {
+({
+  Map<String, List<String>> refToRefsInBlock,
+  Map<String, String> refToCommentary,
+  List<CommentaryEntry> allSections
+}) _parseCommentary(String content) {
   // Detects a section header line: any line starting with [chapter.verse (e.g. [1.32], [1.4ab], [1.34-1.35ab])
   final sectionHeader = RegExp(r'^\[\d+\.');
   // Extracts verse refs from a header, handling ranges like [1.34-1.35ab] → ["1.34", "1.35ab"]
   final refExtract = RegExp(r'(?:\[|-)(\d+\.\d+[a-z]*)');
-  int compareRefs(String a, String b) {
-    final ap = a.split('.');
-    final bp = b.split('.');
-    if (ap.length != 2 || bp.length != 2) return a.compareTo(b);
-    final ac = int.tryParse(ap[0]) ?? 0;
-    final av = int.tryParse(ap[1]) ?? 0;
-    final bc = int.tryParse(bp[0]) ?? 0;
-    final bv = int.tryParse(bp[1]) ?? 0;
-    if (ac != bc) return ac.compareTo(bc);
-    return av.compareTo(bv);
+  int suffixRank(String suffix) {
+    switch (suffix) {
+      case '':
+        return 0;
+      case 'a':
+      case 'ab':
+        return 1;
+      case 'bcd':
+      case 'cd':
+        return 2;
+      default:
+        return 3;
+    }
   }
+
+  (int, int, int, String)? parseRef(String ref) {
+    final m =
+        RegExp(r'^(\d+)\.(\d+)([a-z]*)$', caseSensitive: false).firstMatch(ref);
+    if (m == null) return null;
+    final ch = int.tryParse(m.group(1)!);
+    final verse = int.tryParse(m.group(2)!);
+    if (ch == null || verse == null) return null;
+    final suffix = (m.group(3) ?? '').toLowerCase();
+    return (ch, verse, suffixRank(suffix), suffix);
+  }
+
+  int compareRefs(String a, String b) {
+    final pa = parseRef(a);
+    final pb = parseRef(b);
+    if (pa == null || pb == null) return a.compareTo(b);
+    if (pa.$1 != pb.$1) return pa.$1.compareTo(pb.$1);
+    if (pa.$2 != pb.$2) return pa.$2.compareTo(pb.$2);
+    if (pa.$3 != pb.$3) return pa.$3.compareTo(pb.$3);
+    return pa.$4.compareTo(pb.$4);
+  }
+
   final refToRefsInBlock = <String, List<String>>{};
   final refToCommentary = <String, String>{};
   final allSections = <CommentaryEntry>[];
@@ -36,9 +65,15 @@ class CommentaryEntry {
   var i = 0;
   while (i < lines.length) {
     final line = lines[i];
-    if (!sectionHeader.hasMatch(line)) { i++; continue; }
+    if (!sectionHeader.hasMatch(line)) {
+      i++;
+      continue;
+    }
     final refs = refExtract.allMatches(line).map((m) => m.group(1)!).toList();
-    if (refs.isEmpty) { i++; continue; }
+    if (refs.isEmpty) {
+      i++;
+      continue;
+    }
     final refsDeduped = refs.toSet().toList()..sort(compareRefs);
     final bodyLines = <String>[];
     i++;
@@ -49,14 +84,19 @@ class CommentaryEntry {
       i++;
     }
     final commentaryText = bodyLines.join('\n').trim();
-    final entry = CommentaryEntry(refsInBlock: refsDeduped, commentaryText: commentaryText);
+    final entry = CommentaryEntry(
+        refsInBlock: refsDeduped, commentaryText: commentaryText);
     allSections.add(entry);
     for (final ref in refsDeduped) {
       refToRefsInBlock[ref] = refsDeduped;
       refToCommentary[ref] = commentaryText;
     }
   }
-  return (refToRefsInBlock: refToRefsInBlock, refToCommentary: refToCommentary, allSections: allSections);
+  return (
+    refToRefsInBlock: refToRefsInBlock,
+    refToCommentary: refToCommentary,
+    allSections: allSections
+  );
 }
 
 /// Loads and parses verse_commentary_mapping.txt. Section headers are lines containing one or more [c.v];

@@ -171,7 +171,21 @@ void main() {
       expect(path610.last['section'], path);
     });
 
-    test('5.1/5.2 split maps to first three children under guarding the mind', () {
+    test(
+        'single-line leaf section maps to segmented first verse (4.4.2 -> 7.2a)',
+        () {
+      const path = '4.4.2';
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, contains('7.2a'));
+      expect(hierarchyService.getFirstVerseForSectionSync(path), '7.2a');
+
+      final hierarchy = hierarchyService.getHierarchyForVerseSync('7.2a');
+      expect(hierarchy, isNotEmpty);
+      expect(hierarchy.last['section'], path);
+    });
+
+    test('5.1/5.2 split maps to first three children under guarding the mind',
+        () {
       const path1 = '4.2.1.1.1';
       const path2 = '4.2.1.1.2';
       const path3 = '4.2.1.1.3';

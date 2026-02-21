@@ -13,6 +13,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
     required this.entry,
     required this.onClose,
     this.forBottomSheet = false,
+
     /// When set (from DraggableScrollableSheet), the panel manages its own scroll
     /// so the header stays pinned while the content scrolls.
     this.scrollController,
@@ -56,12 +57,15 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
       final t = raw.trim();
 
       if (t.isEmpty) {
-        if (segs.isNotEmpty && segs.last is! _BlankSeg) segs.add(const _BlankSeg());
+        if (segs.isNotEmpty && segs.last is! _BlankSeg) {
+          segs.add(const _BlankSeg());
+        }
         continue;
       }
 
       // Verse ref line (e.g. "1.32") — keep even in preamble
-      if (RegExp(r'^\d+\.\d+\s*$').hasMatch(t)) {
+      if (RegExp(r'^\d+\.\d+(?:[a-d]+)?\s*$', caseSensitive: false)
+          .hasMatch(t)) {
         segs.add(_RefSeg(t));
         continue;
       }
@@ -75,7 +79,9 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
       // Verse text line (>>> prefix)
       if (t.startsWith('>>>')) {
         seenVerse = true;
-        final verse = t.length > 4 ? t.substring(4) : (t.length > 3 ? t.substring(3) : '');
+        final verse = t.length > 4
+            ? t.substring(4)
+            : (t.length > 3 ? t.substring(3) : '');
         segs.add(_VerseSeg(verse));
         continue;
       }
@@ -155,7 +161,8 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _Header(label: headerLabel, onClose: onClose, forBottomSheet: false),
+            _Header(
+                label: headerLabel, onClose: onClose, forBottomSheet: false),
             SelectionArea(
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -187,9 +194,8 @@ class _Header extends StatelessWidget {
     final closeBtn = TextButton(
       onPressed: onClose,
       style: TextButton.styleFrom(
-        foregroundColor: forBottomSheet
-            ? AppColors.primary
-            : AppColors.commentaryHeader,
+        foregroundColor:
+            forBottomSheet ? AppColors.primary : AppColors.commentaryHeader,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -206,10 +212,10 @@ class _Header extends StatelessWidget {
               child: Text(
                 label,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontFamily: 'Lora',
-                  color: AppColors.bodyText,
-                  fontWeight: FontWeight.w600,
-                ),
+                      fontFamily: 'Lora',
+                      color: AppColors.bodyText,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ),
             closeBtn,
@@ -232,10 +238,10 @@ class _Header extends StatelessWidget {
             child: Text(
               label,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontFamily: 'Lora',
-                color: AppColors.commentaryHeader,
-                fontSize: 16,
-              ),
+                    fontFamily: 'Lora',
+                    color: AppColors.commentaryHeader,
+                    fontSize: 16,
+                  ),
             ),
           ),
           closeBtn,
@@ -257,12 +263,12 @@ class _SegmentBody extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Root verse lines (>>> in source): indented, bold, tight line spacing.
     final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
-          fontFamily: 'Crimson Text',
-          fontSize: 18,
-          height: 1.2,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textDark,
-        ) ??
+              fontFamily: 'Crimson Text',
+              fontSize: 18,
+              height: 1.2,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textDark,
+            ) ??
         const TextStyle(
           fontFamily: 'Crimson Text',
           fontSize: 18,
@@ -272,11 +278,11 @@ class _SegmentBody extends StatelessWidget {
         );
 
     final proseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
-          fontFamily: 'Crimson Text',
-          fontSize: 18,
-          height: 1.5,
-          color: AppColors.textDark,
-        ) ??
+              fontFamily: 'Crimson Text',
+              fontSize: 18,
+              height: 1.5,
+              color: AppColors.textDark,
+            ) ??
         const TextStyle(
           fontFamily: 'Crimson Text',
           fontSize: 18,
@@ -285,9 +291,11 @@ class _SegmentBody extends StatelessWidget {
         );
 
     final refStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-      fontFamily: 'Lora',
-      color: forBottomSheet ? AppColors.mutedBrown : AppColors.commentaryHeader,
-    );
+          fontFamily: 'Lora',
+          color: forBottomSheet
+              ? AppColors.mutedBrown
+              : AppColors.commentaryHeader,
+        );
 
     final children = <Widget>[];
     // Buffer consecutive verse lines so they become one BcvVerseText block
@@ -340,7 +348,9 @@ class _SegmentBody extends StatelessWidget {
 
 // ── Segment types ─────────────────────────────────────────────────────────────
 
-sealed class _Seg { const _Seg(); }
+sealed class _Seg {
+  const _Seg();
+}
 
 class _RefSeg extends _Seg {
   const _RefSeg(this.ref);

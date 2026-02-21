@@ -97,6 +97,10 @@ void main() {
     expect(find.text('Verse 7.7a'), findsOneWidget);
     expect(find.textContaining('Because it will'), findsWidgets);
     expect(
+      find.textContaining('And pacify the'),
+      findsNothing,
+    );
+    expect(
       find.textContaining('I will give myself up for others'),
       findsNothing,
     );
@@ -110,7 +114,15 @@ void main() {
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 7.7bcd'), findsOneWidget);
     expect(
+      find.textContaining('And pacify the'),
+      findsWidgets,
+    );
+    expect(
       find.textContaining('I will give myself up for others'),
+      findsWidgets,
+    );
+    expect(
+      find.textContaining('And embrace others'),
       findsWidgets,
     );
     expect(find.textContaining('Because it will'), findsNothing);
