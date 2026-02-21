@@ -32,6 +32,9 @@ dependencies:
   # Visibility detection for scroll-based breadcrumb
   visibility_detector: ^0.4.0+2
 
+  # Local key-value storage (bookmark, preferences)
+  shared_preferences: ^2.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

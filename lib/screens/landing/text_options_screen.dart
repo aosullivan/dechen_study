@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
+import '../../services/bookmark_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import 'bcv_file_quiz_screen.dart';
@@ -205,6 +206,27 @@ class _ReadChapterSelectionScreenState
     extends State<_ReadChapterSelectionScreen> {
   late final Future<List<BcvChapter>> _chaptersFuture =
       BcvVerseService.instance.getChapters();
+  Bookmark? _bookmark;
+
+  @override
+  void initState() {
+    super.initState();
+    BookmarkService.instance.load().then((b) {
+      if (b != null && mounted) setState(() => _bookmark = b);
+    });
+  }
+
+  void _resumeReading() {
+    final bm = _bookmark;
+    if (bm == null) return;
+    Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+      builder: (_) => BcvReadScreen(
+        title: widget.title,
+        initialChapterNumber: bm.chapterNumber,
+        scrollToVerseIndex: bm.verseIndex,
+      ),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,12 +294,28 @@ class _ReadChapterSelectionScreenState
             );
           }
 
+          final bm = _bookmark;
+          final chapterTitle = bm != null
+              ? chapters
+                  .where((c) => c.number == bm.chapterNumber)
+                  .map((c) => c.title)
+                  .firstOrNull
+              : null;
+
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 20),
-            itemCount: chapters.length,
+            itemCount: chapters.length + (bm != null ? 1 : 0),
             separatorBuilder: (_, __) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
-              final chapter = chapters[index];
+              if (bm != null && index == 0) {
+                return _ResumeReadingCard(
+                  verseRef: bm.verseRef,
+                  chapterTitle: chapterTitle,
+                  onTap: _resumeReading,
+                );
+              }
+              final chapterIndex = bm != null ? index - 1 : index;
+              final chapter = chapters[chapterIndex];
               return Card(
                 margin: EdgeInsets.zero,
                 color: AppColors.cardBeige,
@@ -333,6 +371,74 @@ class _ReadChapterSelectionScreenState
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _ResumeReadingCard extends StatelessWidget {
+  const _ResumeReadingCard({
+    required this.onTap,
+    this.verseRef,
+    this.chapterTitle,
+  });
+
+  final VoidCallback onTap;
+  final String? verseRef;
+  final String? chapterTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = <String>[];
+    if (chapterTitle != null) subtitle.add(chapterTitle!);
+    if (verseRef != null) subtitle.add('Verse $verseRef');
+
+    return Card(
+      margin: EdgeInsets.zero,
+      color: AppColors.primary.withValues(alpha: 0.08),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          child: Row(
+            children: [
+              Icon(Icons.bookmark_outlined,
+                  color: AppColors.primary, size: 22),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Resume Reading',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle.join(' · '),
+                        style:
+                            Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: AppColors.mutedBrown,
+                                ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              Icon(Icons.arrow_forward_ios,
+                  size: 14, color: AppColors.primary.withValues(alpha: 0.6)),
+            ],
+          ),
+        ),
       ),
     );
   }

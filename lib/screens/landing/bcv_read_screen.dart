@@ -15,6 +15,7 @@ import 'bcv/bcv_section_overlay.dart';
 import 'bcv/bcv_section_slider.dart';
 import 'bcv/bcv_verse_text.dart';
 import '../../services/bcv_verse_service.dart';
+import '../../services/bookmark_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
@@ -279,12 +280,31 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   @override
   void dispose() {
+    _bookmarkDebounce?.cancel();
     _visibilityDebounceTimer?.cancel();
     _mainScrollController.dispose();
     _sectionSliderScrollController.dispose();
     _sectionOverviewFocusNode.dispose();
     _sectionChangeNotifier.dispose();
     super.dispose();
+  }
+
+  Timer? _bookmarkDebounce;
+  int? _lastBookmarkedVerseIndex;
+
+  void _saveBookmark(int verseIndex) {
+    if (verseIndex == _lastBookmarkedVerseIndex) return;
+    _lastBookmarkedVerseIndex = verseIndex;
+    _bookmarkDebounce?.cancel();
+    _bookmarkDebounce = Timer(const Duration(seconds: 2), () {
+      final chapterNum = _currentChapterNumber;
+      if (chapterNum == null) return;
+      BookmarkService.instance.save(
+        verseIndex: verseIndex,
+        chapterNumber: chapterNum,
+        verseRef: _verseService.getVerseRef(verseIndex),
+      );
+    });
   }
 
   Future<void> _load() async {
@@ -798,6 +818,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _currentSectionVerseIndices = verseIndices;
     _currentSegmentRef = segmentRef;
     _visibleVerseIndex = verseIndex;
+    _saveBookmark(verseIndex);
     _sectionChangeNotifier.notify();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
