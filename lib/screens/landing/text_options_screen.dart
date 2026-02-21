@@ -224,6 +224,7 @@ class _ReadChapterSelectionScreenState
         title: widget.title,
         initialChapterNumber: bm.chapterNumber,
         scrollToVerseIndex: bm.verseIndex,
+        collapsePanelsOnOpen: false,
       ),
     ));
   }

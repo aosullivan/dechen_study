@@ -37,6 +37,7 @@ class BcvReadScreen extends StatefulWidget {
     this.highlightSectionIndices,
     this.initialSegmentRef,
     this.title = 'Bodhicaryavatara',
+    this.collapsePanelsOnOpen,
     this.onSectionNavigateForTest,
     this.commentaryLoader,
   });
@@ -53,6 +54,10 @@ class BcvReadScreen extends StatefulWidget {
   /// Use when [scrollToVerseIndex] resolves from a segmented ref.
   final String? initialSegmentRef;
   final String title;
+
+  /// When true (default for deep links), collapse nav panels on open.
+  /// When false (e.g. Resume Reading), keep panels expanded.
+  final bool? collapsePanelsOnOpen;
 
   /// Test-only: called when arrow-key navigation selects a section. Receives (sectionPath, firstVerseRef).
   /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
@@ -250,8 +255,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
-    if (_isDeepLinkOpen) {
-      // Keep desktop startup light when opened from Daily/Verse deep links.
+    final shouldCollapse =
+        widget.collapsePanelsOnOpen ?? _isDeepLinkOpen;
+    if (shouldCollapse) {
       _chaptersPanelCollapsed = true;
       _sectionSliderCollapsed = true;
       _breadcrumbCollapsed = true;
@@ -471,8 +477,20 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     return 0.2;
   }
 
-  void _scrollToVerseWidget({double alignment = 0.2}) {
-    if (_scrollToVerseKey?.currentContext == null) return;
+  void _scrollToVerseWidget({
+    double alignment = 0.2,
+    int retryCount = 0,
+  }) {
+    if (_scrollToVerseKey?.currentContext == null) {
+      if (retryCount < 3) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) {
+            _scrollToVerseWidget(alignment: alignment, retryCount: retryCount + 1);
+          }
+        });
+      }
+      return;
+    }
     Scrollable.ensureVisible(
       _scrollToVerseKey!.currentContext!,
       alignment: alignment,
@@ -2045,18 +2063,21 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
         ],
       );
     }
-    // Mobile: nav (segment bar + optional pane) is content-sized; reader fills the rest.
+    // Mobile: collapse panels by default unless collapsePanelsOnOpen is false (e.g. Resume).
     if (!_mobileNavCollapseInitialized) {
       _mobileNavCollapseInitialized = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _chaptersPanelCollapsed = true;
-            _sectionSliderCollapsed = true;
-            _breadcrumbCollapsed = true;
-          });
-        }
-      });
+      final shouldCollapse = widget.collapsePanelsOnOpen ?? true;
+      if (shouldCollapse) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              _chaptersPanelCollapsed = true;
+              _sectionSliderCollapsed = true;
+              _breadcrumbCollapsed = true;
+            });
+          }
+        });
+      }
     }
     // Constrain panels height so Column never overflows (e.g. in tests or small viewports).
     return LayoutBuilder(
