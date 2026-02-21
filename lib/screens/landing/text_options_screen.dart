@@ -7,7 +7,6 @@ import 'bcv_file_quiz_screen.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
 import 'daily_verse_screen.dart';
-import 'inspiration_screen.dart';
 import 'textual_overview_screen.dart';
 
 /// Shows top-level study modes for a text.
@@ -64,11 +63,6 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             onTap: () => _openDaily(context),
           ),
           _OptionTile(
-            icon: Icons.self_improvement_outlined,
-            label: 'Inspiration',
-            onTap: () => _openInspiration(context),
-          ),
-          _OptionTile(
             icon: Icons.quiz_outlined,
             label: 'Guess the Chapter',
             onTap: () => _openGuessTheChapter(context),
@@ -102,18 +96,6 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
       );
     } else {
       _showComingSoon(context, 'Daily');
-    }
-  }
-
-  void _openInspiration(BuildContext context) {
-    if (textId == 'bodhicaryavatara') {
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const InspirationScreen(),
-        ),
-      );
-    } else {
-      _showComingSoon(context, 'Inspiration');
     }
   }
 

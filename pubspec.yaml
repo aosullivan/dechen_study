@@ -62,7 +62,6 @@ flutter:
     - texts/verse_commentary_mapping.txt
     - texts/verse_hierarchy_map.json
     - texts/section_emotion_mappings.json
-    - texts/full_text_feeling_advice_mapping.json
     - texts/root_text_quiz.txt
     - texts/root_text_quiz_400.txt
 

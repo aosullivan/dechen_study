@@ -31,7 +31,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
   int? _currentQuestionIndex;
   String? _selectedOptionKey;
   bool _showAnswer = false;
-  List<_ResolvedVerse> _resolvedVerses = const [];
 
   int _correctAnswers = 0;
   int _totalAnswers = 0;
@@ -116,7 +115,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
         _currentQuestionIndex = null;
         _selectedOptionKey = null;
         _showAnswer = false;
-        _resolvedVerses = const [];
         _isLoading = false;
       });
       _nextQuestion();
@@ -153,7 +151,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
       _currentQuestionIndex = index;
       _selectedOptionKey = null;
       _showAnswer = false;
-      _resolvedVerses = const [];
     });
   }
 
@@ -194,11 +191,11 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
   void _revealAnswer() {
     final q = _currentQuestion;
     if (q == null || _showAnswer) return;
+    final resolvedVerses = _resolveVerses(q.verseRefs);
 
     setState(() {
       _showAnswer = true;
       _selectedOptionKey = null;
-      _resolvedVerses = _resolveVerses(q.verseRefs);
       _consecutiveCorrect = 0;
     });
 
@@ -207,6 +204,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
       message: 'Answer: ${q.correctAnswerText}',
       tint: AppColors.primary,
       icon: Icons.info_outline,
+      verses: resolvedVerses,
     );
   }
 
@@ -216,6 +214,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
 
     final correct = key == q.answerKey;
     final correctText = q.correctAnswerText;
+    final resolvedVerses = _resolveVerses(q.verseRefs);
     String message;
 
     if (correct) {
@@ -244,7 +243,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     setState(() {
       _selectedOptionKey = key;
       _showAnswer = true;
-      _resolvedVerses = _resolveVerses(q.verseRefs);
       _totalAnswers++;
       if (correct) _correctAnswers++;
     });
@@ -254,6 +252,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
       message: message,
       tint: correct ? Colors.green : AppColors.wrong,
       icon: correct ? Icons.check_circle : Icons.cancel_outlined,
+      verses: resolvedVerses,
     );
 
     if (correct && _consecutiveCorrect >= 3) {
@@ -266,6 +265,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     required String message,
     required Color tint,
     required IconData icon,
+    required List<_ResolvedVerse> verses,
   }) async {
     if (!mounted) return;
     await showDialog<void>(
@@ -279,7 +279,20 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
             Expanded(child: Text(title)),
           ],
         ),
-        content: Text(message),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(message),
+                const SizedBox(height: 12),
+                _buildVerseDialogPanel(verses),
+              ],
+            ),
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -400,27 +413,22 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     );
   }
 
-  Widget _buildVersePanel(double maxHeight) {
-    final hasMultipleVerses = _resolvedVerses.length > 1;
-    final panelHeight = hasMultipleVerses
-        ? (maxHeight * 0.36).clamp(220.0, 360.0)
-        : (maxHeight * 0.30).clamp(180.0, 280.0);
-
-    return SizedBox(
-      height: panelHeight,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-        decoration: BoxDecoration(
-          color: AppColors.cardBeige,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.borderLight),
-        ),
+  Widget _buildVerseDialogPanel(List<_ResolvedVerse> verses) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppColors.cardBeige,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.borderLight),
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 240),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Underlying Verse${_resolvedVerses.length == 1 ? '' : 's'}',
+                'Underlying Verse${verses.length == 1 ? '' : 's'}',
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -428,17 +436,17 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              for (var i = 0; i < _resolvedVerses.length; i++) ...[
+              for (var i = 0; i < verses.length; i++) ...[
                 if (i > 0)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
                     child: Divider(height: 1, color: AppColors.borderLight),
                   ),
-                if (_resolvedVerses[i].ref.isNotEmpty)
+                if (verses[i].ref.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(
-                      _resolvedVerses[i].ref,
+                      verses[i].ref,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -447,7 +455,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                     ),
                   ),
                 BcvVerseText(
-                  text: _resolvedVerses[i].text,
+                  text: verses[i].text,
                   style: const TextStyle(
                     fontFamily: 'Crimson Text',
                     fontSize: 18,
@@ -538,7 +546,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
               child: LayoutBuilder(
-                builder: (context, viewport) {
+                builder: (context, _) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -639,10 +647,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                                   question,
                                 ),
                                 const SizedBox(height: 6),
-                              ],
-                              if (_showAnswer) ...[
-                                const SizedBox(height: 6),
-                                _buildVersePanel(viewport.maxHeight),
                               ],
                             ],
                           ),

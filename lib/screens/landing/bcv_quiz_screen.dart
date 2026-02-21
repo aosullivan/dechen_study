@@ -643,39 +643,13 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'To which chapter does this belong?',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.textDark,
-                                  ),
+                      Text(
+                        'To which chapter does this belong?',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textDark,
                             ),
-                          ),
-                          TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _showChapterLabels = !_showChapterLabels;
-                              });
-                            },
-                            icon: Icon(
-                              _showChapterLabels
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              size: 16,
-                            ),
-                            label: Text(
-                              _showChapterLabels ? 'Hide names' : 'Show names',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ),
-                        ],
                       ),
                       const SizedBox(height: 8),
                       Expanded(
@@ -815,6 +789,27 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                               },
                             );
                           },
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _showChapterLabels = !_showChapterLabels;
+                            });
+                          },
+                          icon: Icon(
+                            _showChapterLabels
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            size: 16,
+                          ),
+                          label: Text(
+                            _showChapterLabels ? 'Hide names' : 'Show names',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
                         ),
                       ),
                     ],
