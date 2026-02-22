@@ -760,8 +760,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     // Collect the verse refs that belong to the current section so we can
     // find the exact segment for each verse index in the run (e.g. a section
     // may own "9.28cd" of verse 9.28 and "9.29ab" of verse 9.29).
-    final sectionRefs =
-        _hierarchyService.getVerseRefsForSectionSync(_currentSectionPath);
+    final ownSectionRefs =
+        _hierarchyService.getOwnVerseRefsForSectionSync(_currentSectionPath);
+    final sectionRefs = ownSectionRefs.isNotEmpty
+        ? ownSectionRefs
+        : _hierarchyService.getVerseRefsForSectionSync(_currentSectionPath);
     for (final idx in run) {
       // For split verses, use the specific segment key for the half that
       // belongs to the current section (e.g. 9.28cd → segment key index 1).
@@ -851,7 +854,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     if (sectionPath.isEmpty) return {};
     final cached = _sectionVerseIndicesCache[sectionPath];
     if (cached != null && cached.isNotEmpty) return cached;
-    final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
+    final ownRefs =
+        _hierarchyService.getOwnVerseRefsForSectionSync(sectionPath);
+    final refs = ownRefs.isNotEmpty
+        ? ownRefs
+        : _hierarchyService.getVerseRefsForSectionSync(sectionPath);
     final indices = <int>{};
     for (final ref in refs) {
       final i = _verseService.getIndexForRefWithFallback(ref);

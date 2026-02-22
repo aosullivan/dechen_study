@@ -21,8 +21,12 @@ class OverviewVersePanel extends StatelessWidget {
   final ScrollController? scrollController;
 
   List<({String ref, String text})> _loadVerses() {
-    final refs = VerseHierarchyService.instance
-        .getVerseRefsForSectionSync(sectionPath)
+    final ownRefs = VerseHierarchyService.instance
+        .getOwnVerseRefsForSectionSync(sectionPath);
+    final refs = (ownRefs.isNotEmpty
+            ? ownRefs
+            : VerseHierarchyService.instance
+                .getVerseRefsForSectionSync(sectionPath))
         .toList()
       ..sort(VerseHierarchyService.compareVerseRefs);
 
@@ -52,8 +56,7 @@ class OverviewVersePanel extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: const BoxDecoration(
-              border:
-                  Border(bottom: BorderSide(color: AppColors.borderLight)),
+              border: Border(bottom: BorderSide(color: AppColors.borderLight)),
             ),
             child: Row(
               children: [

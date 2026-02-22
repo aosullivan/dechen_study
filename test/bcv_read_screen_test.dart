@@ -22,6 +22,8 @@ void main() {
 
   late int verseIndex237;
   late int verseIndex649;
+  late int verseIndex92a;
+  late int verseIndex93cd;
   late int firstLeafVerseIndex;
   late int lastLeafVerseIndex;
   late List<({String path, String title, int depth})> leafOrdered;
@@ -42,6 +44,8 @@ void main() {
     await hierarchyService.getHierarchyForVerse('1.1');
     verseIndex237 = verseService.getIndexForRef('2.37') ?? -1;
     verseIndex649 = verseService.getIndexForRef('6.49') ?? -1;
+    verseIndex92a = verseService.getIndexForRefWithFallback('9.2a') ?? -1;
+    verseIndex93cd = verseService.getIndexForRefWithFallback('9.3cd') ?? -1;
     leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
     firstLeafVerseIndex = -1;
     for (final s in leafOrdered) {
@@ -67,6 +71,10 @@ void main() {
         reason: 'Verse 2.37 must exist');
     expect(verseIndex649, greaterThanOrEqualTo(0),
         reason: 'Verse 6.49 must exist');
+    expect(verseIndex92a, greaterThanOrEqualTo(0),
+        reason: 'Verse 9.2a must exist');
+    expect(verseIndex93cd, greaterThanOrEqualTo(0),
+        reason: 'Verse 9.3cd must exist');
     expect(firstLeafVerseIndex, greaterThanOrEqualTo(0),
         reason: 'First leaf verse must resolve');
     expect(lastLeafVerseIndex, greaterThanOrEqualTo(0),
@@ -76,12 +84,14 @@ void main() {
   Future<void> pumpBcvReadScreen(
     WidgetTester tester, {
     int? scrollToVerseIndex,
+    String? initialSegmentRef,
     Size? mediaSize,
     void Function(String sectionPath, String firstVerseRef)?
         onSectionNavigateForTest,
   }) async {
     final screen = BcvReadScreen(
       scrollToVerseIndex: scrollToVerseIndex,
+      initialSegmentRef: initialSegmentRef,
       title: 'Bodhicaryavatara',
       onSectionNavigateForTest: onSectionNavigateForTest,
     );
@@ -215,6 +225,57 @@ void main() {
         1,
         reason: 'One key tap (down+up) should navigate once, never twice.',
       );
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets(
+        'from 9.2a, first key down lands on 9.2bcd (parent-owned section)',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex92a,
+        onSectionNavigateForTest: (_, firstRef) => capturedRefs.add(firstRef),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(capturedRefs.length, greaterThanOrEqualTo(1),
+          reason: 'Arrow down should trigger a navigation callback');
+      expect(capturedRefs.first, equals('9.2bcd'),
+          reason: 'First keydown from 9.2a must land on parent-owned 9.2bcd');
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets(
+        'from 9.3cd section, first key down lands on 9.4d (not grouped with c)',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex93cd,
+        initialSegmentRef: '9.3cd',
+        onSectionNavigateForTest: (_, firstRef) => capturedRefs.add(firstRef),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(capturedRefs.length, greaterThanOrEqualTo(1),
+          reason: 'Arrow down should trigger a navigation callback');
+      expect(capturedRefs.first, equals('9.4d'),
+          reason:
+              'From the 9.3cd/9.4abc section, next section must be 9.4d only');
       await tester.pump(const Duration(seconds: 2));
     });
 

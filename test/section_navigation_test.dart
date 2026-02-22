@@ -13,7 +13,7 @@ import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
 const _expectedLeafSkipCount = 166;
-const _expectedLeafGapSum = 467;
+const _expectedLeafGapSum = 465;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
   '3.1.2.4 (1.18) -> 3.1.3.1 (1.20): verse gap 2',
@@ -451,10 +451,8 @@ void main() {
       expect(idx114 + 1, idx115);
     });
 
-    /// In verse_hierarchy_map, 9.2a/9.2bcd live in parent sections (no leaf);
-    /// the first leaf after 9.1 is 9.3. We must not skip to 9.116.
-    test(
-        'fallback from 9.1: findAdjacentSectionIndex returns 9.2 or 9.3 not 9.116',
+    /// 9.2a/9.2bcd must be reachable before 9.3* and never skip to 9.116.
+    test('fallback from 9.1: findAdjacentSectionIndex returns 9.2, not 9.116',
         () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
       final nextIdx = hierarchyService.findAdjacentSectionIndex(leaves, '9.1',
@@ -464,9 +462,8 @@ void main() {
           hierarchyService.getFirstVerseForSectionSync(leaves[nextIdx].path);
       final (ch, v) = VerseHierarchyService.baseVerseFromRef(nextRef ?? '');
       expect(ch, 9);
-      expect(v, lessThanOrEqualTo(3),
-          reason:
-              'Fallback from 9.1 must land on 9.2 or 9.3, not skip to 9.116');
+      expect(v, equals(2),
+          reason: 'Fallback from 9.1 must land on a 9.2 section');
     });
 
     /// Real-world: from 6.48 leaf, next leaf must be 6.49 or 6.50 (not skip to 6.52).
@@ -817,6 +814,94 @@ void main() {
       expect(seg29.any((s) => s.ref == '9.29ab'), isTrue);
       expect(seg29.any((s) => s.ref == '9.29cd'), isTrue);
     });
+
+    test('getSplitVerseSegmentsSync detects 9.4 split as 9.4abc then 9.4d', () {
+      final segs = hierarchyService.getSplitVerseSegmentsSync('9.4');
+      expect(segs.length, 2);
+      expect(segs[0].ref, equals('9.4abc'));
+      expect(segs[1].ref, equals('9.4d'));
+      expect(segs[0].sectionPath, equals('4.6.2.1.1.3.2'));
+      expect(segs[1].sectionPath, equals('4.6.2.1.1.3.3.1'));
+    });
+
+    test(
+        'non-leaf section 4.6.2.1.1.3 keeps parent-owned ref 9.2bcd in section index',
+        () {
+      const path = '4.6.2.1.1.3';
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, contains('9.2bcd'));
+    });
+
+    test('own refs for 4.6.2.1.1.3 include only 9.2bcd (exclude child refs)',
+        () {
+      const path = '4.6.2.1.1.3';
+      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(path);
+      expect(ownRefs, contains('9.2bcd'));
+      expect(ownRefs, isNot(contains('9.3ab')));
+      expect(ownRefs, isNot(contains('9.3cd')));
+      expect(ownRefs, isNot(contains('9.4abc')));
+      expect(ownRefs, isNot(contains('9.5')));
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Parent-owned refs with children (9.2-9.3 area)
+  // ---------------------------------------------------------------------------
+  group('Leaf navigation through parent-owned refs (9.2-9.3)', () {
+    test('leaf list includes parent section 4.6.2.1.1.3 (9.2bcd)', () {
+      const parentPath = '4.6.2.1.1.3';
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+      final idx = leaves.indexWhere((s) => s.path == parentPath);
+      expect(idx, greaterThanOrEqualTo(0),
+          reason: 'Parent section with exclusive ref 9.2bcd must be navigable');
+      if (idx >= 0) {
+        expect(hierarchyService.getFirstVerseForSectionSync(parentPath),
+            equals('9.2bcd'));
+      }
+    });
+
+    test('sequence is 9.2a -> 9.2bcd -> 9.3ab', () {
+      const path92a = '4.6.2.1.1.1.4';
+      const path92bcd = '4.6.2.1.1.3';
+      const path93ab = '4.6.2.1.1.3.1';
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+      final idx92a = leaves.indexWhere((s) => s.path == path92a);
+      final idx92bcd = leaves.indexWhere((s) => s.path == path92bcd);
+      final idx93ab = leaves.indexWhere((s) => s.path == path93ab);
+
+      expect(idx92a, greaterThanOrEqualTo(0), reason: '9.2a section missing');
+      expect(idx92bcd, greaterThanOrEqualTo(0),
+          reason: '9.2bcd section missing');
+      expect(idx93ab, greaterThanOrEqualTo(0), reason: '9.3ab section missing');
+
+      if (idx92a >= 0 && idx92bcd >= 0 && idx93ab >= 0) {
+        expect(idx92a + 1, equals(idx92bcd),
+            reason: 'Arrow-down from 9.2a must land on 9.2bcd');
+        expect(idx92bcd + 1, equals(idx93ab),
+            reason: 'Arrow-down from 9.2bcd must land on 9.3ab');
+      }
+    });
+
+    test('sequence continues 9.3cd -> 9.4abc -> 9.4d -> 9.5', () {
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+      final refsByPath = {
+        for (final s in leaves)
+          s.path: hierarchyService.getFirstVerseForSectionSync(s.path) ?? '',
+      };
+      final idx93cd = leaves.indexWhere((s) => refsByPath[s.path] == '9.3cd');
+      final idx94d = leaves.indexWhere((s) => refsByPath[s.path] == '9.4d');
+      final idx95 = leaves.indexWhere((s) => refsByPath[s.path] == '9.5');
+      expect(idx93cd, greaterThanOrEqualTo(0), reason: '9.3cd section missing');
+      expect(idx94d, greaterThanOrEqualTo(0), reason: '9.4d section missing');
+      expect(idx95, greaterThanOrEqualTo(0), reason: '9.5 section missing');
+
+      if (idx93cd >= 0 && idx94d >= 0 && idx95 >= 0) {
+        expect(idx93cd + 1, equals(idx94d),
+            reason: 'Arrow-down from 9.3cd/9.4abc section must land on 9.4d');
+        expect(idx94d + 1, equals(idx95),
+            reason: 'Arrow-down from 9.4d section must land on 9.5');
+      }
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -825,8 +910,9 @@ void main() {
   group('Leaf navigation through segmented verses (9.27-9.29)', () {
     test('leaf list includes sections for 9.27cd, 9.28ab, 9.28cd, 9.29cd', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
-      final firstRefs =
-          leaves.map((s) => hierarchyService.getFirstVerseForSectionSync(s.path)).toSet();
+      final firstRefs = leaves
+          .map((s) => hierarchyService.getFirstVerseForSectionSync(s.path))
+          .toSet();
 
       expect(firstRefs, contains('9.27cd'),
           reason: '"Presenting the objection" must appear in leaf list');
@@ -847,8 +933,7 @@ void main() {
       // the objection" (9.27cd), not jump all the way to 9.30.
       const abandoningPath = '4.6.2.1.2.3.1.2.2.3.3';
       const presentingPath = '4.6.2.1.2.3.2.1';
-      final abandoningIdx =
-          leaves.indexWhere((s) => s.path == abandoningPath);
+      final abandoningIdx = leaves.indexWhere((s) => s.path == abandoningPath);
       expect(abandoningIdx, greaterThan(-1),
           reason: 'Abandoning objections must be in the leaf list');
 
@@ -871,7 +956,8 @@ void main() {
         '4.6.2.1.2.3.2.4', // 9.29cd
       ];
 
-      final indices = paths.map((p) => leaves.indexWhere((s) => s.path == p)).toList();
+      final indices =
+          paths.map((p) => leaves.indexWhere((s) => s.path == p)).toList();
       for (var i = 0; i < indices.length; i++) {
         expect(indices[i], greaterThan(-1),
             reason: 'Section ${paths[i]} must be in leaf list');
