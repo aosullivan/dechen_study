@@ -343,13 +343,233 @@
       color: #3d3328;
     }
 
+    .icon-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      border: 1px solid #e6d8c3;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      flex: 0 0 24px;
+    }
+
+    .mini-icon svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mini-icon--circle {
+      border-radius: 999px;
+      border-color: #e9dbc4;
+      background: #fffdf8;
+      box-shadow: inset 0 0 0 2px #f8f0e3;
+    }
+
+    .sense-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .triad-note {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.84rem;
+      color: #5a4836;
+      border: 1px solid #e8dcc8;
+      background: #fff8ee;
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .sense-card {
+      border: 1px solid #eadfcf;
+      border-radius: 10px;
+      background: #fffefb;
+      padding: 10px;
+    }
+
+    .sense-card h4 {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 1.02rem;
+      font-weight: 600;
+      font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
+    }
+
+    .sense-list {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .sense-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #3c3023;
+    }
+
+    .duality-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .duality-card {
+      border: 1px solid #eadfcf;
+      border-radius: 10px;
+      background: #fffefb;
+      padding: 10px;
+    }
+
+    .duality-card h4 {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 1.02rem;
+      font-weight: 600;
+      font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
+    }
+
+    .duality-list {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .duality-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #3c3023;
+    }
+
+    .icon-list-grid {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .icon-list-grid li {
+      border: 1px solid #eadfcf;
+      border-radius: 10px;
+      background: #fffefb;
+      padding: 8px;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+    }
+
+    .subdivision-chips {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      margin: 8px 0 2px;
+    }
+
+    .subdivision-chip {
+      border: 1px solid #eadfcf;
+      border-radius: 10px;
+      background: #fffefb;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: #403427;
+      min-height: 40px;
+    }
+
+    .links-grid {
+      list-style: none;
+      margin: 8px 0 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      counter-reset: links;
+    }
+
+    .links-grid li {
+      counter-increment: links;
+      border: 1px solid #eadfcf;
+      border-radius: 10px;
+      background: #fffefb;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      font-size: 0.92rem;
+    }
+
+    .links-grid li::before {
+      content: counter(links);
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      border: 1px solid #dac8ad;
+      background: #fff8ec;
+      color: #6e573f;
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      line-height: 1;
+      flex: 0 0 21px;
+    }
+
     ul, ol {
       margin: 8px 0 0;
       padding-left: 21px;
     }
 
+    ul.sense-list,
+    ul.duality-list,
+    ol.links-grid,
+    ul.icon-list-grid {
+      padding-left: 0;
+      margin: 8px 0 0;
+    }
+
     li + li {
       margin-top: 3px;
+    }
+
+    .sense-list li + li,
+    .duality-list li + li,
+    .links-grid li + li,
+    .icon-list-grid li + li {
+      margin-top: 0;
     }
 
     .split-list {
@@ -418,6 +638,14 @@
       .sidebar {
         position: static;
       }
+
+      .sense-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .icon-list-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 760px) {
@@ -440,6 +668,13 @@
 
       .chapter {
         border-radius: 12px;
+      }
+
+      .sense-grid,
+      .links-grid,
+      .duality-grid,
+      .icon-list-grid {
+        grid-template-columns: 1fr;
       }
 
       table {
@@ -491,6 +726,181 @@
       <path d="M3 10h18"></path>
       <path d="M9 5v14"></path>
       <path d="M15 5v14"></path>
+    </symbol>
+    <symbol id="i-form" viewBox="0 0 24 24">
+      <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+      <path d="M5 10h14"></path>
+      <path d="M10 5v14"></path>
+    </symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24">
+      <path d="M2.5 13c2.1-4 4.2-4 6.3 0s4.2 4 6.3 0 4.2-4 6.3 0"></path>
+    </symbol>
+    <symbol id="i-knot" viewBox="0 0 24 24">
+      <path d="M6 8h12v8H6z"></path>
+      <path d="M8 6v12"></path>
+      <path d="M16 6v12"></path>
+      <path d="M4 12h16"></path>
+    </symbol>
+    <symbol id="i-lamp" viewBox="0 0 24 24">
+      <path d="M8 10a4 4 0 1 1 8 0c0 1.7-.9 3-2.2 3.9V17h-3.6v-3.1C8.9 13 8 11.7 8 10Z"></path>
+      <path d="M10 20h4"></path>
+      <path d="M11 17h2"></path>
+    </symbol>
+    <symbol id="i-ear" viewBox="0 0 24 24">
+      <path d="M14 16a3 3 0 1 0-3-3v4a3 3 0 0 0 3 3h1"></path>
+      <path d="M14 16c2 0 3.5-1.6 3.5-3.7V10a5.5 5.5 0 1 0-11 0"></path>
+    </symbol>
+    <symbol id="i-nose" viewBox="0 0 24 24">
+      <path d="M10 4v9a3 3 0 0 0 3 3h2"></path>
+      <path d="M15 16a2 2 0 1 1-2 2"></path>
+    </symbol>
+    <symbol id="i-tongue" viewBox="0 0 24 24">
+      <path d="M6 9h12v5a6 6 0 0 1-12 0V9Z"></path>
+      <path d="M12 14v6"></path>
+    </symbol>
+    <symbol id="i-body" viewBox="0 0 24 24">
+      <path d="M12 4v5"></path>
+      <path d="m9 9-4 4"></path>
+      <path d="m15 9 4 4"></path>
+      <path d="M10 14h4"></path>
+      <path d="m10 14-1.5 6"></path>
+      <path d="m14 14 1.5 6"></path>
+    </symbol>
+    <symbol id="i-mind" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5.5"></circle>
+      <path d="M12 8.5v7"></path>
+      <path d="M8.5 12h7"></path>
+    </symbol>
+    <symbol id="i-visual" viewBox="0 0 24 24">
+      <rect x="4" y="5" width="16" height="14" rx="2"></rect>
+      <path d="m8 14 2.5-2.5L14 15l2.5-2.5L20 16"></path>
+      <circle cx="9" cy="9" r="1.2"></circle>
+    </symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24">
+      <path d="M4 10h3l4-3v10l-4-3H4z"></path>
+      <path d="M15 9c1 .8 1.5 1.8 1.5 3S16 14.2 15 15"></path>
+      <path d="M18 7c1.6 1.4 2.4 3 2.4 5s-.8 3.6-2.4 5"></path>
+    </symbol>
+    <symbol id="i-smell" viewBox="0 0 24 24">
+      <path d="M8 18c2 0 3-1.4 3-3V6"></path>
+      <path d="M13 18c2 0 3-1.4 3-3V9"></path>
+      <path d="M18 18c1.3 0 2-.9 2-2"></path>
+    </symbol>
+    <symbol id="i-taste" viewBox="0 0 24 24">
+      <path d="M12 4c2.5 3.1 4 5.2 4 7.2a4 4 0 1 1-8 0C8 9.2 9.5 7.1 12 4Z"></path>
+    </symbol>
+    <symbol id="i-texture" viewBox="0 0 24 24">
+      <path d="M4 8h16"></path>
+      <path d="M4 12h16"></path>
+      <path d="M4 16h16"></path>
+      <path d="M8 6v12"></path>
+      <path d="M16 6v12"></path>
+    </symbol>
+    <symbol id="i-thought" viewBox="0 0 24 24">
+      <path d="M7 16h9a4 4 0 0 0 0-8h-.5A5 5 0 0 0 6 9.5"></path>
+      <circle cx="6" cy="18.3" r="1"></circle>
+      <circle cx="9" cy="20" r="1"></circle>
+    </symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24">
+      <path d="M7 17h10a3.5 3.5 0 0 0 .2-7 5 5 0 0 0-9.7 1.2A3.2 3.2 0 0 0 7 17Z"></path>
+    </symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24">
+      <path d="M4 10.5V5h5.5L20 15.5 15.5 20 4 10.5Z"></path>
+      <circle cx="8.2" cy="8.2" r="1"></circle>
+    </symbol>
+    <symbol id="i-hex" viewBox="0 0 24 24">
+      <path d="m12 3 7 4v10l-7 4-7-4V7l7-4Z"></path>
+    </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24">
+      <path d="M10 13.5 8 15.5a3 3 0 1 1-4.2-4.2l2.3-2.3A3 3 0 0 1 10.3 9"></path>
+      <path d="m14 10.5 2-2a3 3 0 1 1 4.2 4.2l-2.3 2.3A3 3 0 0 1 13.7 15"></path>
+      <path d="m9.5 12.5 5-1"></path>
+    </symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24">
+      <path d="M8 12V7a1 1 0 1 1 2 0v4"></path>
+      <path d="M10 11V6a1 1 0 1 1 2 0v5"></path>
+      <path d="M12 11V7a1 1 0 1 1 2 0v5"></path>
+      <path d="M14 12v-3a1 1 0 1 1 2 0v5.2c0 3.2-2.2 5.8-5 5.8H9.2A4.2 4.2 0 0 1 5 15.8V12"></path>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="m12 4 1.8 4.2L18 10l-4.2 1.8L12 16l-1.8-4.2L6 10l4.2-1.8Z"></path>
+    </symbol>
+    <symbol id="i-hourglass" viewBox="0 0 24 24">
+      <path d="M6 4h12"></path>
+      <path d="M6 20h12"></path>
+      <path d="M7 4c0 4 2.2 5.4 5 7 2.8-1.6 5-3 5-7"></path>
+      <path d="M7 20c0-4 2.2-5.4 5-7 2.8 1.6 5 3 5 7"></path>
+    </symbol>
+    <symbol id="i-earth" viewBox="0 0 24 24">
+      <path d="M3 17h18"></path>
+      <path d="m5 17 4-7 4 5 3-4 3 6"></path>
+    </symbol>
+    <symbol id="i-water" viewBox="0 0 24 24">
+      <path d="M3 12c1.8-1.8 3.6-1.8 5.4 0s3.6 1.8 5.4 0 3.6-1.8 5.4 0"></path>
+      <path d="M3 16c1.8-1.8 3.6-1.8 5.4 0s3.6 1.8 5.4 0 3.6-1.8 5.4 0"></path>
+    </symbol>
+    <symbol id="i-fire" viewBox="0 0 24 24">
+      <path d="M12 4c2.4 2.6 4.5 4.9 4.5 7.8a4.5 4.5 0 1 1-9 0C7.5 9.2 9.4 7 12 4Z"></path>
+      <path d="M12 11c1.1 1.1 2 2 2 3.1a2 2 0 1 1-4 0c0-1 .8-2 2-3.1Z"></path>
+    </symbol>
+    <symbol id="i-wind" viewBox="0 0 24 24">
+      <path d="M3 9h11"></path>
+      <path d="M7 13h13"></path>
+      <path d="M4 17h9"></path>
+      <path d="M14 9a2 2 0 1 0 0-4"></path>
+      <path d="M20 13a2 2 0 1 1 0 4"></path>
+    </symbol>
+    <symbol id="i-space" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="6"></circle>
+      <path d="m12 4 1.2 2.2L15.5 7l-2.3.8L12 10l-1.2-2.2L8.5 7l2.3-.8Z"></path>
+    </symbol>
+    <symbol id="i-consciousness" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5.5"></circle>
+      <circle cx="12" cy="12" r="1.4"></circle>
+      <path d="M12 4v2"></path>
+      <path d="M20 12h-2"></path>
+      <path d="M12 20v-2"></path>
+      <path d="M4 12h2"></path>
+    </symbol>
+    <symbol id="i-seed" viewBox="0 0 24 24">
+      <path d="M12 18c-3.2 0-5-2.6-5-5.1S8.8 8 12 8s5 2.5 5 4.9S15.2 18 12 18Z"></path>
+      <path d="M12 8V5"></path>
+    </symbol>
+    <symbol id="i-sprout" viewBox="0 0 24 24">
+      <path d="M12 20V11"></path>
+      <path d="M12 13c-3 0-5-2.1-5-5 3 0 5 2.1 5 5Z"></path>
+      <path d="M12 13c3 0 5-2.1 5-5-3 0-5 2.1-5 5Z"></path>
+    </symbol>
+    <symbol id="i-stamen" viewBox="0 0 24 24">
+      <path d="M12 20V9"></path>
+      <path d="M9 9h6"></path>
+      <circle cx="9" cy="7.5" r="1"></circle>
+      <circle cx="12" cy="6.5" r="1"></circle>
+      <circle cx="15" cy="7.5" r="1"></circle>
+    </symbol>
+    <symbol id="i-stalk" viewBox="0 0 24 24">
+      <path d="M12 20V5"></path>
+      <path d="M12 10c-2.2 0-3.7-1.3-4.8-3.1"></path>
+      <path d="M12 14c2.2 0 3.7-1.3 4.8-3.1"></path>
+    </symbol>
+    <symbol id="i-bud" viewBox="0 0 24 24">
+      <path d="M12 19V12"></path>
+      <path d="M12 12c-2.5 0-4.1-1.7-4.1-4.1A4.1 4.1 0 0 1 12 3.8a4.1 4.1 0 0 1 4.1 4.1c0 2.4-1.6 4.1-4.1 4.1Z"></path>
+    </symbol>
+    <symbol id="i-flower" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="1.6"></circle>
+      <circle cx="12" cy="7.6" r="2"></circle>
+      <circle cx="16.1" cy="10" r="2"></circle>
+      <circle cx="16.1" cy="14" r="2"></circle>
+      <circle cx="12" cy="16.4" r="2"></circle>
+      <circle cx="7.9" cy="14" r="2"></circle>
+      <circle cx="7.9" cy="10" r="2"></circle>
+    </symbol>
+    <symbol id="i-fruit" viewBox="0 0 24 24">
+      <circle cx="12" cy="13" r="5.2"></circle>
+      <path d="M12 7.8V5.5"></path>
+      <path d="M12 5.5c1.8 0 3-.8 3.7-2"></path>
+      <path d="M8.2 10.3c1.8-.7 3.5-.2 4.8 1.1"></path>
     </symbol>
     <symbol id="i-arrow-up" viewBox="0 0 24 24">
       <path d="m6 10 6-6 6 6"></path>
@@ -574,11 +984,11 @@
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Five Aggregates</h3>
             <div class="pill-grid">
-              <div class="pill">Form</div>
-              <div class="pill">Sensation</div>
-              <div class="pill">Perceptions</div>
-              <div class="pill">Formations</div>
-              <div class="pill">Consciousness</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-form"></use></svg></span>Form</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-wave"></use></svg></span>Sensation</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Perceptions</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-knot"></use></svg></span>Formations</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-lamp"></use></svg></span>Consciousness</div>
             </div>
           </section>
 
@@ -726,24 +1136,43 @@
           </header>
 
           <section class="topic">
-            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Table 1</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Sense Faculties</th>
-                  <th>Sense Objects</th>
-                  <th>Consciousness</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Eye Element</td><td>Visual Form Element</td><td>Eye Consciousness Element</td></tr>
-                <tr><td>Ear Element</td><td>Sound Element</td><td>Ear Consciousness Element</td></tr>
-                <tr><td>Nose Element</td><td>Smell Element</td><td>Nose Consciousness Element</td></tr>
-                <tr><td>Tongue Element</td><td>Taste Element</td><td>Tongue Consciousness Element</td></tr>
-                <tr><td>Body Element</td><td>Texture Element</td><td>Body Consciousness Element</td></tr>
-                <tr><td>Mind Element</td><td>Mental Object Element</td><td>Mind Consciousness Element</td></tr>
-              </tbody>
-            </table>
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Six Sense Triads at a Glance</h3>
+            <p class="triad-note"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>Dhatus are presented here as a clear triad: faculties, objects, consciousnesses.</p>
+            <div class="sense-grid sense-grid--triad">
+              <div class="sense-card">
+                <h4><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>1. Faculties</h4>
+                <ul class="sense-list">
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Eye Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-ear"></use></svg></span>Ear Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-nose"></use></svg></span>Nose Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-tongue"></use></svg></span>Tongue Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Body Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-mind"></use></svg></span>Mind Element</li>
+                </ul>
+              </div>
+              <div class="sense-card">
+                <h4><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>2. Objects</h4>
+                <ul class="sense-list">
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Visual Form Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-sound"></use></svg></span>Sound Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-smell"></use></svg></span>Smell Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-taste"></use></svg></span>Taste Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-texture"></use></svg></span>Texture Element</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-thought"></use></svg></span>Mental Object Element</li>
+                </ul>
+              </div>
+              <div class="sense-card">
+                <h4><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-lamp"></use></svg></span>3. Consciousnesses</h4>
+                <ul class="sense-list">
+                  <li><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Eye Consciousness Element</li>
+                  <li><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-ear"></use></svg></span>Ear Consciousness Element</li>
+                  <li><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-nose"></use></svg></span>Nose Consciousness Element</li>
+                  <li><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-tongue"></use></svg></span>Tongue Consciousness Element</li>
+                  <li><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Body Consciousness Element</li>
+                  <li><span class="mini-icon mini-icon--circle"><svg viewBox="0 0 24 24"><use href="#i-mind"></use></svg></span>Mind Consciousness Element</li>
+                </ul>
+              </div>
+            </div>
           </section>
 
           <section class="topic">
@@ -758,12 +1187,12 @@
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>Six Elements of a Person</h3>
             <div class="pill-grid">
-              <div class="pill">Earth</div>
-              <div class="pill">Water</div>
-              <div class="pill">Fire</div>
-              <div class="pill">Wind</div>
-              <div class="pill">Space</div>
-              <div class="pill">Consciousness</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-earth"></use></svg></span>Earth</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-water"></use></svg></span>Water</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-fire"></use></svg></span>Fire</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-wind"></use></svg></span>Wind</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-space"></use></svg></span>Space</div>
+              <div class="pill icon-pill"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-consciousness"></use></svg></span>Consciousness</div>
             </div>
           </section>
 
@@ -791,7 +1220,37 @@
           </header>
 
           <section class="topic">
-            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Inner and Outer Sources</h3>
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Inner and Outer Sources (Duality View)</h3>
+            <p class="triad-note"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span>Sense sources are shown as a dual structure: what apprehends and what is apprehended.</p>
+            <div class="duality-grid">
+              <div class="duality-card">
+                <h4><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Inner Sources (What Apprehends)</h4>
+                <ul class="duality-list">
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Eye Source (Eye Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-ear"></use></svg></span>Ear Source (Ear Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-nose"></use></svg></span>Nose Source (Nose Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-tongue"></use></svg></span>Tongue Source (Tongue Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Body Source (Body Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-mind"></use></svg></span>Mind Source (Seven Consciousness Elements)</li>
+                </ul>
+              </div>
+              <div class="duality-card">
+                <h4><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Outer Sources (What Is Apprehended)</h4>
+                <ul class="duality-list">
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Visual Object Source (Visual Form Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-sound"></use></svg></span>Sound Object Source (Sound Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-smell"></use></svg></span>Olfactory Object Source (Smell Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-taste"></use></svg></span>Taste Object Source (Taste Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-texture"></use></svg></span>Tactile Object Source (Texture Element)</li>
+                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-thought"></use></svg></span>Mental Object Source (Mental Object Element)</li>
+                </ul>
+              </div>
+            </div>
+            <p class="callout">Inner and outer sources work as a complementary pair: each inner source engages a corresponding outer source.</p>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Reference Table</h3>
             <table>
               <thead>
                 <tr>
@@ -830,49 +1289,55 @@
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Seven Related Causes</h3>
-            <ol>
-              <li>Seed</li>
-              <li>Sprout</li>
-              <li>Stamen</li>
-              <li>Stalk</li>
-              <li>Bud</li>
-              <li>Flower</li>
-              <li>Fruit</li>
-            </ol>
+            <ul class="icon-list-grid">
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-seed"></use></svg></span>Seed</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-sprout"></use></svg></span>Sprout</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-stamen"></use></svg></span>Stamen</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-stalk"></use></svg></span>Stalk</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-bud"></use></svg></span>Bud</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-flower"></use></svg></span>Flower</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-fruit"></use></svg></span>Fruit</li>
+            </ul>
           </section>
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Six Related Conditions</h3>
-            <ol>
-              <li>Earth</li>
-              <li>Water</li>
-              <li>Fire</li>
-              <li>Wind</li>
-              <li>Space</li>
-              <li>Time</li>
-            </ol>
+            <ul class="icon-list-grid">
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-earth"></use></svg></span>Earth</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-water"></use></svg></span>Water</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-fire"></use></svg></span>Fire</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-wind"></use></svg></span>Wind</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-space"></use></svg></span>Space</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-hourglass"></use></svg></span>Time</li>
+            </ul>
           </section>
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>The Twelve Links of Dependent Origination</h3>
-            <ol>
-              <li>Ignorance</li>
-              <li>Formation</li>
-              <li>Consciousness</li>
-              <li>Name and form</li>
-              <li>The six sense sources</li>
-              <li>Contact</li>
-              <li>Sensation</li>
-              <li>Craving</li>
-              <li>Grasping</li>
-              <li>Becoming</li>
-              <li>Rebirth</li>
-              <li>Old age and death</li>
+            <ol class="links-grid">
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-cloud"></use></svg></span>Ignorance</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-stack"></use></svg></span>Formation</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Consciousness</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-tag"></use></svg></span>Name and form</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-hex"></use></svg></span>The six sense sources</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span>Contact</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-wave"></use></svg></span>Sensation</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-taste"></use></svg></span>Craving</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-hand"></use></svg></span>Grasping</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>Becoming</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-spark"></use></svg></span>Rebirth</li>
+              <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-hourglass"></use></svg></span>Old age and death</li>
             </ol>
           </section>
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>First Subdivision of the Twelve Links</h3>
+            <div class="subdivision-chips">
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-spark"></use></svg></span>Propelling Links</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-tag"></use></svg></span>Propelled Result</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-hand"></use></svg></span>Fully Establishing Links</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-hourglass"></use></svg></span>Fully Established Links</div>
+            </div>
             <table>
               <thead>
                 <tr>
@@ -892,6 +1357,11 @@
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Second Subdivision of the Twelve Links</h3>
+            <div class="subdivision-chips">
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-cloud"></use></svg></span>Affliction of Disturbing Emotions</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-knot"></use></svg></span>Affliction of Karma</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Affliction of Life</div>
+            </div>
             <table>
               <thead>
                 <tr>
@@ -913,6 +1383,10 @@
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Third Subdivision of the Twelve Links</h3>
+            <div class="subdivision-chips">
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span>Truth of Origin</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-wave"></use></svg></span>Truth of Suffering</div>
+            </div>
             <table>
               <thead>
                 <tr>
@@ -931,6 +1405,10 @@
 
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Fourth Subdivision of the Twelve Links</h3>
+            <div class="subdivision-chips">
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>Truth of the Path</div>
+              <div class="subdivision-chip"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-lamp"></use></svg></span>Truth of Cessation</div>
+            </div>
             <table>
               <thead>
                 <tr>
