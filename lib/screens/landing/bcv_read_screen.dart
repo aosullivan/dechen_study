@@ -852,13 +852,22 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// Resolve verse indices from section path (refs -> indices, handling split verses).
   Set<int> _verseIndicesForSection(String sectionPath) {
     if (sectionPath.isEmpty) return {};
-    final cached = _sectionVerseIndicesCache[sectionPath];
-    if (cached != null && cached.isNotEmpty) return cached;
     final ownRefs =
         _hierarchyService.getOwnVerseRefsForSectionSync(sectionPath);
-    final refs = ownRefs.isNotEmpty
-        ? ownRefs
-        : _hierarchyService.getVerseRefsForSectionSync(sectionPath);
+    if (ownRefs.isNotEmpty) {
+      // Prefer direct ownership every time. This avoids returning a stale
+      // descendant-expanded cache entry for parent-owned sections.
+      final indices = <int>{};
+      for (final ref in ownRefs) {
+        final i = _verseService.getIndexForRefWithFallback(ref);
+        if (i != null) indices.add(i);
+      }
+      if (indices.isNotEmpty) _sectionVerseIndicesCache[sectionPath] = indices;
+      return indices;
+    }
+    final cached = _sectionVerseIndicesCache[sectionPath];
+    if (cached != null && cached.isNotEmpty) return cached;
+    final refs = _hierarchyService.getVerseRefsForSectionSync(sectionPath);
     final indices = <int>{};
     for (final ref in refs) {
       final i = _verseService.getIndexForRefWithFallback(ref);

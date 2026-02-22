@@ -513,6 +513,13 @@ class VerseHierarchyService {
     final ownSplit =
         _collectSplitSegmentsFromIndex(_sectionOwnRefsIndex, baseRef);
     if (ownSplit.isNotEmpty) return ownSplit;
+    // If sections own the unsuffixed base ref (e.g. "9.110"), treat it as a
+    // whole verse and ignore verseToPath split aliases (e.g. 9.110ab/cd).
+    if (_sectionOwnRefsIndex != null) {
+      for (final refs in _sectionOwnRefsIndex!.values) {
+        if (refs.contains(baseRef)) return [];
+      }
+    }
 
     final abPath = verseToPath['${baseRef}ab'];
     final cdPath = verseToPath['${baseRef}cd'];

@@ -13,7 +13,7 @@ import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
 const _expectedLeafSkipCount = 166;
-const _expectedLeafGapSum = 465;
+const _expectedLeafGapSum = 464;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
   '3.1.2.4 (1.18) -> 3.1.3.1 (1.20): verse gap 2',
@@ -41,13 +41,10 @@ const _expectedMissingVerses = <String>[
   '2.20: missing',
   '2.21: missing',
   '6.27: missing',
-  '9.151: missing',
-  '9.152: missing',
 ];
 const _expectedNonConsecutive = <String>[
   '2.12 -> 2.22: non-consecutive (gap 10)',
   '6.26 -> 6.28: non-consecutive (gap 2)',
-  '9.150cd -> 9.153: non-consecutive (gap 3)',
 ];
 
 void main() {
@@ -824,6 +821,24 @@ void main() {
       expect(segs[1].sectionPath, equals('4.6.2.1.1.3.3.1'));
     });
 
+    test('getSplitVerseSegmentsSync treats 9.110 as whole verse', () {
+      final segs = hierarchyService.getSplitVerseSegmentsSync('9.110');
+      expect(segs, isEmpty,
+          reason:
+              '9.110 is directly owned as a whole verse in sections.verses');
+      const path = '4.6.2.3.1.4.4.2.2.3';
+      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(path);
+      expect(ownRefs, contains('9.110'));
+    });
+
+    test('section 4.6.2.5.1.1.1 owns 9.151 and 9.152', () {
+      const path = '4.6.2.5.1.1.1';
+      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(path);
+      expect(ownRefs, containsAll(['9.151', '9.152']));
+      expect(
+          hierarchyService.getFirstVerseForSectionSync(path), equals('9.151'));
+    });
+
     test(
         'non-leaf section 4.6.2.1.1.3 keeps parent-owned ref 9.2bcd in section index',
         () {
@@ -970,6 +985,31 @@ void main() {
               reason:
                   '${paths[i]} should come after ${paths[i - 1]} in leaf order');
         }
+      }
+    });
+  });
+
+  group('Chapter 9 continuity around 9.149-9.153', () {
+    test('leaf order includes 9.151 section between 9.150cd and 9.153', () {
+      const path150cd = '4.6.2.4.3.3.3.2.3';
+      const path151 = '4.6.2.5.1.1.1';
+      const path153 = '4.6.2.5.1.1.2';
+
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+      final idx150cd = leaves.indexWhere((s) => s.path == path150cd);
+      final idx151 = leaves.indexWhere((s) => s.path == path151);
+      final idx153 = leaves.indexWhere((s) => s.path == path153);
+
+      expect(idx150cd, greaterThanOrEqualTo(0),
+          reason: '9.150cd section missing');
+      expect(idx151, greaterThanOrEqualTo(0), reason: '9.151 section missing');
+      expect(idx153, greaterThanOrEqualTo(0), reason: '9.153 section missing');
+
+      if (idx150cd >= 0 && idx151 >= 0 && idx153 >= 0) {
+        expect(idx150cd + 1, equals(idx151),
+            reason: 'Arrow-down from 9.150cd must land on the 9.151 section');
+        expect(idx151 + 1, equals(idx153),
+            reason: 'Arrow-down from 9.151/9.152 section must land on 9.153');
       }
     });
   });

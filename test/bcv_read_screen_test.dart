@@ -24,6 +24,7 @@ void main() {
   late int verseIndex649;
   late int verseIndex92a;
   late int verseIndex93cd;
+  late int verseIndex9150cd;
   late int firstLeafVerseIndex;
   late int lastLeafVerseIndex;
   late List<({String path, String title, int depth})> leafOrdered;
@@ -46,6 +47,7 @@ void main() {
     verseIndex649 = verseService.getIndexForRef('6.49') ?? -1;
     verseIndex92a = verseService.getIndexForRefWithFallback('9.2a') ?? -1;
     verseIndex93cd = verseService.getIndexForRefWithFallback('9.3cd') ?? -1;
+    verseIndex9150cd = verseService.getIndexForRefWithFallback('9.150cd') ?? -1;
     leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
     firstLeafVerseIndex = -1;
     for (final s in leafOrdered) {
@@ -75,6 +77,8 @@ void main() {
         reason: 'Verse 9.2a must exist');
     expect(verseIndex93cd, greaterThanOrEqualTo(0),
         reason: 'Verse 9.3cd must exist');
+    expect(verseIndex9150cd, greaterThanOrEqualTo(0),
+        reason: 'Verse 9.150cd must exist');
     expect(firstLeafVerseIndex, greaterThanOrEqualTo(0),
         reason: 'First leaf verse must resolve');
     expect(lastLeafVerseIndex, greaterThanOrEqualTo(0),
@@ -276,6 +280,31 @@ void main() {
       expect(capturedRefs.first, equals('9.4d'),
           reason:
               'From the 9.3cd/9.4abc section, next section must be 9.4d only');
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('from 9.150cd, first key down lands on 9.151',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex9150cd,
+        initialSegmentRef: '9.150cd',
+        onSectionNavigateForTest: (_, firstRef) => capturedRefs.add(firstRef),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(capturedRefs.length, greaterThanOrEqualTo(1),
+          reason: 'Arrow down should trigger a navigation callback');
+      expect(capturedRefs.first, equals('9.151'),
+          reason: 'From 9.150cd, next section must be the 9.151/9.152 section');
       await tester.pump(const Duration(seconds: 2));
     });
 

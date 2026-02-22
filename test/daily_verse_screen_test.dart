@@ -6,14 +6,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dechen_study/screens/landing/daily_verse_screen.dart';
 import 'package:dechen_study/screens/landing/bcv_read_screen.dart';
 import 'package:dechen_study/services/commentary_service.dart';
+import 'package:dechen_study/services/verse_hierarchy_service.dart';
 import 'package:dechen_study/utils/app_theme.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  setUpAll(() async {
+    await VerseHierarchyService.instance.getHierarchyForVerse('1.1');
+  });
+
   Future<void> pumpDaily(
     WidgetTester tester, {
     required List<String> refs,
+    int minLinesForSection = 0,
+    void Function(List<String> refs)? onResolvedRefsForTest,
   }) async {
     const fullVerse = 'Because it will, in this way, pacify harm to myself\n'
         'And pacify the sufferings of others,\n'
@@ -33,9 +40,21 @@ void main() {
           ),
           verseIndexForRef: (_) => 0,
           verseTextForIndex: (_) => fullVerse,
+          minLinesForSection: minLinesForSection,
+          onResolvedRefsForTest: onResolvedRefsForTest,
         ),
       ),
     );
+  }
+
+  Future<void> waitForDailyLoad(WidgetTester tester) async {
+    final another = find.widgetWithText(OutlinedButton, 'Another verse');
+    for (var i = 0; i < 80; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      if (another.evaluate().isNotEmpty) return;
+    }
+    expect(another, findsOneWidget,
+        reason: 'Daily screen did not finish loading');
   }
 
   testWidgets('split ref ab renders first-half text (not blank)',
@@ -126,5 +145,39 @@ void main() {
       findsWidgets,
     );
     expect(find.textContaining('Because it will'), findsNothing);
+  });
+
+  testWidgets('short section expands to parent section when below min lines',
+      (WidgetTester tester) async {
+    List<String>? resolvedRefs;
+    await pumpDaily(
+      tester,
+      refs: const ['8.136ab'],
+      minLinesForSection: 4,
+      onResolvedRefsForTest: (refs) => resolvedRefs = refs,
+    );
+    await waitForDailyLoad(tester);
+
+    expect(find.text('Could not load section'), findsNothing);
+    expect(resolvedRefs, isNotNull);
+    expect(resolvedRefs!.length, greaterThan(1),
+        reason: 'Short section should expand to parent refs');
+    expect(resolvedRefs, containsAll(const ['8.136ab', '8.136cd']),
+        reason: 'Expanded parent refs should include the original leaf pair');
+  });
+
+  testWidgets('section with at least min lines does not expand',
+      (WidgetTester tester) async {
+    List<String>? resolvedRefs;
+    await pumpDaily(
+      tester,
+      refs: const ['8.137'],
+      minLinesForSection: 4,
+      onResolvedRefsForTest: (refs) => resolvedRefs = refs,
+    );
+    await waitForDailyLoad(tester);
+
+    expect(find.text('Could not load section'), findsNothing);
+    expect(resolvedRefs, equals(const ['8.137']));
   });
 }

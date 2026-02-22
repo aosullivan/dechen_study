@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../utils/app_theme.dart';
 import '../../services/commentary_service.dart';
+import '../../services/verse_hierarchy_service.dart';
 import 'bcv/bcv_verse_text.dart';
 import 'bcv_read_screen.dart';
 
@@ -13,13 +14,17 @@ class DailyVerseScreen extends StatefulWidget {
     super.key,
     this.verseService,
     this.commentaryService,
+    this.hierarchyService,
     this.randomSectionLoader,
     this.verseIndexForRef,
     this.verseTextForIndex,
+    this.minLinesForSection = 4,
+    this.onResolvedRefsForTest,
   });
 
   final BcvVerseService? verseService;
   final CommentaryService? commentaryService;
+  final VerseHierarchyService? hierarchyService;
 
   /// Test seam: override random-section loading to make widget tests deterministic.
   final Future<CommentaryEntry?> Function()? randomSectionLoader;
@@ -30,6 +35,13 @@ class DailyVerseScreen extends StatefulWidget {
   /// Test seam: override verse text lookup by index.
   final String? Function(int index)? verseTextForIndex;
 
+  /// Minimum total displayed logical lines for the daily block.
+  /// If fewer, the block expands to parent section refs.
+  final int minLinesForSection;
+
+  /// Test seam: captures resolved refs after min-line expansion logic.
+  final void Function(List<String> refs)? onResolvedRefsForTest;
+
   @override
   State<DailyVerseScreen> createState() => _DailyVerseScreenState();
 }
@@ -37,6 +49,7 @@ class DailyVerseScreen extends StatefulWidget {
 class _DailyVerseScreenState extends State<DailyVerseScreen> {
   late final BcvVerseService _verseService;
   late final CommentaryService _commentaryService;
+  late final VerseHierarchyService _hierarchyService;
 
   /// Current section: refs and their verse texts (in order).
   List<String> _sectionRefs = [];
@@ -52,6 +65,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     super.initState();
     _verseService = widget.verseService ?? BcvVerseService.instance;
     _commentaryService = widget.commentaryService ?? CommentaryService.instance;
+    _hierarchyService =
+        widget.hierarchyService ?? VerseHierarchyService.instance;
     _loadSection();
   }
 
@@ -60,6 +75,132 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     final range = BcvVerseService.lineRangeForSegmentRef(ref, lines.length);
     if (range == null) return fullText;
     return lines.sublist(range[0], range[1] + 1).join('\n');
+  }
+
+  String _baseRef(String ref) {
+    final m = RegExp(r'^(\d+\.\d+)', caseSensitive: false).firstMatch(ref);
+    return m?.group(1) ?? ref;
+  }
+
+  List<String> _hierarchyCandidatesForRef(String ref) {
+    final out = <String>{};
+    out.add(ref);
+    final m =
+        RegExp(r'^(\d+\.\d+)([a-z]+)?$', caseSensitive: false).firstMatch(ref);
+    if (m != null) {
+      final base = m.group(1)!;
+      final suffix = (m.group(2) ?? '').toLowerCase();
+      if (suffix.isNotEmpty) {
+        if (suffix == 'a') out.add('${base}ab');
+        if (suffix == 'bcd') out.add('${base}cd');
+        if (suffix == 'ab') out.add('${base}a');
+        if (suffix == 'cd') out.add('${base}bcd');
+      }
+      out.add(base);
+    }
+    return out.toList();
+  }
+
+  Future<String?> _leafSectionPathForRef(String ref) async {
+    for (final candidate in _hierarchyCandidatesForRef(ref)) {
+      final hierarchy = await _hierarchyService.getHierarchyForVerse(candidate);
+      if (hierarchy.isEmpty) continue;
+      final sec = hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
+      if (sec.isNotEmpty) return sec;
+    }
+    return null;
+  }
+
+  String _parentPath(String path) {
+    final dot = path.lastIndexOf('.');
+    if (dot <= 0) return '';
+    return path.substring(0, dot);
+  }
+
+  int _logicalLineCount(String text) {
+    if (text.trim().isEmpty) return 0;
+    return text.split('\n').length;
+  }
+
+  int _totalLogicalLines(List<String> texts) {
+    var total = 0;
+    for (final t in texts) {
+      total += _logicalLineCount(t);
+    }
+    return total;
+  }
+
+  int _compareRefsForDisplay(
+    String a,
+    String b,
+    int? Function(String ref) indexForRef,
+  ) {
+    final ai = indexForRef(a);
+    final bi = indexForRef(b);
+    if (ai != null && bi != null && ai != bi) return ai.compareTo(bi);
+    if (ai != null && bi == null) return -1;
+    if (ai == null && bi != null) return 1;
+
+    final ar = BcvVerseService.lineRangeForSegmentRef(a, 4);
+    final br = BcvVerseService.lineRangeForSegmentRef(b, 4);
+    if (ar != null && br != null) {
+      final cStart = ar[0].compareTo(br[0]);
+      if (cStart != 0) return cStart;
+      final cEnd = ar[1].compareTo(br[1]);
+      if (cEnd != 0) return cEnd;
+    } else if (ar != null && br == null) {
+      return 1;
+    } else if (ar == null && br != null) {
+      return -1;
+    }
+
+    final bc = VerseHierarchyService.compareVerseRefs(_baseRef(a), _baseRef(b));
+    if (bc != 0) return bc;
+    return a.compareTo(b);
+  }
+
+  ({List<String> refs, List<String> texts, Set<int> indices})
+      _buildSectionContent(
+    List<String> refs,
+    int? Function(String ref) indexForRef,
+    String? Function(int index) textForIndex,
+  ) {
+    final texts = <String>[];
+    final indices = <int>{};
+    for (final ref in refs) {
+      final idx = indexForRef(ref);
+      if (idx != null) {
+        indices.add(idx);
+        final text = textForIndex(idx);
+        texts.add(_segmentTextForRef(ref, text ?? ''));
+      } else {
+        texts.add('');
+      }
+    }
+    return (refs: refs, texts: texts, indices: indices);
+  }
+
+  Future<String?> _deepestCommonLeafPath(List<String> refs) async {
+    final paths = <List<String>>[];
+    for (final ref in refs) {
+      final leafPath = await _leafSectionPathForRef(ref);
+      if (leafPath == null || leafPath.isEmpty) continue;
+      paths.add(leafPath.split('.'));
+    }
+    if (paths.isEmpty) return null;
+    var common = paths.first;
+    for (var i = 1; i < paths.length; i++) {
+      final next = paths[i];
+      final limit = common.length < next.length ? common.length : next.length;
+      var j = 0;
+      while (j < limit && common[j] == next[j]) {
+        j++;
+      }
+      common = common.sublist(0, j);
+      if (common.isEmpty) break;
+    }
+    if (common.isEmpty) return null;
+    return common.join('.');
   }
 
   Future<void> _loadSection() async {
@@ -91,24 +232,34 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
       if (!usingCustomResolvers) {
         await _verseService.getChapters();
       }
-      final refs = section.refsInBlock;
-      final texts = <String>[];
-      final indices = <int>{};
-      for (final ref in refs) {
-        final idx = indexForRef(ref);
-        if (idx != null) {
-          indices.add(idx);
-          final text = textForIndex(idx);
-          texts.add(_segmentTextForRef(ref, text ?? ''));
-        } else {
-          texts.add('');
+      var refs = List<String>.from(section.refsInBlock);
+      refs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
+      var content = _buildSectionContent(refs, indexForRef, textForIndex);
+
+      if (widget.minLinesForSection > 0 &&
+          _totalLogicalLines(content.texts) < widget.minLinesForSection) {
+        var currentPath = await _deepestCommonLeafPath(content.refs);
+        final visitedParents = <String>{};
+        while (currentPath != null &&
+            currentPath.isNotEmpty &&
+            _totalLogicalLines(content.texts) < widget.minLinesForSection) {
+          final parent = _parentPath(currentPath);
+          if (parent.isEmpty || !visitedParents.add(parent)) break;
+          final parentRefs =
+              _hierarchyService.getVerseRefsForSectionSync(parent).toList();
+          if (parentRefs.isEmpty) break;
+          parentRefs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
+          content = _buildSectionContent(parentRefs, indexForRef, textForIndex);
+          currentPath = parent;
         }
       }
+
       if (mounted) {
+        widget.onResolvedRefsForTest?.call(content.refs);
         setState(() {
-          _sectionRefs = refs;
-          _sectionVerseTexts = texts;
-          _sectionVerseIndices = indices;
+          _sectionRefs = content.refs;
+          _sectionVerseTexts = content.texts;
+          _sectionVerseIndices = content.indices;
           _loading = false;
         });
       }

@@ -8133,7 +8133,10 @@
                             {
                               "title": "The non-establishment of the eight worldly dharmas, the objects of attachment",
                               "path": "4.6.2.5.1.1.1",
-                              "verses": [],
+                              "verses": [
+                                "9.151",
+                                "9.152"
+                              ],
                               "children": []
                             },
                             {
@@ -33294,32 +33297,20 @@
         "title": "It is the wisdom of the emptiness of intrinsic nature"
       },
       {
-        "section": "4.6.2.3",
-        "title": "How to engage in meditation on emptiness"
+        "section": "4.6.2.5",
+        "title": "The result of meditation on emptiness"
       },
       {
-        "section": "4.6.2.3.1",
-        "title": "How to engage in meditation on the non-self of the individual"
+        "section": "4.6.2.5.1",
+        "title": "Benefit of self"
       },
       {
-        "section": "4.6.2.3.1.4",
-        "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
+        "section": "4.6.2.5.1.1",
+        "title": "Pacifying attachment"
       },
       {
-        "section": "4.6.2.3.1.4.4",
-        "title": "Mindfulness of dharmas"
-      },
-      {
-        "section": "4.6.2.3.1.4.4.2",
-        "title": "Abandoning objections"
-      },
-      {
-        "section": "4.6.2.3.1.4.4.2.2",
-        "title": "Abandoning the objection that this ascertainment entails an infinite regress"
-      },
-      {
-        "section": "4.6.2.3.1.4.4.2.2.2",
-        "title": "If the non-arising of the subject depends upon a further understanding, there is an infinite regress"
+        "section": "4.6.2.5.1.1.1",
+        "title": "The non-establishment of the eight worldly dharmas, the objects of attachment"
       }
     ],
     "9.152": [
@@ -33336,32 +33327,20 @@
         "title": "It is the wisdom of the emptiness of intrinsic nature"
       },
       {
-        "section": "4.6.2.3",
-        "title": "How to engage in meditation on emptiness"
+        "section": "4.6.2.5",
+        "title": "The result of meditation on emptiness"
       },
       {
-        "section": "4.6.2.3.1",
-        "title": "How to engage in meditation on the non-self of the individual"
+        "section": "4.6.2.5.1",
+        "title": "Benefit of self"
       },
       {
-        "section": "4.6.2.3.1.4",
-        "title": "Refuting the understanding of the skandhas and elements as self with the four foundations of mindfulness"
+        "section": "4.6.2.5.1.1",
+        "title": "Pacifying attachment"
       },
       {
-        "section": "4.6.2.3.1.4.4",
-        "title": "Mindfulness of dharmas"
-      },
-      {
-        "section": "4.6.2.3.1.4.4.2",
-        "title": "Abandoning objections"
-      },
-      {
-        "section": "4.6.2.3.1.4.4.2.2",
-        "title": "Abandoning the objection that this ascertainment entails an infinite regress"
-      },
-      {
-        "section": "4.6.2.3.1.4.4.2.2.2",
-        "title": "If the non-arising of the subject depends upon a further understanding, there is an infinite regress"
+        "section": "4.6.2.5.1.1.1",
+        "title": "The non-establishment of the eight worldly dharmas, the objects of attachment"
       }
     ],
     "9.153": [
@@ -41039,11 +41018,11 @@
     "4.6.2.4.3.3.3.2.1": "9.149",
     "4.6.2.4.3.3.3.2.2": "9.150ab",
     "4.6.2.4.3.3.3.2.3": "9.150cd",
-    "4.6.2.5": "9.154cd",
-    "4.6.2.5.1": "9.154cd",
-    "4.6.2.5.1.1": "9.154cd",
-    "4.6.2.5.1.1.1": "9.154cd",
-    "4.6.2.5.1.1.2": "9.154cd",
+    "4.6.2.5": "9.151",
+    "4.6.2.5.1": "9.151",
+    "4.6.2.5.1.1": "9.151",
+    "4.6.2.5.1.1.1": "9.151",
+    "4.6.2.5.1.1.2": "9.153",
     "4.6.2.5.1.2": "9.155",
     "4.6.2.5.1.2.1": "9.155",
     "4.6.2.5.1.2.2": "9.156",
