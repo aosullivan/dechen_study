@@ -5973,9 +5973,7 @@
                         {
                           "title": "Distinguishing the two truths",
                           "path": "4.6.2.1.1.1",
-                          "verses": [
-                            "9.2a"
-                          ],
+                          "verses": [],
                           "children": [
                             {
                               "title": "Basis of the distinction",
@@ -5998,7 +5996,9 @@
                             {
                               "title": "Definitions",
                               "path": "4.6.2.1.1.1.4",
-                              "verses": [],
+                              "verses": [
+                                "9.2a"
+                              ],
                               "children": []
                             }
                           ]
@@ -39974,6 +39974,10 @@
       {
         "section": "4.6.2.1.1.1",
         "title": "Distinguishing the two truths"
+      },
+      {
+        "section": "4.6.2.1.1.1.4",
+        "title": "Definitions"
       }
     ],
     "9.2bcd": [
