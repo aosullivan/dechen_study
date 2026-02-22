@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/web_navigation.dart';
 import 'text_options_screen.dart';
 
 /// dechen.study-style landing: light yellow background, text cards with Details button.
@@ -32,8 +33,22 @@ class _LandingScreenState extends State<LandingScreen> {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-            child: _BodhicaryavataraCard(
-              onTap: () => _openTextOptions(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _TextLandingCard(
+                  title: 'Gateway to Knowledge',
+                  author: 'JAMGON JU MIPHAM',
+                  onTap: () => _openGatewayToKnowledge(context),
+                ),
+                const SizedBox(height: 20),
+                _TextLandingCard(
+                  title: 'Bodhicaryavatara',
+                  author: 'SANTIDEVA',
+                  onTap: () => _openTextOptions(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -51,11 +66,29 @@ class _LandingScreenState extends State<LandingScreen> {
       ),
     );
   }
+
+  void _openGatewayToKnowledge(BuildContext context) {
+    final opened = openGatewayToKnowledgePage();
+    if (!opened) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Gateway to Knowledge is currently available on web.'),
+          backgroundColor: AppColors.primary,
+        ),
+      );
+    }
+  }
 }
 
-class _BodhicaryavataraCard extends StatelessWidget {
-  const _BodhicaryavataraCard({required this.onTap});
+class _TextLandingCard extends StatelessWidget {
+  const _TextLandingCard({
+    required this.title,
+    required this.author,
+    required this.onTap,
+  });
 
+  final String title;
+  final String author;
   final VoidCallback onTap;
 
   static const Color _cardBeige = AppColors.cardBeige;
@@ -82,12 +115,12 @@ class _BodhicaryavataraCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Bodhicaryavatara',
+                title,
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      fontFamily: 'Crimson Text',
-                      color: _textDark,
-                      fontWeight: FontWeight.w600,
-                    ) ??
+                          fontFamily: 'Crimson Text',
+                          color: _textDark,
+                          fontWeight: FontWeight.w600,
+                        ) ??
                     const TextStyle(
                       fontFamily: 'Crimson Text',
                       fontSize: 28,
@@ -97,13 +130,13 @@ class _BodhicaryavataraCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'SANTIDEVA',
+                author,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontFamily: 'Crimson Text',
-                      color: _textDark,
-                      fontSize: 16,
-                      letterSpacing: 1.2,
-                    ) ??
+                          fontFamily: 'Crimson Text',
+                          color: _textDark,
+                          fontSize: 16,
+                          letterSpacing: 1.2,
+                        ) ??
                     const TextStyle(
                       fontFamily: 'Crimson Text',
                       fontSize: 16,

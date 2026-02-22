@@ -12,6 +12,28 @@ class _ParsedHierarchy {
   final Map<String, Set<String>> sectionToRefs;
 }
 
+/// Walks the sections tree and adds each node's [verses] entries to [out].
+/// This supplements [verseToPath] which only stores base refs pointing to
+/// parent sections — the tree's [verses] arrays carry the segment-level refs
+/// (e.g. "9.27cd") and point directly to the leaf section that owns them.
+void _walkSectionsForRefs(dynamic node, Map<String, Set<String>> out) {
+  if (node is! Map) return;
+  final path = (node['path'] ?? '').toString();
+  final verses = node['verses'];
+  if (path.isNotEmpty && verses is List) {
+    for (final v in verses) {
+      final ref = (v ?? '').toString();
+      if (ref.isNotEmpty) (out[path] ??= {}).add(ref);
+    }
+  }
+  final children = node['children'];
+  if (children is List) {
+    for (final c in children) {
+      _walkSectionsForRefs(c, out);
+    }
+  }
+}
+
 /// Loads verse hierarchy mapping and provides section path for each verse.
 /// Hierarchy source of truth is texts/verse_hierarchy_map.json.
 class VerseHierarchyService {
@@ -42,6 +64,15 @@ class VerseHierarchyService {
             }
           }
         }
+      }
+    }
+    // Also index verses from sections.verses arrays.  verseToPath only carries
+    // base refs pointing to parent sections; the tree's verses arrays hold the
+    // segment-level refs (e.g. "9.27cd") that belong to each leaf section.
+    final sections = map['sections'];
+    if (sections is List) {
+      for (final s in sections) {
+        _walkSectionsForRefs(s, sectionToRefs);
       }
     }
     return _ParsedHierarchy(map: map, sectionToRefs: sectionToRefs);
@@ -311,6 +342,13 @@ class VerseHierarchyService {
         }
       }
     }
+    // Also index verses from sections.verses arrays (supplement for segment refs).
+    final sections = _map?['sections'];
+    if (sections is List) {
+      for (final s in sections) {
+        _walkSectionsForRefs(s, _sectionToRefsIndex!);
+      }
+    }
   }
 
   /// Returns verse refs whose path contains [sectionPath] (section + descendants).
@@ -412,6 +450,32 @@ class VerseHierarchyService {
         segments.add((ref: '${baseRef}a', sectionPath: aLeaf));
         segments.add((ref: '${baseRef}bcd', sectionPath: bcdLeaf));
       }
+    }
+    if (segments.isNotEmpty) return segments;
+
+    // Fallback: verseToPath may only have the base ref pointing to a parent
+    // section.  Search _sectionToRefsIndex (which also indexes sections.verses)
+    // for any leaf section that contains the segment-level refs.
+    _ensureSectionToRefsIndex();
+    final index = _sectionToRefsIndex ?? {};
+    String? abSec, cdSec, aSec, bcdSec;
+    for (final entry in index.entries) {
+      if (entry.value.contains('${baseRef}ab')) abSec = entry.key;
+      if (entry.value.contains('${baseRef}cd')) cdSec = entry.key;
+      if (entry.value.contains('${baseRef}a')) aSec = entry.key;
+      if (entry.value.contains('${baseRef}bcd')) bcdSec = entry.key;
+    }
+    if (abSec != null && cdSec != null && abSec != cdSec) {
+      return [
+        (ref: '${baseRef}ab', sectionPath: abSec),
+        (ref: '${baseRef}cd', sectionPath: cdSec),
+      ];
+    }
+    if (aSec != null && bcdSec != null && aSec != bcdSec) {
+      return [
+        (ref: '${baseRef}a', sectionPath: aSec),
+        (ref: '${baseRef}bcd', sectionPath: bcdSec),
+      ];
     }
     return segments;
   }

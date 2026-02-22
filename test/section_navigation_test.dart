@@ -12,8 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
-const _expectedLeafSkipCount = 174;
-const _expectedLeafGapSum = 497;
+const _expectedLeafSkipCount = 166;
+const _expectedLeafGapSum = 467;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
   '3.1.2.4 (1.18) -> 3.1.3.1 (1.20): verse gap 2',
@@ -701,6 +701,190 @@ void main() {
         }
       }
       expect(jumps, isEmpty);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // lineRangeForSegmentRef – all permutations
+  // ---------------------------------------------------------------------------
+  group('BcvVerseService.lineRangeForSegmentRef', () {
+    test('single-letter suffixes on 4-line verse', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1a', 4), [0, 0]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1b', 4), [1, 1]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1c', 4), [2, 2]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1d', 4), [3, 3]);
+    });
+
+    test('two-letter suffixes on 4-line verse', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1ab', 4), [0, 1]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1bc', 4), [1, 2]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1cd', 4), [2, 3]);
+    });
+
+    test('three-letter suffixes on 4-line verse', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1abc', 4), [0, 2]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1bcd', 4), [1, 3]);
+    });
+
+    test('non-contiguous suffix returns null', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1ac', 4), isNull);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1bd', 4), isNull);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1ad', 4), isNull);
+    });
+
+    test('no suffix returns null', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1', 4), isNull);
+      expect(BcvVerseService.lineRangeForSegmentRef('9', 4), isNull);
+    });
+
+    test('unknown suffix character returns null', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1e', 4), isNull);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1x', 4), isNull);
+    });
+
+    test('2-line verse proportional mapping', () {
+      // First half (a/b positions 0-1) → line 0; second half (c/d positions 2-3) → line 1.
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1a', 2), [0, 0]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1b', 2), [0, 0]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1ab', 2), [0, 0]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1c', 2), [1, 1]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1d', 2), [1, 1]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1cd', 2), [1, 1]);
+    });
+
+    test('1-line verse always returns [0, 0]', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1a', 1), [0, 0]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1cd', 1), [0, 0]);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1bcd', 1), [0, 0]);
+    });
+
+    test('zero or negative lineCount returns null', () {
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1ab', 0), isNull);
+      expect(BcvVerseService.lineRangeForSegmentRef('9.1ab', -1), isNull);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // sections.verses indexing and split-verse detection
+  // ---------------------------------------------------------------------------
+  group('sections.verses indexing', () {
+    test(
+        '"Presenting the objection" (4.6.2.1.2.3.2.1) has 9.27cd via sections.verses',
+        () {
+      const path = '4.6.2.1.2.3.2.1';
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, contains('9.27cd'),
+          reason:
+              'sections.verses index should carry the segment ref from the tree');
+      expect(
+          hierarchyService.getFirstVerseForSectionSync(path), equals('9.27cd'),
+          reason: 'first verse of the section should be 9.27cd');
+    });
+
+    test('"A counterobjection" (4.6.2.1.2.3.2.3) has both 9.28cd and 9.29ab',
+        () {
+      const path = '4.6.2.1.2.3.2.3';
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, containsAll(['9.28cd', '9.29ab']));
+    });
+
+    test('"Establishing the pervasion" (4.6.2.1.2.3.2.4) has 9.29cd', () {
+      const path = '4.6.2.1.2.3.2.4';
+      final refs = hierarchyService.getVerseRefsForSectionSync(path);
+      expect(refs, contains('9.29cd'));
+    });
+
+    test('getSplitVerseSegmentsSync detects 9.27 split via sections.verses',
+        () {
+      final segs = hierarchyService.getSplitVerseSegmentsSync('9.27');
+      expect(segs.length, 2);
+      expect(segs.any((s) => s.ref == '9.27ab'), isTrue,
+          reason: 'ab half should be detected');
+      expect(segs.any((s) => s.ref == '9.27cd'), isTrue,
+          reason: 'cd half should be detected');
+      expect(segs[0].ref, '9.27ab', reason: 'ab comes first in document order');
+      expect(segs[1].ref, '9.27cd');
+    });
+
+    test('getSplitVerseSegmentsSync detects 9.28 and 9.29 splits', () {
+      final seg28 = hierarchyService.getSplitVerseSegmentsSync('9.28');
+      expect(seg28.length, 2);
+      expect(seg28.any((s) => s.ref == '9.28ab'), isTrue);
+      expect(seg28.any((s) => s.ref == '9.28cd'), isTrue);
+
+      final seg29 = hierarchyService.getSplitVerseSegmentsSync('9.29');
+      expect(seg29.length, 2);
+      expect(seg29.any((s) => s.ref == '9.29ab'), isTrue);
+      expect(seg29.any((s) => s.ref == '9.29cd'), isTrue);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Leaf-section navigation through 9.27-9.29 area
+  // ---------------------------------------------------------------------------
+  group('Leaf navigation through segmented verses (9.27-9.29)', () {
+    test('leaf list includes sections for 9.27cd, 9.28ab, 9.28cd, 9.29cd', () {
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+      final firstRefs =
+          leaves.map((s) => hierarchyService.getFirstVerseForSectionSync(s.path)).toSet();
+
+      expect(firstRefs, contains('9.27cd'),
+          reason: '"Presenting the objection" must appear in leaf list');
+      expect(firstRefs, contains('9.28ab'),
+          reason: '"The logic which refutes" must appear in leaf list');
+      expect(firstRefs, contains('9.28cd'),
+          reason: '"A counterobjection" must appear in leaf list');
+      expect(firstRefs, contains('9.29cd'),
+          reason: '"Establishing the pervasion" must appear in leaf list');
+    });
+
+    test('arrow-down from section containing 9.26 reaches 9.27cd (not 9.30)',
+        () {
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+
+      // The "Abandoning objections" section (4.6.2.1.2.3.1.2.2.3.3) contains
+      // 9.25, 9.26, 9.27ab.  Pressing down from it should reach "Presenting
+      // the objection" (9.27cd), not jump all the way to 9.30.
+      const abandoningPath = '4.6.2.1.2.3.1.2.2.3.3';
+      const presentingPath = '4.6.2.1.2.3.2.1';
+      final abandoningIdx =
+          leaves.indexWhere((s) => s.path == abandoningPath);
+      expect(abandoningIdx, greaterThan(-1),
+          reason: 'Abandoning objections must be in the leaf list');
+
+      if (abandoningIdx >= 0) {
+        final nextSection = leaves[abandoningIdx + 1];
+        expect(nextSection.path, equals(presentingPath),
+            reason:
+                'Arrow-down from 9.25-9.27ab section must land on 9.27cd section, not skip to 9.30');
+      }
+    });
+
+    test('leaf sections 9.27cd through 9.29cd are consecutive in leaf order',
+        () {
+      final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
+
+      final paths = [
+        '4.6.2.1.2.3.2.1', // 9.27cd
+        '4.6.2.1.2.3.2.2', // 9.28ab
+        '4.6.2.1.2.3.2.3', // 9.28cd / 9.29ab
+        '4.6.2.1.2.3.2.4', // 9.29cd
+      ];
+
+      final indices = paths.map((p) => leaves.indexWhere((s) => s.path == p)).toList();
+      for (var i = 0; i < indices.length; i++) {
+        expect(indices[i], greaterThan(-1),
+            reason: 'Section ${paths[i]} must be in leaf list');
+      }
+      // They should be in ascending index order (possibly with other sections
+      // sandwiched in, but must form an increasing sequence).
+      for (var i = 1; i < indices.length; i++) {
+        if (indices[i - 1] >= 0 && indices[i] >= 0) {
+          expect(indices[i], greaterThan(indices[i - 1]),
+              reason:
+                  '${paths[i]} should come after ${paths[i - 1]} in leaf order');
+        }
+      }
     });
   });
 }

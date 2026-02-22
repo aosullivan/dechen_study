@@ -85,6 +85,10 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   /// When set (after tapping a verse), scroll to this verse on next frame then clear.
   int? _scrollToVerseIndexAfterTap;
 
+  /// Segment index to target when the fallback rebuild-based scroll is used.
+  /// 0 means the first (or only) segment; 1 means the second segment (e.g. cd half).
+  int? _scrollToVerseSegmentIndex;
+
   /// Verses to highlight (set when arriving from Daily or when user taps a verse); cleared on reload.
   Set<int>? _highlightVerseIndices = {};
 
@@ -753,15 +757,37 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     final rightMargin = _overlayRightInset;
     const verseBottomPadding = 20.0;
     const marginV = 6.0;
+    // Collect the verse refs that belong to the current section so we can
+    // find the exact segment for each verse index in the run (e.g. a section
+    // may own "9.28cd" of verse 9.28 and "9.29ab" of verse 9.29).
+    final sectionRefs =
+        _hierarchyService.getVerseRefsForSectionSync(_currentSectionPath);
     for (final idx in run) {
-      // For split verses, use the specific segment key when we know which
-      // half is active (e.g. 8.136cd → use _verseSegmentKeys['N_1'], not ab).
+      // For split verses, use the specific segment key for the half that
+      // belongs to the current section (e.g. 9.28cd → segment key index 1).
       GlobalKey? key;
-      final segRef = _currentSegmentRef;
-      if (segRef != null) {
-        final segIdx = _segmentIndexForRef(idx, segRef);
-        if (segIdx > 0) {
-          key = _verseSegmentKeys[(idx, segIdx)];
+      final baseRef = _verseService.getVerseRef(idx);
+      if (baseRef != null && sectionRefs.isNotEmpty) {
+        // Find the section ref whose base matches this verse index.
+        String? matchRef;
+        for (final r in sectionRefs) {
+          if (r == baseRef ||
+              (r.startsWith(baseRef) && r.length > baseRef.length)) {
+            matchRef = r;
+            break;
+          }
+        }
+        if (matchRef != null && matchRef != baseRef) {
+          final segIdx = _segmentIndexForRef(idx, matchRef);
+          if (segIdx > 0) key = _verseSegmentKeys[(idx, segIdx)];
+        }
+      }
+      // Fallback: use the legacy _currentSegmentRef if no per-verse match found.
+      if (key == null) {
+        final segRef = _currentSegmentRef;
+        if (segRef != null) {
+          final segIdx = _segmentIndexForRef(idx, segRef);
+          if (segIdx > 0) key = _verseSegmentKeys[(idx, segIdx)];
         }
       }
       key ??= _verseKeys[idx];
@@ -914,12 +940,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _verseVisibility.clear(); // Discard stale visibility data
     // For split verses, prefer the specific segment key (e.g. cd half)
     // over the default verse key which always points to the ab half.
+    final segIdx =
+        segmentRef != null ? _segmentIndexForRef(index, segmentRef) : 0;
     GlobalKey? keyToUse;
-    if (segmentRef != null) {
-      final segIdx = _segmentIndexForRef(index, segmentRef);
-      if (segIdx > 0) {
-        keyToUse = _verseSegmentKeys[(index, segIdx)];
-      }
+    if (segIdx > 0) {
+      keyToUse = _verseSegmentKeys[(index, segIdx)];
     }
     keyToUse ??= _verseKeys[index];
     // Try scrolling using existing verse GlobalKey (avoids full rebuild)
@@ -934,12 +959,16 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     }
     // Fallback: attach temporary key via rebuild (for initial load / unmounted verses)
     _scrollToVerseIndexAfterTap = index;
+    _scrollToVerseSegmentIndex = segIdx > 0 ? segIdx : null;
     _scrollToVerseKey ??= GlobalKey();
     setState(() {});
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _scrollToVerseWidget(alignment: alignment);
-      setState(() => _scrollToVerseIndexAfterTap = null);
+      setState(() {
+        _scrollToVerseIndexAfterTap = null;
+        _scrollToVerseSegmentIndex = null;
+      });
       _clearProgrammaticNavigationAfterScrollSettles();
     });
   }
@@ -1767,7 +1796,9 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
                                         _scrollTargetVerseIndex != null &&
                                             _scrollTargetVerseIndex == idx &&
                                             _scrollToVerseKey != null &&
-                                            (segmentIndex ?? 0) == 0;
+                                            (segmentIndex ?? 0) ==
+                                                (_scrollToVerseSegmentIndex ??
+                                                    0);
                                     final effectiveStyle = verseStyle ??
                                         Theme.of(context)
                                             .textTheme

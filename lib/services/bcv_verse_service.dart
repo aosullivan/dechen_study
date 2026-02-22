@@ -35,50 +35,50 @@ class BcvVerseService {
   /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd".
   static final RegExp segmentSuffixPattern = RegExp(r'[a-d]+$');
 
-  /// Returns the inclusive line range for a segmented ref.
+  /// Returns the inclusive [start, end] line range for a segmented ref.
   ///
-  /// For canonical 4-line verses:
-  /// - `a` -> line 1
-  /// - `ab` -> lines 1-2
-  /// - `cd` -> lines 3-4
-  /// - `bcd` -> lines 2-4
+  /// Letters map to canonical 0-based positions in a 4-line verse:
+  ///   a=0, b=1, c=2, d=3
   ///
-  /// Falls back to proportional splits for shorter lines.
+  /// The suffix must be a non-empty, contiguous run of letters from {a,b,c,d}
+  /// (e.g. "a", "ab", "bc", "cd", "abc", "bcd"). Non-contiguous suffixes
+  /// (e.g. "ac", "bd") and unknown characters return null.
+  ///
+  /// For verses with 4+ lines the positions are used directly.
+  /// For shorter verses the range is scaled proportionally so that the
+  /// first half of the alphabet (a/b) maps to the first half of the lines
+  /// and the second half (c/d) maps to the second half.
   static List<int>? lineRangeForSegmentRef(String ref, int lineCount) {
     if (lineCount <= 0) return null;
     final m = RegExp(r'([a-d]+)$', caseSensitive: false).firstMatch(ref);
     if (m == null) return null;
     final suffix = m.group(1)!.toLowerCase();
+    if (suffix.isEmpty) return null;
 
-    int start = 0;
-    int end = lineCount - 1;
+    const letterPos = {'a': 0, 'b': 1, 'c': 2, 'd': 3};
 
-    switch (suffix) {
-      case 'a':
-        end = 0;
-        break;
-      case 'bcd':
-        start = lineCount > 1 ? 1 : 0;
-        break;
-      case 'ab':
-        if (lineCount >= 4) {
-          end = 1;
-        } else {
-          end = ((lineCount / 2).ceil() - 1).clamp(0, lineCount - 1);
-        }
-        break;
-      case 'cd':
-        if (lineCount >= 4) {
-          start = 2;
-        } else {
-          start = (lineCount / 2).ceil().clamp(0, lineCount - 1);
-        }
-        break;
-      default:
+    // Validate: all chars known and strictly contiguous.
+    for (var i = 0; i < suffix.length; i++) {
+      if (!letterPos.containsKey(suffix[i])) return null;
+      if (i > 0 && letterPos[suffix[i]]! != letterPos[suffix[i - 1]]! + 1) {
         return null;
+      }
     }
 
-    if (start > end) return null;
+    final firstPos = letterPos[suffix[0]]!; // 0–3
+    final lastPos = letterPos[suffix[suffix.length - 1]]!; // 0–3
+
+    int start, end;
+    if (lineCount >= 4) {
+      start = firstPos;
+      end = lastPos;
+    } else {
+      // Scale the 4-slot canonical positions into the actual line count.
+      start = (firstPos * lineCount ~/ 4).clamp(0, lineCount - 1);
+      end = (((lastPos + 1) * lineCount + 3) ~/ 4 - 1).clamp(0, lineCount - 1);
+      if (start > end) end = start;
+    }
+
     return [start, end];
   }
 

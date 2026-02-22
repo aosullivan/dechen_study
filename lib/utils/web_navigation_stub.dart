@@ -1,0 +1,3 @@
+bool openGatewayToKnowledgePage() {
+  return false;
+}
