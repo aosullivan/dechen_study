@@ -224,7 +224,6 @@ class _ReadChapterSelectionScreenState
         title: widget.title,
         initialChapterNumber: bm.chapterNumber,
         scrollToVerseIndex: bm.verseIndex,
-        collapsePanelsOnOpen: false,
       ),
     ));
   }
@@ -408,8 +407,7 @@ class _ResumeReadingCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           child: Row(
             children: [
-              Icon(Icons.bookmark_outlined,
-                  color: AppColors.primary, size: 22),
+              Icon(Icons.bookmark_outlined, color: AppColors.primary, size: 22),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -426,10 +424,9 @@ class _ResumeReadingCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         subtitle.join(' · '),
-                        style:
-                            Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColors.mutedBrown,
-                                ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.mutedBrown,
+                            ),
                       ),
                     ],
                   ],

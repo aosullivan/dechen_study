@@ -55,8 +55,8 @@ class BcvReadScreen extends StatefulWidget {
   final String? initialSegmentRef;
   final String title;
 
-  /// When true (default for deep links), collapse nav panels on open.
-  /// When false (e.g. Resume Reading), keep panels expanded.
+  /// Deprecated: panel defaults are now layout-based only
+  /// (mobile collapsed, laptop expanded) regardless of entry path.
   final bool? collapsePanelsOnOpen;
 
   /// Test-only: called when arrow-key navigation selects a section. Receives (sectionPath, firstVerseRef).
@@ -150,7 +150,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   bool _breadcrumbCollapsed = false;
   bool _sectionSliderCollapsed = false;
   bool _chaptersPanelCollapsed = false;
-  bool _mobileNavCollapseInitialized = false;
+  bool? _lastIsLaptopLayout;
   bool _deferredStartupWorkScheduled = false;
 
   final FocusNode _sectionOverviewFocusNode = FocusNode();
@@ -255,13 +255,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
-    final shouldCollapse =
-        widget.collapsePanelsOnOpen ?? _isDeepLinkOpen;
-    if (shouldCollapse) {
-      _chaptersPanelCollapsed = true;
-      _sectionSliderCollapsed = true;
-      _breadcrumbCollapsed = true;
-    }
     if (widget.scrollToVerseIndex != null || _hasInitialHighlight) {
       _scrollToVerseKey = GlobalKey();
     }
@@ -271,6 +264,7 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _syncPanelDefaultsForLayout();
     final theme = Theme.of(context).textTheme;
     _verseStyle = theme.bodyLarge?.copyWith(
       fontFamily: 'Crimson Text',
@@ -282,6 +276,22 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       fontFamily: 'Crimson Text',
       color: AppColors.textDark,
     );
+  }
+
+  void _syncPanelDefaultsForLayout() {
+    final isLaptop =
+        MediaQuery.of(context).size.width >= BcvReadConstants.laptopBreakpoint;
+    if (_lastIsLaptopLayout == isLaptop) return;
+    _lastIsLaptopLayout = isLaptop;
+    if (isLaptop) {
+      _chaptersPanelCollapsed = false;
+      _sectionSliderCollapsed = false;
+      _breadcrumbCollapsed = false;
+    } else {
+      _chaptersPanelCollapsed = true;
+      _sectionSliderCollapsed = true;
+      _breadcrumbCollapsed = true;
+    }
   }
 
   @override
@@ -485,7 +495,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
       if (retryCount < 3) {
         Future.delayed(const Duration(milliseconds: 100), () {
           if (mounted) {
-            _scrollToVerseWidget(alignment: alignment, retryCount: retryCount + 1);
+            _scrollToVerseWidget(
+                alignment: alignment, retryCount: retryCount + 1);
           }
         });
       }
@@ -2062,22 +2073,6 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           ),
         ],
       );
-    }
-    // Mobile: collapse panels by default unless collapsePanelsOnOpen is false (e.g. Resume).
-    if (!_mobileNavCollapseInitialized) {
-      _mobileNavCollapseInitialized = true;
-      final shouldCollapse = widget.collapsePanelsOnOpen ?? true;
-      if (shouldCollapse) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            setState(() {
-              _chaptersPanelCollapsed = true;
-              _sectionSliderCollapsed = true;
-              _breadcrumbCollapsed = true;
-            });
-          }
-        });
-      }
     }
     // Constrain panels height so Column never overflows (e.g. in tests or small viewports).
     return LayoutBuilder(
