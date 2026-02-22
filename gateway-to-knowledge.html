@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gateway to Knowledge - Overview</title>
+  <meta name="description" content="Gateway to Knowledge overview by Jamgon Ju Mipham.">
+  <style>
+    :root {
+      --bg: #eadcc4;
+      --paper: #f8f7f3;
+      --paper-strong: #fffdf8;
+      --ink: #2c2416;
+      --body: #3d3426;
+      --muted: #5c4a3a;
+      --line: #e8e4dc;
+      --line-strong: #d9ccb9;
+      --primary: #8b7355;
+      --primary-soft: #cbb99f;
+      --shadow-soft: 0 12px 34px rgba(44, 36, 22, 0.08);
+      --shadow-lite: 0 3px 8px rgba(44, 36, 22, 0.08);
+      --radius-xl: 20px;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      color: var(--body);
+      background:
+        radial-gradient(1200px 380px at 10% -10%, #f4ebda 0%, transparent 66%),
+        radial-gradient(900px 300px at 90% 0%, #f0e2ca 0%, transparent 62%),
+        var(--bg);
+      font-family: "Lora", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+      line-height: 1.66;
+      scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--ink);
+      font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(1260px, calc(100% - 28px));
+      margin: 22px auto 34px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(155deg, rgba(255, 253, 248, 0.96), rgba(248, 242, 230, 0.96));
+      box-shadow: var(--shadow-soft);
+      padding: clamp(20px, 4vw, 38px);
+      margin-bottom: 16px;
+      isolation: isolate;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -120px;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 115, 85, 0.2) 0%, rgba(139, 115, 85, 0.06) 42%, transparent 66%);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      font-size: 0.74rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.8vw, 3.6rem);
+      font-weight: 600;
+    }
+
+    .hero .author {
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-size: clamp(0.95rem, 2.2vw, 1.14rem);
+    }
+
+    .hero .intro {
+      margin-top: 18px;
+      max-width: 78ch;
+      color: #443728;
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      padding: 9px 15px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      transition: transform 150ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    }
+
+    .btn-primary {
+      color: #f8f7f3;
+      background: var(--primary);
+      box-shadow: var(--shadow-lite);
+    }
+
+    .btn-secondary {
+      color: var(--ink);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 272px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--paper);
+      box-shadow: var(--shadow-lite);
+      padding: 14px;
+    }
+
+    .sidebar-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.94rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .side-links {
+      display: grid;
+      gap: 8px;
+    }
+
+    .side-link {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: var(--paper-strong);
+      padding: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: border-color 180ms ease, transform 150ms ease, background-color 180ms ease;
+    }
+
+    .side-link:hover {
+      border-color: var(--primary-soft);
+      background: #fffefb;
+      transform: translateX(1px);
+    }
+
+    .side-link strong {
+      font-size: 0.96rem;
+      line-height: 1.2;
+      font-weight: 600;
+      font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
+    }
+
+    .side-link span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.22;
+      margin-top: 2px;
+    }
+
+    .icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--primary);
+      background: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .icon-box svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .content {
+      min-width: 0;
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .chapter-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      padding: 10px 12px;
+      text-decoration: none;
+      color: var(--ink);
+      box-shadow: var(--shadow-lite);
+      transition: transform 150ms ease, border-color 180ms ease;
+    }
+
+    .chapter-chip:hover {
+      transform: translateY(-1px);
+      border-color: var(--primary-soft);
+    }
+
+    .chapter-chip h4 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .chapter-chip p {
+      margin-top: 2px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .chapter {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--paper-strong);
+      box-shadow: var(--shadow-soft);
+      padding: clamp(16px, 2.8vw, 24px);
+      margin-bottom: 14px;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ebdfcf;
+    }
+
+    .chapter-header h2 {
+      font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+      font-weight: 600;
+    }
+
+    .topic {
+      border: 1px solid #efe6d9;
+      border-radius: var(--radius-md);
+      background: #fffdf9;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .topic-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 1.11rem;
+      font-weight: 600;
+    }
+
+    .topic-copy {
+      color: #463a2b;
+      margin-bottom: 6px;
+    }
+
+    .pill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .pill {
+      border: 1px solid #e7dac7;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #fff9ef;
+      font-size: 0.94rem;
+      color: #3d3328;
+    }
+
+    ul, ol {
+      margin: 8px 0 0;
+      padding-left: 21px;
+    }
+
+    li + li {
+      margin-top: 3px;
+    }
+
+    .split-list {
+      columns: 2;
+      column-gap: 22px;
+    }
+
+    .split-list li {
+      break-inside: avoid;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #ebdfcf;
+      font-size: 0.92rem;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid #efe3d3;
+      padding: 8px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8efe2;
+      color: #37281c;
+      font-weight: 600;
+      font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
+    }
+
+    .callout {
+      border-left: 3px solid var(--primary-soft);
+      background: #fff7ea;
+      border-radius: 0 10px 10px 0;
+      padding: 9px 10px;
+      margin-top: 8px;
+      color: #4a3b2a;
+      font-size: 0.93rem;
+    }
+
+    .back-to-top {
+      margin: 6px 0 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .back-to-top:hover {
+      color: var(--ink);
+    }
+
+    @media (max-width: 1020px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: calc(100% - 16px);
+        margin-top: 8px;
+      }
+
+      .hero {
+        border-radius: 14px;
+      }
+
+      .chapter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .split-list {
+        columns: 1;
+      }
+
+      .chapter {
+        border-radius: 12px;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-home" viewBox="0 0 24 24">
+      <path d="M3 11.5 12 4l9 7.5"></path>
+      <path d="M5.5 10.5V20h13V10.5"></path>
+      <path d="M9.5 20v-6h5v6"></path>
+    </symbol>
+    <symbol id="i-stack" viewBox="0 0 24 24">
+      <path d="m4 8 8-4 8 4-8 4-8-4Z"></path>
+      <path d="m4 12 8 4 8-4"></path>
+      <path d="m4 16 8 4 8-4"></path>
+    </symbol>
+    <symbol id="i-elements" viewBox="0 0 24 24">
+      <path d="M12 3v7"></path>
+      <path d="m12 10-4.5 7.5h9L12 10Z"></path>
+      <path d="M6 4.5c1.2 1 1.8 2.1 1.8 3.2S7.2 10 6 11"></path>
+      <path d="M18 4.5c-1.2 1-1.8 2.1-1.8 3.2S16.8 10 18 11"></path>
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24">
+      <path d="M2.7 12s3.3-6 9.3-6 9.3 6 9.3 6-3.3 6-9.3 6-9.3-6-9.3-6Z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </symbol>
+    <symbol id="i-cycle" viewBox="0 0 24 24">
+      <path d="M20 7h-5V2"></path>
+      <path d="M4 17h5v5"></path>
+      <path d="M5.5 10A7 7 0 0 1 16 5l4 2"></path>
+      <path d="M18.5 14A7 7 0 0 1 8 19l-4-2"></path>
+    </symbol>
+    <symbol id="i-list" viewBox="0 0 24 24">
+      <path d="M8 6h12"></path>
+      <path d="M8 12h12"></path>
+      <path d="M8 18h12"></path>
+      <circle cx="4" cy="6" r="1"></circle>
+      <circle cx="4" cy="12" r="1"></circle>
+      <circle cx="4" cy="18" r="1"></circle>
+    </symbol>
+    <symbol id="i-table" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+      <path d="M3 10h18"></path>
+      <path d="M9 5v14"></path>
+      <path d="M15 5v14"></path>
+    </symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24">
+      <path d="m6 10 6-6 6 6"></path>
+      <path d="M12 4v16"></path>
+    </symbol>
+  </svg>
+
+  <a id="top"></a>
+  <main class="shell">
+    <header class="hero">
+      <p class="eyebrow">Khyen Jug Overview</p>
+      <h1>Gateway to Knowledge</h1>
+      <p class="author">Jamgon Ju Mipham</p>
+      <p class="intro">
+        A clear and beautiful web reading version of the study outline. The layout follows the same warm tones and card style used across the app,
+        with icon-guided sections, quick chapter jumps, and improved readability on both desktop and mobile.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#chapter-1">
+          <span class="icon-box" style="width:22px;height:22px;border-radius:7px;border-color:rgba(255,255,255,0.45);background:transparent;color:#fff;box-shadow:none;">
+            <svg viewBox="0 0 24 24"><use href="#i-list"></use></svg>
+          </span>
+          Start Reading
+        </a>
+        <a class="btn btn-secondary" href="#chapter-nav">Jump to Chapter</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Page navigation">
+        <div class="sidebar-title">
+          <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-home"></use></svg></span>
+          Navigation
+        </div>
+        <nav class="side-links">
+          <a class="side-link" href="#chapter-1">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-stack"></use></svg></span>
+            <div><strong>Chapter 1</strong><span>Aggregates (Skandhas)</span></div>
+          </a>
+          <a class="side-link" href="#chapter-2">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>
+            <div><strong>Chapter 2</strong><span>Elements (Dhatu)</span></div>
+          </a>
+          <a class="side-link" href="#chapter-3">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>
+            <div><strong>Chapter 3</strong><span>Sense Sources (Ayatana)</span></div>
+          </a>
+          <a class="side-link" href="#chapter-4">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>
+            <div><strong>Chapter 4</strong><span>Dependent Origination</span></div>
+          </a>
+        </nav>
+      </aside>
+
+      <section class="content">
+        <div id="chapter-nav" class="chapter-grid">
+          <a class="chapter-chip" href="#chapter-1">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-stack"></use></svg></span>
+            <div><h4>Chapter 1</h4><p>The five aggregates</p></div>
+          </a>
+          <a class="chapter-chip" href="#chapter-2">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>
+            <div><h4>Chapter 2</h4><p>The elements and classifications</p></div>
+          </a>
+          <a class="chapter-chip" href="#chapter-3">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>
+            <div><h4>Chapter 3</h4><p>Inner and outer sense sources</p></div>
+          </a>
+          <a class="chapter-chip" href="#chapter-4">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>
+            <div><h4>Chapter 4</h4><p>Dependent origination and links</p></div>
+          </a>
+        </div>
+
+        <article class="chapter" id="chapter-1">
+          <header class="chapter-header">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-stack"></use></svg></span>
+            <h2>Chapter 1 - The Aggregates (Skandhas)</h2>
+          </header>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Five Aggregates</h3>
+            <div class="pill-grid">
+              <div class="pill">Form</div>
+              <div class="pill">Sensation</div>
+              <div class="pill">Perceptions</div>
+              <div class="pill">Formations</div>
+              <div class="pill">Consciousness</div>
+            </div>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>Aggregate of Form</h3>
+            <p class="topic-copy"><strong>Physical form</strong> includes:</p>
+            <ul>
+              <li><strong>4 primary elements:</strong> earth, water, fire, wind.</li>
+              <li><strong>11 resultant forms:</strong> five sense faculties, five sense objects, and imperceptible form.</li>
+            </ul>
+            <p class="topic-copy" style="margin-top:8px;">In the Abhidharma Samuccaya, the five forms of mental objects are listed as:</p>
+            <ul>
+              <li>Deduced form</li>
+              <li>Spatial forms</li>
+              <li>Imperceptible forms (from taking a vow)</li>
+              <li>Imagined forms</li>
+              <li>Mastered forms through meditation</li>
+            </ul>
+            <p class="topic-copy" style="margin-top:8px;">Imperceptible form is described as:</p>
+            <ul>
+              <li>Imperceptible form after obtaining a vow</li>
+              <li>Imperceptible form arising from elements embraced by the stream of mind</li>
+              <li>A certain kind of physical or verbal action</li>
+            </ul>
+            <p class="callout">Form can be visible and obstructive, invisible and obstructive, or invisible and non-obstructive.</p>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Aggregate of Sensation</h3>
+            <p class="topic-copy">Sensation is divided into pleasant, painful, and neutral. By support, there are 18 sensations: six senses multiplied by the three feeling tones.</p>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Aggregate of Perceptions</h3>
+            <p class="topic-copy">Six perceptions arise from contact. Six subdivisions are listed:</p>
+            <ol>
+              <li>Perceptions with characteristics (with three exceptions)</li>
+              <li>Perceptions without characteristics (those three exceptions)</li>
+              <li>Lesser perceptions (desire realm)</li>
+              <li>Vast perceptions (form realm)</li>
+              <li>Immeasurable perceptions</li>
+              <li>Perception of nothing whatsoever</li>
+            </ol>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Aggregate of Formations</h3>
+            <p class="topic-copy"><strong>Five ever-present mental states:</strong></p>
+            <ul>
+              <li>Attraction</li>
+              <li>Sensation</li>
+              <li>Perception</li>
+              <li>Attention</li>
+              <li>Contact</li>
+            </ul>
+            <p class="topic-copy" style="margin-top:8px;"><strong>Five object-determining mental states:</strong></p>
+            <ul>
+              <li>Intention</li>
+              <li>Interest</li>
+              <li>Recollection</li>
+              <li>Concentration</li>
+              <li>Discrimination</li>
+            </ul>
+            <p class="callout">These ten are called the Ten General Mind Bases.</p>
+
+            <p class="topic-copy" style="margin-top:8px;"><strong>Eleven virtuous mental states:</strong></p>
+            <ul>
+              <li>Faith</li>
+              <li>Conscientiousness</li>
+              <li>Pliancy</li>
+              <li>Equanimity</li>
+              <li>Conscience</li>
+              <li>Shame</li>
+              <li>Non-attachment</li>
+              <li>Non-aggression</li>
+              <li>Non-delusion</li>
+              <li>Non-violence</li>
+              <li>Diligence</li>
+            </ul>
+
+            <p class="topic-copy" style="margin-top:8px;"><strong>Root disturbing emotions (6):</strong> ignorance, attachment, anger, arrogance, doubt, belief.</p>
+            <p class="topic-copy" style="margin-top:8px;"><strong>Belief has 5 types:</strong></p>
+            <ul>
+              <li>Belief in transitory collection</li>
+              <li>Belief of holding extremes</li>
+              <li>Perverted belief</li>
+              <li>Holding a belief to be paramount</li>
+              <li>Holding a discipline or ritual</li>
+            </ul>
+
+            <p class="topic-copy" style="margin-top:8px;"><strong>Twenty subsidiary disturbing emotions:</strong></p>
+            <ol class="split-list">
+              <li>Fury</li>
+              <li>Resentment</li>
+              <li>Spite</li>
+              <li>Hostility</li>
+              <li>Envy</li>
+              <li>Hypocrisy</li>
+              <li>Pretense</li>
+              <li>Lack of engagement</li>
+              <li>Shamelessness</li>
+              <li>Concealment</li>
+              <li>Stinginess</li>
+              <li>Self-infatuation</li>
+              <li>Lack of faith</li>
+              <li>Laziness</li>
+              <li>Heedlessness</li>
+              <li>Forgetfulness</li>
+              <li>Non-alertness</li>
+              <li>Lethargy</li>
+              <li>Excitement</li>
+              <li>Distraction</li>
+            </ol>
+
+            <p class="topic-copy" style="margin-top:8px;"><strong>Four variables:</strong> sleep, regret, conception, discernment.</p>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Non-current Formations</h3>
+            <p class="topic-copy">A quality newly obtained in a being (virtuous, non-virtuous, or neutral). Listed examples include:</p>
+            <ul>
+              <li>Dispossession</li>
+              <li>Same status or similar class</li>
+              <li>Perceptionless serenity</li>
+              <li>State of non-perception</li>
+              <li>Serenity of cessation</li>
+              <li>Ongoing all-ground not blocked by non-perception</li>
+              <li>Life faculty and life span of similar classes of beings</li>
+            </ul>
+            <p class="topic-copy" style="margin-top:8px;"><strong>Four characteristics of conditioned things:</strong> birth, subsistence, aging, impermanence.</p>
+            <p class="topic-copy" style="margin-top:6px;"><strong>Dharmas of formation:</strong> category of names, words, and letters.</p>
+            <p class="topic-copy" style="margin-top:6px;"><strong>Additional non-current formations:</strong> ordinary person, regular sequence, definitive distinctiveness, connected link, speed, sequence, time, location, number, gathering.</p>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Aggregate of Consciousness</h3>
+            <p class="topic-copy">Presented as seven categories: the mind element plus six consciousness elements.</p>
+          </section>
+        </article>
+
+        <article class="chapter" id="chapter-2">
+          <header class="chapter-header">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>
+            <h2>Chapter 2 - The Elements (Dhatu)</h2>
+          </header>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Table 1</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Sense Faculties</th>
+                  <th>Sense Objects</th>
+                  <th>Consciousness</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Eye Element</td><td>Visual Form Element</td><td>Eye Consciousness Element</td></tr>
+                <tr><td>Ear Element</td><td>Sound Element</td><td>Ear Consciousness Element</td></tr>
+                <tr><td>Nose Element</td><td>Smell Element</td><td>Nose Consciousness Element</td></tr>
+                <tr><td>Tongue Element</td><td>Taste Element</td><td>Tongue Consciousness Element</td></tr>
+                <tr><td>Body Element</td><td>Texture Element</td><td>Body Consciousness Element</td></tr>
+                <tr><td>Mind Element</td><td>Mental Object Element</td><td>Mind Consciousness Element</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Mental Object Sources (Ayatana)</h3>
+            <ul>
+              <li>Three aggregates: sensation, perceptions, formations.</li>
+              <li>Five imperceptible forms (mental-object forms).</li>
+              <li>Unconditioned things: cessation due to discrimination, cessation not due to discrimination, space, suchness of virtue, suchness of non-virtue, suchness of neutral, occasion of blocked cognition during non-perception serenity, and occasion of blocked cognition during serenity of cessation.</li>
+            </ul>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>Six Elements of a Person</h3>
+            <div class="pill-grid">
+              <div class="pill">Earth</div>
+              <div class="pill">Water</div>
+              <div class="pill">Fire</div>
+              <div class="pill">Wind</div>
+              <div class="pill">Space</div>
+              <div class="pill">Consciousness</div>
+            </div>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Element Classifications</h3>
+            <ul>
+              <li><strong>Elements with physical form:</strong> five sensory triads plus mental object element.</li>
+              <li><strong>Mutually obstructive elements:</strong> five sense faculties and five sense objects.</li>
+              <li><strong>Undefiling elements:</strong> mind element, mental object element, mind consciousness element, plus unconditioned things.</li>
+              <li><strong>Desire realm elements:</strong> full set of six faculties, six objects, six consciousnesses.</li>
+              <li><strong>Form realm elements:</strong> form-realm grouping of faculties, objects, and consciousnesses.</li>
+              <li><strong>Formless realm elements:</strong> mind element, mental object element, mind consciousness element.</li>
+              <li><strong>Outer elements:</strong> visual form, sound, smell, taste, texture, mental object element.</li>
+              <li><strong>Elements with focus:</strong> six consciousness elements with mind and mental object.</li>
+              <li><strong>Elements with concepts:</strong> mind element, mental object element, mind consciousness element.</li>
+              <li><strong>Nine elements embraced by personal sensation:</strong> eye, ear, nose, tongue, body elements; smell, taste, texture, and mental object element.</li>
+            </ul>
+          </section>
+        </article>
+
+        <article class="chapter" id="chapter-3">
+          <header class="chapter-header">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>
+            <h2>Chapter 3 - The Sense Sources (Ayatana)</h2>
+          </header>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Inner and Outer Sources</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Inner Sources (What Apprehends)</th>
+                  <th>Outer Sources (What Is Apprehended)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Eye Source (Eye Element)</td><td>Visual Object Source (Visual Form Element)</td></tr>
+                <tr><td>Ear Source (Ear Element)</td><td>Sound Object Source (Sound Element)</td></tr>
+                <tr><td>Nose Source (Nose Element)</td><td>Olfactory Object Source (Smell Element)</td></tr>
+                <tr><td>Tongue Source (Tongue Element)</td><td>Taste Object Source (Taste Element)</td></tr>
+                <tr><td>Body Source (Body Element)</td><td>Tactile Object Source (Texture Element)</td></tr>
+                <tr><td>Mind Source (Seven Consciousness Elements)</td><td>Mental Object Source (Mental Object Element)</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>The Five Base Knowables</h3>
+            <ol>
+              <li>Form base of appearance: the form aggregate.</li>
+              <li>Chief mind base: six or eight collections of consciousness (according to school).</li>
+              <li>Accompanying base of mental states: all mental states (51).</li>
+              <li>Non-current formations.</li>
+              <li>Base of unconditioned things: the mental object elements.</li>
+            </ol>
+          </section>
+        </article>
+
+        <article class="chapter" id="chapter-4">
+          <header class="chapter-header">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>
+            <h2>Chapter 4 - Dependent Origination</h2>
+          </header>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Seven Related Causes</h3>
+            <ol>
+              <li>Seed</li>
+              <li>Sprout</li>
+              <li>Stamen</li>
+              <li>Stalk</li>
+              <li>Bud</li>
+              <li>Flower</li>
+              <li>Fruit</li>
+            </ol>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>Six Related Conditions</h3>
+            <ol>
+              <li>Earth</li>
+              <li>Water</li>
+              <li>Fire</li>
+              <li>Wind</li>
+              <li>Space</li>
+              <li>Time</li>
+            </ol>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-list"></use></svg></span>The Twelve Links of Dependent Origination</h3>
+            <ol>
+              <li>Ignorance</li>
+              <li>Formation</li>
+              <li>Consciousness</li>
+              <li>Name and form</li>
+              <li>The six sense sources</li>
+              <li>Contact</li>
+              <li>Sensation</li>
+              <li>Craving</li>
+              <li>Grasping</li>
+              <li>Becoming</li>
+              <li>Rebirth</li>
+              <li>Old age and death</li>
+            </ol>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>First Subdivision of the Twelve Links</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Propelling Links</th>
+                  <th>Propelled Result</th>
+                  <th>Fully Establishing Links</th>
+                  <th>Fully Established Links</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Ignorance</td><td>Name and Form</td><td>Craving</td><td>Rebirth</td></tr>
+                <tr><td>Formation</td><td>The Six Sense Sources</td><td>Grasping</td><td>Old Age and Death</td></tr>
+                <tr><td>Consciousness</td><td>Contact / Sensation</td><td>Becoming</td><td></td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Second Subdivision of the Twelve Links</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Affliction of Disturbing Emotions</th>
+                  <th>Affliction of Karma</th>
+                  <th>Affliction of Life (Seven Bases of Suffering)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ignorance, Craving, Grasping</td>
+                  <td>Formation, Becoming</td>
+                  <td>Consciousness, Name and Form, Six Sense Sources, Contact, Sensation, Rebirth, Old Age and Death</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="callout">From the three disturbing emotions come two karmas; from these arise the seven bases of suffering.</p>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Third Subdivision of the Twelve Links</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Truth of Origin</th>
+                  <th>Truth of Suffering</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ignorance, Craving, Grasping, Formation, Becoming</td>
+                  <td>Consciousness, Name and Form, Six Sense Sources, Contact, Sensation, Rebirth, Old Age and Death</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section class="topic">
+            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Fourth Subdivision of the Twelve Links</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Truth of the Path (reversal)</th>
+                  <th>Truth of Cessation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ignorance, Craving, Grasping, Formation, Becoming</td>
+                  <td>Consciousness, Name and Form, Six Sense Sources, Contact, Sensation, Rebirth, Old Age and Death</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <a class="back-to-top" href="#top">
+            <span class="icon-box" style="width:28px;height:28px;border-radius:8px;"><svg viewBox="0 0 24 24"><use href="#i-arrow-up"></use></svg></span>
+            Back to top
+          </a>
+        </article>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
