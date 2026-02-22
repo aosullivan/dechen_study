@@ -119,6 +119,18 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
   }
 
   void _onNodeTap(({String path, String title, int depth}) section) {
+    final hasChildren =
+        _filteredSections.any((s) => s.path.startsWith('${section.path}.'));
+    if (hasChildren) {
+      setState(() {
+        _selectedPath = null;
+        _selectedTitle = null;
+        _pickerSelections = _pickerSelectionsForPath(section.path);
+        _scrollToPath = section.path;
+      });
+      return;
+    }
+
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
 

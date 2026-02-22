@@ -29,24 +29,104 @@ class OverviewTreeView extends StatefulWidget {
 
 class _OverviewTreeViewState extends State<OverviewTreeView> {
   final _scrollController = ScrollController();
+  final Set<String> _expandedPaths = <String>{};
   String? _lastScrolledTo;
+  String _lastStructureSignature = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _syncStructureAndExpansion();
+  }
 
   @override
   void didUpdateWidget(OverviewTreeView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.scrollToPath != null &&
-        widget.scrollToPath != _lastScrolledTo) {
+    _syncStructureAndExpansion();
+    if (widget.selectedPath != null &&
+        widget.selectedPath != oldWidget.selectedPath) {
+      final changed = _expandAncestors(widget.selectedPath!);
+      if (changed) setState(() {});
+    }
+    if (widget.scrollToPath != null && widget.scrollToPath != _lastScrolledTo) {
+      final changed = _expandAncestors(widget.scrollToPath!);
+      if (changed) setState(() {});
       _lastScrolledTo = widget.scrollToPath;
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSection());
     }
   }
 
+  void _syncStructureAndExpansion() {
+    final signature = widget.flatSections.map((s) => s.path).join('|');
+    if (signature == _lastStructureSignature) return;
+    _lastStructureSignature = signature;
+    _expandedPaths
+      ..clear()
+      ..addAll(
+          widget.flatSections.where((s) => s.depth == 0).map((s) => s.path));
+    if (widget.selectedPath != null) {
+      _expandAncestors(widget.selectedPath!);
+    }
+    if (widget.scrollToPath != null) {
+      _expandAncestors(widget.scrollToPath!);
+    }
+  }
+
+  static String _parentPath(String path) {
+    final idx = path.lastIndexOf('.');
+    return idx >= 0 ? path.substring(0, idx) : '';
+  }
+
+  bool _expandAncestors(String path) {
+    var changed = false;
+    var current = _parentPath(path);
+    while (current.isNotEmpty) {
+      if (_expandedPaths.add(current)) changed = true;
+      current = _parentPath(current);
+    }
+    return changed;
+  }
+
+  bool _isVisible(String path) {
+    var current = _parentPath(path);
+    while (current.isNotEmpty) {
+      if (!_expandedPaths.contains(current)) return false;
+      current = _parentPath(current);
+    }
+    return true;
+  }
+
+  List<({String path, String title, int depth})> _visibleSections() {
+    return widget.flatSections.where((s) => _isVisible(s.path)).toList();
+  }
+
+  Set<String> _parentPaths() {
+    final out = <String>{};
+    for (final section in widget.flatSections) {
+      final parent = _parentPath(section.path);
+      if (parent.isNotEmpty) out.add(parent);
+    }
+    return out;
+  }
+
+  void _toggleExpanded(String path) {
+    setState(() {
+      if (_expandedPaths.contains(path)) {
+        _expandedPaths.removeWhere((p) => p == path || p.startsWith('$path.'));
+      } else {
+        _expandedPaths.add(path);
+      }
+    });
+  }
+
   void _scrollToSection() {
     if (widget.scrollToPath == null) return;
-    final idx = widget.flatSections
-        .indexWhere((s) => s.path == widget.scrollToPath);
+    final visibleSections = _visibleSections();
+    final idx =
+        visibleSections.indexWhere((s) => s.path == widget.scrollToPath);
     if (idx < 0) return;
     final target = idx * OverviewConstants.nodeHeight;
+    if (!_scrollController.hasClients) return;
     _scrollController.animateTo(
       target.clamp(0.0, _scrollController.position.maxScrollExtent),
       duration: const Duration(milliseconds: 300),
@@ -65,9 +145,10 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     if (widget.flatSections.isEmpty) {
       return const Center(child: Text('No sections loaded.'));
     }
+    final visibleSections = _visibleSections();
+    final parentPaths = _parentPaths();
 
-    final totalHeight =
-        widget.flatSections.length * OverviewConstants.nodeHeight;
+    final totalHeight = visibleSections.length * OverviewConstants.nodeHeight;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -83,21 +164,31 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
                 // Layer 1: Connector lines.
                 CustomPaint(
                   size: Size(viewportWidth, totalHeight),
-                  painter: OverviewTreePainter(
-                      flatSections: widget.flatSections),
+                  painter: OverviewTreePainter(flatSections: visibleSections),
                 ),
                 // Layer 2: Node cards.
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (var i = 0; i < widget.flatSections.length; i++)
+                    for (var i = 0; i < visibleSections.length; i++)
                       OverviewNodeCard(
-                        path: widget.flatSections[i].path,
-                        title: widget.flatSections[i].title,
-                        depth: widget.flatSections[i].depth,
+                        path: visibleSections[i].path,
+                        title: visibleSections[i].title,
+                        depth: visibleSections[i].depth,
+                        hasChildren:
+                            parentPaths.contains(visibleSections[i].path),
+                        isExpanded:
+                            _expandedPaths.contains(visibleSections[i].path),
                         isSelected:
-                            widget.flatSections[i].path == widget.selectedPath,
-                        onTap: () => widget.onNodeTap(widget.flatSections[i]),
+                            visibleSections[i].path == widget.selectedPath,
+                        onTap: () {
+                          final hasChildren =
+                              parentPaths.contains(visibleSections[i].path);
+                          if (hasChildren) {
+                            _toggleExpanded(visibleSections[i].path);
+                          }
+                          widget.onNodeTap(visibleSections[i]);
+                        },
                       ),
                   ],
                 ),

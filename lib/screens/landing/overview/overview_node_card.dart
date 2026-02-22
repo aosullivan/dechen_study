@@ -10,6 +10,8 @@ class OverviewNodeCard extends StatelessWidget {
     required this.path,
     required this.title,
     required this.depth,
+    required this.hasChildren,
+    required this.isExpanded,
     required this.isSelected,
     required this.onTap,
   });
@@ -17,6 +19,8 @@ class OverviewNodeCard extends StatelessWidget {
   final String path;
   final String title;
   final int depth;
+  final bool hasChildren;
+  final bool isExpanded;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -54,37 +58,60 @@ class OverviewNodeCard extends StatelessWidget {
                     width: isSelected ? 1.5 : 0.5,
                   ),
                 ),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '$_shortNumber. ',
-                        style: TextStyle(
-                          fontFamily: 'Lora',
-                          fontSize:
-                              OverviewConstants.fontSizeForDepth(depth) - 1,
-                          fontWeight: FontWeight.w600,
-                          color: isSelected
-                              ? AppColors.primary
-                              : AppColors.mutedBrown,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      child: hasChildren
+                          ? Icon(
+                              isExpanded
+                                  ? Icons.expand_more
+                                  : Icons.chevron_right,
+                              size: 16,
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : AppColors.mutedBrown,
+                            )
+                          : null,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '$_shortNumber. ',
+                              style: TextStyle(
+                                fontFamily: 'Lora',
+                                fontSize:
+                                    OverviewConstants.fontSizeForDepth(depth) -
+                                        1,
+                                fontWeight: FontWeight.w600,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.mutedBrown,
+                              ),
+                            ),
+                            TextSpan(
+                              text: title,
+                              style: TextStyle(
+                                fontFamily: 'Lora',
+                                fontSize:
+                                    OverviewConstants.fontSizeForDepth(depth),
+                                fontWeight:
+                                    OverviewConstants.fontWeightForDepth(depth),
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.textDark,
+                              ),
+                            ),
+                          ],
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      TextSpan(
-                        text: title,
-                        style: TextStyle(
-                          fontFamily: 'Lora',
-                          fontSize: OverviewConstants.fontSizeForDepth(depth),
-                          fontWeight:
-                              OverviewConstants.fontWeightForDepth(depth),
-                          color: isSelected
-                              ? AppColors.primary
-                              : AppColors.textDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ),
