@@ -54,6 +54,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
   /// Current section: refs and their verse texts (in order).
   List<String> _sectionRefs = [];
   List<String> _sectionVerseTexts = [];
+  String _sectionTitle = '';
 
   /// Verse indices in the flat list for deep link and highlight.
   Set<int> _sectionVerseIndices = {};
@@ -81,6 +82,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     final m = RegExp(r'^(\d+\.\d+)', caseSensitive: false).firstMatch(ref);
     return m?.group(1) ?? ref;
   }
+
+  String _displayRef(String ref) => _baseRef(ref);
 
   List<String> _hierarchyCandidatesForRef(String ref) {
     final out = <String>{};
@@ -203,12 +206,39 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     return common.join('.');
   }
 
+  Future<String> _sectionTitleForRefs(
+    List<String> refs, {
+    String? sectionPath,
+  }) async {
+    String titleFromPath(String path) {
+      if (path.isEmpty) return '';
+      final hierarchy = _hierarchyService.getHierarchyForSectionSync(path);
+      if (hierarchy.isEmpty) return '';
+      return (hierarchy.last['title'] ?? '').trim();
+    }
+
+    final path = sectionPath ?? await _deepestCommonLeafPath(refs);
+    if (path != null && path.isNotEmpty) {
+      final title = titleFromPath(path);
+      if (title.isNotEmpty) return title;
+    }
+
+    for (final ref in refs) {
+      final hierarchy = await _hierarchyService.getHierarchyForVerse(ref);
+      if (hierarchy.isEmpty) continue;
+      final title = (hierarchy.last['title'] ?? '').trim();
+      if (title.isNotEmpty) return title;
+    }
+    return '';
+  }
+
   Future<void> _loadSection() async {
     setState(() {
       _loading = true;
       _error = null;
       _sectionRefs = [];
       _sectionVerseTexts = [];
+      _sectionTitle = '';
       _sectionVerseIndices = {};
     });
     try {
@@ -235,30 +265,33 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
       var refs = List<String>.from(section.refsInBlock);
       refs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
       var content = _buildSectionContent(refs, indexForRef, textForIndex);
+      var sectionPath = await _deepestCommonLeafPath(content.refs);
 
       if (widget.minLinesForSection > 0 &&
           _totalLogicalLines(content.texts) < widget.minLinesForSection) {
-        var currentPath = await _deepestCommonLeafPath(content.refs);
         final visitedParents = <String>{};
-        while (currentPath != null &&
-            currentPath.isNotEmpty &&
+        while (sectionPath != null &&
+            sectionPath.isNotEmpty &&
             _totalLogicalLines(content.texts) < widget.minLinesForSection) {
-          final parent = _parentPath(currentPath);
+          final parent = _parentPath(sectionPath);
           if (parent.isEmpty || !visitedParents.add(parent)) break;
           final parentRefs =
               _hierarchyService.getVerseRefsForSectionSync(parent).toList();
           if (parentRefs.isEmpty) break;
           parentRefs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
           content = _buildSectionContent(parentRefs, indexForRef, textForIndex);
-          currentPath = parent;
+          sectionPath = parent;
         }
       }
+      final sectionTitle =
+          await _sectionTitleForRefs(content.refs, sectionPath: sectionPath);
 
       if (mounted) {
         widget.onResolvedRefsForTest?.call(content.refs);
         setState(() {
           _sectionRefs = content.refs;
           _sectionVerseTexts = content.texts;
+          _sectionTitle = sectionTitle;
           _sectionVerseIndices = content.indices;
           _loading = false;
         });
@@ -273,34 +306,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
     }
   }
 
-  String get _sectionCaption {
-    if (_sectionRefs.isEmpty) return '';
-    if (_sectionRefs.length == 1) {
-      final ref = _sectionRefs.single;
-      final parts = ref.split('.');
-      if (parts.length == 2) return 'Chapter ${parts[0]}, Verse ${parts[1]}';
-      return 'Verse $ref';
-    }
-    final first = _sectionRefs.first;
-    final last = _sectionRefs.last;
-    final cFirst = first.split('.').firstOrNull ?? '';
-    final cLast = last.split('.').firstOrNull ?? '';
-    if (cFirst != cLast) return 'Verses ${_sectionRefs.join(', ')}';
-    int? verseNumber(String ref) {
-      final m = RegExp(r'^\d+\.(\d+)').firstMatch(ref);
-      if (m == null) return null;
-      return int.tryParse(m.group(1)!);
-    }
-
-    final verseNums = _sectionRefs.map(verseNumber).whereType<int>().toList();
-    final contiguous = verseNums.length == _sectionRefs.length &&
-        verseNums.length > 1 &&
-        (verseNums.last - verseNums.first + 1) == verseNums.length;
-    if (contiguous) {
-      return 'Chapter $cFirst, Verses ${verseNums.first}–${verseNums.last}';
-    }
-    return 'Chapter $cFirst, Verses ${_sectionRefs.map((r) => r.split('.').last).join(', ')}';
-  }
+  String get _sectionHeading =>
+      _sectionTitle.isEmpty ? 'Section' : _sectionTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -379,7 +386,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _sectionCaption,
+                  _sectionHeading,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontFamily: 'Lora',
                         color: AppColors.primary,
@@ -390,14 +397,15 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
                   final i = entry.key;
                   final text = entry.value;
                   final ref = i < _sectionRefs.length ? _sectionRefs[i] : null;
+                  final displayRef = ref == null ? null : _displayRef(ref);
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (ref != null) ...[
+                        if (displayRef != null) ...[
                           Text(
-                            'Verse $ref',
+                            'Verse $displayRef',
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontFamily: 'Lora',

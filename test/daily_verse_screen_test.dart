@@ -63,7 +63,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not load section'), findsNothing);
-    expect(find.text('Verse 8.136ab'), findsOneWidget);
+    expect(find.text('Verse 8.136'), findsOneWidget);
     expect(find.textContaining('Because it will'), findsWidgets);
     expect(
         find.textContaining('I will give myself up for others'), findsNothing);
@@ -75,7 +75,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not load section'), findsNothing);
-    expect(find.text('Verse 8.136cd'), findsOneWidget);
+    expect(find.text('Verse 8.136'), findsOneWidget);
     expect(
         find.textContaining('I will give myself up for others'), findsWidgets);
     expect(find.textContaining('Because it will'), findsNothing);
@@ -113,7 +113,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not load section'), findsNothing);
-    expect(find.text('Verse 7.7a'), findsOneWidget);
+    expect(find.text('Verse 7.7'), findsOneWidget);
     expect(find.textContaining('Because it will'), findsWidgets);
     expect(
       find.textContaining('And pacify the'),
@@ -131,7 +131,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not load section'), findsNothing);
-    expect(find.text('Verse 7.7bcd'), findsOneWidget);
+    expect(find.text('Verse 7.7'), findsOneWidget);
     expect(
       find.textContaining('And pacify the'),
       findsWidgets,
