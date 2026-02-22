@@ -30,6 +30,10 @@ class OverviewTreeView extends StatefulWidget {
 class _OverviewTreeViewState extends State<OverviewTreeView> {
   final _scrollController = ScrollController();
   final Set<String> _expandedPaths = <String>{};
+  Set<String> _parentPathsCache = <String>{};
+  List<({String path, String title, int depth})> _visibleSectionsCache =
+      const [];
+  bool _visibleSectionsDirty = true;
   String? _lastScrolledTo;
   String _lastStructureSignature = '';
 
@@ -60,10 +64,16 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     final signature = widget.flatSections.map((s) => s.path).join('|');
     if (signature == _lastStructureSignature) return;
     _lastStructureSignature = signature;
+    _parentPathsCache = <String>{};
+    for (final section in widget.flatSections) {
+      final parent = _parentPath(section.path);
+      if (parent.isNotEmpty) _parentPathsCache.add(parent);
+    }
     _expandedPaths
       ..clear()
       ..addAll(
           widget.flatSections.where((s) => s.depth == 0).map((s) => s.path));
+    _visibleSectionsDirty = true;
     if (widget.selectedPath != null) {
       _expandAncestors(widget.selectedPath!);
     }
@@ -84,6 +94,7 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
       if (_expandedPaths.add(current)) changed = true;
       current = _parentPath(current);
     }
+    if (changed) _visibleSectionsDirty = true;
     return changed;
   }
 
@@ -96,17 +107,16 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     return true;
   }
 
-  List<({String path, String title, int depth})> _visibleSections() {
-    return widget.flatSections.where((s) => _isVisible(s.path)).toList();
+  void _ensureVisibleSections() {
+    if (!_visibleSectionsDirty) return;
+    _visibleSectionsCache =
+        widget.flatSections.where((s) => _isVisible(s.path)).toList();
+    _visibleSectionsDirty = false;
   }
 
-  Set<String> _parentPaths() {
-    final out = <String>{};
-    for (final section in widget.flatSections) {
-      final parent = _parentPath(section.path);
-      if (parent.isNotEmpty) out.add(parent);
-    }
-    return out;
+  List<({String path, String title, int depth})> get _visibleSections {
+    _ensureVisibleSections();
+    return _visibleSectionsCache;
   }
 
   void _toggleExpanded(String path) {
@@ -116,12 +126,13 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
       } else {
         _expandedPaths.add(path);
       }
+      _visibleSectionsDirty = true;
     });
   }
 
   void _scrollToSection() {
     if (widget.scrollToPath == null) return;
-    final visibleSections = _visibleSections();
+    final visibleSections = _visibleSections;
     final idx =
         visibleSections.indexWhere((s) => s.path == widget.scrollToPath);
     if (idx < 0) return;
@@ -145,8 +156,8 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     if (widget.flatSections.isEmpty) {
       return const Center(child: Text('No sections loaded.'));
     }
-    final visibleSections = _visibleSections();
-    final parentPaths = _parentPaths();
+    final visibleSections = _visibleSections;
+    final parentPaths = _parentPathsCache;
 
     final totalHeight = visibleSections.length * OverviewConstants.nodeHeight;
 

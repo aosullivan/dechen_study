@@ -12,6 +12,44 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
+const _expectedLeafSkipCount = 174;
+const _expectedLeafGapSum = 497;
+const _expectedLeafMaxGap = 12;
+const _expectedLeafSkipsFirst5 = <String>[
+  '3.1.2.4 (1.18) -> 3.1.3.1 (1.20): verse gap 2',
+  '3.1.3.2.1.1 (1.21) -> 3.1.3.2.1.2.1 (1.23): verse gap 2',
+  '3.1.3.2.2.2 (1.28) -> 3.1.3.2.2.3 (1.31): verse gap 3',
+  '3.1.3.2.2.4 (1.32) -> 3.1.3.2.2.5 (1.34): verse gap 2',
+  '3.2.1.1.2 (2.2) -> 3.2.1.1.3 (2.8): verse gap 6',
+];
+const _expectedLeafSkipsLast5 = <String>[
+  '5.2.1.3.2.1.1 (10.27) -> 5.2.1.3.2.1.2 (10.32): verse gap 5',
+  '5.2.1.3.2.1.3 (10.33) -> 5.2.1.3.2.2 (10.42): verse gap 9',
+  '5.2.1.3.2.2 (10.42) -> 5.2.2 (10.49): verse gap 7',
+  '5.2.2 (10.49) -> 5.3 (10.51): verse gap 2',
+  '5.3 (10.51) -> 5.4 (10.57): verse gap 6',
+];
+
+const _expectedMissingVerses = <String>[
+  '2.13: missing',
+  '2.14: missing',
+  '2.15: missing',
+  '2.16: missing',
+  '2.17: missing',
+  '2.18: missing',
+  '2.19: missing',
+  '2.20: missing',
+  '2.21: missing',
+  '6.27: missing',
+  '9.151: missing',
+  '9.152: missing',
+];
+const _expectedNonConsecutive = <String>[
+  '2.12 -> 2.22: non-consecutive (gap 10)',
+  '6.26 -> 6.28: non-consecutive (gap 2)',
+  '9.150cd -> 9.153: non-consecutive (gap 3)',
+];
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -415,7 +453,8 @@ void main() {
 
     /// In verse_hierarchy_map, 9.2a/9.2bcd live in parent sections (no leaf);
     /// the first leaf after 9.1 is 9.3. We must not skip to 9.116.
-    test('fallback from 9.1: findAdjacentSectionIndex returns 9.2 or 9.3 not 9.116',
+    test(
+        'fallback from 9.1: findAdjacentSectionIndex returns 9.2 or 9.3 not 9.116',
         () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
       final nextIdx = hierarchyService.findAdjacentSectionIndex(leaves, '9.1',
@@ -426,7 +465,8 @@ void main() {
       final (ch, v) = VerseHierarchyService.baseVerseFromRef(nextRef ?? '');
       expect(ch, 9);
       expect(v, lessThanOrEqualTo(3),
-          reason: 'Fallback from 9.1 must land on 9.2 or 9.3, not skip to 9.116');
+          reason:
+              'Fallback from 9.1 must land on 9.2 or 9.3, not skip to 9.116');
     });
 
     /// Real-world: from 6.48 leaf, next leaf must be 6.49 or 6.50 (not skip to 6.52).
@@ -490,17 +530,16 @@ void main() {
     });
   });
 
-  /// Full-doc traversal: report every consecutive leaf pair (same chapter) where
-  /// first-verse numbers skip (e.g. 8.17 then 8.19 skips 8.18). Run with:
-  ///   flutter test test/section_navigation_test.dart --name "consecutive leaves"
-  /// to get a full list in ~4s. Fails if any skips exist (many exist today due to
-  /// outline structure; use this as a regression baseline or to drive fixes).
+  /// Full-doc traversal: we intentionally keep a baseline while hierarchy data
+  /// is being cleaned up. This catches regressions without requiring zero skips.
   group('Full-doc leaf traversal (no skips)', () {
-    test('consecutive leaves in same chapter have no verse-number skip', () {
+    test('consecutive-leaf skip baseline is unchanged', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync();
       expect(leaves, isNotEmpty);
 
       final skips = <String>[];
+      var gapSum = 0;
+      var maxGap = 0;
       for (var i = 0; i < leaves.length - 1; i++) {
         final refA =
             hierarchyService.getFirstVerseForSectionSync(leaves[i].path);
@@ -514,17 +553,41 @@ void main() {
 
         final gap = vB - vA;
         if (gap > 1) {
+          gapSum += gap;
+          if (gap > maxGap) maxGap = gap;
           skips.add(
               '${leaves[i].path} ($refA) -> ${leaves[i + 1].path} ($refB): verse gap $gap');
         }
       }
       expect(
-        skips,
-        isEmpty,
+        skips.length,
+        _expectedLeafSkipCount,
         reason:
-            'Leaf list has ${skips.length} verse-number skips (key-down would skip verses). First 5:\n${skips.take(5).join('\n')}\n... run test for full list.',
+            'Leaf skip count changed: expected $_expectedLeafSkipCount, got ${skips.length}.',
       );
-    }, skip: 'verse_hierarchy_map.json has gaps; enable when map is updated');
+      expect(
+        gapSum,
+        _expectedLeafGapSum,
+        reason:
+            'Leaf skip gap-sum changed: expected $_expectedLeafGapSum, got $gapSum.',
+      );
+      expect(
+        maxGap,
+        _expectedLeafMaxGap,
+        reason:
+            'Leaf max gap changed: expected $_expectedLeafMaxGap, got $maxGap.',
+      );
+      expect(
+        skips.take(5).toList(),
+        _expectedLeafSkipsFirst5,
+        reason: 'Leading leaf-skip baseline changed.',
+      );
+      expect(
+        skips.skip(skips.length - 5).toList(),
+        _expectedLeafSkipsLast5,
+        reason: 'Trailing leaf-skip baseline changed.',
+      );
+    });
   });
 
   /// Extracts all "verses" attributes from verse_hierarchy_map.json in order,
@@ -599,18 +662,17 @@ void main() {
 
       expect(
         missing,
-        isEmpty,
-        reason: 'verse_hierarchy_map.json: ${missing.length} missing\n$report',
+        _expectedMissingVerses,
+        reason:
+            'verse_hierarchy_map.json missing-verse baseline changed\n$report',
       );
       expect(
         nonConsecutive,
-        isEmpty,
+        _expectedNonConsecutive,
         reason:
-            'verse_hierarchy_map.json: ${nonConsecutive.length} non-consecutive\n$report',
+            'verse_hierarchy_map.json non-consecutive baseline changed\n$report',
       );
-    },
-        skip:
-            'verse_hierarchy_map.json has missing verses; enable when map is updated');
+    });
   });
 
   group('Verse-order (deduplicated) navigation', () {

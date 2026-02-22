@@ -71,6 +71,8 @@ class BcvReadScreen extends StatefulWidget {
   State<BcvReadScreen> createState() => _BcvReadScreenState();
 }
 
+enum _MobileNavPanel { chapter, section, breadcrumb }
+
 class _BcvReadScreenState extends State<BcvReadScreen> {
   final _verseService = BcvVerseService.instance;
   List<BcvChapter> _chapters = [];
@@ -1497,41 +1499,45 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     );
   }
 
-  void _mobileToggleChapter() {
+  void _toggleMobilePanel(_MobileNavPanel panel) {
     setState(() {
-      final wasExpanded = !_chaptersPanelCollapsed;
-      _chaptersPanelCollapsed = !_chaptersPanelCollapsed;
-      if (!_chaptersPanelCollapsed) {
-        _sectionSliderCollapsed = true;
-        _breadcrumbCollapsed = true;
+      var wasExpanded = false;
+      switch (panel) {
+        case _MobileNavPanel.chapter:
+          wasExpanded = !_chaptersPanelCollapsed;
+          _chaptersPanelCollapsed = !_chaptersPanelCollapsed;
+          if (!_chaptersPanelCollapsed) {
+            _sectionSliderCollapsed = true;
+            _breadcrumbCollapsed = true;
+          }
+          break;
+        case _MobileNavPanel.section:
+          wasExpanded = !_sectionSliderCollapsed;
+          _sectionSliderCollapsed = !_sectionSliderCollapsed;
+          if (!_sectionSliderCollapsed) {
+            _chaptersPanelCollapsed = true;
+            _breadcrumbCollapsed = true;
+          }
+          break;
+        case _MobileNavPanel.breadcrumb:
+          wasExpanded = !_breadcrumbCollapsed;
+          _breadcrumbCollapsed = !_breadcrumbCollapsed;
+          if (!_breadcrumbCollapsed) {
+            _chaptersPanelCollapsed = true;
+            _sectionSliderCollapsed = true;
+          }
+          break;
       }
       if (wasExpanded) _cooldownAfterPanelClose();
     });
   }
 
-  void _mobileToggleSection() {
-    setState(() {
-      final wasExpanded = !_sectionSliderCollapsed;
-      _sectionSliderCollapsed = !_sectionSliderCollapsed;
-      if (!_sectionSliderCollapsed) {
-        _chaptersPanelCollapsed = true;
-        _breadcrumbCollapsed = true;
-      }
-      if (wasExpanded) _cooldownAfterPanelClose();
-    });
-  }
+  void _mobileToggleChapter() => _toggleMobilePanel(_MobileNavPanel.chapter);
 
-  void _mobileToggleBreadcrumb() {
-    setState(() {
-      final wasExpanded = !_breadcrumbCollapsed;
-      _breadcrumbCollapsed = !_breadcrumbCollapsed;
-      if (!_breadcrumbCollapsed) {
-        _chaptersPanelCollapsed = true;
-        _sectionSliderCollapsed = true;
-      }
-      if (wasExpanded) _cooldownAfterPanelClose();
-    });
-  }
+  void _mobileToggleSection() => _toggleMobilePanel(_MobileNavPanel.section);
+
+  void _mobileToggleBreadcrumb() =>
+      _toggleMobilePanel(_MobileNavPanel.breadcrumb);
 
   /// After closing a nav pane, ignore visibility-driven section updates briefly
   /// so the highlighted verse doesn't jump when the viewport resizes.

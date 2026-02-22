@@ -9,6 +9,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:dechen_study/screens/landing/bcv_read_screen.dart';
+import 'package:dechen_study/screens/landing/bcv/bcv_breadcrumb_bar.dart';
+import 'package:dechen_study/screens/landing/bcv/bcv_chapters_panel.dart';
+import 'package:dechen_study/screens/landing/bcv/bcv_mobile_nav_bar.dart';
+import 'package:dechen_study/screens/landing/bcv/bcv_section_slider.dart';
 import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 import 'package:dechen_study/utils/app_theme.dart';
@@ -72,9 +76,15 @@ void main() {
   Future<void> pumpBcvReadScreen(
     WidgetTester tester, {
     int? scrollToVerseIndex,
+    Size? mediaSize,
     void Function(String sectionPath, String firstVerseRef)?
         onSectionNavigateForTest,
   }) async {
+    final screen = BcvReadScreen(
+      scrollToVerseIndex: scrollToVerseIndex,
+      title: 'Bodhicaryavatara',
+      onSectionNavigateForTest: onSectionNavigateForTest,
+    );
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(
@@ -82,11 +92,12 @@ void main() {
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
           scaffoldBackgroundColor: AppColors.scaffoldBackground,
         ),
-        home: BcvReadScreen(
-          scrollToVerseIndex: scrollToVerseIndex,
-          title: 'Bodhicaryavatara',
-          onSectionNavigateForTest: onSectionNavigateForTest,
-        ),
+        home: mediaSize == null
+            ? screen
+            : MediaQuery(
+                data: MediaQueryData(size: mediaSize),
+                child: screen,
+              ),
       ),
     );
   }
@@ -279,6 +290,41 @@ void main() {
         reason:
             'Auto-scrolling section list must not trigger another section navigation.',
       );
+    });
+  });
+
+  group('BcvReadScreen panel defaults by layout', () {
+    testWidgets('mobile opens with chapter/section/breadcrumb collapsed',
+        (WidgetTester tester) async {
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex237,
+        mediaSize: const Size(390, 844),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(find.byType(BcvMobileNavBar), findsOneWidget);
+      expect(find.byType(BcvChaptersPanel), findsNothing);
+      expect(find.byType(BcvSectionSlider), findsNothing);
+      expect(find.byType(BcvBreadcrumbBar), findsNothing);
+    });
+
+    testWidgets(
+        'laptop opens with chapter/section/breadcrumb expanded by default',
+        (WidgetTester tester) async {
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex237,
+        mediaSize: const Size(1200, 800),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(find.byType(BcvMobileNavBar), findsNothing);
+      expect(find.byType(BcvChaptersPanel), findsOneWidget);
+      expect(find.byType(BcvSectionSlider), findsOneWidget);
+      expect(find.byType(BcvBreadcrumbBar), findsOneWidget);
     });
   });
 }
