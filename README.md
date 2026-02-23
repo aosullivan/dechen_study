@@ -226,7 +226,7 @@ Notes:
 A built-in HTML report with charts is available at `/analytics.html`:
 
 - **Production (Vercel):** `https://your-app.vercel.app/analytics.html` – config is injected at build time from env vars
-- **Local:** Add your Supabase URL and anon key to `web/supabase_config.js`, then open `analytics.html` from the build output
+- **Local:** Run `bash scripts/sync_supabase_config.sh` to copy credentials from `.env` to `web/supabase_config.js`, then open `analytics.html` (e.g. after `flutter run -d chrome`, visit the `/analytics.html` path)
 
 Charts show events by mode, events over time, top event types, and quiz summary. Data comes from the `analytics_dashboard_json()` RPC in Supabase.
 
