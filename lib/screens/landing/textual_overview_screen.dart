@@ -267,18 +267,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         'has_children': hasChildren,
       },
     ));
-    if (hasChildren) {
-      setState(() {
-        _selectedPath = null;
-        _selectedTitle = null;
-        _pickerSelections = _pickerSelectionsForPath(section.path);
-        _scrollToPath = section.path;
-      });
-      unawaited(_saveLastPath(section.path));
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _scrollPickersToEnd());
-      return;
-    }
 
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
@@ -291,8 +279,9 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         } else {
           _selectedPath = section.path;
           _selectedTitle = section.title;
-          _pickerSelections = _pickerSelectionsForPath(section.path);
         }
+        _pickerSelections = _pickerSelectionsForPath(section.path);
+        _scrollToPath = section.path;
       });
       unawaited(_saveLastPath(section.path));
       WidgetsBinding.instance
@@ -302,6 +291,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         _selectedPath = section.path;
         _selectedTitle = section.title;
         _pickerSelections = _pickerSelectionsForPath(section.path);
+        _scrollToPath = section.path;
       });
       unawaited(_saveLastPath(section.path));
       WidgetsBinding.instance

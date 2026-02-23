@@ -211,14 +211,11 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
                               _expandedPaths.contains(visibleSections[i].path),
                           isSelected:
                               visibleSections[i].path == widget.selectedPath,
-                          onTap: () {
-                            final hasChildren =
-                                parentPaths.contains(visibleSections[i].path);
-                            if (hasChildren) {
-                              _toggleExpanded(visibleSections[i].path);
-                            }
-                            widget.onNodeTap(visibleSections[i]);
-                          },
+                          onTap: () => widget.onNodeTap(visibleSections[i]),
+                          onExpandTap: parentPaths
+                                  .contains(visibleSections[i].path)
+                              ? () => _toggleExpanded(visibleSections[i].path)
+                              : null,
                         ),
                     ],
                   ),

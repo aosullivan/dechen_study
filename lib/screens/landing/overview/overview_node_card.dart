@@ -14,6 +14,7 @@ class OverviewNodeCard extends StatelessWidget {
     required this.isExpanded,
     required this.isSelected,
     required this.onTap,
+    this.onExpandTap,
   });
 
   final String path;
@@ -23,6 +24,7 @@ class OverviewNodeCard extends StatelessWidget {
   final bool isExpanded;
   final bool isSelected;
   final VoidCallback onTap;
+  final VoidCallback? onExpandTap;
 
   String get _shortNumber {
     final dot = path.lastIndexOf('.');
@@ -61,16 +63,25 @@ class OverviewNodeCard extends StatelessWidget {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 16,
+                      width: 20,
                       child: hasChildren
-                          ? Icon(
-                              isExpanded
-                                  ? Icons.expand_more
-                                  : Icons.chevron_right,
-                              size: 16,
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : AppColors.mutedBrown,
+                          ? IconButton(
+                              onPressed: onExpandTap,
+                              padding: EdgeInsets.zero,
+                              splashRadius: 14,
+                              constraints: const BoxConstraints(
+                                minWidth: 20,
+                                minHeight: 20,
+                              ),
+                              icon: Icon(
+                                isExpanded
+                                    ? Icons.expand_more
+                                    : Icons.chevron_right,
+                                size: 16,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.mutedBrown,
+                              ),
                             )
                           : null,
                     ),
