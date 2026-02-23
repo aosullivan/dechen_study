@@ -50,10 +50,19 @@ app.*.map.json
 /web/flutter_service_worker.js
 /web/version.json
 
-# Environment variables
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
 
 # Supabase credentials (NEVER commit these!)
 lib/config/supabase_config.dart
+web/supabase_config.js
 .vercel
-.env*.local
+
+# API keys, tokens, certs
+*.pem
+*.key
+credentials.json
+secrets.json
+**/secrets/
