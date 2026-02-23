@@ -167,6 +167,7 @@ class UsageMetricsService {
     final normalizedProps = properties == null
         ? <String, dynamic>{}
         : Map<String, dynamic>.from(properties);
+    normalizedProps.putIfAbsent('environment', () => appEnvironment);
 
     _pending.add({
       'event_name': normalizedName,

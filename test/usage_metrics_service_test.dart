@@ -149,6 +149,8 @@ void main() {
     expect(row['section_title'], 'Useful Section');
     expect(row['verse_ref'], '9.2bcd');
     expect(row['occurred_at'], fixedNow.toIso8601String());
-    expect(row['properties'], {'sample': true});
+    final properties = row['properties'] as Map<String, dynamic>;
+    expect(properties['sample'], isTrue);
+    expect(properties['environment'], isNotNull);
   });
 }

@@ -68,6 +68,13 @@ SUPABASE_ANON_KEY=<your-anon-key>
 
 **Important:** The `.env` file is already added to `.gitignore` to protect your credentials.
 
+### Test vs Prod
+
+- **Prod** (Vercel): Uses `SUPABASE_URL` and `SUPABASE_ANON_KEY` from Vercel env vars.
+- **Test** (local): Uses `SUPABASE_URL_TEST` and `SUPABASE_ANON_KEY_TEST` in `.env`. Run with `--dart-define=APP_ENV=test`.
+
+See README "Environment Split (test vs prod)" for details.
+
 ## 🚀 Usage in Code
 
 Access the Supabase client anywhere in your app:

@@ -185,14 +185,41 @@ Run the SQL smoke-check script in Supabase SQL editor:
 
 `supabase/tests/usage_metrics_analytics_smoke.sql`
 
-### Environment Split (recommended)
+### Environment Split (test vs prod)
 
-Use separate Supabase projects for production and non-production analytics.
+The app distinguishes **test** (local) from **prod** (Vercel) via `APP_ENV` and uses different Supabase projects:
 
-- Keep production pointing at your current project.
-- Use a separate non-prod project for local/dev/staging.
-- Apply the same migrations to both projects.
-- Keep distinct `.env` credentials per environment.
+| Environment | When | Supabase credentials |
+|-------------|------|------------------------|
+| **prod** | Deployed to Vercel | `SUPABASE_URL`, `SUPABASE_ANON_KEY` (Vercel env vars) |
+| **test** | Running locally | `SUPABASE_URL_TEST`, `SUPABASE_ANON_KEY_TEST` (in `.env`) |
+
+- Apply the same migrations to both Supabase projects.
+- Vercel builds pass `APP_ENV=prod`; local runs use `APP_ENV=test` to hit the test project.
+
+Examples:
+
+```bash
+# Local (test) – uses SUPABASE_URL_TEST / SUPABASE_ANON_KEY_TEST from .env
+flutter run -d chrome --dart-define=APP_ENV=test
+
+# Local with single project – override via dart-define
+flutter run -d chrome \
+  --dart-define=APP_ENV=test \
+  --dart-define=SUPABASE_URL_TEST=https://your-test-project.supabase.co \
+  --dart-define=SUPABASE_ANON_KEY_TEST=your-test-anon-key
+```
+
+`.env` for local development:
+
+```
+SUPABASE_URL_TEST=https://your-test-project.supabase.co
+SUPABASE_ANON_KEY_TEST=your-test-anon-key
+```
+
+Notes:
+- `appEnvironment`, `isTest`, and `isProd` from `utils/constants.dart` expose the current environment.
+- `APP_ENV` is attached to analytics event properties as `environment`.
 
 ## Design
 

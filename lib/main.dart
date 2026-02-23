@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'services/usage_metrics_service.dart';
 import 'screens/auth/splash_screen.dart';
+import 'services/usage_metrics_service.dart';
 import 'utils/app_theme.dart';
 import 'utils/constants.dart';
 
@@ -14,18 +14,29 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    // Load environment variables (included in assets via pubspec.yaml)
+    // Load fallback environment variables from asset.
+    // Per-environment overrides can be passed via --dart-define.
     await dotenv.load(fileName: '.env');
+  } catch (e) {
+    debugPrint('dotenv load skipped: $e');
+  }
 
-    await Supabase.initialize(
-      url: supabaseUrl,
-      anonKey: supabaseAnonKey,
-    );
+  try {
+    if (isSupabaseConfigured) {
+      await Supabase.initialize(
+        url: supabaseUrl,
+        anonKey: supabaseAnonKey,
+      );
 
-    await UsageMetricsService.instance.init();
+      await UsageMetricsService.instance.init();
+    } else {
+      debugPrint(
+        'Supabase not configured for APP_ENV=$appEnvironment; running without backend analytics.',
+      );
+    }
   } catch (e) {
     debugPrint('Supabase initialization error: $e');
-    // Continue anyway - the app will show an error screen
+    // Continue anyway - the app will still run without Supabase-backed features.
   }
 
   WidgetsBinding.instance.addObserver(_usageMetricsLifecycleObserver);
