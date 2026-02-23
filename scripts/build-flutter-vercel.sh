@@ -5,6 +5,7 @@ set -e
 if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
   echo "SUPABASE_URL=$SUPABASE_URL" > .env
   echo "SUPABASE_ANON_KEY=$SUPABASE_ANON_KEY" >> .env
+  echo "window.SUPABASE_URL='$SUPABASE_URL';window.SUPABASE_ANON_KEY='$SUPABASE_ANON_KEY';" > web/supabase_config.js
 fi
 export PATH="$PWD/flutter/bin:$PATH"
 flutter build web --release --dart-define=APP_ENV=prod

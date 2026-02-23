@@ -3,5 +3,5 @@
   "outputDirectory": "build/web",
   "installCommand": "bash scripts/install-flutter-vercel.sh",
   "framework": null,
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/analytics.html", "destination": "/analytics.html" }, { "source": "/supabase_config.js", "destination": "/supabase_config.js" }, { "source": "/(.*)", "destination": "/index.html" }]
 }

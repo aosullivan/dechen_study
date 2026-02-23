@@ -221,6 +221,15 @@ Notes:
 - `appEnvironment`, `isTest`, and `isProd` from `utils/constants.dart` expose the current environment.
 - `APP_ENV` is attached to analytics event properties as `environment`.
 
+### Analytics Dashboard
+
+A built-in HTML report with charts is available at `/analytics.html`:
+
+- **Production (Vercel):** `https://your-app.vercel.app/analytics.html` – config is injected at build time from env vars
+- **Local:** Add your Supabase URL and anon key to `web/supabase_config.js`, then open `analytics.html` from the build output
+
+Charts show events by mode, events over time, top event types, and quiz summary. Data comes from the `analytics_dashboard_json()` RPC in Supabase.
+
 ## Design
 
 - **Colors**: Warm browns (#8B7355), cream backgrounds (#FAF8F5)

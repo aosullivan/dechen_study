@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 enum BcvFileQuizDifficulty { beginner, advanced }
@@ -57,9 +58,14 @@ class BcvFileQuizService {
     return parsed;
   }
 
+  @visibleForTesting
+  List<BcvFileQuizQuestion> parseQuestionsForTest(String content) {
+    return _parseQuestions(content);
+  }
+
   List<BcvFileQuizQuestion> _parseQuestions(String content) {
     final lines = content.split('\n');
-    final questions = <BcvFileQuizQuestion>[];
+    final drafts = <_ParsedQuizQuestionDraft>[];
 
     final questionPattern = RegExp(r'^Q(\d+)\.\s*(.*)$');
     final optionPattern = RegExp(r'^([a-d])\)\s*(.*)$');
@@ -67,11 +73,22 @@ class BcvFileQuizService {
         RegExp(r'^ANSWER:\s*([a-d])\s*$', caseSensitive: false);
     final verseRefsPattern =
         RegExp(r'^VERSE REF\(S\):\s*(.*)$', caseSensitive: false);
+    final chapterPattern = RegExp(r'^CHAPTER\s+(\d+)\b', caseSensitive: false);
 
+    int? currentChapter;
     var i = 0;
     while (i < lines.length) {
       final raw = lines[i].trimRight();
-      final qMatch = questionPattern.firstMatch(raw);
+      final trimmed = raw.trim();
+
+      final chapterMatch = chapterPattern.firstMatch(trimmed);
+      if (chapterMatch != null) {
+        currentChapter = int.tryParse(chapterMatch.group(1) ?? '');
+        i++;
+        continue;
+      }
+
+      final qMatch = questionPattern.firstMatch(trimmed);
       if (qMatch == null) {
         i++;
         continue;
@@ -82,6 +99,7 @@ class BcvFileQuizService {
         i++;
         continue;
       }
+      final questionChapter = currentChapter;
 
       final prompt = (qMatch.group(2) ?? '').trim();
       final options = <String, String>{};
@@ -92,6 +110,13 @@ class BcvFileQuizService {
       while (i < lines.length) {
         final current = lines[i].trimRight();
         final trimmed = current.trim();
+
+        final chapterMatch = chapterPattern.firstMatch(trimmed);
+        if (chapterMatch != null) {
+          currentChapter = int.tryParse(chapterMatch.group(1) ?? '');
+          i++;
+          continue;
+        }
 
         if (questionPattern.hasMatch(trimmed)) {
           break;
@@ -130,22 +155,68 @@ class BcvFileQuizService {
         continue;
       }
 
-      final seedText = '$prompt ${options[answerKey] ?? ''}';
+      final seedText =
+          '$prompt ${options.values.join(' ')} ${options[answerKey] ?? ''}';
       final refs =
           explicitRefs.isNotEmpty ? explicitRefs : _extractVerseRefs(seedText);
 
-      questions.add(
-        BcvFileQuizQuestion(
+      drafts.add(
+        _ParsedQuizQuestionDraft(
           number: number,
           prompt: prompt,
           options: options,
           answerKey: answerKey,
           verseRefs: refs,
+          chapter: questionChapter,
         ),
       );
     }
 
-    return questions;
+    _backfillMissingRefs(drafts);
+
+    return drafts
+        .map(
+          (q) => BcvFileQuizQuestion(
+            number: q.number,
+            prompt: q.prompt,
+            options: q.options,
+            answerKey: q.answerKey,
+            verseRefs: q.verseRefs,
+          ),
+        )
+        .toList(growable: false);
+  }
+
+  void _backfillMissingRefs(List<_ParsedQuizQuestionDraft> questions) {
+    for (var i = 0; i < questions.length; i++) {
+      if (questions[i].verseRefs.isNotEmpty) continue;
+      final chapter = questions[i].chapter;
+
+      List<String>? fallback;
+      for (var prev = i - 1; prev >= 0; prev--) {
+        if (chapter != null && questions[prev].chapter != chapter) continue;
+        if (questions[prev].verseRefs.isEmpty) continue;
+        fallback = questions[prev].verseRefs;
+        break;
+      }
+
+      fallback ??= _findNextRefsInChapter(questions, i + 1, chapter);
+      if (fallback == null) continue;
+      questions[i].verseRefs = List<String>.from(fallback);
+    }
+  }
+
+  List<String>? _findNextRefsInChapter(
+    List<_ParsedQuizQuestionDraft> questions,
+    int start,
+    int? chapter,
+  ) {
+    for (var i = start; i < questions.length; i++) {
+      if (chapter != null && questions[i].chapter != chapter) continue;
+      if (questions[i].verseRefs.isEmpty) continue;
+      return questions[i].verseRefs;
+    }
+    return null;
   }
 
   List<String> _extractVerseRefs(String text) {
@@ -204,4 +275,22 @@ class BcvFileQuizService {
     order.shuffle(random);
     return order;
   }
+}
+
+class _ParsedQuizQuestionDraft {
+  _ParsedQuizQuestionDraft({
+    required this.number,
+    required this.prompt,
+    required this.options,
+    required this.answerKey,
+    required this.verseRefs,
+    required this.chapter,
+  });
+
+  final int number;
+  final String prompt;
+  final Map<String, String> options;
+  final String answerKey;
+  List<String> verseRefs;
+  final int? chapter;
 }
