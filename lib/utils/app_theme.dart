@@ -23,7 +23,7 @@ abstract final class AppColors {
   static const Color landingBackground = Color(0xFFEADCC4);
 
   /// Card/panel background (beige).
-  static const Color cardBeige = Color(0xFFF8F7F3);
+  static const Color cardBeige = Color(0xFFF4ECDD);
 
   /// Light border (landing cards, subtle dividers).
   static const Color borderLight = Color(0xFFE8E4DC);

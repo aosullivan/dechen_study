@@ -303,23 +303,15 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         children: [
           _buildTopSectionPicker(topSections.take(5).toList()),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.cardBeige,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.borderLight),
-                ),
-                child: const Center(
-                  child: Text(
-                    'Choose a top section to begin.',
-                    style: TextStyle(
-                      fontFamily: 'Lora',
-                      fontSize: 16,
-                      color: AppColors.mutedBrown,
-                    ),
+            child: ColoredBox(
+              color: AppColors.landingBackground,
+              child: const Center(
+                child: Text(
+                  'Choose a top section to begin.',
+                  style: TextStyle(
+                    fontFamily: 'Lora',
+                    fontSize: 16,
+                    color: AppColors.mutedBrown,
                   ),
                 ),
               ),
@@ -333,53 +325,43 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       children: [
         _buildPickers(),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.cardBeige,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.borderLight),
-              ),
-              child: isDesktop
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child: OverviewTreeView(
-                            flatSections: _filteredSections,
-                            selectedPath: _selectedPath,
-                            onNodeTap: _onNodeTap,
-                            scrollToPath: _scrollToPath,
-                          ),
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeInOut,
-                          width: _selectedPath != null
-                              ? OverviewConstants.versePanelWidth
-                              : 0,
-                          child: _selectedPath != null
-                              ? OverviewVersePanel(
-                                  key: ValueKey(_selectedPath),
-                                  sectionPath: _selectedPath!,
-                                  sectionTitle: _selectedTitle ?? '',
-                                  onClose: () => setState(() {
-                                    _selectedPath = null;
-                                    _selectedTitle = null;
-                                  }),
-                                )
-                              : const SizedBox.shrink(),
-                        ),
-                      ],
-                    )
-                  : OverviewTreeView(
-                      flatSections: _filteredSections,
-                      selectedPath: _selectedPath,
-                      onNodeTap: _onNodeTap,
-                      scrollToPath: _scrollToPath,
+          child: isDesktop
+              ? Row(
+                  children: [
+                    Expanded(
+                      child: OverviewTreeView(
+                        flatSections: _filteredSections,
+                        selectedPath: _selectedPath,
+                        onNodeTap: _onNodeTap,
+                        scrollToPath: _scrollToPath,
+                      ),
                     ),
-            ),
-          ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      width: _selectedPath != null
+                          ? OverviewConstants.versePanelWidth
+                          : 0,
+                      child: _selectedPath != null
+                          ? OverviewVersePanel(
+                              key: ValueKey(_selectedPath),
+                              sectionPath: _selectedPath!,
+                              sectionTitle: _selectedTitle ?? '',
+                              onClose: () => setState(() {
+                                _selectedPath = null;
+                                _selectedTitle = null;
+                              }),
+                            )
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                )
+              : OverviewTreeView(
+                  flatSections: _filteredSections,
+                  selectedPath: _selectedPath,
+                  onNodeTap: _onNodeTap,
+                  scrollToPath: _scrollToPath,
+                ),
         ),
       ],
     );
@@ -391,7 +373,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: const BoxDecoration(
-        color: AppColors.cardBeige,
         border: Border(bottom: BorderSide(color: AppColors.borderLight)),
       ),
       child: Column(
@@ -401,17 +382,17 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
             children: [
               for (var i = 0; i < topSections.length; i++) ...[
                 if (i > 0) const SizedBox(height: 8),
-                Card(
-                  margin: EdgeInsets.zero,
-                  color: AppColors.cardBeige,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: const BorderSide(color: AppColors.borderLight),
-                  ),
+                Material(
+                  color: Colors.transparent,
                   child: InkWell(
                     onTap: () => _onPickerChanged(0, topSections[i].path),
                     borderRadius: BorderRadius.circular(8),
-                    child: Padding(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBeige,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppColors.borderLight),
+                      ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 12,
@@ -493,7 +474,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: const BoxDecoration(
-        color: AppColors.cardBeige,
         border: Border(bottom: BorderSide(color: AppColors.borderLight)),
       ),
       child: Wrap(
@@ -521,7 +501,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       constraints: const BoxConstraints(maxWidth: 260),
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
-        color: AppColors.scaffoldBackground,
+        color: AppColors.cardBeige,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
       ),
