@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - Dechen Study</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #FAF8F5;
+      --ink: #2c2416;
+      --body: #3d3426;
+      --primary: #8B7355;
+      --line: #e8e4dc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Lora, Georgia, serif;
+      background: var(--bg);
+      color: var(--body);
+    }
+    h1 { font-size: 1.75rem; color: var(--ink); margin: 0 0 24px; }
+    h2 { font-size: 1.1rem; color: var(--ink); margin: 24px 0 12px; }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      max-width: 600px;
+    }
+    .stat { font-size: 1.5rem; font-weight: 600; color: var(--primary); }
+    .error { color: #c53030; }
+    .loading { color: #718096; }
+  </style>
+</head>
+<body>
+  <h1>Dechen Study Analytics</h1>
+  <div id="config-msg" class="card error" style="display:none;">
+    Analytics require Supabase config. Set SUPABASE_URL and SUPABASE_ANON_KEY in Vercel env vars, or create web/supabase_config.js for local dev.
+  </div>
+  <div id="loading" class="card loading">Loading analytics…</div>
+  <div id="content" style="display:none;">
+    <div class="card">
+      <h2>Summary</h2>
+      <p><span class="stat" id="total-events">0</span> total events</p>
+      <p><span class="stat" id="unique-sessions">0</span> unique sessions</p>
+      <p><span class="stat" id="quiz-attempts">0</span> quiz attempts</p>
+    </div>
+    <div class="card">
+      <h2>Events by mode</h2>
+      <canvas id="chart-mode" height="200"></canvas>
+    </div>
+    <div class="card">
+      <h2>Events over time (30 days)</h2>
+      <canvas id="chart-time" height="200"></canvas>
+    </div>
+    <div class="card">
+      <h2>Top event types</h2>
+      <canvas id="chart-type" height="280"></canvas>
+    </div>
+  </div>
+  <script src="supabase_config.js"></script>
+  <script>
+    (function() {
+      const url = typeof window.SUPABASE_URL !== 'undefined' ? window.SUPABASE_URL : '';
+      const key = typeof window.SUPABASE_ANON_KEY !== 'undefined' ? window.SUPABASE_ANON_KEY : '';
+      if (!url || !key) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('config-msg').style.display = 'block';
+        return;
+      }
+      const supabase = window.supabase.createClient(url, key);
+      supabase.rpc('analytics_dashboard_json').then(({ data, error }) => {
+        document.getElementById('loading').style.display = 'none';
+        if (error) {
+          document.getElementById('config-msg').textContent = 'Error: ' + error.message;
+          document.getElementById('config-msg').style.display = 'block';
+          return;
+        }
+        const d = data || {};
+        document.getElementById('content').style.display = 'block';
+        const totals = d.totals || {};
+        const quiz = d.quiz_summary || {};
+        document.getElementById('total-events').textContent = totals.total_events || 0;
+        document.getElementById('unique-sessions').textContent = totals.unique_sessions || 0;
+        document.getElementById('quiz-attempts').textContent = quiz.quiz_attempts || 0;
+        const modeData = d.events_by_mode || [];
+        const timeData = d.events_over_time || [];
+        const typeData = d.events_by_type || [];
+        new Chart(document.getElementById('chart-mode'), {
+          type: 'bar',
+          data: {
+            labels: modeData.map(r => r.mode || ''),
+            datasets: [{ label: 'Events', data: modeData.map(r => r.count), backgroundColor: '#8B7355' }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+        new Chart(document.getElementById('chart-time'), {
+          type: 'line',
+          data: {
+            labels: timeData.map(r => r.day || ''),
+            datasets: [{ label: 'Events', data: timeData.map(r => r.count), borderColor: '#8B7355', fill: true, tension: 0.2 }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+        const typeLabels = typeData.map(r => (r.event_name || '') + (r.mode ? ' (' + r.mode + ')' : ''));
+        new Chart(document.getElementById('chart-type'), {
+          type: 'bar',
+          data: {
+            labels: typeLabels,
+            datasets: [{ label: 'Events', data: typeData.map(r => r.count), backgroundColor: '#8B7355' }]
+          },
+          options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
