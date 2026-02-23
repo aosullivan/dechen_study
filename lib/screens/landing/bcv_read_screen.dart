@@ -40,6 +40,7 @@ class BcvReadScreen extends StatefulWidget {
     this.title = 'Bodhicaryavatara',
     this.collapsePanelsOnOpen,
     this.onSectionNavigateForTest,
+    this.onSectionStateForTest,
     this.commentaryLoader,
   });
 
@@ -64,6 +65,12 @@ class BcvReadScreen extends StatefulWidget {
   /// Enables automated verification that key-down does not skip verses (e.g. 6.49 -> 6.50, not 6.52).
   final void Function(String sectionPath, String firstVerseRef)?
       onSectionNavigateForTest;
+
+  /// Test-only: called whenever section state is applied.
+  /// Receives (sectionPath, verseIndices, visibleVerseIndex).
+  final void Function(
+          String sectionPath, Set<int> verseIndices, int verseIndex)?
+      onSectionStateForTest;
 
   /// Test seam: override commentary lookup.
   final Future<CommentaryEntry?> Function(String ref)? commentaryLoader;
@@ -401,10 +408,6 @@ class _BcvReadScreenState extends State<BcvReadScreen>
             _minHighlightIndex =
                 _highlightVerseIndices!.reduce((a, b) => a < b ? a : b);
             _intentionalHighlight = true;
-          } else if (widget.scrollToVerseIndex != null) {
-            _highlightVerseIndices = {widget.scrollToVerseIndex!};
-            _minHighlightIndex = widget.scrollToVerseIndex;
-            _intentionalHighlight = true;
           }
 
           // Build flat indices for ListView.builder
@@ -444,6 +447,9 @@ class _BcvReadScreenState extends State<BcvReadScreen>
             _currentSegmentRef = _initialSegmentRefForVerseIndex(initialIndex);
             _sectionChangeNotifier.notify();
           }
+          // Resolve and apply the full section as soon as possible (e.g. resume
+          // reading should include the whole section, not only one verse).
+          _setInitialBreadcrumb();
           // Fallback in case scroll-settle callback doesn't fire.
           _scheduleDeferredStartupWork(
             delay: const Duration(milliseconds: 1200),
@@ -935,6 +941,11 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     _currentSectionVerseIndices = verseIndices;
     _currentSegmentRef = segmentRef;
     _visibleVerseIndex = verseIndex;
+    final sectionPath = hierarchy.isNotEmpty
+        ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '')
+        : '';
+    widget.onSectionStateForTest
+        ?.call(sectionPath, Set<int>.from(verseIndices), verseIndex);
     _trackReadSectionTransition(
       hierarchy: hierarchy,
       verseIndex: verseIndex,
@@ -955,6 +966,9 @@ class _BcvReadScreenState extends State<BcvReadScreen>
 
     _startProgrammaticNavigation();
     _intentionalHighlight = false;
+    _highlightVerseIndices = {};
+    _minHighlightIndex = null;
+    _commentaryEntryForSelected = null;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data
@@ -1476,6 +1490,9 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     // Fully synchronous path — no async gaps that let the next key press race.
     _startProgrammaticNavigation();
     _intentionalHighlight = false;
+    _highlightVerseIndices = {};
+    _minHighlightIndex = null;
+    _commentaryEntryForSelected = null;
     _visibilityDebounceTimer?.cancel();
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data

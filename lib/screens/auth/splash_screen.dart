@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../landing/landing_screen.dart';
+import '../landing/text_options_screen.dart';
+import '../../utils/web_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,7 +23,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
-    // Skip login for now — go straight to landing (re-enable session check to require login)
+    if (currentAppPath() == '/bodhicaryavatara') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const TextOptionsScreen(
+            textId: 'bodhicaryavatara',
+            title: 'Bodhicaryavatara',
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Skip login for now - go straight to landing (re-enable session check to require login)
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const LandingScreen()),
     );

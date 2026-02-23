@@ -25,6 +25,8 @@ void main() {
   late int verseIndex92a;
   late int verseIndex93cd;
   late int verseIndex9150cd;
+  late int verseIndex8167;
+  late int verseIndex8168;
   late int firstLeafVerseIndex;
   late int lastLeafVerseIndex;
   late List<({String path, String title, int depth})> leafOrdered;
@@ -48,6 +50,8 @@ void main() {
     verseIndex92a = verseService.getIndexForRefWithFallback('9.2a') ?? -1;
     verseIndex93cd = verseService.getIndexForRefWithFallback('9.3cd') ?? -1;
     verseIndex9150cd = verseService.getIndexForRefWithFallback('9.150cd') ?? -1;
+    verseIndex8167 = verseService.getIndexForRefWithFallback('8.167') ?? -1;
+    verseIndex8168 = verseService.getIndexForRefWithFallback('8.168') ?? -1;
     leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
     firstLeafVerseIndex = -1;
     for (final s in leafOrdered) {
@@ -79,6 +83,10 @@ void main() {
         reason: 'Verse 9.3cd must exist');
     expect(verseIndex9150cd, greaterThanOrEqualTo(0),
         reason: 'Verse 9.150cd must exist');
+    expect(verseIndex8167, greaterThanOrEqualTo(0),
+        reason: 'Verse 8.167 must exist');
+    expect(verseIndex8168, greaterThanOrEqualTo(0),
+        reason: 'Verse 8.168 must exist');
     expect(firstLeafVerseIndex, greaterThanOrEqualTo(0),
         reason: 'First leaf verse must resolve');
     expect(lastLeafVerseIndex, greaterThanOrEqualTo(0),
@@ -92,12 +100,15 @@ void main() {
     Size? mediaSize,
     void Function(String sectionPath, String firstVerseRef)?
         onSectionNavigateForTest,
+    void Function(String sectionPath, Set<int> verseIndices, int verseIndex)?
+        onSectionStateForTest,
   }) async {
     final screen = BcvReadScreen(
       scrollToVerseIndex: scrollToVerseIndex,
       initialSegmentRef: initialSegmentRef,
       title: 'Bodhicaryavatara',
       onSectionNavigateForTest: onSectionNavigateForTest,
+      onSectionStateForTest: onSectionStateForTest,
     );
     await tester.pumpWidget(
       MaterialApp(
@@ -229,6 +240,89 @@ void main() {
         1,
         reason: 'One key tap (down+up) should navigate once, never twice.',
       );
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('resume reading on 8.167 applies section that includes 8.168',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final sectionEvents =
+          <({String path, Set<int> indices, int verseIndex})>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex8167,
+        onSectionStateForTest: (path, indices, verseIndex) {
+          sectionEvents.add(
+            (
+              path: path,
+              indices: Set<int>.from(indices),
+              verseIndex: verseIndex,
+            ),
+          );
+        },
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      final hasFullSectionFor8167 = sectionEvents.any((e) =>
+          e.verseIndex == verseIndex8167 &&
+          e.indices.contains(verseIndex8167) &&
+          e.indices.contains(verseIndex8168));
+      expect(hasFullSectionFor8167, isTrue,
+          reason:
+              'Resume reading should apply the full 8.167/8.168 section, not only verse 8.167');
+    });
+
+    testWidgets('from resume 8.167, down then up restores 8.167/8.168 section',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedRefs = <String>[];
+      final sectionEvents =
+          <({String path, Set<int> indices, int verseIndex})>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex8167,
+        onSectionNavigateForTest: (_, firstRef) => capturedRefs.add(firstRef),
+        onSectionStateForTest: (path, indices, verseIndex) {
+          sectionEvents.add(
+            (
+              path: path,
+              indices: Set<int>.from(indices),
+              verseIndex: verseIndex,
+            ),
+          );
+        },
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      final eventsBeforeUp = sectionEvents.length;
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowUp);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(capturedRefs.length, greaterThanOrEqualTo(2),
+          reason: 'Down and up should each trigger one section navigation');
+      expect(capturedRefs[0], equals('8.169ab'),
+          reason: 'From 8.167/8.168 section, next should be 8.169ab');
+      expect(capturedRefs[1], startsWith('8.167'),
+          reason: 'Arrow-up should return to the 8.167 section');
+
+      final postUpEvents = sectionEvents.skip(eventsBeforeUp);
+      final restored = postUpEvents.any((e) =>
+          e.verseIndex == verseIndex8167 &&
+          e.indices.contains(verseIndex8167) &&
+          e.indices.contains(verseIndex8168));
+      expect(restored, isTrue,
+          reason:
+              'After arrow-up, section highlight must be restored to include both 8.167 and 8.168');
+      // Let programmatic-navigation timers settle (scroll-settle + fallback).
       await tester.pump(const Duration(seconds: 2));
     });
 

@@ -48,7 +48,7 @@ void main() {
   }
 
   Future<void> waitForDailyLoad(WidgetTester tester) async {
-    final another = find.widgetWithText(OutlinedButton, 'Another verse');
+    final another = find.widgetWithText(OutlinedButton, 'More Verses');
     for (var i = 0; i < 80; i++) {
       await tester.pump(const Duration(milliseconds: 100));
       if (another.evaluate().isNotEmpty) return;
@@ -79,6 +79,18 @@ void main() {
     expect(
         find.textContaining('I will give myself up for others'), findsWidgets);
     expect(find.textContaining('Because it will'), findsNothing);
+  });
+
+  testWidgets('split refs for same verse render verse label once',
+      (WidgetTester tester) async {
+    await pumpDaily(tester, refs: const ['8.136ab', '8.136cd']);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load section'), findsNothing);
+    expect(find.text('Verse 8.136'), findsOneWidget);
+    expect(find.textContaining('Because it will'), findsWidgets);
+    expect(
+        find.textContaining('I will give myself up for others'), findsWidgets);
   });
 
   testWidgets('full text navigation preserves split segment ref',

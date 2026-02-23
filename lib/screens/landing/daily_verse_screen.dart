@@ -439,6 +439,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
         ),
       );
     }
+    final shownDisplayRefs = <String>{};
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 24, 16),
       child: Column(
@@ -467,12 +468,15 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                   final text = entry.value;
                   final ref = i < _sectionRefs.length ? _sectionRefs[i] : null;
                   final displayRef = ref == null ? null : _displayRef(ref);
+                  final shouldShowDisplayRef = displayRef != null
+                      ? shownDisplayRefs.add(displayRef)
+                      : false;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (displayRef != null) ...[
+                        if (shouldShowDisplayRef) ...[
                           Text(
                             'Verse $displayRef',
                             style:
@@ -527,7 +531,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                           _loadSection();
                         },
                   icon: const Icon(Icons.refresh, size: 20),
-                  label: const Text('Another verse'),
+                  label: const Text('More Verses'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.primary,
                     side: const BorderSide(color: AppColors.primary),

@@ -7,6 +7,7 @@ import '../../services/bookmark_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/web_navigation.dart';
 import 'bcv_file_quiz_screen.dart';
 import 'bcv_quiz_screen.dart';
 import 'bcv_read_screen.dart';
@@ -44,52 +45,65 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.landingBackground,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          title,
-          style: Theme.of(context).textTheme.titleLarge,
+    return PopScope<void>(
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) {
+          _restoreLandingPath();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.landingBackground,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-          onPressed: () => Navigator.of(context).pop(),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          children: [
+            _OptionTile(
+              icon: Icons.today_outlined,
+              label: 'Daily Verses',
+              onTap: () => _openDaily(context),
+            ),
+            _OptionTile(
+              icon: Icons.quiz_outlined,
+              label: 'Guess the Chapter',
+              onTap: () => _openGuessTheChapter(context),
+            ),
+            _OptionTile(
+              icon: Icons.fact_check_outlined,
+              label: 'Quiz',
+              onTap: () => _openQuiz(context),
+            ),
+            _OptionTile(
+              icon: Icons.book_outlined,
+              label: 'Read',
+              onTap: () => _openRead(context),
+            ),
+            _OptionTile(
+              icon: Icons.account_tree_outlined,
+              label: 'Textual Overview',
+              onTap: () => _openOverview(context),
+            ),
+          ],
         ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        children: [
-          _OptionTile(
-            icon: Icons.today_outlined,
-            label: 'Daily',
-            onTap: () => _openDaily(context),
-          ),
-          _OptionTile(
-            icon: Icons.quiz_outlined,
-            label: 'Guess the Chapter',
-            onTap: () => _openGuessTheChapter(context),
-          ),
-          _OptionTile(
-            icon: Icons.fact_check_outlined,
-            label: 'Quiz',
-            onTap: () => _openQuiz(context),
-          ),
-          _OptionTile(
-            icon: Icons.book_outlined,
-            label: 'Read',
-            onTap: () => _openRead(context),
-          ),
-          _OptionTile(
-            icon: Icons.account_tree_outlined,
-            label: 'Textual Overview',
-            onTap: () => _openOverview(context),
-          ),
-        ],
       ),
     );
+  }
+
+  void _restoreLandingPath() {
+    if (textId == 'bodhicaryavatara') {
+      replaceAppPath('/');
+    }
   }
 
   void _openDaily(BuildContext context) {

@@ -60,6 +60,7 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   void _openTextOptions(BuildContext context) {
+    pushAppPath('/bodhicaryavatara');
     unawaited(UsageMetricsService.instance.trackEvent(
       eventName: 'text_opened',
       textId: 'bodhicaryavatara',
