@@ -440,6 +440,28 @@ class VerseHierarchyService {
     return _sectionOwnRefsIndex?[sectionPath] ?? {};
   }
 
+  /// Returns refs from the section tree only: [sectionPath] own refs plus all
+  /// descendants' own refs from `sections[].verses`.
+  ///
+  /// This excludes refs that appear only through `verseToPath` ancestor
+  /// propagation and is safer for Textual Structure popups.
+  Set<String> getTreeVerseRefsForSectionSync(String sectionPath) {
+    if (_map == null || sectionPath.isEmpty) return {};
+    _ensureSectionToRefsIndex();
+    final ownIndex = _sectionOwnRefsIndex;
+    if (ownIndex == null || ownIndex.isEmpty) return {};
+
+    final out = <String>{};
+    final prefix = '$sectionPath.';
+    for (final e in ownIndex.entries) {
+      final path = e.key;
+      if (path == sectionPath || path.startsWith(prefix)) {
+        out.addAll(e.value);
+      }
+    }
+    return out;
+  }
+
   List<({String path, String title, int depth})>? _flatSections;
   List<({String path, String title, int depth})>? _cachedLeafSections;
   Map<String, String>? _cachedLeafFirstRefs;

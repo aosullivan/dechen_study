@@ -23,10 +23,16 @@ class OverviewVersePanel extends StatelessWidget {
   List<({String ref, String text})> _loadVerses() {
     final ownRefs = VerseHierarchyService.instance
         .getOwnVerseRefsForSectionSync(sectionPath);
+    final treeRefs =
+        VerseHierarchyService.instance.getTreeVerseRefsForSectionSync(
+      sectionPath,
+    );
     final refs = (ownRefs.isNotEmpty
             ? ownRefs
-            : VerseHierarchyService.instance
-                .getVerseRefsForSectionSync(sectionPath))
+            : treeRefs.isNotEmpty
+                ? treeRefs
+                : VerseHierarchyService.instance
+                    .getVerseRefsForSectionSync(sectionPath))
         .toList()
       ..sort(VerseHierarchyService.compareVerseRefs);
 
