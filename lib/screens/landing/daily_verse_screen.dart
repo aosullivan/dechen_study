@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
+import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
@@ -46,15 +49,19 @@ class DailyVerseScreen extends StatefulWidget {
   State<DailyVerseScreen> createState() => _DailyVerseScreenState();
 }
 
-class _DailyVerseScreenState extends State<DailyVerseScreen> {
+class _DailyVerseScreenState extends State<DailyVerseScreen>
+    with WidgetsBindingObserver {
+  final _usageMetrics = UsageMetricsService.instance;
   late final BcvVerseService _verseService;
   late final CommentaryService _commentaryService;
   late final VerseHierarchyService _hierarchyService;
+  DateTime? _screenDwellStartedAt;
 
   /// Current section: refs and their verse texts (in order).
   List<String> _sectionRefs = [];
   List<String> _sectionVerseTexts = [];
   String _sectionTitle = '';
+  String _sectionPath = '';
 
   /// Verse indices in the flat list for deep link and highlight.
   Set<int> _sectionVerseIndices = {};
@@ -64,11 +71,59 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _screenDwellStartedAt = DateTime.now().toUtc();
     _verseService = widget.verseService ?? BcvVerseService.instance;
     _commentaryService = widget.commentaryService ?? CommentaryService.instance;
     _hierarchyService =
         widget.hierarchyService ?? VerseHierarchyService.instance;
     _loadSection();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+    unawaited(_usageMetrics.flush(all: true));
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.hidden) {
+      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+      unawaited(_usageMetrics.flush(all: true));
+      return;
+    }
+    if (state == AppLifecycleState.resumed) {
+      _screenDwellStartedAt ??= DateTime.now().toUtc();
+    }
+  }
+
+  void _trackSurfaceDwell({
+    required DateTime nowUtc,
+    required bool resetStart,
+  }) {
+    final startedAt = _screenDwellStartedAt;
+    if (startedAt == null) return;
+    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
+    if (durationMs >= _usageMetrics.minDwellMs) {
+      unawaited(_usageMetrics.trackSurfaceDwell(
+        textId: 'bodhicaryavatara',
+        mode: 'daily',
+        durationMs: durationMs,
+        sectionPath: _sectionPath,
+        sectionTitle: _sectionTitle,
+        verseRef: _sectionRefs.isNotEmpty ? _sectionRefs.first : null,
+        properties: {
+          'refs_count': _sectionRefs.length,
+        },
+      ));
+    }
+    if (resetStart) _screenDwellStartedAt = null;
   }
 
   String _segmentTextForRef(String ref, String fullText) {
@@ -239,6 +294,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
       _sectionRefs = [];
       _sectionVerseTexts = [];
       _sectionTitle = '';
+      _sectionPath = '';
       _sectionVerseIndices = {};
     });
     try {
@@ -292,9 +348,22 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
           _sectionRefs = content.refs;
           _sectionVerseTexts = content.texts;
           _sectionTitle = sectionTitle;
+          _sectionPath = sectionPath ?? '';
           _sectionVerseIndices = content.indices;
           _loading = false;
         });
+        unawaited(_usageMetrics.trackEvent(
+          eventName: 'daily_section_loaded',
+          textId: 'bodhicaryavatara',
+          mode: 'daily',
+          sectionPath: _sectionPath,
+          sectionTitle: _sectionTitle,
+          verseRef: _sectionRefs.isNotEmpty ? _sectionRefs.first : null,
+          properties: {
+            'refs_count': _sectionRefs.length,
+            'line_count': _totalLogicalLines(_sectionVerseTexts),
+          },
+        ));
       }
     } catch (e) {
       if (mounted) {
@@ -442,7 +511,21 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: _loading ? null : _loadSection,
+                  onPressed: _loading
+                      ? null
+                      : () {
+                          unawaited(_usageMetrics.trackEvent(
+                            eventName: 'daily_another_section_tapped',
+                            textId: 'bodhicaryavatara',
+                            mode: 'daily',
+                            sectionPath: _sectionPath,
+                            sectionTitle: _sectionTitle,
+                            verseRef: _sectionRefs.isNotEmpty
+                                ? _sectionRefs.first
+                                : null,
+                          ));
+                          _loadSection();
+                        },
                   icon: const Icon(Icons.refresh, size: 20),
                   label: const Text('Another verse'),
                   style: OutlinedButton.styleFrom(
@@ -475,6 +558,17 @@ class _DailyVerseScreenState extends State<DailyVerseScreen> {
 
   void _openFullText() {
     if (_sectionVerseIndices.isEmpty) return;
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'open_full_text_from_daily',
+      textId: 'bodhicaryavatara',
+      mode: 'daily',
+      sectionPath: _sectionPath,
+      sectionTitle: _sectionTitle,
+      verseRef: _sectionRefs.isNotEmpty ? _sectionRefs.first : null,
+      properties: {
+        'refs_count': _sectionRefs.length,
+      },
+    ));
     final sorted = _sectionVerseIndices.toList()..sort();
     final firstIndex = sorted.first;
     final initialSegmentRef = _initialSegmentRefForFirstIndex(firstIndex);

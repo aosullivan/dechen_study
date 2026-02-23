@@ -164,6 +164,36 @@ flutter test
 flutter test test/section_navigation_test.dart
 ```
 
+## Usage Metrics
+
+The app writes product analytics events into `public.app_usage_events` and now includes reporting views for dwell-time analysis:
+
+- `public.analytics_text_dwell_daily_v1`
+- `public.analytics_mode_dwell_daily_v1`
+- `public.analytics_read_section_dwell_daily_v1`
+- `public.analytics_top_read_sections_30d_v1`
+
+Retention is enforced by `public.prune_app_usage_events(interval)` (default `12 months`) with daily scheduling via `pg_cron` when available.
+
+Apply migrations:
+
+```bash
+supabase db push
+```
+
+Run the SQL smoke-check script in Supabase SQL editor:
+
+`supabase/tests/usage_metrics_analytics_smoke.sql`
+
+### Environment Split (recommended)
+
+Use separate Supabase projects for production and non-production analytics.
+
+- Keep production pointing at your current project.
+- Use a separate non-prod project for local/dev/staging.
+- Apply the same migrations to both projects.
+- Keep distinct `.env` credentials per environment.
+
 ## Design
 
 - **Colors**: Warm browns (#8B7355), cream backgrounds (#FAF8F5)

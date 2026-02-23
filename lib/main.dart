@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'services/usage_metrics_service.dart';
 import 'screens/auth/splash_screen.dart';
 import 'utils/app_theme.dart';
 import 'utils/constants.dart';
+
+final _usageMetricsLifecycleObserver = _UsageMetricsLifecycleObserver();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,12 +21,23 @@ void main() async {
       url: supabaseUrl,
       anonKey: supabaseAnonKey,
     );
+
+    await UsageMetricsService.instance.init();
   } catch (e) {
     debugPrint('Supabase initialization error: $e');
     // Continue anyway - the app will show an error screen
   }
 
+  WidgetsBinding.instance.addObserver(_usageMetricsLifecycleObserver);
+
   runApp(const MyApp());
+}
+
+class _UsageMetricsLifecycleObserver with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    unawaited(UsageMetricsService.instance.onAppLifecycleStateChanged(state));
+  }
 }
 
 class MyApp extends StatelessWidget {

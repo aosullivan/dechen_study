@@ -6,10 +6,21 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 /// Expected keys:
 /// - SUPABASE_URL
 /// - SUPABASE_ANON_KEY
-String get supabaseUrl => (dotenv.env['SUPABASE_URL'] ?? '').trim();
-String get supabaseAnonKey => (dotenv.env['SUPABASE_ANON_KEY'] ?? '').trim();
+String _safeEnv(String key) {
+  try {
+    return (dotenv.env[key] ?? '').trim();
+  } catch (_) {
+    return '';
+  }
+}
 
-bool get isSupabaseConfigured => supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
+String get safeSupabaseUrl => _safeEnv('SUPABASE_URL');
+String get safeSupabaseAnonKey => _safeEnv('SUPABASE_ANON_KEY');
+String get supabaseUrl => safeSupabaseUrl;
+String get supabaseAnonKey => safeSupabaseAnonKey;
+
+bool get isSupabaseConfigured =>
+    safeSupabaseUrl.isNotEmpty && safeSupabaseAnonKey.isNotEmpty;
 
 // Supabase client getter (valid after Supabase.initialize)
 SupabaseClient get supabase => Supabase.instance.client;

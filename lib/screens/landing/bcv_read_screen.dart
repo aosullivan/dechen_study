@@ -17,6 +17,7 @@ import 'bcv/bcv_verse_text.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/bookmark_service.dart';
 import '../../services/commentary_service.dart';
+import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 
@@ -73,7 +74,8 @@ class BcvReadScreen extends StatefulWidget {
 
 enum _MobileNavPanel { chapter, section, breadcrumb }
 
-class _BcvReadScreenState extends State<BcvReadScreen> {
+class _BcvReadScreenState extends State<BcvReadScreen>
+    with WidgetsBindingObserver {
   final _verseService = BcvVerseService.instance;
   List<BcvChapter> _chapters = [];
   List<String> _verses = [];
@@ -100,6 +102,14 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   final _commentaryService = CommentaryService.instance;
   final _hierarchyService = VerseHierarchyService.instance;
+  final _usageMetrics = UsageMetricsService.instance;
+
+  DateTime? _screenDwellStartedAt;
+  DateTime? _sectionDwellStartedAt;
+  String? _trackedSectionPath;
+  String? _trackedSectionTitle;
+  int? _trackedSectionChapterNumber;
+  String? _trackedSectionVerseRef;
 
   final List<int> _chapterHeaderFlatIndices = <int>[];
 
@@ -261,6 +271,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _screenDwellStartedAt = DateTime.now().toUtc();
     if (widget.scrollToVerseIndex != null || _hasInitialHighlight) {
       _scrollToVerseKey = GlobalKey();
     }
@@ -302,6 +314,8 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _flushReadMetricsOnDispose();
     _bookmarkDebounce?.cancel();
     _visibilityDebounceTimer?.cancel();
     _mainScrollController.dispose();
@@ -309,6 +323,24 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _sectionOverviewFocusNode.dispose();
     _sectionChangeNotifier.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.hidden) {
+      _flushReadMetricsOnLifecyclePause();
+      return;
+    }
+    if (state == AppLifecycleState.resumed) {
+      final now = DateTime.now().toUtc();
+      _screenDwellStartedAt ??= now;
+      if (_trackedSectionPath != null && _trackedSectionPath!.isNotEmpty) {
+        _sectionDwellStartedAt ??= now;
+      }
+    }
   }
 
   Timer? _bookmarkDebounce;
@@ -584,6 +616,18 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
   void _showCommentary() {
     final entry = _commentaryEntryForSelected;
     if (entry == null) return;
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'commentary_opened',
+      textId: 'bodhicaryavatara',
+      mode: 'read',
+      sectionPath: _currentSectionPath,
+      sectionTitle: _currentSectionTitle,
+      chapterNumber: _currentChapterNumber,
+      verseRef: _currentSegmentRef ??
+          (_visibleVerseIndex != null
+              ? _verseService.getVerseRef(_visibleVerseIndex!)
+              : null),
+    ));
     final screenHeight = MediaQuery.of(context).size.height;
     final initialSize = screenHeight > 900
         ? 0.92
@@ -891,6 +935,11 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
     _currentSectionVerseIndices = verseIndices;
     _currentSegmentRef = segmentRef;
     _visibleVerseIndex = verseIndex;
+    _trackReadSectionTransition(
+      hierarchy: hierarchy,
+      verseIndex: verseIndex,
+      segmentRef: segmentRef,
+    );
     _saveBookmark(verseIndex);
     _sectionChangeNotifier.notify();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1521,6 +1570,125 @@ class _BcvReadScreenState extends State<BcvReadScreen> {
           _breadcrumbHierarchy.last['path'] ??
           '')
       : '';
+
+  String get _currentSectionTitle => _breadcrumbHierarchy.isNotEmpty
+      ? (_breadcrumbHierarchy.last['title'] ?? '')
+      : '';
+
+  void _trackReadSectionTransition({
+    required List<Map<String, String>> hierarchy,
+    required int verseIndex,
+    String? segmentRef,
+  }) {
+    final sectionPath = hierarchy.isNotEmpty
+        ? (hierarchy.last['section'] ?? hierarchy.last['path'] ?? '').trim()
+        : '';
+    if (sectionPath.isEmpty) return;
+
+    final sectionTitle =
+        hierarchy.isNotEmpty ? (hierarchy.last['title'] ?? '').trim() : '';
+    final chapterNumber = _chapterNumberForVerseIndex(verseIndex);
+    final verseRef =
+        (segmentRef ?? _verseService.getVerseRef(verseIndex))?.trim();
+    final now = DateTime.now().toUtc();
+
+    if (_trackedSectionPath == null) {
+      _trackedSectionPath = sectionPath;
+      _trackedSectionTitle = sectionTitle;
+      _trackedSectionChapterNumber = chapterNumber;
+      _trackedSectionVerseRef = verseRef;
+      _sectionDwellStartedAt = now;
+      return;
+    }
+
+    if (_trackedSectionPath == sectionPath) {
+      if (sectionTitle.isNotEmpty) _trackedSectionTitle = sectionTitle;
+      _trackedSectionChapterNumber =
+          chapterNumber ?? _trackedSectionChapterNumber;
+      if (verseRef != null && verseRef.isNotEmpty) {
+        _trackedSectionVerseRef = verseRef;
+      }
+      return;
+    }
+
+    _emitReadSectionDwell(now);
+    _trackedSectionPath = sectionPath;
+    _trackedSectionTitle = sectionTitle;
+    _trackedSectionChapterNumber = chapterNumber;
+    _trackedSectionVerseRef = verseRef;
+    _sectionDwellStartedAt = now;
+  }
+
+  int? _chapterNumberForVerseIndex(int verseIndex) {
+    for (final chapter in _chapters) {
+      if (verseIndex >= chapter.startVerseIndex &&
+          verseIndex < chapter.endVerseIndex) {
+        return chapter.number;
+      }
+    }
+    return null;
+  }
+
+  void _emitReadSectionDwell(DateTime endedAt) {
+    final path = _trackedSectionPath;
+    final startedAt = _sectionDwellStartedAt;
+    if (path == null || path.isEmpty || startedAt == null) return;
+
+    final durationMs = endedAt.difference(startedAt).inMilliseconds;
+    if (durationMs < _usageMetrics.minDwellMs) return;
+
+    unawaited(_usageMetrics.trackReadSectionDwell(
+      textId: 'bodhicaryavatara',
+      sectionPath: path,
+      sectionTitle: _trackedSectionTitle,
+      chapterNumber: _trackedSectionChapterNumber,
+      verseRef: _trackedSectionVerseRef,
+      durationMs: durationMs,
+      properties: {
+        'source': 'read_screen',
+      },
+    ));
+  }
+
+  void _emitReadSurfaceDwell(DateTime endedAt) {
+    final startedAt = _screenDwellStartedAt;
+    if (startedAt == null) return;
+    final durationMs = endedAt.difference(startedAt).inMilliseconds;
+    if (durationMs < _usageMetrics.minDwellMs) return;
+    unawaited(_usageMetrics.trackSurfaceDwell(
+      textId: 'bodhicaryavatara',
+      mode: 'read',
+      durationMs: durationMs,
+      chapterNumber: _currentChapterNumber,
+      sectionPath: _trackedSectionPath,
+      sectionTitle: _trackedSectionTitle,
+      verseRef: _trackedSectionVerseRef,
+      properties: {'source': 'read_screen'},
+    ));
+  }
+
+  void _flushReadMetricsOnLifecyclePause() {
+    final endedAt = DateTime.now().toUtc();
+    _emitReadSectionDwell(endedAt);
+    _emitReadSurfaceDwell(endedAt);
+    _screenDwellStartedAt = null;
+    _sectionDwellStartedAt = null;
+    unawaited(_usageMetrics.flush(all: true));
+  }
+
+  void _flushReadMetricsOnDispose() {
+    final endedAt = DateTime.now().toUtc();
+    _emitReadSectionDwell(endedAt);
+    _emitReadSurfaceDwell(endedAt);
+
+    _screenDwellStartedAt = null;
+    _sectionDwellStartedAt = null;
+    _trackedSectionPath = null;
+    _trackedSectionTitle = null;
+    _trackedSectionChapterNumber = null;
+    _trackedSectionVerseRef = null;
+    unawaited(_usageMetrics.flush(all: true));
+  }
 
   Widget _buildSectionSlider({double? height, required bool collapsed}) {
     final flat = _hierarchyService.getFlatSectionsSync();

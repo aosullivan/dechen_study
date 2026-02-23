@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
 import '../../services/bookmark_service.dart';
+import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import 'bcv_file_quiz_screen.dart';
@@ -42,6 +45,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.landingBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -90,6 +94,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openDaily(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
+      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+        textId: textId,
+        targetMode: 'daily',
+      ));
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => const DailyVerseScreen(),
@@ -102,9 +110,16 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   Future<void> _openRead(BuildContext context) async {
     if (textId == 'bodhicaryavatara') {
+      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+        textId: textId,
+        targetMode: 'read',
+      ));
       Navigator.of(context).push(
         MaterialPageRoute<void>(
-          builder: (_) => _ReadChapterSelectionScreen(title: title),
+          builder: (_) => _ReadChapterSelectionScreen(
+            title: title,
+            textId: textId,
+          ),
         ),
       );
     } else {
@@ -114,6 +129,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openGuessTheChapter(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
+      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+        textId: textId,
+        targetMode: 'guess_chapter',
+      ));
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => const BcvQuizScreen(),
@@ -126,6 +145,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openQuiz(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
+      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+        textId: textId,
+        targetMode: 'quiz',
+      ));
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => const BcvFileQuizScreen(),
@@ -138,6 +161,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   void _openOverview(BuildContext context) {
     if (textId == 'bodhicaryavatara') {
+      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+        textId: textId,
+        targetMode: 'overview',
+      ));
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => const TextualOverviewScreen(),
@@ -193,9 +220,11 @@ class _OptionTile extends StatelessWidget {
 class _ReadChapterSelectionScreen extends StatefulWidget {
   const _ReadChapterSelectionScreen({
     required this.title,
+    required this.textId,
   });
 
   final String title;
+  final String textId;
 
   @override
   State<_ReadChapterSelectionScreen> createState() =>
@@ -219,6 +248,13 @@ class _ReadChapterSelectionScreenState
   void _resumeReading() {
     final bm = _bookmark;
     if (bm == null) return;
+    unawaited(UsageMetricsService.instance.trackEvent(
+      eventName: 'read_resume_tapped',
+      textId: widget.textId,
+      mode: 'read',
+      chapterNumber: bm.chapterNumber,
+      verseRef: bm.verseRef,
+    ));
     Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
       builder: (_) => BcvReadScreen(
         title: widget.title,
@@ -231,6 +267,7 @@ class _ReadChapterSelectionScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.landingBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -271,6 +308,11 @@ class _ReadChapterSelectionScreenState
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {
+                        unawaited(UsageMetricsService.instance.trackEvent(
+                          eventName: 'read_open_without_chapter',
+                          textId: widget.textId,
+                          mode: 'read',
+                        ));
                         Navigator.of(context)
                             .pushReplacement(MaterialPageRoute<void>(
                           builder: (_) => BcvReadScreen(title: widget.title),
@@ -326,6 +368,13 @@ class _ReadChapterSelectionScreenState
                 child: InkWell(
                   borderRadius: BorderRadius.circular(8),
                   onTap: () {
+                    unawaited(UsageMetricsService.instance.trackEvent(
+                      eventName: 'read_chapter_selected',
+                      textId: widget.textId,
+                      mode: 'read',
+                      chapterNumber: chapter.number,
+                      properties: {'chapter_title': chapter.title},
+                    ));
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute<void>(
                       builder: (_) => BcvReadScreen(

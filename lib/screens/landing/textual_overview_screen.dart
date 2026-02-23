@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
+import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import 'overview/overview_constants.dart';
@@ -18,9 +21,12 @@ class TextualOverviewScreen extends StatefulWidget {
   State<TextualOverviewScreen> createState() => _TextualOverviewScreenState();
 }
 
-class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
+class _TextualOverviewScreenState extends State<TextualOverviewScreen>
+    with WidgetsBindingObserver {
+  final _usageMetrics = UsageMetricsService.instance;
   bool _loading = true;
   List<({String path, String title, int depth})> _flatSections = [];
+  DateTime? _screenDwellStartedAt;
 
   String? _selectedPath;
   String? _selectedTitle;
@@ -34,7 +40,54 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _screenDwellStartedAt = DateTime.now().toUtc();
     _load();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+    unawaited(_usageMetrics.flush(all: true));
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.hidden) {
+      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+      unawaited(_usageMetrics.flush(all: true));
+      return;
+    }
+    if (state == AppLifecycleState.resumed) {
+      _screenDwellStartedAt ??= DateTime.now().toUtc();
+    }
+  }
+
+  void _trackSurfaceDwell({
+    required DateTime nowUtc,
+    required bool resetStart,
+  }) {
+    final startedAt = _screenDwellStartedAt;
+    if (startedAt == null) return;
+    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
+    if (durationMs >= _usageMetrics.minDwellMs) {
+      unawaited(_usageMetrics.trackSurfaceDwell(
+        textId: 'bodhicaryavatara',
+        mode: 'overview',
+        durationMs: durationMs,
+        sectionPath: _selectedPath,
+        sectionTitle: _selectedTitle,
+        properties: {
+          'selected_depth': _selectedPath?.split('.').length,
+        },
+      ));
+    }
+    if (resetStart) _screenDwellStartedAt = null;
   }
 
   Future<void> _load() async {
@@ -76,6 +129,13 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
   }
 
   void _onPickerChanged(int depth, String? path) {
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'overview_picker_changed',
+      textId: 'bodhicaryavatara',
+      mode: 'overview',
+      sectionPath: path,
+      properties: {'depth': depth},
+    ));
     setState(() {
       // Truncate selections beyond this depth.
       if (_pickerSelections.length > depth) {
@@ -121,6 +181,17 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
   void _onNodeTap(({String path, String title, int depth}) section) {
     final hasChildren =
         _filteredSections.any((s) => s.path.startsWith('${section.path}.'));
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'overview_node_tapped',
+      textId: 'bodhicaryavatara',
+      mode: 'overview',
+      sectionPath: section.path,
+      sectionTitle: section.title,
+      properties: {
+        'depth': section.depth,
+        'has_children': hasChildren,
+      },
+    ));
     if (hasChildren) {
       setState(() {
         _selectedPath = null;
@@ -194,6 +265,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.landingBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -230,14 +302,25 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
       return Column(
         children: [
           _buildTopSectionPicker(topSections.take(5).toList()),
-          const Expanded(
-            child: Center(
-              child: Text(
-                'Choose a top section to begin.',
-                style: TextStyle(
-                  fontFamily: 'Lora',
-                  fontSize: 16,
-                  color: AppColors.mutedBrown,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: AppColors.cardBeige,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.borderLight),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Choose a top section to begin.',
+                    style: TextStyle(
+                      fontFamily: 'Lora',
+                      fontSize: 16,
+                      color: AppColors.mutedBrown,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -250,43 +333,53 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen> {
       children: [
         _buildPickers(),
         Expanded(
-          child: isDesktop
-              ? Row(
-                  children: [
-                    Expanded(
-                      child: OverviewTreeView(
-                        flatSections: _filteredSections,
-                        selectedPath: _selectedPath,
-                        onNodeTap: _onNodeTap,
-                        scrollToPath: _scrollToPath,
-                      ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.cardBeige,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.borderLight),
+              ),
+              child: isDesktop
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: OverviewTreeView(
+                            flatSections: _filteredSections,
+                            selectedPath: _selectedPath,
+                            onNodeTap: _onNodeTap,
+                            scrollToPath: _scrollToPath,
+                          ),
+                        ),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeInOut,
+                          width: _selectedPath != null
+                              ? OverviewConstants.versePanelWidth
+                              : 0,
+                          child: _selectedPath != null
+                              ? OverviewVersePanel(
+                                  key: ValueKey(_selectedPath),
+                                  sectionPath: _selectedPath!,
+                                  sectionTitle: _selectedTitle ?? '',
+                                  onClose: () => setState(() {
+                                    _selectedPath = null;
+                                    _selectedTitle = null;
+                                  }),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ],
+                    )
+                  : OverviewTreeView(
+                      flatSections: _filteredSections,
+                      selectedPath: _selectedPath,
+                      onNodeTap: _onNodeTap,
+                      scrollToPath: _scrollToPath,
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeInOut,
-                      width: _selectedPath != null
-                          ? OverviewConstants.versePanelWidth
-                          : 0,
-                      child: _selectedPath != null
-                          ? OverviewVersePanel(
-                              key: ValueKey(_selectedPath),
-                              sectionPath: _selectedPath!,
-                              sectionTitle: _selectedTitle ?? '',
-                              onClose: () => setState(() {
-                                _selectedPath = null;
-                                _selectedTitle = null;
-                              }),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                  ],
-                )
-              : OverviewTreeView(
-                  flatSections: _filteredSections,
-                  selectedPath: _selectedPath,
-                  onNodeTap: _onNodeTap,
-                  scrollToPath: _scrollToPath,
-                ),
+            ),
+          ),
         ),
       ],
     );

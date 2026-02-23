@@ -42,17 +42,42 @@ CREATE TABLE daily_sections (
   UNIQUE(user_id, date)
 );
 
+-- Usage Metrics Event Stream (tracks product usage and dwell time)
+CREATE TABLE app_usage_events (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  occurred_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  received_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  event_name TEXT NOT NULL,
+  session_id TEXT NOT NULL,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  anon_id TEXT,
+  text_id TEXT,
+  mode TEXT,
+  section_path TEXT,
+  section_title TEXT,
+  chapter_number INTEGER,
+  verse_ref TEXT,
+  duration_ms INTEGER,
+  properties JSONB DEFAULT '{}'::jsonb
+);
+
 -- Create indexes for better query performance
 CREATE INDEX idx_chapters_study_text ON chapters(study_text_id);
 CREATE INDEX idx_sections_chapter ON sections(chapter_id);
 CREATE INDEX idx_daily_sections_user ON daily_sections(user_id);
 CREATE INDEX idx_daily_sections_date ON daily_sections(date);
+CREATE INDEX idx_app_usage_events_occurred_at ON app_usage_events(occurred_at);
+CREATE INDEX idx_app_usage_events_event_name_occurred_at ON app_usage_events(event_name, occurred_at);
+CREATE INDEX idx_app_usage_events_text_mode_occurred_at ON app_usage_events(text_id, mode, occurred_at);
+CREATE INDEX idx_app_usage_events_section_path_occurred_at ON app_usage_events(section_path, occurred_at);
+CREATE INDEX idx_app_usage_events_user_occurred_at ON app_usage_events(user_id, occurred_at);
 
 -- Enable Row Level Security (RLS)
 ALTER TABLE study_texts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chapters ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE daily_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE app_usage_events ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for study_texts (everyone can read)
 CREATE POLICY "Public study texts are viewable by everyone"
@@ -81,6 +106,15 @@ CREATE POLICY "Users can insert their own daily sections"
 CREATE POLICY "Users can update their own daily sections"
   ON daily_sections FOR UPDATE
   USING (auth.uid() = user_id);
+
+CREATE POLICY "Insert usage metrics events"
+  ON app_usage_events FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (
+    (auth.uid() IS NOT NULL AND user_id = auth.uid())
+    OR
+    (auth.uid() IS NULL AND user_id IS NULL)
+  );
 
 -- Function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../services/bcv_file_quiz_service.dart';
 import '../../services/bcv_verse_service.dart';
+import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import 'bcv/bcv_verse_text.dart';
 
@@ -15,10 +17,13 @@ class BcvFileQuizScreen extends StatefulWidget {
   State<BcvFileQuizScreen> createState() => _BcvFileQuizScreenState();
 }
 
-class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
+class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
+    with WidgetsBindingObserver {
   final _quizService = BcvFileQuizService.instance;
   final _verseService = BcvVerseService.instance;
+  final _usageMetrics = UsageMetricsService.instance;
   final _random = Random();
+  DateTime? _screenDwellStartedAt;
 
   late final ConfettiController _confettiController;
 
@@ -76,6 +81,8 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _screenDwellStartedAt = DateTime.now().toUtc();
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 2));
     _loadDifficulty(_difficulty, resetScore: true);
@@ -83,8 +90,48 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+    unawaited(_usageMetrics.flush(all: true));
     _confettiController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.hidden) {
+      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+      unawaited(_usageMetrics.flush(all: true));
+      return;
+    }
+    if (state == AppLifecycleState.resumed) {
+      _screenDwellStartedAt ??= DateTime.now().toUtc();
+    }
+  }
+
+  void _trackSurfaceDwell({
+    required DateTime nowUtc,
+    required bool resetStart,
+  }) {
+    final startedAt = _screenDwellStartedAt;
+    if (startedAt == null) return;
+    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
+    if (durationMs >= _usageMetrics.minDwellMs) {
+      unawaited(_usageMetrics.trackSurfaceDwell(
+        textId: 'bodhicaryavatara',
+        mode: 'quiz',
+        durationMs: durationMs,
+        properties: {
+          'difficulty': _difficulty.name,
+          'total_answers': _totalAnswers,
+          'correct_answers': _correctAnswers,
+        },
+      ));
+    }
+    if (resetStart) _screenDwellStartedAt = null;
   }
 
   Future<void> _loadDifficulty(
@@ -117,7 +164,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
         _showAnswer = false;
         _isLoading = false;
       });
-      _nextQuestion();
+      _nextQuestion(trackInteraction: false);
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -133,8 +180,19 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     return _questions[index];
   }
 
-  void _nextQuestion() {
+  void _nextQuestion({required bool trackInteraction}) {
     if (_questions.isEmpty) return;
+    if (trackInteraction) {
+      unawaited(_usageMetrics.trackEvent(
+        eventName: 'quiz_next_question_tapped',
+        textId: 'bodhicaryavatara',
+        mode: 'quiz',
+        properties: {
+          'difficulty': _difficulty.name,
+          'from_state': _showAnswer ? 'next' : 'skip',
+        },
+      ));
+    }
     if (_orderCursor >= _order.length) {
       _order = _quizService.buildShuffledOrder(_questions.length, _random);
       _orderCursor = 0;
@@ -183,6 +241,11 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     return 'Chapter $chapter';
   }
 
+  int? _chapterFromRefs(List<String> refs) {
+    if (refs.isEmpty) return null;
+    return int.tryParse(refs.first.split('.').first);
+  }
+
   void _revealAnswer() {
     final q = _currentQuestion;
     if (q == null || _showAnswer) return;
@@ -193,6 +256,16 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
       _selectedOptionKey = null;
       _consecutiveCorrect = 0;
     });
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'quiz_answer_revealed',
+      textId: 'bodhicaryavatara',
+      mode: 'quiz',
+      chapterNumber: _chapterFromRefs(q.verseRefs),
+      properties: {
+        'difficulty': _difficulty.name,
+        'reason': 'skipped_or_revealed',
+      },
+    ));
 
     _showResultDialog(
       title: 'Answer',
@@ -241,6 +314,13 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
       _totalAnswers++;
       if (correct) _correctAnswers++;
     });
+    unawaited(_usageMetrics.trackQuizAttempt(
+      textId: 'bodhicaryavatara',
+      mode: 'quiz',
+      correct: correct,
+      chapterNumber: _chapterFromRefs(q.verseRefs),
+      difficulty: _difficulty.name,
+    ));
 
     _showResultDialog(
       title: correct ? 'Correct' : 'Not quite',
@@ -315,7 +395,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
             decoration: BoxDecoration(
               color: selected
                   ? AppColors.primary.withValues(alpha: 0.14)
-                  : Colors.white,
+                  : AppColors.cardBeige,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: selected ? AppColors.primary : AppColors.border,
@@ -357,7 +437,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
             ? AppColors.wrong.withValues(alpha: 0.10)
             : (isSelected
                 ? AppColors.primary.withValues(alpha: 0.08)
-                : Colors.white));
+                : AppColors.cardBeige));
 
     return Material(
       color: Colors.transparent,
@@ -463,6 +543,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
 
     if (_isLoading) {
       return Scaffold(
+        backgroundColor: AppColors.landingBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -479,6 +560,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
 
     if (_error != null || question == null) {
       return Scaffold(
+        backgroundColor: AppColors.landingBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -517,6 +599,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
     final beginnerChapterHint = _beginnerChapterHint(question.verseRefs);
 
     return Scaffold(
+      backgroundColor: AppColors.landingBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -579,7 +662,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.cardBeige,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: AppColors.borderLight),
                         ),
@@ -651,8 +734,8 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen> {
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: _showAnswer
-                                  ? _nextQuestion
-                                  : () => _nextQuestion(),
+                                  ? () => _nextQuestion(trackInteraction: true)
+                                  : () => _nextQuestion(trackInteraction: true),
                               icon: Icon(
                                 _showAnswer
                                     ? Icons.arrow_forward

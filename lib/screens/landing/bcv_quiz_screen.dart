@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../utils/app_theme.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
+import '../../services/usage_metrics_service.dart';
 import 'bcv/bcv_verse_text.dart';
 
 /// Guess the Chapter: pick which chapter a random section belongs to.
@@ -15,9 +17,12 @@ class BcvQuizScreen extends StatefulWidget {
   State<BcvQuizScreen> createState() => _BcvQuizScreenState();
 }
 
-class _BcvQuizScreenState extends State<BcvQuizScreen> {
+class _BcvQuizScreenState extends State<BcvQuizScreen>
+    with WidgetsBindingObserver {
   final _verseService = BcvVerseService.instance;
   final _commentaryService = CommentaryService.instance;
+  final _usageMetrics = UsageMetricsService.instance;
+  DateTime? _screenDwellStartedAt;
 
   bool _isLoading = true;
   List<String> _sectionVerseTexts = [];
@@ -111,6 +116,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _screenDwellStartedAt = DateTime.now().toUtc();
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 2));
     _loadQuiz();
@@ -118,8 +125,49 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+    unawaited(_usageMetrics.flush(all: true));
     _confettiController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.hidden) {
+      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
+      unawaited(_usageMetrics.flush(all: true));
+      return;
+    }
+    if (state == AppLifecycleState.resumed) {
+      _screenDwellStartedAt ??= DateTime.now().toUtc();
+    }
+  }
+
+  void _trackSurfaceDwell({
+    required DateTime nowUtc,
+    required bool resetStart,
+  }) {
+    final startedAt = _screenDwellStartedAt;
+    if (startedAt == null) return;
+    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
+    if (durationMs >= _usageMetrics.minDwellMs) {
+      unawaited(_usageMetrics.trackSurfaceDwell(
+        textId: 'bodhicaryavatara',
+        mode: 'guess_chapter',
+        durationMs: durationMs,
+        chapterNumber: _correctChapterNumber > 0 ? _correctChapterNumber : null,
+        verseRef: _correctVerseRef,
+        properties: {
+          'total_answers': _totalAnswers,
+          'correct_answers': _correctAnswers,
+        },
+      ));
+    }
+    if (resetStart) _screenDwellStartedAt = null;
   }
 
   Future<void> _loadQuiz() async {
@@ -253,7 +301,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                       ? AppColors.wrong.withValues(alpha: 0.12)
                       : (isSelected
                           ? AppColors.primary.withValues(alpha: 0.10)
-                          : Colors.white)),
+                          : AppColors.cardBeige)),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: isCorrect
@@ -338,7 +386,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
           borderRadius: BorderRadius.circular(12),
           child: Container(
             decoration: BoxDecoration(
-              color: filled ? AppColors.primary : Colors.white,
+              color: filled ? AppColors.primary : AppColors.cardBeige,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: filled ? AppColors.primary : AppColors.border,
@@ -394,6 +442,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   }
 
   void _nextQuestion() {
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'quiz_next_question_tapped',
+      textId: 'bodhicaryavatara',
+      mode: 'guess_chapter',
+      chapterNumber: _correctChapterNumber > 0 ? _correctChapterNumber : null,
+      verseRef: _correctVerseRef,
+      properties: {'from_state': _showAnswer ? 'next' : 'skip'},
+    ));
     _loadQuiz();
   }
 
@@ -407,6 +463,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
       _showAnswer = true;
       _selectedChapter = null;
     });
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'quiz_answer_revealed',
+      textId: 'bodhicaryavatara',
+      mode: 'guess_chapter',
+      chapterNumber: _correctChapterNumber,
+      verseRef: _correctVerseRef,
+      properties: {'reason': 'skipped_or_revealed'},
+    ));
     _showAnswerDialog(
       message: message,
       title: 'Answer',
@@ -453,6 +517,13 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
       _totalAnswers++;
       if (correct) _correctAnswers++;
     });
+    unawaited(_usageMetrics.trackQuizAttempt(
+      textId: 'bodhicaryavatara',
+      mode: 'guess_chapter',
+      correct: correct,
+      chapterNumber: _correctChapterNumber,
+      verseRef: _correctVerseRef,
+    ));
     _showAnswerDialog(
       message:
           correct ? (correctMsg ?? 'Correct!') : (wrongMsg ?? 'Not quite.'),
@@ -498,6 +569,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
+        backgroundColor: AppColors.landingBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -517,6 +589,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
 
     if (_error != null || _chapters.isEmpty) {
       return Scaffold(
+        backgroundColor: AppColors.landingBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -554,6 +627,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
     }
 
     return Scaffold(
+      backgroundColor: AppColors.landingBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -645,11 +719,12 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                       const SizedBox(height: 6),
                       Text(
                         'To which chapter does this belong?',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textDark,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textDark,
+                                ),
                       ),
                       const SizedBox(height: 8),
                       Expanded(
@@ -713,9 +788,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                             icon: _showAnswer
                                                 ? Icons.arrow_forward
                                                 : Icons.skip_next,
-                                            onTap: _showAnswer
-                                                ? _nextQuestion
-                                                : _loadQuiz,
+                                            onTap: _nextQuestion,
                                             filled: true,
                                           ),
                                         ),
@@ -782,8 +855,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen> {
                                   icon: _showAnswer
                                       ? Icons.arrow_forward
                                       : Icons.skip_next,
-                                  onTap:
-                                      _showAnswer ? _nextQuestion : _loadQuiz,
+                                  onTap: _nextQuestion,
                                   filled: true,
                                 );
                               },

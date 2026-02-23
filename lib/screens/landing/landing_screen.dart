@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_verse_service.dart';
+import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
@@ -57,6 +60,11 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   void _openTextOptions(BuildContext context) {
+    unawaited(UsageMetricsService.instance.trackEvent(
+      eventName: 'text_opened',
+      textId: 'bodhicaryavatara',
+      mode: 'text_options',
+    ));
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => const TextOptionsScreen(
@@ -69,6 +77,12 @@ class _LandingScreenState extends State<LandingScreen> {
 
   void _openGatewayToKnowledge(BuildContext context) {
     final opened = openGatewayToKnowledgePage();
+    unawaited(UsageMetricsService.instance.trackEvent(
+      eventName: 'text_opened',
+      textId: 'gateway_to_knowledge',
+      mode: 'external_web',
+      properties: {'opened_in_web': opened},
+    ));
     if (!opened) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
