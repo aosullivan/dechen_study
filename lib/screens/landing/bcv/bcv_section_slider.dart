@@ -25,6 +25,65 @@ class BcvSectionSlider extends StatelessWidget {
   final ScrollController? scrollController;
   final double? height;
 
+  /// True when this row starts a new top-level section group.
+  static bool isTopLevelGroupStart(
+      List<BcvSectionItem> flatSections, int index) {
+    if (index <= 0 || index >= flatSections.length) return false;
+    return flatSections[index].depth == 0;
+  }
+
+  static bool _isCooperatingConditionMainSection(BcvSectionItem item) {
+    final segments = item.path.split('.');
+    return segments.length == 2 && segments.first == '4';
+  }
+
+  /// True for 4.2/4.3/... main subsections under "The Cooperating Condition".
+  /// This inserts separators between those six main blocks (4.1 to 4.6).
+  static bool isCooperatingMainSectionStart(
+      List<BcvSectionItem> flatSections, int index) {
+    if (index <= 0 || index >= flatSections.length) return false;
+    if (!_isCooperatingConditionMainSection(flatSections[index])) return false;
+    for (var i = 0; i < index; i++) {
+      if (_isCooperatingConditionMainSection(flatSections[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Extra visual spacing inserted before top-level section groups.
+  static double extraTopPaddingForIndex(
+      List<BcvSectionItem> flatSections, int index) {
+    var total = 0.0;
+    if (isTopLevelGroupStart(flatSections, index)) {
+      total += BcvReadConstants.sectionSliderTopLevelGap;
+    }
+    if (isCooperatingMainSectionStart(flatSections, index)) {
+      total += BcvReadConstants.sectionSliderCooperatingMainGap;
+    }
+    return total;
+  }
+
+  /// Extra vertical height before the section row at [index], including
+  /// separators/gaps inserted above that row.
+  static double extraHeightBeforeRow(
+      List<BcvSectionItem> flatSections, int index) {
+    var total = 0.0;
+    for (var i = 1; i <= index && i < flatSections.length; i++) {
+      total += extraTopPaddingForIndex(flatSections, i);
+    }
+    return total;
+  }
+
+  /// Total extra vertical height added to the slider via top-level separators.
+  static double totalExtraHeight(List<BcvSectionItem> flatSections) {
+    var total = 0.0;
+    for (var i = 1; i < flatSections.length; i++) {
+      total += extraTopPaddingForIndex(flatSections, i);
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (flatSections.isEmpty) return const SizedBox.shrink();
@@ -46,39 +105,61 @@ class BcvSectionSlider extends StatelessWidget {
         itemCount: flatSections.length,
         itemBuilder: (context, index) {
           final item = flatSections[index];
+          final hasTopLevelSeparator =
+              isTopLevelGroupStart(flatSections, index);
+          final hasCooperatingMainSeparator =
+              isCooperatingMainSectionStart(flatSections, index);
+          final hasSeparator =
+              hasTopLevelSeparator || hasCooperatingMainSeparator;
+          final topPadding = extraTopPaddingForIndex(flatSections, index);
           final isCurrent = item.path == currentPath;
           final isAncestor = currentPath.isNotEmpty &&
               (item.path == currentPath ||
                   currentPath.startsWith('${item.path}.'));
-          final indent = item.depth * BcvReadConstants.sectionSliderIndentPerLevel;
+          final indent =
+              item.depth * BcvReadConstants.sectionSliderIndentPerLevel;
           final numStr = sectionNumberForDisplay(item.path);
           final label =
               numStr.isNotEmpty ? '$numStr. ${item.title}' : item.title;
-          return Material(
-            color: isCurrent
-                ? AppColors.primary.withValues(alpha: 0.12)
-                : Colors.transparent,
-            child: InkWell(
-              onTap: () => onSectionTap({
-                'section': item.path,
-                'path': item.path,
-                'title': item.title,
-              }),
-              child: SizedBox(
-                height: BcvReadConstants.sectionSliderLineHeight,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: indent),
-                    child: Text(
-                      label,
-                      style: sectionListTextStyle(
-                        context,
-                        isCurrent: isCurrent,
-                        isAncestor: isAncestor,
+          return Container(
+            padding: EdgeInsets.only(top: topPadding),
+            decoration: hasSeparator
+                ? BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: AppColors.border.withValues(alpha: 0.65),
+                        width: BcvReadConstants
+                            .sectionSliderTopLevelDividerThickness,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                : null,
+            child: Material(
+              color: isCurrent
+                  ? AppColors.primary.withValues(alpha: 0.12)
+                  : Colors.transparent,
+              child: InkWell(
+                onTap: () => onSectionTap({
+                  'section': item.path,
+                  'path': item.path,
+                  'title': item.title,
+                }),
+                child: SizedBox(
+                  height: BcvReadConstants.sectionSliderLineHeight,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: indent),
+                      child: Text(
+                        label,
+                        style: sectionListTextStyle(
+                          context,
+                          isCurrent: isCurrent,
+                          isAncestor: isAncestor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ),
@@ -96,17 +177,17 @@ class BcvSectionSlider extends StatelessWidget {
     required bool isAncestor,
   }) {
     return Theme.of(context).textTheme.bodySmall?.copyWith(
-          fontFamily: 'Lora',
-          fontSize: BcvReadConstants.sectionListFontSize,
-          height: BcvReadConstants.sectionListLineHeight /
-              BcvReadConstants.sectionListFontSize,
-          color: isCurrent
-              ? AppColors.textDark
-              : isAncestor
-                  ? AppColors.mutedBrown
-                  : AppColors.primary.withValues(alpha: 0.9),
-          fontWeight: isAncestor ? FontWeight.w600 : FontWeight.normal,
-        ) ??
+              fontFamily: 'Lora',
+              fontSize: BcvReadConstants.sectionListFontSize,
+              height: BcvReadConstants.sectionListLineHeight /
+                  BcvReadConstants.sectionListFontSize,
+              color: isCurrent
+                  ? AppColors.textDark
+                  : isAncestor
+                      ? AppColors.mutedBrown
+                      : AppColors.primary.withValues(alpha: 0.9),
+              fontWeight: isAncestor ? FontWeight.w600 : FontWeight.normal,
+            ) ??
         TextStyle(
           fontFamily: 'Lora',
           fontSize: BcvReadConstants.sectionListFontSize,

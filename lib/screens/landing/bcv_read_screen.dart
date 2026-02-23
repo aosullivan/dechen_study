@@ -1245,12 +1245,17 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     if (idx < 0) return;
     final viewportHeight = BcvReadConstants.sectionSliderLineHeight *
         BcvReadConstants.sectionSliderVisibleLines;
-    final targetOffset = (idx * BcvReadConstants.sectionSliderLineHeight) -
+    final extraBeforeRow = BcvSectionSlider.extraHeightBeforeRow(flat, idx);
+    final rowTop =
+        (idx * BcvReadConstants.sectionSliderLineHeight) + extraBeforeRow;
+    final targetOffset = rowTop -
         (viewportHeight / 2) +
         (BcvReadConstants.sectionSliderLineHeight / 2);
-    final maxOffset = (flat.length * BcvReadConstants.sectionSliderLineHeight -
-            viewportHeight)
-        .clamp(0.0, double.infinity);
+    final contentHeight =
+        (flat.length * BcvReadConstants.sectionSliderLineHeight) +
+            BcvSectionSlider.totalExtraHeight(flat);
+    final maxOffset =
+        (contentHeight - viewportHeight).clamp(0.0, double.infinity);
     final maxOffsetSafe = maxOffset.isFinite ? maxOffset : 0.0;
     final clamped = targetOffset.clamp(0.0, maxOffsetSafe).toDouble();
     void doScroll() {
