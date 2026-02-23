@@ -91,7 +91,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             ),
             _OptionTile(
               icon: Icons.account_tree_outlined,
-              label: 'Textual Overview',
+              label: 'Textual Structure',
               onTap: () => _openOverview(context),
             ),
           ],
@@ -185,7 +185,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
         ),
       );
     } else {
-      _showComingSoon(context, 'Textual Overview');
+      _showComingSoon(context, 'Textual Structure');
     }
   }
 

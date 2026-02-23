@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Layout and styling constants for the Textual Overview screen.
+/// Layout and styling constants for the Textual Structure screen.
 abstract final class OverviewConstants {
   OverviewConstants._();
 

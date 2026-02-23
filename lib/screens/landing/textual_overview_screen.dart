@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/bcv_verse_service.dart';
 import '../../services/usage_metrics_service.dart';
@@ -23,7 +24,11 @@ class TextualOverviewScreen extends StatefulWidget {
 
 class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     with WidgetsBindingObserver {
+  static const _lastPathPrefsKey =
+      'bodhicaryavatara_textual_structure_last_path';
+
   final _usageMetrics = UsageMetricsService.instance;
+  final _pickerScrollController = ScrollController();
   bool _loading = true;
   List<({String path, String title, int depth})> _flatSections = [];
   DateTime? _screenDwellStartedAt;
@@ -50,6 +55,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
+    _pickerScrollController.dispose();
     super.dispose();
   }
 
@@ -96,10 +102,74 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       VerseHierarchyService.instance.preload(),
     ]);
     if (!mounted) return;
+    final flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
+    final restoredPath = await _loadLastPath();
+    if (!mounted) return;
+
+    var restoredSelections = <String>[];
+    String? restoredSelectedPath;
+    String? restoredSelectedTitle;
+    String? restoredScrollPath;
+
+    if (restoredPath != null &&
+        flatSections.any((s) => s.path == restoredPath)) {
+      restoredSelections = _pickerSelectionsForPath(restoredPath);
+      restoredScrollPath = restoredPath;
+      final hasChildren = flatSections.any(
+        (s) => s.path.startsWith('$restoredPath.'),
+      );
+      if (!hasChildren) {
+        restoredSelectedPath = restoredPath;
+        restoredSelectedTitle = flatSections
+            .where((s) => s.path == restoredPath)
+            .firstOrNull
+            ?.title;
+      }
+    }
+
     setState(() {
-      _flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
+      _flatSections = flatSections;
+      _pickerSelections = restoredSelections;
+      _selectedPath = restoredSelectedPath;
+      _selectedTitle = restoredSelectedTitle;
+      _scrollToPath = restoredScrollPath;
       _loading = false;
     });
+    if (restoredSelections.isNotEmpty) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _scrollPickersToEnd(animate: false));
+    }
+  }
+
+  Future<String?> _loadLastPath() async {
+    final prefs = await SharedPreferences.getInstance();
+    final path = prefs.getString(_lastPathPrefsKey)?.trim();
+    if (path == null || path.isEmpty) return null;
+    return path;
+  }
+
+  Future<void> _saveLastPath(String? path) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (path == null || path.trim().isEmpty) {
+      await prefs.remove(_lastPathPrefsKey);
+      return;
+    }
+    await prefs.setString(_lastPathPrefsKey, path.trim());
+  }
+
+  void _scrollPickersToEnd({bool animate = true}) {
+    if (!_pickerScrollController.hasClients) return;
+    final target = _pickerScrollController.position.maxScrollExtent;
+    if (target <= 0) return;
+    if (animate) {
+      _pickerScrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+      );
+    } else {
+      _pickerScrollController.jumpTo(target);
+    }
   }
 
   /// Returns children of [parentPath] (empty string = root-level sections).
@@ -136,6 +206,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       sectionPath: path,
       properties: {'depth': depth},
     ));
+    String? restorablePath;
     setState(() {
       // Truncate selections beyond this depth.
       if (_pickerSelections.length > depth) {
@@ -154,14 +225,18 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
           _selectedPath = null;
           _selectedTitle = null;
         }
+        restorablePath = path;
       } else {
         // "All" picked — clear selection.
         _selectedPath = null;
         _selectedTitle = null;
         _scrollToPath =
             _pickerSelections.isNotEmpty ? _pickerSelections.last : null;
+        restorablePath = _scrollToPath;
       }
     });
+    unawaited(_saveLastPath(restorablePath));
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollPickersToEnd());
   }
 
   /// Build picker selections from a section path.
@@ -199,6 +274,9 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         _pickerSelections = _pickerSelectionsForPath(section.path);
         _scrollToPath = section.path;
       });
+      unawaited(_saveLastPath(section.path));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _scrollPickersToEnd());
       return;
     }
 
@@ -216,12 +294,18 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
           _pickerSelections = _pickerSelectionsForPath(section.path);
         }
       });
+      unawaited(_saveLastPath(section.path));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _scrollPickersToEnd());
     } else {
       setState(() {
         _selectedPath = section.path;
         _selectedTitle = section.title;
         _pickerSelections = _pickerSelectionsForPath(section.path);
       });
+      unawaited(_saveLastPath(section.path));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _scrollPickersToEnd());
       showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
@@ -274,7 +358,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Textual Overview',
+          'Textual Structure',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
@@ -477,6 +561,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         border: Border(bottom: BorderSide(color: AppColors.borderLight)),
       ),
       child: SingleChildScrollView(
+        controller: _pickerScrollController,
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
