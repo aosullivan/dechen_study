@@ -67,6 +67,7 @@ flutter:
     - texts/section_emotion_mappings.json
     - texts/root_text_quiz.txt
     - texts/root_text_quiz_400.txt
+    - texts/section_clues.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

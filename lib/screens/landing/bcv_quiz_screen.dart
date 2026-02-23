@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../utils/app_theme.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
+import '../../services/section_clue_service.dart';
 import '../../services/usage_metrics_service.dart';
 import 'bcv/bcv_verse_text.dart';
 
@@ -21,6 +22,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     with WidgetsBindingObserver {
   final _verseService = BcvVerseService.instance;
   final _commentaryService = CommentaryService.instance;
+  final _clueService = SectionClueService.instance;
   final _usageMetrics = UsageMetricsService.instance;
   DateTime? _screenDwellStartedAt;
 
@@ -36,6 +38,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
   int _totalAnswers = 0;
   int _consecutiveCorrect = 0;
   Object? _error;
+  String? _clueText;
+  bool _showClue = false;
   late ConfettiController _confettiController;
 
   static final _correctAnswerMessages = [
@@ -178,6 +182,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
       _correctChapterNumber = 0;
       _selectedChapter = null;
       _showAnswer = false;
+      _showClue = false;
+      _clueText = null;
     });
     try {
       final chapters = await _verseService.getChapters();
@@ -191,12 +197,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
         }
         return;
       }
+      final clue = await _clueService.getClueForRef(section.verseRef);
       if (mounted) {
         setState(() {
           _sectionVerseTexts = section.verseTexts;
           _correctChapterNumber = section.chapterNumber;
           _correctVerseRef = section.verseRef;
           _chapters = chapters;
+          _clueText = clue;
           _isLoading = false;
         });
       }
@@ -726,6 +734,23 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                                   color: AppColors.textDark,
                                 ),
                       ),
+                      if (_showClue && _clueText != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            _clueText!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontStyle: FontStyle.italic,
+                                  color: AppColors.textDark
+                                      .withValues(alpha: 0.7),
+                                  fontSize: 15,
+                                  height: 1.3,
+                                ),
+                          ),
+                        ),
                       const SizedBox(height: 8),
                       Expanded(
                         child: LayoutBuilder(
@@ -864,25 +889,39 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              _showChapterLabels = !_showChapterLabels;
-                            });
-                          },
-                          icon: Icon(
-                            _showChapterLabels
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            size: 16,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (_clueText != null && !_showClue && !_showAnswer)
+                            TextButton.icon(
+                              onPressed: () {
+                                setState(() => _showClue = true);
+                              },
+                              icon: const Icon(Icons.lightbulb_outline,
+                                  size: 16),
+                              label: Text(
+                                'Clue',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                _showChapterLabels = !_showChapterLabels;
+                              });
+                            },
+                            icon: Icon(
+                              _showChapterLabels
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              size: 16,
+                            ),
+                            label: Text(
+                              _showChapterLabels ? 'Hide names' : 'Show names',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
                           ),
-                          label: Text(
-                            _showChapterLabels ? 'Hide names' : 'Show names',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   );
