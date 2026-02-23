@@ -476,18 +476,21 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.borderLight)),
       ),
-      child: Wrap(
-        spacing: 8,
-        runSpacing: 6,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          for (var i = 0; i < pickers.length; i++) ...[
-            if (i > 0)
-              const Icon(Icons.chevron_right,
-                  size: 18, color: AppColors.mutedBrown),
-            pickers[i],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (var i = 0; i < pickers.length; i++) ...[
+              if (i > 0)
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Icon(Icons.chevron_right,
+                      size: 18, color: AppColors.mutedBrown),
+                ),
+              pickers[i],
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -498,7 +501,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     required String? selectedPath,
   }) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 260),
+      constraints: const BoxConstraints(maxWidth: 320),
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: AppColors.cardBeige,

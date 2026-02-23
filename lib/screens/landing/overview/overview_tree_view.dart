@@ -29,6 +29,7 @@ class OverviewTreeView extends StatefulWidget {
 
 class _OverviewTreeViewState extends State<OverviewTreeView> {
   final _scrollController = ScrollController();
+  final _horizontalScrollController = ScrollController();
   final Set<String> _expandedPaths = <String>{};
   Set<String> _parentPathsCache = <String>{};
   List<({String path, String title, int depth})> _visibleSectionsCache =
@@ -148,6 +149,7 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _horizontalScrollController.dispose();
     super.dispose();
   }
 
@@ -164,46 +166,64 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final viewportWidth = constraints.maxWidth;
+        final maxDepth = visibleSections.fold<int>(
+          0,
+          (currentMax, section) =>
+              section.depth > currentMax ? section.depth : currentMax,
+        );
+        final maxIndent = maxDepth * OverviewConstants.indentPerLevel +
+            OverviewConstants.leftPadding +
+            (maxDepth > 0 ? OverviewConstants.stubLength : 0);
+        // Keep row width stable as depth grows: indentation should add
+        // scrollable width, not shrink the visible card area.
+        final baseCardWidth = viewportWidth - OverviewConstants.leftPadding;
+        final contentWidth = maxIndent + baseCardWidth;
+        final treeWidth =
+            contentWidth > viewportWidth ? contentWidth : viewportWidth;
 
         return SingleChildScrollView(
           controller: _scrollController,
-          child: SizedBox(
-            width: viewportWidth,
-            height: totalHeight,
-            child: Stack(
-              children: [
-                // Layer 1: Connector lines.
-                CustomPaint(
-                  size: Size(viewportWidth, totalHeight),
-                  painter: OverviewTreePainter(flatSections: visibleSections),
-                ),
-                // Layer 2: Node cards.
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var i = 0; i < visibleSections.length; i++)
-                      OverviewNodeCard(
-                        path: visibleSections[i].path,
-                        title: visibleSections[i].title,
-                        depth: visibleSections[i].depth,
-                        hasChildren:
-                            parentPaths.contains(visibleSections[i].path),
-                        isExpanded:
-                            _expandedPaths.contains(visibleSections[i].path),
-                        isSelected:
-                            visibleSections[i].path == widget.selectedPath,
-                        onTap: () {
-                          final hasChildren =
-                              parentPaths.contains(visibleSections[i].path);
-                          if (hasChildren) {
-                            _toggleExpanded(visibleSections[i].path);
-                          }
-                          widget.onNodeTap(visibleSections[i]);
-                        },
-                      ),
-                  ],
-                ),
-              ],
+          child: SingleChildScrollView(
+            controller: _horizontalScrollController,
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: treeWidth,
+              height: totalHeight,
+              child: Stack(
+                children: [
+                  // Layer 1: Connector lines.
+                  CustomPaint(
+                    size: Size(treeWidth, totalHeight),
+                    painter: OverviewTreePainter(flatSections: visibleSections),
+                  ),
+                  // Layer 2: Node cards.
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (var i = 0; i < visibleSections.length; i++)
+                        OverviewNodeCard(
+                          path: visibleSections[i].path,
+                          title: visibleSections[i].title,
+                          depth: visibleSections[i].depth,
+                          hasChildren:
+                              parentPaths.contains(visibleSections[i].path),
+                          isExpanded:
+                              _expandedPaths.contains(visibleSections[i].path),
+                          isSelected:
+                              visibleSections[i].path == widget.selectedPath,
+                          onTap: () {
+                            final hasChildren =
+                                parentPaths.contains(visibleSections[i].path);
+                            if (hasChildren) {
+                              _toggleExpanded(visibleSections[i].path);
+                            }
+                            widget.onNodeTap(visibleSections[i]);
+                          },
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
