@@ -821,6 +821,22 @@ void main() {
       expect(paths, containsAll(['1.3.2.1', '1.3.3.1', '1.3.3.2', '1.3.3.3']));
     });
 
+    test('2.1 directly owns verse 1.4 and 2.2 owns verse 1.5', () {
+      const bodily = '2.1';
+      const mental = '2.2';
+      final ownBodily = hierarchyService.getOwnVerseRefsForSectionSync(bodily);
+      final ownMental = hierarchyService.getOwnVerseRefsForSectionSync(mental);
+      expect(ownBodily, containsAll(['1.4ab', '1.4cd']));
+      expect(ownMental, containsAll(['1.5ab', '1.5cd']));
+
+      final path14ab = hierarchyService.getHierarchyForVerseSync('1.4ab');
+      final path14cd = hierarchyService.getHierarchyForVerseSync('1.4cd');
+      final path15ab = hierarchyService.getHierarchyForVerseSync('1.5ab');
+      expect(path14ab.last['section'], equals('2.1'));
+      expect(path14cd.last['section'], equals('2.1'));
+      expect(path15ab.last['section'], equals('2.2'));
+    });
+
     test('opening condensed discarding-pride section owns 1.2 and 1.3', () {
       const path = '1.2.3';
       final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(path);

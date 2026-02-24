@@ -473,7 +473,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(capturedPaths.length, greaterThanOrEqualTo(1));
-      expect(capturedPaths.first, equals('2.1.1'));
+      expect(capturedPaths.first, equals('2.1'));
       expect(capturedRefs.first, equals('1.4ab'));
       expect(capturedRefs, isNot(contains('1.3cd')));
       await tester.pump(const Duration(seconds: 2));
@@ -742,7 +742,7 @@ void main() {
       );
       final slider =
           tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
-      expect(slider.currentPath, equals('2.1.1'));
+      expect(slider.currentPath, equals('2.1'));
       expect(slider.currentPath, isNot(equals('1.4')));
       expect(slider.nonNavigablePaths, contains('1.4'));
     });
