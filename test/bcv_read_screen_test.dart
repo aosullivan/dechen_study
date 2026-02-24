@@ -474,7 +474,7 @@ void main() {
 
       expect(capturedPaths.length, greaterThanOrEqualTo(1));
       expect(capturedPaths.first, equals('2.1'));
-      expect(capturedRefs.first, equals('1.4ab'));
+      expect(capturedRefs.first, equals('1.4'));
       expect(capturedRefs, isNot(contains('1.3cd')));
       await tester.pump(const Duration(seconds: 2));
     });

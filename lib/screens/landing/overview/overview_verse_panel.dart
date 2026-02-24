@@ -20,6 +20,11 @@ class OverviewVersePanel extends StatelessWidget {
   final VoidCallback onClose;
   final ScrollController? scrollController;
 
+  String _baseRef(String ref) {
+    final m = RegExp(r'^(\d+\.\d+)', caseSensitive: false).firstMatch(ref);
+    return m?.group(1) ?? ref;
+  }
+
   List<({String ref, String text})> _loadVerses() {
     final ownRefs = VerseHierarchyService.instance
         .getOwnVerseRefsForSectionSync(sectionPath);
@@ -36,12 +41,16 @@ class OverviewVersePanel extends StatelessWidget {
         .toList()
       ..sort(VerseHierarchyService.compareVerseRefs);
 
+    final seen = <String>{};
     final verses = <({String ref, String text})>[];
     for (final ref in refs) {
       final idx = BcvVerseService.instance.getIndexForRefWithFallback(ref);
       if (idx != null) {
+        final base = _baseRef(ref);
+        final key = 'r:$base';
+        if (!seen.add(key)) continue;
         final text = BcvVerseService.instance.getVerseAt(idx);
-        if (text != null) verses.add((ref: ref, text: text));
+        if (text != null) verses.add((ref: base, text: text));
       }
     }
     return verses;

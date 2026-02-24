@@ -93,6 +93,16 @@ void main() {
         find.textContaining('I will give myself up for others'), findsWidgets);
   });
 
+  testWidgets('split refs in same verse are shown once in daily view',
+      (WidgetTester tester) async {
+    await pumpDaily(tester, refs: const ['1.2abc', '1.2d']);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load section'), findsNothing);
+    expect(find.text('Verse 1.2'), findsOneWidget);
+    expect(find.textContaining('Because it will'), findsOneWidget);
+  });
+
   testWidgets('full text navigation preserves split segment ref',
       (WidgetTester tester) async {
     await pumpDaily(tester, refs: const ['8.136cd']);
@@ -159,7 +169,7 @@ void main() {
     expect(find.textContaining('Because it will'), findsNothing);
   });
 
-  testWidgets('short section expands to parent section when below min lines',
+  testWidgets('short split section dedupes to one base verse when expanded',
       (WidgetTester tester) async {
     List<String>? resolvedRefs;
     await pumpDaily(
@@ -172,10 +182,11 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(resolvedRefs, isNotNull);
-    expect(resolvedRefs!.length, greaterThan(1),
-        reason: 'Short section should expand to parent refs');
-    expect(resolvedRefs, containsAll(const ['8.136ab', '8.136cd']),
-        reason: 'Expanded parent refs should include the original leaf pair');
+    final refs136 = resolvedRefs!
+        .where((r) => RegExp(r'^8\.136([a-d]+)?$').hasMatch(r))
+        .toList();
+    expect(refs136.length, 1,
+        reason: 'Split refs for the same verse should collapse to one entry');
   });
 
   testWidgets('section with at least min lines does not expand',
@@ -191,5 +202,46 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(resolvedRefs, equals(const ['8.137']));
+  });
+
+  testWidgets('expansion keeps daily refs in the seed chapter',
+      (WidgetTester tester) async {
+    List<String>? resolvedRefs;
+    int? indexForRef(String ref) {
+      final m = RegExp(r'^(\d+)\.(\d+)', caseSensitive: false).firstMatch(ref);
+      if (m == null) return null;
+      final ch = int.tryParse(m.group(1)!);
+      final verse = int.tryParse(m.group(2)!);
+      if (ch == null || verse == null) return null;
+      return (ch * 1000) + verse;
+    }
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+          scaffoldBackgroundColor: AppColors.scaffoldBackground,
+        ),
+        home: DailyVerseScreen(
+          randomSectionLoader: () async => const CommentaryEntry(
+            refsInBlock: ['6.28ab'],
+            commentaryText: 'test',
+          ),
+          verseIndexForRef: indexForRef,
+          verseTextForIndex: (_) => 'line 1\nline 2',
+          minLinesForSection: 4,
+          onResolvedRefsForTest: (refs) => resolvedRefs = refs,
+        ),
+      ),
+    );
+    await waitForDailyLoad(tester);
+
+    expect(resolvedRefs, isNotNull);
+    final chapters = resolvedRefs!
+        .map((r) => RegExp(r'^(\d+)\.').firstMatch(r)?.group(1))
+        .whereType<String>()
+        .toSet();
+    expect(chapters, equals({'6'}));
   });
 }

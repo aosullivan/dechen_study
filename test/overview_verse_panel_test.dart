@@ -43,7 +43,8 @@ void main() {
           'The valid cognitions which ascertain those characteristics',
     );
 
-    expect(find.text('Verse 9.2bcd'), findsOneWidget);
+    expect(find.text('Verse 9.2'), findsOneWidget);
+    expect(find.text('Verse 9.2bcd'), findsNothing);
     expect(find.text('Verse 9.3ab'), findsNothing);
     expect(find.text('Verse 9.3cd'), findsNothing);
     expect(find.text('Verse 9.4abc'), findsNothing);
@@ -58,7 +59,9 @@ void main() {
       sectionTitle: 'A counterobjection',
     );
 
-    expect(find.text('Verse 9.28cd'), findsOneWidget);
-    expect(find.text('Verse 9.29ab'), findsOneWidget);
+    expect(find.text('Verse 9.28'), findsOneWidget);
+    expect(find.text('Verse 9.29'), findsOneWidget);
+    expect(find.text('Verse 9.28cd'), findsNothing);
+    expect(find.text('Verse 9.29ab'), findsNothing);
   });
 }

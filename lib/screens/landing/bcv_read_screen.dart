@@ -563,10 +563,10 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     final baseRef = _verseService.getVerseRef(firstIndex);
     if (baseRef == null) return;
     final preferredRef = _initialSegmentRefForVerseIndex(firstIndex);
-    CommentaryEntry? entry =
-        await _getCommentaryForRef(preferredRef ?? baseRef);
+    CommentaryEntry? entry = await _getCommentaryForRef(preferredRef ?? baseRef,
+        withContinuation: true);
     if (entry == null && preferredRef != null && preferredRef != baseRef) {
-      entry = await _getCommentaryForRef(baseRef);
+      entry = await _getCommentaryForRef(baseRef, withContinuation: true);
     }
     if (!mounted) return;
     setState(() {
@@ -599,9 +599,10 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     if (baseRef == null) return;
     final lookupRef = segmentRef ?? baseRef;
 
-    CommentaryEntry? entry = await _getCommentaryForRef(lookupRef);
+    CommentaryEntry? entry =
+        await _getCommentaryForRef(lookupRef, withContinuation: true);
     if (entry == null && lookupRef != baseRef) {
-      entry = await _getCommentaryForRef(baseRef);
+      entry = await _getCommentaryForRef(baseRef, withContinuation: true);
     }
     if (!mounted) return;
 
@@ -614,9 +615,15 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     _showCommentary();
   }
 
-  Future<CommentaryEntry?> _getCommentaryForRef(String ref) {
+  Future<CommentaryEntry?> _getCommentaryForRef(
+    String ref, {
+    bool withContinuation = false,
+  }) {
     final loader = widget.commentaryLoader;
     if (loader != null) return loader(ref);
+    if (withContinuation) {
+      return _commentaryService.getCommentaryForRefWithContinuation(ref);
+    }
     return _commentaryService.getCommentaryForRef(ref);
   }
 

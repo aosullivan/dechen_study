@@ -217,25 +217,113 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     return a.compareTo(b);
   }
 
+  ({int chapter, int verse})? _chapterVerseFromRef(String ref) {
+    final m = RegExp(r'^(\d+)\.(\d+)', caseSensitive: false).firstMatch(ref);
+    if (m == null) return null;
+    final chapter = int.tryParse(m.group(1)!);
+    final verse = int.tryParse(m.group(2)!);
+    if (chapter == null || verse == null) return null;
+    return (chapter: chapter, verse: verse);
+  }
+
+  bool _isConsecutiveOrSameVerse(
+    ({int chapter, int verse}) previous,
+    ({int chapter, int verse}) next,
+  ) {
+    if (previous.chapter != next.chapter) return false;
+    final delta = next.verse - previous.verse;
+    return delta >= 0 && delta <= 1;
+  }
+
+  /// Returns the local consecutive run (same chapter, no verse gaps > 1)
+  /// around [anchorRef] from a sorted ref list.
+  List<String> _consecutiveRunAroundAnchor(
+    List<String> sortedRefs, {
+    required String anchorRef,
+  }) {
+    if (sortedRefs.isEmpty) return const [];
+    final parsed = sortedRefs.map(_chapterVerseFromRef).toList();
+    final anchorCv = _chapterVerseFromRef(anchorRef);
+    if (anchorCv == null) return sortedRefs;
+
+    var anchorIndex = parsed.indexWhere(
+      (cv) =>
+          cv != null &&
+          cv.chapter == anchorCv.chapter &&
+          cv.verse == anchorCv.verse,
+    );
+    if (anchorIndex < 0) {
+      anchorIndex = parsed
+          .indexWhere((cv) => cv != null && cv.chapter == anchorCv.chapter);
+    }
+    if (anchorIndex < 0) return sortedRefs;
+
+    var start = anchorIndex;
+    var end = anchorIndex;
+
+    while (start > 0) {
+      final prev = parsed[start - 1];
+      final current = parsed[start];
+      if (prev == null ||
+          current == null ||
+          !_isConsecutiveOrSameVerse(prev, current)) {
+        break;
+      }
+      start--;
+    }
+
+    while (end < parsed.length - 1) {
+      final current = parsed[end];
+      final next = parsed[end + 1];
+      if (current == null ||
+          next == null ||
+          !_isConsecutiveOrSameVerse(current, next)) {
+        break;
+      }
+      end++;
+    }
+
+    return sortedRefs.sublist(start, end + 1);
+  }
+
   ({List<String> refs, List<String> texts, Set<int> indices})
       _buildSectionContent(
     List<String> refs,
     int? Function(String ref) indexForRef,
     String? Function(int index) textForIndex,
   ) {
-    final texts = <String>[];
-    final indices = <int>{};
+    final deduped = <({String ref, int? idx, bool merged})>[];
+    final seenByKey = <String, int>{};
     for (final ref in refs) {
       final idx = indexForRef(ref);
+      final key = 'r:${_baseRef(ref)}';
+      final existing = seenByKey[key];
+      if (existing == null) {
+        seenByKey[key] = deduped.length;
+        deduped.add((ref: ref, idx: idx, merged: false));
+      } else {
+        final item = deduped[existing];
+        deduped[existing] = (ref: item.ref, idx: item.idx, merged: true);
+      }
+    }
+
+    final outRefs = <String>[];
+    final texts = <String>[];
+    final indices = <int>{};
+    for (final item in deduped) {
+      outRefs.add(item.ref);
+      final idx = item.idx;
       if (idx != null) {
         indices.add(idx);
-        final text = textForIndex(idx);
-        texts.add(_segmentTextForRef(ref, text ?? ''));
+        final fullText = textForIndex(idx) ?? '';
+        texts.add(
+          item.merged ? fullText : _segmentTextForRef(item.ref, fullText),
+        );
       } else {
         texts.add('');
       }
     }
-    return (refs: refs, texts: texts, indices: indices);
+    return (refs: outRefs, texts: texts, indices: indices);
   }
 
   Future<String?> _deepestCommonLeafPath(List<String> refs) async {
@@ -322,6 +410,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       refs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
       var content = _buildSectionContent(refs, indexForRef, textForIndex);
       var sectionPath = await _deepestCommonLeafPath(content.refs);
+      final anchorRef =
+          content.refs.isNotEmpty ? content.refs.first : refs.firstOrNull;
 
       if (widget.minLinesForSection > 0 &&
           _totalLogicalLines(content.texts) < widget.minLinesForSection) {
@@ -335,8 +425,11 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
               _hierarchyService.getVerseRefsForSectionSync(parent).toList();
           if (parentRefs.isEmpty) break;
           parentRefs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
-          content = _buildSectionContent(parentRefs, indexForRef, textForIndex);
-          sectionPath = parent;
+          final runRefs = anchorRef != null
+              ? _consecutiveRunAroundAnchor(parentRefs, anchorRef: anchorRef)
+              : parentRefs;
+          content = _buildSectionContent(runRefs, indexForRef, textForIndex);
+          sectionPath = await _deepestCommonLeafPath(content.refs) ?? parent;
         }
       }
       final sectionTitle =

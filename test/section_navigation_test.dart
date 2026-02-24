@@ -826,8 +826,12 @@ void main() {
       const mental = '2.2';
       final ownBodily = hierarchyService.getOwnVerseRefsForSectionSync(bodily);
       final ownMental = hierarchyService.getOwnVerseRefsForSectionSync(mental);
-      expect(ownBodily, containsAll(['1.4ab', '1.4cd']));
-      expect(ownMental, containsAll(['1.5ab', '1.5cd']));
+      expect(ownBodily, contains('1.4'));
+      expect(ownMental, contains('1.5'));
+      expect(ownBodily, isNot(contains('1.4ab')));
+      expect(ownBodily, isNot(contains('1.4cd')));
+      expect(ownMental, isNot(contains('1.5ab')));
+      expect(ownMental, isNot(contains('1.5cd')));
 
       final path14ab = hierarchyService.getHierarchyForVerseSync('1.4ab');
       final path14cd = hierarchyService.getHierarchyForVerseSync('1.4cd');

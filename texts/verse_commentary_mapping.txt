@@ -24,8 +24,8 @@ These concern lines 1ab, 1cd and the next eight lines, respectively:
 1.1
 >>> To the Sugatas, the dharmakāya they have mastered, and their sons, 
 >>> And to all those worthy of prostration, I respectfully prostrate.
-To enter the vow of the Sugatas’ sons,
-In accord with the tradition, I will now briefly explain.
+>>> To enter the vow of the Sugatas’ sons,
+>>> In accord with the tradition, I will now briefly explain.
 
 1.2
 >>> Nothing said here has not been said before,
@@ -114,8 +114,8 @@ It would not be possible to give here a detailed explanation of the entire scrip
 1. The understanding of others is not the primary goal
 1.2
 >>> Nothing said here has not been said before,
-And I have neither eloquence nor erudition.
-So I do not expect this to benefit others.
+>>> And I have neither eloquence nor erudition.
+>>> So I do not expect this to benefit others.
 Objection: ‘The composition of this śāstra is not of benefit for the understanding of others because, since it has not fully purified you, it cannot ripen others. It is not of benefit for your own understanding either, because your understanding is already complete, so you have no need of it.’
 Response: it is not expected to benefit others. In which case, is the benefit of others neglected? No, because there is no possibility of it benefitting others. Why not? Because, regarding the meaning, nothing said here has not been said before, i.e. it will not create any understanding that was previously lacking and because, regarding the words, they are neither eloquent nor erudite, i.e. they will not create any understanding in the manner of beautiful poetics, such as the Condensed Succession of Lives by Virācārya [Aśvaghoṣa].
 Therefore, there is no possibility of it benefitting others, so there is nothing to be done. [252] In that case, what is the purpose of composing it?
@@ -587,7 +587,7 @@ With great dedication, they never perform nonvirtue [270] even at the cost of th
 5. Summarizing the benefits of others
 1.36
 >>> I bow down before
-Those in whom this sacred jewel of mind is born
+>>> Those in whom this sacred jewel of mind is born
 >>> And I take refuge in those sources of happiness 
 >>> Who bring happiness even to those who harm them.
 Bringing happiness even to those who harm them means, out of compassion, they bestow happiness on those who do them harm. It does not mean the happiness arises as a result of the harms committed, for that would contradict the earlier assertion in verse 34.
@@ -769,7 +769,7 @@ These articles comprise the precious parasol, lion throne, foot rest, cooling fa
 >>> I offer to the lords of sages
 >>> Beautiful jewelled parasols with golden handles,
 >>> Decorated with handsome designs and
-Held aloft in an arrangement joyful to behold,
+>>> Held aloft in an arrangement joyful to behold,
 
 2.20
 >>> And a multitude of other offerings,
@@ -822,8 +822,8 @@ The first line indicates the particular time and the following three indicate th
 2.26
 >>> Until the essence of enlightenment,
 >>> I take refuge in the Buddha,
-And likewise in the dharma,
-And in the assembly of bodhisattvas.
+>>> And likewise in the dharma,
+>>> And in the assembly of bodhisattvas.
 Taking refuge can be summarized in seven points:
 [2.26cd]
 1.	Classifications
@@ -1179,8 +1179,8 @@ The first line indicates the resultant suffering and the rest is bringing the ca
 2.63
 >>> Insensibly and ignorantly,
 >>> Whatever nonvirtues, whether inherent
-Or attendant,
-I have done,
+>>> Or attendant,
+>>> I have done,
 
 2.64
 >>> In the presence of the protectors,
@@ -1325,7 +1325,7 @@ The intended purpose, aspiration to give and substances given are indicated in t
 >>> Nirvāṇa is attained by giving everything up.
 >>> Nirvāṇa is my goal,
 >>> And to give everything at once
-To sentient beings is the supreme gift.
+>>> To sentient beings is the supreme gift.
 Nirvāṇa will be attained by giving up all. Because one’s intent is to attain nirvāṇa, that is what should be done. The third line indicates sentient beings as the precious field of giving. Giving up all ‘at once’ means completely letting go of both that which is appropriate to be given and that which is appropriate not to be given.
 [3.13] [3.14] [3.15]
 3. The subsequent practice
@@ -1655,7 +1655,7 @@ One deceived them because one promised to liberate all sentient beings but they 
 2. Scriptural establishment
 4.5
 >>> If it is taught that someone who intended to give 
-Some slight, unremarkable thing,
+>>> Some slight, unremarkable thing,
 >>> But then did not do so, 
 >>> Will be reborn as a hungry ghost,
 
@@ -1823,7 +1823,7 @@ A momentary nonvirtue which leads to rebirth in the Avīci Hell is, as previousl
 Although there are many nonvirtues, if they have not yet ripened, might they become exhausted? No, they are not exhausted by themselves:
 4.22
 >>> Even after having suffered such experiences,
-I still won’t be free of them
+>>> I still won’t be free of them
 >>> For, even while undergoing them,
 >>> I will commit yet more nonvirtue.
 This is because nonvirtues, etc. will ripen as effects in conformity with their causes.
@@ -1852,7 +1852,7 @@ The deception here is thinking of this life. The delusion is not understanding t
 4.25
 >>> When my body is burning
 >>> For a long time in the torturous fires of hell,
-Without doubt, my mind will also be tormented
+>>> Without doubt, my mind will also be tormented
 >>> By the unbearable fire of remorse.
 The first two lines indicate the fires that harm the body while the latter two indicate the fire that harms the mind.
 4. Advice in overcoming that with an admonition
@@ -1895,7 +1895,7 @@ To behave in this way is to lack autonomy, like being manipulated by an evil man
 >>> Who is this inside of me?
 The cause of losing autonomy is not knowing by whom one is being manipulated. To ask, ‘who is inside of me?’ indicates that one’s mental activity is not right. [298] Concerning the characteristics of this loss of autonomy:
 4.28
-Enemies like hatred and craving
+>>> Enemies like hatred and craving
 >>> Don’t have hands or feet,
 >>> Aren’t courageous or intelligent,
 >>> And yet I act like their slave.
@@ -1903,7 +1903,7 @@ The first two lines indicate one’s loss of autonomy is not caused by a physica
 Concerning the characteristics which establish the extent of that:
 4.29
 >>> While they remain in my mind
-They can harm me whenever they want,
+>>> They can harm me whenever they want,
 >>> And I patiently accept it without any resentment,
 >>> But this is not a situation that warrants patience.
 It is not logical to be patient with this enemy who is causing one harm, so one should not develop patience with it. 
@@ -2590,8 +2590,8 @@ Ceasing activities motivated by the root defilements:
 Ceasing activities motivated by the secondary defilements:
 5.49
 >>> When my attitude is irritated or derisive,
-Proud, vain,
-Cutting,
+>>> Proud, vain,
+>>> Cutting,
 >>> Cruel or deceptive,
 ‘Irritated’ here means not at peace, ‘proud’ means being puffed-up, ‘vain’ means attachment to one’s perceptible qualities, ‘cutting’ means exposing their faults, [311] ‘cruel’ means harming someone through exposing some true situation about them and ‘deceptive’ means misrepresenting something.
 5.50
@@ -2645,7 +2645,7 @@ And with calmness, I will strive for the happiness of others.
 ‘The inclinations of bickering, childish people’ means those whose intentions are in conflict. One should not be discouraged by them. The antidote to such discouragement is kind affection, indicated in the last two lines.
 5.57
 >>> Without propagating misdeeds,
-Whether acting for myself or for sentient beings,
+>>> Whether acting for myself or for sentient beings,
 >>> I will always keep this attitude,
 >>> Acting selflessly, like an apparition.
 [312] The first line refers summarily to the antidotes which guard the mind from damage. The rest indicates abandoning conceit both in oneself and towards others. 
@@ -2872,8 +2872,8 @@ One should do things oneself and not depend on others.
 5.83
 >>> The perfections of generosity, etc.
 >>> Are each superior to the preceding one.
-I should not give up the greater in favour of the lesser,
-But the most important thing is to consider the benefit of others.
+>>> I should not give up the greater in favour of the lesser,
+>>> But the most important thing is to consider the benefit of others.
 The first three lines indicate the causes of merit—the perfections—or the cause of giving itself, while the last line indicates the reason for doing these. 
 [ Image: 5.5.jp2 ]
 3. Training in the conduct of benefitting sentient beings
@@ -2917,8 +2917,8 @@ The recipients: ‘those who have fallen’—hungry ghosts, hell beings etc.—
 
 5.87
 >>> My compassionate intentions being impure,
-I should not give away this body but,
-In this and future lives,
+>>> I should not give away this body but,
+>>> In this and future lives,
 >>> It may be given to accomplish a great benefit.
 Abandoning meaningless harm, the necessity of that, not giving the body for the time being and the correct method of giving it are indicated in each of the four pairs of lines respectively.
 2. Gathering with dharma
@@ -2961,7 +2961,7 @@ In relation to eating:
 >>> I should not eat noisily or with my mouth open,
 >>> Or by cramming my mouth full.
 >>> I should not sit with my feet up
-Or massage my shoulders with both hands at once.16
+>>> Or massage my shoulders with both hands at once.16
 In relation to company:
 5.93
 >>> I should not be alone with a woman
@@ -3013,7 +3013,7 @@ Because one should exhaust nonvirtues previously committed, one should recite th
 [5.99] [5.100]
 2. The basis of training
 5.99
-Regardless of whether it is one’s own or another’s [training],
+>>> Regardless of whether it is one’s own or another’s [training],
 >>> For any particular situation,
 >>> I should train with diligence
 >>> In whatever is taught for that situation.
@@ -3134,7 +3134,7 @@ To develop patience ‘in the various ways’ means, from the ultimate perspecti
 [6.3]
 1. Harm to the mind
 6.3
-If I hold onto thoughts afflicted by anger,
+>>> If I hold onto thoughts afflicted by anger,
 >>> My mind will know no peace.
 >>> Having no happiness or pleasure,
 >>> I will be unsettled and unable to sleep.
@@ -3173,8 +3173,8 @@ The first two lines indicate non-happiness. The next two indicate the creation o
 [6.7]
 1. The nature of its cause
 6.7
-It arises in the production of what I wish against,
-And in the obstruction of what I wish for.
+>>> It arises in the production of what I wish against,
+>>> And in the obstruction of what I wish for.
 >>> Feeding on an unhappy mind,
 >>> Aggression grows and destroys me.
 Through experiencing the production of the twelve undesirables and the twelve obstructions of desirables,1 an unhappy mind arises and, in conjunction with that, aggression, by which one’s mind is tormented and troubled.
@@ -3349,7 +3349,7 @@ These two are not distinct in as much as they are similarly unwanted, yet arise 
 6.24
 >>> They don’t think, ‘I’m going to get angry now’,
 >>> But people nevertheless get angry.
-Similarly, it doesn’t think ‘I’m going to arise now’,
+>>> Similarly, it doesn’t think ‘I’m going to arise now’,
 >>> But anger nevertheless arises.
 The first two lines indicate ordinary people’s lack of autonomy. The latter two lines indicate the lack of autonomy in anger itself.
 [6.25]
@@ -3473,7 +3473,7 @@ Of suffering will be cut—there is nothing wrong with this.
 6.33
 >>> Therefore, regardless of friend or enemy,
 >>> When I see them behaving negatively,
-Thinking, ‘This comes from related conditions’,
+>>> Thinking, ‘This comes from related conditions’,
 >>> I will remain happy.
 
 6.34
@@ -4382,7 +4382,7 @@ The first two lines are presented from the perspective of effort as the indirect
 1. Examining the cause of non-application and averting it
 7.3
 >>> With the sweet taste of inactivity
-And the craving of sleep,
+>>> And the craving of sleep,
 >>> I am not yet tired of the sufferings of saṃsāra,
 >>> So laziness arises.
 Laziness arises in not being tired of inactivity and saṃsāric concerns. 
@@ -4679,8 +4679,8 @@ The first two lines indicate that one should establish all good qualities. The s
 7.38
 >>> I have not protected the frightened from what threatens them,
 >>> Nor given comfort to the destitute.
-The only thing I have done is cause 
-My mother the pain and suffering of carrying me in her womb.
+>>> The only thing I have done is cause 
+>>> My mother the pain and suffering of carrying me in her womb.
 The first six lines indicate the kinds of acts that one has not accomplished. The rest indicates the meaninglessness of one’s birth.
 [7.39] [7.40]
 2. Result of motivation
@@ -4688,7 +4688,7 @@ The first six lines indicate the kinds of acts that one has not accomplished. Th
 >>> In the past, until now,
 >>> I have had no motivation for dharma,
 >>> And now I am destitute like this.
-Who abandons the motivation for dharma?
+>>> Who abandons the motivation for dharma?
 
 7.40
 >>> Motivation is the source
@@ -4733,10 +4733,10 @@ The first line indicates the place of birth; the second, the presence of the tea
 [7.45]
 3. The ripening of purely black actions
 7.45
-The servants of the Lord of Death will relentlessly flail all the skin from their bodies,
+>>> The servants of the Lord of Death will relentlessly flail all the skin from their bodies,
 >>> And pour molten copper, liquefied by ferocious furnaces, down their throats.
 >>> As one hundred chunks of flesh are gouged from them with red hot swords and knives,
-The nonvirtuous will fall upon the fiercely blazing iron ground.
+>>> The nonvirtuous will fall upon the fiercely blazing iron ground.
 The first line indicates one’s body; the second indicates the internal experience; the third indicates the external experience; the last line indicates the place.
 [7.46ab]
 4. Conclusion
@@ -5081,7 +5081,7 @@ Why should one place the mind, as it says, in samādhi after developing effort? 
 >>> Understanding that insight with complete calm abiding
 >>> Will utterly destroy the defilements,
 >>> I should seek calm abiding first,
-And that is achieved through the joy of having no worldly attachment.
+>>> And that is achieved through the joy of having no worldly attachment.
 The first two lines briefly summarize abandoning the world. The next two lines indicate that the defilements are destroyed by the unification of calm abiding and insight. The next line indicates that the cause of insight is calm abiding. The last line indicates that the cause of calm abiding is abandoning attachment to the world.
 [ Image: 8.2.jp2 ]
 3. How the antidotes are accomplished
@@ -5256,7 +5256,7 @@ One does not have the power to take care of others:
 >>> Therefore, I will give up thinking about worldly people.
 The reason for that:
 8.23
-They criticize those who have no possessions,
+>>> They criticize those who have no possessions,
 >>> And complain about those who have them.
 >>> Since they are so difficult to get along with,
 >>> How can they bring me any joy?
@@ -5702,7 +5702,7 @@ Summary of faults:
 Wasting their freedom:
 8.81
 >>> For the sake of something that gives little satisfaction
-And which is so common that even animals can get it,
+>>> And which is so common that even animals can get it,
 >>> Those tormented by their karma waste the magnificent freedoms and endowments 
 >>> That they had acquired with such difficulty.
 Comparing such faults with striving in the means of liberation:
@@ -6133,7 +6133,7 @@ In relation to giving:
 >>> ‘If I give this, what will I have?’
 >>> Thinking of one’s own benefit is the way of demons.
 >>> ‘If I keep this, what will I give?’
-Thinking of the benefit of others is dharma of the gods.
+>>> Thinking of the benefit of others is dharma of the gods.
 In relation to harm:
 8.126
 >>> If I harm others for my own sake,
@@ -6173,7 +6173,7 @@ Summary:
 1. Invisible faults
 8.131
 >>> If I do not actually exchange
-My happiness for the suffering of others
+>>> My happiness for the suffering of others
 >>> Not only will I not attain buddhahood but,
 >>> Even in saṃsāra, I will find no happiness.
 One will not attain liberation and even in saṃsāra one will not find happiness, i.e. one will not proceed to a happy rebirth.
@@ -6366,7 +6366,7 @@ Taking someone of a high status as oneself, one looks at one’s former self fro
 8.152
 >>> When they hear of my good qualities,
 >>> Which everyone talks about,
-I will enjoy the pleasant feeling
+>>> I will enjoy the pleasant feeling
 >>> Of a tingling sensation.
 Considered from the perspective of the assumed self, [374] one will experience in one’s own mind a blissful feeling that one has such good qualities.
 [8.153]
@@ -6403,7 +6403,7 @@ The first two lines indicate applying the harm of others to oneself from their p
 >>> Those who decisively engage
 >>> In truly benefitting others,
 >>> In future will, as the Sage has incontrovertibly said,
-Know the excellence of doing so.
+>>> Know the excellence of doing so.
 The first two lines urge one to exert oneself, the third line is the scriptural establishment of the result and the last line indicates the experiential establishment of the result.
 [8.157]
 3. Experiencing the results
@@ -6780,10 +6780,10 @@ There is no contradiction, for there are ‘agreed upon examples’, i.e. just a
 ‘In that case, it follows that yogins and ordinary people are undifferentiated in their understanding. That is to say, do deluded appearances not exist equally for both?’
 There is a difference regarding the existence and nonexistence of attachment to their reality [383]: 
 9.5
-Worldly people see existent objects
+>>> Worldly people see existent objects
 >>> And discriminate them as reality,
 >>> Not as illusion-like. Therefore, on this,
-Yogins and worldly people are in dispute. 
+>>> Yogins and worldly people are in dispute. 
 This is how verses 3-5 are explained by some.12 However, it is not correct. It suggests that yogins see truth but ordinary people do not see truth13 but that is inconsistent with line 5d, which refers to a proponent and objector being in dispute, i.e. the objections between them are not direct perceptions but are inferential. 
 There are no inferential objections regarding the ‘examples accepted by both’, for how could there be any such objections, either between the conceptual thought of yogins and ordinary beings, or between the conceptual thought of superior yogins and ordinary yogins? They are both in agreement on the examples, so there are no differences in this regard.
 The objections of the conceptual thought of superior yogins are not direct perceptions, either. If they were, it would be unreasonable for proponents of wisdom without dualistic appearances [i.e. Mādhyamikas] to express any objections towards those who see subject and object as mere discriminating awareness [i.e. Vijñaptimātrins] because, concerning the distinction between Mahāyāna Mādhyamikas and proponents of mere discriminating awareness, for those who have newly entered the vehicle, there are no differences amongst them in terms of their seeing truth, so a disputer and the disputee cannot be distinguished.14
@@ -6848,10 +6848,10 @@ Is it not a contradiction for an appearance to be untrue? There is no contradict
 ‘It follows that since they have not abandoned the conceptual thought which has appearances, even the higher yogins are not different to worldly ones.’
 There is a difference:
 9.5
-Worldly people see existent objects
+>>> Worldly people see existent objects
 >>> And discriminate them as reality,
 >>> Not as illusion-like. Therefore, on this,
-Yogins and worldly people are in dispute. 
+>>> Yogins and worldly people are in dispute. 
 Worldly people see existent objects with a non-comprehending cognition. Those who have such conceptual discrimination [387] conceptualize reality without understanding it as illusion-like. Yogins are distinct from this because they have such illusion-like understanding. Therefore, yogins and worldly people are in dispute, since the worldly cling to reality while yogins inferentially refute truly existent objects. 
 [9.5cd]
 2. Abandoning objections by those who cling to reality 
@@ -7385,7 +7385,7 @@ In accord with this, since the Vedas and so forth are accepted by two tīrthikas
 9.43
 >>> ‘But the Mahāyāna is disputed.’
 >>> Your scriptures are also in dispute—with those of the tīrthikas,
-As well as with the other [śrāvaka] scriptures.
+>>> As well as with the other [śrāvaka] scriptures.
 >>> Therefore, you should abandon them.
 Whether or not the Mahāyāna is the Buddha’s word, if it should be rejected because it is disputed, other scriptures even among the baskets of the śrāvakas should also be rejected because they are disputed, too. How are they are disputed? For tīrthikas, there is a dispute as to whether or not they are scriptures. Furthermore, disputations exist within the different śrāvaka schools. 
 [9.43cd]
@@ -8013,7 +8013,7 @@ Sensations are not ultimate but are connected to conditions:
 9.91
 >>> If suffering cannot occur
 >>> Due to the arising of its contrary condition,
-Shouldn’t suffering be considered
+>>> Shouldn’t suffering be considered
 >>> Merely the attachment to a concept?
 ‘By the arising of suffering, its contrary condition—happiness—ceases.’ 
 Since a fleeting happiness is established as a temporary artifice, it has no intrinsic nature. Therefore, sensation is fully established as the mere clinging to a discrimination. 
@@ -8289,7 +8289,7 @@ Since they would be established by mutual dependence, neither of the two would e
 >>> If there is no father without a son,
 >>> Where does the son come from?
 >>> There is no father without a son.
-Accordingly, neither of them exist.
+>>> Accordingly, neither of them exist.
 If a designated son is not established, then his designated father is also not established. When no product is ascertained, it is contradictory to the ascertainment of its corollary—its producer. Thus, their mutual dependence is proven.
 ‘But the producer is not in mutual dependence because, although the arising of the son depended upon the father, the father’s arising did not depend upon the son.’
 [9.114] [9.115]
@@ -8501,7 +8501,7 @@ The possessor of autonomy subject to conditions is the logical subject. [Contrad
 9.125
 >>> If Īśvara creates without wanting to,
 >>> He is affected by an external power.
-If he creates when he wants to, the effect depends on his wishes.
+>>> If he creates when he wants to, the effect depends on his wishes.
 >>> How then is he ‘The Almighty’ [Īśvara]?
 ‘The creation of an effect [448] does not depend upon the concurrence of conditions. Rather, the effects arise from Īśvara. He creates the effects when he wishes to.’
 It follows then that his wishes arise from an external power. Being subject to such wishes, his autonomy is violated, which is inappropriate for your Īśvara.
@@ -8764,7 +8764,7 @@ When an analytical cognition negates true existence, appearances are established
 >>> And to where it could go.
 
 9.144
-Whatever it is, it is seen in relation to something else.
+>>> Whatever it is, it is seen in relation to something else.
 >>> Otherwise, it is not seen.
 >>> It is fabricated, like a reflection.
 >>> How can there be reality in that?
@@ -9554,4 +9554,3 @@ happiness,
 >>> By whose kindness my mind turned to virtue,
 >>> And I prostrate to my spiritual masters,
 >>> By whose kindness I matured.
-
