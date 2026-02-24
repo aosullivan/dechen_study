@@ -42,7 +42,7 @@ I will explain each section with respect to the following three points: [248]
 1.	The purpose of the section
 2.	A condensed explanation of the section
 3.	The literal meaning of each section2
-[ Image: 1.1.jp2 ]
+
 1. The purpose of each section
 The purpose of homage and praise: while an author may or may not have their own individual purposes, of most importance are the following enumerated results. There are three benefits for the author himself: 
 1.	Those which are worldly: [praise and fame in the world, which though acquired nevertheless are not intended by the author]
@@ -93,14 +93,14 @@ To ‘prostrate’ to them means making homage and praise to the sources of refu
 2.	Abandoning personal invention 
 3.	Abandoning the fault of repetition
 1. Setting out the subject matter to be elaborated
-To enter the vow of the Sugatas’ sons,
+>>> To enter the vow of the Sugatas’ sons,
 This has four aspects:
 1.	The individuals who undertake the vow: the Sugatas’ sons are bodhisattvas in whose minds the vow exists.
 2.	The essence of the vow: the continuity of the intention to train. This is not a physical characteristic.5
 3.	Its aspects: The nature of the vow itself—the moral conduct of the vow [i.e. abandoning nonvirtues]; the nature of diligence in the vow—the moral conduct of gathering virtuous dharmas; the moral conduct of benefitting sentient beings
 4.	The meaning of the term ‘vow’: like a dam across a river stops the water from flowing the wrong way, a vow functions similarly [251] in regard to the methods of practice.
 2. Abandoning personal invention
-In accord with the tradition, …
+>>> In accord with the tradition, …
 Is this an original explanation of the bodhisattva vow by the author’s own invention? No, it is in accord with the tradition since it does not contradict the scriptural tradition.
 3. Abandoning the fault of repetition
 Objection: ‘The explanation of the meaning here has already been taught elsewhere. Therefore, since this is repetition, it is pointless.’
@@ -151,7 +151,7 @@ To elaborate on these:
 4.	By showing the relation, the relation between achieving the immediate purpose by means of the explanans is established.
 3. The literal meaning: this has already been explained in the previous section. 
 If one wishes for an explanation of the meaning of each chapter according to the tradition of the śāstra, it is as follows.
-[ Image: 1.3.jp2 ]
+
 Concerning parts 2 - 5:
 •	Part 2 is the primary basis—the individual person. 
 •	Part 3 is the generation of bodhicitta—the productive cause.
@@ -266,7 +266,7 @@ The generation of bodhicitta has two main subsections:
 1.	Invisible benefits
 2.	Visible benefits
 3.	Praising the benefits by analogy
-[ Image: 1.4.jp2 ]
+
 1. Invisible benefits
 1.	It overcomes all nonvirtue
 2.	It benefits oneself
@@ -279,7 +279,7 @@ The generation of bodhicitta has two main subsections:
 1. The nature of nonvirtue
 1.6
 >>> In this way, virtue is constantly weak and feeble,
-And the extremely great power of nonvirtue is unbearable.
+>>> And the extremely great power of nonvirtue is unbearable.
 The first line indicates the weakness of the power of the antidote. ‘The extremely great power of nonvirtue’ indicates the great power of that which is to be abandoned. ‘Unbearable’ indicates the result of this—suffering. One’s nonvirtues are not dominated by virtues; rather, one’s virtues are dominated by nonvirtues. 
 [1.6cd]
 2. How bodhicitta overcomes nonvirtue
@@ -424,7 +424,7 @@ With aspiration, since it is not the same as having diligence in actual practice
 >>> As vast as space
 >>> Arises in an uninterrupted stream.
 The one who adopts this intent, from the moment it is embraced, creates a force of merit equal to the sky. What does it mean to ‘adopt’ the intent? It means that the intent is ‘irreversible’, i.e. one does not allow the commitment to practise the path to diminish. What is the purpose of not allowing the commitment to practise the path to diminish? It is to completely liberate the limitless realms of sentient beings. Therefore, through adopting the generation of the mind which thinks, ‘I will not allow the conduct which will liberate sentient beings to diminish’, merit increases. Does it increase only intermittently? No, it is constant, without interruption. When does the cause to fulfil the intent occur? Although the cause is not present when one is sleeping or distracted, it nevertheless arises by the power of adopting the commitment. For example, this is like the continuity of merit that arises for someone who adopts renunciation, even when sleeping or distracted. Regarding this distraction, however, if someone is generating bodhicitta but, out of distraction from training, decides to stop practising, it is not logical that merit still increases.
-[ Image: 1.5.jp2 ]
+
 3. The reasons for the benefits
 1.	Scripture
 2.	Reasoning
@@ -533,7 +533,7 @@ Of overflowing treasures to the Sugatas.11
 >>>And cut off from all their suffering,
 
 1.30
->>>And their ignorance, too, will be dispelled.
+>>> And their ignorance, too, will be dispelled.
 >>> What virtue could equal that?
 >>> What friend can compare to it?
 >>> What merit is remotely comparable to it?
@@ -596,7 +596,7 @@ Bringing happiness even to those who harm them means, out of compassion, they be
 
 
 >>> Chapter 2: Confession of Faults
-[ Image: 1.6.jp2 ]
+
 Generating bodhicitta in one’s stream of being [i.e. part 3.2] has three subsections:
 1.	Preliminaries
 2.	Main part
@@ -870,7 +870,7 @@ One should not prostrate to the tīrthikas.5
 2.	The power of reliance
 3.	The power of antidote
 4.	The power of desisting
-[ Image: 2.2.jp2 ]
+
 1. The power of regret
 1.	Consideration of each type of act individually
 2.	Longing to be freed swiftly
@@ -1207,7 +1207,7 @@ In the first two lines, one acknowledges one’s faults as faults. In the latter
 8. Sapan, sdom gsum rab byed, chapter 1, verse 204-5: ‘Therefore, the sutras and śāstras explain evil deeds with two classifications: inherent misdeeds and attendant misdeeds. Inherent misdeeds are misdeeds for all beings, while attendant misdeeds are subsequent downfalls attendant to [vows].’ See Sapan, A Clear Differentiation of the Three Codes, trans. Rhoton, 2002, p.67.
 
 >>> Chapter 3: Fully Holding Bodhicitta
-[ Image: 3.1.jp2 ]
+
 4. Rejoicing
 1.	Rejoicing in worldly virtue
 2.	Rejoicing in the virtue of śrāvakas
@@ -1300,7 +1300,7 @@ These four lines indicate the act, object of supplication, purpose and duration,
 >>> As all kinds of provisions and necessities.
 * * *
 2. The main part: the actual practice of generating bodhicitta
-[ Image: 3.2.jp2 ]
+
 1.	Aspiration to give up everything
 2.	Aspiration for inexhaustible causes
 3.	Aspiration to be a cause of sustenance
@@ -1431,7 +1431,7 @@ For the benefit of beings,
 Likewise I, too,
 >>> Will gradually practise the trainings.
 These two can be expressed together as they are in the root text or separated in accord with the liturgy of Ācārya Jetāri.2 In this system, there are two main points:
-[ Image: 3.3.jp2 ]
+
 1.	The cause of generating bodhicitta with nothing lacking 
 2.	The purpose of a proper ritual
 1. The cause of generating bodhicitta with nothing lacking
@@ -1616,7 +1616,7 @@ In respect to benefitting sentient beings: When engaged, for example, in accompl
 2. Extensively
 1.	Concern for bodhicitta
 2.	Concern for the training 
-[ Image: 4.1.jp2 ]
+
 1. Concern for bodhicitta
 1.	Reasons for not abandoning bodhicitta
 2.	The faults of abandoning it
@@ -1722,7 +1722,7 @@ One may respond that, once it is broken, the vow can be subsequently be retaken 
 2.	Concern to cultivate virtue
 3.	Concern to abandon the defilements
 4.	Concluding summary
-[ Image: 4.2.jp2 ]
+
 1. Concern to abandon nonvirtue
 1.	Faults causing rebirth in the lower realms
 2.	Not attaining freedom
@@ -1805,7 +1805,7 @@ What does one fail to do despite having the chance? Accomplishing virtue, the ba
 >>> Is like a turtle putting its neck through
 >>> A wooden yoke adrift on a great ocean.
 The analogy comes from the Ordination of Nanda Sutra.15
-[ Image: 4.3.jp2 ]
+
 2. Concern to cultivate virtue
 1.	Many nonvirtues were previously gathered
 2.	They are not exhausted by themselves
@@ -1875,7 +1875,7 @@ Freedom, being extremely difficult to find, is precious and is beneficial, since
 >>> Like someone manipulated by mantras,
 >>> I must have lost my mind.
 To behave in this way is to lack autonomy, like being manipulated by an evil mantra which has destroyed one’s perseverance. Thus, the benefits of perseverance are implicitly suggested. ‘Manipulated by mantras’ mean the loss of autonomy by mantras such as wrathful summoning mantras.
-[ Image: 4.4.jp2 ]
+
 3. Concern to abandon the defilements
 1.	Examining the contrasting attitude
 2.	Rejecting the idea that application will create suffering
@@ -2080,12 +2080,12 @@ When one abandons the seeds of the defilements, they never arise again.
 [4.46ab]
 3. The nature of the antidotes which bring about abandonment
 4.46
-These pathetic defilements, cast out by the eye of wisdom,
+>>> These pathetic defilements, cast out by the eye of wisdom,
 The defilements are pathetic, or miserable, i.e. they have little power against being cast out by their antidote, the eye of wisdom.
 [4.46cd]
 4. The essential characteristic of their not returning
 >>> And extirpated from my mind, where can they go?
-Where can they settle to hurt me again?
+>>> Where can they settle to hurt me again?
 >>> And yet, weak-willed, I give up without even trying.
 When their complete basis is eliminated, they have no other support. 
 [4.47]
@@ -2112,7 +2112,7 @@ The first two lines indicate that one should endeavour consistently with the tra
 3.	How to train in the conduct of guarding the mind with mindfulness and clear comprehension [v34-97]
 4.	Factors which enhance the training [v98-108]
 5.	Applying the key point [v109]
-[ Image: 5.1.jp2 ]
+
 1. Guarding the mind as the means of guarding training
 1.	By guarding the mind, one guards all
 2.	The reason everything depends upon mind
@@ -2218,8 +2218,8 @@ The perfection of giving was completed by those protectors. By what cause? By fu
 [5.11]
 2. Moral conduct
 5.11
-‘Where has the killing of fish and other creatures
-Been eradicated?’
+>>> ‘Where has the killing of fish and other creatures
+>>> Been eradicated?’
 >>> The Sage has taught that the intention to abandon this
 >>> Is the perfection of moral conduct.
 This refutes the claim that one can complete moral conduct by external actions.
@@ -2326,7 +2326,7 @@ If one can keep to the conduct of protecting the mind, then when among a group o
 >>> And better even for every other virtue to degenerate,
 >>> Than for the mind for degenerate.
 Not having attachment to the things of this world is better than having no money or respect, or no subsistence of body or mind. Better than the degeneration of other virtues means it is better than the degeneration of virtues conducive to merit and even those conducive to liberation. ‘Mind’ here refers to the mind of a Mahāyānist. [306] 
-[ Image: 5.2.jp2 ]
+
 2. Guarding mindfulness and clear comprehension as the means of guarding the mind
 1.	Brief description
 2.	The faults of lacking mindfulness and clear comprehension
@@ -2400,8 +2400,8 @@ Mindfulness should never stray. From what? The ‘gateway of mind’, i.e. the i
 1.	Keeping in mind the faults of its loss
 2.	Relying on the conditions which prevent its loss
 1. Keeping in mind the faults of its loss
-If it ever leaves, remembering
-The horrors of the lower realms, I must get it back.
+>>> If it ever leaves, remembering
+>>> The horrors of the lower realms, I must get it back.
 If mindfulness leaves for somewhere else, i.e. if it is lost, then it must be gotten back, i.e. restored to its former condition. By what consideration? By remembering the horrors of rebirth in the lower realms.
 2. Relying on the conditions which prevent its loss
 1.	The outer condition: reliance on the spiritual friend
@@ -2418,10 +2418,10 @@ Through association with teachers who bestow the scriptural transmissions and wi
 [5.31] [5.32]
 2. The inner condition: a proper mental attitude
 5.31
-At all times I am 
-In the presence of
+>>> At all times I am 
+>>> In the presence of
 >>> All the Buddhas and bodhisattvas
-Whose vision is completely without obstruction.
+>>> Whose vision is completely without obstruction.
 
 5.32
 >>> With this in mind, I should have
@@ -2441,7 +2441,7 @@ For oneself, i.e. from one’s own self-perspective, one should have shame by be
 1.	Training in the conduct of vows
 2.	Training in the conduct of accumulating virtue
 3.	Training in the conduct of benefitting sentient beings
-[ Image: 5.3.jp2 ]
+
 1. Training in the conduct of vows
 1.	In relation to type8
 2.	Guarding against damage
@@ -2493,8 +2493,8 @@ One should look ahead for dangers on the ground. [309] One may perceive some dan
 [5.39]
 4. Preparing and checking
 5.39
-Having prepared for some activity 
-With the thought, ‘I will maintain such and such a position’,
+>>> Having prepared for some activity 
+>>> With the thought, ‘I will maintain such and such a position’,
 >>> I should occasionally check to see
 >>> If I am remaining as intended.
 The last two lines indicate that one should scrutinize the bodily conduct adopted for one’s activities. When? When preparing for an activity, i.e. beforehand. How should one prepare? By deciding that one will maintain a particular physical position.
@@ -2613,8 +2613,8 @@ Ceasing activities motivated by the secondary defilements:
 >>> Then I should remain like a block of wood.
 
 5.53
-When I am about to be impatient, lazy, afraid,
-Rude, stupid, 
+>>> When I am about to be impatient, lazy, afraid,
+>>> Rude, stupid, 
 >>> Or preferential to my own side,
 >>> That is when I should remain like a block of wood.
 ‘Impatient’ means not being able to put up with something. ‘Afraid’ means scared to act. ‘Rude’ means unrestrained conduct. ‘Stupid’ means spouting meaningless words. 
@@ -2634,8 +2634,8 @@ This hero never instigates negative conduct, since he has captured his enemies, 
 5.55
 >>> Fully resolved, with proper faith,
 >>> Steadfast, respectful, polite, 
-With care and apprehension,
-And with calmness, I will strive for the happiness of others.
+>>> With care and apprehension,
+>>> And with calmness, I will strive for the happiness of others.
 ‘Fully resolved’ means firmly applying oneself or distinguishing what to accept and reject. ‘Proper faith’ means the three kinds of faith. ‘Steadfast’ means not retreating from the antidotes. ‘Respectful’ means regarding one’s respect and service of the Three Jewels as of great importance. ‘Polite’ means addressing impartially the old, the middle-aged and the young with courteous words. ‘Care’ means avoiding nonvirtues, whether inherent misdeeds or due to the power of dharma [i.e. attendant misdeeds]. ‘Apprehension’ means fearing the ripening of karma. ‘Calmness’ means the senses are disciplined. ‘Striving for the happiness of others’ means acting with great concern for the benefit of others. 
 5.56
 >>> Undiscouraged by the inclinations
@@ -2657,7 +2657,7 @@ And with calmness, I will strive for the happiness of others.
 >>> I will hold on to this mind and it will stray
 >>> No more than the king of mountains.
 The first two lines are a consideration of the difficulty of acquiring freedom and leisure. The latter two indicate not damaging the mind’s virtue.
-[ Image: 5.4.jp2 ]
+
 2. Training in the conduct of accumulating virtue
 1.	Accomplishing non-attachment to the body
 2.	Training in the means of accomplishing virtue
@@ -2762,7 +2762,7 @@ Consideration of the motivation:
 >>> While there is the freedom to do this,
 Physical conduct:
 >>> Always presenting a cheerful countenance, 
-I will stop scowling angrily
+>>> I will stop scowling angrily
 Verbal conduct:
 And, instead, be a straightforward friend to the world. 
 How to interact with external objects:
@@ -2851,13 +2851,13 @@ The first two lines indicate establishing the benefit of others. The next two li
 [5.81ab]
 1. Intention
 5.81
-Always motivated by aspiration 
+>>> Always motivated by aspiration 
 Or antidotes,
 ‘Aspiration’ means increasing one’s resolve. ‘Antidotes’ are the mental antidotes of not being greedy, avoiding negative actions, not being angry, having energy, being undistracted and recognizing the illusory nature of greed, etc.13
 [5.81cd]
 2. Fields
 >>> There will be great virtue
-In the fields of good qualities, help and suffering.
+>>> In the fields of good qualities, help and suffering.
 The field of ‘good qualities’ is the Three Jewels, etc. The field of ‘help’ is parents, abbots and ācāryas. The field of ‘suffering’ is the poor, etc.
 [5.82]
 3. Application
@@ -2875,7 +2875,7 @@ One should do things oneself and not depend on others.
 >>> I should not give up the greater in favour of the lesser,
 >>> But the most important thing is to consider the benefit of others.
 The first three lines indicate the causes of merit—the perfections—or the cause of giving itself, while the last line indicates the reason for doing these. 
-[ Image: 5.5.jp2 ]
+
 3. Training in the conduct of benefitting sentient beings
 1.	Increasing activities for the benefit of others
 2.	The conduct of gathering sentient beings
@@ -2993,7 +2993,7 @@ In summary, practise the conduct which purifies the mind:
 >>> That bodhisattva conduct is limitless,
 >>> For now, I should actually practise 
 >>> As much conduct as possible that purifies the mind.
-[ Image: 5.6.jp2 ]
+
 4. Factors which enhance the training
 1.	The cause of purifying faults
 2.	The basis of training
@@ -3039,8 +3039,8 @@ One ‘indirectly’ benefits beings by dedicating one’s gathering of vows and
 [5.102ab]
 1. The spiritual friend
 5.102
-The spiritual friend is
-Learned in the Mahāyāna
+>>> The spiritual friend is
+>>> Learned in the Mahāyāna
 >>> And has mastered the discipline of the bodhisattvas.
 He is learned in that the trainings he has received are undamaged and is skilled in the means of restoring them if they are damaged. He keeps the bodhisattva vow and bestows it on others, his students.
 [5.102cd]
@@ -3072,10 +3072,10 @@ The trainings are explained in the sutras, so one must learn them from there:
 >>> The Śikṣā-samuccaya.
 
 5.106
-Otherwise I should study
-The Sutra-samuccaya.
+>>> Otherwise I should study
+>>> The Sutra-samuccaya.
 >>> I should also make an effort to study
-These two works composed by Ārya Nāgārjuna.
+>>> These two works composed by Ārya Nāgārjuna.
 The Ākāśagarbha Sutra explains the root downfalls.22 The two Samuccayas23 give a general account of the main body of training.
 [5.107] [5.108]
 6. Summary of the training
@@ -3102,7 +3102,7 @@ That application will bring the result, that mere words will not bring the resul
 [5.109cd]
 
 >>> Chapter 6: Patience
-[ Image: 6.1.jp2 ]
+
 
 1.	Developing motivation for patience [v1-6]
 2.	Keeping in mind the skilful means for accomplishing patience [v7-134]
@@ -3200,7 +3200,7 @@ This verse indicates the elimination of the means—an unhappy mind—and aggres
 >>> If nothing can be done,
 >>> What good is it to be unhappy?
 The first two lines indicate generally the abandoning of an unhappy mind; the third line indicates that an unhappy mind does not result in one’s wishes being accomplished; the fourth line indicates that what one wishes against results from an unhappy mind; the second verse indicates the mental antidote for an unhappy mind.
-[ Image: 6.2.jp2 ]
+
 4. Keeping in mind the means of averting the cause of the cause
 1.	General explanation distinguishing desirable and undesirable dharmas
 2.	Ceasing anger toward the production of undesirables
@@ -3228,7 +3228,7 @@ In addition, there are obstructions to the twelve desirables, i.e. twenty-four u
 1. Stopping impatience with the production of negative actions towards oneself
 1.	Stopping impatience with the establishment of suffering for oneself
 2.	Stopping impatience with the establishment of disrespect, etc. [for oneself]
-[ Image: 6.3.jp2 ]
+
 1. Stopping impatience with the establishment of suffering for oneself
 1.	Tolerating suffering by examining the suffering itself
 2.	Definitive consideration of the qualities in the discrimination
@@ -3430,7 +3430,7 @@ What depends upon conditions is extraneously controlled. ‘Like apparitions’ 
 Alternatively, the author of the Great Commentary explains it this way:
 6.27
 >>> Some claim that there is a primal substance,
-And they designate a ‘self’.
+>>> And they designate a ‘self’.
 The first line refers to the sempiternal material primal substance asserted by the Sāṃkhyas. The second line refers to the sentient mind, a premeditating intentionality comprised of matter with a separate awareness connected to it, asserted by the Naiyāyikas.14 Having presented their doctrines, then they are refuted.
 1. Refuting the position of the Sāṃkhyas
 1.	Refuting the primal substance as creator
@@ -3444,7 +3444,7 @@ The primal substance itself cannot have the deliberate thought or premeditated i
 [6.28ab]
 2. Refuting the manifestations as creator
 6.28
-And if that which has not arisen does not exist,
+>>> And if that which has not arisen does not exist,
 >>> What in that moment wants to create itself?
 [327] The state in which the manifestations have not arisen is the logical subject. ‘What wants to create itself’ indicates that there is no mind to think ‘I want to create myself’. ‘If it does not exist’ indicates [the reason]: because it has no nature before it has arisen.
 ‘The individual consciousness is the creator.’
@@ -3463,7 +3463,7 @@ The refutation of the Naiyāyikas in the Great Commentary is the same as above.
 3. The necessity of overcoming anger
 ‘Since in reality neither the aggressor nor the one who prevents aggression is accomplished, it is not logical to practise preventing something.’ This is the objection:
 6.32
-‘Who prevents what?
+>>> ‘Who prevents what?
 It is inappropriate to prevent anything.’
 Although in reality there is no prevention nor anything to prevent, in dependence upon their existence in relative truth, one dispels the sufferings of others. Therefore, one should prevent them [328]:
 Through reliance on this, the stream
@@ -3518,15 +3518,15 @@ And cease the characteristics of anger:
 2. Not dwelling on the characteristics of anger
 Anger towards an intrinsic nature is wrong: 
 6.39
-If it is in the nature of fools
+>>> If it is in the nature of fools
 To cause harm to others,
-Then it is wrong to be angry with them:
-That is like getting angry with a flame for having the nature to burn.
+>>> Then it is wrong to be angry with them:
+>>> That is like getting angry with a flame for having the nature to burn.
 Anger towards an accidental nature is wrong: 
 6.40
 >>> On the other hand, if their faults are accidental,
 Occurring despite their intrinsic nature,
-Then it is wrong to be angry with them:
+>>> Then it is wrong to be angry with them:
 That is like getting angry with an empty space for the presence of a cloud of incense. 
 Anger is wrong under examination of the direct and indirect causes:
 6.41
@@ -3628,8 +3628,8 @@ It is ‘if I only look after myself’, i.e. while they can support both nonvir
 >>> But it would damage my conduct,
 >>> And so destroy the discipline.
 It would not support virtue for someone with the right attitude [patience] to actively harm others. Rather, one would be supporting nonvirtue. Rather than protect them, since one’s own conduct would be damaged, one’s discipline would be destroyed. 
-[ Image: Blank.JPG ]
-[ Image: 6.4.jp2 ]
+
+
 2. Stopping impatience with the establishment of disrespect, etc. [for oneself]
 1.	It does no harm to the body
 2.	It makes no sense to get angry in connection to the hatred of others
@@ -3678,7 +3678,7 @@ Although acquisitions may be acquired though anger, they will be lost but one’
 6.56
 >>> It would be better to die today
 >>> Than to live a long life badly,
->>> For although someone like me might be around for a long time,
+For although someone like me might be around for a long time,
 >>> The suffering of death still awaits.
 Even though one may live a long life, the suffering of death cannot be avoided. 
 [6.57] [6.58]
@@ -3736,7 +3736,7 @@ And yet, when those same people criticize someone else, causing others to lose r
 Yet, when respect for oneself is damaged through the defilements of a contemptful person, that also has nothing to do with oneself, so it is inappropriate to be angry with them:
 >>> So why not be patient with criticisms,
 >>> Since they are dependent upon the arising of the defilements.
-[ Image: 6.5.jp2 ]
+
 2. Stopping impatience with criticism, etc. towards one’s own side19
 1.	Properly considering those [who criticize or harm] the dharma
 2.	The patience of putting up with harm-doers
@@ -3836,7 +3836,7 @@ Like someone who receives the punishment of a severed limb and is freed from the
 >>> I should only be joyful
 >>> In sufferings that dispel the harms of beings.
 The first verse is an example of having the patience to bear sufferings which have no result. [334] The first line of the second verse indicates that the sufferings which have a result are only minor, while the second line indicates the greatness of the results. The last two lines indicate that therefore it is right to have patience.
-[ Image: 6.6.jp2 ]
+
 3. Stopping impatience with the production of goodness for one’s enemies
 1.	Abandoning impatience with their being praised and renowned
 2.	Abandoning impatience with their achieving happiness
@@ -3924,7 +3924,7 @@ These two verses indicate, respectively, that it is equally of no use to oneself
 >>> About your own nonvirtues,
 >>> Do you also want to compete
 >>> With others who have gathered merit?
-[ Image: 6.7.jp2 ]
+
 3. Ceasing anger towards those who obstruct desirable dharmas
 1.	Abandoning impatience with those who obstruct accomplishing negative actions towards one’s enemies
 2.	Abandoning impatience with those who obstruct good for oneself and one’s own side
@@ -4090,7 +4090,7 @@ The harm-doer—logical subject—is a cause of virtue because it is not possibl
 >>> And it would be absurd to say that an abbot
 >>> Is an obstruction to taking ordination. 
 The first is an example of giving and the second of moral conduct.
-[ Image: 6.8.jp2 ]
+
 3. Considering them as objects of respect
 1.	One should respect them for their own qualities
 2.	One should respect them out of one’s faith in the Buddhas
@@ -4276,8 +4276,8 @@ Just as if the body which one holds as ‘mine’ were to catch fire, food and s
 2. The Buddhas treat sentient beings as themselves
 6.126
 >>> There is no doubt that the lords of compassion
-Treat all beings as their own selves.
-I may see them as sentient beings
+>>> Treat all beings as their own selves.
+>>> I may see them as sentient beings
 But the protectors see them as self. Why then do I have no respect?
 Though one may see the nature of sentient beings, the lords of the world see their similarity to themselves. 
 2. Keeping in mind the results of patience
@@ -4338,8 +4338,8 @@ The first verse indicates that the harms of the lower realms that result from do
 6.134
 >>> In saṃsāra, patience brings beauty,
 >>> Good health and reputation,
-A long life,
-And all the vast pleasures of a universal emperor.
+>>> A long life,
+>>> And all the vast pleasures of a universal emperor.
 The first two lines indicate the principal result. The second two lines indicate the visible results [in this life]. The second verse indicates the fully ripened result [in future lives].
 
 
@@ -4363,7 +4363,7 @@ The first two lines are presented from the perspective of effort as the indirect
 >>> What is effort? Joy in virtue.
 ‘What is effort?’ indicates the definiendum. ‘Virtue’ is its essential characteristic, which excludes nonvirtue and [343] mundane joy. ‘Joy’ is the manifest characteristic. 
 [7.2bcd]
-[ Image: 7.1.jp2 ]
+
 3. Abandoning opposing factors
 1.	Summarizing the opposing factors
 2.	Abandoning the laziness of non-application
@@ -4630,7 +4630,7 @@ This indicates the result. The more these six powers are enhanced, the more one�
 2.	The power of steadfastness
 3.	The power of joy
 4.	The power of rest
-[ Image: 7.2.jp2 ]
+
 1. The power of motivation
 1.	Object
 2.	Result
@@ -4744,7 +4744,7 @@ The first line indicates one’s body; the second indicates the internal experie
 >>> Therefore, I should be motivated to virtue,
 >>> And develop enthusiasm for it.
 [7.46cd]
-[ Image: 7.3.jp2 ]
+
 2. The power of steadfastness
 1.	Stable preparation 
 2.	Stable engagement
@@ -4873,7 +4873,7 @@ Since out of discouragement one does not try, one takes no pride in one’s abil
 Stupid, ugly and pathetic,
 
 7.58
-Despised wherever they go.
+>>> Despised wherever they go.
 >>> If these wretches, inflated with pride,
 >>> Are counted among the proud,
 >>> Who could be considered shamed?
@@ -4907,11 +4907,11 @@ The actual explanation:
 >>> Than to be constantly grovelling
 >>> To the enemy defilements.
 
-7.62a
+>>> 7.62a
 >>> Similarly, in all circumstances,
-I should do nothing apart from what is appropriate.
+>>> I should do nothing apart from what is appropriate.
 A ‘deadly situation’ [v61a] means something life-threatening. 
-[ Image: 7.4.jp2 ]
+
 3. The power of joy
 1.	One should enjoy the play of good actions themselves without concern for a result
 2.	Consideration of the result: enjoyment
@@ -4919,9 +4919,9 @@ A ‘deadly situation’ [v61a] means something life-threatening.
 [7.63]
 1. One should enjoy the play of good actions themselves without concern for a result [352]
 7.63
-Whatever actions are to be done,
-I will carry them out
-Like someone who enjoys the playing of a game as its own reward;
+>>> Whatever actions are to be done,
+>>> I will carry them out
+>>> Like someone who enjoys the playing of a game as its own reward;
 >>> I will insatiably delight in participating.
 One should just enjoy it like playing a game of dice.
 2. Consideration of the result: enjoyment
@@ -5041,7 +5041,7 @@ The result of effort in self-control:
 1.	Abandoning contradictory factors
 2.	Developing joy in solitude1
 3.	Focussing the mind on samatha
-[ Image: 8.1.jp2 ]
+
 1. Abandoning contradictory factors
 1.	Briefly
 2.	Abandoning the world
@@ -5083,7 +5083,7 @@ Why should one place the mind, as it says, in samādhi after developing effort? 
 >>> I should seek calm abiding first,
 >>> And that is achieved through the joy of having no worldly attachment.
 The first two lines briefly summarize abandoning the world. The next two lines indicate that the defilements are destroyed by the unification of calm abiding and insight. The next line indicates that the cause of insight is calm abiding. The last line indicates that the cause of calm abiding is abandoning attachment to the world.
-[ Image: 8.2.jp2 ]
+
 3. How the antidotes are accomplished
 1.	Establishing non-attachment towards sentient beings
 2.	Establishing non-attachment towards possessions, etc.
@@ -5138,7 +5138,7 @@ When one cannot see the person to whom one is attached, one’s mind is disturbe
 8.	How to abandon them
 1. They destroy great benefits
 >>> The unchanging dharma
-Is lost though transient friends.
+>>> Is lost though transient friends.
 In this way, they diminish actions which lead to the great enlightenment.
 [8.9]
 2. They lead one to lower rebirths
@@ -5161,8 +5161,8 @@ This is because they are conducive to the causes of the lower realms. [355] ‘A
 8.11
 >>> If I say something helpful, they get angry,
 >>> And oppose my help.
-If I don’t listen to them,
-They get angry, and then will go to a bad rebirth.
+>>> If I don’t listen to them,
+>>> They get angry, and then will go to a bad rebirth.
 The first two lines indicate their response to benefit is backwards. The next line indicates their response to helpful advice is backwards. The next line indicates that they involve one in nonvirtue. The last two lines indicate that when one does not comply with them, their minds become agitated.
 [8.12]
 5. One does not get any benefit
@@ -5266,7 +5266,7 @@ The reason for not getting involved with them:
 >>> ‘Since the childish are not happy
 >>> Unless they are benefitting themselves,
 >>> The childish are friends to no one.’
-[ Image: 8.3.jp2 ]
+
 5. The qualities of non-distraction2
 1.	Friends
 2.	Places
@@ -5371,7 +5371,7 @@ Separation from friends such as these is a remedy for unhappiness.
 >>> With few problems, happy and content,
 >>> All disturbances will be pacified.
 The first verse indicates resolving to live in isolation. The next two verses indicate not being distracted by either enemies or friends. The last verse summarizes the qualities of isolation.
-[ Image: 8.4.jp2 ]
+
 3. Giving up conceptual discrimination
 Although there are many ways to give up conceptual discrimination in general, since the conceptual discrimination of desirable objects is particularly difficult to abandon, this section focuses specifically on the antidotes for that.
 1.	Examining how the result is destroyed
@@ -5763,11 +5763,11 @@ One is cooled by moonlight, like the cooling sandalwood water of a king’s pala
 >>> They live with a contentment and happiness
 >>> That even Indra would have difficulty finding.
 Since they are free, they can do as they please. They are their own masters. They are protected from enemies and need nothing from friends. Since their contentment is not worldly, it is difficult for Indra to find it.
-[ Image: Blank.JPG ]
+
 3. Focussing the mind on samatha
 1.	Equalizing self and others
 2.	Exchanging self and others
-[ Image: 8.5.jp2 ]
+
 1. Equalizing self and others
 1.	Brief explanation
 2.	Equality of subjection to suffering from self-grasping
@@ -5780,7 +5780,7 @@ What is the cause of meditating on equalizing self and others?
 8.89
 >>> Having considered how solitude 
 >>> Has such good qualities,
-What is its purpose?
+>>> What is its purpose?
 >>> I should pacify conceptual discrimination
 >>> And meditate on bodhicitta.
 
@@ -6001,8 +6001,8 @@ Without the conception that they are other, one will not develop the arrogance o
 >>> Nor should it be hard to see
 >>> My own body as theirs, too.
 The body one now clings to was previously the semen and blood of one’s parents [368] and one’s mind was distinct from it. Through habituation, conceptual thought which clings to it as self was developed. Similarly, though one’s mind is separate from them, why, through habituation, would one not be able to come to regard the streams of being of others as self?
-[ Image: Blank.JPG ]
-[ Image: Blank.JPG ]
+
+
 2. Exchanging oneself and others
 1.	Brief description of the essential characteristics
 2.	Detailed explanation of the essential characteristics
@@ -6027,7 +6027,7 @@ One should regard the self as defective and others as an ocean of good qualities
 >>> Why don’t I regard embodied beings
 >>> As limbs of one life? 
 Just as through habituation, the hands and so forth are protected and grasped as one’s own, even though they are distinct, so the streams of being of others should be treated in application with self-clinging and protected.
-[ Image: 8.6.jp2 ]
+
 2. Detailed explanation of the essential characteristics
 1.	Accepting others
 2.	Abandoning clinging to ‘I’
@@ -6244,7 +6244,7 @@ Since one’s own body, with eyes and so forth under the control of other people
 >>> Should be taken away from it
 >>> And used to help others.
 Even the good qualities of one’s own body should be taken away and given to others. 
-[ Image: 8.7.jp2 ]
+
 3. Detailed explanation of the practices related to aspiration
 1.	Brief explanation
 2.	Meditation on envy
@@ -6421,7 +6421,7 @@ If one had previously exchanged self and other, one would have attained the blis
 >>> So you should regard all others as self
 >>> Through habitual practice.
 Just as one grasps the semen and blood of others as self, so one should practise grasping others as oneself.
-[ Image: 8.8.jp2 ]
+
 4. Detailed explanation of the practices related to application
 1.	How to accomplish the practice
 2.	Controlling the mind for practice
@@ -6522,11 +6522,11 @@ Having been given such advice, one should maintain control over the mind. If you
 8.169
 >>> Though you have destroyed me,
 >>> That is in the past. That time is over.
-Now I have seen you, 
+>>> Now I have seen you, 
 In the past, self-grasping (‘you’) has led one to destruction in places such as the hells, but now that time is over, for now one can see the faults of such destruction.
 [8.169cd]
 2. Not giving away any control
-…where can you go?
+>>> …where can you go?
 >>> I am going to completely crush your arrogance. 
 ‘Where can you go’ means to be given no chances. The second line indicates the manner of being giving no chances.
 [8.170]
@@ -6681,7 +6681,7 @@ Focussing on meditation:
 4.	Ceasing to grasp at true existence [v111-150]
 5.	The result of meditation on emptiness [v151-167]
 
-[ Image: Blank.JPG ]
+
 
 1. Explaining that wisdom is the principal
 1.	The reason wisdom is the principal 
@@ -6697,14 +6697,14 @@ The other five perfections, or five aspects of skilful means, have now been pres
 >>> Therefore, those who wish to pacify sufferings
 >>> Should develop wisdom.
 Since only wisdom can overcome attachment to existence, the root of suffering, it should be developed.
-[ Image: Blank.JPG ]
+
 2. It is the wisdom of the emptiness of intrinsic nature
 1.	Establishing the object as empty
 2.	Establishing the subject as the path 
 1. Establishing the object as empty
 1.	The nature of the two truths in our tradition 
 2.	Abandoning objections1
-[ Image: 9.1.jp2 ]
+
 1. The nature of the two truths in our tradition 
 1.	Distinguishing the two truths
 2.	Their characteristics 
@@ -6716,8 +6716,8 @@ Since only wisdom can overcome attachment to existence, the root of suffering, i
 [9.2ab]
 4.	Definitions
 9.2
-Relative and ultimate: 
-These are asserted as the two truths. 
+>>> Relative and ultimate: 
+>>> These are asserted as the two truths. 
 [9.2cd]
 1. Basis of the distinction
 The basis is mere cognoscibility. Since the ultimate is how cognizables really are and the relative is how they seem to be, both are pervaded by mere cognoscibility.
@@ -6744,8 +6744,8 @@ It is certain that truth and falsity are mutually exclusive. It is false that on
 Ultimate truth is completely empty of deluded perceptions. Any kind of positive claim about it as existent, nonexistent, both, or neither, is a perception of deluded conceptual thought. Being completely distinct from that, it is unelaborated. The relative, appearing but untrue from the perspective of realization, is the perception of erroneous conceptual thought. 
 3. The valid cognitions which ascertain those characteristics 
 The unelaborated ultimate is a cognition that sees reality with yogic direct perception by not seeing anything. It is ascertained by the elimination of objects to be negated with inferential reasoning cutting off elaborations. [381] The illusion-like relative is ascertained by conventional valid cognition in mere appearances and by the negation of untrue appearances with inferential reasoning that cuts off elaborations upon truth.4 These characteristics are explained in the root text as follows: 
-The ultimate is not within the domain of conceptual thought. 
-Conceptual thought is said to be relative.
+>>> The ultimate is not within the domain of conceptual thought. 
+>>> Conceptual thought is said to be relative.
 This section is explained by some5 as follows: 
 1.	Distinguishing the types of conceptual thought
 2.	The graduations of refuter
@@ -6754,15 +6754,15 @@ This section is explained by some5 as follows:
 1. Distinguishing the types of conceptual thought 
 9.3
 >>> We can see two types of people: 
-Yogins and ordinary people.
+>>> Yogins and ordinary people.
 ‘Yogins’ are stream-entrants and those on the first bhūmi and above, who have achieved transcendental wisdom. ‘Ordinary people’ are those who have not seen reality—both the non-Buddhists, such as the followers of Kapila,6 and ordinary Buddhists.
 [9.4]
 2. The graduations of refuter
-Ordinary, worldly people
-Are opposed by worldly yogins.
-Worldly ones, such as those who hold the view of self, are opposed by those who, with the direct perception which sees non-self, cognize it is not true. Among these, ordinary worldly people are opposed by ‘worldly yogins’, i.e. śrāvaka yogins who see the self of dharmas. They in turn are opposed by the insight of yogins who see the non-self of subject and object—those who have the vision of mere discriminating awareness. They are opposed in turn by those [Madhyamaka yogins] who have the wisdom without dualistic appearances.7 
+>>> Ordinary, worldly people
+>>> Are opposed by worldly yogins.
+>>> Worldly ones, such as those who hold the view of self, are opposed by those who, with the direct perception which sees non-self, cognize it is not true. Among these, ordinary worldly people are opposed by ‘worldly yogins’, i.e. śrāvaka yogins who see the self of dharmas. They in turn are opposed by the insight of yogins who see the non-self of subject and object—those who have the vision of mere discriminating awareness. They are opposed in turn by those [Madhyamaka yogins] who have the wisdom without dualistic appearances.7 
 9.4
-Yogins, too, have distinct conceptual thought, 
+>>> Yogins, too, have distinct conceptual thought, 
 With higher and higher objectors,
 Why are ordinary people, who do not see reality, opposed by those with higher minds? It is because of the ascertainments of inferential reasoning made with those higher minds. Their inferential reasoning which refutes the self of the individual ascertains that the self and so forth, conceived of as objects by ordinary minds, are not established and their inferential reasoning which refutes the self of dharmas ascertains that there is no subject, object, nor mere discriminating awareness. How are these refutations made?
 Both agreeing upon examples, 
@@ -6795,35 +6795,38 @@ Verses 3-5 are correctly explained this way:
 1. Distinguishing the types of conceptual thought 
 9.3
 >>> We can see two types of people: 
-Yogins and ordinary people.
+>>> Yogins and ordinary people.
 Yogins are those who accept the textual tradition sealed by the words of the Sugata. Ordinary people are tīrthikas, who assert the doctrine of self, and other ordinary people. [384]
 [9.4ab]
 2. The graduations of refuter 
-Ordinary, worldly people
-Are opposed by worldly yogins.
-Worldly people and non-Buddhists grasp many tiny atoms as a composite whole and take the stream of instants of cognition as a unified continuity. Since they are grasping at permanence, worldly yogins are opposed to them. These are śrāvakas who, with lower conceptual thought, have established tiny atoms and momentary instants of grasping. Furthermore, if one wonders whether there are objections among the conceptual thoughts of yogins, such as the śrāvakas: 
+>>> Ordinary, worldly people
+>>> Are opposed by worldly yogins.
+>>> Worldly people and non-Buddhists grasp many tiny atoms as a composite whole and take the stream of instants of cognition as a unified continuity. Since they are grasping at permanence, worldly yogins are opposed to them. These are śrāvakas who, with lower conceptual thought, have established tiny atoms and momentary instants of grasping. Furthermore, if one wonders whether there are objections among the conceptual thoughts of yogins, such as the śrāvakas: 
 9.4
-Yogins, too, have distinct conceptual thought, 
+>>> Yogins, too, have distinct conceptual thought, 
 With higher and higher objectors,
 The Vaibhāṣikas hold the position that in the appearance of a blue object, cognition and object are connected without an intervening representation. They are opposed by the Sautrāntika yogins with arguments such as the ascertainment of simultaneous perception.15 
 The Sautrāntikas hold that all appearances are mental representations and so they are representationalists, asserting that representations take on the shape of outer objects like reflections within a mirror. These proponents of the reality of external perceptual objects are opposed by Cittamātrin yogins who argue that if atoms were partless, they would all be combined with a central atom, so it would follow that the edges of the atoms would form a whole unified mass. Since this would constitute an agglomeration extending in all directions, there can be no partless atoms. Thus, they refute the possibility of subtle particles forming gross substances. They also object to the Sautrāntikas with a refutation of the essential characteristics of the object resembling its product.16 
 The True Representationalists17 claim that the true nature of everything is mind. The proponents of the doctrine of the reality of individual moments of cognition like a pure crystal [i.e. False Representationalists] object to them by saying that since there are many connected representations, there cannot be a single, partless cognition of them. [385]
 The Madhyamaka yogins object to them, arguing if each moment of cognition were not comprised of many parts, it would follow that its earlier and later instants would be one, such that even an aeon would be indistinguishable from an instant. Seeing the relation between many such instants, they argue that there cannot be an indivisible moment. 
 Who is it that understands arguments such as these?
-Both agreeing upon examples, 
+
+>>> Both agreeing upon examples, 
+
 Both proponent and objector accept examples such as reflections in a mirror. 
 An extensive explanation of the differences among the conceptual thought of the [Buddhist] yogins will be given below [v6-56]. The objections to ordinary ones [i.e. non-Buddhists] will be taught in detail in the sections on the non-self of the individual [v57-110] and on the ceasing of grasping at existence [v111-150].18 
 ‘Are these refutations true in the Madhyamaka tradition or not? If the refutations are true, there is an infinite regress. If the refutations are not true, the Madhyamaka arguments would then be established as true, so there would be no delusion in such conceptual thought, and yet your position is that all conceptual thought is established as relative. This is a fault.’
 For Mādhyamikas, although for any assertion put forth, there is a refutation, nevertheless, it is not correct to assert emptiness. As it says,
-If the empty slightly existed, 
-The non-empty would have to slightly exist.
-If the non-empty slightly existed, 
-Emptiness would also exist.
+    If the empty slightly existed, 
+    The non-empty would have to slightly exist.
+    If the non-empty slightly existed, 
+    Emptiness would also exist.
 
-The emptiness of the conquerors
-Truly delivers one from all views.
-Whoever holds a view of emptiness
-Will not attain accomplishment.19
+    The emptiness of the conquerors
+    Truly delivers one from all views.
+    Whoever holds a view of emptiness
+    Will not attain accomplishment.
+
 Therefore, in the Madhyamaka, since no assertion is made, there are no refutations and therefore no infinite regress. There being no assertions, no objects of conceptual thought are established and therefore there is no erroneous consequence [386] that there could be a position with no refutation. Furthermore: 
 Not establishing any side as existent,
 Nonexistent, or both,
@@ -6859,7 +6862,7 @@ Most of the Tibetan Geshes, such as Geshe [Ngok] Lotsawa, explain this in two se
 1.	Abandoning objections from the relative perspective 
 2.	Abandoning objections from the ultimate perspective
 However, this is not correct. If the ‘relative perspective’ is what Mādhyamikas mean by ‘relative’, then the second section also concerns the relative, so it would be part of the same section. If realists accepted this as relative, they would be in agreement with Madhyamaka and there would be no objections. Similarly with the latter section: if the ‘ultimate perspective’ is what realists mean by ‘ultimate’, then the first section is also ultimate. If Mādhyamikas accepted this as ultimate, there would be no objections. Therefore, this whole section takes the perspective of what is relative for Mādhyamikas and ultimate for realists. Thus, it simply concerns the objections raised by realists and the abandoning of them:
-[ Image: 9.2.jp2 ]
+
 1.	Abandoning the objections of Vaibhāṣikas 
 2.	Abandoning the objections of Sautrāntikas 
 3.	Abandoning the objections of the Vijñaptimātrins
@@ -6870,7 +6873,7 @@ The Vaibhāṣikas assert there are five bases of cognizables such as form, whic
 [9.6]
 1. Abandoning objections of contradiction with valid cognition 
 9.6
-Although there is direct perception of forms and so forth,
+>>> Although there is direct perception of forms and so forth,
 >>> That is a consensus, not a valid cognition.
 It is a delusion to accord with a consensus
 Such as that something unclean is clean.
@@ -6881,8 +6884,8 @@ Is this consensus ultimate reality? No, it is a delusion. For example, it is acc
 2. Abandoning contradiction with the textual tradition of the Bhagavān
 9.7
 >>> For the sake of introducing the worldly,
-The protector taught in terms of existence. In suchness,
-There is no momentariness.
+>>> The protector taught in terms of existence. In suchness,
+>>> There is no momentariness.
 ‘If everything is without reality, this would contradict the Bhagavān’s teachings that the skandhas and so forth exist.’
 This is an intentional teaching. ‘Intentional’ means it has three factors: an intention, an intentional basis and a valid cognition which refutes the literal meaning.22 What is the intention? The Protector taught existence to allow worldly people to enter into the teachings. What is the intentional basis? [389] Relative existence. What is the valid cognition which refutes the literal meaning? [The following syllogism:]
 The skandhas and so forth are the logical subject. The probandum: they are ‘not really existent’ and are ‘not ultimate’. The reason: there is no momentariness, so what need to mention a corporeal existence? That is to say, there is not even an infinitesimal moment, so there cannot be something which is a composition of many of them. There is no single instant because it would comprise three parts—beginning, middle and end. If there were not these three parts, earlier and later would occur at the same instant and it would follow that even an aeon could be called an ‘instant’. As it says in the Ratnāvali, 
@@ -6894,7 +6897,7 @@ The world never abides for an instant.23
 ‘This is incompatible with relative truth.’
 An aggregate of past, present and future is not ultimate but it is relative. There are two relatives: this is not the relative which is the conceptual thought of ordinary people, so there is no error. It is the relative of yogins. Since it is an object of the direct perception of yogins who see the truth and an object of analytical inference, it exists in the sense of appearing in that conceptual thought and hence there is no contradiction:
 9.8
-There is no error, for it is the yogin’s relative.
+>>> There is no error, for it is the yogin’s relative.
 ‘There is a contradiction because śrāvakas who see momentariness are taught to be seeing truth.’
 >>> In comparison to the worldly, it is seeing reality.
 The claim that to see momentariness is to see reality means to see how things are in comparison to the deluded conceptual thought of worldly people.
@@ -6935,7 +6938,7 @@ A stream of being that persists from birth for a long time is not pervaded by be
 ‘If everything were illusion-like, it would follow that there would be no nonvirtue, such as killing, nor any virtue in doing good. If nonvirtue or virtue existed in illusions, then it would be nonvirtuous to kill a person conjured by an illusionist and virtuous to give him food.’
 9.11
 >>> When illusory beings are killed,
->>>There is no nonvirtue because they do not have minds.
+>>> There is no nonvirtue because they do not have minds.
 >>> Merit and nonvirtue originate
 >>> With those who possess an illusory mind.
 You accept that it is not nonvirtuous to destroy a heap of stones, while it is nonvirtuous to kill a person, for there is a difference in the existence or nonexistence of a mind. Similarly, though we assert that everything is like an illusion, when there is the illusion of mind-possession, we say that there is merit in the giving of food and nonvirtue in killing. If there is no mind, there is no nonvirtue or virtue in such things.
@@ -6950,7 +6953,7 @@ In that case, if both are existent, that would also contradict it.
 ‘But one can see their non-contradiction.’
 Within illusoriness, too, one can see different effects such as horses and elephants coming from different conditions, so the differentiation of causes and their various effects is not contradicted:
 >>> Having arisen from a variety of conditions,
->>> Illusions are varied too,
+Illusions are varied too,
 However, whether illusory or real [393], the arising of different effects from unvarying causes is denied:
 9.13
 >>> But nowhere is there a single condition
@@ -7002,7 +7005,7 @@ Though it is illusory, an illusion is not dispelled while the causes and conditi
 3. Abandoning objections of the Vijñaptimātrins32
 1.	Non-establishment of the subject
 2.	Non-establishment of the basis
-[ Image: 9.3.jp2 ]
+
 1. Non-establishment of the subject
 1.	Abandoning objections of the False Representationalists
 2.	Abandoning objections of the True Representationalists 
@@ -7058,7 +7061,7 @@ Is perception something separate from mind? What is perception? It is itself jus
 2. An example of the agency of cognition
 9.18
 >>> Just as the blade of a sword
-Cannot cut itself…
+>>> Cannot cut itself…
 3. Conclusion
 … so it is with the mind.
 3. Settling that with reasoning
@@ -7094,8 +7097,8 @@ A blue object is not pervaded by a distinct agent and patient, for it does not h
 [9.21]
 1. The nonexistence of the general concept
 9.21
-A lamp, when cognized by cognition, 
-May be designated ‘the illuminator’,
+>>> A lamp, when cognized by cognition, 
+>>> May be designated ‘the illuminator’,
 >>> But what do you claim cognizes
 The mind as ‘self-luminous?’
 It is reasonable to say that a lamp, as an object of awareness, is established as illuminated by the direct perception of someone possessing a discriminating mind, who can designate it as such. But this is incompatible with the self-knowing illuminating cognition mentioned above. That is knowledge by awareness of other, from which it follows that there would be both subject and object. By this error, the conclusion of self-awareness is not warranted and is incompatible. Thus, it is illogical to designate such knowledge ‘self-cognizing awareness’. 
@@ -7126,14 +7129,14 @@ An example is the poison of rat. Although one may not notice a rat bite which le
 2. The error in the reason of its intrinsic nature
 Some explain the objection this way: ‘Through having cultivated the conditions of meditation, some are able to see the existence of distant objects, such as the minds of others who are far away. Therefore one may illuminate one’s own cognition, which is very near.’
 9.24
-‘Since under the right conditions the mind can see
+>>> ‘Since under the right conditions the mind can see
 >>> That of others, how can it not see itself?’
 This logic is not certain, for it may be criticized as follows: if seeing something far were pervaded by seeing what is near, then if one saw a vase deep beneath the ground with an eye to which a magical eye lotion had been applied, it would follow that the eye, which is near, would also be seen. Yet, although one may see distant objects, one will not see the eye itself, smeared with eye lotion. Seeing far is not pervaded by seeing self and [401] so the reason is not certain: 
 >>> Through applying the eye lotion of accomplishment,
 >>> One will see a vase and not the eye lotion itself.
 Others explain this verse as follows: ‘The logical subject is a manifest object such as a blue object. This manifestation has the nature of cognition because the condition for such manifestations is either a cognitive condition, such as a sense power, or a mental condition, such as an inferential faculty. The pervasion is established, i.e. whatever arises merely from a cognitive condition is pervaded by the nature of cognition. Therefore, manifest objects are established as self-illuminated.’ Thus, it is objected:
 9.24
-‘Since under the right conditions the mind can see
+>>> ‘Since under the right conditions the mind can see
 >>> That of others, how can it not see itself?’
 In that case, it would follow that when the eye is smeared with magical eye lotion, the manifestation of the underground vase would also have the nature of an eye smeared with magical eye lotion because of its arising as a manifestation from that optical condition. If arising as a manifestation from an optical condition is not pervaded by the nature of the eye, arising as a manifestation from a cognitive condition is not pervaded by the nature of cognition, so the pervasion is not established:
 >>> Through applying the eye lotion of accomplishment,
@@ -7192,7 +7195,7 @@ It is untenable to say the reason40 is not established because it is accepted by
 It is illogical that the basis mind is true while the dualistic appearances resting on it are false, for it would follow that this mind of yours is an isolated, non-dual cognition [404] unconnected to the dualistic appearances. If this position is accepted, the objection can be made:
 9.29
 >>> Being free from dualistic perception,
-All would be the Tathāgata.
+>>> All would be the Tathāgata.
 Since it is free from the impurities of dualistic appearances and the subject-object mind, it would follow that all there would be is buddhahood. 
 ‘Although mind is free from the dualistic appearance of subject and object, it has not attained buddhahood. Where is the contradiction? The pervasion42 is not established.’
 [9.29cd]
@@ -7202,7 +7205,7 @@ Since it is free from the impurities of dualistic appearances and the subject-ob
 Although everything may be conceived as mere discriminating awareness, if one is not free from the obscurations, it follows that the designations of mind only and freedom from duality would be unnecessary to achieve liberation from saṃsāra. If such designations were necessary, liberation would occur when one conceived of freedom from duality. Therefore, there is no need for the conceptual discrimination of freedom from duality. 
 Or, these lines may be understood as a response to the opponent saying, ‘We accept the consequence that saṃsāra is completely nonexistent.’ The designation of mere discriminating awareness was supposed to show the true basis of saṃsāric delusion. If it does not help you establish saṃsāra after all, of what advantage is it to make that designation?
 Or, if mind is the Tathāgata from the very beginning, it is meaningless to accomplish buddhahood. 
-[ Image: 9.4-intro.jp2 ]
+
 2. Establishing the subject as the path 
 It has been taught elsewhere that this section has the following three parts:
 1.	Establishing the relative subject as the path 
@@ -7212,7 +7215,7 @@ However, the first part does not concern establishing the relative subject as th
 1.	Establishment of subject cognition as the path (the main part)
 2.	Abandoning the objections of śrāvakas 
 3.	Conclusion: the function of the two cognitions 
-[ Image: 9.4.jp2 ]
+
 1. Establishing subject cognition as the path
 1.	Objection
 2.	Response
@@ -7282,8 +7285,8 @@ There is no other category because there is no alternative apart from these two�
 1. The appearance of the Conqueror’s kāya to trainees who have purified their streams of being
 ‘How is the benefit of others enacted when the wisdom without dualistic appearances is always in equanimity in the emptiness of all dharmas?’
 9.35
-Just as wish granting jewels and wish fulfilling trees
-Fulfil hopes, 
+>>> Just as wish granting jewels and wish fulfilling trees
+>>> Fulfil hopes, 
 >>> So, too, the conquerors appear
 >>> By the power of trainees and aspiration prayers.
 The saṃbhogakāya appears to those who have mastered the tenth bhūmi and the nirmāṇakāya appears to ordinary individuals. What causes them to arise? They arise by the power of trainees and by the power of former aspiration prayers. How can they appear when they have no conceptual discrimination? In the same way that wish granting jewels and wish fulfilling trees fulfil hopes.
@@ -7316,11 +7319,13 @@ Long ago, when the people of a certain place were afflicted by nāgas, Samgu,46 
 Although he does not have the discrimination of being pleased by offerings, this does not conflict with the existence of merit, just as there is merit in making offerings to his physical remains after his attainment of complete nirvāṇa, which also have no thoughts. How can this be?
 >>> Remaining in the world and passing into nirvāṇa
 >>> Were taught to be equivalent.
-As it says in the Affectionate Lion Sutra,48 
-Therefore, whether one makes offerings to 
-The Buddha who remains in the world
-Or his mortal remains and relics,
-If the intention is the same, the results will be the same.
+As it says in the Affectionate Lion Sutra,
+
+    Therefore, whether one makes offerings to 
+    The Buddha who remains in the world
+    Or his mortal remains and relics,
+    If the intention is the same, the results will be the same.
+
 If one argues that even though this is taught in this scripture, nevertheless, the result is not the same: [409]
 [9.39]
 3. Establishing the pervasion49 of that 
@@ -7330,7 +7335,7 @@ If one argues that even though this is taught in this scripture, nevertheless, t
 >>> Just as, for example, there is a result
 >>> In offering to a real Buddha.
 Our position is that merit is relative, while your position is that it is ultimate. Since we both hold the position that it is established in the scriptures that merit exists, it is true for both of us and thus there is the pervasion.
-[ Image: 9.5.jp2 ]
+
 2. Abandoning the objections of śrāvakas 
 1.	Presenting the objection 
 2.	The scriptural criterion for the path
@@ -7341,8 +7346,8 @@ Our position is that merit is relative, while your position is that it is ultima
 [9.40ab]
 1. Presenting the objection 
 9.40
-‘You will be liberated by seeing truth,
-But what is the point of seeing emptiness?’
+>>> ‘You will be liberated by seeing truth,
+>>> But what is the point of seeing emptiness?’
 Śrāvakas assert the Four Truths: 
 [9.40cd]
 1.	The fourfold truth of suffering: suffering, impermanence, emptiness and non-self
@@ -7364,7 +7369,7 @@ In the Perfection of Wisdom it says, [410] ‘If one has a conception of reality
 9.41
 >>> ‘The Mahāyāna is not established.’
 >>> Why are your scriptures established?
-‘Because they are established for both.’
+>>> ‘Because they are established for both.’
 How, if the Mahāyāna is not established as the Buddha’s word, are your śrāvaka scriptures established as the Buddha’s word?
 ‘They are established as the Buddha’s word for both the disputer and the respondent.’
 In that case, either a) they are established as the Buddha’s word for both this disputer and this respondent or else b) they are established as the Buddha’s word by the agreement of any two individuals. 
@@ -7374,7 +7379,7 @@ Your texts are not automatically known to be scriptural.
 If you assert [a2], ‘I accepted them through reasoning’:
 9.42
 >>> And whatever conditions gave you confidence in them,
-We have them in the Mahāyāna, too.
+>>> We have them in the Mahāyāna, too.
 What are the criteria for accepting something as Buddha’s word? If one says it is ‘what is included in the sutras, what appears in vinaya and what does not contradict the truth’,52 then that is the same for the Mahāyāna because that also meets these conditions. [411] Therefore, you have no criteria that distinguish only your own texts as the Buddha’s word and which are not met for both the disputer and the respondent. 
 If you assert [b] that they are the Buddha’s word because they are accepted as such by agreement between any two people, then:
 If truth is the belief of two others, 
@@ -7399,7 +7404,7 @@ This is incorrect; the Mahāyāna is of definitive meaning. Conversely, the śr�
 [9.44ab]
 1. The error for the śrāvaka tradition in the monk who has abandoned defilements
 9.44
-‘The root of the doctrine is monasticism.’
+>>> ‘The root of the doctrine is monasticism.’
 >>> It is difficult to be such a monk.
 There are five classifications of monk: 
 [9.44cd]
@@ -7549,7 +7554,7 @@ If it is logical to be afraid of something that is a basis for suffering, such a
 >>> You would be right to be afraid.
 >>> But since there is no such thing as ‘I’,
 >>> What is there to be afraid of?
-[ Image: Blank.JPG ]
+
 [9.56cd]
 3. How to engage in meditation on emptiness
 Geshe Ngok Lotsawa and others have explained this as follows: 
@@ -7589,7 +7594,7 @@ Non-self in the fire, wind and consciousness elements:
 >>> The orifices are not the self, 
 >>> And none of the six consciousnesses are the self either. 
 It has been said by some earlier masters that the first eleven lines teach the non-self of the skandha of form and the final line teaches the non-self of the other skandhas. However, since this is not how it appears in the root text, [418] it is not the intended meaning.
-[ Image: 9.6.jp2 ]
+
 2. Refuting the self of the skandhas and elements, etc. as designated by tīrthikas
 1.	Refuting Sāṃkhyas 
 2.	Refuting Naiyāyikas
@@ -7746,7 +7751,7 @@ If the former matter was insentient then, being mutually exclusive with sentienc
 >>> Thus, being non-cognizing and free from activity,
 >>> Space would also be such a ‘self’.
 If the self has no nature of cognition nor is an agent, it follows that space is also a self.
-[ Image: 9.7.jp2 ]
+
 3. Abandoning objections to non-self
 1.	Abandoning the objection that the connection of actions and effects is not logical 
 2.	Abandoning the objection of objects of cultivating compassion being illogical
@@ -7816,8 +7821,8 @@ Past and future minds are not the self because the former has ceased and the lat
 1.	Establishing that sentient beings are designated 
 2.	Abandoning an objection to that
 1. Establishing that sentient beings are designated
-Compassion is for those imputed by confusion:
-They are accepted for the sake of the result.
+>>> Compassion is for those imputed by confusion:
+>>> They are accepted for the sake of the result.
 ‘Confusion’ means grasping the illusion-like relative that a stream of many moments is a sentient being. Relative sentient beings and compassion are not incompatible. What sort of relative is this? It is an unabandoned relative acceptance of conduct for the benefit of others.
 Why accept this delusion? It is for the sake of the result, i.e. we do not abandon others for the sake of benefitting them and attaining buddhahood, in accord with the earlier teaching on not abandoning conceptual thought with appearances.
 2. Abandoning an objection to that
@@ -7828,7 +7833,7 @@ Why accept this delusion? It is for the sake of the result, i.e. we do not aband
 [9.76ab]
 1. The independence of the substantially established individual
 9.76
-‘If there are no sentient beings, who gets the result?’
+>>> ‘If there are no sentient beings, who gets the result?’
 >>> This is true but, nevertheless, they are accepted out of confusion.
 ‘If even sentient beings are not established, how can there be any results from benefitting them?’
 It is true that in reality there are no sentient beings, i.e. the objects to be benefitted are not pervaded by being real sentient beings. Yet, while they are illusion-like and agglomerations of many moments, it is reasonable to treat these so-called ‘sentient beings’ as objects and to fulfil their benefit.
@@ -7836,7 +7841,7 @@ Objection: ‘The conception of the reality of sentient beings is to be abandone
 [9.76cd]
 2. The mere designation is not to be abandoned
 >>> For the sake of fully pacifying suffering,
-One should not oppose the delusion of this result.
+>>> One should not oppose the delusion of this result.
 Since practice requires a variety of skilful methods, [426] those wise in such methods should rely upon the deluded relative. 
 [9.77ab]
 3. Abandoning a contradiction in our own words
@@ -7866,7 +7871,7 @@ Having refuted the erroneous conception the non-Buddhists have of a seeing and s
 3.	Mindfulness of mind 
 4.	Mindfulness of dharmas [427]
 This section is not a teaching on the four foundations of mindfulness taught elsewhere as the impurity of the body, the suffering of sensations, the impermanence of mind and the non-self of dharmas. However, one need not think there is any contradiction here to that teaching, only a different purpose. In our bodhisattva tradition, the purpose is to analyse the individual self for which grasping arises under the power of wrong views, by developing the characteristics of non-self in the meditative objects [i.e. the four foundations] to purify defilements. In the other tradition, since conduct degenerates under the influence of defilements such as attachment, one develops in one’s stream of being the characteristics of abandonment of the four wrong views73 as meditative objects to purify conduct.74
-[ Image: 9.8.jp2 ]
+
 1. Mindfulness of the body
 1.	The individual parts are not the body 
 2.	An existent body which possesses the parts is not established
@@ -7957,7 +7962,7 @@ The first verse indicates the non-establishment of the coarse and the second ver
 >>> When there is no existent body,
 >>> What is a man and what is a woman?
 The non-establishment of the body generally is indicated in the first two lines and the non-establishment of particular bodies is indicated in the second two lines.
-[ Image: 9.9.jp2 ]
+
 2. Mindfulness of sensations
 1.	The non-establishment of the intrinsic nature of sensations
 2.	The non-establishment of its cause: contact
@@ -8125,7 +8130,7 @@ If the former: the logical subject is the mind at the moment of the sensation. [
 ‘The sensation arises first and the experience after. Since the sensation arises first, it is the cause. Since the consciousness arises subsequently, it is the effect. These are the object and subject.’
 9.100
 >>> Although something from before may be remembered after, 
-That is not experiencing it.
+>>> That is not experiencing it.
 The previous [sensation] is the logical subject. [Contradiction:] Although the proposition is that it is experienced, it follows that it is an object of subsequent remembering, not an object of present experience because its intrinsic nature has ended. If one doubts the establishment of the pervasion,85 it would contradict valid cognition because that which is an object of present experience is pervaded by a nature which has not ended.
 [9.100cd]
 2. No self-experience
@@ -8141,7 +8146,7 @@ This is because, apart from consciousness and the sensation itself, there is not
 >>> Therefore, there are no sensations.
 >>> Therefore, what could ever harm
 >>> This selfless composite?
-[ Image: 9.10.jp2 ]
+
 3. Mindfulness of mind 
 1.	The nature of mind is not established
 2.	Perceptions of the five consciousnesses are not established
@@ -8164,7 +8169,7 @@ The sixth mind is not an inner sense organ, for it does not possess form. Nor it
 2. Perception of the five consciousnesses is not established
 ‘The sixth mind, although not established as having an intrinsic cognizing nature, exists as nothing but the five consciousnesses themselves.’
 9.104
-If the cognition exists before cognizable,
+>>> If the cognition exists before cognizable,
 >>> What does it arise from?
 Does cognition exist a) before its cause, the cognizable, b) simultaneously with its cognizable or c) after the cognizable?
 a) If consciousness existed before its cognizable, the following consequence would result. The logical subject is the cognition. It has no producer because a cognition before its cognizable has no preceding cause. It is untenable to say that the proposition and reason86 are not established, for that would violate your own premises. It is impossible that the pervasion87 is not established, for it would contradict valid cognition, as there is no effect without a cause.
@@ -8196,8 +8201,8 @@ If the relative exists [for the Buddha] due to others,
 >>> How can sentient beings transcend suffering?’
 The correct response is as follows: 
 9.107
-It is just the discrimination of those other minds.
-The relative is not [the Buddha’s] perspective.
+>>> It is just the discrimination of those other minds.
+>>> The relative is not [the Buddha’s] perspective.
 There are no defilements in the stream of being of the Buddha. The designation of his having obscurations is a designation from the perspective of someone’s conceptual discrimination. It is not the relative of one who has attained nirvāṇa, for whom there are no obscurations. 
 ‘Although it exists only from the perspective of someone’s delusion, that relative depends upon conceptual thought, which is not logical, for it is negated from the perspective of one who perceives its reality. Hence, there remains the error that two truths do not exist.’
 From the perspective of perceiving reality, when the logic that refutes ultimate arising is applied to relative arising, the error that the relative does not exist does not follow. We do not assert that there is arising before or at the same time as the cause, but we allow that there is arising after the cause. Likewise, we do not assert arising from a temporal separation of cause and effect, but we allow that there is arising from their non-separation. Likewise, we do not assert cause and effect are wholly unseparated, but we allow that they are partially unseparated, i.e. it is taking something composite as singular. This is a relative designation:
@@ -8241,7 +8246,7 @@ Although, since it is relative, it is not a valid cognition of reality, there is
 We do not deny all relative existence, such as the analysanda of conceptual thought which, with inferential reasoning, grasps the essential characteristics of conceptual objects, and general concepts. Thus, it is in dependence upon an analysandum that the conception of dharmas and dharma-possessors arises, as is explained in v108ab. 
 ‘In addition to that inferential reasoning of a relative existence without existence in reality, there must be a second analysis. What is it that makes this latter inferential analysis?’ Thus, the objection is that there would be an infinite regress, as presented in v109. 
 When it is directly ascertained that universally all dharmas have no intrinsic nature, that ascertainment is contrary to any individual case of an inferentially known intrinsic nature. Thus, it is ascertained a priori that no intrinsic nature is known inferentially. In other words, if it is understood that objects—the analysanda—are not established, then it is understood a priori that the analyst also has no intrinsic nature. Thus, it is not necessary to form this conclusion again with another inference, so there is no fault of an infinite regress, as presented in v110. The analysis has ‘no basis’ [v110c], i.e. the pervader is not supported. ‘It is non-arising’ [v110c] means that inferentially known existence is not ultimate. Being naturally ‘nirvāṇa’ [v110d] means that the obscurations of reality are not ultimate.91
-[ Image: Blank.JPG ]
+
 [9.110cd]
 4. Ceasing to grasp at true existence
 [439] This is explained by Ngok Lotsawa and others as: 
@@ -8254,7 +8259,7 @@ According to the commentary by Ācārya Vairocanarakṣita:
 4.	Verses 111-115 show that an inherent nature of all cognizing and cognized dharmas cannot be proven.
 5.	Verses 116-150, the section on showing the errors in the tīrthika accounts of arising, is a continuation of the explanation of the foundation of mindfulness of dharmas, showing that all dharmas are without arising, ceasing, intrinsic nature or self. 
 Other commentaries have also explained v105cd onwards as part of the foundation of mindfulness of dharmas and I accept these explanations of the root text.92 
-[ Image: 9.11.jp2 ]
+
 1. There is no reason that establishes all dharmas as having inherent nature
 1.	General presentation
 2.	Extensive explanation
@@ -8319,14 +8324,14 @@ Establishing the qualification:
 1.	The main establishment of qualification [v116-137]
 2.	Without making a positive affirmation, the analysis is not contrary to valid cognition [v138-140]
 3.	Showing the certainty of the syllogism [v141-142b] 
-[ Image: 9.12.jp2 ]
+
 The explanation of the qualification is taught by the Svātantrika founding fathers through the application of further syllogisms.98 Although their proofs by svātantra are indeed inerrant, establishing their pervasions, qualifications and so forth is very difficult, so those establishments will not be presented here. But if they are not established, are the syllogisms not incomplete? That may be so, but the three root syllogisms [not arising from self, other or without cause] do not actually appear in the root text, [442] so it was not the intention of the Ācārya to present the non-arising of dharmas in this way. Furthermore, if they were to be established, the appropriate place for that would be before lines 105cd: ‘Accordingly, all dharmas/Are not to be understood as arising…’, rather than here.99 
 Therefore, in this section, verses 116–137 [do not prove syllogistically the non-arising of all dharmas but] show the errors in the tīrthikas’ positions on the arising of an intrinsic nature, with verses 138-140 explaining the abandonment of objections to the teaching of emptiness as the non-arising of all dharmas. Verses 141-150 show that all dharmas arise through dependent origination:
 •	Verses 141-142b are a summary of the non-arising and non-ceasing of all dharmas by showing their dependent origination.
 •	Verses 142c-144 show the relative arising of all dharmas in dependent origination to be illusion-like.
 •	Verses 145-148 show the refutation of the proposition that mere dependent origination itself has its own intrinsic nature.
 •	Verse 149-150 are an abbreviated showing of the sameness of existence and pacification. 
-[ Image: 9.13.jp2 ]
+
 2. Refuting the tīrthikas’ positions of arising with an intrinsic nature 
 1.	The main teaching on refuting an arising with intrinsic nature
 2.	Abandoning objections to the middle way
@@ -8362,14 +8367,14 @@ To understand this, one must analyse their specific causes:
 ‘If different effects are created by different causes, what creates the different causes?’ 
 They are created by previous different causes:
 9.117
-‘What creates different causes?’
+>>> ‘What creates different causes?’
 >>> They come from previous different causes.
 [9.117cd]
 4. Differences of power in relation to cause
 ‘Why do specific causes have the power to create only certain effects and not the power to create others?’ 
 >>> ‘Why is a cause able to produce its effect?’
 >>> It comes from the power of a previous cause.
-[ Image: 9.14.jp2 ]
+
 2. Refuting arising from other
 1.	Refuting arising from an impermanent other 
 2.	Refuting arising from a permanent other
@@ -8488,12 +8493,12 @@ If you claim that everything was created by Īśvara and that there is nothing w
 [9.124ab]
 1. Establishing the concurrence of conditions as the cause
 9.124
-If he were dependent, the concurrence itself
+>>> If he were dependent, the concurrence itself
 >>> Would be the cause, not Īśvara.
 If there is a concurrence of conditions, either it is an effect of Īśvara or it is not. If it is not, it would be the concurrence and not Īśvara’s causal powers which would be the cause. Thus, it would not be established that Īśvara is the cause but rather that the concurrence is the cause. 
 [9.124cd]
 2. Autonomy is violated
-When assembled, he is powerless not to create,
+>>> When assembled, he is powerless not to create,
 >>> When absent, he is powerless to create.
 The possessor of autonomy subject to conditions is the logical subject. [Contradiction]: it follows that it is not autonomous because of coming under the power of the concurrence of conditions. Through this prasaṅga, it is established a priori that Īśvara is not autonomous, yet your position is that he is autonomous.
 [9.125]
@@ -8511,7 +8516,7 @@ It follows then that his wishes arise from an external power. Being subject to s
 >>> For those who assert sempiternal particles,
 >>> The refutation was completed previously.
 The assertion of particles referred to here is the proposal of a substance as the ultimate cause by certain non-Buddhists, such as the Vaiśeṣikas. The refutation was previously completed in the section concerning the foundation of mindfulness of the body [v86], i.e. [they are not ultimate] because they are refuted by their decomposition into parts.
-[ Image: 9.15.jp2 ]
+
 [9.126cd]
 3. Refuting arising from self
 1.	Formulating the position of the other [i.e. Sāṃkhya] tradition
@@ -8559,7 +8564,7 @@ The pervasion for this inference110 is expressed in the root text:
 >>> Is illogical. There is no such thing.
 [9.128cd]
 2. Refuting its qualities
-‘Nevertheless, the three qualities exist.’
+>>> ‘Nevertheless, the three qualities exist.’
 >>> The three qualities also do not exist
 >>> Because each of them would also have three parts.
 The three qualities are also not real, [450] because there would have to be three parts to each of them, such as a purity of the purity and so forth. 
@@ -8587,14 +8592,14 @@ Refuting this has four parts:
 [9.130ab]
 1. Recalling the logic that was already completed
 9.130
-‘They are caused by the substantial [bare elements].’
+>>> ‘They are caused by the substantial [bare elements].’
 >>> Wasn’t the analysis of such substances already completed?
 If you propose that the five bare elements such as sound are the causes of pleasure and so forth, this would be a cognizable as the cause of cognition and the refutation for this was completed in the section on cognizable arising before cognition. According to the author of the Great Commentary, ‘completed’ here refers to the refutation of existence as atoms, as a composite and as a threefold nature.111
 [9.130cd]
 2. The idea contradicts your own words [451]
 ‘You may have refuted cognizable and cognition as ultimate cause and effect but you did not refute them as relative.’ 
 Nevertheless, if you claim that the cause is the five bare elements and the effect is pleasure and so forth, you contradict your previous position that the primal substance with a threefold nature of pleasure, etc.112 is the cause and the five bare elements are the effect: 
-Also, the pleasure and so forth [in the primal substance] were your causes, [not the bare elements].113
+>>> Also, the pleasure and so forth [in the primal substance] were your causes, [not the bare elements].113
 [9.131ab]
 3. Not preexisting in its basis
 ‘We do not assert that the five bare elements are the causes of pleasure and so forth. The proposition is that the primal substance with the intrinsic nature of pleasure and so forth creates the five bare elements.’
@@ -8681,18 +8686,18 @@ It also follows that to experience the cause would be to experience the effect a
 >>> ‘The worldly fail to see it due to delusion.’
 ‘Although cotton exists in cotton seeds, it is not possible for the worldly to experience it, due to their non-realization, which is based on delusion.’
 Even if the worldly do not experience it due to delusion, for the non-deluded who cognize the truth, such as Kapila, it is a contradiction to wear cotton, but not to wear cotton seeds:
-Yet, someone who knows the reality is in the same predicament 
+>>> Yet, someone who knows the reality is in the same predicament 
 The first line is the objection and the second line is the response. 
 [9.137ab]
 2. Contradictory to worldly confusion 
 9.137
-And, since that knowledge of reality exists even for
+>>> And, since that knowledge of reality exists even for
 >>> The worldly, why do they not see it?
 Taking someone who has worldly delusion as the cause and an omniscient teacher who cognizes the twenty-five basic elements as the effect, since the effect abides within the cause, omniscient cognition already exists for that worldly person; in which case, how come he does not cognize the existence of cotton in cotton seeds?
 [9.137cd]
 3. The consequence that the role of the effect is a delusion
 >>> ‘The worldly do not have valid cognition.’
-Then seeing manifestations would also be untrue.
+>>> Then seeing manifestations would also be untrue.
 If the worldly person does not have valid cognition, he could not experience [454] any manifest effects. If he did see them, they would be false. 
 2. Abandoning objections to the middle way
 According to the Svātantrika perspective, first one must establish the logic that proves there is no ultimate intrinsic nature. Then, in order to abandon the error of inferential valid cognition, it is shown that no positive affirmations are established, and this analysis does not contradict valid cognition. According to the Prāsangika perspective, one simply abandons objections to the teaching that all dharmas have no intrinsic nature.
@@ -8702,8 +8707,8 @@ According to the Svātantrika perspective, first one must establish the logic th
 [9.138]
 1. Setting out the objections
 9.138
-‘If valid cognition is not valid,
-Are its analyses not false?
+>>> ‘If valid cognition is not valid,
+>>> Are its analyses not false?
 1) ‘You Mādhyamikas hold that conceptual thought is relative. If this thought is deluded, it follows that even inferential valid cognition which cuts off elaborations is delusion.’
 2) ‘If the primal substance etc. were not real, since a refutation depends upon something to be refuted and since the object of refutation is not real, it follows that emptiness, which refutes it, is also not real.’
 >>> If reality is emptiness,
@@ -8727,7 +8732,7 @@ Concerning the second prasaṅga, ‘It follows that the cultivation of emptines
 >>> Counters the discrimination that he exists,
 >>> Even though it is false.
 If the son within a dream is false, the discrimination that, ‘Now he has died, so he does not exist’ is also false. Nevertheless, it counters the discrimination that he exists. It functions as an antidote to the imputation that grasps him as existent, in respect of which it is not a delusion. In the same way, the explicit predicate ‘[it] is empty’ negates the object to be negated. Although that positive affirmation of the emptiness of the external object of attachment is itself false, it overcomes the possibility for imputations to arise which could be grasped as existent. In respect of its eliminating imputations grasped as existent, there is no contradiction with the merely analytical aspect of valid cognition. This is the Svātantrika Madhyamaka argument.119 If one applies the Prāsangika Madhyamaka explanation, ‘it is false’ means it is the yogic relative, by which the erroneous understandings of others are refuted.
-[ Image: 9.17.jp2 ]
+
 3. Showing that all dharmas arise merely through dependent origination
 1. A summary of the refutation of the four [kinds of] arising
 2.	Showing that there is no arising or ceasing, coming or going
@@ -8849,8 +8854,8 @@ The nonexistent object is the logical subject:
 1. Freedom from the two extremes
 9.149
 >>> In this way, there is no cessation.
-Nor is there any existence. Because of this,
-All these beings
+>>> Nor is there any existence. Because of this,
+>>> All these beings
 >>> Are forever neither arising nor ceasing.
 Since beings have no cessation, all sentient beings are called ‘always non-ceasing’. Since they have no existence, they are called ‘always non-arising’.
 [9.150ab]
@@ -8864,9 +8869,9 @@ The first line establishes they are deluded perceptions and the second line indi
 >>> In suchness, there is no distinction
 >>> Between nirvāṇa and non-nirvāṇa.
 There is no distinction between saṃsāra and nirvāṇa. In every sense? Only in suchness, i.e. ultimately, they have the single taste of emptiness.
-[ Image: Blank.JPG ]
 
-[ Image: 9.18.jp2 ]
+
+
 5. The result of meditation on emptiness
 This is explained by some127 as follows:
 1.	Benefit of self

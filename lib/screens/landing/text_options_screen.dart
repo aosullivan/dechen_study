@@ -30,6 +30,31 @@ class TextOptionsScreen extends StatefulWidget {
 }
 
 class _TextOptionsScreenState extends State<TextOptionsScreen> {
+  static const String _rootTextPurchaseUrl = 'https://amzn.to/3N1bxAD';
+  static const String _commentaryPurchaseUrl = 'https://amzn.to/3MsRxa5';
+  static const Map<String, String> _amazonBaseByCountryCode = <String, String>{
+    'US': 'https://www.amazon.com',
+    'GB': 'https://www.amazon.co.uk',
+    'UK': 'https://www.amazon.co.uk',
+    'CA': 'https://www.amazon.ca',
+    'AU': 'https://www.amazon.com.au',
+    'DE': 'https://www.amazon.de',
+    'FR': 'https://www.amazon.fr',
+    'IT': 'https://www.amazon.it',
+    'ES': 'https://www.amazon.es',
+    'NL': 'https://www.amazon.nl',
+    'PL': 'https://www.amazon.pl',
+    'SE': 'https://www.amazon.se',
+    'TR': 'https://www.amazon.com.tr',
+    'BR': 'https://www.amazon.com.br',
+    'MX': 'https://www.amazon.com.mx',
+    'IN': 'https://www.amazon.in',
+    'JP': 'https://www.amazon.co.jp',
+    'SG': 'https://www.amazon.sg',
+    'AE': 'https://www.amazon.ae',
+    'SA': 'https://www.amazon.sa',
+  };
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +70,34 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final options = <_StudyModeOption>[
+      _StudyModeOption(
+        icon: Icons.today_outlined,
+        label: 'Daily Verses',
+        onTap: () => _openDaily(context),
+      ),
+      _StudyModeOption(
+        icon: Icons.quiz_outlined,
+        label: 'Guess the Chapter',
+        onTap: () => _openGuessTheChapter(context),
+      ),
+      _StudyModeOption(
+        icon: Icons.fact_check_outlined,
+        label: 'Quiz',
+        onTap: () => _openQuiz(context),
+      ),
+      _StudyModeOption(
+        icon: Icons.book_outlined,
+        label: 'Read',
+        onTap: () => _openRead(context),
+      ),
+      _StudyModeOption(
+        icon: Icons.account_tree_outlined,
+        label: 'Textual Structure',
+        onTap: () => _openOverview(context),
+      ),
+    ];
+
     return PopScope<void>(
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
@@ -56,6 +109,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          toolbarHeight: 52,
           title: Text(
             title,
             style: Theme.of(context).textTheme.titleLarge,
@@ -67,33 +121,32 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
           children: [
-            _OptionTile(
-              icon: Icons.today_outlined,
-              label: 'Daily Verses',
-              onTap: () => _openDaily(context),
-            ),
-            _OptionTile(
-              icon: Icons.quiz_outlined,
-              label: 'Guess the Chapter',
-              onTap: () => _openGuessTheChapter(context),
-            ),
-            _OptionTile(
-              icon: Icons.fact_check_outlined,
-              label: 'Quiz',
-              onTap: () => _openQuiz(context),
-            ),
-            _OptionTile(
-              icon: Icons.book_outlined,
-              label: 'Read',
-              onTap: () => _openRead(context),
-            ),
-            _OptionTile(
-              icon: Icons.account_tree_outlined,
-              label: 'Textual Structure',
-              onTap: () => _openOverview(context),
-            ),
+            if (textId == 'bodhicaryavatara') ...[
+              _BodhicaryavataraTextLandingCard(
+                onBuyRootText: () => _openPurchaseLink(
+                  context,
+                  linkType: 'root_text',
+                  usUrl: _rootTextPurchaseUrl,
+                  localizedSearchTerm: 'Bodhicaryavatara Santideva root text',
+                ),
+                onBuyCommentary: () => _openPurchaseLink(
+                  context,
+                  linkType: 'commentary',
+                  usUrl: _commentaryPurchaseUrl,
+                  localizedSearchTerm:
+                      'Bodhicaryavatara Sonam Tsemo commentary',
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+            for (final option in options)
+              _OptionTile(
+                icon: option.icon,
+                label: option.label,
+                onTap: option.onTap,
+              ),
           ],
         ),
       ),
@@ -197,6 +250,307 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
       ),
     );
   }
+
+  void _openPurchaseLink(
+    BuildContext context, {
+    required String linkType,
+    required String usUrl,
+    required String localizedSearchTerm,
+  }) {
+    final localeCode = Localizations.maybeLocaleOf(context)?.countryCode;
+    final regionalUrl = _resolveRegionalAmazonUrl(
+      usUrl: usUrl,
+      countryCode: localeCode,
+      localizedSearchTerm: localizedSearchTerm,
+    );
+    final opened = openExternalUrl(regionalUrl);
+    unawaited(UsageMetricsService.instance.trackEvent(
+      eventName: 'purchase_link_tapped',
+      textId: textId,
+      mode: 'text_options',
+      properties: {
+        'link_type': linkType,
+        'country_code': localeCode?.toUpperCase(),
+        'target_url': regionalUrl,
+        'opened_in_web': opened,
+      },
+    ));
+    if (!opened) {
+      _showExternalLinkUnavailable(context);
+    }
+  }
+
+  void _showExternalLinkUnavailable(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('External links are currently available on web.'),
+        backgroundColor: AppColors.primary,
+      ),
+    );
+  }
+
+  String _resolveRegionalAmazonUrl({
+    required String usUrl,
+    required String localizedSearchTerm,
+    required String? countryCode,
+  }) {
+    final normalizedCountryCode = countryCode?.toUpperCase().trim();
+    if (normalizedCountryCode == null ||
+        normalizedCountryCode.isEmpty ||
+        normalizedCountryCode == 'US') {
+      return usUrl;
+    }
+
+    final amazonBase = _amazonBaseByCountryCode[normalizedCountryCode];
+    if (amazonBase == null) {
+      return usUrl;
+    }
+
+    final encodedQuery = Uri.encodeQueryComponent(localizedSearchTerm);
+    return '$amazonBase/s?k=$encodedQuery';
+  }
+}
+
+class _BodhicaryavataraTextLandingCard extends StatelessWidget {
+  const _BodhicaryavataraTextLandingCard({
+    required this.onBuyRootText,
+    required this.onBuyCommentary,
+  });
+
+  final VoidCallback onBuyRootText;
+  final VoidCallback onBuyCommentary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      color: AppColors.cardBeige,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: AppColors.borderLight),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth >= 760;
+            if (!isWide) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _BodhicaryavataraTextLandingContent(
+                    onBuyRootText: onBuyRootText,
+                    onBuyCommentary: onBuyCommentary,
+                  ),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 96,
+                      child: _CommentaryBookCard(
+                        onBuyCommentary: onBuyCommentary,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: _BodhicaryavataraTextLandingContent(
+                    onBuyRootText: onBuyRootText,
+                    onBuyCommentary: onBuyCommentary,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                SizedBox(
+                  width: 120,
+                  child: _CommentaryBookCard(
+                    onBuyCommentary: onBuyCommentary,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _BodhicaryavataraTextLandingContent extends StatelessWidget {
+  const _BodhicaryavataraTextLandingContent({
+    required this.onBuyRootText,
+    required this.onBuyCommentary,
+  });
+
+  final VoidCallback onBuyRootText;
+  final VoidCallback onBuyCommentary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'BODHICARYAVATARA • ACARYA SANTIDEVA',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: 12,
+                    letterSpacing: 1.5,
+                    color: AppColors.mutedBrown,
+                  ) ??
+              const TextStyle(
+                fontFamily: 'Crimson Text',
+                fontSize: 12,
+                letterSpacing: 1.5,
+                color: AppColors.mutedBrown,
+              ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Bodhicaryavatara',
+          style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                    fontSize: 34,
+                    height: 1.0,
+                  ) ??
+              const TextStyle(
+                fontFamily: 'Crimson Text',
+                fontSize: 34,
+                height: 1.0,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textDark,
+              ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Study the root text with structure and meaning details based on Sonam Tsemo commentary.',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 15,
+                    height: 1.45,
+                  ) ??
+              const TextStyle(
+                fontFamily: 'Lora',
+                fontSize: 15,
+                height: 1.45,
+                color: AppColors.bodyText,
+              ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Purpose: help you get familiar with chapter flow, structure, and key meaning progressions.',
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 14,
+                    height: 1.4,
+                  ) ??
+              const TextStyle(
+                fontFamily: 'Lora',
+                fontSize: 14,
+                height: 1.4,
+                color: AppColors.bodyText,
+              ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 6,
+          children: [
+            _PurchaseLinkButton(
+              label: 'Root Text',
+              onPressed: onBuyRootText,
+            ),
+            _PurchaseLinkButton(
+              label: 'Commentary',
+              onPressed: onBuyCommentary,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CommentaryBookCard extends StatelessWidget {
+  const _CommentaryBookCard({
+    required this.onBuyCommentary,
+  });
+
+  final VoidCallback onBuyCommentary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onBuyCommentary,
+        borderRadius: BorderRadius.zero,
+        child: AspectRatio(
+          aspectRatio: 348 / 522,
+          child: Image.asset(
+            'assets/bodhicarya.jpg',
+            fit: BoxFit.cover,
+            errorBuilder: (context, _, __) => Container(
+              color: const Color(0xFFB2223B),
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.menu_book_rounded,
+                color: Colors.white,
+                size: 34,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PurchaseLinkButton extends StatelessWidget {
+  const _PurchaseLinkButton({
+    required this.label,
+    required this.onPressed,
+  });
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.textDark,
+        side: const BorderSide(color: AppColors.border, width: 1),
+        backgroundColor: const Color(0xFFF7F1E8),
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+        minimumSize: const Size(1, 30),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        textStyle: const TextStyle(
+          fontFamily: 'Lora',
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+      ),
+      child: Text(label),
+    );
+  }
+}
+
+class _StudyModeOption {
+  const _StudyModeOption({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
 }
 
 class _OptionTile extends StatelessWidget {

@@ -57,6 +57,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - .env
+    - assets/gateway.jpg
+    - assets/bodhicarya.jpg
     - texts/bcv-root
     - texts/bcv_parsed.json
     - texts/verse_commentary_mapping.txt
@@ -65,6 +67,7 @@ flutter:
     - texts/root_text_quiz.txt
     - texts/root_text_quiz_400.txt
     - texts/section_clues.json
+    - texts/overviews_pages_eos.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

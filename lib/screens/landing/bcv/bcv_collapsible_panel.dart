@@ -19,7 +19,7 @@ class BcvPanelHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.cardBeige,
+      color: AppColors.scaffoldBackground,
       child: InkWell(
         onTap: onCollapse,
         child: Container(
@@ -83,7 +83,7 @@ class BcvCollapsedStrip extends StatelessWidget {
     final iconSize = useCompact ? 18.0 : 20.0;
     final displayText = subtitle.isNotEmpty ? '$label: $subtitle' : label;
     return Material(
-      color: AppColors.cardBeige,
+      color: AppColors.scaffoldBackground,
       child: InkWell(
         onTap: onTap,
         child: Container(

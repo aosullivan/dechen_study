@@ -32,7 +32,7 @@ class BcvMobileNavBar extends StatelessWidget {
           color: AppColors.textDark,
         );
     return Material(
-      color: AppColors.cardBeige,
+      color: AppColors.scaffoldBackground,
       child: Container(
         height: BcvReadConstants.mobileNavBarHeight,
         decoration: BoxDecoration(

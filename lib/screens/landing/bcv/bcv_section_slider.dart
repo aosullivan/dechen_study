@@ -104,7 +104,7 @@ class BcvSectionSlider extends StatelessWidget {
     return Container(
       height: sliderHeight,
       decoration: BoxDecoration(
-        color: AppColors.cardBeige,
+        color: AppColors.scaffoldBackground,
         border: Border(
           bottom: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
         ),

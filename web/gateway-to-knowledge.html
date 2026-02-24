@@ -1433,5 +1433,47 @@
       </section>
     </div>
   </main>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const chapterParam = params.get('chapter');
+      const chapterNumber = Number(chapterParam);
+      if (!Number.isInteger(chapterNumber) || chapterNumber <= 0) return;
+
+      const chapterId = `chapter-${chapterNumber}`;
+      const selectedChapter = document.getElementById(chapterId);
+      if (!selectedChapter) return;
+
+      document.body.classList.add('single-chapter-view');
+
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar) sidebar.style.display = 'none';
+
+      const chapterNav = document.getElementById('chapter-nav');
+      if (chapterNav) chapterNav.style.display = 'none';
+
+      const chapters = document.querySelectorAll('article.chapter');
+      chapters.forEach((chapter) => {
+        chapter.style.display = chapter.id === chapterId ? '' : 'none';
+      });
+
+      const layout = document.querySelector('.layout');
+      if (layout) layout.style.gridTemplateColumns = '1fr';
+
+      const primaryButton = document.querySelector('.hero-actions .btn-primary');
+      if (primaryButton) primaryButton.setAttribute('href', `#${chapterId}`);
+
+      const secondaryButton = document.querySelector('.hero-actions .btn-secondary');
+      if (secondaryButton) {
+        secondaryButton.setAttribute('href', 'gateway-to-knowledge.html');
+        secondaryButton.textContent = 'All Chapters';
+      }
+
+      const heading = selectedChapter.querySelector('.chapter-header h2');
+      if (heading && heading.textContent) {
+        document.title = `${heading.textContent.trim()} - Gateway to Knowledge`;
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -2,6 +2,14 @@ bool openGatewayToKnowledgePage() {
   return false;
 }
 
+bool openGatewayChapterPage(int chapterNumber) {
+  return false;
+}
+
+bool openExternalUrl(String url) {
+  return false;
+}
+
 String currentAppPath() {
   return '/';
 }

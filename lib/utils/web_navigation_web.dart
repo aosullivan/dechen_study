@@ -8,6 +8,24 @@ bool openGatewayToKnowledgePage() {
   return true;
 }
 
+bool openGatewayChapterPage(int chapterNumber) {
+  if (chapterNumber <= 0) return false;
+  final url = Uri.base
+      .resolve('gateway-to-knowledge.html?chapter=$chapterNumber')
+      .toString();
+  html.window.location.assign(url);
+  return true;
+}
+
+bool openExternalUrl(String url) {
+  final parsed = Uri.tryParse(url);
+  if (parsed == null || !parsed.hasScheme || !parsed.hasAuthority) {
+    return false;
+  }
+  html.window.open(parsed.toString(), '_blank');
+  return true;
+}
+
 String currentAppPath() {
   final path = Uri.base.path;
   return _normalizePath(path);

@@ -19,7 +19,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(TextOptionsScreen), findsOneWidget);
+    expect(find.text('Bodhicaryavatara'), findsWidgets);
+    expect(find.text('Root Text'), findsOneWidget);
     expect(find.text('Guess the Chapter'), findsOneWidget);
-    expect(find.text('Read'), findsOneWidget);
   });
 }

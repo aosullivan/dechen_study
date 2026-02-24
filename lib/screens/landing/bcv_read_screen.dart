@@ -1647,7 +1647,7 @@ class _BcvReadScreenState extends State<BcvReadScreen>
         : '';
     final centerLabel = sectionTitle.isNotEmpty ? sectionTitle : 'Section';
     return Material(
-      color: AppColors.cardBeige,
+      color: AppColors.scaffoldBackground,
       child: SafeArea(
         top: false,
         child: Container(
@@ -2615,7 +2615,7 @@ class _BcvReadScreenState extends State<BcvReadScreen>
             width: _rightPanelsWidth,
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.cardBeige,
+                color: AppColors.scaffoldBackground,
                 border: Border(
                   left: BorderSide(
                       color: AppColors.border.withValues(alpha: 0.5)),

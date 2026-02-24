@@ -7,9 +7,9 @@ import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
+import 'gateway_landing_screen.dart';
 import 'text_options_screen.dart';
 
-/// dechen.study-style landing: light yellow background, text cards with Details button.
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
 
@@ -23,7 +23,6 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   void initState() {
     super.initState();
-    // Pre-warm heavy assets so the read screen opens instantly.
     BcvVerseService.instance.preload();
     VerseHierarchyService.instance.preload();
   }
@@ -48,7 +47,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 const SizedBox(height: 20),
                 _TextLandingCard(
                   title: 'Bodhicaryavatara',
-                  author: 'SANTIDEVA',
+                  author: 'ACARYA SANTIDEVA',
                   onTap: () => _openTextOptions(context),
                 ),
               ],
@@ -77,21 +76,17 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   void _openGatewayToKnowledge(BuildContext context) {
-    final opened = openGatewayToKnowledgePage();
+    pushAppPath('/gateway-to-knowledge');
     unawaited(UsageMetricsService.instance.trackEvent(
       eventName: 'text_opened',
       textId: 'gateway_to_knowledge',
-      mode: 'external_web',
-      properties: {'opened_in_web': opened},
+      mode: 'text_options',
     ));
-    if (!opened) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Gateway to Knowledge is currently available on web.'),
-          backgroundColor: AppColors.primary,
-        ),
-      );
-    }
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const GatewayLandingScreen(),
+      ),
+    );
   }
 }
 
@@ -169,7 +164,6 @@ class _TextLandingCard extends StatelessWidget {
   }
 }
 
-/// Black button with white "Details" text and concave left edge (dechen.study style).
 class _DetailsButton extends StatelessWidget {
   const _DetailsButton({required this.onPressed});
 
@@ -206,9 +200,8 @@ class _ConcaveLeftButtonClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     const radius = 8.0;
-    const indent = 12.0; // how far right the concave dip goes
+    const indent = 12.0;
     final path = Path();
-    // Start at top-left (after small curve)
     path.moveTo(indent, 0);
     path.lineTo(size.width - radius, 0);
     path.arcToPoint(
@@ -221,7 +214,6 @@ class _ConcaveLeftButtonClipper extends CustomClipper<Path> {
       radius: const Radius.circular(radius),
     );
     path.lineTo(indent, size.height);
-    // Concave curve on the left: bulge inward (to the right)
     path.quadraticBezierTo(
       indent + 16,
       size.height * 0.5,
