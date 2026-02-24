@@ -110,7 +110,6 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
   }
 
   void _openChapter(BuildContext context, GatewayOutlineChapter chapter) {
-    final opened = openGatewayChapterPage(chapter.number);
     unawaited(UsageMetricsService.instance.trackEvent(
       eventName: 'gateway_chapter_opened',
       textId: 'gateway_to_knowledge',
@@ -118,11 +117,9 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
       chapterNumber: chapter.number,
       properties: {
         'chapter_title': chapter.title,
-        'opened_in_web': opened,
+        'opened_in_web': false,
       },
     ));
-    if (opened) return;
-
     pushAppPath('/gateway-to-knowledge/chapter-${chapter.number}');
     Navigator.of(context).push(
       MaterialPageRoute<void>(

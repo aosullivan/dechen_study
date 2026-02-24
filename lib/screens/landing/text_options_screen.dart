@@ -457,7 +457,7 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
         ),
         SizedBox(height: compact ? 3 : 8),
         Text(
-          'Read, explore the textual structure, reflect with daily verses, and quiz yourself. Commentary included.',
+          'Read, explore the root text, reflect with daily verses, and quiz yourself. The root text is presented in a structured format according to the commentary by Sonam Tsemo.',
           maxLines: compact ? 2 : null,
           overflow: compact ? TextOverflow.ellipsis : null,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
