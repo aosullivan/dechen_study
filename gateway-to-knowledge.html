@@ -43,6 +43,14 @@
       scroll-behavior: smooth;
     }
 
+    body {
+      padding-top: 56px;
+    }
+
+    body.embedded-view {
+      padding-top: 0;
+    }
+
     h1, h2, h3, h4 {
       color: var(--ink);
       font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
@@ -61,6 +69,51 @@
     .shell {
       width: min(1260px, calc(100% - 28px));
       margin: 22px auto 34px;
+    }
+
+    .top-banner {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      z-index: 1400;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      background: var(--bg);
+      border-bottom: 1px solid #d8c9b4;
+      box-shadow: 0 2px 8px rgba(44, 36, 22, 0.08);
+    }
+
+    .page-back-btn {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      padding: 0;
+      border-radius: 999px;
+      color: var(--ink);
+      border: 1px solid #d8c9b4;
+      background: rgba(255, 253, 248, 0.88);
+      transition: background-color 160ms ease;
+      cursor: pointer;
+    }
+
+    .page-back-btn:hover {
+      background: #f7ecdb;
+    }
+
+    .page-back-btn svg {
+      width: 30px;
+      height: 30px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .hero {
@@ -295,6 +348,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 12px;
       padding-bottom: 10px;
       border-bottom: 1px solid #ebdfcf;
@@ -303,6 +357,27 @@
     .chapter-header h2 {
       font-size: clamp(1.35rem, 2.3vw, 1.9rem);
       font-weight: 600;
+      flex: 1 1 320px;
+    }
+
+    .chapter-picker-link {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-pill);
+      background: #fffefb;
+      color: var(--ink);
+      font-size: 0.82rem;
+      line-height: 1;
+      padding: 7px 11px;
+      transition: border-color 180ms ease, transform 150ms ease;
+    }
+
+    .chapter-picker-link:hover {
+      border-color: var(--primary-soft);
+      transform: translateY(-1px);
     }
 
     .topic {
@@ -630,6 +705,52 @@
       color: var(--ink);
     }
 
+    .chapter-picker-fab {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line-strong);
+      background: var(--paper-strong);
+      color: var(--ink);
+      box-shadow: var(--shadow-lite);
+      padding: 9px 13px;
+      font-size: 0.88rem;
+    }
+
+    body.embedded-view .top-banner,
+    body.embedded-view .hero,
+    body.embedded-view .sidebar,
+    body.embedded-view #chapter-nav,
+    body.embedded-view .chapter-picker-link,
+    body.embedded-view .chapter-picker-fab,
+    body.embedded-view .back-to-top {
+      display: none !important;
+    }
+
+    body.embedded-view .shell {
+      width: min(1260px, calc(100% - 12px));
+      margin: 6px auto 14px;
+    }
+
+    body.embedded-view .layout {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    body.embedded-view .chapter {
+      margin-bottom: 0;
+    }
+
+    body.single-chapter-view .chapter-picker-fab {
+      display: inline-flex;
+    }
+
     @media (max-width: 1020px) {
       .layout {
         grid-template-columns: 1fr;
@@ -654,6 +775,25 @@
         margin-top: 8px;
       }
 
+      body {
+        padding-top: 52px;
+      }
+
+      .top-banner {
+        height: 52px;
+        padding: 0 8px;
+      }
+
+      .page-back-btn {
+        width: 36px;
+        height: 36px;
+      }
+
+      .page-back-btn svg {
+        width: 28px;
+        height: 28px;
+      }
+
       .hero {
         border-radius: 14px;
       }
@@ -670,11 +810,22 @@
         border-radius: 12px;
       }
 
+      .chapter-picker-link {
+        margin-left: 0;
+      }
+
       .sense-grid,
       .links-grid,
       .duality-grid,
       .icon-list-grid {
         grid-template-columns: 1fr;
+      }
+
+      .chapter-picker-fab {
+        right: 10px;
+        bottom: 10px;
+        padding: 8px 11px;
+        font-size: 0.82rem;
       }
 
       table {
@@ -902,6 +1053,10 @@
       <path d="M12 5.5c1.8 0 3-.8 3.7-2"></path>
       <path d="M8.2 10.3c1.8-.7 3.5-.2 4.8 1.1"></path>
     </symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24">
+      <path d="M20 12H4"></path>
+      <path d="m11 5-7 7 7 7"></path>
+    </symbol>
     <symbol id="i-arrow-up" viewBox="0 0 24 24">
       <path d="m6 10 6-6 6 6"></path>
       <path d="M12 4v16"></path>
@@ -909,6 +1064,11 @@
   </svg>
 
   <a id="top"></a>
+  <header class="top-banner" aria-label="Page header">
+    <button id="page-back-button" class="page-back-btn" type="button" aria-label="Back">
+      <svg viewBox="0 0 24 24"><use href="#i-arrow-left"></use></svg>
+    </button>
+  </header>
   <main class="shell">
     <header class="hero">
       <p class="eyebrow">Khyen Jug Overview</p>
@@ -979,6 +1139,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-stack"></use></svg></span>
             <h2>Chapter 1 - The Aggregates (Skandhas)</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1133,6 +1294,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>
             <h2>Chapter 2 - The Elements (Dhatu)</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1217,6 +1379,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>
             <h2>Chapter 3 - The Sense Sources (Ayatana)</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1285,6 +1448,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>
             <h2>Chapter 4 - Dependent Origination</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1433,5 +1597,228 @@
       </section>
     </div>
   </main>
+  <script>
+    (function () {
+      const initialParams = new URLSearchParams(window.location.search);
+      const isEmbedded = initialParams.get('embed') === '1';
+      if (isEmbedded) {
+        document.body.classList.add('embedded-view');
+      }
+
+      const backButton = document.getElementById('page-back-button');
+      const sidebar = document.querySelector('.sidebar');
+      const chapterNav = document.getElementById('chapter-nav');
+      const layout = document.querySelector('.layout');
+      const chapters = Array.from(document.querySelectorAll('article.chapter'));
+      const primaryButton = document.querySelector('.hero-actions .btn-primary');
+      const secondaryButton = document.querySelector('.hero-actions .btn-secondary');
+      const chapterPickerLinks =
+          Array.from(document.querySelectorAll('.chapter-picker-link'));
+      let pickerFab = document.querySelector('.chapter-picker-fab');
+      if (!pickerFab) {
+        pickerFab = document.createElement('a');
+        pickerFab.className = 'chapter-picker-fab';
+        pickerFab.href = 'gateway-to-knowledge.html';
+        pickerFab.innerHTML = '<span>Back to Start Page</span>';
+        document.body.appendChild(pickerFab);
+      }
+
+      const chapterSelectLinks = Array.from(
+        document.querySelectorAll('.chapter-chip, .side-link')
+      );
+
+      function chapterFromHref(href) {
+        if (!href) return null;
+        const match = href.match(/^#chapter-(\d+)$/);
+        if (!match) return null;
+        const value = Number(match[1]);
+        if (!Number.isInteger(value) || value <= 0) return null;
+        return value;
+      }
+
+      function chapterFromQuery() {
+        const params = new URLSearchParams(window.location.search);
+        const value = Number(params.get('chapter'));
+        if (!Number.isInteger(value) || value <= 0) return null;
+        return value;
+      }
+
+      function chapterListUrl() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('chapter');
+        url.hash = '';
+        const search = url.search ? url.search : '';
+        return `${url.pathname}${search}`;
+      }
+
+      function chapterUrl(chapterNumber) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('chapter', String(chapterNumber));
+        url.hash = '';
+        return `${url.pathname}${url.search}`;
+      }
+
+      function renderChapterListView() {
+        document.body.classList.remove('single-chapter-view');
+        if (sidebar) sidebar.style.display = '';
+        if (chapterNav) chapterNav.style.display = '';
+        if (layout) layout.style.gridTemplateColumns = '';
+        for (const chapter of chapters) chapter.style.display = '';
+
+        if (primaryButton) primaryButton.setAttribute('href', '#chapter-1');
+        if (secondaryButton) {
+          secondaryButton.setAttribute('href', '#chapter-nav');
+          secondaryButton.textContent = 'Jump to Chapter';
+        }
+        for (const link of chapterPickerLinks) {
+          link.setAttribute('href', '#chapter-nav');
+          link.textContent = 'Chapter Picker';
+        }
+        if (pickerFab) pickerFab.setAttribute('href', '#chapter-nav');
+
+        document.title = 'Gateway to Knowledge - Overview';
+      }
+
+      function renderSingleChapterView(chapterNumber) {
+        const chapterId = `chapter-${chapterNumber}`;
+        const selectedChapter = document.getElementById(chapterId);
+        if (!selectedChapter) {
+          renderChapterListView();
+          return false;
+        }
+
+        document.body.classList.add('single-chapter-view');
+        if (sidebar) sidebar.style.display = 'none';
+        if (chapterNav) chapterNav.style.display = 'none';
+        if (layout) layout.style.gridTemplateColumns = '1fr';
+        for (const chapter of chapters) {
+          chapter.style.display = chapter.id === chapterId ? '' : 'none';
+        }
+
+        if (primaryButton) primaryButton.setAttribute('href', `#${chapterId}`);
+        if (secondaryButton) {
+          secondaryButton.setAttribute('href', chapterListUrl());
+          secondaryButton.textContent = 'Back to Start Page';
+        }
+        for (const link of chapterPickerLinks) {
+          link.setAttribute('href', chapterListUrl());
+          link.textContent = 'Back to Start Page';
+        }
+        if (pickerFab) pickerFab.setAttribute('href', chapterListUrl());
+
+        const heading = selectedChapter.querySelector('.chapter-header h2');
+        if (heading && heading.textContent) {
+          document.title = `${heading.textContent.trim()} - Gateway to Knowledge`;
+        }
+        return true;
+      }
+
+      function openChapter(chapterNumber) {
+        if (!renderSingleChapterView(chapterNumber)) return;
+        if (isEmbedded) return;
+        window.history.pushState(
+          {
+            gatewayView: 'chapter',
+            chapterNumber,
+            fromChapterList: true,
+          },
+          '',
+          chapterUrl(chapterNumber)
+        );
+      }
+
+      function openChapterList({ replaceHistory = false } = {}) {
+        renderChapterListView();
+        if (isEmbedded) return;
+        const method = replaceHistory ? 'replaceState' : 'pushState';
+        window.history[method](
+          { gatewayView: 'chapters' },
+          '',
+          chapterListUrl()
+        );
+      }
+
+      function renderFromLocation({ replaceHistory = false } = {}) {
+        const chapterNumber = chapterFromQuery();
+        if (isEmbedded) {
+          if (chapterNumber == null) {
+            renderChapterListView();
+          } else {
+            renderSingleChapterView(chapterNumber);
+          }
+          return;
+        }
+        if (chapterNumber == null) {
+          renderChapterListView();
+          if (replaceHistory || window.history.state?.gatewayView !== 'chapters') {
+            window.history.replaceState(
+              { gatewayView: 'chapters' },
+              '',
+              chapterListUrl()
+            );
+          }
+          return;
+        }
+        if (!renderSingleChapterView(chapterNumber)) {
+          openChapterList({ replaceHistory: true });
+          return;
+        }
+        if (replaceHistory || window.history.state?.gatewayView !== 'chapter') {
+          window.history.replaceState(
+            {
+              gatewayView: 'chapter',
+              chapterNumber,
+              fromChapterList: false,
+            },
+            '',
+            chapterUrl(chapterNumber)
+          );
+        }
+      }
+
+      for (const link of chapterSelectLinks) {
+        link.addEventListener('click', (event) => {
+          const chapterNumber = chapterFromHref(link.getAttribute('href'));
+          if (chapterNumber == null) return;
+          event.preventDefault();
+          openChapter(chapterNumber);
+        });
+      }
+
+      const chapterListLinks = [secondaryButton, ...chapterPickerLinks, pickerFab]
+          .filter(Boolean);
+      for (const link of chapterListLinks) {
+        link.addEventListener('click', (event) => {
+          if (!document.body.classList.contains('single-chapter-view')) return;
+          event.preventDefault();
+          openChapterList();
+        });
+      }
+
+      if (backButton && !isEmbedded) {
+        backButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (document.body.classList.contains('single-chapter-view')) {
+            const state = window.history.state;
+            if (state?.gatewayView === 'chapter' && state?.fromChapterList) {
+              window.history.back();
+            } else {
+              openChapterList({ replaceHistory: true });
+            }
+            return;
+          }
+          window.history.back();
+        });
+      }
+
+      if (!isEmbedded) {
+        window.addEventListener('popstate', () => {
+          renderFromLocation();
+        });
+      }
+
+      renderFromLocation({ replaceHistory: true });
+    })();
+  </script>
 </body>
 </html>

@@ -51,8 +51,7 @@
               "title": "The condensed meaning of discarding pride",
               "path": "1.2.3",
               "verses": [
-                "1.1",
-                "1,2",
+                "1.2",
                 "1.3"
               ],
               "children": []
@@ -81,24 +80,20 @@
                   "title": "Setting out the subject matter to be elaborated",
                   "path": "1.3.2.1",
                   "verses": [
-                    "1.1c"
+                    "1.1cd"
                   ],
                   "children": []
                 },
                 {
                   "title": "Abandoning personal invention",
                   "path": "1.3.2.2",
-                  "verses": [
-                    "1.1d"
-                  ],
+                  "verses": [],
                   "children": []
                 },
                 {
                   "title": "Abandoning the fault of repetition",
                   "path": "1.3.2.3",
-                  "verses": [
-                    "1.1d"
-                  ],
+                  "verses": [],
                   "children": []
                 }
               ]
@@ -106,30 +101,27 @@
             {
               "title": "The literal meaning of discarding pride",
               "path": "1.3.3",
-              "verses": [],
+              "verses": [
+                "1.2",
+                "1.3"
+              ],
               "children": [
                 {
                   "title": "The understanding of others is not the primary goal",
                   "path": "1.3.3.1",
-                  "verses": [
-                    "1.2"
-                  ],
+                  "verses": [],
                   "children": []
                 },
                 {
                   "title": "The author’s own understanding is the primary goal",
                   "path": "1.3.3.2",
-                  "verses": [
-                    "1.3ab"
-                  ],
+                  "verses": [],
                   "children": []
                 },
                 {
                   "title": "Yet, in dependence upon that, there is benefit for others",
                   "path": "1.3.3.3",
-                  "verses": [
-                    "1.3cd"
-                  ],
+                  "verses": [],
                   "children": []
                 }
               ]
@@ -172,38 +164,16 @@
         {
           "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments",
           "path": "2.1",
-          "verses": [],
-          "children": [
-            {
-              "title": "Their nature",
-              "path": "2.1.1",
-              "verses": [
-                "1.4ab"
-              ],
-              "children": []
-            },
-            {
-              "title": "Difficult to acquire",
-              "path": "2.1.2",
-              "verses": [],
-              "children": []
-            },
-            {
-              "title": "The extent of the benefits it brings",
-              "path": "2.1.3",
-              "verses": [
-                "1.4cd"
-              ],
-              "children": []
-            }
-          ]
+          "verses": [
+            "1.4"
+          ],
+          "children": []
         },
         {
           "title": "The mental basis: meritorious intelligence",
           "path": "2.2",
           "verses": [
-            "1.5ab",
-            "1.5cd"
+            "1.5"
           ],
           "children": []
         }
@@ -8581,34 +8551,6 @@
     }
   ],
   "verseToPath": {
-    "1,2": [
-      {
-        "section": "1",
-        "title": "The purposes and relation"
-      },
-      {
-        "section": "1.2",
-        "title": "The condensed meaning of each section"
-      },
-      {
-        "section": "1.2.3",
-        "title": "The condensed meaning of discarding pride"
-      }
-    ],
-    "1.1": [
-      {
-        "section": "1",
-        "title": "The purposes and relation"
-      },
-      {
-        "section": "1.2",
-        "title": "The condensed meaning of each section"
-      },
-      {
-        "section": "1.2.3",
-        "title": "The condensed meaning of discarding pride"
-      }
-    ],
     "1.10": [
       {
         "section": "3",
@@ -8877,8 +8819,8 @@
         "title": "The literal meaning of the commitment to compose"
       },
       {
-        "section": "1.3.2.2",
-        "title": "Abandoning personal invention"
+        "section": "1.3.2.1",
+        "title": "Setting out the subject matter to be elaborated"
       }
     ],
     "1.2": [
@@ -8893,10 +8835,34 @@
       {
         "section": "1.3.3",
         "title": "The literal meaning of discarding pride"
+      }
+    ],
+    "1.2abc": [
+      {
+        "section": "1",
+        "title": "The purposes and relation"
       },
       {
-        "section": "1.3.3.1",
-        "title": "The understanding of others is not the primary goal"
+        "section": "1.3",
+        "title": "The literal meaning of each section"
+      },
+      {
+        "section": "1.3.3",
+        "title": "The literal meaning of discarding pride"
+      }
+    ],
+    "1.2d": [
+      {
+        "section": "1",
+        "title": "The purposes and relation"
+      },
+      {
+        "section": "1.3",
+        "title": "The literal meaning of each section"
+      },
+      {
+        "section": "1.3.3",
+        "title": "The literal meaning of discarding pride"
       }
     ],
     "1.20": [
@@ -9169,12 +9135,12 @@
         "title": "The purposes and relation"
       },
       {
-        "section": "1.2",
-        "title": "The condensed meaning of each section"
+        "section": "1.3",
+        "title": "The literal meaning of each section"
       },
       {
-        "section": "1.2.3",
-        "title": "The condensed meaning of discarding pride"
+        "section": "1.3.3",
+        "title": "The literal meaning of discarding pride"
       }
     ],
     "1.30": [
@@ -9373,10 +9339,6 @@
       {
         "section": "1.3.3",
         "title": "The literal meaning of discarding pride"
-      },
-      {
-        "section": "1.3.3.2",
-        "title": "The author’s own understanding is the primary goal"
       }
     ],
     "1.3cd": [
@@ -9391,10 +9353,6 @@
       {
         "section": "1.3.3",
         "title": "The literal meaning of discarding pride"
-      },
-      {
-        "section": "1.3.3.3",
-        "title": "Yet, in dependence upon that, there is benefit for others"
       }
     ],
     "1.4ab": [
@@ -9405,10 +9363,6 @@
       {
         "section": "2.1",
         "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments"
-      },
-      {
-        "section": "2.1.1",
-        "title": "Their nature"
       }
     ],
     "1.4cd": [
@@ -9419,10 +9373,6 @@
       {
         "section": "2.1",
         "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments"
-      },
-      {
-        "section": "2.1.3",
-        "title": "The extent of the benefits it brings"
       }
     ],
     "1.5ab": [
@@ -39984,11 +39934,49 @@
         "section": "4.6.2.1.1.3",
         "title": "The valid cognitions which ascertain those characteristics"
       }
+    ],
+    "1.1cd": [
+      {
+        "section": "1",
+        "title": "The purposes and relation"
+      },
+      {
+        "section": "1.3",
+        "title": "The literal meaning of each section"
+      },
+      {
+        "section": "1.3.2",
+        "title": "The literal meaning of the commitment to compose"
+      },
+      {
+        "section": "1.3.2.1",
+        "title": "Setting out the subject matter to be elaborated"
+      }
+    ],
+    "1.4": [
+      {
+        "section": "2",
+        "title": "The primary basis: the individual person"
+      },
+      {
+        "section": "2.1",
+        "title": "The bodily basis: the difficulty of acquiring the freedoms and endowments"
+      }
+    ],
+    "1.5": [
+      {
+        "section": "2",
+        "title": "The primary basis: the individual person"
+      },
+      {
+        "section": "2.2",
+        "title": "The mental basis: meritorious intelligence"
+      }
     ]
   },
   "sectionToFirstVerse": {
     "1": "1.1",
-    "2": "1.4ab",
+    "2": "1.4",
     "3": "1.6ab",
     "4": "4.1",
     "5": "10.1",
@@ -39996,29 +39984,21 @@
     "1.1.1": "1.1",
     "1.1.2": "1.1",
     "1.1.3": "1.1",
-    "1.2": "1.1",
-    "1.2.1": "1.1",
-    "1.2.2": "1.1",
-    "1.2.3": "1.1",
+    "1.2": "1.2",
+    "1.2.1": "1.2",
+    "1.2.2": "1.2",
+    "1.2.3": "1.2",
     "1.3": "1.1ab",
     "1.3.1": "1.1ab",
-    "1.3.2": "1.1c",
-    "1.3.2.1": "1.1c",
-    "1.3.2.2": "1.1d",
-    "1.3.2.3": "1.1d",
+    "1.3.2": "1.1cd",
+    "1.3.2.1": "1.1cd",
     "1.3.3": "1.2",
-    "1.3.3.1": "1.2",
-    "1.3.3.2": "1.3ab",
-    "1.3.3.3": "1.3cd",
     "1.4": "1.1",
     "1.4.1": "1.1",
     "1.4.1.2": "1.1",
     "1.4.1.3": "1.1",
-    "2.1": "1.4ab",
-    "2.1.1": "1.4ab",
-    "2.1.2": "1.4ab",
-    "2.1.3": "1.4cd",
-    "2.2": "1.5ab",
+    "2.1": "1.4",
+    "2.2": "1.5",
     "3.1": "1.6ab",
     "3.1.1": "1.6ab",
     "3.1.1.1": "1.6ab",
