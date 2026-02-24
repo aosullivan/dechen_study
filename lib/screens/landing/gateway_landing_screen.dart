@@ -79,20 +79,6 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
               padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
               children: [
                 _GatewayHeroCard(),
-                const SizedBox(height: 14),
-                Text(
-                  '${chapters.length} Chapter Breakdowns',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                          ) ??
-                      const TextStyle(
-                        fontFamily: 'Crimson Text',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
-                      ),
-                ),
                 const SizedBox(height: 10),
                 _GatewayChapterGrid(
                   chapters: chapters,
@@ -162,70 +148,68 @@ class _GatewayHeroCard extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 760;
-            final text = Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'KHYEN JUG OVERVIEW',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontSize: 12,
-                              letterSpacing: 1.6,
-                              color: AppColors.mutedBrown,
-                            ) ??
-                        const TextStyle(
-                          fontFamily: 'Crimson Text',
-                          fontSize: 12,
-                          letterSpacing: 1.6,
-                          color: AppColors.mutedBrown,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Gateway to Knowledge',
-                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                              fontSize: 38,
-                              height: 1,
-                            ) ??
-                        const TextStyle(
-                          fontFamily: 'Crimson Text',
-                          fontSize: 38,
-                          height: 1,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.textDark,
-                        ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Jamgon Ju Mipham',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontSize: 18,
-                              letterSpacing: 1.1,
-                              color: AppColors.mutedBrown,
-                            ) ??
-                        const TextStyle(
-                          fontFamily: 'Crimson Text',
-                          fontSize: 18,
-                          letterSpacing: 1.1,
-                          color: AppColors.mutedBrown,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Choose a chapter breakdown. Each button opens its own chapter page.',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontSize: 15,
-                              height: 1.45,
-                            ) ??
-                        const TextStyle(
-                          fontFamily: 'Lora',
-                          fontSize: 15,
-                          height: 1.45,
-                          color: AppColors.bodyText,
-                        ),
-                  ),
-                ],
-              ),
+            final text = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'KHYEN JUG OVERVIEW',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontSize: 12,
+                            letterSpacing: 1.6,
+                            color: AppColors.mutedBrown,
+                          ) ??
+                      const TextStyle(
+                        fontFamily: 'Crimson Text',
+                        fontSize: 12,
+                        letterSpacing: 1.6,
+                        color: AppColors.mutedBrown,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Gateway to Knowledge',
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                            fontSize: 38,
+                            height: 1,
+                          ) ??
+                      const TextStyle(
+                        fontFamily: 'Crimson Text',
+                        fontSize: 38,
+                        height: 1,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textDark,
+                      ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Jamgon Ju Mipham',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontSize: 18,
+                            letterSpacing: 1.1,
+                            color: AppColors.mutedBrown,
+                          ) ??
+                      const TextStyle(
+                        fontFamily: 'Crimson Text',
+                        fontSize: 18,
+                        letterSpacing: 1.1,
+                        color: AppColors.mutedBrown,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Choose a chapter breakdown. Each button opens its own chapter page.',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 15,
+                            height: 1.45,
+                          ) ??
+                      const TextStyle(
+                        fontFamily: 'Lora',
+                        fontSize: 15,
+                        height: 1.45,
+                        color: AppColors.bodyText,
+                      ),
+                ),
+              ],
             );
 
             final cover = SizedBox(
@@ -247,7 +231,7 @@ class _GatewayHeroCard extends StatelessWidget {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                text,
+                Expanded(child: text),
                 const SizedBox(width: 16),
                 cover,
               ],
@@ -337,15 +321,16 @@ class _GatewayCoverImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1,
+      aspectRatio: 907 / 1360,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.zero,
           border: Border.all(color: AppColors.borderLight),
+          color: const Color(0xFFF6F2EB),
         ),
         child: Image.asset(
           'assets/gateway.jpg',
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
           errorBuilder: (context, _, __) {
             return Container(
               color: const Color(0xFFA4B8CF),

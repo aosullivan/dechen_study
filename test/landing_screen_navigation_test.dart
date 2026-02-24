@@ -20,7 +20,44 @@ void main() {
 
     expect(find.byType(TextOptionsScreen), findsOneWidget);
     expect(find.text('Bodhicaryavatara'), findsWidgets);
-    expect(find.text('Root Text'), findsOneWidget);
     expect(find.text('Guess the Chapter'), findsOneWidget);
+
+    await tester.scrollUntilVisible(
+      find.text('Purchase root text'),
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Purchase root text'), findsOneWidget);
+  });
+
+  testWidgets('tapping Bodhicaryavatara cover image opens read flow',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: LandingScreen(),
+      ),
+    );
+
+    await tester.tap(find.text('Bodhicaryavatara').first);
+    await tester.pumpAndSettle();
+
+    final coverImageFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Image &&
+          widget.image is AssetImage &&
+          (widget.image as AssetImage).assetName == 'assets/bodhicarya.jpg',
+    );
+    expect(coverImageFinder, findsOneWidget);
+
+    final coverTapTarget = find
+        .ancestor(of: coverImageFinder, matching: find.byType(InkWell))
+        .first;
+    await tester.tap(coverTapTarget);
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.byType(TextOptionsScreen), findsNothing);
+    expect(find.text('Guess the Chapter'), findsNothing);
   });
 }

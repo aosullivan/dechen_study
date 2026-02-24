@@ -63,6 +63,39 @@
       margin: 22px auto 34px;
     }
 
+    .page-back-btn {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 1400;
+      width: 62px;
+      height: 62px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--ink);
+      border-right: 1px solid #d8c9b4;
+      border-bottom: 1px solid #d8c9b4;
+      background: var(--bg);
+      box-shadow: 0 2px 8px rgba(44, 36, 22, 0.08);
+      transition: background-color 160ms ease;
+    }
+
+    .page-back-btn:hover {
+      background: #f1e5d0;
+    }
+
+    .page-back-btn svg {
+      width: 34px;
+      height: 34px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     .hero {
       position: relative;
       overflow: hidden;
@@ -295,6 +328,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 12px;
       padding-bottom: 10px;
       border-bottom: 1px solid #ebdfcf;
@@ -303,6 +337,27 @@
     .chapter-header h2 {
       font-size: clamp(1.35rem, 2.3vw, 1.9rem);
       font-weight: 600;
+      flex: 1 1 320px;
+    }
+
+    .chapter-picker-link {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-pill);
+      background: #fffefb;
+      color: var(--ink);
+      font-size: 0.82rem;
+      line-height: 1;
+      padding: 7px 11px;
+      transition: border-color 180ms ease, transform 150ms ease;
+    }
+
+    .chapter-picker-link:hover {
+      border-color: var(--primary-soft);
+      transform: translateY(-1px);
     }
 
     .topic {
@@ -630,6 +685,28 @@
       color: var(--ink);
     }
 
+    .chapter-picker-fab {
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line-strong);
+      background: var(--paper-strong);
+      color: var(--ink);
+      box-shadow: var(--shadow-lite);
+      padding: 9px 13px;
+      font-size: 0.88rem;
+    }
+
+    body.single-chapter-view .chapter-picker-fab {
+      display: inline-flex;
+    }
+
     @media (max-width: 1020px) {
       .layout {
         grid-template-columns: 1fr;
@@ -654,6 +731,16 @@
         margin-top: 8px;
       }
 
+      .page-back-btn {
+        width: 54px;
+        height: 54px;
+      }
+
+      .page-back-btn svg {
+        width: 30px;
+        height: 30px;
+      }
+
       .hero {
         border-radius: 14px;
       }
@@ -670,11 +757,22 @@
         border-radius: 12px;
       }
 
+      .chapter-picker-link {
+        margin-left: 0;
+      }
+
       .sense-grid,
       .links-grid,
       .duality-grid,
       .icon-list-grid {
         grid-template-columns: 1fr;
+      }
+
+      .chapter-picker-fab {
+        right: 10px;
+        bottom: 10px;
+        padding: 8px 11px;
+        font-size: 0.82rem;
       }
 
       table {
@@ -902,6 +1000,10 @@
       <path d="M12 5.5c1.8 0 3-.8 3.7-2"></path>
       <path d="M8.2 10.3c1.8-.7 3.5-.2 4.8 1.1"></path>
     </symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24">
+      <path d="M20 12H4"></path>
+      <path d="m11 5-7 7 7 7"></path>
+    </symbol>
     <symbol id="i-arrow-up" viewBox="0 0 24 24">
       <path d="m6 10 6-6 6 6"></path>
       <path d="M12 4v16"></path>
@@ -909,6 +1011,9 @@
   </svg>
 
   <a id="top"></a>
+  <a id="page-back-button" class="page-back-btn" href="/" aria-label="Back">
+    <svg viewBox="0 0 24 24"><use href="#i-arrow-left"></use></svg>
+  </a>
   <main class="shell">
     <header class="hero">
       <p class="eyebrow">Khyen Jug Overview</p>
@@ -979,6 +1084,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-stack"></use></svg></span>
             <h2>Chapter 1 - The Aggregates (Skandhas)</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1133,6 +1239,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-elements"></use></svg></span>
             <h2>Chapter 2 - The Elements (Dhatu)</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1217,6 +1324,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>
             <h2>Chapter 3 - The Sense Sources (Ayatana)</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1285,6 +1393,7 @@
           <header class="chapter-header">
             <span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-cycle"></use></svg></span>
             <h2>Chapter 4 - Dependent Origination</h2>
+            <a class="chapter-picker-link" href="#chapter-nav">Chapter Picker</a>
           </header>
 
           <section class="topic">
@@ -1435,6 +1544,16 @@
   </main>
   <script>
     (function () {
+      const backButton = document.getElementById('page-back-button');
+      if (backButton) {
+        backButton.addEventListener('click', (event) => {
+          if (window.history.length > 1 && document.referrer) {
+            event.preventDefault();
+            window.history.back();
+          }
+        });
+      }
+
       const params = new URLSearchParams(window.location.search);
       const chapterParam = params.get('chapter');
       const chapterNumber = Number(chapterParam);
@@ -1466,7 +1585,27 @@
       const secondaryButton = document.querySelector('.hero-actions .btn-secondary');
       if (secondaryButton) {
         secondaryButton.setAttribute('href', 'gateway-to-knowledge.html');
-        secondaryButton.textContent = 'All Chapters';
+        secondaryButton.textContent = 'Back to Start Page';
+      }
+
+      if (backButton) {
+        backButton.setAttribute('href', 'gateway-to-knowledge.html');
+        backButton.setAttribute('aria-label', 'Back to chapter picker');
+      }
+
+      const chapterPickerLinks = document.querySelectorAll('.chapter-picker-link');
+      chapterPickerLinks.forEach((link) => {
+        link.setAttribute('href', 'gateway-to-knowledge.html');
+        link.textContent = 'Back to Start Page';
+      });
+
+      let pickerFab = document.querySelector('.chapter-picker-fab');
+      if (!pickerFab) {
+        pickerFab = document.createElement('a');
+        pickerFab.className = 'chapter-picker-fab';
+        pickerFab.href = 'gateway-to-knowledge.html';
+        pickerFab.innerHTML = '<span>Back to Start Page</span>';
+        document.body.appendChild(pickerFab);
       }
 
       const heading = selectedChapter.querySelector('.chapter-header h2');

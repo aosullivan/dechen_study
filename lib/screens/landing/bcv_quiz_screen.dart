@@ -328,7 +328,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                           '${chapter.number}',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontSize: 13,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: textColor,
                                     height: 1.0,
@@ -345,8 +345,8 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                           overflow: TextOverflow.ellipsis,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontSize: 13,
-                                    height: 1.14,
+                                    fontSize: 14,
+                                    height: 1.16,
                                     fontWeight: FontWeight.w600,
                                     color: textColor,
                                   ),
@@ -359,7 +359,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                       '${chapter.number}',
                       style:
                           Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                fontSize: 19,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w700,
                                 color: textColor,
                                 height: 1.0,
@@ -668,14 +668,14 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                                         .bodyLarge
                                         ?.copyWith(
                                           fontFamily: 'Crimson Text',
-                                          fontSize: 18,
-                                          height: 1.42,
+                                          fontSize: 20,
+                                          height: 1.5,
                                           color: const Color(0xFF2C2416),
                                         ) ??
                                     const TextStyle(
                                       fontFamily: 'Crimson Text',
-                                      fontSize: 18,
-                                      height: 1.42,
+                                      fontSize: 20,
+                                      height: 1.5,
                                       color: AppColors.textDark,
                                     ),
                               ),
@@ -689,7 +689,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                   Text(
                     'To which chapter does this belong?',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontSize: 18,
+                          fontSize: 19,
                           fontWeight: FontWeight.w400,
                           color: AppColors.textDark,
                         ),
@@ -700,9 +700,9 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                       child: Text(
                         _clueText!,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textDark.withValues(alpha: 0.7),
-                              fontSize: 15,
-                              height: 1.3,
+                              color: AppColors.textDark.withValues(alpha: 0.78),
+                              fontSize: 17,
+                              height: 1.34,
                             ),
                       ),
                     ),
@@ -722,7 +722,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                                     crossAxisCount: 2,
                                     mainAxisSpacing: 6,
                                     crossAxisSpacing: 6,
-                                    mainAxisExtent: 74,
+                                    mainAxisExtent: 78,
                                   ),
                                   itemCount: 10,
                                   itemBuilder: (context, index) {
@@ -849,10 +849,10 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                           onPressed: () {
                             setState(() => _showClue = true);
                           },
-                          icon: const Icon(Icons.lightbulb_outline, size: 16),
+                          icon: const Icon(Icons.lightbulb_outline, size: 18),
                           label: Text(
                             'Clue',
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ),
                       TextButton.icon(
@@ -865,11 +865,11 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                           _showChapterLabels
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
-                          size: 16,
+                          size: 18,
                         ),
                         label: Text(
-                          _showChapterLabels ? 'Hide names' : 'Show names',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          _showChapterLabels ? 'Hide chapter names' : 'Show chapter names',
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                     ],

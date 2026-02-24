@@ -70,6 +70,8 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewport = MediaQuery.sizeOf(context);
+    final isCompactPhone = viewport.width <= 430 && viewport.height <= 950;
     final options = <_StudyModeOption>[
       _StudyModeOption(
         icon: Icons.today_outlined,
@@ -109,7 +111,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          toolbarHeight: 52,
+          toolbarHeight: isCompactPhone ? 46 : 52,
           title: Text(
             title,
             style: Theme.of(context).textTheme.titleLarge,
@@ -121,10 +123,29 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          padding: EdgeInsets.symmetric(
+            horizontal: isCompactPhone ? 12 : 18,
+            vertical: isCompactPhone ? 4 : 8,
+          ),
           children: [
             if (textId == 'bodhicaryavatara') ...[
               _BodhicaryavataraTextLandingCard(
+                compact: isCompactPhone,
+                onOpenReader: () => _openReaderView(context),
+              ),
+              SizedBox(height: isCompactPhone ? 6 : 10),
+            ],
+            for (final option in options)
+              _OptionTile(
+                compact: isCompactPhone,
+                icon: option.icon,
+                label: option.label,
+                onTap: option.onTap,
+              ),
+            if (textId == 'bodhicaryavatara') ...[
+              SizedBox(height: isCompactPhone ? 4 : 8),
+              _PurchaseFooterLinks(
+                compact: isCompactPhone,
                 onBuyRootText: () => _openPurchaseLink(
                   context,
                   linkType: 'root_text',
@@ -139,14 +160,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
                       'Bodhicaryavatara Sonam Tsemo commentary',
                 ),
               ),
-              const SizedBox(height: 10),
             ],
-            for (final option in options)
-              _OptionTile(
-                icon: option.icon,
-                label: option.label,
-                onTap: option.onTap,
-              ),
           ],
         ),
       ),
@@ -187,6 +201,22 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             title: title,
             textId: textId,
           ),
+        ),
+      );
+    } else {
+      _showComingSoon(context, 'Read');
+    }
+  }
+
+  void _openReaderView(BuildContext context) {
+    if (textId == 'bodhicaryavatara') {
+      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+        textId: textId,
+        targetMode: 'read',
+      ));
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => BcvReadScreen(title: title),
         ),
       );
     } else {
@@ -313,12 +343,12 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 
 class _BodhicaryavataraTextLandingCard extends StatelessWidget {
   const _BodhicaryavataraTextLandingCard({
-    required this.onBuyRootText,
-    required this.onBuyCommentary,
+    required this.compact,
+    required this.onOpenReader,
   });
 
-  final VoidCallback onBuyRootText;
-  final VoidCallback onBuyCommentary;
+  final bool compact;
+  final VoidCallback onOpenReader;
 
   @override
   Widget build(BuildContext context) {
@@ -331,45 +361,48 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
         side: const BorderSide(color: AppColors.borderLight),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: EdgeInsets.all(compact ? 8 : 14),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 760;
-            if (!isWide) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            final canKeepImageOnRight = isWide || constraints.maxWidth >= 420;
+
+            if (canKeepImageOnRight) {
+              final coverWidth = isWide ? 120.0 : (compact ? 64.0 : 86.0);
+              final gap = isWide ? 14.0 : 10.0;
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _BodhicaryavataraTextLandingContent(
-                    onBuyRootText: onBuyRootText,
-                    onBuyCommentary: onBuyCommentary,
+                  Expanded(
+                    child: _BodhicaryavataraTextLandingContent(
+                      compact: compact && !isWide,
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: SizedBox(
-                      width: 96,
-                      child: _CommentaryBookCard(
-                        onBuyCommentary: onBuyCommentary,
-                      ),
+                  SizedBox(width: gap),
+                  SizedBox(
+                    width: coverWidth,
+                    child: _BookCoverCard(
+                      onTap: onOpenReader,
                     ),
                   ),
                 ],
               );
             }
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: _BodhicaryavataraTextLandingContent(
-                    onBuyRootText: onBuyRootText,
-                    onBuyCommentary: onBuyCommentary,
-                  ),
+                _BodhicaryavataraTextLandingContent(
+                  compact: true,
                 ),
-                const SizedBox(width: 14),
-                SizedBox(
-                  width: 120,
-                  child: _CommentaryBookCard(
-                    onBuyCommentary: onBuyCommentary,
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: SizedBox(
+                    width: 86,
+                    child: _BookCoverCard(
+                      onTap: onOpenReader,
+                    ),
                   ),
                 ),
               ],
@@ -383,12 +416,10 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
 
 class _BodhicaryavataraTextLandingContent extends StatelessWidget {
   const _BodhicaryavataraTextLandingContent({
-    required this.onBuyRootText,
-    required this.onBuyCommentary,
+    required this.compact,
   });
 
-  final VoidCallback onBuyRootText;
-  final VoidCallback onBuyCommentary;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -396,95 +427,68 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'BODHICARYAVATARA • ACARYA SANTIDEVA',
+          'BODHICARYAVATARA • SANTIDEVA',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 12,
-                    letterSpacing: 1.5,
+                    fontSize: compact ? 9 : 12,
+                    letterSpacing: compact ? 0.9 : 1.5,
                     color: AppColors.mutedBrown,
                   ) ??
-              const TextStyle(
+              TextStyle(
                 fontFamily: 'Crimson Text',
-                fontSize: 12,
-                letterSpacing: 1.5,
+                fontSize: compact ? 9 : 12,
+                letterSpacing: compact ? 0.9 : 1.5,
                 color: AppColors.mutedBrown,
               ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: compact ? 1 : 4),
         Text(
           'Bodhicaryavatara',
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontSize: 34,
+                    fontSize: compact ? 22 : 34,
                     height: 1.0,
                   ) ??
-              const TextStyle(
+              TextStyle(
                 fontFamily: 'Crimson Text',
-                fontSize: 34,
+                fontSize: compact ? 22 : 34,
                 height: 1.0,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textDark,
               ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: compact ? 3 : 8),
         Text(
-          'Study the root text with structure and meaning details based on Sonam Tsemo commentary.',
+          'Read, explore the textual structure, reflect with daily verses, and quiz yourself. Commentary included.',
+          maxLines: compact ? 2 : null,
+          overflow: compact ? TextOverflow.ellipsis : null,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 15,
-                    height: 1.45,
+                    fontSize: compact ? 12.5 : 14,
+                    height: compact ? 1.2 : 1.4,
                   ) ??
-              const TextStyle(
+              TextStyle(
                 fontFamily: 'Lora',
-                fontSize: 15,
-                height: 1.45,
+                fontSize: compact ? 12.5 : 14,
+                height: compact ? 1.2 : 1.4,
                 color: AppColors.bodyText,
               ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Purpose: help you get familiar with chapter flow, structure, and key meaning progressions.',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 14,
-                    height: 1.4,
-                  ) ??
-              const TextStyle(
-                fontFamily: 'Lora',
-                fontSize: 14,
-                height: 1.4,
-                color: AppColors.bodyText,
-              ),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 6,
-          children: [
-            _PurchaseLinkButton(
-              label: 'Root Text',
-              onPressed: onBuyRootText,
-            ),
-            _PurchaseLinkButton(
-              label: 'Commentary',
-              onPressed: onBuyCommentary,
-            ),
-          ],
         ),
       ],
     );
   }
 }
 
-class _CommentaryBookCard extends StatelessWidget {
-  const _CommentaryBookCard({
-    required this.onBuyCommentary,
+class _BookCoverCard extends StatelessWidget {
+  const _BookCoverCard({
+    required this.onTap,
   });
 
-  final VoidCallback onBuyCommentary;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onBuyCommentary,
+        onTap: onTap,
         borderRadius: BorderRadius.zero,
         child: AspectRatio(
           aspectRatio: 348 / 522,
@@ -507,36 +511,59 @@ class _CommentaryBookCard extends StatelessWidget {
   }
 }
 
-class _PurchaseLinkButton extends StatelessWidget {
-  const _PurchaseLinkButton({
-    required this.label,
-    required this.onPressed,
+class _PurchaseFooterLinks extends StatelessWidget {
+  const _PurchaseFooterLinks({
+    required this.compact,
+    required this.onBuyRootText,
+    required this.onBuyCommentary,
   });
 
-  final String label;
-  final VoidCallback onPressed;
+  final bool compact;
+  final VoidCallback onBuyRootText;
+  final VoidCallback onBuyCommentary;
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.textDark,
-        side: const BorderSide(color: AppColors.border, width: 1),
-        backgroundColor: const Color(0xFFF7F1E8),
-        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-        minimumSize: const Size(1, 30),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textStyle: const TextStyle(
-          fontFamily: 'Lora',
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-        ),
+    final textStyle = TextStyle(
+      fontFamily: 'Lora',
+      fontSize: compact ? 13 : 14,
+      fontWeight: FontWeight.w500,
+      decoration: TextDecoration.underline,
+    );
+    return Padding(
+      padding: EdgeInsets.only(
+        left: compact ? 2 : 4,
+        top: compact ? 2 : 4,
+        bottom: compact ? 6 : 10,
       ),
-      child: Text(label),
+      child: Wrap(
+        spacing: compact ? 16 : 20,
+        runSpacing: compact ? 6 : 8,
+        children: [
+          TextButton(
+            onPressed: onBuyRootText,
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.textDark,
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              textStyle: textStyle,
+            ),
+            child: const Text('Purchase root text'),
+          ),
+          TextButton(
+            onPressed: onBuyCommentary,
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.textDark,
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              textStyle: textStyle,
+            ),
+            child: const Text('Purchase commentary'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -555,11 +582,13 @@ class _StudyModeOption {
 
 class _OptionTile extends StatelessWidget {
   const _OptionTile({
+    required this.compact,
     required this.icon,
     required this.label,
     required this.onTap,
   });
 
+  final bool compact;
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -567,17 +596,35 @@ class _OptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: compact ? 6 : 12),
       color: AppColors.cardBeige,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: const BorderSide(color: AppColors.borderLight),
       ),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.primary),
+        dense: compact,
+        minLeadingWidth: compact ? 26 : 40,
+        minVerticalPadding: compact ? 0 : null,
+        visualDensity:
+            compact ? const VisualDensity(horizontal: 0, vertical: -3) : null,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: compact ? 10 : 16,
+          vertical: compact ? 0 : 4,
+        ),
+        leading: Icon(icon, color: AppColors.primary, size: compact ? 20 : 24),
         title: Text(
           label,
-          style: Theme.of(context).textTheme.titleLarge,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontSize: compact ? 16 : 22,
+              ),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: compact ? 12 : 13,
+          color: AppColors.mutedBrown,
         ),
         onTap: onTap,
       ),

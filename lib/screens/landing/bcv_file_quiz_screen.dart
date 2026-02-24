@@ -672,7 +672,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
                           question.prompt,
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontSize: 20,
+                                    fontSize: 21,
                                     height: 1.25,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.textDark,

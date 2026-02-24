@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/gateway_outline_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
+import 'gateway_landing_screen.dart';
 
 class GatewayChapterScreen extends StatelessWidget {
   const GatewayChapterScreen({
@@ -11,6 +12,19 @@ class GatewayChapterScreen extends StatelessWidget {
   });
 
   final int chapterNumber;
+
+  void _openChapterPicker(BuildContext context) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+      return;
+    }
+    replaceAppPath('/gateway-to-knowledge');
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (_) => const GatewayLandingScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +44,30 @@ class GatewayChapterScreen extends StatelessWidget {
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => _openChapterPicker(context),
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: TextButton.icon(
+                onPressed: () => _openChapterPicker(context),
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
+                label: const Text('Back to Start'),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  textStyle: const TextStyle(
+                    fontFamily: 'Lora',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         body: FutureBuilder<GatewayOutlineChapter?>(
           future: GatewayOutlineService.instance.getChapter(chapterNumber),
@@ -63,6 +99,34 @@ class GatewayChapterScreen extends StatelessWidget {
             return ListView(
               padding: const EdgeInsets.fromLTRB(14, 8, 14, 20),
               children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _openChapterPicker(context),
+                    icon: const Icon(Icons.arrow_back_rounded, size: 16),
+                    label: const Text('Back to Start Page'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.border, width: 1),
+                      backgroundColor: const Color(0xFFF7F1E8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 7,
+                      ),
+                      minimumSize: const Size(1, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      textStyle: const TextStyle(
+                        fontFamily: 'Lora',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
                 _ChapterIntroCard(chapter: chapter),
                 const SizedBox(height: 10),
                 ...chapter.sections.map(

@@ -47,7 +47,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 const SizedBox(height: 20),
                 _TextLandingCard(
                   title: 'Bodhicaryavatara',
-                  author: 'ACARYA SANTIDEVA',
+                  author: 'SANTIDEVA',
                   onTap: () => _openTextOptions(context),
                 ),
               ],
