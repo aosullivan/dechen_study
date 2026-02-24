@@ -59,6 +59,7 @@ flutter:
     - .env
     - assets/gateway.jpg
     - assets/bodhicarya.jpg
+    - assets/icons/bodhicarya_style_icon.svg
     - texts/bcv-root
     - texts/bcv_parsed.json
     - texts/verse_commentary_mapping.txt

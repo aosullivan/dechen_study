@@ -571,8 +571,9 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
             fontSize: 13,
             color: AppColors.textDark,
           ),
+          itemHeight: null,
           selectedItemBuilder: (context) {
-            // The displayed selected value (compact, truncated).
+            // The selected value should show the full title (no ellipsis).
             return [
               // "All" item:
               const Align(
@@ -590,8 +591,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                     alignment: Alignment.centerLeft,
                     child: Text(
                       '${_shortNum(s.path)}. ${s.title}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
                       style: const TextStyle(
                         fontFamily: 'Lora',
                         fontSize: 13,
@@ -618,8 +618,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                   value: s.path,
                   child: Text(
                     '${_shortNum(s.path)}. ${s.title}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
                   ),
                 )),
           ],

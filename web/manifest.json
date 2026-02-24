@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#FAF8F3",
     "theme_color": "#8B7355",
-    "description": "A text study app with daily sections",
+    "description": "Study dharma texts interactively",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

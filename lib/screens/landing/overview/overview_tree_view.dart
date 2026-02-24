@@ -146,6 +146,62 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     );
   }
 
+  double _maxRequiredTreeWidth(
+    BuildContext context,
+    List<({String path, String title, int depth})> visibleSections,
+    Set<String> parentPaths,
+  ) {
+    final textDirection = Directionality.of(context);
+    var requiredWidth = 0.0;
+    for (final section in visibleSections) {
+      final shortNumber = _shortNumber(section.path);
+      final titleSpan = TextSpan(
+        children: [
+          TextSpan(
+            text: '$shortNumber. ',
+            style: TextStyle(
+              fontFamily: 'Lora',
+              fontSize: OverviewConstants.fontSizeForDepth(section.depth) - 1,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          TextSpan(
+            text: section.title,
+            style: TextStyle(
+              fontFamily: 'Lora',
+              fontSize: OverviewConstants.fontSizeForDepth(section.depth),
+              fontWeight: OverviewConstants.fontWeightForDepth(section.depth),
+            ),
+          ),
+        ],
+      );
+      final labelPainter = TextPainter(
+        text: titleSpan,
+        textDirection: textDirection,
+        maxLines: 1,
+      )..layout();
+      final indent = section.depth * OverviewConstants.indentPerLevel +
+          OverviewConstants.leftPadding +
+          (section.depth > 0 ? OverviewConstants.stubLength : 0);
+      final hasChildren = parentPaths.contains(section.path);
+      final expandIconSlot = hasChildren ? 20.0 : 20.0;
+      final horizontalPadding = 20.0;
+      final gapAfterIcon = 4.0;
+      final rowWidth = indent +
+          horizontalPadding +
+          expandIconSlot +
+          gapAfterIcon +
+          labelPainter.width;
+      if (rowWidth > requiredWidth) requiredWidth = rowWidth;
+    }
+    return requiredWidth;
+  }
+
+  static String _shortNumber(String path) {
+    final dot = path.lastIndexOf('.');
+    return dot >= 0 ? path.substring(dot + 1) : path;
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -177,7 +233,12 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
         // Keep row width stable as depth grows: indentation should add
         // scrollable width, not shrink the visible card area.
         final baseCardWidth = viewportWidth - OverviewConstants.leftPadding;
-        final contentWidth = maxIndent + baseCardWidth;
+        final baseContentWidth = maxIndent + baseCardWidth;
+        final textContentWidth =
+            _maxRequiredTreeWidth(context, visibleSections, parentPaths);
+        final contentWidth = textContentWidth > baseContentWidth
+            ? textContentWidth
+            : baseContentWidth;
         final treeWidth =
             contentWidth > viewportWidth ? contentWidth : viewportWidth;
 

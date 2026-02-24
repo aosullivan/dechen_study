@@ -96,13 +96,47 @@ class GatewayChapterScreen extends StatelessWidget {
               );
             }
 
+            final topicAnchors = _buildTopicAnchors(chapter);
+            final topicLookup = _buildTopicLookup(topicAnchors);
+
+            Future<void> openTopic(String label) async {
+              final key = _resolveTopicKey(label, topicLookup);
+              final targetContext = key?.currentContext;
+              if (targetContext == null) return;
+              await Scrollable.ensureVisible(
+                targetContext,
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+                alignment: 0.06,
+              );
+            }
+
+            bool canOpenTopic(String label) =>
+                _resolveTopicKey(label, topicLookup) != null;
+
             return SelectionArea(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(14, 10, 14, 20),
                 children: [
-                  _ChapterIntroCard(chapter: chapter),
+                  _ChapterIntroCard(
+                    chapter: chapter,
+                    topics: topicAnchors.map((anchor) => anchor.topic).toList(),
+                    onOpenTopic: (label) {
+                      openTopic(label);
+                    },
+                    canOpenTopic: canOpenTopic,
+                  ),
                   const SizedBox(height: 12),
-                  ...chapter.topics.map((topic) => _GatewayTopicCard(topic: topic)),
+                  ...topicAnchors.map(
+                    (anchor) => _GatewayTopicCard(
+                      key: anchor.key,
+                      topic: anchor.topic,
+                      onChipTap: (label) {
+                        openTopic(label);
+                      },
+                      canOpenTopic: canOpenTopic,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -114,9 +148,17 @@ class GatewayChapterScreen extends StatelessWidget {
 }
 
 class _ChapterIntroCard extends StatelessWidget {
-  const _ChapterIntroCard({required this.chapter});
+  const _ChapterIntroCard({
+    required this.chapter,
+    required this.topics,
+    required this.onOpenTopic,
+    required this.canOpenTopic,
+  });
 
   final GatewayRichChapter chapter;
+  final List<GatewayRichTopic> topics;
+  final ValueChanged<String> onOpenTopic;
+  final bool Function(String topicTitle) canOpenTopic;
 
   @override
   Widget build(BuildContext context) {
@@ -167,12 +209,24 @@ class _ChapterIntroCard extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
-                  '${chapter.topics.length} sections',
+                  'Topics',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.mutedBrown,
+                        fontWeight: FontWeight.w600,
                       ),
                 ),
+                const SizedBox(height: 2),
+                for (var i = 0; i < topics.length; i++)
+                  Padding(
+                    padding: EdgeInsets.only(left: i == 0 ? 0 : 14, top: 2),
+                    child: _TopicLink(
+                      label: topics[i].title,
+                      enabled: canOpenTopic(topics[i].title),
+                      onTap: () => onOpenTopic(topics[i].title),
+                    ),
+                  ),
               ],
             );
             if (!showCover) return text;
@@ -211,10 +265,62 @@ class _ChapterIntroCard extends StatelessWidget {
   }
 }
 
-class _GatewayTopicCard extends StatelessWidget {
-  const _GatewayTopicCard({required this.topic});
+class _TopicLink extends StatelessWidget {
+  const _TopicLink({
+    required this.label,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: enabled ? AppColors.primary : AppColors.mutedBrown,
+          fontSize: 15.5,
+          fontWeight: enabled ? FontWeight.w600 : FontWeight.w500,
+          decoration: enabled ? TextDecoration.underline : TextDecoration.none,
+        );
+    if (!enabled) return Text(label, style: textStyle);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(4),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+          child: Text(label, style: textStyle),
+        ),
+      ),
+    );
+  }
+}
+
+class _TopicAnchor {
+  const _TopicAnchor({
+    required this.topic,
+    required this.key,
+  });
 
   final GatewayRichTopic topic;
+  final GlobalKey key;
+}
+
+class _GatewayTopicCard extends StatelessWidget {
+  const _GatewayTopicCard({
+    super.key,
+    required this.topic,
+    required this.onChipTap,
+    required this.canOpenTopic,
+  });
+
+  final GatewayRichTopic topic;
+  final ValueChanged<String> onChipTap;
+  final bool Function(String topicTitle) canOpenTopic;
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +341,11 @@ class _GatewayTopicCard extends StatelessWidget {
             columns: [
               ('Faculties', blocks[i].items, _TriadCategory.faculties),
               ('Objects', blocks[i + 1].items, _TriadCategory.objects),
-              ('Consciousnesses', blocks[i + 2].items, _TriadCategory.consciousnesses),
+              (
+                'Consciousnesses',
+                blocks[i + 2].items,
+                _TriadCategory.consciousnesses
+              ),
             ],
           ),
         );
@@ -264,7 +374,13 @@ class _GatewayTopicCard extends StatelessWidget {
           i += 1;
           chipTexts.add(blocks[i].text ?? '');
         }
-        children.add(_GatewayChipWrap(items: chipTexts));
+        children.add(
+          _GatewayChipWrap(
+            items: chipTexts,
+            onChipTap: onChipTap,
+            canOpenTopic: canOpenTopic,
+          ),
+        );
         continue;
       }
       children.add(_GatewayBlockView(block: block));
@@ -372,9 +488,9 @@ class _GatewayBlockView extends StatelessWidget {
             child: Text(
               block.text ?? '',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.bodyText,
-                        fontSize: 15.5,
-                      ),
+                    color: AppColors.bodyText,
+                    fontSize: 15.5,
+                  ),
             ),
           );
         }
@@ -392,7 +508,8 @@ class _GatewayBlockView extends StatelessWidget {
       case 'ol':
         final isNumbered = block.type == 'ol';
         final items = block.items;
-        if (block.styleClass == 'icon-list-grid' || block.styleClass == 'links-grid') {
+        if (block.styleClass == 'icon-list-grid' ||
+            block.styleClass == 'links-grid') {
           return Padding(
             padding: const EdgeInsets.only(top: 7),
             child: Wrap(
@@ -401,8 +518,10 @@ class _GatewayBlockView extends StatelessWidget {
               children: [
                 for (var i = 0; i < items.length; i++)
                   Container(
-                    constraints: const BoxConstraints(minWidth: 180, maxWidth: 330),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                    constraints:
+                        const BoxConstraints(minWidth: 180, maxWidth: 330),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFFEFB),
                       borderRadius: BorderRadius.circular(10),
@@ -419,11 +538,15 @@ class _GatewayBlockView extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFF8EC),
                               borderRadius: BorderRadius.circular(999),
-                              border: Border.all(color: const Color(0xFFDAC8AD)),
+                              border:
+                                  Border.all(color: const Color(0xFFDAC8AD)),
                             ),
                             child: Text(
                               '${i + 1}',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
                                     color: AppColors.mutedBrown,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -435,7 +558,10 @@ class _GatewayBlockView extends StatelessWidget {
                         Expanded(
                           child: Text(
                             items[i],
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: AppColors.bodyText,
                                   fontSize: 15,
                                 ),
@@ -448,7 +574,9 @@ class _GatewayBlockView extends StatelessWidget {
             ),
           );
         }
-        if (block.styleClass == 'split-list' && isNumbered && items.length > 8) {
+        if (block.styleClass == 'split-list' &&
+            isNumbered &&
+            items.length > 8) {
           final mid = (items.length / 2).ceil();
           final left = items.take(mid).toList();
           final right = items.skip(mid).toList();
@@ -522,11 +650,13 @@ class _GatewayBlockView extends StatelessWidget {
                           padding: const EdgeInsets.all(8),
                           child: Text(
                             i < row.length ? row[i] : '',
-                            style:
-                                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: AppColors.bodyText,
-                                      fontSize: 15,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: AppColors.bodyText,
+                                  fontSize: 15,
+                                ),
                           ),
                         ),
                     ],
@@ -542,9 +672,15 @@ class _GatewayBlockView extends StatelessWidget {
 }
 
 class _GatewayChipWrap extends StatelessWidget {
-  const _GatewayChipWrap({required this.items});
+  const _GatewayChipWrap({
+    required this.items,
+    this.onChipTap,
+    this.canOpenTopic,
+  });
 
   final List<String> items;
+  final ValueChanged<String>? onChipTap;
+  final bool Function(String topicTitle)? canOpenTopic;
 
   @override
   Widget build(BuildContext context) {
@@ -555,29 +691,72 @@ class _GatewayChipWrap extends StatelessWidget {
         runSpacing: 8,
         children: [
           for (final item in items)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF9EF),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFE7DAC7)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _IconBadge(icon: _iconForLabel(item), size: 14),
-                  const SizedBox(width: 6),
-                  Text(
-                    item,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.bodyText,
-                          fontSize: 15,
-                        ),
-                  ),
-                ],
-              ),
+            _GatewayChipLink(
+              label: item,
+              enabled: canOpenTopic?.call(item) ?? false,
+              onTap: onChipTap == null ? null : () => onChipTap!(item),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _GatewayChipLink extends StatelessWidget {
+  const _GatewayChipLink({
+    required this.label,
+    required this.enabled,
+    this.onTap,
+  });
+
+  final String label;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: enabled ? AppColors.primary : AppColors.bodyText,
+          fontSize: 15,
+          decoration: enabled ? TextDecoration.underline : TextDecoration.none,
+          fontWeight: enabled ? FontWeight.w600 : FontWeight.w400,
+        );
+    final child = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _IconBadge(icon: _iconForLabel(label), size: 14),
+          const SizedBox(width: 6),
+          Text(label, style: textStyle),
+        ],
+      ),
+    );
+
+    if (!enabled || onTap == null) {
+      return Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFF9EF),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE7DAC7)),
+        ),
+        child: child,
+      );
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: Ink(
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFF9EF),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE1D1BA)),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          child: child,
+        ),
       ),
     );
   }
@@ -586,7 +765,8 @@ class _GatewayChipWrap extends StatelessWidget {
 class _TriadCards extends StatelessWidget {
   const _TriadCards({required this.columns});
 
-  final List<(String title, List<String> items, _TriadCategory? category)> columns;
+  final List<(String title, List<String> items, _TriadCategory? category)>
+      columns;
 
   @override
   Widget build(BuildContext context) {
@@ -601,7 +781,10 @@ class _TriadCards extends StatelessWidget {
                 for (final column in columns)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: _TriadCard(title: column.$1, items: column.$2, category: column.$3),
+                    child: _TriadCard(
+                        title: column.$1,
+                        items: column.$2,
+                        category: column.$3),
                   ),
               ],
             );
@@ -612,8 +795,12 @@ class _TriadCards extends StatelessWidget {
               for (var i = 0; i < columns.length; i++)
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(right: i == columns.length - 1 ? 0 : 8),
-                    child: _TriadCard(title: columns[i].$1, items: columns[i].$2, category: columns[i].$3),
+                    padding:
+                        EdgeInsets.only(right: i == columns.length - 1 ? 0 : 8),
+                    child: _TriadCard(
+                        title: columns[i].$1,
+                        items: columns[i].$2,
+                        category: columns[i].$3),
                   ),
                 ),
             ],
@@ -764,37 +951,36 @@ class _PlainList extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(label, style: bodyStyle?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  )),
+                  child: Text(label,
+                      style: bodyStyle?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      )),
                 ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 32, top: 4),
+              padding: const EdgeInsets.only(left: 40, top: 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final sub in subItems)
+                  for (var si = 0; si < subItems.length; si++)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 3),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6),
-                            child: Container(
-                              width: 5,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.5),
-                                shape: BoxShape.circle,
+                          SizedBox(
+                            width: 22,
+                            child: Text(
+                              '${si + 1}.',
+                              style: subItemStyle?.copyWith(
+                                color: AppColors.mutedBrown,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
                           Expanded(
-                            child: Text(sub, style: subItemStyle),
+                            child: Text(subItems[si], style: subItemStyle),
                           ),
                         ],
                       ),
@@ -890,23 +1076,96 @@ class _IconBadge extends StatelessWidget {
     if (p.endsWith('.')) {
       p = p.substring(0, p.length - 1);
     }
-    if (p.isNotEmpty) subItems.add(p);
+    // Capitalize first letter
+    if (p.isNotEmpty) {
+      p = p[0].toUpperCase() + p.substring(1);
+      subItems.add(p);
+    }
   }
 
   if (subItems.length < 2) return null;
   return (label, subItems);
 }
 
+List<_TopicAnchor> _buildTopicAnchors(GatewayRichChapter chapter) {
+  return [
+    for (var i = 0; i < chapter.topics.length; i++)
+      _TopicAnchor(
+        topic: chapter.topics[i],
+        key: GlobalKey(debugLabel: 'gateway-topic-${chapter.number}-$i'),
+      ),
+  ];
+}
+
+Map<String, GlobalKey> _buildTopicLookup(List<_TopicAnchor> anchors) {
+  final lookup = <String, GlobalKey>{};
+  for (final anchor in anchors) {
+    _registerTopicAlias(lookup, anchor.topic.title, anchor.key);
+    final title = anchor.topic.title.trim();
+    const aggregatePrefix = 'aggregate of ';
+    if (title.toLowerCase().startsWith(aggregatePrefix)) {
+      final base = title.substring(aggregatePrefix.length).trim();
+      _registerTopicAlias(lookup, base, anchor.key);
+      if (base.endsWith('s') && base.length > 1) {
+        _registerTopicAlias(
+            lookup, base.substring(0, base.length - 1), anchor.key);
+      } else {
+        _registerTopicAlias(lookup, '${base}s', anchor.key);
+      }
+    }
+  }
+  return lookup;
+}
+
+void _registerTopicAlias(
+    Map<String, GlobalKey> lookup, String label, GlobalKey key) {
+  final normalized = _normalizeTopicLabel(label);
+  if (normalized.isEmpty) return;
+  lookup.putIfAbsent(normalized, () => key);
+}
+
+GlobalKey? _resolveTopicKey(String label, Map<String, GlobalKey> topicLookup) {
+  final direct = topicLookup[_normalizeTopicLabel(label)];
+  if (direct != null) return direct;
+
+  final aggregate = topicLookup[_normalizeTopicLabel('Aggregate of $label')];
+  if (aggregate != null) return aggregate;
+
+  if (label.endsWith('s') && label.length > 1) {
+    final singular = label.substring(0, label.length - 1);
+    final singularKey = topicLookup[_normalizeTopicLabel(singular)] ??
+        topicLookup[_normalizeTopicLabel('Aggregate of $singular')];
+    if (singularKey != null) return singularKey;
+  } else {
+    final plural = '${label}s';
+    final pluralKey = topicLookup[_normalizeTopicLabel(plural)] ??
+        topicLookup[_normalizeTopicLabel('Aggregate of $plural')];
+    if (pluralKey != null) return pluralKey;
+  }
+
+  return null;
+}
+
+String _normalizeTopicLabel(String input) {
+  return input.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();
+}
+
 IconData _iconForLabel(String text) {
   final t = text.toLowerCase();
-  if (t.contains('eye') || t.contains('visual')) return Icons.visibility_outlined;
+  if (t.contains('eye') || t.contains('visual')) {
+    return Icons.visibility_outlined;
+  }
   if (t.contains('ear') || t.contains('sound')) return Icons.hearing_outlined;
   if (t.contains('nose') || t.contains('smell')) return Icons.air_outlined;
-  if (t.contains('tongue') || t.contains('taste')) return Icons.water_drop_outlined;
+  if (t.contains('tongue') || t.contains('taste')) {
+    return Icons.water_drop_outlined;
+  }
   if (t.contains('body') || t.contains('texture') || t.contains('touch')) {
     return Icons.pan_tool_outlined;
   }
-  if (t.contains('mind') || t.contains('conscious')) return Icons.psychology_outlined;
+  if (t.contains('mind') || t.contains('conscious')) {
+    return Icons.psychology_outlined;
+  }
   if (t.contains('earth')) return Icons.landscape_outlined;
   if (t.contains('water')) return Icons.water_outlined;
   if (t.contains('fire')) return Icons.local_fire_department_outlined;
@@ -919,11 +1178,17 @@ IconData _iconForLabel(String text) {
     return Icons.local_florist_outlined;
   }
   if (t.contains('chapter')) return Icons.menu_book_outlined;
-  if (t.contains('table') || t.contains('reference')) return Icons.table_chart_outlined;
+  if (t.contains('table') || t.contains('reference')) {
+    return Icons.table_chart_outlined;
+  }
   if (t.contains('link') || t.contains('dependent')) return Icons.link_outlined;
-  if (t.contains('list') || t.contains('aggregate')) return Icons.format_list_bulleted;
+  if (t.contains('list') || t.contains('aggregate')) {
+    return Icons.format_list_bulleted;
+  }
   // Element-classification patterns
-  if (t.contains('physical') || t.contains('matter')) return Icons.widgets_outlined;
+  if (t.contains('physical') || t.contains('matter')) {
+    return Icons.widgets_outlined;
+  }
   if (t.contains('obstruct')) return Icons.block_outlined;
   if (t.contains('undefil')) return Icons.auto_awesome_outlined;
   if (t.contains('realm')) return Icons.layers_outlined;
@@ -934,9 +1199,13 @@ IconData _iconForLabel(String text) {
   if (t.contains('perception')) return Icons.remove_red_eye_outlined;
   if (t.contains('formation')) return Icons.settings_outlined;
   // Topic-level patterns
-  if (t.contains('classif') || t.contains('categor')) return Icons.category_outlined;
+  if (t.contains('classif') || t.contains('categor')) {
+    return Icons.category_outlined;
+  }
   if (t.contains('triad')) return Icons.account_tree_outlined;
-  if (t.contains('source') || t.contains('ayatana')) return Icons.swap_horiz_outlined;
+  if (t.contains('source') || t.contains('ayatana')) {
+    return Icons.swap_horiz_outlined;
+  }
   if (t.contains('mental')) return Icons.psychology_outlined;
   if (t.contains('person')) return Icons.person_outline;
   if (t.contains('knowable')) return Icons.school_outlined;
