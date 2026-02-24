@@ -25,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
 
     final path = currentAppPath();
+    final isProdHost = isAppDechenStudyHost();
 
     if (path == '/bodhicaryavatara') {
       Navigator.of(context).pushReplacement(
@@ -47,6 +48,14 @@ class _SplashScreenState extends State<SplashScreen> {
             initialChapterNumber: chapterNumber,
           ),
         ),
+      );
+      return;
+    }
+
+    if (isProdHost) {
+      replaceAppPath('/gateway-to-knowledge');
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const GatewayLandingScreen()),
       );
       return;
     }

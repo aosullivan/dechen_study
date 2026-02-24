@@ -10,6 +10,12 @@ bool openExternalUrl(String url) {
   return false;
 }
 
+bool isAppDechenStudyHost() {
+  return false;
+}
+
+void leaveAppToDechenStudy() {}
+
 String currentAppPath() {
   return '/';
 }

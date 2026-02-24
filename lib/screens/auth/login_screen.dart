@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../../utils/constants.dart';
+import '../../utils/web_navigation.dart';
 import '../../widgets/auth_text_field.dart';
+import '../landing/gateway_landing_screen.dart';
 import '../landing/landing_screen.dart';
 import 'signup_screen.dart';
 
@@ -42,9 +44,16 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
 
       if (response.user != null) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LandingScreen()),
-        );
+        if (isAppDechenStudyHost()) {
+          replaceAppPath('/gateway-to-knowledge');
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const GatewayLandingScreen()),
+          );
+        } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const LandingScreen()),
+          );
+        }
       }
     } catch (e) {
       _showError(e.toString());

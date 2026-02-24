@@ -24,11 +24,17 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
   late final Future<List<GatewayOutlineChapter>> _chaptersFuture =
       GatewayOutlineService.instance.getChapters();
   bool _openedInitialChapter = false;
+  bool get _isProdHost => isAppDechenStudyHost();
 
   @override
   Widget build(BuildContext context) {
     return PopScope<void>(
+      canPop: !_isProdHost,
       onPopInvokedWithResult: (didPop, _) {
+        if (_isProdHost && !didPop) {
+          leaveAppToDechenStudy();
+          return;
+        }
         if (didPop) replaceAppPath('/');
       },
       child: Scaffold(
@@ -43,7 +49,7 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: _handleBackPressed,
           ),
         ),
         body: FutureBuilder<List<GatewayOutlineChapter>>(
@@ -90,6 +96,14 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
         ),
       ),
     );
+  }
+
+  void _handleBackPressed() {
+    if (_isProdHost) {
+      leaveAppToDechenStudy();
+      return;
+    }
+    Navigator.of(context).pop();
   }
 
   void _openInitialChapterIfNeeded(List<GatewayOutlineChapter> chapters) {

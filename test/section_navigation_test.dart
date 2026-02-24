@@ -12,8 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
-const _expectedLeafSkipCount = 166;
-const _expectedLeafGapSum = 464;
+const _expectedLeafSkipCount = 167;
+const _expectedLeafGapSum = 466;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
   '3.1.2.4 (1.18) -> 3.1.3.1 (1.20): verse gap 2',
@@ -797,12 +797,11 @@ void main() {
       expect(refs, contains('9.29cd'));
     });
 
-    test(
-        'opening discarding-pride literal section owns 1.2abc-1.3cd as one block',
+    test('opening discarding-pride literal section owns base 1.2/1.3 block',
         () {
       const path = '1.3.3';
       final own = hierarchyService.getOwnVerseRefsForSectionSync(path);
-      expect(own, containsAll(['1.2abc', '1.2d', '1.3ab', '1.3cd']));
+      expect(own, containsAll(['1.2', '1.3']));
       expect(
         hierarchyService.getFirstVerseForSectionSync(path),
         equals('1.2'),

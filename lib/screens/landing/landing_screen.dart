@@ -19,16 +19,41 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> {
   static const Color _backgroundYellow = AppColors.landingBackground;
+  bool _redirectingToGateway = false;
 
   @override
   void initState() {
     super.initState();
     BcvVerseService.instance.preload();
     VerseHierarchyService.instance.preload();
+    if (isAppDechenStudyHost()) {
+      _redirectingToGateway = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        replaceAppPath('/gateway-to-knowledge');
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(
+            builder: (_) => const GatewayLandingScreen(),
+          ),
+        );
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_redirectingToGateway) {
+      return const Scaffold(
+        backgroundColor: _backgroundYellow,
+        body: Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: _backgroundYellow,
       body: SafeArea(

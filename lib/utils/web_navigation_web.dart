@@ -26,6 +26,15 @@ bool openExternalUrl(String url) {
   return true;
 }
 
+bool isAppDechenStudyHost() {
+  final host = Uri.base.host.toLowerCase();
+  return host == 'app.dechen.study';
+}
+
+void leaveAppToDechenStudy() {
+  html.window.location.assign('https://dechen.study');
+}
+
 String currentAppPath() {
   final path = Uri.base.path;
   return _normalizePath(path);

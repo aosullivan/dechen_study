@@ -5,6 +5,8 @@ bool openGatewayToKnowledgePage() => impl.openGatewayToKnowledgePage();
 bool openGatewayChapterPage(int chapterNumber) =>
     impl.openGatewayChapterPage(chapterNumber);
 bool openExternalUrl(String url) => impl.openExternalUrl(url);
+bool isAppDechenStudyHost() => impl.isAppDechenStudyHost();
+void leaveAppToDechenStudy() => impl.leaveAppToDechenStudy();
 String currentAppPath() => impl.currentAppPath();
 void pushAppPath(String path) => impl.pushAppPath(path);
 void replaceAppPath(String path) => impl.replaceAppPath(path);

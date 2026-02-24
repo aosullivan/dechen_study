@@ -72,6 +72,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   Widget build(BuildContext context) {
     final viewport = MediaQuery.sizeOf(context);
     final isCompactPhone = viewport.width <= 430 && viewport.height <= 950;
+    final isVerySmallPhone = viewport.width <= 375 && viewport.height <= 820;
     final options = <_StudyModeOption>[
       _StudyModeOption(
         icon: Icons.today_outlined,
@@ -111,7 +112,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          toolbarHeight: isCompactPhone ? 46 : 52,
+          toolbarHeight: isCompactPhone ? 50 : 52,
           title: Text(
             title,
             style: Theme.of(context).textTheme.titleLarge,
@@ -131,6 +132,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             if (textId == 'bodhicaryavatara') ...[
               _BodhicaryavataraTextLandingCard(
                 compact: isCompactPhone,
+                verySmallPhone: isVerySmallPhone,
                 onOpenReader: () => _openReaderView(context),
               ),
               SizedBox(height: isCompactPhone ? 6 : 10),
@@ -138,6 +140,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             for (final option in options)
               _OptionTile(
                 compact: isCompactPhone,
+                verySmallPhone: isVerySmallPhone,
                 icon: option.icon,
                 label: option.label,
                 onTap: option.onTap,
@@ -146,6 +149,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
               SizedBox(height: isCompactPhone ? 4 : 8),
               _PurchaseFooterLinks(
                 compact: isCompactPhone,
+                verySmallPhone: isVerySmallPhone,
                 onBuyRootText: () => _openPurchaseLink(
                   context,
                   linkType: 'root_text',
@@ -344,10 +348,12 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
 class _BodhicaryavataraTextLandingCard extends StatelessWidget {
   const _BodhicaryavataraTextLandingCard({
     required this.compact,
+    required this.verySmallPhone,
     required this.onOpenReader,
   });
 
   final bool compact;
+  final bool verySmallPhone;
   final VoidCallback onOpenReader;
 
   @override
@@ -361,7 +367,7 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
         side: const BorderSide(color: AppColors.borderLight),
       ),
       child: Padding(
-        padding: EdgeInsets.all(compact ? 8 : 14),
+        padding: EdgeInsets.all(compact ? 10 : 14),
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 760;
@@ -376,6 +382,7 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
                   Expanded(
                     child: _BodhicaryavataraTextLandingContent(
                       compact: compact && !isWide,
+                      verySmallPhone: verySmallPhone && !isWide,
                     ),
                   ),
                   SizedBox(width: gap),
@@ -394,6 +401,7 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
               children: [
                 _BodhicaryavataraTextLandingContent(
                   compact: true,
+                  verySmallPhone: verySmallPhone,
                 ),
                 const SizedBox(height: 10),
                 Align(
@@ -417,9 +425,11 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
 class _BodhicaryavataraTextLandingContent extends StatelessWidget {
   const _BodhicaryavataraTextLandingContent({
     required this.compact,
+    required this.verySmallPhone,
   });
 
   final bool compact;
+  final bool verySmallPhone;
 
   @override
   Widget build(BuildContext context) {
@@ -429,45 +439,43 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
         Text(
           'BODHICARYAVATARA • SANTIDEVA',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: compact ? 9 : 12,
-                    letterSpacing: compact ? 0.9 : 1.5,
+                    fontSize: compact ? (verySmallPhone ? 10.5 : 11.5) : 12,
+                    letterSpacing: compact ? (verySmallPhone ? 1.0 : 1.2) : 1.5,
                     color: AppColors.mutedBrown,
                   ) ??
               TextStyle(
                 fontFamily: 'Crimson Text',
-                fontSize: compact ? 9 : 12,
-                letterSpacing: compact ? 0.9 : 1.5,
+                fontSize: compact ? (verySmallPhone ? 10.5 : 11.5) : 12,
+                letterSpacing: compact ? (verySmallPhone ? 1.0 : 1.2) : 1.5,
                 color: AppColors.mutedBrown,
               ),
         ),
-        SizedBox(height: compact ? 1 : 4),
+        SizedBox(height: compact ? 3 : 4),
         Text(
           'Bodhicaryavatara',
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                    fontSize: compact ? 22 : 34,
-                    height: 1.0,
+                    fontSize: compact ? (verySmallPhone ? 24 : 27) : 34,
+                    height: 1.05,
                   ) ??
               TextStyle(
                 fontFamily: 'Crimson Text',
-                fontSize: compact ? 22 : 34,
-                height: 1.0,
+                fontSize: compact ? (verySmallPhone ? 24 : 27) : 34,
+                height: 1.05,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textDark,
               ),
         ),
-        SizedBox(height: compact ? 3 : 8),
+        SizedBox(height: compact ? 6 : 8),
         Text(
           'Read, explore the root text, reflect with daily verses, and quiz yourself. The root text is presented in a structured format according to the commentary by Sonam Tsemo.',
-          maxLines: compact ? 2 : null,
-          overflow: compact ? TextOverflow.ellipsis : null,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: compact ? 12.5 : 14,
-                    height: compact ? 1.2 : 1.4,
+                    fontSize: compact ? (verySmallPhone ? 14.25 : 15.5) : 14,
+                    height: compact ? (verySmallPhone ? 1.32 : 1.35) : 1.4,
                   ) ??
               TextStyle(
                 fontFamily: 'Lora',
-                fontSize: compact ? 12.5 : 14,
-                height: compact ? 1.2 : 1.4,
+                fontSize: compact ? (verySmallPhone ? 14.25 : 15.5) : 14,
+                height: compact ? (verySmallPhone ? 1.32 : 1.35) : 1.4,
                 color: AppColors.bodyText,
               ),
         ),
@@ -514,11 +522,13 @@ class _BookCoverCard extends StatelessWidget {
 class _PurchaseFooterLinks extends StatelessWidget {
   const _PurchaseFooterLinks({
     required this.compact,
+    required this.verySmallPhone,
     required this.onBuyRootText,
     required this.onBuyCommentary,
   });
 
   final bool compact;
+  final bool verySmallPhone;
   final VoidCallback onBuyRootText;
   final VoidCallback onBuyCommentary;
 
@@ -526,18 +536,18 @@ class _PurchaseFooterLinks extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
       fontFamily: 'Lora',
-      fontSize: compact ? 13 : 14,
+      fontSize: compact ? (verySmallPhone ? 14 : 15) : 14,
       fontWeight: FontWeight.w500,
       decoration: TextDecoration.underline,
     );
     return Padding(
       padding: EdgeInsets.only(
         left: compact ? 2 : 4,
-        top: compact ? 2 : 4,
-        bottom: compact ? 6 : 10,
+        top: compact ? 4 : 4,
+        bottom: compact ? 8 : 10,
       ),
       child: Wrap(
-        spacing: compact ? 16 : 20,
+        spacing: compact ? (verySmallPhone ? 10 : 14) : 20,
         runSpacing: compact ? 6 : 8,
         children: [
           TextButton(
@@ -583,12 +593,14 @@ class _StudyModeOption {
 class _OptionTile extends StatelessWidget {
   const _OptionTile({
     required this.compact,
+    required this.verySmallPhone,
     required this.icon,
     required this.label,
     required this.onTap,
   });
 
   final bool compact;
+  final bool verySmallPhone;
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -603,27 +615,28 @@ class _OptionTile extends StatelessWidget {
         side: const BorderSide(color: AppColors.borderLight),
       ),
       child: ListTile(
-        dense: compact,
-        minLeadingWidth: compact ? 26 : 40,
-        minVerticalPadding: compact ? 0 : null,
-        visualDensity:
-            compact ? const VisualDensity(horizontal: 0, vertical: -3) : null,
+        minLeadingWidth: compact ? (verySmallPhone ? 30 : 34) : 40,
+        minVerticalPadding: compact ? 2 : null,
         contentPadding: EdgeInsets.symmetric(
-          horizontal: compact ? 10 : 16,
-          vertical: compact ? 0 : 4,
+          horizontal: compact ? (verySmallPhone ? 10 : 12) : 16,
+          vertical: compact ? 2 : 4,
         ),
-        leading: Icon(icon, color: AppColors.primary, size: compact ? 20 : 24),
+        leading: Icon(
+          icon,
+          color: AppColors.primary,
+          size: compact ? (verySmallPhone ? 20 : 22) : 24,
+        ),
         title: Text(
           label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: compact ? 16 : 22,
+                fontSize: compact ? (verySmallPhone ? 17.5 : 19) : 22,
               ),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios,
-          size: compact ? 12 : 13,
+          size: compact ? (verySmallPhone ? 13 : 14) : 13,
           color: AppColors.mutedBrown,
         ),
         onTap: onTap,
