@@ -16,6 +16,12 @@ bool isAppDechenStudyHost() {
 
 void leaveAppToDechenStudy() {}
 
+bool hasBrowserBackTarget() {
+  return false;
+}
+
+void navigateBrowserBack() {}
+
 String currentAppPath() {
   return '/';
 }

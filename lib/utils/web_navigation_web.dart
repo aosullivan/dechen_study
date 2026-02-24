@@ -1,6 +1,11 @@
 // ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 
+import 'dart:convert';
 import 'dart:html' as html;
+
+const String _stateCanGoBackKey = 'dechenCanGoBack';
+const String _stateCurrentPathKey = 'dechenCurrentPath';
+const String _stateFromPathKey = 'dechenFromPath';
 
 bool openGatewayToKnowledgePage() {
   final url = Uri.base.resolve('gateway-to-knowledge.html').toString();
@@ -35,6 +40,15 @@ void leaveAppToDechenStudy() {
   html.window.location.assign('https://dechen.study');
 }
 
+bool hasBrowserBackTarget() {
+  if (_hasInAppBackState()) return true;
+  return _hasDechenStudyReferrer();
+}
+
+void navigateBrowserBack() {
+  html.window.history.back();
+}
+
 String currentAppPath() {
   final path = Uri.base.path;
   return _normalizePath(path);
@@ -50,12 +64,51 @@ void replaceAppPath(String path) {
 
 void _setAppPath(String path, {required bool replace}) {
   final normalized = _normalizePath(path);
-  if (normalized == currentAppPath()) return;
+  final currentPath = currentAppPath();
+  if (normalized == currentPath) return;
+  final state = jsonEncode(<String, Object?>{
+    _stateCanGoBackKey: !replace,
+    _stateCurrentPathKey: normalized,
+    _stateFromPathKey: currentPath,
+  });
   if (replace) {
-    html.window.history.replaceState(null, '', normalized);
+    html.window.history.replaceState(state, '', normalized);
     return;
   }
-  html.window.history.pushState(null, '', normalized);
+  html.window.history.pushState(state, '', normalized);
+}
+
+bool _hasInAppBackState() {
+  final state = html.window.history.state;
+  return _readBoolState(state, _stateCanGoBackKey);
+}
+
+bool _hasDechenStudyReferrer() {
+  final rawReferrer = html.document.referrer.trim();
+  if (rawReferrer.isEmpty) return false;
+  final referrer = Uri.tryParse(rawReferrer);
+  if (referrer == null) return false;
+  final host = referrer.host.toLowerCase();
+  return host == 'dechen.study' || host.endsWith('.dechen.study');
+}
+
+bool _readBoolState(dynamic state, String key) {
+  if (state == null) return false;
+  if (state is String) {
+    try {
+      final decoded = jsonDecode(state);
+      if (decoded is Map) {
+        return decoded[key] == true;
+      }
+    } catch (_) {
+      return false;
+    }
+    return false;
+  }
+  if (state is Map) {
+    return state[key] == true;
+  }
+  return false;
 }
 
 String _normalizePath(String rawPath) {

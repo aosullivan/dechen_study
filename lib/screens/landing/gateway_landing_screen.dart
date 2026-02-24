@@ -24,33 +24,37 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
   late final Future<List<GatewayOutlineChapter>> _chaptersFuture =
       GatewayOutlineService.instance.getChapters();
   bool _openedInitialChapter = false;
-  bool get _isProdHost => isAppDechenStudyHost();
 
   @override
   Widget build(BuildContext context) {
     return PopScope<void>(
-      canPop: !_isProdHost,
+      canPop: true,
       onPopInvokedWithResult: (didPop, _) {
-        if (_isProdHost && !didPop) {
-          leaveAppToDechenStudy();
+        if (didPop) {
+          replaceAppPath('/');
           return;
         }
-        if (didPop) replaceAppPath('/');
+        if (hasBrowserBackTarget()) {
+          navigateBrowserBack();
+        }
       },
       child: Scaffold(
         backgroundColor: AppColors.landingBackground,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          automaticallyImplyLeading: false,
           title: Text(
             'Gateway to Knowledge',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-            onPressed: _handleBackPressed,
-          ),
+          leading: _canShowTopBackButton(context)
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                  onPressed: () => _handleBackPressed(context),
+                )
+              : null,
         ),
         body: FutureBuilder<List<GatewayOutlineChapter>>(
           future: _chaptersFuture,
@@ -98,12 +102,19 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
     );
   }
 
-  void _handleBackPressed() {
-    if (_isProdHost) {
-      leaveAppToDechenStudy();
+  bool _canShowTopBackButton(BuildContext context) {
+    if (Navigator.of(context).canPop()) return true;
+    return hasBrowserBackTarget();
+  }
+
+  void _handleBackPressed(BuildContext context) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
       return;
     }
-    Navigator.of(context).pop();
+    if (hasBrowserBackTarget()) {
+      navigateBrowserBack();
+    }
   }
 
   void _openInitialChapterIfNeeded(List<GatewayOutlineChapter> chapters) {
@@ -163,16 +174,16 @@ class _GatewayHeroCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'KHYEN JUG OVERVIEW',
+                  'JAMGON JU MIPHAM',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontSize: 12,
-                            letterSpacing: 1.6,
+                            letterSpacing: 1.5,
                             color: AppColors.mutedBrown,
                           ) ??
                       const TextStyle(
                         fontFamily: 'Crimson Text',
                         fontSize: 12,
-                        letterSpacing: 1.6,
+                        letterSpacing: 1.5,
                         color: AppColors.mutedBrown,
                       ),
                 ),
@@ -189,21 +200,6 @@ class _GatewayHeroCard extends StatelessWidget {
                         height: 1,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textDark,
-                      ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Jamgon Ju Mipham',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontSize: 18,
-                            letterSpacing: 1.1,
-                            color: AppColors.mutedBrown,
-                          ) ??
-                      const TextStyle(
-                        fontFamily: 'Crimson Text',
-                        fontSize: 18,
-                        letterSpacing: 1.1,
-                        color: AppColors.mutedBrown,
                       ),
                 ),
                 const SizedBox(height: 8),

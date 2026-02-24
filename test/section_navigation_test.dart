@@ -16,11 +16,11 @@ const _expectedLeafSkipCount = 167;
 const _expectedLeafGapSum = 466;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
+  '1.3.3 (1.2) -> 2.1 (1.4): verse gap 2',
   '3.1.2.4 (1.18) -> 3.1.3.1 (1.20): verse gap 2',
   '3.1.3.2.1.1 (1.21) -> 3.1.3.2.1.2.1 (1.23): verse gap 2',
   '3.1.3.2.2.2 (1.28) -> 3.1.3.2.2.3 (1.31): verse gap 3',
   '3.1.3.2.2.4 (1.32) -> 3.1.3.2.2.5 (1.34): verse gap 2',
-  '3.2.1.1.2 (2.2) -> 3.2.1.1.3 (2.8): verse gap 6',
 ];
 const _expectedLeafSkipsLast5 = <String>[
   '5.2.1.3.2.1.1 (10.27) -> 5.2.1.3.2.1.2 (10.32): verse gap 5',

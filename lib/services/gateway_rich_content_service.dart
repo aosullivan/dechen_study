@@ -98,7 +98,6 @@ class GatewayRichContentService {
     ]),
     GatewayRichChapter(number: 2, title: 'The Elements (Dhatu)', topics: <GatewayRichTopic>[
       GatewayRichTopic(title: 'Six Sense Triads at a Glance', blocks: <GatewayRichBlock>[
-        GatewayRichBlock(type: 'p', text: 'Dhatus are presented here as a clear triad: faculties, objects, consciousnesses.', styleClass: 'triad-note'),
         GatewayRichBlock(type: 'ul', items: <String>['Eye Element', 'Ear Element', 'Nose Element', 'Tongue Element', 'Body Element', 'Mind Element'], styleClass: 'sense-list'),
         GatewayRichBlock(type: 'ul', items: <String>['Visual Form Element', 'Sound Element', 'Smell Element', 'Taste Element', 'Texture Element', 'Mental Object Element'], styleClass: 'sense-list'),
         GatewayRichBlock(type: 'ul', items: <String>['Eye Consciousness Element', 'Ear Consciousness Element', 'Nose Consciousness Element', 'Tongue Consciousness Element', 'Body Consciousness Element', 'Mind Consciousness Element'], styleClass: 'sense-list'),

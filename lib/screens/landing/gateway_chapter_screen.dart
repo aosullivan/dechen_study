@@ -96,13 +96,15 @@ class GatewayChapterScreen extends StatelessWidget {
               );
             }
 
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 20),
-              children: [
-                _ChapterIntroCard(chapter: chapter),
-                const SizedBox(height: 12),
-                ...chapter.topics.map((topic) => _GatewayTopicCard(topic: topic)),
-              ],
+            return SelectionArea(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(14, 10, 14, 20),
+                children: [
+                  _ChapterIntroCard(chapter: chapter),
+                  const SizedBox(height: 12),
+                  ...chapter.topics.map((topic) => _GatewayTopicCard(topic: topic)),
+                ],
+              ),
             );
           },
         ),
@@ -154,12 +156,12 @@ class _ChapterIntroCard extends StatelessWidget {
                 Text(
                   chapter.title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontSize: 30,
+                            fontSize: 32,
                             fontWeight: FontWeight.w600,
                           ) ??
                       const TextStyle(
                         fontFamily: 'Crimson Text',
-                        fontSize: 30,
+                        fontSize: 32,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textDark,
                       ),
@@ -231,9 +233,9 @@ class _GatewayTopicCard extends StatelessWidget {
         children.add(
           _TriadCards(
             columns: [
-              ('Faculties', blocks[i].items),
-              ('Objects', blocks[i + 1].items),
-              ('Consciousnesses', blocks[i + 2].items),
+              ('Faculties', blocks[i].items, _TriadCategory.faculties),
+              ('Objects', blocks[i + 1].items, _TriadCategory.objects),
+              ('Consciousnesses', blocks[i + 2].items, _TriadCategory.consciousnesses),
             ],
           ),
         );
@@ -248,8 +250,8 @@ class _GatewayTopicCard extends StatelessWidget {
         children.add(
           _TriadCards(
             columns: [
-              ('Inner Sources', blocks[i].items),
-              ('Outer Sources', blocks[i + 1].items),
+              ('Inner Sources', blocks[i].items, null),
+              ('Outer Sources', blocks[i + 1].items, null),
             ],
           ),
         );
@@ -289,12 +291,12 @@ class _GatewayTopicCard extends StatelessWidget {
                   child: Text(
                     topic.title,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontSize: 22,
+                              fontSize: 24,
                               fontWeight: FontWeight.w600,
                             ) ??
                         const TextStyle(
                           fontFamily: 'Crimson Text',
-                          fontSize: 22,
+                          fontSize: 24,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textDark,
                         ),
@@ -345,6 +347,7 @@ class _GatewayBlockView extends StatelessWidget {
                     block.text ?? '',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.bodyText,
+                          fontSize: 14,
                         ),
                   ),
                 ),
@@ -370,15 +373,19 @@ class _GatewayBlockView extends StatelessWidget {
               block.text ?? '',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.bodyText,
+                        fontSize: 15.5,
                       ),
             ),
           );
         }
         return Padding(
-          padding: const EdgeInsets.only(top: 6),
+          padding: const EdgeInsets.only(top: 8),
           child: Text(
             block.text ?? '',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.35),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: 17,
+                  height: 1.4,
+                ),
           ),
         );
       case 'ul':
@@ -430,6 +437,7 @@ class _GatewayBlockView extends StatelessWidget {
                             items[i],
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: AppColors.bodyText,
+                                  fontSize: 15,
                                 ),
                           ),
                         ),
@@ -500,6 +508,7 @@ class _GatewayBlockView extends StatelessWidget {
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.textDark,
+                                    fontSize: 15,
                                   ),
                         ),
                       ),
@@ -516,6 +525,7 @@ class _GatewayBlockView extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodyMedium?.copyWith(
                                       color: AppColors.bodyText,
+                                      fontSize: 15,
                                     ),
                           ),
                         ),
@@ -561,6 +571,7 @@ class _GatewayChipWrap extends StatelessWidget {
                     item,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.bodyText,
+                          fontSize: 15,
                         ),
                   ),
                 ],
@@ -575,7 +586,7 @@ class _GatewayChipWrap extends StatelessWidget {
 class _TriadCards extends StatelessWidget {
   const _TriadCards({required this.columns});
 
-  final List<(String title, List<String> items)> columns;
+  final List<(String title, List<String> items, _TriadCategory? category)> columns;
 
   @override
   Widget build(BuildContext context) {
@@ -590,7 +601,7 @@ class _TriadCards extends StatelessWidget {
                 for (final column in columns)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: _TriadCard(title: column.$1, items: column.$2),
+                    child: _TriadCard(title: column.$1, items: column.$2, category: column.$3),
                   ),
               ],
             );
@@ -602,7 +613,7 @@ class _TriadCards extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(right: i == columns.length - 1 ? 0 : 8),
-                    child: _TriadCard(title: columns[i].$1, items: columns[i].$2),
+                    child: _TriadCard(title: columns[i].$1, items: columns[i].$2, category: columns[i].$3),
                   ),
                 ),
             ],
@@ -617,10 +628,12 @@ class _TriadCard extends StatelessWidget {
   const _TriadCard({
     required this.title,
     required this.items,
+    this.category,
   });
 
   final String title;
   final List<String> items;
+  final _TriadCategory? category;
 
   @override
   Widget build(BuildContext context) {
@@ -636,7 +649,13 @@ class _TriadCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              _IconBadge(icon: _iconForLabel(title), size: 14),
+              _IconBadge(
+                icon: _iconForLabel(title),
+                size: 14,
+                backgroundColor: category?.background,
+                borderColor: category?.border,
+                iconColor: category?.icon,
+              ),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
@@ -644,6 +663,7 @@ class _TriadCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textDark,
                         fontWeight: FontWeight.w700,
+                        fontSize: 15.5,
                       ),
                 ),
               ),
@@ -656,13 +676,20 @@ class _TriadCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _IconBadge(icon: _iconForLabel(item), size: 12),
+                  _IconBadge(
+                    icon: _iconForLabel(item),
+                    size: 12,
+                    backgroundColor: category?.background,
+                    borderColor: category?.border,
+                    iconColor: category?.icon,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       item,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: AppColors.bodyText,
+                            fontSize: 14.5,
                           ),
                     ),
                   ),
@@ -689,41 +716,115 @@ class _PlainList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bodyStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 15.5,
+        );
+    final numberStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.mutedBrown,
+          fontWeight: FontWeight.w600,
+          fontSize: 15.5,
+        );
+    final subItemStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 14.5,
+        );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var i = 0; i < items.length; i++)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Row(
+          _buildItem(context, i, bodyStyle, numberStyle, subItemStyle),
+      ],
+    );
+  }
+
+  Widget _buildItem(
+    BuildContext context,
+    int i,
+    TextStyle? bodyStyle,
+    TextStyle? numberStyle,
+    TextStyle? subItemStyle,
+  ) {
+    final parsed = isNumbered ? null : _parseSublist(items[i]);
+
+    if (parsed != null) {
+      final (label, subItems) = parsed;
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (isNumbered)
-                  Text(
-                    '${startIndex + i}. ',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.mutedBrown,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  )
-                else
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: _IconBadge(icon: _iconForLabel(items[i]), size: 12),
-                  ),
-                if (!isNumbered) const SizedBox(width: 7),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: _IconBadge(icon: _iconForLabel(items[i]), size: 13),
+                ),
+                const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    items[i],
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.bodyText,
-                        ),
-                  ),
+                  child: Text(label, style: bodyStyle?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  )),
                 ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 32, top: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (final sub in subItems)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 3),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Container(
+                              width: 5,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.5),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(sub, style: subItemStyle),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (isNumbered)
+            Text('${startIndex + i}. ', style: numberStyle)
+          else
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: _IconBadge(icon: _iconForLabel(items[i]), size: 13),
+            ),
+          if (!isNumbered) const SizedBox(width: 8),
+          Expanded(
+            child: Text(items[i], style: bodyStyle),
           ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -732,10 +833,16 @@ class _IconBadge extends StatelessWidget {
   const _IconBadge({
     required this.icon,
     required this.size,
+    this.backgroundColor,
+    this.borderColor,
+    this.iconColor,
   });
 
   final IconData icon;
   final double size;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -743,18 +850,51 @@ class _IconBadge extends StatelessWidget {
       width: size + 10,
       height: size + 10,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular((size + 10) / 3),
-        border: Border.all(color: const Color(0xFFE6D8C3)),
+        border: Border.all(color: borderColor ?? const Color(0xFFE6D8C3)),
       ),
       alignment: Alignment.center,
       child: Icon(
         icon,
         size: size,
-        color: AppColors.primary,
+        color: iconColor ?? AppColors.primary,
       ),
     );
   }
+}
+
+/// Parses an item like "4 primary elements: earth, water, fire, wind."
+/// into a (label, subItems) pair for rendering as a sublist.
+/// Returns null if the item doesn't match the pattern.
+(String, List<String>)? _parseSublist(String item) {
+  final colonIndex = item.indexOf(':');
+  if (colonIndex < 0 || colonIndex >= item.length - 1) return null;
+
+  final label = item.substring(0, colonIndex + 1).trim();
+  final remainder = item.substring(colonIndex + 1).trim();
+
+  // Split by commas
+  final parts = remainder.split(',').map((p) => p.trim()).toList();
+  if (parts.length < 2) return null;
+
+  final subItems = <String>[];
+  for (final part in parts) {
+    var p = part.trim();
+    if (p.isEmpty) continue;
+    // Handle "and X" prefix
+    if (p.startsWith('and ')) {
+      p = p.substring(4);
+    }
+    // Remove trailing period
+    if (p.endsWith('.')) {
+      p = p.substring(0, p.length - 1);
+    }
+    if (p.isNotEmpty) subItems.add(p);
+  }
+
+  if (subItems.length < 2) return null;
+  return (label, subItems);
 }
 
 IconData _iconForLabel(String text) {
@@ -782,5 +922,61 @@ IconData _iconForLabel(String text) {
   if (t.contains('table') || t.contains('reference')) return Icons.table_chart_outlined;
   if (t.contains('link') || t.contains('dependent')) return Icons.link_outlined;
   if (t.contains('list') || t.contains('aggregate')) return Icons.format_list_bulleted;
+  // Element-classification patterns
+  if (t.contains('physical') || t.contains('matter')) return Icons.widgets_outlined;
+  if (t.contains('obstruct')) return Icons.block_outlined;
+  if (t.contains('undefil')) return Icons.auto_awesome_outlined;
+  if (t.contains('realm')) return Icons.layers_outlined;
+  if (t.contains('outer')) return Icons.open_in_new_outlined;
+  if (t.contains('focus')) return Icons.center_focus_strong_outlined;
+  if (t.contains('concept')) return Icons.lightbulb_outlined;
+  if (t.contains('sensation')) return Icons.sensors_outlined;
+  if (t.contains('perception')) return Icons.remove_red_eye_outlined;
+  if (t.contains('formation')) return Icons.settings_outlined;
+  // Topic-level patterns
+  if (t.contains('classif') || t.contains('categor')) return Icons.category_outlined;
+  if (t.contains('triad')) return Icons.account_tree_outlined;
+  if (t.contains('source') || t.contains('ayatana')) return Icons.swap_horiz_outlined;
+  if (t.contains('mental')) return Icons.psychology_outlined;
+  if (t.contains('person')) return Icons.person_outline;
+  if (t.contains('knowable')) return Icons.school_outlined;
+  if (t.contains('cause')) return Icons.device_hub_outlined;
+  if (t.contains('condition')) return Icons.tune_outlined;
+  if (t.contains('subdivision')) return Icons.vertical_split_outlined;
+  if (t.contains('inner')) return Icons.adjust_outlined;
+  if (t.contains('element')) return Icons.grain_outlined;
   return Icons.circle_outlined;
+}
+
+/// Colour tints that distinguish dhatu categories while keeping badge
+/// shape and size identical for consistent spacing.
+///   • Faculties – warm amber (subtle physical form)
+///   • Objects   – neutral/default
+///   • Consciousnesses – soft cool-grey
+enum _TriadCategory {
+  faculties(
+    background: Color(0xFFFDF1DC),
+    border: Color(0xFFD4B88E),
+    icon: Color(0xFF8B6914),
+  ),
+  objects(
+    background: Color(0xFFFFFFFF),
+    border: Color(0xFFE6D8C3),
+    icon: null, // uses AppColors.primary
+  ),
+  consciousnesses(
+    background: Color(0xFFF2EEF6),
+    border: Color(0xFFCFC4D8),
+    icon: Color(0xFF6B5B7B),
+  );
+
+  const _TriadCategory({
+    required this.background,
+    required this.border,
+    this.icon,
+  });
+
+  final Color background;
+  final Color border;
+  final Color? icon;
 }

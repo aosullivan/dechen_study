@@ -113,15 +113,18 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           toolbarHeight: isCompactPhone ? 50 : 52,
+          automaticallyImplyLeading: false,
           title: Text(
             title,
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          leading: _canShowTopBackButton(context)
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                  onPressed: () => _handleTopBackPressed(context),
+                )
+              : null,
         ),
         body: ListView(
           padding: EdgeInsets.symmetric(
@@ -174,6 +177,21 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   void _restoreLandingPath() {
     if (textId == 'bodhicaryavatara') {
       replaceAppPath('/');
+    }
+  }
+
+  bool _canShowTopBackButton(BuildContext context) {
+    if (Navigator.of(context).canPop()) return true;
+    return hasBrowserBackTarget();
+  }
+
+  void _handleTopBackPressed(BuildContext context) {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+      return;
+    }
+    if (hasBrowserBackTarget()) {
+      navigateBrowserBack();
     }
   }
 
@@ -371,10 +389,13 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final isWide = constraints.maxWidth >= 760;
-            final canKeepImageOnRight = isWide || constraints.maxWidth >= 420;
+            final canKeepImageOnRight =
+                isWide || (compact && constraints.maxWidth >= 300);
 
             if (canKeepImageOnRight) {
-              final coverWidth = isWide ? 120.0 : (compact ? 64.0 : 86.0);
+              final coverWidth = isWide
+                  ? 120.0
+                  : (compact ? (verySmallPhone ? 56.0 : 62.0) : 86.0);
               final gap = isWide ? 14.0 : 10.0;
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -437,7 +458,7 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'BODHICARYAVATARA • SANTIDEVA',
+          'SANTIDEVA',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontSize: compact ? (verySmallPhone ? 10.5 : 11.5) : 12,
                     letterSpacing: compact ? (verySmallPhone ? 1.0 : 1.2) : 1.5,
