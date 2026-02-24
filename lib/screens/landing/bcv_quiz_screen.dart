@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/app_theme.dart';
@@ -40,7 +39,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
   Object? _error;
   String? _clueText;
   bool _showClue = false;
-  late ConfettiController _confettiController;
 
   static final _correctAnswerMessages = [
     'Well done! That\'s correct.',
@@ -122,8 +120,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 2));
     _loadQuiz();
   }
 
@@ -132,7 +128,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
-    _confettiController.dispose();
     super.dispose();
   }
 
@@ -427,28 +422,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     );
   }
 
-  /// Star path for confetti particles (5-pointed star centered in [size]).
-  static Path _createStarPath(Size size) {
-    const points = 5;
-    final center = Offset(size.width / 2, size.height / 2);
-    final outerR = size.shortestSide / 2;
-    final innerR = outerR * 0.4;
-    final path = Path();
-    for (var i = 0; i < points * 2; i++) {
-      final radius = i.isEven ? outerR : innerR;
-      final angle = (i * (pi / points)) - (pi / 2);
-      final x = center.dx + radius * cos(angle);
-      final y = center.dy + radius * sin(angle);
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-    path.close();
-    return path;
-  }
-
   void _nextQuestion() {
     unawaited(_usageMetrics.trackEvent(
       eventName: 'quiz_next_question_tapped',
@@ -539,9 +512,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
       tint: correct ? Colors.green : AppColors.wrong,
       icon: correct ? Icons.check_circle : Icons.cancel_outlined,
     );
-    if (correct && _consecutiveCorrect >= 3) {
-      _confettiController.play();
-    }
   }
 
   Future<void> _showAnswerDialog({
@@ -649,308 +619,266 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
         ),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
-              child: LayoutBuilder(
-                builder: (context, viewport) {
-                  final hasMultipleVerses = _sectionVerseTexts.length > 1;
-                  final versePanelHeight = hasMultipleVerses
-                      ? (viewport.maxHeight * 0.38).clamp(210.0, 340.0)
-                      : (viewport.maxHeight * 0.30).clamp(150.0, 260.0);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '$_correctAnswers/$_totalAnswers',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                color: _totalAnswers == 0
-                                    ? AppColors.primary.withValues(alpha: 0.55)
-                                    : AppColors.primary,
-                                fontWeight: FontWeight.w600,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+          child: LayoutBuilder(
+            builder: (context, viewport) {
+              final hasMultipleVerses = _sectionVerseTexts.length > 1;
+              final versePanelHeight = hasMultipleVerses
+                  ? (viewport.maxHeight * 0.38).clamp(210.0, 340.0)
+                  : (viewport.maxHeight * 0.30).clamp(150.0, 260.0);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '$_correctAnswers/$_totalAnswers',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: _totalAnswers == 0
+                                ? AppColors.primary.withValues(alpha: 0.55)
+                                : AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    height: versePanelHeight,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.cardBeige,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppColors.borderLight),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var i = 0;
+                                i < _sectionVerseTexts.length;
+                                i++) ...[
+                              if (i > 0) const SizedBox(height: 14),
+                              BcvVerseText(
+                                text: _sectionVerseTexts[i],
+                                style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          fontFamily: 'Crimson Text',
+                                          fontSize: 18,
+                                          height: 1.42,
+                                          color: const Color(0xFF2C2416),
+                                        ) ??
+                                    const TextStyle(
+                                      fontFamily: 'Crimson Text',
+                                      fontSize: 18,
+                                      height: 1.42,
+                                      color: AppColors.textDark,
+                                    ),
                               ),
+                            ],
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      SizedBox(
-                        height: versePanelHeight,
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                          decoration: BoxDecoration(
-                            color: AppColors.cardBeige,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: AppColors.borderLight),
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: _sectionVerseTexts
-                                  .asMap()
-                                  .entries
-                                  .map((entry) {
-                                final text = entry.value;
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'To which chapter does this belong?',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.textDark,
+                        ),
+                  ),
+                  if (_showClue && _clueText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        _clueText!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textDark.withValues(alpha: 0.7),
+                              fontSize: 15,
+                              height: 1.3,
+                            ),
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, pad) {
+                        if (_showChapterLabels) {
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: GridView.builder(
+                                  padding: EdgeInsets.zero,
+                                  physics: const ClampingScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 6,
+                                    crossAxisSpacing: 6,
+                                    mainAxisExtent: 74,
+                                  ),
+                                  itemCount: 10,
+                                  itemBuilder: (context, index) {
+                                    final number = index + 1;
+                                    return _buildChapterPadKey(
+                                      context: context,
+                                      chapter: _chapters.firstWhere(
+                                          (c) => c.number == number),
+                                      isSelected: _selectedChapter == number,
+                                      isCorrect: _showAnswer &&
+                                          _correctChapterNumber == number,
+                                      isWrong: _showAnswer &&
+                                          _selectedChapter == number &&
+                                          _correctChapterNumber != number,
+                                      showLabel: true,
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              SizedBox(
+                                height: 42,
+                                child: Row(
                                   children: [
-                                    BcvVerseText(
-                                      text: text,
-                                      style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge
-                                              ?.copyWith(
-                                                fontFamily: 'Crimson Text',
-                                                fontSize: 18,
-                                                height: 1.42,
-                                                color: const Color(0xFF2C2416),
-                                              ) ??
-                                          const TextStyle(
-                                            fontFamily: 'Crimson Text',
-                                            fontSize: 18,
-                                            height: 1.42,
-                                            color: AppColors.textDark,
-                                          ),
+                                    Expanded(
+                                      child: _buildActionPadKey(
+                                        context: context,
+                                        label: 'Reveal',
+                                        icon: Icons.visibility_outlined,
+                                        onTap:
+                                            _showAnswer ? null : _revealAnswer,
+                                        filled: false,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Expanded(
+                                      child: _buildActionPadKey(
+                                        context: context,
+                                        label: _showAnswer ? 'Next' : 'Skip',
+                                        icon: _showAnswer
+                                            ? Icons.arrow_forward
+                                            : Icons.skip_next,
+                                        onTap: _nextQuestion,
+                                        filled: true,
+                                      ),
                                     ),
                                   ],
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'To which chapter does this belong?',
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textDark,
                                 ),
-                      ),
-                      if (_showClue && _clueText != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Text(
-                            _clueText!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontStyle: FontStyle.italic,
-                                  color: AppColors.textDark
-                                      .withValues(alpha: 0.7),
-                                  fontSize: 15,
-                                  height: 1.3,
-                                ),
+                              ),
+                            ],
+                          );
+                        }
+
+                        return GridView.builder(
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 6,
+                            crossAxisSpacing: 6,
+                            mainAxisExtent: 54,
                           ),
-                        ),
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: LayoutBuilder(
-                          builder: (context, pad) {
-                            if (_showChapterLabels) {
-                              return Column(
-                                children: [
-                                  Expanded(
-                                    child: GridView.builder(
-                                      padding: EdgeInsets.zero,
-                                      physics: const ClampingScrollPhysics(),
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 6,
-                                        crossAxisSpacing: 6,
-                                        mainAxisExtent: 74,
-                                      ),
-                                      itemCount: 10,
-                                      itemBuilder: (context, index) {
-                                        final number = index + 1;
-                                        return _buildChapterPadKey(
-                                          context: context,
-                                          chapter: _chapters.firstWhere(
-                                              (c) => c.number == number),
-                                          isSelected:
-                                              _selectedChapter == number,
-                                          isCorrect: _showAnswer &&
-                                              _correctChapterNumber == number,
-                                          isWrong: _showAnswer &&
-                                              _selectedChapter == number &&
-                                              _correctChapterNumber != number,
-                                          showLabel: true,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  SizedBox(
-                                    height: 42,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: _buildActionPadKey(
-                                            context: context,
-                                            label: 'Reveal',
-                                            icon: Icons.visibility_outlined,
-                                            onTap: _showAnswer
-                                                ? null
-                                                : _revealAnswer,
-                                            filled: false,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Expanded(
-                                          child: _buildActionPadKey(
-                                            context: context,
-                                            label:
-                                                _showAnswer ? 'Next' : 'Skip',
-                                            icon: _showAnswer
-                                                ? Icons.arrow_forward
-                                                : Icons.skip_next,
-                                            onTap: _nextQuestion,
-                                            filled: true,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            if (index < 9) {
+                              final number = index + 1;
+                              return _buildChapterPadKey(
+                                context: context,
+                                chapter: _chapters
+                                    .firstWhere((c) => c.number == number),
+                                isSelected: _selectedChapter == number,
+                                isCorrect: _showAnswer &&
+                                    _correctChapterNumber == number,
+                                isWrong: _showAnswer &&
+                                    _selectedChapter == number &&
+                                    _correctChapterNumber != number,
+                                showLabel: false,
                               );
                             }
-
-                            return GridView.builder(
-                              padding: EdgeInsets.zero,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                mainAxisSpacing: 6,
-                                crossAxisSpacing: 6,
-                                mainAxisExtent: 54,
-                              ),
-                              itemCount: 12,
-                              itemBuilder: (context, index) {
-                                if (index < 9) {
-                                  final number = index + 1;
-                                  return _buildChapterPadKey(
-                                    context: context,
-                                    chapter: _chapters
-                                        .firstWhere((c) => c.number == number),
-                                    isSelected: _selectedChapter == number,
-                                    isCorrect: _showAnswer &&
-                                        _correctChapterNumber == number,
-                                    isWrong: _showAnswer &&
-                                        _selectedChapter == number &&
-                                        _correctChapterNumber != number,
-                                    showLabel: false,
-                                  );
-                                }
-                                if (index == 9) {
-                                  return _buildActionPadKey(
-                                    context: context,
-                                    label: 'Reveal',
-                                    icon: Icons.visibility_outlined,
-                                    onTap: _showAnswer ? null : _revealAnswer,
-                                    filled: false,
-                                  );
-                                }
-                                if (index == 10) {
-                                  return _buildChapterPadKey(
-                                    context: context,
-                                    chapter: _chapters
-                                        .firstWhere((c) => c.number == 10),
-                                    isSelected: _selectedChapter == 10,
-                                    isCorrect: _showAnswer &&
-                                        _correctChapterNumber == 10,
-                                    isWrong: _showAnswer &&
-                                        _selectedChapter == 10 &&
-                                        _correctChapterNumber != 10,
-                                    showLabel: false,
-                                  );
-                                }
-                                return _buildActionPadKey(
-                                  context: context,
-                                  label: _showAnswer ? 'Next' : 'Skip',
-                                  icon: _showAnswer
-                                      ? Icons.arrow_forward
-                                      : Icons.skip_next,
-                                  onTap: _nextQuestion,
-                                  filled: true,
-                                );
-                              },
+                            if (index == 9) {
+                              return _buildActionPadKey(
+                                context: context,
+                                label: 'Reveal',
+                                icon: Icons.visibility_outlined,
+                                onTap: _showAnswer ? null : _revealAnswer,
+                                filled: false,
+                              );
+                            }
+                            if (index == 10) {
+                              return _buildChapterPadKey(
+                                context: context,
+                                chapter:
+                                    _chapters.firstWhere((c) => c.number == 10),
+                                isSelected: _selectedChapter == 10,
+                                isCorrect:
+                                    _showAnswer && _correctChapterNumber == 10,
+                                isWrong: _showAnswer &&
+                                    _selectedChapter == 10 &&
+                                    _correctChapterNumber != 10,
+                                showLabel: false,
+                              );
+                            }
+                            return _buildActionPadKey(
+                              context: context,
+                              label: _showAnswer ? 'Next' : 'Skip',
+                              icon: _showAnswer
+                                  ? Icons.arrow_forward
+                                  : Icons.skip_next,
+                              onTap: _nextQuestion,
+                              filled: true,
                             );
                           },
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (_clueText != null && !_showClue && !_showAnswer)
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() => _showClue = true);
+                          },
+                          icon: const Icon(Icons.lightbulb_outline, size: 16),
+                          label: Text(
+                            'Clue',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      TextButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _showChapterLabels = !_showChapterLabels;
+                          });
+                        },
+                        icon: Icon(
+                          _showChapterLabels
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          size: 16,
+                        ),
+                        label: Text(
+                          _showChapterLabels ? 'Hide names' : 'Show names',
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
-                      const SizedBox(height: 2),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if (_clueText != null && !_showClue && !_showAnswer)
-                            TextButton.icon(
-                              onPressed: () {
-                                setState(() => _showClue = true);
-                              },
-                              icon: const Icon(Icons.lightbulb_outline,
-                                  size: 16),
-                              label: Text(
-                                'Clue',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ),
-                          TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _showChapterLabels = !_showChapterLabels;
-                              });
-                            },
-                            icon: Icon(
-                              _showChapterLabels
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              size: 16,
-                            ),
-                            label: Text(
-                              _showChapterLabels ? 'Hide names' : 'Show names',
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
-                  );
-                },
-              ),
-            ),
+                  ),
+                ],
+              );
+            },
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              numberOfParticles: 50,
-              maxBlastForce: 40,
-              minBlastForce: 15,
-              emissionFrequency: 0.05,
-              gravity: 0.15,
-              createParticlePath: _createStarPath,
-              minimumSize: const Size(12, 12),
-              maximumSize: const Size(20, 20),
-              colors: const [
-                Color(0xFFFFD700), // Gold
-                Colors.amber,
-                Colors.amberAccent,
-              ],
-              shouldLoop: false,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

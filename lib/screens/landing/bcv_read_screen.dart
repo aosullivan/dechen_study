@@ -177,6 +177,7 @@ class _BcvReadScreenState extends State<BcvReadScreen>
   bool _deferredStartupWorkScheduled = false;
 
   final FocusNode _sectionOverviewFocusNode = FocusNode();
+  final FocusNode _readerFocusNode = FocusNode();
 
   double _rightPanelsWidth = 360;
   double _chaptersPanelHeight = 80;
@@ -327,6 +328,7 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     _visibilityDebounceTimer?.cancel();
     _mainScrollController.dispose();
     _sectionSliderScrollController.dispose();
+    _readerFocusNode.dispose();
     _sectionOverviewFocusNode.dispose();
     _sectionChangeNotifier.dispose();
     super.dispose();
@@ -899,6 +901,251 @@ class _BcvReadScreenState extends State<BcvReadScreen>
     return parts.last;
   }
 
+  static const Set<String> _openingHomageTriad = <String>{
+    '1.1.1',
+    '1.2.1',
+    '1.3.1',
+  };
+  static const Set<String> _openingCommitmentTriad = <String>{
+    '1.1.2',
+    '1.2.2',
+    '1.3.2',
+  };
+  static const Set<String> _openingDiscardingTriad = <String>{
+    '1.1.3',
+    '1.2.3',
+    '1.3.3',
+  };
+
+  static const List<String> _openingOverviewSummaryPaths = <String>[
+    '1.3.1',
+    '1.3.2',
+    '1.2.3',
+    '1.4',
+  ];
+
+  static const Map<String, String> _openingOverviewSummaryTitles =
+      <String, String>{
+    '1.3.1': 'Homage and praise',
+    '1.3.2': 'Commitment to compose',
+    '1.2.3': 'Discarding pride',
+    '1.4': 'The implicit section: the four branches of purpose and relation',
+  };
+
+  Set<String> _openingTriadForRef(String ref) {
+    final match = RegExp(
+      r'^1\.(\d+)([a-d]+)?$',
+      caseSensitive: false,
+    ).firstMatch(ref.trim());
+    if (match == null) return const <String>{};
+
+    final verse = int.tryParse(match.group(1)!);
+    if (verse == null) return const <String>{};
+    final suffix = (match.group(2) ?? '').toLowerCase();
+
+    if (verse == 1) {
+      if (suffix.contains('c') || suffix.contains('d')) {
+        return _openingCommitmentTriad;
+      }
+      if (suffix.contains('a') || suffix.contains('b')) {
+        return _openingHomageTriad;
+      }
+      // Unsuffixed 1.1 defaults to lines ab for section-overview pedagogy.
+      return _openingHomageTriad;
+    }
+    if (verse == 2 || verse == 3) {
+      return _openingDiscardingTriad;
+    }
+    return const <String>{};
+  }
+
+  int? _openingTriadIndexForSectionPath(String sectionPath) {
+    if (sectionPath.startsWith('1.1.1') ||
+        sectionPath.startsWith('1.2.1') ||
+        sectionPath.startsWith('1.3.1')) {
+      return 0;
+    }
+    if (sectionPath.startsWith('1.1.2') ||
+        sectionPath.startsWith('1.2.2') ||
+        sectionPath.startsWith('1.3.2')) {
+      return 1;
+    }
+    if (sectionPath.startsWith('1.1.3') ||
+        sectionPath.startsWith('1.2.3') ||
+        sectionPath.startsWith('1.3.3')) {
+      return 2;
+    }
+    return null;
+  }
+
+  int? _openingTriadIndexForRef(String ref) {
+    final triad = _openingTriadForRef(ref);
+    if (triad.isEmpty) return null;
+    if (triad.contains('1.3.1')) return 0;
+    if (triad.contains('1.3.2')) return 1;
+    if (triad.contains('1.3.3')) return 2;
+    return null;
+  }
+
+  int? _openingTriadIndexForContext() {
+    final byPath = _openingTriadIndexForSectionPath(_currentSectionPath);
+    if (byPath != null) return byPath;
+
+    final segRef = _currentSegmentRef;
+    if (segRef != null && segRef.isNotEmpty) {
+      final bySegRef = _openingTriadIndexForRef(segRef);
+      if (bySegRef != null) return bySegRef;
+    }
+
+    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+    if (visibleIdx != null) {
+      final baseRef = _verseService.getVerseRef(visibleIdx);
+      if (baseRef != null && baseRef.isNotEmpty) {
+        return _openingTriadIndexForRef(baseRef);
+      }
+    }
+    return null;
+  }
+
+  int? _openingVerseNumberForRef(String ref) {
+    final match = RegExp(r'^1\.(\d+)([a-d]+)?$', caseSensitive: false)
+        .firstMatch(ref.trim());
+    if (match == null) return null;
+    return int.tryParse(match.group(1)!);
+  }
+
+  int? get _openingContextVerse {
+    final segmentRef = _currentSegmentRef;
+    if (segmentRef != null && segmentRef.isNotEmpty) {
+      final verse = _openingVerseNumberForRef(segmentRef);
+      if (verse != null) return verse;
+    }
+    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
+    if (visibleIdx == null) return null;
+    final baseRef = _verseService.getVerseRef(visibleIdx);
+    if (baseRef == null || baseRef.isEmpty) return null;
+    return _openingVerseNumberForRef(baseRef);
+  }
+
+  bool get _isOpeningOverviewContext {
+    final verse = _openingContextVerse;
+    return verse != null && verse >= 1 && verse <= 4;
+  }
+
+  bool get _useOpeningSimplifiedMode => _isOpeningOverviewContext;
+
+  String _openingSummaryPathForSectionPath(String sectionPath) {
+    if (sectionPath.startsWith('1.1.1') ||
+        sectionPath.startsWith('1.2.1') ||
+        sectionPath.startsWith('1.3.1')) {
+      return '1.3.1';
+    }
+    if (sectionPath.startsWith('1.1.2') ||
+        sectionPath.startsWith('1.2.2') ||
+        sectionPath.startsWith('1.3.2')) {
+      return '1.3.2';
+    }
+    if (sectionPath.startsWith('1.1.3') ||
+        sectionPath.startsWith('1.2.3') ||
+        sectionPath.startsWith('1.3.3')) {
+      return '1.2.3';
+    }
+    if (sectionPath == '1.4' || sectionPath.startsWith('1.4.')) {
+      return '1.4';
+    }
+    return sectionPath;
+  }
+
+  String _sectionOverviewDisplayPath(String sectionPath) {
+    if (!_useOpeningSimplifiedMode) return sectionPath;
+    return _openingSummaryPathForSectionPath(sectionPath);
+  }
+
+  Set<String> _sectionOverviewNonNavigablePaths() {
+    if (!_useOpeningSimplifiedMode) return const <String>{};
+    return const <String>{'1.4'};
+  }
+
+  List<BcvSectionItem> _sectionOverviewFlatSections(List<BcvSectionItem> flat) {
+    if (!_useOpeningSimplifiedMode) return flat;
+    final byPath = <String, BcvSectionItem>{
+      for (final item in flat) item.path: item,
+    };
+    final out = <BcvSectionItem>[];
+    final added = <String>{};
+
+    final root = byPath['1'];
+    if (root != null) {
+      out.add(root);
+      added.add(root.path);
+    }
+
+    for (final summaryPath in _openingOverviewSummaryPaths) {
+      final summary = byPath[summaryPath];
+      if (summary == null) continue;
+      out.add((
+        path: summary.path,
+        title: _openingOverviewSummaryTitles[summary.path] ?? summary.title,
+        depth: 1,
+      ));
+      added.add(summary.path);
+    }
+
+    for (final item in flat) {
+      if (item.path == '1' || item.path.startsWith('1.')) continue;
+      out.add(item);
+    }
+    return out;
+  }
+
+  String _openingTriadPathForIndex(int index) {
+    switch (index) {
+      case 0:
+        return '1.3.1';
+      case 1:
+        return '1.3.2';
+      case 2:
+        return '1.2.3';
+      default:
+        return '';
+    }
+  }
+
+  String _openingTriadFirstRefForIndex(int index) {
+    switch (index) {
+      case 0:
+        return '1.1ab';
+      case 1:
+        return '1.1cd';
+      case 2:
+        return '1.2';
+      default:
+        return '';
+    }
+  }
+
+  String _normalizeOpeningNavigationPath(String sectionPath) {
+    if (sectionPath == '1.3.1') return '1.3.1';
+    if (sectionPath.startsWith('1.3.2')) return '1.3.2';
+    if (sectionPath == '1.2.3' || sectionPath.startsWith('1.3.3')) {
+      return '1.2.3';
+    }
+    return sectionPath;
+  }
+
+  String? _openingFirstRefOverrideForPath(String sectionPath) {
+    switch (sectionPath) {
+      case '1.3.1':
+        return '1.1ab';
+      case '1.3.2':
+        return '1.1cd';
+      case '1.2.3':
+        return '1.2';
+      default:
+        return null;
+    }
+  }
+
   /// Resolve verse indices from section path (refs -> indices, handling split verses).
   Set<int> _verseIndicesForSection(String sectionPath) {
     if (sectionPath.isEmpty) return {};
@@ -1234,13 +1481,15 @@ class _BcvReadScreenState extends State<BcvReadScreen>
   void _scrollSectionSliderToCurrent() {
     if (_sectionSliderCollapsed) return;
     if (_breadcrumbHierarchy.isEmpty) return;
-    final currentPath = _breadcrumbHierarchy.last['section'] ??
+    final rawCurrentPath = _breadcrumbHierarchy.last['section'] ??
         _breadcrumbHierarchy.last['path'] ??
         '';
+    final currentPath = _sectionOverviewDisplayPath(rawCurrentPath);
     if (currentPath.isEmpty) return;
     _sectionSliderScrollRequestId++;
     final requestId = _sectionSliderScrollRequestId;
-    final flat = _hierarchyService.getFlatSectionsSync();
+    final flat =
+        _sectionOverviewFlatSections(_hierarchyService.getFlatSectionsSync());
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
     final viewportHeight = BcvReadConstants.sectionSliderLineHeight *
@@ -1444,17 +1693,95 @@ class _BcvReadScreenState extends State<BcvReadScreen>
   }
 
   /// Run [fn] only if enough time has passed since last arrow nav (debounce 200ms).
-  void _debouncedArrowNav(void Function() fn) {
+  /// If [fn] performs no navigation, rollback debounce state so next key press is not consumed.
+  void _debouncedArrowNav(bool Function() fn) {
+    final before = _navState;
     if (!_tryAcceptArrowNav()) return;
-    fn();
+    final moved = fn();
+    if (!moved) {
+      _navState = before;
+    }
+  }
+
+  bool _navigateToSectionPath(
+    String sectionPath, {
+    String? firstVerseRefOverride,
+  }) {
+    if (sectionPath.isEmpty) return false;
+
+    // Fully synchronous path — no async gaps that let the next key press race.
+    _startProgrammaticNavigation();
+    _intentionalHighlight = false;
+    _highlightVerseIndices = {};
+    _minHighlightIndex = null;
+    _commentaryEntryForSelected = null;
+    _visibilityDebounceTimer?.cancel();
+    _visibilityDebounceTimer = null;
+    _verseVisibility.clear(); // Discard stale visibility data
+
+    final hierarchy = _hierarchyService.getHierarchyForSectionSync(sectionPath);
+    final verseIndices = _verseIndicesForSection(sectionPath);
+
+    final preferredChapter = _currentChapterNumber;
+    final firstVerseRef = firstVerseRefOverride ??
+        _hierarchyService.getFirstVerseForSectionInChapterSync(
+            sectionPath, preferredChapter) ??
+        _hierarchyService.getFirstVerseForSectionSync(sectionPath);
+    widget.onSectionNavigateForTest?.call(sectionPath, firstVerseRef ?? '');
+    if (firstVerseRef == null || firstVerseRef.isEmpty) return false;
+    final verseIndex = _verseService.getIndexForRefWithFallback(firstVerseRef);
+    if (verseIndex == null) return false;
+
+    _applySectionState(
+      hierarchy: hierarchy,
+      verseIndices: verseIndices.isNotEmpty ? verseIndices : {verseIndex},
+      verseIndex: verseIndex,
+      segmentRef: firstVerseRef,
+    );
+    _scrollToVerseIndex(verseIndex, segmentRef: firstVerseRef);
+    if (_readerFocusNode.canRequestFocus) {
+      _readerFocusNode.requestFocus();
+    }
+    return true;
   }
 
   /// Navigate to previous (direction -1) or next (direction 1) section.
   /// Reader pane: uses leaf sections only so each key down moves exactly one
   /// "lowest level" section forward (no jumps to parents, no skipping).
-  void _scrollToAdjacentSection(int direction) {
+  bool _scrollToAdjacentSection(int direction) {
     final leafOrdered = _hierarchyService.getLeafSectionsByVerseOrderSync();
-    if (leafOrdered.isEmpty) return;
+    if (leafOrdered.isEmpty) return false;
+
+    final triadIndex = _openingTriadIndexForContext();
+    if (_useOpeningSimplifiedMode && triadIndex != null) {
+      final targetTriad = triadIndex + direction;
+      if (targetTriad >= 0 && targetTriad <= 2) {
+        final sectionPath = _openingTriadPathForIndex(targetTriad);
+        final firstRef = _openingTriadFirstRefForIndex(targetTriad);
+        return _navigateToSectionPath(
+          sectionPath,
+          firstVerseRefOverride: firstRef,
+        );
+      }
+      if (direction > 0) {
+        final nextIdx = _hierarchyService.findAdjacentSectionIndex(
+          leafOrdered,
+          '1.3',
+          direction: 1,
+          useFullRefOrder: true,
+        );
+        if (nextIdx >= 0 && nextIdx < leafOrdered.length) {
+          final normalized = _normalizeOpeningNavigationPath(
+            leafOrdered[nextIdx].path,
+          );
+          return _navigateToSectionPath(
+            normalized,
+            firstVerseRefOverride: _openingFirstRefOverrideForPath(normalized),
+          );
+        }
+      }
+      return false;
+    }
 
     final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
     final verseRef =
@@ -1486,43 +1813,16 @@ class _BcvReadScreenState extends State<BcvReadScreen>
         useFullRefOrder: true,
       );
     } else {
-      return;
+      return false;
     }
 
-    if (newIdx < 0 || newIdx >= leafOrdered.length) return;
-    final section = leafOrdered[newIdx];
-
-    // Fully synchronous path — no async gaps that let the next key press race.
-    _startProgrammaticNavigation();
-    _intentionalHighlight = false;
-    _highlightVerseIndices = {};
-    _minHighlightIndex = null;
-    _commentaryEntryForSelected = null;
-    _visibilityDebounceTimer?.cancel();
-    _visibilityDebounceTimer = null;
-    _verseVisibility.clear(); // Discard stale visibility data
-
-    final hierarchy =
-        _hierarchyService.getHierarchyForSectionSync(section.path);
-    final verseIndices = _verseIndicesForSection(section.path);
-
-    final preferredChapter = _currentChapterNumber;
-    final firstVerseRef =
-        _hierarchyService.getFirstVerseForSectionInChapterSync(
-                section.path, preferredChapter) ??
-            _hierarchyService.getFirstVerseForSectionSync(section.path);
-    widget.onSectionNavigateForTest?.call(section.path, firstVerseRef ?? '');
-    if (firstVerseRef == null || firstVerseRef.isEmpty) return;
-    final verseIndex = _verseService.getIndexForRefWithFallback(firstVerseRef);
-    if (verseIndex == null) return;
-
-    _applySectionState(
-      hierarchy: hierarchy,
-      verseIndices: verseIndices.isNotEmpty ? verseIndices : {verseIndex},
-      verseIndex: verseIndex,
-      segmentRef: firstVerseRef,
+    if (newIdx < 0 || newIdx >= leafOrdered.length) return false;
+    final normalizedPath =
+        _normalizeOpeningNavigationPath(leafOrdered[newIdx].path);
+    return _navigateToSectionPath(
+      normalizedPath,
+      firstVerseRefOverride: _openingFirstRefOverrideForPath(normalizedPath),
     );
-    _scrollToVerseIndex(verseIndex, segmentRef: firstVerseRef);
   }
 
   Widget _buildBody() {
@@ -1713,10 +2013,17 @@ class _BcvReadScreenState extends State<BcvReadScreen>
   }
 
   Widget _buildSectionSlider({double? height, required bool collapsed}) {
-    final flat = _hierarchyService.getFlatSectionsSync();
+    final fullFlat = _hierarchyService.getFlatSectionsSync();
+    final flat = _sectionOverviewFlatSections(fullFlat);
+    final nonNavigablePaths = _sectionOverviewNonNavigablePaths();
+    final sliderCurrentPath = _sectionOverviewDisplayPath(_currentSectionPath);
     final slider = BcvSectionSlider(
       flatSections: flat,
-      currentPath: _currentSectionPath,
+      currentPath: sliderCurrentPath,
+      additionalHighlightedPaths: const <String>{},
+      expandablePaths: const <String>{},
+      expandedPaths: const <String>{},
+      nonNavigablePaths: nonNavigablePaths,
       onSectionTap: _onBreadcrumbSectionTap,
       sectionNumberForDisplay: _sectionNumberForDisplay,
       scrollController: _sectionSliderScrollController,
@@ -1907,6 +2214,7 @@ class _BcvReadScreenState extends State<BcvReadScreen>
   Widget _buildMainContent() {
     final isLaptop = _isLaptopLayout;
     final scrollContent = Focus(
+      focusNode: _readerFocusNode,
       autofocus: true,
       onKeyEvent: _handleReaderKeyEvent,
       child: GestureDetector(

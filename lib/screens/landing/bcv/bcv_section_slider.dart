@@ -14,6 +14,11 @@ class BcvSectionSlider extends StatelessWidget {
     required this.currentPath,
     required this.onSectionTap,
     required this.sectionNumberForDisplay,
+    this.additionalHighlightedPaths = const <String>{},
+    this.expandablePaths = const <String>{},
+    this.expandedPaths = const <String>{},
+    this.nonNavigablePaths = const <String>{},
+    this.onToggleExpandPath,
     this.scrollController,
     this.height,
   });
@@ -22,6 +27,11 @@ class BcvSectionSlider extends StatelessWidget {
   final String currentPath;
   final ValueChanged<Map<String, String>> onSectionTap;
   final String Function(String path) sectionNumberForDisplay;
+  final Set<String> additionalHighlightedPaths;
+  final Set<String> expandablePaths;
+  final Set<String> expandedPaths;
+  final Set<String> nonNavigablePaths;
+  final ValueChanged<String>? onToggleExpandPath;
   final ScrollController? scrollController;
   final double? height;
 
@@ -112,7 +122,11 @@ class BcvSectionSlider extends StatelessWidget {
           final hasSeparator =
               hasTopLevelSeparator || hasCooperatingMainSeparator;
           final topPadding = extraTopPaddingForIndex(flatSections, index);
-          final isCurrent = item.path == currentPath;
+          final isCurrent = item.path == currentPath ||
+              additionalHighlightedPaths.contains(item.path);
+          final isExpandable = expandablePaths.contains(item.path);
+          final isExpanded = expandedPaths.contains(item.path);
+          final isNavigable = !nonNavigablePaths.contains(item.path);
           final isAncestor = currentPath.isNotEmpty &&
               (item.path == currentPath ||
                   currentPath.startsWith('${item.path}.'));
@@ -139,26 +153,66 @@ class BcvSectionSlider extends StatelessWidget {
                   ? AppColors.primary.withValues(alpha: 0.12)
                   : Colors.transparent,
               child: InkWell(
-                onTap: () => onSectionTap({
-                  'section': item.path,
-                  'path': item.path,
-                  'title': item.title,
-                }),
+                onTap: () {
+                  if (!isNavigable) {
+                    if (isExpandable && onToggleExpandPath != null) {
+                      onToggleExpandPath!(item.path);
+                    }
+                    return;
+                  }
+                  onSectionTap({
+                    'section': item.path,
+                    'path': item.path,
+                    'title': item.title,
+                  });
+                },
                 child: SizedBox(
                   height: BcvReadConstants.sectionSliderLineHeight,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.only(left: indent),
-                      child: Text(
-                        label,
-                        style: sectionListTextStyle(
-                          context,
-                          isCurrent: isCurrent,
-                          isAncestor: isAncestor,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      child: Row(
+                        children: [
+                          if (isExpandable)
+                            SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: IconButton(
+                                key: Key('section_expand_${item.path}'),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints.tightFor(
+                                    width: 18, height: 18),
+                                iconSize: 16,
+                                tooltip: isExpanded
+                                    ? 'Collapse section'
+                                    : 'Expand section',
+                                color: AppColors.primary,
+                                onPressed: onToggleExpandPath == null
+                                    ? null
+                                    : () => onToggleExpandPath!(item.path),
+                                icon: Icon(
+                                  isExpanded
+                                      ? Icons.expand_more
+                                      : Icons.chevron_right,
+                                ),
+                              ),
+                            ),
+                          if (isExpandable) const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              label,
+                              style: sectionListTextStyle(
+                                context,
+                                isCurrent: isCurrent,
+                                isAncestor: isAncestor,
+                                isNavigable: isNavigable,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -175,8 +229,9 @@ class BcvSectionSlider extends StatelessWidget {
     BuildContext context, {
     required bool isCurrent,
     required bool isAncestor,
+    bool isNavigable = true,
   }) {
-    return Theme.of(context).textTheme.bodySmall?.copyWith(
+    final base = Theme.of(context).textTheme.bodySmall?.copyWith(
               fontFamily: 'Lora',
               fontSize: BcvReadConstants.sectionListFontSize,
               height: BcvReadConstants.sectionListLineHeight /
@@ -194,5 +249,10 @@ class BcvSectionSlider extends StatelessWidget {
           height: BcvReadConstants.sectionListLineHeight /
               BcvReadConstants.sectionListFontSize,
         );
+    if (isNavigable) return base;
+    return base.copyWith(
+      color: AppColors.mutedBrown.withValues(alpha: 0.78),
+      fontWeight: FontWeight.normal,
+    );
   }
 }

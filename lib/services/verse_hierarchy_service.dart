@@ -115,7 +115,7 @@ class VerseHierarchyService {
     var path = verseToPath[ref];
     if ((path == null || path is! List) &&
         BcvVerseService.baseVerseRefPattern.hasMatch(ref)) {
-      for (final suffix in ['a', 'bcd', 'ab', 'cd']) {
+      for (final suffix in ['ab', 'cd', 'a', 'bcd']) {
         path = verseToPath['$ref$suffix'];
         if (path is List && path.isNotEmpty) break;
       }

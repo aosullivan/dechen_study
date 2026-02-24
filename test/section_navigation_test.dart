@@ -762,6 +762,15 @@ void main() {
   // sections.verses indexing and split-verse detection
   // ---------------------------------------------------------------------------
   group('sections.verses indexing', () {
+    test('base 1.1 resolves to literal homage section via 1.1ab', () async {
+      final hierarchy = await hierarchyService.getHierarchyForVerse('1.1');
+      expect(hierarchy, isNotEmpty);
+      expect(
+        hierarchy.last['section'] ?? hierarchy.last['path'],
+        equals('1.3.1'),
+      );
+    });
+
     test(
         '"Presenting the objection" (4.6.2.1.2.3.2.1) has 9.27cd via sections.verses',
         () {
@@ -786,6 +795,41 @@ void main() {
       const path = '4.6.2.1.2.3.2.4';
       final refs = hierarchyService.getVerseRefsForSectionSync(path);
       expect(refs, contains('9.29cd'));
+    });
+
+    test(
+        'opening discarding-pride literal section owns 1.2abc-1.3cd as one block',
+        () {
+      const path = '1.3.3';
+      final own = hierarchyService.getOwnVerseRefsForSectionSync(path);
+      expect(own, containsAll(['1.2abc', '1.2d', '1.3ab', '1.3cd']));
+      expect(
+        hierarchyService.getFirstVerseForSectionSync(path),
+        equals('1.2'),
+      );
+      expect(
+          hierarchyService.getOwnVerseRefsForSectionSync('1.3.3.1'), isEmpty);
+      expect(
+          hierarchyService.getOwnVerseRefsForSectionSync('1.3.3.2'), isEmpty);
+      expect(
+          hierarchyService.getOwnVerseRefsForSectionSync('1.3.3.3'), isEmpty);
+    });
+
+    test('opening detailed nodes remain available in full hierarchy', () {
+      final flat = hierarchyService.getFlatSectionsSync();
+      final paths = flat.map((s) => s.path).toSet();
+      expect(paths, containsAll(['1.3.2.1', '1.3.3.1', '1.3.3.2', '1.3.3.3']));
+    });
+
+    test('opening condensed discarding-pride section owns 1.2 and 1.3', () {
+      const path = '1.2.3';
+      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(path);
+      expect(ownRefs, containsAll(['1.2', '1.3']));
+      expect(ownRefs, isNot(contains('1.1')));
+      expect(
+        hierarchyService.getFirstVerseForSectionSync(path),
+        equals('1.2'),
+      );
     });
 
     test('getSplitVerseSegmentsSync detects 9.27 split via sections.verses',

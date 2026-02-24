@@ -28,7 +28,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       'bodhicaryavatara_textual_structure_last_path';
 
   final _usageMetrics = UsageMetricsService.instance;
-  final _pickerScrollController = ScrollController();
   bool _loading = true;
   List<({String path, String title, int depth})> _flatSections = [];
   DateTime? _screenDwellStartedAt;
@@ -55,7 +54,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
-    _pickerScrollController.dispose();
     super.dispose();
   }
 
@@ -135,10 +133,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       _scrollToPath = restoredScrollPath;
       _loading = false;
     });
-    if (restoredSelections.isNotEmpty) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _scrollPickersToEnd(animate: false));
-    }
   }
 
   Future<String?> _loadLastPath() async {
@@ -155,21 +149,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       return;
     }
     await prefs.setString(_lastPathPrefsKey, path.trim());
-  }
-
-  void _scrollPickersToEnd({bool animate = true}) {
-    if (!_pickerScrollController.hasClients) return;
-    final target = _pickerScrollController.position.maxScrollExtent;
-    if (target <= 0) return;
-    if (animate) {
-      _pickerScrollController.animateTo(
-        target,
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOut,
-      );
-    } else {
-      _pickerScrollController.jumpTo(target);
-    }
   }
 
   /// Returns children of [parentPath] (empty string = root-level sections).
@@ -236,7 +215,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       }
     });
     unawaited(_saveLastPath(restorablePath));
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollPickersToEnd());
   }
 
   /// Build picker selections from a section path.
@@ -284,8 +262,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         _scrollToPath = section.path;
       });
       unawaited(_saveLastPath(section.path));
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _scrollPickersToEnd());
     } else {
       setState(() {
         _selectedPath = section.path;
@@ -294,8 +270,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         _scrollToPath = section.path;
       });
       unawaited(_saveLastPath(section.path));
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _scrollPickersToEnd());
       showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
@@ -550,22 +524,13 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.borderLight)),
       ),
-      child: SingleChildScrollView(
-        controller: _pickerScrollController,
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            for (var i = 0; i < pickers.length; i++) ...[
-              if (i > 0)
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(Icons.chevron_right,
-                      size: 18, color: AppColors.mutedBrown),
-                ),
-              pickers[i],
-            ],
+      child: Column(
+        children: [
+          for (var i = 0; i < pickers.length; i++) ...[
+            if (i > 0) const SizedBox(height: 8),
+            pickers[i],
           ],
-        ),
+        ],
       ),
     );
   }
@@ -576,7 +541,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     required String? selectedPath,
   }) {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 320),
+      width: double.infinity,
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: AppColors.cardBeige,

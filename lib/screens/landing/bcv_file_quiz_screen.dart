@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/bcv_file_quiz_service.dart';
@@ -24,8 +23,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
   final _usageMetrics = UsageMetricsService.instance;
   final _random = Random();
   DateTime? _screenDwellStartedAt;
-
-  late final ConfettiController _confettiController;
 
   bool _isLoading = true;
   Object? _error;
@@ -83,8 +80,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 2));
     _loadDifficulty(_difficulty, resetScore: true);
   }
 
@@ -93,7 +88,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
-    _confettiController.dispose();
     super.dispose();
   }
 
@@ -329,10 +323,6 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
       icon: correct ? Icons.check_circle : Icons.cancel_outlined,
       verses: resolvedVerses,
     );
-
-    if (correct && _consecutiveCorrect >= 3) {
-      _confettiController.play();
-    }
   }
 
   Future<void> _showResultDialog({
@@ -610,173 +600,143 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
         title: Text('Quiz', style: Theme.of(context).textTheme.titleLarge),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
-              child: LayoutBuilder(
-                builder: (context, _) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
+          child: LayoutBuilder(
+            builder: (context, _) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          const Spacer(),
-                          Text(
-                            '$_correctAnswers/$_totalAnswers',
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: _totalAnswers == 0
-                                          ? AppColors.primary
-                                              .withValues(alpha: 0.55)
-                                          : AppColors.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          _buildDifficultyButton(
-                            value: BcvFileQuizDifficulty.beginner,
-                            label: 'Beginner',
-                            onTap: () => _loadDifficulty(
-                              BcvFileQuizDifficulty.beginner,
-                              resetScore: true,
+                      const Spacer(),
+                      Text(
+                        '$_correctAnswers/$_totalAnswers',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: _totalAnswers == 0
+                                  ? AppColors.primary.withValues(alpha: 0.55)
+                                  : AppColors.primary,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          _buildDifficultyButton(
-                            value: BcvFileQuizDifficulty.advanced,
-                            label: 'Advanced',
-                            onTap: () => _loadDifficulty(
-                              BcvFileQuizDifficulty.advanced,
-                              resetScore: true,
-                            ),
-                          ),
-                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                        decoration: BoxDecoration(
-                          color: AppColors.cardBeige,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.borderLight),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      _buildDifficultyButton(
+                        value: BcvFileQuizDifficulty.beginner,
+                        label: 'Beginner',
+                        onTap: () => _loadDifficulty(
+                          BcvFileQuizDifficulty.beginner,
+                          resetScore: true,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (beginnerChapterHint != null) ...[
-                              Text(
-                                beginnerChapterHint,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                              ),
-                              const SizedBox(height: 6),
-                            ],
-                            Text(
-                              question.prompt,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
+                      ),
+                      const SizedBox(width: 8),
+                      _buildDifficultyButton(
+                        value: BcvFileQuizDifficulty.advanced,
+                        label: 'Advanced',
+                        onTap: () => _loadDifficulty(
+                          BcvFileQuizDifficulty.advanced,
+                          resetScore: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.cardBeige,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.borderLight),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (beginnerChapterHint != null) ...[
+                          Text(
+                            beginnerChapterHint,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          const SizedBox(height: 6),
+                        ],
+                        Text(
+                          question.prompt,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontSize: 20,
                                     height: 1.25,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.textDark,
                                   ),
-                            ),
-                          ],
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              for (final key in orderedKeys) ...[
-                                _buildOptionButton(
-                                  context,
-                                  key,
-                                  question.options[key] ?? '',
-                                  question,
-                                ),
-                                const SizedBox(height: 6),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Row(
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Expanded(
-                            child: OutlinedButton.icon(
-                              onPressed: _showAnswer ? null : _revealAnswer,
-                              icon: const Icon(Icons.visibility_outlined),
-                              label: const Text('Reveal'),
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: AppColors.primary,
-                                side: const BorderSide(color: AppColors.border),
-                              ),
+                          for (final key in orderedKeys) ...[
+                            _buildOptionButton(
+                              context,
+                              key,
+                              question.options[key] ?? '',
+                              question,
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: _showAnswer
-                                  ? () => _nextQuestion(trackInteraction: true)
-                                  : () => _nextQuestion(trackInteraction: true),
-                              icon: Icon(
-                                _showAnswer
-                                    ? Icons.arrow_forward
-                                    : Icons.skip_next,
-                              ),
-                              label: Text(_showAnswer ? 'Next' : 'Skip'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.primary,
-                                foregroundColor: Colors.white,
-                              ),
-                            ),
-                          ),
+                            const SizedBox(height: 6),
+                          ],
                         ],
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: _showAnswer ? null : _revealAnswer,
+                          icon: const Icon(Icons.visibility_outlined),
+                          label: const Text('Reveal'),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.primary,
+                            side: const BorderSide(color: AppColors.border),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: _showAnswer
+                              ? () => _nextQuestion(trackInteraction: true)
+                              : () => _nextQuestion(trackInteraction: true),
+                          icon: Icon(
+                            _showAnswer ? Icons.arrow_forward : Icons.skip_next,
+                          ),
+                          label: Text(_showAnswer ? 'Next' : 'Skip'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
                     ],
-                  );
-                },
-              ),
-            ),
+                  ),
+                ],
+              );
+            },
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              numberOfParticles: 36,
-              maxBlastForce: 34,
-              minBlastForce: 12,
-              emissionFrequency: 0.06,
-              gravity: 0.18,
-              minimumSize: const Size(10, 10),
-              maximumSize: const Size(16, 16),
-              colors: const [
-                Color(0xFFFFD700),
-                Colors.amber,
-                Colors.amberAccent
-              ],
-              shouldLoop: false,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

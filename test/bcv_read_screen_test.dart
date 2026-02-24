@@ -27,6 +27,9 @@ void main() {
   late int verseIndex9150cd;
   late int verseIndex8167;
   late int verseIndex8168;
+  late int verseIndex11;
+  late int verseIndex12;
+  late int verseIndex14ab;
   late int firstLeafVerseIndex;
   late int lastLeafVerseIndex;
   late List<({String path, String title, int depth})> leafOrdered;
@@ -52,6 +55,9 @@ void main() {
     verseIndex9150cd = verseService.getIndexForRefWithFallback('9.150cd') ?? -1;
     verseIndex8167 = verseService.getIndexForRefWithFallback('8.167') ?? -1;
     verseIndex8168 = verseService.getIndexForRefWithFallback('8.168') ?? -1;
+    verseIndex11 = verseService.getIndexForRefWithFallback('1.1') ?? -1;
+    verseIndex12 = verseService.getIndexForRefWithFallback('1.2') ?? -1;
+    verseIndex14ab = verseService.getIndexForRefWithFallback('1.4ab') ?? -1;
     leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync();
     firstLeafVerseIndex = -1;
     for (final s in leafOrdered) {
@@ -87,6 +93,12 @@ void main() {
         reason: 'Verse 8.167 must exist');
     expect(verseIndex8168, greaterThanOrEqualTo(0),
         reason: 'Verse 8.168 must exist');
+    expect(verseIndex11, greaterThanOrEqualTo(0),
+        reason: 'Verse 1.1 must exist');
+    expect(verseIndex12, greaterThanOrEqualTo(0),
+        reason: 'Verse 1.2 must exist');
+    expect(verseIndex14ab, greaterThanOrEqualTo(0),
+        reason: 'Verse 1.4ab must exist');
     expect(firstLeafVerseIndex, greaterThanOrEqualTo(0),
         reason: 'First leaf verse must resolve');
     expect(lastLeafVerseIndex, greaterThanOrEqualTo(0),
@@ -402,6 +414,71 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
     });
 
+    testWidgets('chapter 1 opening keydown follows triad sequence for 1.1-1.3',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedPaths = <String>[];
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex11,
+        initialSegmentRef: '1.1ab',
+        onSectionNavigateForTest: (path, firstRef) {
+          capturedPaths.add(path);
+          capturedRefs.add(firstRef);
+        },
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(
+        capturedPaths.length,
+        greaterThanOrEqualTo(2),
+        reason: 'Captured paths=$capturedPaths refs=$capturedRefs',
+      );
+      expect(capturedPaths[0], equals('1.3.2'));
+      expect(capturedRefs[0], equals('1.1cd'));
+      expect(capturedPaths[1], equals('1.2.3'));
+      expect(capturedRefs[1], equals('1.2'));
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('chapter 1 discarding keydown moves directly to 1.4',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedPaths = <String>[];
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex12,
+        initialSegmentRef: '1.2',
+        onSectionNavigateForTest: (path, firstRef) {
+          capturedPaths.add(path);
+          capturedRefs.add(firstRef);
+        },
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(capturedPaths.length, greaterThanOrEqualTo(1));
+      expect(capturedPaths.first, equals('2.1.1'));
+      expect(capturedRefs.first, equals('1.4ab'));
+      expect(capturedRefs, isNot(contains('1.3cd')));
+      await tester.pump(const Duration(seconds: 2));
+    });
+
     testWidgets('arrow up at first leaf does not navigate',
         (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
@@ -438,6 +515,38 @@ void main() {
       await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
       await tester.pump(const Duration(milliseconds: 400));
       expect(navCount, 0, reason: 'At last leaf, ArrowDown should be a no-op');
+    });
+
+    testWidgets(
+        'no-op boundary key does not consume next opposite-direction key press',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      int navCount = 0;
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: firstLeafVerseIndex,
+        onSectionNavigateForTest: (_, __) => navCount++,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      // First key is a no-op at the top boundary.
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowUp);
+      await tester.pump(const Duration(milliseconds: 10));
+      expect(navCount, 0);
+
+      // Immediate opposite key should navigate on first press.
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(
+        navCount,
+        1,
+        reason:
+            'A no-op arrow key should not consume debounce and force double-press on next valid move.',
+      );
+      await tester.pump(const Duration(seconds: 2));
     });
 
     testWidgets(
@@ -509,6 +618,133 @@ void main() {
       expect(find.byType(BcvChaptersPanel), findsOneWidget);
       expect(find.byType(BcvSectionSlider), findsOneWidget);
       expect(find.byType(BcvBreadcrumbBar), findsOneWidget);
+    });
+  });
+
+  group('BcvReadScreen Chapter 1 triad highlights', () {
+    Future<void> pumpChapterOneSegment(
+      WidgetTester tester, {
+      required int verseIndex,
+      required String segmentRef,
+    }) async {
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex,
+        initialSegmentRef: segmentRef,
+        mediaSize: const Size(1200, 800),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+    }
+
+    testWidgets('1.1ab maps to homage stop', (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex11,
+        segmentRef: '1.1ab',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      expect(slider.currentPath, equals('1.3.1'));
+      expect(slider.additionalHighlightedPaths, isEmpty);
+    });
+
+    testWidgets('base 1.1 defaults to homage stop',
+        (WidgetTester tester) async {
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex11,
+        mediaSize: const Size(1200, 800),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      expect(slider.currentPath, equals('1.3.1'));
+      expect(slider.additionalHighlightedPaths, isEmpty);
+    });
+
+    testWidgets('1.1cd maps to commitment stop', (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex11,
+        segmentRef: '1.1cd',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      expect(slider.currentPath, equals('1.3.2'));
+      expect(slider.additionalHighlightedPaths, isEmpty);
+    });
+
+    testWidgets('opening section overview defaults to simplified structure',
+        (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex11,
+        segmentRef: '1.1cd',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      final paths = slider.flatSections.map((s) => s.path).toSet();
+      final roots = slider.flatSections.where((s) => s.path == '1').length;
+      expect(paths, contains('1.3.1'));
+      expect(paths, contains('1.3.2'));
+      expect(paths, contains('1.2.3'));
+      expect(paths, contains('1.4'));
+      expect(roots, 1);
+      expect(slider.expandablePaths, isEmpty);
+      expect(slider.nonNavigablePaths, contains('1.4'));
+      expect(paths, isNot(contains('1.1.1')));
+      expect(paths, isNot(contains('1.3.2.1')));
+      expect(paths, isNot(contains('1.3.3.1')));
+      expect(paths, isNot(contains('1.4.1')));
+      expect(find.byKey(const Key('section_expand_1.3.2')), findsNothing);
+      expect(
+        slider.flatSections.where((s) => s.path == '1.3.1').first.title,
+        equals('Homage and praise'),
+      );
+    });
+
+    testWidgets('1.2 maps to discarding stop', (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex12,
+        segmentRef: '1.2',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      expect(slider.currentPath, equals('1.2.3'));
+      expect(slider.additionalHighlightedPaths, isEmpty);
+    });
+
+    testWidgets('1.2abc still maps to discarding stop in simplified overview',
+        (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex12,
+        segmentRef: '1.2abc',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      expect(slider.currentPath, equals('1.2.3'));
+      final paths = slider.flatSections.map((s) => s.path).toSet();
+      expect(paths, isNot(contains('1.3.3.1')));
+      expect(paths, isNot(contains('1.3.3.2')));
+      expect(paths, isNot(contains('1.3.3.3')));
+    });
+
+    testWidgets('1.4ab highlights real section, not implicit section 1.4',
+        (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex14ab,
+        segmentRef: '1.4ab',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      expect(slider.currentPath, equals('2.1.1'));
+      expect(slider.currentPath, isNot(equals('1.4')));
+      expect(slider.nonNavigablePaths, contains('1.4'));
     });
   });
 }

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Generate section_clues.json for the Guess the Chapter quiz."""
+"""Generate section_clues.json for the Guess the Chapter quiz.
+
+Clues reference the COMMENTARY's structural outline (section topics,
+parent topics) — never the verse content itself, which the user already sees.
+"""
 
 import re
 import json
@@ -7,8 +11,10 @@ import json
 # ---------------------------------------------------------------------------
 # Clue pools per chapter, organised by verse-number ranges.
 # Each entry: (start_verse, end_verse, [clue_variations])
-# A section whose first ref falls in [start, end] picks from that pool.
-# "start" and "end" are verse numbers (the part after the dot).
+#
+# KEY RULE: never paraphrase or reference what the verse says.
+# Instead, reference the commentary topic: "Which chapter has a section
+# about [X]?" where X comes from the structural outline.
 # ---------------------------------------------------------------------------
 
 CHAPTER_CLUES = {
@@ -17,53 +23,45 @@ CHAPTER_CLUES = {
     # ===================================================================
     1: [
         (1, 3, [
-            "Śāntideva hasn't started the heavy lifting yet — he's still warming up.",
-            "We're still in the opening pages — the author is introducing himself.",
-            "The author is being humbly self-deprecating about what he's about to write.",
-            "This is the overture — Śāntideva is setting the stage for what follows.",
-            "Think prologues and promises — the real argument hasn't begun.",
+            "This section covers the purposes of the composition: homage, commitment to compose, and discarding pride.",
+            "Which chapter opens with the author explaining the purposes and structure of the text?",
+            "The commentary places this under 'the purposes of the composition'.",
+            "Which chapter begins with homage to the Three Jewels and a commitment to compose?",
         ]),
         (4, 5, [
-            "This is about why you're lucky to even be reading this right now.",
-            "The rarity of the present opportunity is being emphasised.",
-            "Lightning and darkness feature here — think fleeting chances.",
-            "Śāntideva is reminding you not to waste what's hard to find.",
+            "The commentary calls this section 'the primary basis: the individual person'.",
+            "Which chapter has a section on the bodily and mental bases for practice?",
+            "This falls under the commentary heading 'the difficulty of acquiring the freedoms and endowments'.",
         ]),
-        (6, 14, [
-            "Elixirs, jewels, trees, warriors, cosmic fire — Śāntideva is reaching for every analogy he can find.",
-            "This verse uses a vivid image to illustrate the power of one specific mind state.",
-            "Think of a section where everything is compared to something miraculous.",
-            "Śāntideva is still selling you on why this one thing matters above all else.",
-            "The author is piling up metaphors — each grander than the last.",
-            "Great evils being consumed, prisons being escaped — the imagery is dramatic.",
-            "A single mental quality is being praised as though it could change the universe.",
-            "Plantain trees, alchemical elixirs, and fires at the end of time — all in service of one point.",
-            "Limitless benefits are being enumerated — this section reads like an advertisement.",
+        (6, 8, [
+            "The commentary places this under the 'ordinary benefits' of bodhicitta — invisible and visible.",
+            "Which chapter has a section on how bodhicitta overcomes nonvirtue?",
+            "This section discusses the 'productive cause': the generation of bodhicitta and its power.",
+        ]),
+        (9, 14, [
+            "The commentary calls this section 'specific examples' illustrating the benefits through a series of analogies.",
+            "Which chapter illustrates the benefits of bodhicitta through a sequence of elaborate analogies?",
+            "This falls under the commentary heading on the visible benefits of bodhicitta.",
+            "Which chapter has a section using analogies to show how bodhicitta overcomes evil and produces inexhaustible virtue?",
         ]),
         (15, 19, [
-            "A distinction is being drawn between wishing and doing — both valuable, but differently.",
-            "Two varieties of the same precious thing are being compared.",
-            "This is about the difference between wanting to go somewhere and actually setting off.",
-            "Aspiration and application — the text is distinguishing two modes of the same quality.",
-            "Even while sleeping, something remarkable happens for those who have taken this on.",
+            "The commentary calls this section the 'characteristics' and 'extraordinary benefits' of the two types of bodhicitta.",
+            "Which chapter explains the divisions of bodhicitta and their respective benefits?",
+            "This section falls under the heading on distinguishing and praising the two types of bodhicitta.",
+            "Which chapter has a section on the extraordinary benefits of aspiration and application bodhicitta?",
         ]),
-        (20, 30, [
-            "Even parents, gods, and sages are being compared unfavourably here.",
-            "The intention to help all beings is being exalted above every other virtue.",
-            "This part reads like a love letter to a particular state of mind.",
-            "Śāntideva is arguing that even wanting to cure headaches generates boundless merit.",
-            "The text is making the case that this intention has never arisen before — not even in dreams.",
-            "A treasure of mind is being described as unprecedented and immeasurable.",
-            "The mere wish to help is being ranked above offerings to all the Buddhas.",
-            "Beings chase suffering while longing to escape it — the irony is deliberate.",
+        (20, 27, [
+            "The commentary calls this 'the reasons for the benefits' — established through scripture and reasoning.",
+            "Which chapter has a section establishing the benefits through the vastness of intent and rarity?",
+            "This falls under the heading on why the benefits are so great — the intent's vastness and unprecedented nature.",
+            "Which chapter argues through reasoning that the greatness of the intent explains the greatness of the benefit?",
+            "The commentary identifies three reasons: vastness of intent, rarity, and greatness of goodness.",
         ]),
-        (31, 36, [
-            "Śāntideva is wrapping up his opening argument with crescendo praise.",
-            "The author is near the end of the beginning — the great advertisement.",
-            "Malevolent thoughts toward certain beings are said to carry aeon-long consequences.",
-            "Worldly generosity — even done contemptuously — earns respect. This is about something far greater.",
-            "We're approaching a chapter boundary — the praise is reaching its peak.",
-            "The sons of the conquerors are praised — harming them carries heavy consequences.",
+        (28, 36, [
+            "The commentary places this under 'reasons for the benefits of application bodhicitta'.",
+            "Which chapter has a section on why the bodhisattva's practice is superior to ordinary generosity?",
+            "This falls under the heading on the particularly powerful field — both harmful and beneficial consequences.",
+            "Which chapter concludes its opening section with praise and offerings to the sources of refuge?",
         ]),
     ],
 
@@ -71,58 +69,53 @@ CHAPTER_CLUES = {
     # CHAPTER 2 – Confession of Faults
     # ===================================================================
     2: [
-        (1, 11, [
-            "Think incense, jewels, and lotus ponds — an elaborate display of generosity.",
-            "Śāntideva is visualising gifts fit for the entire universe.",
-            "This verse is part of an imagined feast for enlightened beings.",
-            "Mountains, forests, and wish-granting trees are being mentally offered.",
-            "Bejewelled mountains and lakes adorned with lotus — the visualisation is lavish.",
-            "The author is offering everything beautiful he can imagine — and then some.",
-            "Crystal floors, pearl canopies, precious vases — this is ritual at its most elaborate.",
-            "Flowers, fruits, fragrances — the senses are all engaged in this offering.",
-            "Every conceivable beauty in the universe is being gathered and presented.",
-            "These offerings aren't physical — they're the products of a generous imagination.",
+        (1, 9, [
+            "The commentary calls this 'offerings of unowned worldly substances' to the Three Jewels.",
+            "Which chapter has a section on outer offerings of material goods?",
+            "This falls under the first of the seven branches — surpassable material offerings.",
+            "Which chapter includes a structured sequence of outer and inner offerings to the Three Jewels?",
         ]),
-        (12, 25, [
-            "Bodies are being offered, bathing rituals described — a personal act of devotion.",
-            "The finest cloths and fragrant robes are being offered to holy beings.",
-            "Scented oils, parasols, and melodious praise — the ritual continues.",
-            "This is a structured devotional sequence — think of the branches of a prayer.",
-            "Prostrations and praise are being made with great formality.",
-            "The author is physically bowing — not just with body but with the full weight of his voice.",
-            "Jewel lamps, golden lotuses, and palaces — offered in imagination.",
-            "Songs of praise are being composed to the sages and their sons.",
-            "Taking refuge is being pledged — until a very specific endpoint.",
+        (10, 16, [
+            "The commentary places this under inner offerings — bathing, robes, scented oils, incense, food.",
+            "Which chapter includes bathing offerings, offering of robes, and offering of specific substances like incense and lamps?",
+            "This section covers the inner material offerings — personal and elaborate.",
+            "Which chapter has a section on inner offerings as part of the seven-branch prayer?",
         ]),
-        (26, 40, [
-            "This is a very personal moment — the author is facing his own failures.",
-            "Śāntideva is not being philosophical here — he's being brutally honest about himself.",
-            "The tone shifts from grand offerings to raw vulnerability.",
-            "Impermanence is making the confession urgent — death could come at any time.",
-            "The author is terrified of what his actions have set in motion.",
-            "Friends, family, possessions — all will be left behind. Only karma remains.",
-            "The Lord of Death is approaching and there is nowhere to hide.",
-            "Fear of consequences is motivating a desperate honesty.",
-            "Past nonvirtues are being recalled with genuine regret.",
-            "The confession is powered by a visceral awareness of mortality.",
-            "Śāntideva is asking to be freed from his own accumulated negativity.",
-            "The author realises his body will be cremated — but his karma will follow him.",
+        (17, 25, [
+            "The commentary calls this section 'unsurpassable offerings' and 'offering of homage' — praise and prostration.",
+            "Which chapter includes the offering of homage — both praise and prostration?",
+            "This falls under the final material offerings and the offering of service.",
+            "Which chapter has a section on praise with melodious words and prostration to the Three Jewels?",
         ]),
-        (41, 55, [
-            "Specific bodhisattvas are being called upon by name for protection.",
-            "The author is taking refuge in particular enlightened beings — Mañjughoṣa, Avalokiteśvara and others.",
-            "An analogy with illness or a precipice is being used to establish urgency.",
-            "If ordinary dangers demand such caution, how much more so for these?",
-            "The power of reliance — turning to protectors in a time of need.",
-            "Śāntideva is reaching out to compassionate beings for help with his predicament.",
+        (26, 31, [
+            "The commentary places this under 'taking refuge' and the beginning of 'confession of faults'.",
+            "Which chapter has a section on taking refuge and considering one's past nonvirtues?",
+            "This falls under the seven-point summary of taking refuge and the power of regret.",
+            "Which chapter begins the actual confession — examining objects, nature, and motivation of nonvirtues?",
         ]),
-        (56, 65, [
-            "The seven-branch prayer is nearing completion.",
-            "Restraint for the future is being pledged alongside confession of the past.",
-            "Think of what you do at the end of an elaborate ritual sequence.",
-            "The author is wrapping up a structured devotional practice with distinct steps.",
-            "Purification of former lives and a vow of restraint — the confession concludes.",
-            "The closing acts of a multi-part prayer are underway.",
+        (32, 42, [
+            "The commentary calls this 'longing to be freed swiftly' — through ceasing reliance on the unreliable.",
+            "Which chapter has a section on the urgency of confession driven by the fear of death?",
+            "This falls under the heading on fearing the results of nonvirtue and the aspects of suffering.",
+            "Which chapter reflects on impermanence and the inevitable approach of death as motivation for purification?",
+        ]),
+        (43, 52, [
+            "The commentary calls this 'the power of reliance' — taking refuge in specific bodhisattvas.",
+            "Which chapter has a section on taking refuge in particular bodhisattvas as supports?",
+            "This falls under the heading on taking hold of both general and particular supports.",
+            "Which chapter invokes individual bodhisattvas by name as part of a purification practice?",
+        ]),
+        (53, 59, [
+            "The commentary calls this 'the power of the antidote' — with analogies of illness and precipices.",
+            "Which chapter has a section on applying antidotes, illustrated by analogies of serious illness?",
+            "This falls under the heading on the reasons to persevere in the antidote.",
+            "Which chapter uses the examples of illness and precipices to establish urgency?",
+        ]),
+        (60, 65, [
+            "The commentary calls this 'the power of desisting' — restraint for the future.",
+            "Which chapter has a section on the intention to abandon nonvirtue going forward?",
+            "This falls under the heading on fearing consequences and definitively giving up worldly interests.",
+            "Which chapter concludes its purification sequence with a pledge of future restraint?",
         ]),
     ],
 
@@ -131,38 +124,33 @@ CHAPTER_CLUES = {
     # ===================================================================
     3: [
         (1, 6, [
-            "Rejoicing is happening — in others' virtue, liberation, and enlightenment.",
-            "The seven-branch prayer continues here — this is one of its middle branches.",
-            "The author is celebrating others' good deeds with genuine delight.",
-            "Buddhas are being asked not to disappear — to keep teaching.",
-            "The dharma wheel is being requested to turn — a formal supplication.",
-            "Rejoicing in virtue at every level — from worldly goodness to the bhūmis.",
+            "The commentary places this under 'rejoicing' — one of the seven branches — and requesting the dharma wheel.",
+            "Which chapter continues the seven-branch prayer with rejoicing, requesting teachings, and supplicating?",
+            "This falls under the heading on rejoicing in worldly virtue, liberation, and enlightenment.",
+            "Which chapter has a section on rejoicing in the virtue of Buddhas, bodhisattvas, and ordinary beings?",
         ]),
-        (7, 15, [
-            "Merit is being dedicated toward removing all forms of suffering.",
-            "Something irreversible is happening — a point of no return.",
-            "The author is giving away everything — body, pleasures, all accumulated merit.",
-            "Think of a solemn ceremony — formal words are being spoken.",
-            "The aspiration here is total: to be a bridge, a boat, a lamp for others.",
-            "Śāntideva aspires to be whatever beings need — medicine, food, sustenance.",
-            "This verse has the feeling of a ceremony — think vows and celebrations.",
+        (7, 10, [
+            "The commentary calls this 'dedicating roots of merit' — toward eliminating sickness, hunger, and poverty.",
+            "Which chapter has a section on dedicating merit toward specific forms of suffering?",
+            "This falls under the heading on the dedication branch of the seven-branch prayer.",
         ]),
-        (16, 24, [
-            "The bodhisattva vow is being taken — the actual words are being recited.",
-            "The author is no longer just talking about the path — he's stepping onto it.",
-            "Witnesses are being called — something formal and irreversible is happening.",
-            "All beings are being invited to a feast of temporary and ultimate happiness.",
-            "In the presence of the protectors, a commitment is being made.",
-            "The vow itself is being spoken aloud — this is the pivotal moment.",
+        (11, 20, [
+            "The commentary calls this 'the main part' — aspirations and the actual taking of the vow.",
+            "Which chapter has a section on aspiring to give up everything for the sake of beings?",
+            "This falls under the heading on four aspirations leading to the bodhisattva vow.",
+            "Which chapter includes aspirations to be sustenance, protector, and guide for all beings?",
+            "The commentary identifies four aspirations here: to give up all, to create inexhaustible causes, to be sustenance, and to recite the vow.",
+        ]),
+        (21, 24, [
+            "The commentary calls this 'reciting the words of the vow' — the pivotal formal moment.",
+            "Which chapter has a section on the actual recitation of the bodhisattva commitment?",
+            "This falls under the heading on formally adopting the vow in the presence of protectors.",
         ]),
         (25, 34, [
-            "The joy here comes from a specific moment of commitment — it's celebratory.",
-            "The author has just done something momentous and is revelling in it.",
-            "Birth into the Buddha family is being celebrated — the author feels transformed.",
-            "A blind person finding a jewel in a heap of refuse — that kind of astonishment.",
-            "Śāntideva is calling on all beings to share in his happiness.",
-            "The power to dispel suffering, ignorance, and bad rebirths is now in hand.",
-            "Life has just become meaningful — the author knows it and is exultant.",
+            "The commentary calls this 'generating joy in the attainment' — both benefit of self and benefit of others.",
+            "Which chapter has a section on celebrating what has been attained — the meaning of one's life?",
+            "This falls under the heading on the power to dispel suffering and obscurations and to establish happiness.",
+            "Which chapter concludes with the power of the newly-generated bodhicitta to benefit self and others?",
         ]),
     ],
 
@@ -170,51 +158,41 @@ CHAPTER_CLUES = {
     # CHAPTER 4 – Concern
     # ===================================================================
     4: [
-        (1, 6, [
-            "Śāntideva is essentially saying: 'Do you realise what you just promised?'",
-            "This is the 'but seriously though' moment after the celebration.",
-            "Having taken the vow, the stakes of failure are now terrifyingly clear.",
-            "The commitment must never be neglected — the consequences of doing so are spelled out.",
-            "Deceiving all sentient beings — that's what abandoning this commitment amounts to.",
-            "If you promise to free beings from prison and then abandon them — what follows?",
+        (1, 3, [
+            "The commentary calls this the 'brief statement' of concern — never neglecting the training.",
+            "Which chapter opens with a brief exhortation to examine everything with wisdom before acting?",
+            "This falls under the heading on the general cause of practice: concern.",
         ]),
-        (7, 16, [
-            "The faults of breaking one's word are being laid out with mathematical precision.",
-            "Even beings who give up lesser commitments fall — how much worse for this one?",
-            "The text is describing a terrifying cycle of rebirth that follows from carelessness.",
-            "The rarity of the right conditions is emphasised — they may never come again.",
-            "This reads like a stern warning label attached to a powerful commitment.",
-            "Lower realms, no opportunity for virtue, no way back — the stakes are existential.",
-            "The tone here is urgent — like a warning on the edge of a cliff.",
+        (4, 11, [
+            "The commentary calls this 'the faults of abandoning bodhicitta' — deceiving beings and obstructing the bhūmis.",
+            "Which chapter has a section on the consequences of abandoning one's commitment?",
+            "This falls under the heading on concern for bodhicitta — reasons not to abandon it.",
+            "Which chapter warns that abandoning the vow amounts to deceiving all sentient beings?",
         ]),
-        (17, 27, [
-            "The defilements are being described as adversaries in a battle you can't afford to lose.",
-            "Nonvirtues have been accumulated over many lives and they don't exhaust themselves.",
-            "The enemy here isn't external — it lives in the mind and has been there a long time.",
-            "Śāntideva is cataloguing the ways the defilements ruin everything — systematically.",
-            "Without striving now, despondency and regret will come — but too late.",
-            "The author is reflecting on how much negativity has been accumulated over lifetimes.",
-            "Time is running out — and the defilements are getting stronger, not weaker.",
-            "These enemies have no beginning and no end — unless you take action.",
-            "The 'honeyed lip of the poisoned cup' — pleasures that lead to destruction.",
+        (12, 20, [
+            "The commentary calls this 'concern to abandon nonvirtue' — repeatedly taking lower rebirths.",
+            "Which chapter has a section on the near-impossibility of returning from the lower realms?",
+            "This falls under the heading on concern for the training — accomplishing the path.",
+            "Which chapter stresses that without virtue there is no higher rebirth, and without that, no opportunity?",
+        ]),
+        (21, 27, [
+            "The commentary calls this 'concern to cultivate virtue' — many nonvirtues accumulated over lifetimes.",
+            "Which chapter has a section on the faults of not striving — in this life and future lives?",
+            "This falls under the heading on the accumulation of nonvirtue and the urgency of striving.",
         ]),
         (28, 42, [
-            "The defilements are being examined as though Śāntideva were a general studying the enemy.",
-            "These are not ordinary foes — they've occupied the mind since beginningless time.",
-            "Loss of autonomy is the key theme — the defilements are the ones in control.",
-            "The author is building resolve — identifying exactly what must be overcome.",
-            "If you'd fight an ordinary enemy to the death, why tolerate this one?",
-            "Even banished enemies regroup and return — but these ones never left.",
-            "The defilements have stolen your freedom and you didn't even notice.",
-            "Śāntideva is arguing that tolerating this internal occupation is madness.",
+            "The commentary calls this 'concern to abandon the defilements' — examining them as enemies.",
+            "Which chapter has a section examining the defilements as enemies that have occupied the mind?",
+            "This falls under the heading on identifying the defilements and their control over us.",
+            "Which chapter has a section on the loss of autonomy caused by the defilements?",
+            "The commentary describes a systematic examination of the defilements: their nature, their harm, and the resolve to fight them.",
+            "Which chapter analyses how the defilements rob beings of freedom?",
         ]),
         (43, 48, [
-            "The final resolve is being made — this battle must be fought to the end.",
-            "Dedication, antidotes, and unwavering commitment — the chapter's practical conclusion.",
-            "Bears and bees pursue their goals single-mindedly — why can't you?",
-            "The essential nature of the defilements is being examined — they're not as solid as they seem.",
-            "The chapter closes with a rallying cry — no more passivity toward the real enemy.",
-            "Śāntideva grips his weapons of mindfulness and clear comprehension.",
+            "The commentary calls this 'the means of devoting oneself to the application' — dedication, antidotes, and the nature of defilements.",
+            "Which chapter concludes with the resolve to fight the defilements and the essential nature of the defilements?",
+            "This falls under the heading on the means of combating the defilements through antidotes.",
+            "Which chapter has a section on applying mindfulness and clear comprehension as weapons against the defilements?",
         ]),
     ],
 
@@ -222,62 +200,58 @@ CHAPTER_CLUES = {
     # CHAPTER 5 – Clear Comprehension
     # ===================================================================
     5: [
-        (1, 10, [
-            "The mind is being identified as the root of all troubles — and all virtues.",
-            "If just one thing is guarded, everything else falls into place.",
-            "Śāntideva is arguing that an unguarded mind is more dangerous than any external threat.",
-            "All the sufferings of the hells were created by the mind — not by anyone else.",
-            "Weapons, snakes, enemies — none compare to the danger of your own undisciplined mind.",
-            "When the elephant of the mind is bound, all fears are bound.",
+        (1, 5, [
+            "The commentary calls this 'guarding the mind as the means of guarding the training'.",
+            "Which chapter has a section establishing that everything — all dangers and virtues — depends on the mind?",
+            "This falls under the heading on the forward and reverse pervasion of mind as the basis of all.",
         ]),
-        (11, 22, [
-            "The perfections themselves — giving, ethics, patience — all depend on mental training.",
-            "The subject here is how to pay attention — not what to pay attention to.",
-            "Guarding the mind is presented as the single most important practice.",
-            "Like protecting a wound in a jostling crowd — that's the level of vigilance needed.",
-            "It's better to let everything else degenerate than to lose control of the mind.",
-            "All the dangers in the world were created by mind alone — this is the central argument.",
+        (6, 17, [
+            "The commentary calls this section 'everything depends on the mind' — all the perfections included.",
+            "Which chapter derives the importance of all the perfections from the single practice of guarding the mind?",
+            "This falls under the heading on how giving, ethics, patience, energy, meditation, and wisdom all depend on mind.",
+        ]),
+        (18, 22, [
+            "The commentary calls this 'making effort to guard the mind' — the skill and perspective needed.",
+            "Which chapter has a section on the perspective needed for protecting the mind?",
+            "This falls under the heading on protecting mindfulness with all one's might.",
         ]),
         (23, 33, [
-            "Mindfulness and clear comprehension are the gatekeepers being introduced.",
-            "Without these two, learning won't help — knowledge leaks like water from a cracked pot.",
-            "The text is describing what happens when awareness lapses — defilements rush in.",
-            "Think of someone standing guard at the doorway of the mind — that's the practice here.",
-            "Mindfulness is the sentinel — clear comprehension follows naturally when it's present.",
-            "Teachers, a sense of proper mental attitude — these are presented as causes.",
+            "The commentary calls this 'guarding mindfulness and clear comprehension'.",
+            "Which chapter has a section on the faults of lacking mindfulness and its causes?",
+            "This falls under the heading on how mindfulness is the means of guarding clear comprehension.",
+            "Which chapter has a section on the causes of mindfulness — relying on teachers and proper mental attitude?",
         ]),
-        (34, 58, [
-            "This reads more like a rulebook than a poem — very practical instructions.",
-            "Śāntideva sounds like a mindfulness teacher giving moment-by-moment instructions.",
-            "How to look, how to sit, how to walk — the instructions are startlingly specific.",
-            "The elephant of the mind is being tied to the great pillar of practice.",
-            "Every bodily action is being brought under the scope of awareness.",
-            "Before acting, check your motivation — that's the essential message.",
-            "Root defilements, secondary defilements — the mind is being examined at granular level.",
-            "Stand firm like a tree — don't move without clear purpose.",
-            "The gaze, the posture, the speech — everything is being regulated.",
-            "This is the most practical, day-to-day section of the entire text.",
-            "Think of someone following you around all day saying 'are you paying attention?'",
+        (34, 47, [
+            "The commentary calls this 'training in the conduct of guarding the mind' — in relation to body and mind.",
+            "Which chapter has a section on training in vows — remaining undiverted and examining motivation?",
+            "This falls under the heading on training in conduct relating to body and mind.",
+            "Which chapter has a section on examining root and secondary defilements before every action?",
+            "The commentary describes training in relation to body (sight, movements) and mind (tying the mind firmly).",
         ]),
-        (59, 83, [
-            "The body is being described as essentially useless — impure, inanimate, without essence.",
-            "Why protect this body so carefully when it will be food for vultures?",
-            "The body should be put to good use — not pampered as though it were precious.",
-            "Cheerful faces, quiet voices, accepting advice — practical guidelines for daily conduct.",
-            "Praising others' merit, speaking gently — the instructions are interpersonal now.",
-            "This is about how to behave around other people — very grounded advice.",
-            "The body is like a boat — useful for crossing, not for worshipping.",
-            "Actions, speech, looking at others — all are being brought under mindful regulation.",
+        (48, 70, [
+            "The commentary calls this 'guarding against damage to vows' and 'accomplishing non-attachment to the body'.",
+            "Which chapter has a section on holding the mind firmly with antidotes like faith, steadfastness, and respect?",
+            "This falls under the heading on the body as inanimate, impure, and essenceless.",
+            "Which chapter has a section on applying the body to good use rather than pampering it?",
+            "The commentary analyses the body to reduce attachment — examining its impurity and uselessness.",
         ]),
-        (84, 109, [
-            "Benefitting sentient beings is the focus — how to teach, share, and protect others' minds.",
-            "The text is talking about how to give dharma teachings — to suitable recipients.",
-            "Eating, sleeping, moving — even these are being dedicated to others' benefit.",
-            "The training is being summarised — the key point is to apply everything to practice.",
-            "Śāntideva recommends reading the Sutra of Three Heaps three times daily.",
-            "Becoming knowledgeable through study, then applying it — that's the instruction.",
-            "Everything you do should benefit beings — directly or indirectly.",
-            "The chapter is wrapping up with a call to learn from the teacher and the sūtras.",
+        (71, 83, [
+            "The commentary calls this 'training in means of accomplishing virtue' — ordinary conduct and conduct toward others.",
+            "Which chapter has a section on ordinary virtuous conduct — cheerful demeanour, quiet behaviour, accepting advice?",
+            "This falls under the heading on conduct of action — speech, looking, and virtuous action.",
+            "Which chapter has a section on praising the merit of others and gathering with wealth and dharma?",
+        ]),
+        (84, 97, [
+            "The commentary calls this 'training in the conduct of benefitting sentient beings'.",
+            "Which chapter has a section on increasing activities for others through gathering with wealth and dharma?",
+            "This falls under the heading on protecting the minds of sentient beings and teaching to proper vessels.",
+            "Which chapter has a section on daily conduct — eating, sleeping, movements — dedicated to others' benefit?",
+        ]),
+        (98, 109, [
+            "The commentary calls this 'factors which enhance the training' — study, reliance on a teacher, application.",
+            "Which chapter has a section on the cause of purifying faults and becoming knowledgeable through sūtras?",
+            "This falls under the heading on the basis of training, the aim, and the teacher.",
+            "Which chapter concludes with a summary of the training and the instruction to apply everything to practice?",
         ]),
     ],
 
@@ -285,70 +259,49 @@ CHAPTER_CLUES = {
     # CHAPTER 6 – Patience
     # ===================================================================
     6: [
-        (1, 10, [
-            "One instant of this emotion can destroy the merit of a thousand aeons.",
-            "Think of the one emotion that undoes everything good in an instant.",
-            "No peace, no happiness, no sleep — the visible consequences are being listed.",
-            "Friends become enemies and even those who are helped turn against you.",
-            "The cause of this destructive state is being identified: unhappiness of mind.",
-            "If you remove the fuel, the fire cannot burn — that's the logic here.",
+        (1, 6, [
+            "The commentary calls this 'developing motivation' — the problems caused by anger, both invisible and visible.",
+            "Which chapter opens with the invisible and visible results of one particular destructive emotion?",
+            "This falls under the heading on developing the motivation to practise one specific quality.",
+            "Which chapter has a section on how one emotion destroys merit and causes visible harm to mind and body?",
         ]),
-        (11, 21, [
-            "Suffering is being examined — and the conclusion is that getting angry about it doesn't help.",
-            "The text asks: if you can fix it, why be upset? If you can't, why be upset?",
-            "Habituation is key — even what seems unbearable becomes tolerable with practice.",
-            "Renunciation is described as having a beneficial quality — not a punishing one.",
-            "Śāntideva is using logic to cool down a very hot emotion.",
-            "The analogy of gradually increasing tolerance — from small pains to great ones.",
+        (7, 21, [
+            "The commentary calls this 'preventing the characteristics of anger' — examining its causes and skilful means.",
+            "Which chapter has a section on tolerating suffering by examining its nature, benefits, and through habituation?",
+            "This falls under the heading on averting anger by examining unhappiness and its non-benefit.",
+            "Which chapter has a section on the skilful means for accepting hardship?",
+            "The commentary describes examining the benefits of renunciation and the qualities of practice as reasons not to resist hardship.",
         ]),
         (22, 34, [
-            "Neither the angry person nor the anger itself chose to arise — both lack autonomy.",
-            "Conditions produce the harm — no one actually decides to be harmful.",
-            "This verse asks: if you wouldn't be angry at bile for causing pain, why be angry at a person?",
-            "Sticks and weapons don't anger you — so why be angry at the hand that wields them?",
-            "The opponent being analysed here is not a person — it's a feeling everyone recognises.",
-            "Śāntideva is arguing that the real culprit is the defilements, not the person.",
-            "Anger itself is compelled by conditions — even the angry person is a victim.",
+            "The commentary calls this 'definitive consideration of the lack of autonomy' of anger and the angry person.",
+            "Which chapter has a section arguing that both the angry person and the anger arise from conditions, not choice?",
+            "This falls under the heading on stopping impatience through understanding that conditions lack autonomy.",
+            "Which chapter has a section on not thinking of harm-doers as the true cause of harm?",
         ]),
         (35, 51, [
-            "The harm-doer is driven by delusion — understanding this changes everything.",
-            "Like a hallucination causing someone to attack — the anger isn't truly their own.",
-            "Your own karma brought this situation about — why blame the other person?",
-            "This chapter asks: if you wouldn't kick a stick, why kick the one who swung it?",
-            "Praise and reputation are being examined — do they actually benefit you?",
-            "Getting angry about insults makes as much sense as getting angry at an echo.",
-            "Disrespect doesn't harm the body or possessions — so what exactly is threatened?",
-            "The analysis here is forensic — every reason for anger is being dismantled.",
+            "The commentary calls this 'examining one's own faults as the cause' and 'stopping impatience with disrespect'.",
+            "Which chapter has a section on how your own karma contributed to the conditions for harm?",
+            "This falls under the heading on the harm-doer being driven by delusion and examining disrespect.",
+            "Which chapter has a section arguing that disrespect does not actually harm body or possessions?",
         ]),
         (52, 70, [
-            "Even when the Three Jewels are harmed, patience is the response — they don't need your anger.",
-            "Obstacles to getting what you want are examined — and anger is shown to be pointless about them.",
-            "Someone harming your teacher or friend? Even then, patience is prescribed.",
-            "The faults of others should make you think of your own faults first.",
-            "Examining the results of actions — anger's consequences are worse than the original harm.",
-            "Whether the harm is to yourself or those you love, the analysis points the same way.",
+            "The commentary calls this 'stopping impatience with harm toward one's own side' — the Three Jewels, teachers, friends.",
+            "Which chapter has a section on patience even when the objects of refuge or one's teacher are harmed?",
+            "This falls under the heading on patience with harm-doers and examining one's own faults.",
+            "Which chapter has a section on putting up with harm-doers by examining the marks of anger?",
         ]),
         (71, 100, [
-            "Enemies are being recast as teachers — they provide the opportunity to practise.",
-            "Without someone to forgive, there would be no patience — harm-doers are essential.",
-            "Merit from patience is limitless — and it requires an adversary to arise.",
-            "If beggars are fields of merit for generosity, enemies are fields of merit for this practice.",
-            "The suffering that motivates renunciation is itself a form of benefit.",
-            "Śāntideva is making the radical argument that harm-doers deserve gratitude.",
-            "Someone is being harmed — and Śāntideva is arguing they shouldn't react.",
-            "The text is examining whether the 'enemy' is really an enemy at all.",
-            "Patience brings good fortune, beauty, health, long life — the benefits are listed.",
-            "If you truly want to help others, losing your temper is the worst thing you can do.",
+            "The commentary calls this 'keeping in mind the results of patience' — reframing harm-doers as beneficial.",
+            "Which chapter has a section on recasting harm-doers as essential opportunities for practice?",
+            "This falls under the heading on the consequences of anger versus the benefits of patience.",
+            "Which chapter has a section arguing that without harm-doers, this particular quality cannot be developed?",
+            "The commentary argues that harm-doers are fields of merit — just as beggars are for generosity.",
         ]),
         (101, 134, [
-            "The benefits of patience are being catalogued — from reputation to good rebirth.",
-            "Compassion for the harm-doer is the unexpected conclusion of this analysis.",
-            "The chapter is nearing its close — patience has been thoroughly established as supreme.",
-            "Anger is being compared to other austerities — and found to be the only one that matters.",
-            "Good fortune, prosperity, beauty — all fruits of mastering this one practice.",
-            "The final verses read like a summation — every reason not to give in to this emotion.",
-            "Śāntideva asks: if patience brings all this, why would you choose its opposite?",
-            "The person who harmed you is now being viewed with something close to tenderness.",
+            "The commentary calls this the summary of benefits — good fortune, reputation, beauty, health, long life.",
+            "Which chapter concludes by cataloguing the worldly and spiritual benefits of one specific practice?",
+            "This falls under the heading on compassion for the harm-doer and the concluding benefits.",
+            "Which chapter has a section listing benefits like prosperity, beauty, health, and rebirth as results of practice?",
         ]),
     ],
 
@@ -357,59 +310,45 @@ CHAPTER_CLUES = {
     # ===================================================================
     7: [
         (1, 2, [
-            "A new pāramitā is being introduced — built on the foundation of the previous one.",
-            "The definition is deceptively simple: joy in what is virtuous.",
-            "This is the one quality without which all the others remain theoretical.",
+            "The commentary defines this quality as 'joy in what is virtuous' and introduces its opposing factors.",
+            "Which chapter opens by defining a perfection and identifying its three opposing factors?",
+            "This falls under the heading on the nature of one particular perfection.",
         ]),
-        (3, 15, [
-            "Śāntideva is essentially giving himself a pep talk about getting off the couch.",
-            "Three kinds of laziness are being identified — and none of them look like what you'd expect.",
-            "The obstacle here isn't anger or attachment — it's plain old inertia.",
-            "Death is mentioned here not to scare you, but to light a fire under you.",
-            "Think of someone who knows exactly what to do but just... can't get started.",
-            "The Yama's messengers are approaching — and you're lying there distracted.",
-            "Like a buffalo with a butcher — that's how unaware you are of what's coming.",
-            "If someone sentenced to have their hand cut off could be freed by losing a finger — they'd rejoice.",
-            "Distractions and idle pleasures are being identified as forms of laziness.",
-            "The suffering ahead is being used to generate urgency now.",
+        (3, 5, [
+            "The commentary calls this 'abandoning the laziness of non-application' — its cause and how to avert it.",
+            "Which chapter has a section on three kinds of laziness?",
+            "This falls under the heading on summarising the opposing factors.",
+        ]),
+        (6, 15, [
+            "The commentary calls this section about overcoming laziness through reflecting on the sufferings of future lives.",
+            "Which chapter has a section using awareness of death to overcome the laziness of non-application?",
+            "This falls under the heading on the faults of this life and the sufferings of future lives.",
+            "Which chapter has a section on exhortation to practise by reflecting on death and future suffering?",
         ]),
         (16, 30, [
-            "Despondency — thinking 'I can't do this' — is being systematically dismantled.",
-            "Even insects and animals can attain the goal — how much more a human with faculties?",
-            "The text is building motivation — like a coach's halftime speech.",
-            "Difficulties on the path are reframed as trivial compared to the sufferings of saṃsāra.",
-            "A doctor cutting to heal causes less suffering than the disease — that's the logic.",
-            "The Buddha himself said it could be done by anyone — Śāntideva takes him at his word.",
-            "Don't be discouraged by giving away hands and feet — you haven't understood emptiness yet.",
-            "Present comforts from past virtue will run out — future suffering awaits the idle.",
+            "The commentary calls this 'abandoning the laziness of despondency' — the antidote to thinking one lacks the ability.",
+            "Which chapter has a section on overcoming the belief that you can't do it?",
+            "This falls under the heading on the antidote to impatience with the application.",
+            "Which chapter has a section reframing the difficulties of practice as trivial compared to saṃsāra's sufferings?",
+            "The commentary argues that since even lesser beings can attain the goal, humans should not lose heart.",
         ]),
         (31, 46, [
-            "Four powers are being introduced as the engine of sustained practice.",
-            "Motivation, steadfastness, joy, and rest — the recipe for sustained application.",
-            "Contemplating karma's ripening is prescribed — to generate the will to act.",
-            "The power of motivation is built through reflecting on what actions lead to.",
-            "Preparing to act without hesitation — testing your strength before committing.",
-            "Taking pride in one's ability to practise — not arrogance, but confident resolve.",
-            "Like an elephant entering a lake — plunging into virtue with delight.",
-            "Actions should not be started and abandoned — better to prepare well first.",
+            "The commentary calls this 'fully developing effort' through four powers: motivation, steadfastness, joy, and rest.",
+            "Which chapter has a section on the power of motivation — contemplating the ripening of karma?",
+            "This falls under the heading on the four powers of effort.",
+            "Which chapter has a section on the cause and object of the power of motivation?",
         ]),
         (47, 60, [
-            "Steadfastness in action — not wavering once committed.",
-            "The defilements should be looked down upon, not feared — you have the advantage.",
-            "A crow encountering a dying snake puffs up with confidence — act the same way with defilements.",
-            "Pride in one's actions, one's capability, and one's power over defilements — three forms of healthy confidence.",
-            "Joy in virtuous action should be like a child's joy in play — effortless and absorbing.",
-            "Worldly people work so hard for uncertain results — why not apply the same to certain ones?",
-            "Never satisfied with virtue — that's the attitude being cultivated.",
+            "The commentary calls this 'the power of steadfastness' and 'the power of joy' in practice.",
+            "Which chapter has a section on stable preparation and stable engagement — not being deterred once committed?",
+            "This falls under the heading on taking pride in one's actions, ability, and power over defilements.",
+            "Which chapter has a section on the power of joy — finding delight in virtuous action?",
         ]),
         (61, 76, [
-            "Rest when needed — like a soldier between engagements — then return to the fight.",
-            "An experienced warrior sidesteps the sword — that's how to handle the defilements.",
-            "Drop what's failing like a dropped sword in battle — pick up another weapon immediately.",
-            "Mindfulness, concern, and self-control — the chapter's concluding triad.",
-            "Light as cotton — that's how responsive the body and mind should become.",
-            "The chapter closes with practical advice on maintaining sustained enthusiasm.",
-            "Like cotton moved by the wind — effortless, responsive, and always in motion.",
+            "The commentary calls this 'the power of rest' and the chapter's conclusion on self-control.",
+            "Which chapter has a section on the power of rest — temporary rest and finishing rest?",
+            "This falls under the heading on dedication, concern, mindfulness, and self-control.",
+            "Which chapter concludes with instructions on dedication to concern and preventing opposing circumstances?",
         ]),
     ],
 
@@ -417,87 +356,60 @@ CHAPTER_CLUES = {
     # CHAPTER 8 – Meditation
     # ===================================================================
     8: [
-        (1, 16, [
-            "Śāntideva is making a case for leaving everything behind.",
-            "This verse suggests that other people might be the biggest obstacle.",
-            "Attachment to beings is identified as the primary distraction.",
-            "Friends are unreliable, hard to please, and will eventually leave — why cling?",
-            "Getting close to others leads to disappointment — that's the argument being made.",
-            "Desire for companionship is presented as a subtle chain.",
-            "The text is warning that even well-meaning relationships can derail practice.",
-            "Childish people — neither satisfied nor satisfying — are best kept at a distance.",
-            "If you praise them, they're pleased; if you speak truthfully, they're angry.",
+        (1, 4, [
+            "The commentary calls this 'abandoning contradictory factors' — isolation of body and mind for samādhi.",
+            "Which chapter opens by prescribing isolation of body and mind as a prerequisite?",
+            "This falls under the heading on the causes of not abandoning the world and their antidote.",
+        ]),
+        (5, 16, [
+            "The commentary calls this 'establishing non-attachment toward sentient beings' — the faults of attachment.",
+            "Which chapter has a section on the faults of attachment to sentient beings?",
+            "This falls under the heading on why attachment to others destroys benefits and obstructs liberation.",
+            "Which chapter has a section on how the desired object is unreliable, never satisfying, and leads to faults?",
         ]),
         (17, 37, [
-            "Forests and graveyards sound appealing in this section.",
-            "Caves, abandoned shrines, and the foot of trees — the ideal dwelling is being described.",
-            "Deer, birds, and trees as companions — the author is serious about this.",
-            "Living with nothing to protect and no one to please — that's the vision.",
-            "The body will be left behind at death — why not leave everything else behind now?",
-            "A meagre robe and a begging bowl — all that's needed.",
-            "Solitude is being presented not as deprivation but as freedom.",
-            "No mourners at your funeral, no one to be missed — that's the preferred situation.",
-            "The natural world is described with genuine longing — a place of peace.",
-            "This section reads like a love letter to the forest.",
+            "The commentary calls this 'qualities of non-distraction' — friends, places, livelihood, and discriminations.",
+            "Which chapter has a section on the qualities of solitude — dwelling places, companions, and livelihood?",
+            "This falls under the heading on the ideal conditions for non-distraction.",
+            "Which chapter has a section describing the ideal dwelling, companions, and way of life for practice?",
+            "The commentary identifies friends, places, livelihood, and discriminations as qualities of non-distraction.",
         ]),
         (38, 70, [
-            "The body's impurity is being examined — in vivid, unflinching detail.",
-            "Burial grounds and decomposition feature prominently here.",
-            "What is so attractive about a body? Śāntideva systematically takes it apart.",
-            "Bones, flesh, and skin — the object of desire is being disassembled.",
-            "The analysis is visceral — what lies beneath the surface of what we find attractive.",
-            "Attraction is being examined forensically — what exactly are you attached to?",
-            "A body wrapped in skin versus unwrapped — the difference is only concealment.",
-            "The living body is no different from the dead one — just warmer.",
-            "Desire for bodies is being described as fundamentally confused.",
-            "Even your own body — why pamper something that's essentially a walking corpse?",
+            "The commentary calls this 'giving up conceptual discrimination' — examining impurity and the body's nature.",
+            "Which chapter has a section on examining the impurity of the body, both living and dead?",
+            "This falls under the heading on how results are destroyed by attachment and the impure nature of the body.",
+            "Which chapter has a section on reasoning about impurity and how harm is abandoned by its cause?",
         ]),
         (71, 90, [
-            "Joy in solitude — this section describes its incomparable happiness.",
-            "Free from disputes, free from defilements — the meditator's life is being praised.",
-            "Others' bodies will never bring lasting happiness — the logic is relentless.",
-            "Thinking about impermanence here — everything that seems solid will dissolve.",
-            "Cool moonlight, silence, vast spaces — the contemplative life at its most appealing.",
-            "Equality of self and others is being introduced — a pivotal concept.",
-            "Happiness and suffering are distributed equally — that's the starting premise.",
+            "The commentary calls this 'developing joy in solitude' — its preeminence and unique happiness.",
+            "Which chapter has a section on the preeminence and unique happiness of solitude?",
+            "This falls under the heading on the introduction to equalising self and others.",
+            "Which chapter has a section establishing the equality of self and others as a preliminary?",
         ]),
-        (91, 120, [
-            "Śāntideva is asking you to imagine being someone else — literally trading places.",
-            "The logic here is radical: what if 'self' and 'other' could be swapped?",
-            "This verse is part of the most psychologically daring section of the text.",
-            "If my foot's pain bothers me because it's 'mine' — why not extend that to others?",
-            "The boundary between self and other is being philosophically dissolved.",
-            "Protecting others from suffering should be as natural as protecting yourself.",
-            "The continuum of suffering doesn't respect the borders we draw around 'me'.",
-            "Self-cherishing is the source of all suffering — cherishing others is the source of all happiness.",
-            "The hands protect the feet not because they're the same, but because they belong to one body.",
-            "An imagined rival and an imagined inferior — Śāntideva is roleplaying both perspectives.",
-            "Look at the faults of cherishing yourself — look at the virtues of cherishing others.",
-            "What you fear for yourself, wish away from others. What you wish for yourself, give to others.",
+        (91, 110, [
+            "The commentary calls this 'equalising self and others' — since all are equally subject to suffering.",
+            "Which chapter has a section on equalising self and other through extensive analysis?",
+            "This falls under the heading on focusing the mind on śamatha through equalising self and others.",
+            "Which chapter has a section analysing why the continuum of suffering does not respect self/other boundaries?",
         ]),
-        (121, 160, [
-            "The exchange is becoming practical — specific contemplations are being prescribed.",
-            "Envy, competitiveness, and pride are being examined from the reversed perspective.",
-            "Imagine taking on the suffering of others and giving them your happiness — that's the practice.",
-            "The self is being turned inside out — what was 'mine' becomes 'theirs' and vice versa.",
-            "This section describes the actual meditation technique — not just the philosophy.",
-            "Your own body should be used for others' benefit — that's the conclusion being drawn.",
-            "Looking at yourself through others' eyes — the text is painfully honest about what they'd see.",
-            "The reversal is complete — self-interest has been redirected outward.",
-            "Specific scenarios of rivalry and condescension are being examined — from the other side.",
-            "Whatever happiness exists in the world comes from wishing others well.",
-            "The contemplation here is deeply interior — think cushion, not classroom.",
-            "Giving away your merit, taking on others' suffering — the practice is being described in detail.",
+        (111, 140, [
+            "The commentary calls this 'exchanging self and others' — the actual practice of reversal.",
+            "Which chapter has a section on the practice of exchanging self and other?",
+            "This falls under the heading on practising mind control through the exchange.",
+            "Which chapter has a section on contemplating envy, competitiveness, and pride from the reversed perspective?",
+            "The commentary describes specific contemplations for the exchange practice.",
+            "Which chapter has a section arguing that all suffering comes from self-cherishing and all happiness from cherishing others?",
+        ]),
+        (141, 160, [
+            "The commentary continues the exchange practice with detailed meditation instructions.",
+            "Which chapter has a section on detailed meditation instructions for the exchange of self and other?",
+            "This falls under the heading on specific scenarios for contemplation from the other's perspective.",
         ]),
         (161, 187, [
-            "The meditation instructions are reaching their conclusion.",
-            "Body, speech, and mind are being yoked to the service of others.",
-            "Abandoning incompatible factors, relying on conducive ones — the final practical advice.",
-            "Eyes should never wander without purpose — the instructions are precise.",
-            "The body should be like a wish-fulfilling tree for other beings.",
-            "This section wraps up with specific advice on how to sustain the practice.",
-            "Solitude, few wants, contentment — the conditions for deep practice are being established.",
-            "Life is short — don't waste it. That's the chapter's closing note.",
+            "The commentary calls this the conclusion — abandoning incompatible factors and relying on conducive ones.",
+            "Which chapter concludes with instructions on sustaining practice — solitude, few wants, contentment?",
+            "This falls under the heading on abandoning incompatible factors and focusing on meditation.",
+            "Which chapter has a section on the final practical instructions for sustaining concentration?",
         ]),
     ],
 
@@ -506,96 +418,79 @@ CHAPTER_CLUES = {
     # ===================================================================
     9: [
         (1, 5, [
-            "You might need a philosophy degree for this section — it's about to get dense.",
-            "The text shifts from practice to theory — sharp analysis begins here.",
-            "Two truths are being introduced — the framework for everything that follows.",
-            "All the previous chapters were taught for the sake of this one.",
-            "Relative and ultimate — a distinction is being drawn that changes everything.",
-            "Śāntideva is putting on his philosopher hat — and it's staying on.",
+            "The commentary calls this 'explaining that wisdom is the principal' — all factors were taught for its sake.",
+            "Which chapter opens by establishing that everything taught so far serves one final quality?",
+            "This falls under the heading on the two truths — relative and ultimate.",
+            "Which chapter has a section introducing the framework of two truths?",
         ]),
         (6, 15, [
-            "An objection is being raised and systematically demolished.",
-            "A particular Buddhist school's position is being challenged.",
-            "The debate is about whether external objects truly exist — or only appear to.",
-            "This is a classic Indian philosophical exchange — objection, response, counter-response.",
-            "The text is dismantling a realist position with surgical precision.",
-            "Tiny particles and their relationships are being examined — do they hold up?",
-            "If atoms have parts, they can be divided. If they don't, nothing is composed of them.",
+            "The commentary calls this 'abandoning objections of the Vaibhāṣikas and Sautrāntikas'.",
+            "Which chapter has a section refuting the Vaibhāṣika and Sautrāntika positions on external objects?",
+            "This falls under the heading on establishing the object as empty of intrinsic nature.",
+            "Which chapter has a section debating whether the objects of perception truly exist as they appear?",
         ]),
         (16, 29, [
-            "Mind-only — the position is being examined and found wanting.",
-            "If everything is just mind, who's perceiving whom?",
-            "The text is arguing against reducing all experience to consciousness alone.",
-            "Even the Buddha said 'mind only' for a specific purpose — not as final truth.",
-            "One school of thought is being dismantled piece by piece.",
-            "The question of whether illusions can perceive themselves is being raised.",
-            "Self-awareness of mind is being analysed — can a sword cut itself?",
+            "The commentary calls this 'abandoning objections of the Vijñaptimātrins (Mind Only school)'.",
+            "Which chapter has a section refuting the Mind Only position?",
+            "This falls under the heading on whether all experience can be reduced to consciousness alone.",
+            "Which chapter has a section on whether the mind can be aware of itself?",
         ]),
-        (30, 49, [
-            "If everything is like an illusion, how does that help end suffering?",
-            "The path is being established — understanding illusion-nature is itself the antidote.",
-            "Śāntideva is defending the Mahāyāna against those who question its scriptural authority.",
-            "The objection is that Mahāyāna is not the Buddha's word — the response is methodical.",
-            "Like fire not being truly fire — even the antidote is ultimately empty.",
-            "Activities of awakened beings continue even without a self — like a wish-fulfilling tree.",
-            "Offerings still matter even though the recipient is beyond concepts — an important point.",
-            "Things are being taken apart to see if anything is really there.",
+        (30, 39, [
+            "The commentary calls this 'establishing the subject as the path' — how illusion-like understanding ends suffering.",
+            "Which chapter has a section on how understanding the illusion-like nature of things is itself the antidote?",
+            "This falls under the heading on engaging in activity without effort after realisation.",
+            "Which chapter has a section on how awakened beings continue to benefit others even without a self?",
         ]),
-        (50, 77, [
-            "The analysis is getting more granular — the self is being looked for and not found.",
-            "Earth, water, fire, wind, space, consciousness — where is the self among these?",
-            "If 'I' is the aggregate of parts, which part is doing the aggregating?",
-            "Physical form is being reduced to its elements — and none of them is 'body'.",
-            "The mind is being examined — is it in the sense organs? The objects? The space between?",
-            "Feelings, perceptions, formations, consciousness — each is examined and found to be not-self.",
-            "The analysis is relentless — nothing survives the search for inherent existence.",
-            "If there's no self, who suffers? The question is being addressed head-on.",
-            "The reasoning here follows a pattern: look for the thing, fail to find it, draw the conclusion.",
-            "Śāntideva is dismantling the very thing we cling to most tightly.",
+        (40, 49, [
+            "The commentary calls this 'abandoning objections of the śrāvakas' — defending the Mahāyāna.",
+            "Which chapter has a section establishing the Mahāyāna as the authentic word of the Buddha?",
+            "This falls under the heading on establishing Mahāyāna scriptures as definitive meaning.",
+            "Which chapter has a section addressing the objection that the Mahāyāna is not genuine Buddha-word?",
         ]),
-        (78, 100, [
-            "The analysis is reaching its conclusion — what remains when everything is examined?",
-            "Atoms, contact, perception — the building blocks of experience are being scrutinised.",
-            "Can partless particles touch? If they can't, what is 'contact'?",
-            "Consciousness without form apprehending form — the circularity is being exposed.",
-            "The text is now in deep philosophical territory — each concept examined and deconstructed.",
-            "Emptiness isn't being introduced here — it's being driven home with forensic rigour.",
-            "The debate has moved to the very foundations of perception and reality.",
-            "If you thought the earlier analysis was thorough, this section goes even deeper.",
-            "Conventional designation is being distinguished from ultimate reality — carefully.",
+        (50, 70, [
+            "The commentary calls this the analysis of the self — searching among the aggregates, elements, and sense bases.",
+            "Which chapter has a section searching for the self among the aggregates and elements?",
+            "This falls under the heading on the result of meditation on emptiness.",
+            "Which chapter has a section analysing whether physical form can be found among its elements?",
+            "The commentary systematically examines each aggregate and finds none to be the self.",
         ]),
-        (101, 130, [
-            "The argument is now between Mādhyamikas and other Buddhist schools.",
-            "Suffering exists by convention — but not ultimately. The implications are being worked out.",
-            "Compassion arises from the conventional — and is no less valid for being empty.",
-            "The four noble truths are being reconciled with emptiness — a delicate operation.",
-            "This is a dialogue — positions are being stated and refuted in alternation.",
-            "The freedom that comes from not clinging to any view — that's the prize being described.",
-            "If nothing truly exists, does the path still work? Yes — and here's why.",
-            "The text is navigating the knife-edge between nihilism and realism.",
-            "The opponent keeps saying 'but if things are empty, then...' — and Śāntideva keeps responding.",
-            "Conventional truth does the work of liberation — ultimate truth is its nature.",
-            "Even emptiness is empty — the analysis doesn't exempt itself.",
+        (71, 85, [
+            "The commentary calls this the analysis of mind — whether it can be located anywhere.",
+            "Which chapter has a section examining where the mind resides?",
+            "This falls under the heading on whether mind exists in sense organs, objects, or the space between.",
+            "Which chapter has a section addressing the question: if there is no self, who experiences suffering?",
         ]),
-        (131, 155, [
-            "The benefits of realising emptiness are now being described — they're immense.",
-            "Cyclic existence is being examined — what keeps it going, and what stops it.",
-            "The text asks: what is it that continues from life to life?",
-            "Karma and its results are being examined in the light of emptiness.",
-            "Merit and nonvirtue still function — even in the absence of inherent existence.",
-            "The bodhisattva's compassion becomes even more powerful when combined with this understanding.",
-            "Like a dream, like a magical illusion — the comparisons are piling up.",
-            "If beings are like illusions, why help them? Because their suffering is real to them.",
-            "The text is addressing the most common objection: doesn't emptiness undermine compassion?",
-            "Saṃsāra and nirvāṇa — the distinction is being dissolved.",
+        (86, 100, [
+            "The commentary calls this the analysis of particles, contact, and perception at the fundamental level.",
+            "Which chapter has a section examining the nature of contact and perception at the atomic level?",
+            "This falls under the heading on whether partless particles can make contact.",
+            "Which chapter has a section distinguishing conventional designation from ultimate reality?",
+        ]),
+        (101, 120, [
+            "The commentary calls this section about navigating between nihilism and realism.",
+            "Which chapter has a section on how emptiness is compatible with conventional function?",
+            "This falls under the heading on how the four noble truths function within emptiness.",
+            "Which chapter has a section addressing the objection that emptiness negates everything?",
+            "The commentary argues that the freedom of not clinging to any view is the result of this analysis.",
+        ]),
+        (121, 140, [
+            "The commentary calls this a section on how karma and transmigration function without inherent existence.",
+            "Which chapter has a section on what continues from life to life in the absence of a self?",
+            "This falls under the heading on examining cyclic existence — what keeps it going and what stops it.",
+            "Which chapter has a section on how merit and nonvirtue still function despite emptiness?",
+            "The commentary uses the analogy of illusion to explain how things function yet lack essence.",
+        ]),
+        (141, 155, [
+            "The commentary calls this a section on whether emptiness undermines compassion.",
+            "Which chapter has a section arguing that emptiness actually strengthens rather than weakens compassion?",
+            "This falls under the heading on the compatibility of emptiness and the motivation to help beings.",
+            "Which chapter has a section arguing that even illusory suffering deserves compassion?",
         ]),
         (156, 167, [
-            "The ocean of suffering can be crossed — that's the promise of this analysis.",
-            "Emptiness is the medicine that cures the root illness — clinging to existence.",
-            "The chapter is reaching its peak — the highest wisdom is being pointed to.",
-            "For the sake of beings, Śāntideva would endure anything — understanding emptiness makes this possible.",
-            "The final verses of this analysis read like a crescendo of realisation.",
-            "Having dismantled everything, the text arrives at something luminous.",
+            "The commentary calls this the conclusion — how this understanding enables crossing the ocean of suffering.",
+            "Which chapter concludes by pointing to this realisation as the cure for the root cause of suffering?",
+            "This falls under the heading on the final benefits of realising emptiness.",
+            "Which chapter reaches its climax with the promise that suffering can be ended through this understanding?",
         ]),
     ],
 }
@@ -606,7 +501,6 @@ def parse_ref_number(ref_str):
     parts = ref_str.split('.')
     if len(parts) != 2:
         return None
-    # Strip any segment suffixes
     num_str = re.sub(r'[a-z]+$', '', parts[1])
     try:
         return int(num_str)
@@ -620,7 +514,6 @@ def get_clue(chapter, verse_num, counters):
     if not ranges:
         return None
 
-    # Find matching range
     for start, end, clues in ranges:
         if start <= verse_num <= end:
             key = (chapter, start, end)
@@ -639,7 +532,6 @@ def get_clue(chapter, verse_num, counters):
 
 
 def main():
-    # Parse commentary sections
     with open('texts/verse_commentary_mapping.txt', 'r') as f:
         content = f.read()
 
@@ -652,7 +544,6 @@ def main():
     ref_extract = re.compile(r'(?:\[|-)(\d+\.\d+[a-z]*)')
     segment_suffix = re.compile(r'[a-z]+$')
 
-    # Collect all unique (first_ref, chapter) pairs in order
     seen_refs = set()
     ref_entries = []
 
@@ -666,7 +557,6 @@ def main():
         if not raw_refs:
             i += 1
             continue
-        # Normalize
         seen_norm = set()
         normalized = []
         for r in raw_refs:
@@ -687,7 +577,6 @@ def main():
                 if verse_num is not None:
                     ref_entries.append((first_ref, chapter, verse_num))
 
-    # Generate clues
     counters = {}
     clue_map = {}
     missing = []
@@ -699,14 +588,12 @@ def main():
         else:
             missing.append(first_ref)
 
-    # Write output
     with open('texts/section_clues.json', 'w') as f:
         json.dump(clue_map, f, indent=2, ensure_ascii=False)
 
     print(f"Generated {len(clue_map)} clues")
     print(f"Missing: {len(missing)} refs: {missing}")
 
-    # Stats per chapter
     from collections import Counter
     ch_counts = Counter()
     for ref in clue_map:
