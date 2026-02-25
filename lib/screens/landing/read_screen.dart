@@ -1025,31 +1025,6 @@ class _ReadScreenState extends State<ReadScreen>
     return null;
   }
 
-  int? _openingVerseNumberForRef(String ref) {
-    final match = RegExp(r'^1\.(\d+)([a-d]+)?$', caseSensitive: false)
-        .firstMatch(ref.trim());
-    if (match == null) return null;
-    return int.tryParse(match.group(1)!);
-  }
-
-  int? get _openingContextVerse {
-    final segmentRef = _currentSegmentRef;
-    if (segmentRef != null && segmentRef.isNotEmpty) {
-      final verse = _openingVerseNumberForRef(segmentRef);
-      if (verse != null) return verse;
-    }
-    final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-    if (visibleIdx == null) return null;
-    final baseRef = _verseService.getVerseRef(_textId,visibleIdx);
-    if (baseRef == null || baseRef.isEmpty) return null;
-    return _openingVerseNumberForRef(baseRef);
-  }
-
-  bool get _isOpeningOverviewContext {
-    final verse = _openingContextVerse;
-    return verse != null && verse >= 1 && verse <= 4;
-  }
-
   // In this reader we always use the simplified opening-section overview for
   // Bodhicaryavatara so section 1 never falls back to the legacy complex tree
   // while scrolling (e.g. 2.1 -> 2.2 should stay one-step in the same view).
