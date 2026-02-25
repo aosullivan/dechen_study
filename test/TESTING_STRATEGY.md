@@ -1,5 +1,21 @@
 # Testing Strategy for Section Navigation
 
+## Test files and coverage
+
+**Run all tests:** `flutter test`
+
+**Run tests with coverage:** `flutter test --coverage`  
+Coverage is written to `coverage/lcov.info`. Open with a coverage viewer (e.g. VS Code “Coverage Gutters” or `genhtml coverage/lcov.info -o coverage/html` and open `coverage/html/index.html`). The `coverage/` directory is gitignored. CI runs `flutter test --coverage` and uploads the coverage artifact.
+
+**New test files (coverage improvements):**
+- `study_models_test.dart` – StudyText, Chapter, Section, DailySection fromJson/toJson and validation
+- `gateway_outline_service_test.dart` – GatewayOutlineService getChapters/getChapter
+- `gateway_rich_content_service_test.dart` – GatewayRichContentService getChapter structure
+- `bookmark_service_test.dart` – BookmarkService save/load with SharedPreferences mock
+- `section_clue_service_test.dart` – SectionClueService getClueForRef with asset loading
+- `constants_test.dart` – app environment and Supabase URL/key resolution
+- `screen_smoke_test.dart` – LoginScreen, SignUpScreen, TextOptionsScreen, GatewayLandingScreen, BcvFileQuizScreen build and show key elements
+
 ## Problem
 
 The current unit tests pass but real-world behavior can be inconsistent:
@@ -80,3 +96,10 @@ Run the app, open Bodhicaryavatara full text, then:
 2. **Double navigation**: Key repeat or platform double-fire → fixed by 200ms debounce in `_debouncedArrowNav`.
 
 3. **2.39 in leaf list**: 2.39 lives in section 3.1.1.3.5 whose first verse is 1.14ab, so 2.39 is not a leaf’s first verse. The leaf sequence 2.37→2.38→2.40... is correct; 2.39 is inside a larger section.
+
+## Auth and Supabase-backed services
+
+**AuthService** and **StudyService** are not covered by unit tests because they call Supabase (auth and database) directly. Options for testing:
+
+- **Integration tests:** Run against a dedicated test Supabase project (use `APP_ENV=test` and test credentials). Verify sign-in, sign-up, getStudyText, getRandomSection, etc.
+- **Unit tests with mocks:** Add `mockito` and `build_runner`, generate mocks for `SupabaseClient` / auth, and inject or override the client in tests. This is more setup but allows fast unit tests without a real backend.
