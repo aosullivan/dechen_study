@@ -218,11 +218,19 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     );
   }
 
-  void _openReaderView(BuildContext context) {
+  Future<void> _openReaderView(BuildContext context) async {
+    final bm = await BookmarkService.instance.load(textId);
+    if (!context.mounted) return;
     _openStudyMode(
       context,
       targetMode: 'read',
-      screen: ReadScreen(textId: textId, title: title),
+      screen: ReadScreen(
+        textId: textId,
+        title: title,
+        initialChapterNumber: bm?.chapterNumber,
+        scrollToVerseIndex: bm?.verseIndex,
+        initialSegmentRef: bm?.verseRef,
+      ),
       comingSoonLabel: 'Read',
     );
   }

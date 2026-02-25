@@ -34,6 +34,7 @@ void main() {
   late int verseIndex11;
   late int verseIndex12;
   late int verseIndex14ab;
+  late int verseIndex15;
   late int firstLeafVerseIndex;
   late int lastLeafVerseIndex;
   late List<({String path, String title, int depth})> leafOrdered;
@@ -67,6 +68,7 @@ void main() {
     verseIndex11 = verseService.getIndexForRefWithFallback(textId, '1.1') ?? -1;
     verseIndex12 = verseService.getIndexForRefWithFallback(textId, '1.2') ?? -1;
     verseIndex14ab = verseService.getIndexForRefWithFallback(textId, '1.4ab') ?? -1;
+    verseIndex15 = verseService.getIndexForRefWithFallback(textId, '1.5') ?? -1;
     leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync(textId);
     firstLeafVerseIndex = -1;
     for (final s in leafOrdered) {
@@ -116,6 +118,8 @@ void main() {
         reason: 'Verse 1.2 must exist');
     expect(verseIndex14ab, greaterThanOrEqualTo(0),
         reason: 'Verse 1.4ab must exist');
+    expect(verseIndex15, greaterThanOrEqualTo(0),
+        reason: 'Verse 1.5 must exist');
     expect(firstLeafVerseIndex, greaterThanOrEqualTo(0),
         reason: 'First leaf verse must resolve');
     expect(lastLeafVerseIndex, greaterThanOrEqualTo(0),
@@ -682,8 +686,8 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
 
       // First key down: karma → samsara.
-      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
-      await tester.pump(const Duration(milliseconds: 400));
+      await pressArrowUntilLength(
+          tester, LogicalKeyboardKey.arrowDown, capturedPaths, 1);
 
       expect(capturedPaths.length, greaterThanOrEqualTo(1),
           reason: 'First arrow down should trigger navigation');
@@ -693,8 +697,8 @@ void main() {
           reason: 'Samsara section starts at 9.13cd');
 
       // Second key down: samsara → forward (False Representationalists or beyond).
-      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
-      await tester.pump(const Duration(milliseconds: 400));
+      await pressArrowUntilLength(
+          tester, LogicalKeyboardKey.arrowDown, capturedPaths, 2);
 
       expect(capturedPaths.length, greaterThanOrEqualTo(2),
           reason: 'Second arrow down should trigger navigation');
@@ -831,6 +835,44 @@ void main() {
       expect(capturedPaths.first, equals('1.3.2'));
       expect(capturedRefs.first, equals('1.1cd'));
       await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets(
+        'plain reader open keeps 1.1ab highlighted until user scrolls',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final sectionEvents =
+          <({String path, Set<int> indices, int verseIndex})>[];
+      await pumpBcvReadScreen(
+        tester,
+        onSectionStateForTest: (path, indices, verseIndex) {
+          sectionEvents.add(
+            (
+              path: path,
+              indices: Set<int>.from(indices),
+              verseIndex: verseIndex,
+            ),
+          );
+        },
+      );
+
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(sectionEvents, isNotEmpty,
+          reason: 'Reader should publish initial section state');
+      expect(sectionEvents.first.verseIndex, equals(verseIndex11),
+          reason: 'Initial highlight should start at 1.1ab/1.1');
+      expect(sectionEvents.last.verseIndex, equals(verseIndex11),
+          reason:
+              'Without scrolling, startup visibility should not jump highlight to 1.2');
+      expect(
+        sectionEvents.where((e) => e.verseIndex == verseIndex12),
+        isEmpty,
+        reason: 'Verse 1.2 should not become active before user scrolls',
+      );
     });
 
     testWidgets('chapter 1 discarding keydown moves directly to 1.4',
@@ -1128,6 +1170,58 @@ void main() {
       expect(slider.currentPath, equals('2.1'));
       expect(slider.currentPath, isNot(equals('1.4')));
       expect(slider.nonNavigablePaths, contains('1.4'));
+    });
+
+    testWidgets('1.5 keeps simplified section overview and maps to 2.2',
+        (WidgetTester tester) async {
+      await pumpChapterOneSegment(
+        tester,
+        verseIndex: verseIndex15,
+        segmentRef: '1.5',
+      );
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      final paths = slider.flatSections.map((s) => s.path).toSet();
+      expect(slider.currentPath, equals('2.2'));
+      expect(paths, contains('1.3.1'));
+      expect(paths, contains('1.3.2'));
+      expect(paths, contains('1.2.3'));
+      expect(paths, contains('1.4'));
+      expect(paths, isNot(contains('1.1.1')));
+      expect(paths, isNot(contains('1.3.2.1')));
+    });
+
+    testWidgets(
+        'from 1.4ab arrow down goes to 2.2 and does not switch to complex section 1',
+        (WidgetTester tester) async {
+      final capturedPaths = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex14ab,
+        initialSegmentRef: '1.4ab',
+        mediaSize: const Size(1200, 800),
+        onSectionNavigateForTest: (path, _) => capturedPaths.add(path),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await waitForListLength(tester, capturedPaths, 1);
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(capturedPaths, isNotEmpty,
+          reason: 'Arrow down should navigate from 2.1 to 2.2');
+      expect(capturedPaths.first, equals('2.2'));
+      expect(capturedPaths.first, isNot(equals('1.1.1')));
+
+      final slider =
+          tester.widget<BcvSectionSlider>(find.byType(BcvSectionSlider));
+      final paths = slider.flatSections.map((s) => s.path).toSet();
+      expect(slider.currentPath, equals('2.2'));
+      expect(paths, isNot(contains('1.1.1')));
+      expect(paths, isNot(contains('1.3.2.1')));
+
+      await tester.pump(const Duration(seconds: 2));
     });
   });
 }

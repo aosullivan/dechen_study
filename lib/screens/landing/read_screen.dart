@@ -158,6 +158,9 @@ class _ReadScreenState extends State<ReadScreen>
 
   /// True while the user is actively scrolling (finger/wheel down). Gates visibility processing.
   bool _isUserScrolling = false;
+  /// For plain reader opens (no deep-link/bookmark/chapter target), ignore
+  /// visibility-driven section changes until the user intentionally scrolls.
+  bool _deferVisibilityUntilUserScroll = false;
 
   /// Per-verse visibility (0–1). We pick the verse with highest visibility = most centered in viewport.
   final Map<(int, String?), double> _verseVisibility = {};
@@ -399,6 +402,7 @@ class _ReadScreenState extends State<ReadScreen>
       _sectionSliderScrollRequestId = 0;
       _chapterHeaderFlatIndices.clear();
       _deferredStartupWorkScheduled = false;
+      _deferVisibilityUntilUserScroll = false;
     });
     try {
     final chapters = await _verseService.getChapters(_textId);
@@ -408,6 +412,8 @@ class _ReadScreenState extends State<ReadScreen>
           _chapters = chapters;
           _verses = verses;
           _loading = false;
+          _deferVisibilityUntilUserScroll =
+              !_isDeepLinkOpen && widget.initialChapterNumber == null;
           if (widget.highlightSectionIndices != null &&
               widget.highlightSectionIndices!.isNotEmpty) {
             _highlightVerseIndices =
@@ -1044,7 +1050,10 @@ class _ReadScreenState extends State<ReadScreen>
     return verse != null && verse >= 1 && verse <= 4;
   }
 
-  bool get _useOpeningSimplifiedMode => _isOpeningOverviewContext;
+  // In this reader we always use the simplified opening-section overview for
+  // Bodhicaryavatara so section 1 never falls back to the legacy complex tree
+  // while scrolling (e.g. 2.1 -> 2.2 should stay one-step in the same view).
+  bool get _useOpeningSimplifiedMode => _textId == 'bodhicaryavatara';
 
   String _openingSummaryPathForSectionPath(String sectionPath) {
     if (sectionPath.startsWith('1.1.1') ||
@@ -1380,7 +1389,10 @@ class _ReadScreenState extends State<ReadScreen>
 
   /// Core visibility processing: pick the best verse, look up hierarchy, apply section state.
   void _processVisibility() {
-    if (!mounted || _verseVisibility.isEmpty || _isVisibilitySuppressed()) {
+    if (!mounted ||
+        _verseVisibility.isEmpty ||
+        _isVisibilitySuppressed() ||
+        _deferVisibilityUntilUserScroll) {
       return;
     }
     final capturedGen = _syncGeneration;
@@ -2332,6 +2344,7 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
           onNotification: (notification) {
             if (notification is ScrollStartNotification) {
               _isUserScrolling = true;
+              _deferVisibilityUntilUserScroll = false;
             } else if (notification is ScrollEndNotification) {
               _isUserScrolling = false;
               // Process deferred visibility now that scroll settled — but only
