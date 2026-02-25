@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dechen_study/services/bookmark_service.dart';
 
 void main() {
-  const _keyVerseIndex = 'bookmark_verse_index';
-  const _keyChapterNumber = 'bookmark_chapter_number';
-  const _keyVerseRef = 'bookmark_verse_ref';
+  const keyVerseIndex = 'bookmark_verse_index';
+  const keyChapterNumber = 'bookmark_chapter_number';
+  const keyVerseRef = 'bookmark_verse_ref';
 
   setUpAll(() {
     SharedPreferences.setMockInitialValues({});
@@ -14,9 +14,9 @@ void main() {
 
   setUp(() async {
     final sp = await SharedPreferences.getInstance();
-    await sp.remove(_keyVerseIndex);
-    await sp.remove(_keyChapterNumber);
-    await sp.remove(_keyVerseRef);
+    await sp.remove(keyVerseIndex);
+    await sp.remove(keyChapterNumber);
+    await sp.remove(keyVerseRef);
   });
 
   group('BookmarkService', () {

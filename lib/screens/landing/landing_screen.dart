@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
-import '../../utils/preload.dart';
 import '../../utils/web_navigation.dart';
 import 'gateway_landing_screen.dart';
 import 'text_options_screen.dart';
@@ -34,9 +33,9 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
         );
       });
-    } else {
-      unawaited(preloadBcvAndHierarchy());
     }
+    // Do not preload BCV here. Gateway and Bodhicaryavatara are separate in prod;
+    // we only load BCV when the user taps Bodhicaryavatara (see TextOptionsScreen).
   }
 
   @override
