@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'bcv_read_screen.dart';
+import 'read_screen.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
@@ -18,7 +18,14 @@ import 'overview/overview_verse_panel.dart';
 /// Tapping a section opens a side panel (desktop) or bottom sheet (mobile)
 /// showing the verses for that section.
 class TextualOverviewScreen extends StatefulWidget {
-  const TextualOverviewScreen({super.key});
+  const TextualOverviewScreen({
+    super.key,
+    required this.textId,
+    required this.title,
+  });
+
+  final String textId;
+  final String title;
 
   @override
   State<TextualOverviewScreen> createState() => _TextualOverviewScreenState();
@@ -26,8 +33,8 @@ class TextualOverviewScreen extends StatefulWidget {
 
 class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     with WidgetLifecycleObserver, WidgetsBindingObserver {
-  static const _lastPathPrefsKey =
-      'bodhicaryavatara_textual_structure_last_path';
+  static String _lastPathPrefsKey(String textId) =>
+      '${textId}_textual_structure_last_path';
 
   final _usageMetrics = UsageMetricsService.instance;
   bool _loading = true;
@@ -81,7 +88,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     final durationMs = nowUtc.difference(startedAt).inMilliseconds;
     if (durationMs >= _usageMetrics.minDwellMs) {
       unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: 'bodhicaryavatara',
+        textId: widget.textId,
         mode: 'overview',
         durationMs: durationMs,
         sectionPath: _selectedPath,
@@ -95,9 +102,9 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   }
 
   Future<void> _load() async {
-    await preloadBcvAndHierarchy();
+    await preloadForText(widget.textId);
     if (!mounted) return;
-    final flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
+    final flatSections = VerseHierarchyService.instance.getFlatSectionsSync(widget.textId);
     final restoredPath = await _loadLastPath();
     if (!mounted) return;
 
@@ -134,7 +141,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
 
   Future<String?> _loadLastPath() async {
     final prefs = await SharedPreferences.getInstance();
-    final path = prefs.getString(_lastPathPrefsKey)?.trim();
+    final path = prefs.getString(_lastPathPrefsKey(widget.textId))?.trim();
     if (path == null || path.isEmpty) return null;
     return path;
   }
@@ -142,10 +149,10 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   Future<void> _saveLastPath(String? path) async {
     final prefs = await SharedPreferences.getInstance();
     if (path == null || path.trim().isEmpty) {
-      await prefs.remove(_lastPathPrefsKey);
+      await prefs.remove(_lastPathPrefsKey(widget.textId));
       return;
     }
-    await prefs.setString(_lastPathPrefsKey, path.trim());
+    await prefs.setString(_lastPathPrefsKey(widget.textId), path.trim());
   }
 
   /// Returns children of [parentPath] (empty string = root-level sections).
@@ -285,6 +292,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
           maxChildSize: 0.95,
           expand: false,
           builder: (_, scrollController) => OverviewVersePanel(
+            textId: widget.textId,
             sectionPath: section.path,
             sectionTitle: section.title,
             scrollController: scrollController,
@@ -312,7 +320,9 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     // Overview already preloaded in _load(); push immediately so reader opens fast.
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => BcvReadScreen(
+        builder: (_) => ReadScreen(
+          textId: widget.textId,
+          title: widget.title,
           scrollToVerseIndex: params.scrollToVerseIndex,
           highlightSectionIndices: params.highlightSectionIndices,
           initialSegmentRef: params.initialSegmentRef,
@@ -430,7 +440,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                         onExpansionChanged: _onExpansionChanged,
                         scrollToPath: _scrollToPath,
                         sectionVerseRanges:
-                            VerseHierarchyService.instance.getSectionVerseRangeMapSync(),
+                            VerseHierarchyService.instance.getSectionVerseRangeMapSync(widget.textId),
                       ),
                     ),
                     AnimatedContainer(
@@ -442,6 +452,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                       child: _selectedPath != null
                           ? OverviewVersePanel(
                               key: ValueKey(_selectedPath),
+                              textId: widget.textId,
                               sectionPath: _selectedPath!,
                               sectionTitle: _selectedTitle ?? '',
                               onClose: () => setState(() {
@@ -463,7 +474,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                   onExpansionChanged: _onExpansionChanged,
                   scrollToPath: _scrollToPath,
                   sectionVerseRanges:
-                      VerseHierarchyService.instance.getSectionVerseRangeMapSync(),
+                      VerseHierarchyService.instance.getSectionVerseRangeMapSync(widget.textId),
                 ),
         ),
       ],

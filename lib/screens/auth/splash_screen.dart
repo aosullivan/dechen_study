@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../config/study_text_config.dart';
+import '../../utils/web_navigation.dart';
 import '../landing/gateway_landing_screen.dart';
 import '../landing/landing_screen.dart';
 import '../landing/text_options_screen.dart';
-import '../../utils/web_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,12 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
     final path = currentAppPath();
     final isProdHost = isAppDechenStudyHost();
 
-    if (path == '/bodhicaryavatara') {
+    final studyText = getStudyTextByPath(path);
+    if (studyText != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => const TextOptionsScreen(
-            textId: 'bodhicaryavatara',
-            title: 'Bodhicaryavatara',
+          builder: (_) => TextOptionsScreen(
+            textId: studyText.textId,
+            title: studyText.title,
           ),
         ),
       );

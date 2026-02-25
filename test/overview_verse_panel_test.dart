@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:dechen_study/screens/landing/overview/overview_verse_panel.dart';
-import 'package:dechen_study/services/bcv_verse_service.dart';
+import 'package:dechen_study/services/verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    await BcvVerseService.instance.getChapters();
-    await VerseHierarchyService.instance.getHierarchyForVerse('1.1');
+    await VerseService.instance.getChapters('bodhicaryavatara');
+    await VerseHierarchyService.instance.getHierarchyForVerse('bodhicaryavatara', '1.1');
   });
 
   Future<void> pumpPanel(
@@ -24,6 +24,7 @@ void main() {
       MaterialApp(
         home: Scaffold(
           body: OverviewVersePanel(
+            textId: 'bodhicaryavatara',
             sectionPath: sectionPath,
             sectionTitle: sectionTitle,
             onClose: () {},

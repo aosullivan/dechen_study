@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/bcv_verse_service.dart';
+import '../../../services/verse_service.dart';
 import '../../../services/verse_hierarchy_service.dart';
 import '../../../utils/app_theme.dart';
 import '../bcv/bcv_verse_text.dart';
@@ -11,6 +11,7 @@ import 'overview_constants.dart';
 class OverviewVersePanel extends StatelessWidget {
   const OverviewVersePanel({
     super.key,
+    required this.textId,
     required this.sectionPath,
     required this.sectionTitle,
     required this.onClose,
@@ -18,6 +19,7 @@ class OverviewVersePanel extends StatelessWidget {
     this.onOpenInReader,
   });
 
+  final String textId;
   final String sectionPath;
   final String sectionTitle;
   final VoidCallback onClose;
@@ -33,9 +35,10 @@ class OverviewVersePanel extends StatelessWidget {
 
   List<({String ref, String text})> _loadVerses() {
     final ownRefs = VerseHierarchyService.instance
-        .getOwnVerseRefsForSectionSync(sectionPath);
+        .getOwnVerseRefsForSectionSync(textId, sectionPath);
     final treeRefs =
         VerseHierarchyService.instance.getTreeVerseRefsForSectionSync(
+      textId,
       sectionPath,
     );
     final refs = (ownRefs.isNotEmpty
@@ -43,19 +46,19 @@ class OverviewVersePanel extends StatelessWidget {
             : treeRefs.isNotEmpty
                 ? treeRefs
                 : VerseHierarchyService.instance
-                    .getVerseRefsForSectionSync(sectionPath))
+                    .getVerseRefsForSectionSync(textId, sectionPath))
         .toList()
       ..sort(VerseHierarchyService.compareVerseRefs);
 
     final seen = <String>{};
     final verses = <({String ref, String text})>[];
     for (final ref in refs) {
-      final idx = BcvVerseService.instance.getIndexForRefWithFallback(ref);
+      final idx = VerseService.instance.getIndexForRefWithFallback(textId, ref);
       if (idx != null) {
         final base = _baseRef(ref);
         final key = 'r:$base';
         if (!seen.add(key)) continue;
-        final text = BcvVerseService.instance.getVerseAt(idx);
+        final text = VerseService.instance.getVerseAt(textId, idx);
         if (text != null) verses.add((ref: base, text: text));
       }
     }
@@ -66,7 +69,7 @@ class OverviewVersePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final verses = _loadVerses();
     final readerParams = onOpenInReader != null
-        ? VerseHierarchyService.instance.getReaderParamsForSectionSync(sectionPath)
+        ? VerseHierarchyService.instance.getReaderParamsForSectionSync(textId, sectionPath)
         : null;
 
     return Container(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../services/bcv_verse_service.dart';
+import '../../../services/verse_service.dart';
 import '../../../utils/app_theme.dart';
 import 'bcv_read_constants.dart';
 
 /// Right-side panel listing chapters; highlights current and supports tap-to-scroll.
-class BcvChaptersPanel extends StatelessWidget {
-  const BcvChaptersPanel({
+class ChaptersPanel extends StatelessWidget {
+  const ChaptersPanel({
     super.key,
     required this.chapters,
     required this.currentChapterNumber,
@@ -14,7 +14,7 @@ class BcvChaptersPanel extends StatelessWidget {
     this.height,
   });
 
-  final List<BcvChapter> chapters;
+  final List<Chapter> chapters;
   final int? currentChapterNumber;
   final ValueChanged<int> onChapterTap;
   final double? height;

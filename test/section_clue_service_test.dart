@@ -11,25 +11,25 @@ void main() {
 
   group('SectionClueService', () {
     test('getClueForRef returns clue for existing ref', () async {
-      final clue = await service.getClueForRef('1.1');
+      final clue = await service.getClueForRef('bodhicaryavatara', '1.1');
       expect(clue, isNotNull);
       expect(clue, isNotEmpty);
       expect(clue, contains('purposes'));
     });
 
     test('getClueForRef returns clue for ref 1.5', () async {
-      final clue = await service.getClueForRef('1.5');
+      final clue = await service.getClueForRef('bodhicaryavatara', '1.5');
       expect(clue, isNotNull);
       expect(clue, contains('bodily'));
     });
 
     test('getClueForRef returns null for non-existent ref', () async {
-      final clue = await service.getClueForRef('99.99');
+      final clue = await service.getClueForRef('bodhicaryavatara', '99.99');
       expect(clue, isNull);
     });
 
     test('getClueForRef returns null for empty ref', () async {
-      final clue = await service.getClueForRef('');
+      final clue = await service.getClueForRef('bodhicaryavatara', '');
       expect(clue, isNull);
     });
   });

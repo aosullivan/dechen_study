@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:dechen_study/screens/landing/daily_verse_screen.dart';
-import 'package:dechen_study/screens/landing/bcv_read_screen.dart';
+import 'package:dechen_study/screens/landing/read_screen.dart';
 import 'package:dechen_study/services/commentary_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 import 'package:dechen_study/utils/app_theme.dart';
@@ -13,7 +13,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    await VerseHierarchyService.instance.getHierarchyForVerse('1.1');
+    await VerseHierarchyService.instance.getHierarchyForVerse('bodhicaryavatara', '1.1');
   });
 
   Future<void> pumpDaily(
@@ -34,6 +34,8 @@ void main() {
           scaffoldBackgroundColor: AppColors.scaffoldBackground,
         ),
         home: DailyVerseScreen(
+          textId: 'bodhicaryavatara',
+          title: 'Bodhicaryavatara',
           randomSectionLoader: () async => CommentaryEntry(
             refsInBlock: refs,
             commentaryText: 'test',
@@ -112,7 +114,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 350));
 
-    final read = tester.widget<BcvReadScreen>(find.byType(BcvReadScreen));
+    final read = tester.widget<ReadScreen>(find.byType(ReadScreen));
     expect(read.initialSegmentRef, '8.136cd');
   });
 
@@ -125,7 +127,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 350));
 
-    final read = tester.widget<BcvReadScreen>(find.byType(BcvReadScreen));
+    final read = tester.widget<ReadScreen>(find.byType(ReadScreen));
     expect(read.initialSegmentRef, '1.14cd');
   });
 
@@ -224,6 +226,8 @@ void main() {
           scaffoldBackgroundColor: AppColors.scaffoldBackground,
         ),
         home: DailyVerseScreen(
+          textId: 'bodhicaryavatara',
+          title: 'Bodhicaryavatara',
           randomSectionLoader: () async => const CommentaryEntry(
             refsInBlock: ['6.28ab'],
             commentaryText: 'test',

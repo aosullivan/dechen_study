@@ -1,5 +1,5 @@
-import 'package:dechen_study/screens/landing/bcv_quiz_screen.dart';
-import 'package:dechen_study/screens/landing/bcv_read_screen.dart';
+import 'package:dechen_study/screens/landing/guess_chapter_screen.dart';
+import 'package:dechen_study/screens/landing/read_screen.dart';
 import 'package:dechen_study/screens/landing/daily_verse_screen.dart';
 import 'package:dechen_study/screens/landing/textual_overview_screen.dart';
 import 'package:dechen_study/services/usage_metrics_service.dart';
@@ -52,7 +52,10 @@ void main() {
   testWidgets('read screen emits surface dwell on dispose', (tester) async {
     final events = await collectSurfaceDwellFromDispose(
       tester,
-      const BcvReadScreen(),
+      const ReadScreen(
+        textId: 'bodhicaryavatara',
+        title: 'Bodhicaryavatara',
+      ),
     );
 
     expect(events.any((row) => row['mode'] == 'read'), isTrue);
@@ -61,7 +64,10 @@ void main() {
   testWidgets('daily screen emits surface dwell on dispose', (tester) async {
     final events = await collectSurfaceDwellFromDispose(
       tester,
-      const DailyVerseScreen(),
+      const DailyVerseScreen(
+        textId: 'bodhicaryavatara',
+        title: 'Bodhicaryavatara',
+      ),
     );
 
     expect(events.any((row) => row['mode'] == 'daily'), isTrue);
@@ -71,7 +77,10 @@ void main() {
       (tester) async {
     final events = await collectSurfaceDwellFromDispose(
       tester,
-      const BcvQuizScreen(),
+      const GuessChapterScreen(
+        textId: 'bodhicaryavatara',
+        title: 'Bodhicaryavatara',
+      ),
     );
 
     expect(events.any((row) => row['mode'] == 'guess_chapter'), isTrue);
@@ -80,7 +89,10 @@ void main() {
   testWidgets('overview screen emits surface dwell on dispose', (tester) async {
     final events = await collectSurfaceDwellFromDispose(
       tester,
-      const TextualOverviewScreen(),
+      const TextualOverviewScreen(
+        textId: 'bodhicaryavatara',
+        title: 'Bodhicaryavatara',
+      ),
     );
 
     expect(events.any((row) => row['mode'] == 'overview'), isTrue);

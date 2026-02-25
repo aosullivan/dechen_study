@@ -9,7 +9,7 @@ void main() {
 
   test('appends adjacent continuation when a section ends with a question',
       () async {
-    final entry = await service.getCommentaryForRefWithContinuation('1.2');
+    final entry = await service.getCommentaryForRefWithContinuation('bodhicaryavatara', '1.2');
     expect(entry, isNotNull);
     expect(
       entry!.commentaryText,
@@ -25,8 +25,8 @@ void main() {
 
   test('does not append continuation when section already ends normally',
       () async {
-    final base = await service.getCommentaryForRef('1.3ab');
-    final chained = await service.getCommentaryForRefWithContinuation('1.3ab');
+    final base = await service.getCommentaryForRef('bodhicaryavatara', '1.3ab');
+    final chained = await service.getCommentaryForRefWithContinuation('bodhicaryavatara', '1.3ab');
     expect(base, isNotNull);
     expect(chained, isNotNull);
     expect(chained!.commentaryText, base!.commentaryText);

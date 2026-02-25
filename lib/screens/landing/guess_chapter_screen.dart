@@ -4,23 +4,30 @@ import 'package:flutter/material.dart';
 
 import '../../utils/app_theme.dart';
 import '../../utils/widget_lifecycle_observer.dart';
-import '../../services/bcv_verse_service.dart';
+import '../../services/verse_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/section_clue_service.dart';
 import '../../services/usage_metrics_service.dart';
 import 'bcv/bcv_verse_text.dart';
 
 /// Guess the Chapter: pick which chapter a random section belongs to.
-class BcvQuizScreen extends StatefulWidget {
-  const BcvQuizScreen({super.key});
+class GuessChapterScreen extends StatefulWidget {
+  const GuessChapterScreen({
+    super.key,
+    required this.textId,
+    required this.title,
+  });
+
+  final String textId;
+  final String title;
 
   @override
-  State<BcvQuizScreen> createState() => _BcvQuizScreenState();
+  State<GuessChapterScreen> createState() => _GuessChapterScreenState();
 }
 
-class _BcvQuizScreenState extends State<BcvQuizScreen>
+class _GuessChapterScreenState extends State<GuessChapterScreen>
     with WidgetLifecycleObserver, WidgetsBindingObserver {
-  final _verseService = BcvVerseService.instance;
+  final _verseService = VerseService.instance;
   final _commentaryService = CommentaryService.instance;
   final _clueService = SectionClueService.instance;
   final _usageMetrics = UsageMetricsService.instance;
@@ -30,7 +37,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
   List<String> _sectionVerseTexts = [];
   int _correctChapterNumber = 0;
   String? _correctVerseRef;
-  List<BcvChapter> _chapters = [];
+  List<Chapter> _chapters = [];
   int? _selectedChapter;
   bool _showAnswer = false;
   bool _showChapterLabels = false;
@@ -154,7 +161,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     final durationMs = nowUtc.difference(startedAt).inMilliseconds;
     if (durationMs >= _usageMetrics.minDwellMs) {
       unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: 'bodhicaryavatara',
+        textId: widget.textId,
         mode: 'guess_chapter',
         durationMs: durationMs,
         chapterNumber: _correctChapterNumber > 0 ? _correctChapterNumber : null,
@@ -179,7 +186,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
       _clueText = null;
     });
     try {
-      final chapters = await _verseService.getChapters();
+      final chapters = await _verseService.getChapters(widget.textId);
       final section = await _pickRenderableSection();
       if (section == null) {
         if (mounted) {
@@ -190,7 +197,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
         }
         return;
       }
-      final clue = await _clueService.getClueForRef(section.verseRef);
+      final clue = await _clueService.getClueForRef(widget.textId, section.verseRef);
       if (mounted) {
         setState(() {
           _sectionVerseTexts = section.verseTexts;
@@ -213,7 +220,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
 
   Future<_QuizSectionData?> _pickRenderableSection() async {
     for (var attempt = 0; attempt < 40; attempt++) {
-      final section = await _commentaryService.getRandomSection();
+      final section = await _commentaryService.getRandomSection(widget.textId);
       if (section == null || section.refsInBlock.isEmpty) continue;
       final data = _buildSectionData(section);
       if (data != null) return data;
@@ -228,9 +235,9 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     final refs = <String>[];
     final texts = <String>[];
     for (final ref in normalizedRefs) {
-      final idx = _verseService.getIndexForRef(ref);
+      final idx = _verseService.getIndexForRef(widget.textId, ref);
       if (idx == null) continue;
-      final text = _verseService.getVerseAt(idx);
+      final text = _verseService.getVerseAt(widget.textId, idx);
       if (text == null || text.trim().isEmpty) continue;
       refs.add(ref);
       texts.add(text);
@@ -253,15 +260,15 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     final seen = <String>{};
     final normalized = <String>[];
     for (final ref in refsInBlock) {
-      final baseRef = ref.replaceAll(BcvVerseService.segmentSuffixPattern, '');
-      if (!BcvVerseService.baseVerseRefPattern.hasMatch(baseRef)) continue;
+      final baseRef = ref.replaceAll(VerseService.segmentSuffixPattern, '');
+      if (!VerseService.baseVerseRefPattern.hasMatch(baseRef)) continue;
       if (!seen.add(baseRef)) continue;
       normalized.add(baseRef);
     }
     return normalized;
   }
 
-  String _formattedAnswer(BcvChapter chapter, String? verseRef) {
+  String _formattedAnswer(Chapter chapter, String? verseRef) {
     final verse = verseRef?.trim();
     if (verse == null || verse.isEmpty) {
       return 'Chapter ${chapter.number}: ${chapter.title}';
@@ -269,13 +276,13 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     return 'Chapter ${chapter.number}: ${chapter.title} - verse $verse';
   }
 
-  String _displayChapterTitle(BcvChapter chapter) {
+  String _displayChapterTitle(Chapter chapter) {
     return _shortChapterTitles[chapter.number] ?? chapter.title;
   }
 
   Widget _buildChapterPadKey({
     required BuildContext context,
-    required BcvChapter chapter,
+    required Chapter chapter,
     required bool isSelected,
     required bool isCorrect,
     required bool isWrong,
@@ -423,7 +430,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
   void _nextQuestion() {
     unawaited(_usageMetrics.trackEvent(
       eventName: 'quiz_next_question_tapped',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'guess_chapter',
       chapterNumber: _correctChapterNumber > 0 ? _correctChapterNumber : null,
       verseRef: _correctVerseRef,
@@ -444,7 +451,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     });
     unawaited(_usageMetrics.trackEvent(
       eventName: 'quiz_answer_revealed',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'guess_chapter',
       chapterNumber: _correctChapterNumber,
       verseRef: _correctVerseRef,
@@ -458,7 +465,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
     );
   }
 
-  void _selectChapter(BcvChapter chapter) {
+  void _selectChapter(Chapter chapter) {
     if (_showAnswer) return;
     final correct = chapter.number == _correctChapterNumber;
     String? wrongMsg;
@@ -497,7 +504,7 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
       if (correct) _correctAnswers++;
     });
     unawaited(_usageMetrics.trackQuizAttempt(
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'guess_chapter',
       correct: correct,
       chapterNumber: _correctChapterNumber,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../config/study_text_config.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
@@ -67,12 +68,16 @@ class _LandingScreenState extends State<LandingScreen> {
                   author: 'JAMGON JU MIPHAM',
                   onTap: () => _openGatewayToKnowledge(context),
                 ),
-                const SizedBox(height: 20),
-                _TextLandingCard(
-                  title: 'Bodhicaryavatara',
-                  author: 'SANTIDEVA',
-                  onTap: () => _openTextOptions(context),
-                ),
+                ...getStudyTextsWithFullSupport().map(
+                  (config) => [
+                    const SizedBox(height: 20),
+                    _TextLandingCard(
+                      title: config.title,
+                      author: config.author,
+                      onTap: () => _openTextOptions(context, config),
+                    ),
+                  ],
+                ).expand((e) => e),
               ],
             ),
           ),
@@ -81,14 +86,14 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
-  void _openTextOptions(BuildContext context) {
+  void _openTextOptions(BuildContext context, StudyTextConfig config) {
     _openText(
       context,
-      textId: 'bodhicaryavatara',
-      path: '/bodhicaryavatara',
-      screen: const TextOptionsScreen(
-        textId: 'bodhicaryavatara',
-        title: 'Bodhicaryavatara',
+      textId: config.textId,
+      path: config.path,
+      screen: TextOptionsScreen(
+        textId: config.textId,
+        title: config.title,
       ),
     );
   }

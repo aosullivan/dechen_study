@@ -2,15 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../services/bcv_verse_service.dart';
+import '../../config/study_text_config.dart';
+import '../../services/verse_service.dart';
 import '../../services/bookmark_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/preload.dart';
 import '../../utils/web_navigation.dart';
-import 'bcv_file_quiz_screen.dart';
-import 'bcv_quiz_screen.dart';
-import 'bcv_read_screen.dart';
+import 'file_quiz_screen.dart';
+import 'guess_chapter_screen.dart';
+import 'read_screen.dart';
 import 'daily_verse_screen.dart';
 import 'textual_overview_screen.dart';
 
@@ -30,8 +31,6 @@ class TextOptionsScreen extends StatefulWidget {
 }
 
 class _TextOptionsScreenState extends State<TextOptionsScreen> {
-  static const String _rootTextPurchaseUrl = 'https://amzn.to/3N1bxAD';
-  static const String _commentaryPurchaseUrl = 'https://amzn.to/3MsRxa5';
   static const Map<String, String> _amazonBaseByCountryCode = <String, String>{
     'US': 'https://www.amazon.com',
     'GB': 'https://www.amazon.co.uk',
@@ -58,9 +57,9 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   @override
   void initState() {
     super.initState();
-    // Pre-warm services so the read screen opens quickly.
-    if (widget.textId == 'bodhicaryavatara') {
-      unawaited(preloadBcvAndHierarchy());
+    final config = getStudyText(widget.textId);
+    if (config != null && config.hasFullStudySupport) {
+      unawaited(preloadForText(widget.textId));
     }
   }
 
@@ -131,13 +130,16 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             vertical: isCompactPhone ? 4 : 8,
           ),
           children: [
-            if (textId == 'bodhicaryavatara') ...[
-              _BodhicaryavataraTextLandingCard(
-                compact: isCompactPhone,
-                verySmallPhone: isVerySmallPhone,
-                onOpenReader: () => _openReaderView(context),
-              ),
-              SizedBox(height: isCompactPhone ? 6 : 10),
+            if (getStudyText(textId) case final config?) ...[
+              if (config.description != null || config.coverAssetPath != null) ...[
+                _TextHeroCard(
+                  config: config,
+                  compact: isCompactPhone,
+                  verySmallPhone: isVerySmallPhone,
+                  onOpenReader: () => _openReaderView(context),
+                ),
+                SizedBox(height: isCompactPhone ? 6 : 10),
+              ],
             ],
             for (final option in options)
               _OptionTile(
@@ -147,25 +149,26 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
                 label: option.label,
                 onTap: option.onTap,
               ),
-            if (textId == 'bodhicaryavatara') ...[
-              SizedBox(height: isCompactPhone ? 4 : 8),
-              _PurchaseFooterLinks(
-                compact: isCompactPhone,
-                verySmallPhone: isVerySmallPhone,
-                onBuyRootText: () => _openPurchaseLink(
-                  context,
-                  linkType: 'root_text',
-                  usUrl: _rootTextPurchaseUrl,
-                  localizedSearchTerm: 'Bodhicaryavatara Santideva root text',
+            if (getStudyText(textId) case final config?) ...[
+              if (config.purchaseRootTextUrl != null || config.purchaseCommentaryUrl != null) ...[
+                SizedBox(height: isCompactPhone ? 4 : 8),
+                _PurchaseFooterLinks(
+                  compact: isCompactPhone,
+                  verySmallPhone: isVerySmallPhone,
+                  onBuyRootText: () => _openPurchaseLink(
+                    context,
+                    linkType: 'root_text',
+                    usUrl: config.purchaseRootTextUrl ?? '',
+                    localizedSearchTerm: config.purchaseRootTextSearchTerm ?? config.title,
+                  ),
+                  onBuyCommentary: () => _openPurchaseLink(
+                    context,
+                    linkType: 'commentary',
+                    usUrl: config.purchaseCommentaryUrl ?? '',
+                    localizedSearchTerm: config.purchaseCommentarySearchTerm ?? '${config.title} commentary',
+                  ),
                 ),
-                onBuyCommentary: () => _openPurchaseLink(
-                  context,
-                  linkType: 'commentary',
-                  usUrl: _commentaryPurchaseUrl,
-                  localizedSearchTerm:
-                      'Bodhicaryavatara Sonam Tsemo commentary',
-                ),
-              ),
+              ],
             ],
           ],
         ),
@@ -174,7 +177,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _restoreLandingPath() {
-    if (textId == 'bodhicaryavatara') {
+    final config = getStudyText(textId);
+    if (config != null) {
+      replaceAppPath(config.path);
+    } else {
       replaceAppPath('/');
     }
   }
@@ -195,16 +201,16 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _openDaily(BuildContext context) {
-    _openBcvMode(
+    _openStudyMode(
       context,
       targetMode: 'daily',
-      screen: const DailyVerseScreen(),
+      screen: DailyVerseScreen(textId: textId, title: title),
       comingSoonLabel: 'Daily',
     );
   }
 
   Future<void> _openRead(BuildContext context) async {
-    _openBcvMode(
+    _openStudyMode(
       context,
       targetMode: 'read',
       screen: _ReadChapterSelectionScreen(title: title, textId: textId),
@@ -213,48 +219,48 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _openReaderView(BuildContext context) {
-    _openBcvMode(
+    _openStudyMode(
       context,
       targetMode: 'read',
-      screen: BcvReadScreen(title: title),
+      screen: ReadScreen(textId: textId, title: title),
       comingSoonLabel: 'Read',
     );
   }
 
   void _openGuessTheChapter(BuildContext context) {
-    _openBcvMode(
+    _openStudyMode(
       context,
       targetMode: 'guess_chapter',
-      screen: const BcvQuizScreen(),
+      screen: GuessChapterScreen(textId: textId, title: title),
       comingSoonLabel: 'Guess the Chapter',
     );
   }
 
   void _openQuiz(BuildContext context) {
-    _openBcvMode(
+    _openStudyMode(
       context,
       targetMode: 'quiz',
-      screen: const BcvFileQuizScreen(),
+      screen: FileQuizScreen(textId: textId, title: title),
       comingSoonLabel: 'Quiz',
     );
   }
 
   void _openOverview(BuildContext context) {
-    _openBcvMode(
+    _openStudyMode(
       context,
       targetMode: 'overview',
-      screen: const TextualOverviewScreen(),
+      screen: TextualOverviewScreen(textId: textId, title: title),
       comingSoonLabel: 'Textual Structure',
     );
   }
 
-  void _openBcvMode(
+  void _openStudyMode(
     BuildContext context, {
     required String targetMode,
     required Widget screen,
     required String comingSoonLabel,
   }) {
-    if (textId == 'bodhicaryavatara') {
+    if (hasFullStudySupport(textId)) {
       unawaited(UsageMetricsService.instance.trackTextOptionTapped(
         textId: textId,
         targetMode: targetMode,
@@ -282,6 +288,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     required String usUrl,
     required String localizedSearchTerm,
   }) {
+    if (usUrl.isEmpty) return;
     final localeCode = Localizations.maybeLocaleOf(context)?.countryCode;
     final regionalUrl = _resolveRegionalAmazonUrl(
       usUrl: usUrl,
@@ -336,19 +343,22 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 }
 
-class _BodhicaryavataraTextLandingCard extends StatelessWidget {
-  const _BodhicaryavataraTextLandingCard({
+class _TextHeroCard extends StatelessWidget {
+  const _TextHeroCard({
+    required this.config,
     required this.compact,
     required this.verySmallPhone,
     required this.onOpenReader,
   });
 
+  final StudyTextConfig config;
   final bool compact;
   final bool verySmallPhone;
   final VoidCallback onOpenReader;
 
   @override
   Widget build(BuildContext context) {
+    final coverPath = config.coverAssetPath;
     return Card(
       margin: EdgeInsets.zero,
       color: AppColors.cardBeige,
@@ -365,7 +375,7 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
             final canKeepImageOnRight =
                 isWide || (compact && constraints.maxWidth >= 300);
 
-            if (canKeepImageOnRight) {
+            if (canKeepImageOnRight && coverPath != null) {
               final coverWidth = isWide
                   ? 120.0
                   : (compact ? (verySmallPhone ? 56.0 : 62.0) : 86.0);
@@ -374,7 +384,8 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: _BodhicaryavataraTextLandingContent(
+                    child: _TextHeroContent(
+                      config: config,
                       compact: compact && !isWide,
                       verySmallPhone: verySmallPhone && !isWide,
                     ),
@@ -383,6 +394,7 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
                   SizedBox(
                     width: coverWidth,
                     child: _BookCoverCard(
+                      coverAssetPath: coverPath,
                       onTap: onOpenReader,
                     ),
                   ),
@@ -393,20 +405,24 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _BodhicaryavataraTextLandingContent(
+                _TextHeroContent(
+                  config: config,
                   compact: true,
                   verySmallPhone: verySmallPhone,
                 ),
-                const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: SizedBox(
-                    width: 86,
-                    child: _BookCoverCard(
-                      onTap: onOpenReader,
+                if (coverPath != null) ...[
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 86,
+                      child: _BookCoverCard(
+                        coverAssetPath: coverPath,
+                        onTap: onOpenReader,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
             );
           },
@@ -416,22 +432,25 @@ class _BodhicaryavataraTextLandingCard extends StatelessWidget {
   }
 }
 
-class _BodhicaryavataraTextLandingContent extends StatelessWidget {
-  const _BodhicaryavataraTextLandingContent({
+class _TextHeroContent extends StatelessWidget {
+  const _TextHeroContent({
+    required this.config,
     required this.compact,
     required this.verySmallPhone,
   });
 
+  final StudyTextConfig config;
   final bool compact;
   final bool verySmallPhone;
 
   @override
   Widget build(BuildContext context) {
+    final description = config.description ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'SANTIDEVA',
+          config.author,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontSize: compact ? (verySmallPhone ? 10.5 : 11.5) : 12,
                     letterSpacing: compact ? (verySmallPhone ? 1.0 : 1.2) : 1.5,
@@ -446,7 +465,7 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
         ),
         SizedBox(height: compact ? 3 : 4),
         Text(
-          'Bodhicaryavatara',
+          config.title,
           style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     fontSize: compact ? (verySmallPhone ? 24 : 27) : 34,
                     height: 1.05,
@@ -459,20 +478,22 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
                 color: AppColors.textDark,
               ),
         ),
-        SizedBox(height: compact ? 6 : 8),
-        Text(
-          'Read, explore the root text, reflect with daily verses, and quiz yourself. The root text is presented in a structured format according to the commentary by Sonam Tsemo.',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: compact ? (verySmallPhone ? 14.25 : 15.5) : 14,
-                    height: compact ? (verySmallPhone ? 1.32 : 1.35) : 1.4,
-                  ) ??
-              TextStyle(
-                fontFamily: 'Lora',
-                fontSize: compact ? (verySmallPhone ? 14.25 : 15.5) : 14,
-                height: compact ? (verySmallPhone ? 1.32 : 1.35) : 1.4,
-                color: AppColors.bodyText,
-              ),
-        ),
+        if (description.isNotEmpty) ...[
+          SizedBox(height: compact ? 6 : 8),
+          Text(
+            description,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: compact ? (verySmallPhone ? 14.25 : 15.5) : 14,
+                      height: compact ? (verySmallPhone ? 1.32 : 1.35) : 1.4,
+                    ) ??
+                TextStyle(
+                  fontFamily: 'Lora',
+                  fontSize: compact ? (verySmallPhone ? 14.25 : 15.5) : 14,
+                  height: compact ? (verySmallPhone ? 1.32 : 1.35) : 1.4,
+                  color: AppColors.bodyText,
+                ),
+          ),
+        ],
       ],
     );
   }
@@ -480,9 +501,11 @@ class _BodhicaryavataraTextLandingContent extends StatelessWidget {
 
 class _BookCoverCard extends StatelessWidget {
   const _BookCoverCard({
+    required this.coverAssetPath,
     required this.onTap,
   });
 
+  final String coverAssetPath;
   final VoidCallback onTap;
 
   @override
@@ -495,7 +518,7 @@ class _BookCoverCard extends StatelessWidget {
         child: AspectRatio(
           aspectRatio: 348 / 522,
           child: Image.asset(
-            'assets/bodhicarya.jpg',
+            coverAssetPath,
             fit: BoxFit.cover,
             errorBuilder: (context, _, __) => Container(
               color: const Color(0xFFB2223B),
@@ -655,14 +678,14 @@ class _ReadChapterSelectionScreen extends StatefulWidget {
 
 class _ReadChapterSelectionScreenState
     extends State<_ReadChapterSelectionScreen> {
-  late final Future<List<BcvChapter>> _chaptersFuture =
-      BcvVerseService.instance.getChapters();
+  late final Future<List<Chapter>> _chaptersFuture =
+      VerseService.instance.getChapters(widget.textId);
   Bookmark? _bookmark;
 
   @override
   void initState() {
     super.initState();
-    BookmarkService.instance.load().then((b) {
+    BookmarkService.instance.load(widget.textId).then((b) {
       if (b != null && mounted) setState(() => _bookmark = b);
     });
   }
@@ -678,7 +701,8 @@ class _ReadChapterSelectionScreenState
       verseRef: bm.verseRef,
     ));
     Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-      builder: (_) => BcvReadScreen(
+      builder: (_) => ReadScreen(
+        textId: widget.textId,
         title: widget.title,
         initialChapterNumber: bm.chapterNumber,
         scrollToVerseIndex: bm.verseIndex,
@@ -703,7 +727,7 @@ class _ReadChapterSelectionScreenState
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder<List<BcvChapter>>(
+      body: FutureBuilder<List<Chapter>>(
         future: _chaptersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -737,7 +761,10 @@ class _ReadChapterSelectionScreenState
                         ));
                         Navigator.of(context)
                             .pushReplacement(MaterialPageRoute<void>(
-                          builder: (_) => BcvReadScreen(title: widget.title),
+                          builder: (_) => ReadScreen(
+                            textId: widget.textId,
+                            title: widget.title,
+                          ),
                         ));
                       },
                       child: const Text('Open Read'),
@@ -748,7 +775,7 @@ class _ReadChapterSelectionScreenState
             );
           }
 
-          final chapters = snapshot.data ?? const <BcvChapter>[];
+          final chapters = snapshot.data ?? const <Chapter>[];
           if (chapters.isEmpty) {
             return Center(
               child: Text(
@@ -799,7 +826,8 @@ class _ReadChapterSelectionScreenState
                     ));
                     Navigator.of(context)
                         .pushReplacement(MaterialPageRoute<void>(
-                      builder: (_) => BcvReadScreen(
+                      builder: (_) => ReadScreen(
+                        textId: widget.textId,
                         title: widget.title,
                         initialChapterNumber: chapter.number,
                       ),

@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../config/study_text_config.dart';
+
 /// One commentary block: the list of verse refs it covers and the commentary text.
 class CommentaryEntry {
   const CommentaryEntry({
@@ -12,16 +14,14 @@ class CommentaryEntry {
   final String commentaryText;
 }
 
-/// Top-level so it can run in a compute isolate.
+// Top-level so it can run in a compute isolate.
 ({
   Map<String, List<String>> refToRefsInBlock,
   Map<String, String> refToCommentary,
   Map<String, int> refToSectionIndex,
   List<CommentaryEntry> allSections
 }) _parseCommentary(String content) {
-  // Detects a section header line: any line starting with [chapter.verse (e.g. [1.32], [1.4ab], [1.34-1.35ab])
   final sectionHeader = RegExp(r'^\[\d+\.');
-  // Extracts verse refs from a header, handling ranges like [1.34-1.35ab] → ["1.34", "1.35ab"]
   final refExtract = RegExp(r'(?:\[|-)(\d+\.\d+[a-z]*)');
   int suffixRank(String suffix) {
     switch (suffix) {
@@ -104,36 +104,42 @@ class CommentaryEntry {
   );
 }
 
-/// Loads and parses verse_commentary_mapping.txt. Section headers are lines containing one or more [c.v];
-/// body runs until the next such line.
+/// Loads and parses verse commentary mapping per text. Paths from [StudyTextConfig].
 class CommentaryService {
   CommentaryService._();
   static final CommentaryService _instance = CommentaryService._();
   static CommentaryService get instance => _instance;
 
-  static const String _assetPath = 'texts/verse_commentary_mapping.txt';
+  final Map<String, _CommentaryCache> _cache = {};
 
-  Map<String, List<String>>? _refToRefsInBlock;
-  Map<String, String>? _refToCommentary;
-  Map<String, int>? _refToSectionIndex;
-  List<CommentaryEntry>? _allSections;
+  String? _assetPathFor(String textId) {
+    return getStudyText(textId)?.commentaryPath;
+  }
 
-  Future<void> _ensureLoaded() async {
-    if (_refToRefsInBlock != null) return;
+  Future<void> _ensureLoaded(String textId) async {
+    if (_cache.containsKey(textId)) return;
+    final path = _assetPathFor(textId);
+    if (path == null || path.isEmpty) return;
     try {
-      final content = await rootBundle.loadString(_assetPath);
+      final content = await rootBundle.loadString(path);
       final result = await compute(_parseCommentary, content);
-      _refToRefsInBlock = result.refToRefsInBlock;
-      _refToCommentary = result.refToCommentary;
-      _refToSectionIndex = result.refToSectionIndex;
-      _allSections = result.allSections;
+      _cache[textId] = _CommentaryCache(
+        refToRefsInBlock: result.refToRefsInBlock,
+        refToCommentary: result.refToCommentary,
+        refToSectionIndex: result.refToSectionIndex,
+        allSections: result.allSections,
+      );
     } catch (_) {
-      _refToRefsInBlock = {};
-      _refToCommentary = {};
-      _refToSectionIndex = {};
-      _allSections = [];
+      _cache[textId] = _CommentaryCache(
+        refToRefsInBlock: {},
+        refToCommentary: {},
+        refToSectionIndex: {},
+        allSections: [],
+      );
     }
   }
+
+  _CommentaryCache? _get(String textId) => _cache[textId];
 
   static final _baseVersePattern = RegExp(r'^(\d+)\.(\d+)');
   static final _trailingQuestionPattern = RegExp(r'''\?\s*(['"”’)\]]*)$''');
@@ -166,30 +172,32 @@ class CommentaryService {
     return delta >= 0 && delta <= 1;
   }
 
-  /// Returns the commentary for [ref] (e.g. "1.5"), or null if none.
-  Future<CommentaryEntry?> getCommentaryForRef(String ref) async {
-    await _ensureLoaded();
-    final refs = _refToRefsInBlock?[ref];
-    final text = _refToCommentary?[ref];
+  /// Returns the commentary for [ref] (e.g. "1.5") for [textId], or null if none.
+  Future<CommentaryEntry?> getCommentaryForRef(String textId, String ref) async {
+    await _ensureLoaded(textId);
+    final c = _get(textId);
+    if (c == null) return null;
+    final refs = c.refToRefsInBlock[ref];
+    final text = c.refToCommentary[ref];
     if (refs == null || text == null || text.isEmpty) return null;
     return CommentaryEntry(refsInBlock: refs, commentaryText: text);
   }
 
-  /// Returns commentary for [ref], optionally appending a nearby following
-  /// section when the current section appears to end mid-thought (e.g. trailing
-  /// question that is answered in the immediately next block).
+  /// Returns commentary for [ref] for [textId], optionally appending a nearby following section.
   Future<CommentaryEntry?> getCommentaryForRefWithContinuation(
+    String textId,
     String ref, {
     int maxContinuationSections = 2,
   }) async {
-    await _ensureLoaded();
-    final sections = _allSections;
-    final sectionIndex = _refToSectionIndex?[ref];
-    if (sections == null ||
-        sectionIndex == null ||
+    await _ensureLoaded(textId);
+    final c = _get(textId);
+    if (c == null) return getCommentaryForRef(textId, ref);
+    final sections = c.allSections;
+    final sectionIndex = c.refToSectionIndex[ref];
+    if (sectionIndex == null ||
         sectionIndex < 0 ||
         sectionIndex >= sections.length) {
-      return getCommentaryForRef(ref);
+      return getCommentaryForRef(textId, ref);
     }
 
     final baseSection = sections[sectionIndex];
@@ -230,11 +238,24 @@ class CommentaryService {
     );
   }
 
-  /// Returns a random commentary section (block of one or more verses). Null if none.
-  Future<CommentaryEntry?> getRandomSection() async {
-    await _ensureLoaded();
-    final sections = _allSections;
-    if (sections == null || sections.isEmpty) return null;
-    return sections[Random().nextInt(sections.length)];
+  /// Returns a random commentary section for [textId]. Null if none.
+  Future<CommentaryEntry?> getRandomSection(String textId) async {
+    await _ensureLoaded(textId);
+    final c = _get(textId);
+    if (c == null || c.allSections.isEmpty) return null;
+    return c.allSections[Random().nextInt(c.allSections.length)];
   }
+}
+
+class _CommentaryCache {
+  _CommentaryCache({
+    required this.refToRefsInBlock,
+    required this.refToCommentary,
+    required this.refToSectionIndex,
+    required this.allSections,
+  });
+  final Map<String, List<String>> refToRefsInBlock;
+  final Map<String, String> refToCommentary;
+  final Map<String, int> refToSectionIndex;
+  final List<CommentaryEntry> allSections;
 }

@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-enum BcvFileQuizDifficulty { beginner, advanced }
+import '../config/study_text_config.dart';
 
-class BcvFileQuizQuestion {
-  const BcvFileQuizQuestion({
+enum FileQuizDifficulty { beginner, advanced }
+
+class FileQuizQuestion {
+  const FileQuizQuestion({
     required this.number,
     required this.prompt,
     required this.options,
@@ -23,47 +25,47 @@ class BcvFileQuizQuestion {
   String get correctAnswerText => options[answerKey] ?? '';
 }
 
-class BcvFileQuizService {
-  BcvFileQuizService._();
+class FileQuizService {
+  FileQuizService._();
 
-  static final BcvFileQuizService instance = BcvFileQuizService._();
+  static final FileQuizService instance = FileQuizService._();
 
-  static const _beginnerPath = 'texts/root_text_quiz.txt';
-  static const _advancedPath = 'texts/root_text_quiz_400.txt';
+  /// Cache: textId -> difficulty -> list of questions.
+  final Map<String, Map<FileQuizDifficulty, List<FileQuizQuestion>>> _cache = {};
 
-  List<BcvFileQuizQuestion>? _beginner;
-  List<BcvFileQuizQuestion>? _advanced;
-
-  Future<List<BcvFileQuizQuestion>> loadQuestions(
-    BcvFileQuizDifficulty difficulty,
+  Future<List<FileQuizQuestion>> loadQuestions(
+    String textId,
+    FileQuizDifficulty difficulty,
   ) async {
-    if (difficulty == BcvFileQuizDifficulty.beginner && _beginner != null) {
-      return _beginner!;
-    }
-    if (difficulty == BcvFileQuizDifficulty.advanced && _advanced != null) {
-      return _advanced!;
+    final byDifficulty = _cache[textId];
+    if (byDifficulty != null) {
+      final cached = byDifficulty[difficulty];
+      if (cached != null) return cached;
     }
 
-    final path = difficulty == BcvFileQuizDifficulty.beginner
-        ? _beginnerPath
-        : _advancedPath;
-    final content = await rootBundle.loadString(path);
-    final parsed = _parseQuestions(content);
+    final config = getStudyText(textId);
+    final path = difficulty == FileQuizDifficulty.beginner
+        ? config?.quizBeginnerPath
+        : config?.quizAdvancedPath;
+    if (path == null || path.isEmpty) return [];
 
-    if (difficulty == BcvFileQuizDifficulty.beginner) {
-      _beginner = parsed;
-    } else {
-      _advanced = parsed;
+    try {
+      final content = await rootBundle.loadString(path);
+      final parsed = _parseQuestions(content);
+      _cache[textId] ??= {};
+      _cache[textId]![difficulty] = parsed;
+      return parsed;
+    } catch (_) {
+      return [];
     }
-    return parsed;
   }
 
   @visibleForTesting
-  List<BcvFileQuizQuestion> parseQuestionsForTest(String content) {
+  List<FileQuizQuestion> parseQuestionsForTest(String content) {
     return _parseQuestions(content);
   }
 
-  List<BcvFileQuizQuestion> _parseQuestions(String content) {
+  List<FileQuizQuestion> _parseQuestions(String content) {
     final lines = content.split('\n');
     final drafts = <_ParsedQuizQuestionDraft>[];
 
@@ -176,7 +178,7 @@ class BcvFileQuizService {
 
     return drafts
         .map(
-          (q) => BcvFileQuizQuestion(
+          (q) => FileQuizQuestion(
             number: q.number,
             prompt: q.prompt,
             options: q.options,

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:dechen_study/services/bcv_file_quiz_service.dart';
+import 'package:dechen_study/services/file_quiz_service.dart';
 
 void main() {
   test('backfills missing refs from nearby questions in same chapter', () {
@@ -38,7 +38,7 @@ d) Option four
 ANSWER: d
 ''';
 
-    final parsed = BcvFileQuizService.instance.parseQuestionsForTest(content);
+    final parsed = FileQuizService.instance.parseQuestionsForTest(content);
 
     expect(parsed, hasLength(4));
     expect(parsed[0].verseRefs, equals(const ['1.2']));
@@ -49,7 +49,7 @@ ANSWER: d
 
   test('advanced source question 337 has a resolved verse reference', () {
     final content = File('texts/root_text_quiz_400.txt').readAsStringSync();
-    final parsed = BcvFileQuizService.instance.parseQuestionsForTest(content);
+    final parsed = FileQuizService.instance.parseQuestionsForTest(content);
     final q337 = parsed.firstWhere((q) => q.number == 337);
 
     expect(q337.verseRefs, isNotEmpty);

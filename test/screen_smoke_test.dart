@@ -1,6 +1,6 @@
 import 'package:dechen_study/screens/auth/login_screen.dart';
 import 'package:dechen_study/screens/auth/signup_screen.dart';
-import 'package:dechen_study/screens/landing/bcv_file_quiz_screen.dart';
+import 'package:dechen_study/screens/landing/file_quiz_screen.dart';
 import 'package:dechen_study/screens/landing/gateway_landing_screen.dart';
 import 'package:dechen_study/screens/landing/text_options_screen.dart';
 import 'package:flutter/material.dart';
@@ -57,10 +57,13 @@ void main() {
       expect(find.text('Gateway to Knowledge'), findsWidgets);
     });
 
-    testWidgets('BcvFileQuizScreen builds and shows Quiz', (tester) async {
+    testWidgets('FileQuizScreen builds and shows Quiz', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: BcvFileQuizScreen(),
+          home: FileQuizScreen(
+            textId: 'bodhicaryavatara',
+            title: 'Bodhicaryavatara',
+          ),
         ),
       );
       await tester.pump();

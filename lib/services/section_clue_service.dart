@@ -1,30 +1,36 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-/// Loads section_clues.json and provides clue lookup by verse ref.
+import '../config/study_text_config.dart';
+
+/// Loads section_clues.json per text and provides clue lookup by verse ref.
 class SectionClueService {
   SectionClueService._();
   static final SectionClueService _instance = SectionClueService._();
   static SectionClueService get instance => _instance;
 
-  static const String _assetPath = 'texts/section_clues.json';
+  final Map<String, Map<String, String>> _cache = {};
 
-  Map<String, String>? _clues;
+  String? _assetPathFor(String textId) {
+    return getStudyText(textId)?.sectionCluesPath;
+  }
 
-  Future<void> _ensureLoaded() async {
-    if (_clues != null) return;
+  Future<void> _ensureLoaded(String textId) async {
+    if (_cache.containsKey(textId)) return;
+    final path = _assetPathFor(textId);
+    if (path == null || path.isEmpty) return;
     try {
-      final content = await rootBundle.loadString(_assetPath);
+      final content = await rootBundle.loadString(path);
       final decoded = json.decode(content) as Map<String, dynamic>;
-      _clues = decoded.map((k, v) => MapEntry(k, v as String));
+      _cache[textId] = decoded.map((k, v) => MapEntry(k, v as String));
     } catch (_) {
-      _clues = {};
+      _cache[textId] = {};
     }
   }
 
-  /// Returns the clue for the given verse ref (e.g. "1.5"), or null if none.
-  Future<String?> getClueForRef(String ref) async {
-    await _ensureLoaded();
-    return _clues?[ref];
+  /// Returns the clue for the given verse ref (e.g. "1.5") for [textId], or null if none.
+  Future<String?> getClueForRef(String textId, String ref) async {
+    await _ensureLoaded(textId);
+    return _cache[textId]?[ref];
   }
 }

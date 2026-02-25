@@ -2,20 +2,22 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../services/bcv_verse_service.dart';
+import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import 'bcv/bcv_verse_text.dart';
-import 'bcv_read_screen.dart';
+import 'read_screen.dart';
 
 /// Full-screen display of a random section (one or more verses) from the commentary mapping,
 /// with "Another section" and "Full text" link that jumps to Read with the section highlighted.
 class DailyVerseScreen extends StatefulWidget {
   const DailyVerseScreen({
     super.key,
+    required this.textId,
+    required this.title,
     this.verseService,
     this.commentaryService,
     this.hierarchyService,
@@ -26,7 +28,9 @@ class DailyVerseScreen extends StatefulWidget {
     this.onResolvedRefsForTest,
   });
 
-  final BcvVerseService? verseService;
+  final String textId;
+  final String title;
+  final VerseService? verseService;
   final CommentaryService? commentaryService;
   final VerseHierarchyService? hierarchyService;
 
@@ -53,7 +57,7 @@ class DailyVerseScreen extends StatefulWidget {
 class _DailyVerseScreenState extends State<DailyVerseScreen>
     with WidgetLifecycleObserver, WidgetsBindingObserver {
   final _usageMetrics = UsageMetricsService.instance;
-  late final BcvVerseService _verseService;
+  late final VerseService _verseService;
   late final CommentaryService _commentaryService;
   late final VerseHierarchyService _hierarchyService;
   DateTime? _screenDwellStartedAt;
@@ -73,7 +77,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   void initState() {
     super.initState();
     _screenDwellStartedAt = DateTime.now().toUtc();
-    _verseService = widget.verseService ?? BcvVerseService.instance;
+    _verseService = widget.verseService ?? VerseService.instance;
     _commentaryService = widget.commentaryService ?? CommentaryService.instance;
     _hierarchyService =
         widget.hierarchyService ?? VerseHierarchyService.instance;
@@ -111,7 +115,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     final durationMs = nowUtc.difference(startedAt).inMilliseconds;
     if (durationMs >= _usageMetrics.minDwellMs) {
       unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: 'bodhicaryavatara',
+        textId: widget.textId,
         mode: 'daily',
         durationMs: durationMs,
         sectionPath: _sectionPath,
@@ -127,7 +131,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
 
   String _segmentTextForRef(String ref, String fullText) {
     final lines = fullText.split('\n');
-    final range = BcvVerseService.lineRangeForSegmentRef(ref, lines.length);
+    final range = VerseService.lineRangeForSegmentRef(ref, lines.length);
     if (range == null) return fullText;
     return lines.sublist(range[0], range[1] + 1).join('\n');
   }
@@ -160,7 +164,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
 
   Future<String?> _leafSectionPathForRef(String ref) async {
     for (final candidate in _hierarchyCandidatesForRef(ref)) {
-      final hierarchy = await _hierarchyService.getHierarchyForVerse(candidate);
+      final hierarchy = await _hierarchyService.getHierarchyForVerse(widget.textId, candidate);
       if (hierarchy.isEmpty) continue;
       final sec = hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
       if (sec.isNotEmpty) return sec;
@@ -198,8 +202,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     if (ai != null && bi == null) return -1;
     if (ai == null && bi != null) return 1;
 
-    final ar = BcvVerseService.lineRangeForSegmentRef(a, 4);
-    final br = BcvVerseService.lineRangeForSegmentRef(b, 4);
+    final ar = VerseService.lineRangeForSegmentRef(a, 4);
+    final br = VerseService.lineRangeForSegmentRef(b, 4);
     if (ar != null && br != null) {
       final cStart = ar[0].compareTo(br[0]);
       if (cStart != 0) return cStart;
@@ -354,7 +358,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   }) async {
     String titleFromPath(String path) {
       if (path.isEmpty) return '';
-      final hierarchy = _hierarchyService.getHierarchyForSectionSync(path);
+      final hierarchy = _hierarchyService.getHierarchyForSectionSync(widget.textId, path);
       if (hierarchy.isEmpty) return '';
       return (hierarchy.last['title'] ?? '').trim();
     }
@@ -366,7 +370,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     }
 
     for (final ref in refs) {
-      final hierarchy = await _hierarchyService.getHierarchyForVerse(ref);
+      final hierarchy = await _hierarchyService.getHierarchyForVerse(widget.textId, ref);
       if (hierarchy.isEmpty) continue;
       final title = (hierarchy.last['title'] ?? '').trim();
       if (title.isNotEmpty) return title;
@@ -385,8 +389,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       _sectionVerseIndices = {};
     });
     try {
-      final sectionLoader =
-          widget.randomSectionLoader ?? _commentaryService.getRandomSection;
+      final sectionLoader = widget.randomSectionLoader ??
+          () => _commentaryService.getRandomSection(widget.textId);
       final section = await sectionLoader();
       if (section == null || section.refsInBlock.isEmpty) {
         if (mounted) {
@@ -397,13 +401,14 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
         }
         return;
       }
-      final indexForRef =
-          widget.verseIndexForRef ?? _verseService.getIndexForRefWithFallback;
-      final textForIndex = widget.verseTextForIndex ?? _verseService.getVerseAt;
+      final indexForRef = widget.verseIndexForRef ??
+          (ref) => _verseService.getIndexForRefWithFallback(widget.textId, ref);
+      final textForIndex = widget.verseTextForIndex ??
+          (index) => _verseService.getVerseAt(widget.textId, index);
       final usingCustomResolvers =
           widget.verseIndexForRef != null && widget.verseTextForIndex != null;
       if (!usingCustomResolvers) {
-        await _verseService.getChapters();
+        await _verseService.getChapters(widget.textId);
       }
       var refs = List<String>.from(section.refsInBlock);
       refs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
@@ -421,7 +426,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
           final parent = _parentPath(sectionPath);
           if (parent.isEmpty || !visitedParents.add(parent)) break;
           final parentRefs =
-              _hierarchyService.getVerseRefsForSectionSync(parent).toList();
+              _hierarchyService.getVerseRefsForSectionSync(widget.textId, parent).toList();
           if (parentRefs.isEmpty) break;
           parentRefs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
           final runRefs = anchorRef != null
@@ -446,7 +451,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
         });
         unawaited(_usageMetrics.trackEvent(
           eventName: 'daily_section_loaded',
-          textId: 'bodhicaryavatara',
+          textId: widget.textId,
           mode: 'daily',
           sectionPath: _sectionPath,
           sectionTitle: _sectionTitle,
@@ -612,7 +617,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                       : () {
                           unawaited(_usageMetrics.trackEvent(
                             eventName: 'daily_another_section_tapped',
-                            textId: 'bodhicaryavatara',
+                            textId: widget.textId,
                             mode: 'daily',
                             sectionPath: _sectionPath,
                             sectionTitle: _sectionTitle,
@@ -670,7 +675,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     final initialSegmentRef = _initialSegmentRefForFirstIndex(firstIndex);
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => BcvReadScreen(
+        builder: (_) => ReadScreen(
+          textId: widget.textId,
+          title: widget.title,
           scrollToVerseIndex: firstIndex,
           highlightSectionIndices: _sectionVerseIndices,
           initialSegmentRef: initialSegmentRef,
@@ -681,14 +688,14 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
 
   String? _initialSegmentRefForFirstIndex(int firstIndex) {
     if (_sectionRefs.isEmpty) return null;
-    final indexForRef =
-        widget.verseIndexForRef ?? _verseService.getIndexForRefWithFallback;
+    final indexForRef = widget.verseIndexForRef ??
+        (ref) => _verseService.getIndexForRefWithFallback(widget.textId, ref);
     String? firstMatchingRef;
     for (final ref in _sectionRefs) {
       final idx = indexForRef(ref);
       if (idx != firstIndex) continue;
       firstMatchingRef ??= ref;
-      if (BcvVerseService.segmentSuffixPattern.hasMatch(ref)) {
+      if (VerseService.segmentSuffixPattern.hasMatch(ref)) {
         return ref;
       }
     }

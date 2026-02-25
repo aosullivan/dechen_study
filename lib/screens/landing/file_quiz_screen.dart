@@ -3,32 +3,39 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../services/bcv_file_quiz_service.dart';
-import '../../services/bcv_verse_service.dart';
+import '../../services/file_quiz_service.dart';
+import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import 'bcv/bcv_verse_text.dart';
 
-class BcvFileQuizScreen extends StatefulWidget {
-  const BcvFileQuizScreen({super.key});
+class FileQuizScreen extends StatefulWidget {
+  const FileQuizScreen({
+    super.key,
+    required this.textId,
+    required this.title,
+  });
+
+  final String textId;
+  final String title;
 
   @override
-  State<BcvFileQuizScreen> createState() => _BcvFileQuizScreenState();
+  State<FileQuizScreen> createState() => _FileQuizScreenState();
 }
 
-class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
+class _FileQuizScreenState extends State<FileQuizScreen>
     with WidgetLifecycleObserver, WidgetsBindingObserver {
-  final _quizService = BcvFileQuizService.instance;
-  final _verseService = BcvVerseService.instance;
+  final _quizService = FileQuizService.instance;
+  final _verseService = VerseService.instance;
   final _usageMetrics = UsageMetricsService.instance;
   final _random = Random();
   DateTime? _screenDwellStartedAt;
 
   bool _isLoading = true;
   Object? _error;
-  BcvFileQuizDifficulty _difficulty = BcvFileQuizDifficulty.beginner;
-  List<BcvFileQuizQuestion> _questions = const [];
+  FileQuizDifficulty _difficulty = FileQuizDifficulty.beginner;
+  List<FileQuizQuestion> _questions = const [];
   List<int> _order = const [];
   int _orderCursor = 0;
   int? _currentQuestionIndex;
@@ -114,7 +121,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     final durationMs = nowUtc.difference(startedAt).inMilliseconds;
     if (durationMs >= _usageMetrics.minDwellMs) {
       unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: 'bodhicaryavatara',
+        textId: widget.textId,
         mode: 'quiz',
         durationMs: durationMs,
         properties: {
@@ -128,7 +135,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
   }
 
   Future<void> _loadDifficulty(
-    BcvFileQuizDifficulty difficulty, {
+    FileQuizDifficulty difficulty, {
     required bool resetScore,
   }) async {
     setState(() {
@@ -143,8 +150,8 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     });
 
     try {
-      final loaded = await _quizService.loadQuestions(difficulty);
-      await _verseService.getChapters();
+      final loaded = await _quizService.loadQuestions(widget.textId, difficulty);
+      await _verseService.getChapters(widget.textId);
       final order = _quizService.buildShuffledOrder(loaded.length, _random);
 
       if (!mounted) return;
@@ -167,7 +174,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     }
   }
 
-  BcvFileQuizQuestion? get _currentQuestion {
+  FileQuizQuestion? get _currentQuestion {
     final index = _currentQuestionIndex;
     if (index == null || index < 0 || index >= _questions.length) return null;
     return _questions[index];
@@ -178,7 +185,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     if (trackInteraction) {
       unawaited(_usageMetrics.trackEvent(
         eventName: 'quiz_next_question_tapped',
-        textId: 'bodhicaryavatara',
+        textId: widget.textId,
         mode: 'quiz',
         properties: {
           'difficulty': _difficulty.name,
@@ -211,9 +218,9 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     }
 
     for (final ref in refs) {
-      final index = _verseService.getIndexForRefWithFallback(ref);
+      final index = _verseService.getIndexForRefWithFallback(widget.textId, ref);
       if (index == null) continue;
-      final text = _verseService.getVerseAt(index);
+      final text = _verseService.getVerseAt(widget.textId, index);
       if (text == null || text.trim().isEmpty) continue;
       return [_ResolvedVerse(ref: ref, text: text)];
     }
@@ -227,7 +234,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
   }
 
   String? _beginnerChapterHint(List<String> refs) {
-    if (_difficulty != BcvFileQuizDifficulty.beginner) return null;
+    if (_difficulty != FileQuizDifficulty.beginner) return null;
     if (refs.isEmpty) return null;
     final chapter = int.tryParse(refs.first.split('.').first);
     if (chapter == null) return null;
@@ -251,7 +258,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     });
     unawaited(_usageMetrics.trackEvent(
       eventName: 'quiz_answer_revealed',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'quiz',
       chapterNumber: _chapterFromRefs(q.verseRefs),
       properties: {
@@ -308,7 +315,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
       if (correct) _correctAnswers++;
     });
     unawaited(_usageMetrics.trackQuizAttempt(
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'quiz',
       correct: correct,
       chapterNumber: _chapterFromRefs(q.verseRefs),
@@ -368,7 +375,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
   }
 
   Widget _buildDifficultyButton({
-    required BcvFileQuizDifficulty value,
+    required FileQuizDifficulty value,
     required String label,
     required VoidCallback onTap,
   }) {
@@ -410,7 +417,7 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
     BuildContext context,
     String key,
     String text,
-    BcvFileQuizQuestion question,
+    FileQuizQuestion question,
   ) {
     final isSelected = _selectedOptionKey == key;
     final isCorrect = key == question.answerKey;
@@ -625,19 +632,19 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
                   Row(
                     children: [
                       _buildDifficultyButton(
-                        value: BcvFileQuizDifficulty.beginner,
+                        value: FileQuizDifficulty.beginner,
                         label: 'Beginner',
                         onTap: () => _loadDifficulty(
-                          BcvFileQuizDifficulty.beginner,
+                          FileQuizDifficulty.beginner,
                           resetScore: true,
                         ),
                       ),
                       const SizedBox(width: 8),
                       _buildDifficultyButton(
-                        value: BcvFileQuizDifficulty.advanced,
+                        value: FileQuizDifficulty.advanced,
                         label: 'Advanced',
                         onTap: () => _loadDifficulty(
-                          BcvFileQuizDifficulty.advanced,
+                          FileQuizDifficulty.advanced,
                           resetScore: true,
                         ),
                       ),
