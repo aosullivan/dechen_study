@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../utils/app_theme.dart';
+import '../../utils/widget_lifecycle_observer.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/section_clue_service.dart';
@@ -18,7 +19,7 @@ class BcvQuizScreen extends StatefulWidget {
 }
 
 class _BcvQuizScreenState extends State<BcvQuizScreen>
-    with WidgetsBindingObserver {
+    with WidgetLifecycleObserver, WidgetsBindingObserver {
   final _verseService = BcvVerseService.instance;
   final _commentaryService = CommentaryService.instance;
   final _clueService = SectionClueService.instance;
@@ -118,14 +119,12 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
     _loadQuiz();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
     super.dispose();

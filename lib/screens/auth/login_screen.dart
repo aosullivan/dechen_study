@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/web_navigation.dart';
+import '../../widgets/auth_form_layout.dart';
 import '../../widgets/auth_text_field.dart';
 import '../landing/gateway_landing_screen.dart';
 import '../landing/landing_screen.dart';
@@ -29,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _signIn() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      _showError('Please fill in all fields');
+      showAuthError(context, 'Please fill in all fields');
       return;
     }
 
@@ -56,109 +57,81 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
     } catch (e) {
-      _showError(e.toString());
+      showAuthError(context, e.toString());
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final bool configured = isSupabaseConfigured;
-    
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (!configured)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      margin: const EdgeInsets.only(bottom: 24),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade50,
-                        border: Border.all(color: Colors.orange.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        children: [
-                          Icon(Icons.warning_amber, color: Colors.orange.shade700),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Supabase not configured',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.orange.shade900,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Missing SUPABASE_URL / SUPABASE_ANON_KEY in .env',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.orange.shade800,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+      body: AuthFormLayout(
+        leading: configured
+            ? null
+            : Container(
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  border: Border.all(color: Colors.orange.shade300),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  children: [
+                    Icon(Icons.warning_amber, color: Colors.orange.shade700),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Supabase not configured',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade900,
                       ),
                     ),
-                  Text(
-                    'Welcome',
-                    style: Theme.of(context).textTheme.displayLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Sign in to continue your study',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 48),
-                  AuthTextField(
-                    controller: _emailController,
-                    label: 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 16),
-                  AuthTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: (_isLoading || !configured) ? null : _signIn,
-                    child: const Text('Sign In'),
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const SignUpScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Don\'t have an account? Sign up'),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      'Missing SUPABASE_URL / SUPABASE_ANON_KEY in .env',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.orange.shade800,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
+        title: 'Welcome',
+        subtitle: 'Sign in to continue your study',
+        children: [
+          AuthTextField(
+            controller: _emailController,
+            label: 'Email',
+            keyboardType: TextInputType.emailAddress,
           ),
-        ),
+          const SizedBox(height: 16),
+          AuthTextField(
+            controller: _passwordController,
+            label: 'Password',
+            obscureText: true,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: (_isLoading || !configured) ? null : _signIn,
+            child: const Text('Sign In'),
+          ),
+          const SizedBox(height: 16),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const SignUpScreen(),
+                ),
+              );
+            },
+            child: const Text('Don\'t have an account? Sign up'),
+          ),
+        ],
       ),
     );
   }

@@ -7,6 +7,7 @@ import '../../services/bcv_file_quiz_service.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/widget_lifecycle_observer.dart';
 import 'bcv/bcv_verse_text.dart';
 
 class BcvFileQuizScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class BcvFileQuizScreen extends StatefulWidget {
 }
 
 class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
-    with WidgetsBindingObserver {
+    with WidgetLifecycleObserver, WidgetsBindingObserver {
   final _quizService = BcvFileQuizService.instance;
   final _verseService = BcvVerseService.instance;
   final _usageMetrics = UsageMetricsService.instance;
@@ -78,14 +79,12 @@ class _BcvFileQuizScreenState extends State<BcvFileQuizScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
     _loadDifficulty(_difficulty, resetScore: true);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
     super.dispose();

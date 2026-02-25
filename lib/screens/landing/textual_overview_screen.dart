@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bcv_read_screen.dart';
-import '../../services/bcv_verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/preload.dart';
+import '../../utils/widget_lifecycle_observer.dart';
 import 'overview/overview_constants.dart';
 import 'overview/overview_tree_view.dart';
 import 'overview/overview_verse_panel.dart';
@@ -24,7 +25,7 @@ class TextualOverviewScreen extends StatefulWidget {
 }
 
 class _TextualOverviewScreenState extends State<TextualOverviewScreen>
-    with WidgetsBindingObserver {
+    with WidgetLifecycleObserver, WidgetsBindingObserver {
   static const _lastPathPrefsKey =
       'bodhicaryavatara_textual_structure_last_path';
 
@@ -45,14 +46,12 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
     _load();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
     super.dispose();
@@ -96,10 +95,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   }
 
   Future<void> _load() async {
-    await Future.wait([
-      BcvVerseService.instance.preload(),
-      VerseHierarchyService.instance.preload(),
-    ]);
+    await preloadBcvAndHierarchy();
     if (!mounted) return;
     final flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
     final restoredPath = await _loadLastPath();

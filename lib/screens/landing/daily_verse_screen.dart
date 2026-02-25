@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/widget_lifecycle_observer.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import 'bcv/bcv_verse_text.dart';
@@ -50,7 +51,7 @@ class DailyVerseScreen extends StatefulWidget {
 }
 
 class _DailyVerseScreenState extends State<DailyVerseScreen>
-    with WidgetsBindingObserver {
+    with WidgetLifecycleObserver, WidgetsBindingObserver {
   final _usageMetrics = UsageMetricsService.instance;
   late final BcvVerseService _verseService;
   late final CommentaryService _commentaryService;
@@ -71,7 +72,6 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
     _verseService = widget.verseService ?? BcvVerseService.instance;
     _commentaryService = widget.commentaryService ?? CommentaryService.instance;
@@ -82,7 +82,6 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
     unawaited(_usageMetrics.flush(all: true));
     super.dispose();

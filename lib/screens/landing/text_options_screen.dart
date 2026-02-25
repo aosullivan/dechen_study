@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/bookmark_service.dart';
 import '../../services/usage_metrics_service.dart';
-import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/preload.dart';
 import '../../utils/web_navigation.dart';
 import 'bcv_file_quiz_screen.dart';
 import 'bcv_quiz_screen.dart';
@@ -60,8 +60,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     super.initState();
     // Pre-warm services so the read screen opens quickly.
     if (widget.textId == 'bodhicaryavatara') {
-      BcvVerseService.instance.preload();
-      VerseHierarchyService.instance.preload();
+      unawaited(preloadBcvAndHierarchy());
     }
   }
 
@@ -196,101 +195,75 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   void _openDaily(BuildContext context) {
-    if (textId == 'bodhicaryavatara') {
-      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
-        textId: textId,
-        targetMode: 'daily',
-      ));
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const DailyVerseScreen(),
-        ),
-      );
-    } else {
-      _showComingSoon(context, 'Daily');
-    }
+    _openBcvMode(
+      context,
+      targetMode: 'daily',
+      screen: const DailyVerseScreen(),
+      comingSoonLabel: 'Daily',
+    );
   }
 
   Future<void> _openRead(BuildContext context) async {
-    if (textId == 'bodhicaryavatara') {
-      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
-        textId: textId,
-        targetMode: 'read',
-      ));
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => _ReadChapterSelectionScreen(
-            title: title,
-            textId: textId,
-          ),
-        ),
-      );
-    } else {
-      _showComingSoon(context, 'Read');
-    }
+    _openBcvMode(
+      context,
+      targetMode: 'read',
+      screen: _ReadChapterSelectionScreen(title: title, textId: textId),
+      comingSoonLabel: 'Read',
+    );
   }
 
   void _openReaderView(BuildContext context) {
-    if (textId == 'bodhicaryavatara') {
-      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
-        textId: textId,
-        targetMode: 'read',
-      ));
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => BcvReadScreen(title: title),
-        ),
-      );
-    } else {
-      _showComingSoon(context, 'Read');
-    }
+    _openBcvMode(
+      context,
+      targetMode: 'read',
+      screen: BcvReadScreen(title: title),
+      comingSoonLabel: 'Read',
+    );
   }
 
   void _openGuessTheChapter(BuildContext context) {
-    if (textId == 'bodhicaryavatara') {
-      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
-        textId: textId,
-        targetMode: 'guess_chapter',
-      ));
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const BcvQuizScreen(),
-        ),
-      );
-    } else {
-      _showComingSoon(context, 'Guess the Chapter');
-    }
+    _openBcvMode(
+      context,
+      targetMode: 'guess_chapter',
+      screen: const BcvQuizScreen(),
+      comingSoonLabel: 'Guess the Chapter',
+    );
   }
 
   void _openQuiz(BuildContext context) {
-    if (textId == 'bodhicaryavatara') {
-      unawaited(UsageMetricsService.instance.trackTextOptionTapped(
-        textId: textId,
-        targetMode: 'quiz',
-      ));
-      Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const BcvFileQuizScreen(),
-        ),
-      );
-    } else {
-      _showComingSoon(context, 'Quiz');
-    }
+    _openBcvMode(
+      context,
+      targetMode: 'quiz',
+      screen: const BcvFileQuizScreen(),
+      comingSoonLabel: 'Quiz',
+    );
   }
 
   void _openOverview(BuildContext context) {
+    _openBcvMode(
+      context,
+      targetMode: 'overview',
+      screen: const TextualOverviewScreen(),
+      comingSoonLabel: 'Textual Structure',
+    );
+  }
+
+  void _openBcvMode(
+    BuildContext context, {
+    required String targetMode,
+    required Widget screen,
+    required String comingSoonLabel,
+  }) {
     if (textId == 'bodhicaryavatara') {
       unawaited(UsageMetricsService.instance.trackTextOptionTapped(
         textId: textId,
-        targetMode: 'overview',
+        targetMode: targetMode,
       ));
       Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (_) => const TextualOverviewScreen(),
-        ),
+        MaterialPageRoute<void>(builder: (_) => screen),
       );
     } else {
-      _showComingSoon(context, 'Textual Structure');
+      _showComingSoon(context, comingSoonLabel);
     }
   }
 

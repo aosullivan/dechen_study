@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../services/bcv_verse_service.dart';
 import '../../services/usage_metrics_service.dart';
-import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/preload.dart';
 import '../../utils/web_navigation.dart';
 import 'gateway_landing_screen.dart';
 import 'text_options_screen.dart';
@@ -24,8 +23,6 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   void initState() {
     super.initState();
-    BcvVerseService.instance.preload();
-    VerseHierarchyService.instance.preload();
     if (isAppDechenStudyHost()) {
       _redirectingToGateway = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -37,6 +34,8 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
         );
       });
+    } else {
+      unawaited(preloadBcvAndHierarchy());
     }
   }
 
@@ -84,33 +83,40 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   void _openTextOptions(BuildContext context) {
-    pushAppPath('/bodhicaryavatara');
-    unawaited(UsageMetricsService.instance.trackEvent(
-      eventName: 'text_opened',
+    _openText(
+      context,
       textId: 'bodhicaryavatara',
-      mode: 'text_options',
-    ));
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const TextOptionsScreen(
-          textId: 'bodhicaryavatara',
-          title: 'Bodhicaryavatara',
-        ),
+      path: '/bodhicaryavatara',
+      screen: const TextOptionsScreen(
+        textId: 'bodhicaryavatara',
+        title: 'Bodhicaryavatara',
       ),
     );
   }
 
   void _openGatewayToKnowledge(BuildContext context) {
-    pushAppPath('/gateway-to-knowledge');
+    _openText(
+      context,
+      textId: 'gateway_to_knowledge',
+      path: '/gateway-to-knowledge',
+      screen: const GatewayLandingScreen(),
+    );
+  }
+
+  void _openText(
+    BuildContext context, {
+    required String textId,
+    required String path,
+    required Widget screen,
+  }) {
+    pushAppPath(path);
     unawaited(UsageMetricsService.instance.trackEvent(
       eventName: 'text_opened',
-      textId: 'gateway_to_knowledge',
+      textId: textId,
       mode: 'text_options',
     ));
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const GatewayLandingScreen(),
-      ),
+      MaterialPageRoute<void>(builder: (_) => screen),
     );
   }
 }

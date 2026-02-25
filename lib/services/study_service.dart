@@ -10,24 +10,30 @@ class StudyService {
   static final StudyService _instance = StudyService._();
   static StudyService get instance => _instance;
 
+  Future<T> _guard<T>(String operation, T fallback, Future<T> Function() fn) async {
+    try {
+      return await fn();
+    } catch (e) {
+      debugPrint('Error $operation: $e');
+      return fallback;
+    }
+  }
+
   // Get the study text (we'll have just one for now)
   Future<StudyText?> getStudyText() async {
-    try {
+    return _guard<StudyText?>('fetching study text', null, () async {
       final response = await supabase
           .from('study_texts')
           .select('*, chapters(*, sections(*))')
           .single();
 
       return StudyText.fromJson(response);
-    } catch (e) {
-      debugPrint('Error fetching study text: $e');
-      return null;
-    }
+    });
   }
 
   // Get all sections flattened
   Future<List<Section>> getAllSections() async {
-    try {
+    return _guard<List<Section>>('fetching sections', [], () async {
       final response = await supabase
           .from('sections')
           .select('*')
@@ -37,29 +43,23 @@ class StudyService {
       return (response as List)
           .map((s) => Section.fromJson(s as Map<String, dynamic>))
           .toList();
-    } catch (e) {
-      debugPrint('Error fetching sections: $e');
-      return [];
-    }
+    });
   }
 
   // Get a random section
   Future<Section?> getRandomSection() async {
-    try {
+    return _guard<Section?>('getting random section', null, () async {
       final sections = await getAllSections();
       if (sections.isEmpty) return null;
-      
+
       final random = Random();
       return sections[random.nextInt(sections.length)];
-    } catch (e) {
-      debugPrint('Error getting random section: $e');
-      return null;
-    }
+    });
   }
 
   // Get today's daily section
   Future<DailySection?> getTodaysDailySection(String userId) async {
-    try {
+    return _guard<DailySection?>('fetching daily section', null, () async {
       final today = DateTime.now();
       final startOfDay = DateTime(today.year, today.month, today.day);
       final endOfDay = startOfDay.add(const Duration(days: 1));
@@ -78,15 +78,12 @@ class StudyService {
       }
 
       return DailySection.fromJson(response);
-    } catch (e) {
-      debugPrint('Error fetching daily section: $e');
-      return null;
-    }
+    });
   }
 
   // Create a new daily section
   Future<DailySection?> createDailySection(String userId) async {
-    try {
+    return _guard<DailySection?>('creating daily section', null, () async {
       // Get the last completed section to pick the next one
       final lastDaily = await supabase
           .from('daily_sections')
@@ -126,29 +123,23 @@ class StudyService {
           .single();
 
       return DailySection.fromJson(response);
-    } catch (e) {
-      debugPrint('Error creating daily section: $e');
-      return null;
-    }
+    });
   }
 
   // Mark daily section as complete
   Future<bool> markDailySectionComplete(String dailySectionId) async {
-    try {
+    return _guard<bool>('marking section complete', false, () async {
       await supabase
           .from('daily_sections')
           .update({'completed': true})
           .eq('id', dailySectionId);
       return true;
-    } catch (e) {
-      debugPrint('Error marking section complete: $e');
-      return false;
-    }
+    });
   }
 
   // Get section by ID
   Future<Section?> getSection(String sectionId) async {
-    try {
+    return _guard<Section?>('fetching section', null, () async {
       final response = await supabase
           .from('sections')
           .select('*')
@@ -156,15 +147,12 @@ class StudyService {
           .single();
 
       return Section.fromJson(response);
-    } catch (e) {
-      debugPrint('Error fetching section: $e');
-      return null;
-    }
+    });
   }
 
   // Get all chapters
   Future<List<Chapter>> getChapters() async {
-    try {
+    return _guard<List<Chapter>>('fetching chapters', [], () async {
       final response = await supabase
           .from('chapters')
           .select('*, sections(*)')
@@ -173,9 +161,6 @@ class StudyService {
       return (response as List)
           .map((c) => Chapter.fromJson(c as Map<String, dynamic>))
           .toList();
-    } catch (e) {
-      debugPrint('Error fetching chapters: $e');
-      return [];
-    }
+    });
   }
 }

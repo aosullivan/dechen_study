@@ -20,6 +20,7 @@ import '../../services/commentary_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/widget_lifecycle_observer.dart';
 
 /// Notifier for section-related state (breadcrumb, overlay, visible verse).
 /// Allows panels and overlay to rebuild independently of the verse list.
@@ -82,7 +83,7 @@ class BcvReadScreen extends StatefulWidget {
 enum _MobileNavPanel { chapter, section, breadcrumb }
 
 class _BcvReadScreenState extends State<BcvReadScreen>
-    with WidgetsBindingObserver {
+    with WidgetLifecycleObserver, WidgetsBindingObserver {
   final _verseService = BcvVerseService.instance;
   List<BcvChapter> _chapters = [];
   List<String> _verses = [];
@@ -279,7 +280,6 @@ class _BcvReadScreenState extends State<BcvReadScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _screenDwellStartedAt = DateTime.now().toUtc();
     if (widget.scrollToVerseIndex != null || _hasInitialHighlight) {
       _scrollToVerseKey = GlobalKey();
@@ -322,7 +322,6 @@ class _BcvReadScreenState extends State<BcvReadScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     _flushReadMetricsOnDispose();
     _bookmarkDebounce?.cancel();
     _visibilityDebounceTimer?.cancel();

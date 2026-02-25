@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
+import '../../widgets/auth_form_layout.dart';
 import '../../widgets/auth_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -28,17 +29,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_emailController.text.isEmpty ||
         _passwordController.text.isEmpty ||
         _confirmPasswordController.text.isEmpty) {
-      _showError('Please fill in all fields');
+      showAuthError(context, 'Please fill in all fields');
       return;
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      _showError('Passwords do not match');
+      showAuthError(context, 'Passwords do not match');
       return;
     }
 
     if (_passwordController.text.length < 6) {
-      _showError('Password must be at least 6 characters');
+      showAuthError(context, 'Password must be at least 6 characters');
       return;
     }
 
@@ -56,19 +57,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _showSuccess();
       }
     } catch (e) {
-      _showError(e.toString());
+      showAuthError(context, e.toString());
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red.shade700,
-      ),
-    );
   }
 
   void _showSuccess() {
@@ -100,55 +92,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Create Account',
-                    style: Theme.of(context).textTheme.displayLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Begin your study journey',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 48),
-                  AuthTextField(
-                    controller: _emailController,
-                    label: 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 16),
-                  AuthTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 16),
-                  AuthTextField(
-                    controller: _confirmPasswordController,
-                    label: 'Confirm Password',
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _signUp,
-                    child: const Text('Sign Up'),
-                  ),
-                ],
-              ),
-            ),
+      body: AuthFormLayout(
+        title: 'Create Account',
+        subtitle: 'Begin your study journey',
+        children: [
+          AuthTextField(
+            controller: _emailController,
+            label: 'Email',
+            keyboardType: TextInputType.emailAddress,
           ),
-        ),
+          const SizedBox(height: 16),
+          AuthTextField(
+            controller: _passwordController,
+            label: 'Password',
+            obscureText: true,
+          ),
+          const SizedBox(height: 16),
+          AuthTextField(
+            controller: _confirmPasswordController,
+            label: 'Confirm Password',
+            obscureText: true,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: _isLoading ? null : _signUp,
+            child: const Text('Sign Up'),
+          ),
+        ],
       ),
     );
   }
