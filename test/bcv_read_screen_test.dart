@@ -22,6 +22,7 @@ void main() {
 
   late int verseIndex237;
   late int verseIndex649;
+  late int verseIndex632;
   late int verseIndex92a;
   late int verseIndex93cd;
   late int verseIndex9150cd;
@@ -50,6 +51,7 @@ void main() {
     await hierarchyService.getHierarchyForVerse('1.1');
     verseIndex237 = verseService.getIndexForRef('2.37') ?? -1;
     verseIndex649 = verseService.getIndexForRef('6.49') ?? -1;
+    verseIndex632 = verseService.getIndexForRef('6.32') ?? -1;
     verseIndex92a = verseService.getIndexForRefWithFallback('9.2a') ?? -1;
     verseIndex93cd = verseService.getIndexForRefWithFallback('9.3cd') ?? -1;
     verseIndex9150cd = verseService.getIndexForRefWithFallback('9.150cd') ?? -1;
@@ -83,6 +85,8 @@ void main() {
         reason: 'Verse 2.37 must exist');
     expect(verseIndex649, greaterThanOrEqualTo(0),
         reason: 'Verse 6.49 must exist');
+    expect(verseIndex632, greaterThanOrEqualTo(0),
+        reason: 'Verse 6.32 must exist');
     expect(verseIndex92a, greaterThanOrEqualTo(0),
         reason: 'Verse 9.2a must exist');
     expect(verseIndex93cd, greaterThanOrEqualTo(0),
@@ -228,6 +232,50 @@ void main() {
       );
 
       // Let programmatic-navigation timers complete
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    /// Regression: from 6.32, key down must go to 6.33, NOT skip to 6.35.
+    /// (Section containing 6.33 has firstRef 6.31 so it appears before 6.32 in leaf order.)
+    testWidgets('key down from 6.32 goes to 6.33 not 6.35',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      String? capturedFirstRef;
+      void onNavigate(String path, String firstRef) {
+        capturedFirstRef = firstRef;
+      }
+
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex632,
+        onSectionNavigateForTest: onNavigate,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(find.text('Could not load text'), findsNothing);
+      expect(find.text('No chapters available.'), findsNothing);
+
+      await tester.ensureVisible(find.textContaining('There is no error in this'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+
+      await tester.tap(
+          find.textContaining('There is no error in this'), warnIfMissed: false);
+      await tester.pump();
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(capturedFirstRef, isNotNull,
+          reason: 'Arrow down should trigger navigation');
+      expect(capturedFirstRef, equals('6.33'),
+          reason: 'From 6.32 next must be 6.33, not 6.35. Got: $capturedFirstRef');
+      expect(capturedFirstRef, isNot(equals('6.35')),
+          reason: 'Must not skip from 6.32 to 6.35. Got: $capturedFirstRef',
+      );
       await tester.pump(const Duration(seconds: 2));
     });
 

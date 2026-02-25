@@ -13,7 +13,7 @@ import 'package:dechen_study/services/bcv_verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
 const _expectedLeafSkipCount = 167;
-const _expectedLeafGapSum = 466;
+const _expectedLeafGapSum = 465;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
   '1.3.3 (1.2) -> 2.1 (1.4): verse gap 2',
@@ -40,11 +40,9 @@ const _expectedMissingVerses = <String>[
   '2.19: missing',
   '2.20: missing',
   '2.21: missing',
-  '6.27: missing',
 ];
 const _expectedNonConsecutive = <String>[
   '2.12 -> 2.22: non-consecutive (gap 10)',
-  '6.26 -> 6.28: non-consecutive (gap 2)',
 ];
 
 void main() {

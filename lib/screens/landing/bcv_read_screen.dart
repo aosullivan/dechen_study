@@ -1794,6 +1794,9 @@ class _BcvReadScreenState extends State<BcvReadScreen>
         visibleIdx != null ? _verseService.getVerseRef(visibleIdx) : null;
     final currentPath = _currentSectionPath;
 
+    // Prefer moving by verse order when leaf order would skip verses: e.g. at 6.32
+    // the next leaf section has firstRef 6.35 (section containing 6.33 has firstRef 6.31).
+    // When leaf order is correct (e.g. 9.2a -> 9.2bcd), use it.
     var currentIdx = -1;
     if (currentPath.isNotEmpty) {
       currentIdx = leafOrdered.indexWhere((s) => s.path == currentPath);
@@ -1808,6 +1811,62 @@ class _BcvReadScreenState extends State<BcvReadScreen>
         }
       }
     }
+    if (visibleIdx != null && verseRef != null && verseRef.isNotEmpty && direction != 0) {
+      final nextVerseIdx = visibleIdx + direction;
+      if (nextVerseIdx >= 0 && nextVerseIdx < _verses.length) {
+        final nextRef = _verseService.getVerseRef(nextVerseIdx);
+        if (nextRef != null && nextRef.isNotEmpty) {
+          final leafNextIdx = currentIdx >= 0
+              ? currentIdx + direction
+              : _hierarchyService.findAdjacentSectionIndex(
+                  leafOrdered, verseRef,
+                  direction: direction, useFullRefOrder: true);
+          if (leafNextIdx >= 0 && leafNextIdx < leafOrdered.length) {
+            final leafFirstRef = _hierarchyService
+                .getFirstVerseForSectionSync(leafOrdered[leafNextIdx].path);
+            // Use verse-order target if leaf would skip past the next verse.
+            final wouldSkip = leafFirstRef != null &&
+                (direction > 0
+                    ? VerseHierarchyService.compareVerseRefs(leafFirstRef, nextRef) > 0
+                    : VerseHierarchyService.compareVerseRefs(leafFirstRef, nextRef) < 0);
+            if (wouldSkip) {
+              final nextHierarchy =
+                  _hierarchyService.getHierarchyForVerseSync(nextRef);
+              if (nextHierarchy.isNotEmpty) {
+                final leafPath = nextHierarchy.last['section'] ??
+                    nextHierarchy.last['path'] ??
+                    '';
+                if (leafPath.isNotEmpty) {
+                  final normalizedPath =
+                      _normalizeOpeningNavigationPath(leafPath);
+                  return _navigateToSectionPath(
+                    normalizedPath,
+                    firstVerseRefOverride: nextRef,
+                  );
+                }
+              }
+            }
+          } else {
+            // No leaf next; use verse-order target.
+            final nextHierarchy =
+                _hierarchyService.getHierarchyForVerseSync(nextRef);
+            if (nextHierarchy.isNotEmpty) {
+              final leafPath = nextHierarchy.last['section'] ??
+                  nextHierarchy.last['path'] ?? '';
+              if (leafPath.isNotEmpty) {
+                final normalizedPath =
+                    _normalizeOpeningNavigationPath(leafPath);
+                return _navigateToSectionPath(
+                  normalizedPath,
+                  firstVerseRefOverride: nextRef,
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+
     int newIdx;
     if (currentIdx >= 0) {
       newIdx = currentIdx + direction;
