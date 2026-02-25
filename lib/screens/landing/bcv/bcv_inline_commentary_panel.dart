@@ -334,7 +334,11 @@ class _SegmentBody extends StatelessWidget {
         if (children.isNotEmpty) children.add(const SizedBox(height: 16));
       } else if (seg is _ProseSeg) {
         if (children.isNotEmpty) children.add(const SizedBox(height: 12));
-        children.add(Text(seg.text, style: proseStyle));
+        children.add(BcvVerseText(
+          text: seg.text,
+          style: proseStyle,
+          wrapIndent: 24.0,
+        ));
       }
     }
     flushVerse();

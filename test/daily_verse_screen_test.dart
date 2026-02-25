@@ -64,9 +64,9 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 8.136'), findsOneWidget);
-    expect(find.textContaining('Because it will'), findsWidgets);
+    expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
     expect(
-        find.textContaining('I will give myself up for others'), findsNothing);
+        find.bySemanticsLabel(RegExp(r'I will give myself up for others')), findsNothing);
   });
 
   testWidgets('split ref cd renders second-half text',
@@ -77,8 +77,8 @@ void main() {
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 8.136'), findsOneWidget);
     expect(
-        find.textContaining('I will give myself up for others'), findsWidgets);
-    expect(find.textContaining('Because it will'), findsNothing);
+        find.bySemanticsLabel(RegExp(r'I will give myself up for others')), findsWidgets);
+    expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsNothing);
   });
 
   testWidgets('split refs for same verse render verse label once',
@@ -88,9 +88,9 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 8.136'), findsOneWidget);
-    expect(find.textContaining('Because it will'), findsWidgets);
+    expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
     expect(
-        find.textContaining('I will give myself up for others'), findsWidgets);
+        find.bySemanticsLabel(RegExp(r'I will give myself up for others')), findsWidgets);
   });
 
   testWidgets('split refs in same verse are shown once in daily view',
@@ -100,7 +100,7 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 1.2'), findsOneWidget);
-    expect(find.textContaining('Because it will'), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsOneWidget);
   });
 
   testWidgets('full text navigation preserves split segment ref',
@@ -136,13 +136,13 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 7.7'), findsOneWidget);
-    expect(find.textContaining('Because it will'), findsWidgets);
+    expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
     expect(
-      find.textContaining('And pacify the'),
+      find.bySemanticsLabel(RegExp(r'And pacify the')),
       findsNothing,
     );
     expect(
-      find.textContaining('I will give myself up for others'),
+      find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
       findsNothing,
     );
   });
@@ -155,18 +155,18 @@ void main() {
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 7.7'), findsOneWidget);
     expect(
-      find.textContaining('And pacify the'),
+      find.bySemanticsLabel(RegExp(r'And pacify the')),
       findsWidgets,
     );
     expect(
-      find.textContaining('I will give myself up for others'),
+      find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
       findsWidgets,
     );
     expect(
-      find.textContaining('And embrace others'),
+      find.bySemanticsLabel(RegExp(r'And embrace others')),
       findsWidgets,
     );
-    expect(find.textContaining('Because it will'), findsNothing);
+    expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsNothing);
   });
 
   testWidgets('short split section dedupes to one base verse when expanded',

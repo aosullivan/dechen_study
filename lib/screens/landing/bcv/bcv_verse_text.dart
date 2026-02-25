@@ -1,7 +1,83 @@
 import 'package:flutter/material.dart';
 
+/// Testable line-breaking for verse text. Used by [BcvVerseText] and by tests.
+class VerseLineBreaker {
+  VerseLineBreaker._();
+
+  /// Splits [line] into visual-line segments at [maxWidth] using [style].
+  /// Returns segments and the [lineHeight] used for layout (for computing total height).
+  /// First segment is flush; rest are continuation lines (to be indented).
+  static ({List<String> segments, double lineHeight}) getVisualLineSegments(
+    String line,
+    TextStyle style,
+    double maxWidth,
+  ) {
+    if (line.isEmpty || maxWidth <= 0 || !maxWidth.isFinite) {
+      final h = (style.fontSize ?? 14) * (style.height ?? 1.5);
+      return (segments: line.isEmpty ? <String>[] : [line], lineHeight: h);
+    }
+
+    final painter = TextPainter(
+      text: TextSpan(text: line, style: style),
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: maxWidth);
+
+    final lineHeight = painter.preferredLineHeight;
+    if (lineHeight <= 0) {
+      painter.dispose();
+      return (segments: [line], lineHeight: (style.fontSize ?? 14) * (style.height ?? 1.5));
+    }
+
+    final numVisualLines = (painter.height / lineHeight).round().clamp(1, 200);
+    if (numVisualLines <= 1) {
+      painter.dispose();
+      return (segments: [line], lineHeight: lineHeight);
+    }
+
+    final ends = <int>[];
+    for (var i = 0; i < numVisualLines; i++) {
+      final yNextLine = (i + 1) * lineHeight;
+      if (yNextLine >= painter.height) {
+        ends.add(line.length);
+        break;
+      }
+      final position = painter.getPositionForOffset(Offset(0, yNextLine));
+      var end = position.offset.clamp(0, line.length);
+      if (end < line.length && end > 0 && line[end] != ' ' && line[end] != '\n') {
+        final segmentStart = ends.isEmpty ? 0 : ends.last;
+        final lastSpace = line.lastIndexOf(' ', end);
+        if (lastSpace >= segmentStart) end = lastSpace + 1;
+      }
+      if (ends.isNotEmpty && end <= ends.last) {
+        end = (ends.last + 1).clamp(0, line.length);
+      }
+      ends.add(end);
+      if (end >= line.length) break;
+    }
+    painter.dispose();
+
+    if (ends.isEmpty) return (segments: [line], lineHeight: lineHeight);
+
+    final segments = <String>[];
+    var start = 0;
+    for (final end in ends) {
+      final seg = line.substring(start, end).trimRight();
+      if (seg.isNotEmpty) segments.add(seg);
+      start = end;
+      if (start >= line.length) break;
+    }
+
+    return (
+      segments: segments.isEmpty ? [line] : segments,
+      lineHeight: lineHeight,
+    );
+  }
+}
+
 /// Renders verse text so that when a logical line wraps, continuation lines
-/// are indented (keeps the "4 lines" look). Logical lines are split by '\n'.
+/// are indented by [wrapIndent]. Logical lines are split by '\n'.
+/// Uses a single CustomPaint pass so every continuation line gets exactly
+/// the same left offset (no stacking).
 class BcvVerseText extends StatelessWidget {
   const BcvVerseText({
     super.key,
@@ -19,147 +95,151 @@ class BcvVerseText extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final logicalLines = text.split('\n');
-        // ListView can pass unbounded maxWidth; use a finite width so wrap+indent works.
         final maxWidth = constraints.maxWidth.isFinite && constraints.maxWidth > 0
             ? constraints.maxWidth
             : 400.0;
         if (maxWidth <= 0) return Text(text, style: style);
 
+        final lineGap = (style.fontSize ?? 18) *
+            ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0);
         final children = <Widget>[];
+
         for (var i = 0; i < logicalLines.length; i++) {
           final line = logicalLines[i];
           if (line.isEmpty) {
-            children.add(SizedBox(height: style.height != null ? style.fontSize! * style.height! : 18));
+            children.add(SizedBox(
+                height: style.height != null
+                    ? style.fontSize! * style.height!
+                    : 18));
             continue;
           }
-          // Every logical line starts flush left. Only when a line wraps does the continuation get indented.
-          children.add(_IndentedLine(
+          children.add(_PaintedIndentedLine(
             line: line,
             style: style,
             maxWidth: maxWidth,
             indent: wrapIndent,
+            lineGap: lineGap,
           ));
           if (i < logicalLines.length - 1) {
-            final lineGap = (style.fontSize ?? 18) *
-                ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0);
             children.add(SizedBox(height: lineGap));
           }
         }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: children,
+
+        return Semantics(
+          label: text,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: children,
+          ),
         );
       },
     );
   }
 }
 
-class _IndentedLine extends StatelessWidget {
-  const _IndentedLine({
+/// One logical line: layout with TextPainter, split into visual-line segments,
+/// then paint each segment at an explicit (x, y). First line at x=0, rest at x=indent.
+class _PaintedIndentedLine extends StatelessWidget {
+  const _PaintedIndentedLine({
     required this.line,
     required this.style,
     required this.maxWidth,
     required this.indent,
+    required this.lineGap,
   });
 
   final String line;
   final TextStyle style;
   final double maxWidth;
   final double indent;
+  final double lineGap;
 
   @override
   Widget build(BuildContext context) {
     if (line.isEmpty) return Text(line, style: style);
-    if (maxWidth <= 0 || !maxWidth.isFinite) return Text(line, style: style);
-
-    final painter = TextPainter(
-      text: TextSpan(text: line, style: style),
-      textDirection: TextDirection.ltr,
-    )..layout(maxWidth: maxWidth);
-
-    final lineHeight = painter.preferredLineHeight;
-    if (lineHeight <= 0) {
-      painter.dispose();
+    if (maxWidth <= 0 || !maxWidth.isFinite) {
       return Text(line, style: style);
     }
 
-    // Does this line wrap? (more than one visual line)
-    final wraps = painter.height > lineHeight + 1;
-    if (!wraps) {
-      painter.dispose();
-      return Text(line, style: style);
+    final result = VerseLineBreaker.getVisualLineSegments(line, style, maxWidth);
+    final segments = result.segments;
+    final lineHeight = result.lineHeight;
+
+    if (segments.length <= 1) {
+      return SizedBox(
+        width: maxWidth,
+        child: Text(line, style: style),
+      );
     }
 
-    // Build list of (start, end) character offsets for each visual line.
-    final segmentEnds = <int>[];
-    var y = lineHeight / 2;
-    while (y < painter.height && segmentEnds.length < 100) {
-      final position = painter.getPositionForOffset(Offset(maxWidth - 1, y));
-      var end = position.offset.clamp(0, line.length);
-      // Prefer word boundary so we don't split mid-word.
-      if (end < line.length && end > 0 && line[end] != ' ' && line[end] != '\n') {
-        final lastSpace = line.lastIndexOf(' ', end);
-        if (lastSpace > (segmentEnds.isEmpty ? 0 : segmentEnds.last)) {
-          end = lastSpace + 1;
-        }
-      }
-      segmentEnds.add(end);
-      if (end >= line.length) break;
-      y += lineHeight;
-    }
-    painter.dispose();
+    final totalHeight =
+        segments.length * lineHeight + (segments.length - 1) * lineGap;
 
-    if (segmentEnds.isEmpty) return Text(line, style: style);
-
-    // Merge any duplicate end offsets (same line) and ensure strictly increasing.
-    final ends = <int>[];
-    var last = 0;
-    for (final e in segmentEnds) {
-      if (e > last) {
-        ends.add(e);
-        last = e;
-      }
-      if (last >= line.length) break;
-    }
-    if (ends.isEmpty) return Text(line, style: style);
-
-    var start = 0;
-    final children = <Widget>[];
-    for (var i = 0; i < ends.length; i++) {
-      final end = ends[i];
-      final segment = line.substring(start, end).trimRight();
-      if (segment.isNotEmpty) {
-        final isFirst = i == 0;
-        final textWidget = Text(segment, style: style);
-        if (isFirst) {
-          children.add(textWidget);
-        } else {
-          children.add(
-            Padding(
-              padding: EdgeInsets.only(left: indent),
-              child: SizedBox(
-                width: (maxWidth - indent).clamp(0.0, double.infinity),
-                child: textWidget,
-              ),
-            ),
-          );
-        }
-      }
-      start = end;
-      if (start >= line.length) break;
-      if (i < ends.length - 1) {
-        children.add(SizedBox(height: (style.fontSize ?? 18) * ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0)));
-      }
-    }
-
-    if (children.isEmpty) return Text(line, style: style);
-    if (children.length == 1) return children[0];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: children,
+    return SizedBox(
+      width: maxWidth,
+      height: totalHeight,
+      child: CustomPaint(
+        size: Size(maxWidth, totalHeight),
+        painter: _VerseLinePainter(
+          segments: segments,
+          style: style,
+          maxWidth: maxWidth,
+          indent: indent,
+          lineHeight: lineHeight,
+          lineGap: lineGap,
+        ),
+      ),
     );
+  }
+}
+
+/// Paints each segment at (0, y) for the first line and (indent, y) for the rest.
+/// Same x offset for all continuations — no stacking.
+class _VerseLinePainter extends CustomPainter {
+  _VerseLinePainter({
+    required this.segments,
+    required this.style,
+    required this.maxWidth,
+    required this.indent,
+    required this.lineHeight,
+    required this.lineGap,
+  });
+
+  final List<String> segments;
+  final TextStyle style;
+  final double maxWidth;
+  final double indent;
+  final double lineHeight;
+  final double lineGap;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var y = 0.0;
+    for (var i = 0; i < segments.length; i++) {
+      final segment = segments[i];
+      final isFirst = i == 0;
+      final width = isFirst ? maxWidth : (maxWidth - indent).clamp(1.0, double.infinity);
+      final x = isFirst ? 0.0 : indent;
+
+      final painter = TextPainter(
+        text: TextSpan(text: segment, style: style),
+        textDirection: TextDirection.ltr,
+      )..layout(maxWidth: width);
+
+      painter.paint(canvas, Offset(x, y));
+      painter.dispose();
+
+      y += lineHeight + lineGap;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _VerseLinePainter oldDelegate) {
+    if (oldDelegate.segments.length != segments.length) return true;
+    for (var i = 0; i < segments.length; i++) {
+      if (oldDelegate.segments[i] != segments[i]) return true;
+    }
+    return oldDelegate.maxWidth != maxWidth || oldDelegate.indent != indent;
   }
 }
