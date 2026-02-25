@@ -29,12 +29,24 @@ class BcvVerseText extends StatelessWidget {
             children.add(SizedBox(height: style.height != null ? style.fontSize! * style.height! : 18));
             continue;
           }
-          children.add(_IndentedLine(
+          // First logical line flush left; subsequent lines indented (same as wrapped continuation).
+          final isFirstLine = i == 0;
+          final lineWidth = isFirstLine ? maxWidth : maxWidth - wrapIndent;
+          final lineIndent = isFirstLine ? wrapIndent : 0.0; // Only first line's wrap gets extra indent
+          final lineWidget = _IndentedLine(
             line: line,
             style: style,
-            maxWidth: maxWidth,
-            indent: wrapIndent,
-          ));
+            maxWidth: lineWidth,
+            indent: lineIndent,
+          );
+          children.add(
+            isFirstLine
+                ? lineWidget
+                : Padding(
+                    padding: EdgeInsets.only(left: wrapIndent),
+                    child: lineWidget,
+                  ),
+          );
           if (i < logicalLines.length - 1) {
             final lineGap = (style.fontSize ?? 18) *
                 ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0);
@@ -69,38 +81,55 @@ class _IndentedLine extends StatelessWidget {
     final painter = TextPainter(
       text: TextSpan(text: line, style: style),
       textDirection: TextDirection.ltr,
-      maxLines: 20,
-    );
-    painter.layout(maxWidth: maxWidth);
+    )..layout(maxWidth: maxWidth);
     final lineHeight = painter.preferredLineHeight;
-    if (lineHeight <= 0) return Text(line, style: style);
-    final lineCount = (painter.height / lineHeight).ceil().clamp(1, 20);
-    if (lineCount <= 1) return Text(line, style: style);
-
-    final spans = <Widget>[];
-    var start = 0;
-    for (var i = 0; i < lineCount; i++) {
-      final endOffset = painter.getPositionForOffset(
-        Offset(maxWidth, lineHeight * (i + 1) - 1),
-      ).offset;
-      final end = endOffset.clamp(0, line.length);
-      final segment = i > 0
-          ? line.substring(start, end).trimLeft()
-          : line.substring(start, end);
-      if (segment.isNotEmpty) {
-        spans.add(
-          Padding(
-            padding: i > 0 ? EdgeInsets.only(left: indent) : EdgeInsets.zero,
-            child: Text(segment, style: style),
-          ),
-        );
-      }
-      start = end;
+    if (lineHeight <= 0 || painter.height <= lineHeight) {
+      painter.dispose();
+      return Text(line, style: style);
     }
+
+    // Find where the first visual line ends.
+    var firstLineEnd = painter
+        .getPositionForOffset(Offset(maxWidth, lineHeight - 1))
+        .offset
+        .clamp(0, line.length);
+    painter.dispose();
+
+    if (firstLineEnd >= line.length) return Text(line, style: style);
+
+    // Break at a word boundary so we don't split mid-word and lose a word when trimming.
+    // Only back up when we'd split a word (current position not after a space).
+    if (firstLineEnd > 0 &&
+        firstLineEnd < line.length &&
+        line[firstLineEnd - 1] != ' ' &&
+        line[firstLineEnd - 1] != '\n') {
+      final lastSpace = line.lastIndexOf(' ', firstLineEnd);
+      if (lastSpace > 0) {
+        firstLineEnd = lastSpace + 1; // include space in first line
+      }
+    }
+
+    final firstLineText = line.substring(0, firstLineEnd).trimRight();
+    final restText = line.substring(firstLineEnd).trimLeft();
+
+    if (restText.isEmpty) return Text(line, style: style);
+
+    // Render first line at full width, continuation lines indented.
+    // Constrain continuation width so it wraps at the same effective width and
+    // all wrapped continuation lines stay at the same indent.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: spans,
+      children: [
+        Text(firstLineText, style: style),
+        Padding(
+          padding: EdgeInsets.only(left: indent),
+          child: SizedBox(
+            width: maxWidth - indent,
+            child: Text(restText, style: style),
+          ),
+        ),
+      ],
     );
   }
 }

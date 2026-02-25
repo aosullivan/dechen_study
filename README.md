@@ -173,7 +173,7 @@ The app writes product analytics events into `public.app_usage_events` and now i
 - `public.analytics_read_section_dwell_daily_v1`
 - `public.analytics_top_read_sections_30d_v1`
 
-Retention is enforced by `public.prune_app_usage_events(interval)` (default `12 months`) with daily scheduling via `pg_cron` when available.
+Retention is enforced by `public.prune_app_usage_events(interval)` (default `4 weeks`) with daily scheduling via `pg_cron` when available.
 
 Apply migrations:
 

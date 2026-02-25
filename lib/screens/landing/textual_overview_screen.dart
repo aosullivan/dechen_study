@@ -101,45 +101,17 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     ]);
     if (!mounted) return;
     final flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
-    final restoredPath = await _loadLastPath();
-    if (!mounted) return;
-
-    var restoredSelections = <String>[];
-    String? restoredSelectedPath;
-    String? restoredSelectedTitle;
-    String? restoredScrollPath;
-
-    if (restoredPath != null &&
-        flatSections.any((s) => s.path == restoredPath)) {
-      restoredSelections = _pickerSelectionsForPath(restoredPath);
-      restoredScrollPath = restoredPath;
-      final hasChildren = flatSections.any(
-        (s) => s.path.startsWith('$restoredPath.'),
-      );
-      if (!hasChildren) {
-        restoredSelectedPath = restoredPath;
-        restoredSelectedTitle = flatSections
-            .where((s) => s.path == restoredPath)
-            .firstOrNull
-            ?.title;
-      }
-    }
 
     setState(() {
       _flatSections = flatSections;
-      _pickerSelections = restoredSelections;
-      _selectedPath = restoredSelectedPath;
-      _selectedTitle = restoredSelectedTitle;
-      _scrollToPath = restoredScrollPath;
+      // Always start with the initial section stage: no restored picker state,
+      // so the user sees the 5 top-level section cards and "Choose a top section to begin."
+      _pickerSelections = [];
+      _selectedPath = null;
+      _selectedTitle = null;
+      _scrollToPath = null;
       _loading = false;
     });
-  }
-
-  Future<String?> _loadLastPath() async {
-    final prefs = await SharedPreferences.getInstance();
-    final path = prefs.getString(_lastPathPrefsKey)?.trim();
-    if (path == null || path.isEmpty) return null;
-    return path;
   }
 
   Future<void> _saveLastPath(String? path) async {
@@ -231,18 +203,15 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     return selections;
   }
 
-  void _onNodeTap(({String path, String title, int depth}) section) {
-    final hasChildren =
-        _filteredSections.any((s) => s.path.startsWith('${section.path}.'));
+  void _onBookTap(({String path, String title, int depth}) section) {
     unawaited(_usageMetrics.trackEvent(
-      eventName: 'overview_node_tapped',
+      eventName: 'overview_book_tapped',
       textId: 'bodhicaryavatara',
       mode: 'overview',
       sectionPath: section.path,
       sectionTitle: section.title,
       properties: {
         'depth': section.depth,
-        'has_children': hasChildren,
       },
     ));
 
@@ -258,16 +227,12 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
           _selectedPath = section.path;
           _selectedTitle = section.title;
         }
-        _pickerSelections = _pickerSelectionsForPath(section.path);
-        _scrollToPath = section.path;
       });
       unawaited(_saveLastPath(section.path));
     } else {
       setState(() {
         _selectedPath = section.path;
         _selectedTitle = section.title;
-        _pickerSelections = _pickerSelectionsForPath(section.path);
-        _scrollToPath = section.path;
       });
       unawaited(_saveLastPath(section.path));
       showModalBottomSheet<void>(
@@ -294,6 +259,25 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         if (mounted) setState(() => _selectedPath = null);
       });
     }
+  }
+
+  void _onExpansionChanged(String path, bool expanded) {
+    setState(() {
+      if (expanded) {
+        _pickerSelections = _pickerSelectionsForPath(path);
+      } else {
+        final dotIdx = path.lastIndexOf('.');
+        if (dotIdx > 0) {
+          _pickerSelections =
+              _pickerSelectionsForPath(path.substring(0, dotIdx));
+        } else {
+          // Root-level collapse — keep just the root.
+          _pickerSelections = [path];
+        }
+      }
+    });
+    unawaited(_saveLastPath(
+        _pickerSelections.isNotEmpty ? _pickerSelections.last : null));
   }
 
   /// Filtered flat sections: only the top-level picker (depth 0) filters.
@@ -379,8 +363,10 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                     Expanded(
                       child: OverviewTreeView(
                         flatSections: _filteredSections,
+                        expandedPaths: Set.from(_pickerSelections),
                         selectedPath: _selectedPath,
-                        onNodeTap: _onNodeTap,
+                        onBookTap: _onBookTap,
+                        onExpansionChanged: _onExpansionChanged,
                         scrollToPath: _scrollToPath,
                       ),
                     ),
@@ -406,8 +392,10 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                 )
               : OverviewTreeView(
                   flatSections: _filteredSections,
+                  expandedPaths: Set.from(_pickerSelections),
                   selectedPath: _selectedPath,
-                  onNodeTap: _onNodeTap,
+                  onBookTap: _onBookTap,
+                  onExpansionChanged: _onExpansionChanged,
                   scrollToPath: _scrollToPath,
                 ),
         ),

@@ -45,6 +45,8 @@ class OverviewTreePainter extends CustomPainter {
     }
 
     const nodeH = OverviewConstants.nodeHeight;
+    const gap = OverviewConstants.nodeGap;
+    const rowH = nodeH + gap;
     const leftPad = OverviewConstants.leftPadding;
     const indent = OverviewConstants.indentPerLevel;
     const stub = OverviewConstants.stubLength;
@@ -55,20 +57,20 @@ class OverviewTreePainter extends CustomPainter {
 
       final depth = childDepths[entry.key] ?? 0;
       final railX = leftPad + depth * indent;
-      final topY = first * nodeH + nodeH / 2;
-      final bottomY = last * nodeH + nodeH / 2;
+      final topY = first * rowH + nodeH / 2;
+      final bottomY = last * rowH + nodeH / 2;
 
       // Vertical rail.
       canvas.drawLine(Offset(railX, topY), Offset(railX, bottomY), paint);
     }
 
-    // Horizontal stubs for every non-root node.
+    // Stubs: same row spacing as rails.
     for (var i = 0; i < flatSections.length; i++) {
       final depth = flatSections[i].depth;
       if (depth == 0) continue; // root nodes have no parent rail
 
       final railX = leftPad + depth * indent;
-      final y = i * nodeH + nodeH / 2;
+      final y = i * rowH + nodeH / 2;
 
       canvas.drawLine(Offset(railX, y), Offset(railX + stub, y), paint);
     }

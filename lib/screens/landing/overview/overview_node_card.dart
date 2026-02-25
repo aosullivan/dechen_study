@@ -4,6 +4,9 @@ import '../../../utils/app_theme.dart';
 import 'overview_constants.dart';
 
 /// A single tree node rendered as a compact rounded card.
+///
+/// Only the leading chevron (>) expands/collapses children; tapping the rest
+/// of the card does not. The book icon at the trailing edge opens the verse panel.
 class OverviewNodeCard extends StatelessWidget {
   const OverviewNodeCard({
     super.key,
@@ -14,7 +17,7 @@ class OverviewNodeCard extends StatelessWidget {
     required this.isExpanded,
     required this.isSelected,
     required this.onTap,
-    this.onExpandTap,
+    required this.onBookTap,
   });
 
   final String path;
@@ -23,8 +26,12 @@ class OverviewNodeCard extends StatelessWidget {
   final bool hasChildren;
   final bool isExpanded;
   final bool isSelected;
+
+  /// Expand / collapse (chevron tap only).
   final VoidCallback onTap;
-  final VoidCallback? onExpandTap;
+
+  /// Show verses (book icon tap).
+  final VoidCallback onBookTap;
 
   String get _shortNumber {
     final dot = path.lastIndexOf('.');
@@ -43,87 +50,115 @@ class OverviewNodeCard extends StatelessWidget {
         children: [
           SizedBox(width: indent),
           Flexible(
-            child: GestureDetector(
-              onTap: onTap,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : OverviewConstants.depthColor(depth),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
                   color: isSelected
-                      ? AppColors.primary.withValues(alpha: 0.15)
-                      : OverviewConstants.depthColor(depth),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: isSelected
-                        ? AppColors.primary
-                        : AppColors.border.withValues(alpha: 0.6),
-                    width: isSelected ? 1.5 : 0.5,
-                  ),
+                      ? AppColors.primary
+                      : AppColors.border.withValues(alpha: 0.6),
+                  width: isSelected ? 1.5 : 0.5,
                 ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
-                      child: hasChildren
-                          ? IconButton(
-                              onPressed: onExpandTap,
-                              padding: EdgeInsets.zero,
-                              splashRadius: 14,
-                              constraints: const BoxConstraints(
-                                minWidth: 20,
-                                minHeight: 20,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Chevron — only this expands/collapses (not the whole card).
+                  SizedBox(
+                    width: 40,
+                    height: 32,
+                    child: hasChildren
+                        ? Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: onTap,
+                              borderRadius: BorderRadius.circular(4),
+                              child: Center(
+                                child: Icon(
+                                  isExpanded
+                                      ? Icons.expand_more
+                                      : Icons.chevron_right,
+                                  size: 16,
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : AppColors.mutedBrown,
+                                ),
                               ),
-                              icon: Icon(
-                                isExpanded
-                                    ? Icons.expand_more
-                                    : Icons.chevron_right,
+                            ),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 4),
+                  // Title + book area: absorb taps so only the chevron expands.
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {}, // No-op: do not expand/collapse on card tap.
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '$_shortNumber. ',
+                                    style: TextStyle(
+                                      fontFamily: 'Lora',
+                                      fontSize:
+                                          OverviewConstants.fontSizeForDepth(depth) -
+                                              1,
+                                      fontWeight: FontWeight.w600,
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.mutedBrown,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: title,
+                                    style: TextStyle(
+                                      fontFamily: 'Lora',
+                                      fontSize:
+                                          OverviewConstants.fontSizeForDepth(depth),
+                                      fontWeight:
+                                          OverviewConstants.fontWeightForDepth(depth),
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.textDark,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          // Book icon — opens verse panel.
+                          const SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: onBookTap,
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: Icon(
+                                Icons.menu_book_rounded,
                                 size: 16,
                                 color: isSelected
                                     ? AppColors.primary
-                                    : AppColors.mutedBrown,
-                              ),
-                            )
-                          : null,
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '$_shortNumber. ',
-                              style: TextStyle(
-                                fontFamily: 'Lora',
-                                fontSize:
-                                    OverviewConstants.fontSizeForDepth(depth) -
-                                        1,
-                                fontWeight: FontWeight.w600,
-                                color: isSelected
-                                    ? AppColors.primary
-                                    : AppColors.mutedBrown,
+                                    : AppColors.mutedBrown.withValues(alpha: 0.6),
                               ),
                             ),
-                            TextSpan(
-                              text: title,
-                              style: TextStyle(
-                                fontFamily: 'Lora',
-                                fontSize:
-                                    OverviewConstants.fontSizeForDepth(depth),
-                                fontWeight:
-                                    OverviewConstants.fontWeightForDepth(depth),
-                                color: isSelected
-                                    ? AppColors.primary
-                                    : AppColors.textDark,
-                              ),
-                            ),
-                          ],
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

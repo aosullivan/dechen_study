@@ -5,6 +5,8 @@ abstract final class OverviewConstants {
   OverviewConstants._();
 
   static const double nodeHeight = 40.0;
+  /// Vertical gap between node cards (consistent spacing at all levels).
+  static const double nodeGap = 6.0;
   static const double indentPerLevel = 28.0;
   static const double leftPadding = 20.0;
   static const double stubLength = 16.0;
@@ -25,15 +27,7 @@ abstract final class OverviewConstants {
     return colors[depth.clamp(0, colors.length - 1)];
   }
 
-  static double fontSizeForDepth(int depth) {
-    if (depth <= 1) return 14.0;
-    if (depth <= 4) return 13.0;
-    return 12.0;
-  }
+  static double fontSizeForDepth(int depth) => 13.0;
 
-  static FontWeight fontWeightForDepth(int depth) {
-    if (depth <= 1) return FontWeight.w600;
-    if (depth <= 4) return FontWeight.w500;
-    return FontWeight.normal;
-  }
+  static FontWeight fontWeightForDepth(int depth) => FontWeight.w500;
 }
