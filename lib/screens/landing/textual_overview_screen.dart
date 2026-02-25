@@ -101,17 +101,45 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     ]);
     if (!mounted) return;
     final flatSections = VerseHierarchyService.instance.getFlatSectionsSync();
+    final restoredPath = await _loadLastPath();
+    if (!mounted) return;
+
+    var restoredSelections = <String>[];
+    String? restoredSelectedPath;
+    String? restoredSelectedTitle;
+    String? restoredScrollPath;
+
+    if (restoredPath != null &&
+        flatSections.any((s) => s.path == restoredPath)) {
+      restoredSelections = _pickerSelectionsForPath(restoredPath);
+      restoredScrollPath = restoredPath;
+      final hasChildren = flatSections.any(
+        (s) => s.path.startsWith('$restoredPath.'),
+      );
+      if (!hasChildren) {
+        restoredSelectedPath = restoredPath;
+        restoredSelectedTitle = flatSections
+            .where((s) => s.path == restoredPath)
+            .firstOrNull
+            ?.title;
+      }
+    }
 
     setState(() {
       _flatSections = flatSections;
-      // Always start with the initial section stage: no restored picker state,
-      // so the user sees the 5 top-level section cards and "Choose a top section to begin."
-      _pickerSelections = [];
-      _selectedPath = null;
-      _selectedTitle = null;
-      _scrollToPath = null;
+      _pickerSelections = restoredSelections;
+      _selectedPath = restoredSelectedPath;
+      _selectedTitle = restoredSelectedTitle;
+      _scrollToPath = restoredScrollPath;
       _loading = false;
     });
+  }
+
+  Future<String?> _loadLastPath() async {
+    final prefs = await SharedPreferences.getInstance();
+    final path = prefs.getString(_lastPathPrefsKey)?.trim();
+    if (path == null || path.isEmpty) return null;
+    return path;
   }
 
   Future<void> _saveLastPath(String? path) async {

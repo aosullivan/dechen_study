@@ -177,7 +177,6 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
       _correctChapterNumber = 0;
       _selectedChapter = null;
       _showAnswer = false;
-      _showClue = false;
       _clueText = null;
     });
     try {
@@ -685,14 +684,29 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
               ),
               if (_showClue && _clueText != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    _clueText!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textDark.withValues(alpha: 0.78),
-                          fontSize: 17,
-                          height: 1.34,
-                        ),
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.textDark.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColors.textDark.withValues(alpha: 0.14),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      'Clue: $_clueText',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textDark.withValues(alpha: 0.85),
+                            fontSize: 17,
+                            height: 1.34,
+                          ),
+                    ),
                   ),
                 ),
               const SizedBox(height: 12),
@@ -834,14 +848,17 @@ class _BcvQuizScreenState extends State<BcvQuizScreen>
                 children: [
                   if (_clueText != null && !_showAnswer)
                     TextButton.icon(
-                      onPressed: _showClue
-                          ? null
-                          : () {
-                              setState(() => _showClue = true);
-                            },
-                      icon: const Icon(Icons.lightbulb_outline, size: 18),
+                      onPressed: () {
+                        setState(() => _showClue = !_showClue);
+                      },
+                      icon: Icon(
+                        _showClue
+                            ? Icons.lightbulb
+                            : Icons.lightbulb_outline,
+                        size: 18,
+                      ),
                       label: Text(
-                        'Clue',
+                        _showClue ? 'Hide clue' : 'Show clue',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
