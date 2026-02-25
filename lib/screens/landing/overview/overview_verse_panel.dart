@@ -15,12 +15,16 @@ class OverviewVersePanel extends StatelessWidget {
     required this.sectionTitle,
     required this.onClose,
     this.scrollController,
+    this.onOpenInReader,
   });
 
   final String sectionPath;
   final String sectionTitle;
   final VoidCallback onClose;
   final ScrollController? scrollController;
+
+  /// When provided, enables "Full text" to open the reader at this section (same as Daily verses).
+  final void Function(ReaderOpenParams)? onOpenInReader;
 
   String _baseRef(String ref) {
     final m = RegExp(r'^(\d+\.\d+)', caseSensitive: false).firstMatch(ref);
@@ -61,6 +65,9 @@ class OverviewVersePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final verses = _loadVerses();
+    final readerParams = onOpenInReader != null
+        ? VerseHierarchyService.instance.getReaderParamsForSectionSync(sectionPath)
+        : null;
 
     return Container(
       decoration: const BoxDecoration(
@@ -90,7 +97,13 @@ class OverviewVersePanel extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 8),
+                if (readerParams != null) ...[
+                  TextButton(
+                    onPressed: () => onOpenInReader!(readerParams),
+                    child: const Text('Full text'),
+                  ),
+                  const SizedBox(width: 4),
+                ],
                 IconButton(
                   icon: const Icon(Icons.close, size: 20),
                   color: AppColors.mutedBrown,

@@ -5,8 +5,8 @@ import 'overview_constants.dart';
 
 /// A single tree node rendered as a compact rounded card.
 ///
-/// Only the leading chevron (>) expands/collapses children; tapping the rest
-/// of the card does not. The book icon at the trailing edge opens the verse panel.
+/// Chevron: expand/collapse. Card body tap: select (highlights card, updates section stack).
+/// Book icon: open verse panel.
 class OverviewNodeCard extends StatelessWidget {
   const OverviewNodeCard({
     super.key,
@@ -18,6 +18,7 @@ class OverviewNodeCard extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.onBookTap,
+    this.onCardTap,
     this.verseRange,
   });
 
@@ -36,6 +37,9 @@ class OverviewNodeCard extends StatelessWidget {
 
   /// Show verses (book icon tap).
   final VoidCallback onBookTap;
+
+  /// Select this card: highlight, collapse others, update section stack (card body tap).
+  final VoidCallback? onCardTap;
 
   String get _shortNumber {
     final dot = path.lastIndexOf('.');
@@ -61,14 +65,14 @@ class OverviewNodeCard extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.15)
+                    ? AppColors.primary.withValues(alpha: 0.06)
                     : OverviewConstants.depthColor(depth),
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
                   color: isSelected
-                      ? AppColors.primary
+                      ? AppColors.primary.withValues(alpha: 0.4)
                       : AppColors.border.withValues(alpha: 0.6),
-                  width: isSelected ? 1.5 : 0.5,
+                  width: isSelected ? 1.0 : 0.5,
                 ),
               ),
             child: Row(
@@ -91,7 +95,7 @@ class OverviewNodeCard extends StatelessWidget {
                                     : Icons.chevron_right,
                                 size: 16,
                                 color: isSelected
-                                    ? AppColors.primary
+                                    ? AppColors.primary.withValues(alpha: 0.85)
                                     : AppColors.mutedBrown,
                               ),
                             ),
@@ -100,11 +104,11 @@ class OverviewNodeCard extends StatelessWidget {
                       : null,
                 ),
                 const SizedBox(width: 4),
-                // Title + book area: absorb taps so only the chevron expands.
+                // Title + verse range: tap selects card (highlight, update stack, collapse others).
                 Expanded(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () {}, // No-op: do not expand/collapse on card tap.
+                    onTap: onCardTap,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -133,9 +137,7 @@ class OverviewNodeCard extends StatelessWidget {
                                         OverviewConstants.fontSizeForDepth(depth),
                                     fontWeight:
                                         OverviewConstants.fontWeightForDepth(depth),
-                                    color: isSelected
-                                        ? AppColors.primary
-                                        : AppColors.textDark,
+                                    color: AppColors.textDark,
                                   ),
                                 ),
                               ],
@@ -153,7 +155,7 @@ class OverviewNodeCard extends StatelessWidget {
                               fontFamily: 'Lora',
                               fontSize: 11,
                               color: isSelected
-                                  ? AppColors.primary
+                                  ? AppColors.primary.withValues(alpha: 0.7)
                                   : AppColors.mutedBrown.withValues(alpha: 0.8),
                             ),
                           ),
@@ -168,9 +170,9 @@ class OverviewNodeCard extends StatelessWidget {
                             child: Icon(
                               Icons.menu_book_rounded,
                               size: 16,
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : AppColors.mutedBrown.withValues(alpha: 0.6),
+                                color: isSelected
+                                    ? AppColors.primary.withValues(alpha: 0.65)
+                                    : AppColors.mutedBrown.withValues(alpha: 0.6),
                             ),
                           ),
                         ),

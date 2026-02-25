@@ -5,6 +5,19 @@ import 'package:flutter/services.dart';
 
 import 'bcv_verse_service.dart';
 
+/// Params to open the reader at a section (e.g. "Full text" from overview or daily).
+/// Reused so overview and daily use the same logic and jump to the correct verse.
+class ReaderOpenParams {
+  const ReaderOpenParams({
+    required this.scrollToVerseIndex,
+    required this.highlightSectionIndices,
+    this.initialSegmentRef,
+  });
+  final int scrollToVerseIndex;
+  final Set<int> highlightSectionIndices;
+  final String? initialSegmentRef;
+}
+
 /// Holds parsed hierarchy data from the background isolate.
 class _ParsedHierarchy {
   _ParsedHierarchy({
@@ -460,6 +473,50 @@ class VerseHierarchyService {
       }
     }
     return out;
+  }
+
+  /// Returns params to open BcvReadScreen at the first verse of [sectionPath].
+  /// Same logic as daily "Full text" / overview "Full text". Call after preload().
+  ReaderOpenParams? getReaderParamsForSectionSync(String sectionPath) {
+    if (sectionPath.isEmpty) return null;
+    final ownRefs = getOwnVerseRefsForSectionSync(sectionPath);
+    final treeRefs = getTreeVerseRefsForSectionSync(sectionPath);
+    final refs = (ownRefs.isNotEmpty
+            ? ownRefs
+            : treeRefs.isNotEmpty
+                ? treeRefs
+                : getVerseRefsForSectionSync(sectionPath))
+        .toList()
+      ..sort(_compareVerseRefsFull);
+
+    final verseService = BcvVerseService.instance;
+    final seen = <String>{};
+    final indices = <int>[];
+    final refForIndex = <int, String>{};
+    for (final ref in refs) {
+      final idx = verseService.getIndexForRefWithFallback(ref);
+      if (idx == null) continue;
+      final base = _baseRefFromReader(ref);
+      if (!seen.add('r:$base')) continue;
+      indices.add(idx);
+      if (!refForIndex.containsKey(idx) ||
+          BcvVerseService.segmentSuffixPattern.hasMatch(ref)) {
+        refForIndex[idx] = ref;
+      }
+    }
+    if (indices.isEmpty) return null;
+    indices.sort();
+    final firstIndex = indices.first;
+    return ReaderOpenParams(
+      scrollToVerseIndex: firstIndex,
+      highlightSectionIndices: indices.toSet(),
+      initialSegmentRef: refForIndex[firstIndex],
+    );
+  }
+
+  static String _baseRefFromReader(String ref) {
+    final m = RegExp(r'^(\d+\.\d+)', caseSensitive: false).firstMatch(ref);
+    return m?.group(1) ?? ref;
   }
 
   List<({String path, String title, int depth})>? _flatSections;

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bcv_read_screen.dart';
 import '../../services/bcv_verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
@@ -231,6 +232,17 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     return selections;
   }
 
+  /// Card body tap: highlight this card, collapse others, update section stack.
+  void _onCardTap(({String path, String title, int depth}) section) {
+    setState(() {
+      _selectedPath = section.path;
+      _selectedTitle = section.title;
+      _pickerSelections = _pickerSelectionsForPath(section.path);
+      _scrollToPath = section.path;
+    });
+    unawaited(_saveLastPath(section.path));
+  }
+
   void _onBookTap(({String path, String title, int depth}) section) {
     unawaited(_usageMetrics.trackEvent(
       eventName: 'overview_book_tapped',
@@ -281,12 +293,36 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
             sectionTitle: section.title,
             scrollController: scrollController,
             onClose: () => Navigator.of(ctx).pop(),
+            onOpenInReader: (params) {
+              Navigator.of(ctx).pop();
+              _openInReaderFromOverview(params);
+            },
           ),
         ),
       ).whenComplete(() {
         if (mounted) setState(() => _selectedPath = null);
       });
     }
+  }
+
+  void _openInReaderFromOverview(ReaderOpenParams params) {
+    unawaited(_usageMetrics.trackEvent(
+      eventName: 'open_full_text_from_overview',
+      textId: 'bodhicaryavatara',
+      mode: 'overview',
+      sectionPath: _selectedPath,
+      sectionTitle: _selectedTitle,
+    ));
+    // Overview already preloaded in _load(); push immediately so reader opens fast.
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => BcvReadScreen(
+          scrollToVerseIndex: params.scrollToVerseIndex,
+          highlightSectionIndices: params.highlightSectionIndices,
+          initialSegmentRef: params.initialSegmentRef,
+        ),
+      ),
+    );
   }
 
   void _onExpansionChanged(String path, bool expanded) {
@@ -394,6 +430,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                         expandedPaths: Set.from(_pickerSelections),
                         selectedPath: _selectedPath,
                         onBookTap: _onBookTap,
+                        onCardTap: _onCardTap,
                         onExpansionChanged: _onExpansionChanged,
                         scrollToPath: _scrollToPath,
                         sectionVerseRanges:
@@ -415,6 +452,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                                 _selectedPath = null;
                                 _selectedTitle = null;
                               }),
+                              onOpenInReader: _openInReaderFromOverview,
                             )
                           : const SizedBox.shrink(),
                     ),
@@ -425,6 +463,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                   expandedPaths: Set.from(_pickerSelections),
                   selectedPath: _selectedPath,
                   onBookTap: _onBookTap,
+                  onCardTap: _onCardTap,
                   onExpansionChanged: _onExpansionChanged,
                   scrollToPath: _scrollToPath,
                   sectionVerseRanges:

@@ -15,6 +15,7 @@ class OverviewTreeView extends StatefulWidget {
     required this.selectedPath,
     required this.onBookTap,
     required this.onExpansionChanged,
+    this.onCardTap,
     this.scrollToPath,
     this.sectionVerseRanges,
   });
@@ -31,6 +32,9 @@ class OverviewTreeView extends StatefulWidget {
 
   /// Called when the book icon on a node is tapped (show verses).
   final ValueChanged<({String path, String title, int depth})> onBookTap;
+
+  /// Called when the card body is tapped: select that card, update section stack, collapse others.
+  final ValueChanged<({String path, String title, int depth})>? onCardTap;
 
   /// Called after a node is expanded or collapsed in the tree.
   final void Function(String path, bool expanded) onExpansionChanged;
@@ -170,6 +174,9 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
                         : () {},
                     onBookTap: () =>
                         widget.onBookTap(visibleSections[i]),
+                    onCardTap: widget.onCardTap != null
+                        ? () => widget.onCardTap!(visibleSections[i])
+                        : null,
                   ),
                   if (i < visibleSections.length - 1)
                     const SizedBox(height: OverviewConstants.nodeGap),
