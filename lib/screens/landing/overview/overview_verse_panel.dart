@@ -4,6 +4,7 @@ import '../../../services/bcv_verse_service.dart';
 import '../../../services/verse_hierarchy_service.dart';
 import '../../../utils/app_theme.dart';
 import '../bcv/bcv_verse_text.dart';
+import 'overview_constants.dart';
 
 /// Shows the verses belonging to a single section in a scrollable panel.
 /// Used as a persistent side panel on desktop and a bottom sheet on mobile.
@@ -121,39 +122,50 @@ class OverviewVersePanel extends StatelessWidget {
                       ),
                     ),
                   )
-                : ListView.separated(
-                    controller: scrollController,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: verses.length,
-                    separatorBuilder: (_, __) => const Divider(
-                      height: 24,
-                      color: AppColors.borderLight,
-                    ),
-                    itemBuilder: (context, index) {
-                      final v = verses[index];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Verse ${v.ref}',
-                            style: const TextStyle(
-                              fontFamily: 'Lora',
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.mutedBrown,
+                : LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Ensure verse text has a finite width so wrap+indent works.
+                      final width = constraints.maxWidth.isFinite && constraints.maxWidth > 0
+                          ? constraints.maxWidth
+                          : OverviewConstants.versePanelWidth;
+                      return ListView.separated(
+                        controller: scrollController,
+                        padding: const EdgeInsets.all(16),
+                        itemCount: verses.length,
+                        separatorBuilder: (_, __) => const Divider(
+                          height: 24,
+                          color: AppColors.borderLight,
+                        ),
+                        itemBuilder: (context, index) {
+                          final v = verses[index];
+                          return SizedBox(
+                            width: width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Verse ${v.ref}',
+                                  style: const TextStyle(
+                                    fontFamily: 'Lora',
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.mutedBrown,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                BcvVerseText(
+                                  text: v.text,
+                                  style: const TextStyle(
+                                    fontFamily: 'Lora',
+                                    fontSize: 15,
+                                    height: 1.6,
+                                    color: AppColors.bodyText,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          BcvVerseText(
-                            text: v.text,
-                            style: const TextStyle(
-                              fontFamily: 'Lora',
-                              fontSize: 15,
-                              height: 1.6,
-                              color: AppColors.bodyText,
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       );
                     },
                   ),

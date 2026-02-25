@@ -18,6 +18,7 @@ class OverviewNodeCard extends StatelessWidget {
     required this.isSelected,
     required this.onTap,
     required this.onBookTap,
+    this.verseRange,
   });
 
   final String path;
@@ -26,6 +27,9 @@ class OverviewNodeCard extends StatelessWidget {
   final bool hasChildren;
   final bool isExpanded;
   final bool isSelected;
+
+  /// Pre-computed verse range (e.g. "v1.1ab", "v1.2-1.3"). Shown before the book icon.
+  final String? verseRange;
 
   /// Expand / collapse (chevron tap only).
   final VoidCallback onTap;
@@ -138,6 +142,20 @@ class OverviewNodeCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          // Verse range (e.g. v1.1ab, v1.2-1.3) — before book icon.
+                          if (verseRange != null && verseRange!.isNotEmpty) ...[
+                            const SizedBox(width: 6),
+                            Text(
+                              verseRange!,
+                              style: TextStyle(
+                                fontFamily: 'Lora',
+                                fontSize: 11,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.mutedBrown.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ],
                           // Book icon — opens verse panel.
                           const SizedBox(width: 6),
                           GestureDetector(

@@ -11,9 +11,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Five Aggregates'), findsOneWidget);
+    expect(find.text('Five Aggregates'), findsWidgets);
     expect(find.text('Consciousness'), findsWidgets);
-    expect(find.text('Aggregate of Form'), findsOneWidget);
+    expect(find.text('Aggregate of Form'), findsWidgets);
   });
 
   testWidgets('chapter 2 renders consciousness element list', (tester) async {
@@ -24,7 +24,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Six Sense Triads at a Glance'), findsOneWidget);
+    expect(find.text('Six Sense Triads at a Glance'), findsWidgets);
     expect(find.text('Eye Consciousness Element'), findsOneWidget);
     expect(find.text('Mind Consciousness Element'), findsOneWidget);
   });

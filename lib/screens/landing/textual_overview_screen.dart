@@ -368,6 +368,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                         onBookTap: _onBookTap,
                         onExpansionChanged: _onExpansionChanged,
                         scrollToPath: _scrollToPath,
+                        sectionVerseRanges:
+                            VerseHierarchyService.instance.getSectionVerseRangeMapSync(),
                       ),
                     ),
                     AnimatedContainer(
@@ -397,6 +399,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                   onBookTap: _onBookTap,
                   onExpansionChanged: _onExpansionChanged,
                   scrollToPath: _scrollToPath,
+                  sectionVerseRanges:
+                      VerseHierarchyService.instance.getSectionVerseRangeMapSync(),
                 ),
         ),
       ],

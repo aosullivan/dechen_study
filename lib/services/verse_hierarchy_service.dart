@@ -469,6 +469,45 @@ class VerseHierarchyService {
   Map<String, Set<String>>? _sectionToRefsIndex;
   Map<String, Set<String>>? _sectionOwnRefsIndex;
 
+  /// Pre-computed section path -> verse range string (e.g. "v1.1ab", "v1.2-1.3").
+  /// Built once on first access; use for overview tree labels.
+  Map<String, String>? _sectionToVerseRange;
+
+  /// Returns a map of section path -> short verse range string for display in the overview.
+  /// E.g. "v1.1ab", "v1.2-1.3", "v4.2-v4.3". Computed once and cached.
+  /// Call after _ensureLoaded().
+  Map<String, String> getSectionVerseRangeMapSync() {
+    if (_sectionToVerseRange != null) return _sectionToVerseRange!;
+    _ensureSectionToRefsIndex();
+    final flat = getFlatSectionsSync();
+    final out = <String, String>{};
+    for (final section in flat) {
+      final path = section.path;
+      final ownRefs = getOwnVerseRefsForSectionSync(path);
+      final treeRefs = getTreeVerseRefsForSectionSync(path);
+      final refs = (ownRefs.isNotEmpty
+              ? ownRefs
+              : treeRefs.isNotEmpty
+                  ? treeRefs
+                  : getVerseRefsForSectionSync(path))
+          .toList()
+        ..sort(_compareVerseRefsFull);
+      if (refs.isEmpty) continue;
+      out[path] = _formatVerseRange(refs);
+    }
+    _sectionToVerseRange = out;
+    return _sectionToVerseRange!;
+  }
+
+  /// Format sorted refs as "v1.1ab" or "v1.2-1.3", "v4.2-v4.3".
+  static String _formatVerseRange(List<String> refs) {
+    if (refs.isEmpty) return '';
+    if (refs.length == 1) return 'v${refs.first}';
+    final first = refs.first;
+    final last = refs.last;
+    return 'v$first-$last';
+  }
+
   /// Returns breadcrumb hierarchy for section path (e.g. "3.1.3" -> root to that section).
   /// Call after _ensureLoaded(). Used when user taps a section to update UI immediately.
   List<Map<String, String>> getHierarchyForSectionSync(String sectionPath) {

@@ -17,12 +17,16 @@ class OverviewTreeView extends StatefulWidget {
     required this.onBookTap,
     required this.onExpansionChanged,
     this.scrollToPath,
+    this.sectionVerseRanges,
   });
 
   final List<({String path, String title, int depth})> flatSections;
 
   /// Which section paths are expanded (owned by parent).
   final Set<String> expandedPaths;
+
+  /// Pre-computed verse range per section (e.g. "v1.1ab", "v1.2-1.3"). Optional.
+  final Map<String, String>? sectionVerseRanges;
 
   final String? selectedPath;
 
@@ -137,6 +141,7 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
   ) {
     final textDirection = Directionality.of(context);
     var requiredWidth = 0.0;
+    final verseRanges = widget.sectionVerseRanges;
     for (final section in visibleSections) {
       final shortNumber = _shortNumber(section.path);
       final titleSpan = TextSpan(
@@ -171,12 +176,26 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
       final expandIconSlot = hasChildren ? 40.0 : 20.0; // 40 = tap target for chevron
       final horizontalPadding = 20.0;
       final gapAfterIcon = 4.0;
+      var verseRangeWidth = 0.0;
+      final rangeStr = verseRanges?[section.path];
+      if (rangeStr != null && rangeStr.isNotEmpty) {
+        final rangePainter = TextPainter(
+          text: TextSpan(
+            text: rangeStr,
+            style: const TextStyle(fontFamily: 'Lora', fontSize: 11),
+          ),
+          textDirection: textDirection,
+          maxLines: 1,
+        )..layout();
+        verseRangeWidth = 6.0 + rangePainter.width; // SizedBox(6) + text
+      }
       final bookIconWidth = 26.0; // SizedBox(6) + Padding(4) + Icon(16)
       final rowWidth = indent +
           horizontalPadding +
           expandIconSlot +
           gapAfterIcon +
           labelPainter.width +
+          verseRangeWidth +
           bookIconWidth;
       if (rowWidth > requiredWidth) requiredWidth = rowWidth;
     }
@@ -262,6 +281,7 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
                               widget.expandedPaths.contains(visibleSections[i].path),
                           isSelected:
                               visibleSections[i].path == widget.selectedPath,
+                          verseRange: widget.sectionVerseRanges?[visibleSections[i].path],
                           onTap: parentPaths.contains(visibleSections[i].path)
                               ? () =>
                                   _toggleExpanded(visibleSections[i].path)

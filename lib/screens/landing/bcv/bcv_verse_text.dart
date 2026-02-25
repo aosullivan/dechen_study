@@ -19,7 +19,10 @@ class BcvVerseText extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final logicalLines = text.split('\n');
-        final maxWidth = constraints.maxWidth;
+        // ListView can pass unbounded maxWidth; use a finite width so wrap+indent works.
+        final maxWidth = constraints.maxWidth.isFinite && constraints.maxWidth > 0
+            ? constraints.maxWidth
+            : 400.0;
         if (maxWidth <= 0) return Text(text, style: style);
 
         final children = <Widget>[];
@@ -29,24 +32,13 @@ class BcvVerseText extends StatelessWidget {
             children.add(SizedBox(height: style.height != null ? style.fontSize! * style.height! : 18));
             continue;
           }
-          // First logical line flush left; subsequent lines indented (same as wrapped continuation).
-          final isFirstLine = i == 0;
-          final lineWidth = isFirstLine ? maxWidth : maxWidth - wrapIndent;
-          final lineIndent = isFirstLine ? wrapIndent : 0.0; // Only first line's wrap gets extra indent
-          final lineWidget = _IndentedLine(
+          // Every logical line starts flush left. Only when a line wraps does the continuation get indented.
+          children.add(_IndentedLine(
             line: line,
             style: style,
-            maxWidth: lineWidth,
-            indent: lineIndent,
-          );
-          children.add(
-            isFirstLine
-                ? lineWidget
-                : Padding(
-                    padding: EdgeInsets.only(left: wrapIndent),
-                    child: lineWidget,
-                  ),
-          );
+            maxWidth: maxWidth,
+            indent: wrapIndent,
+          ));
           if (i < logicalLines.length - 1) {
             final lineGap = (style.fontSize ?? 18) *
                 ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0);
@@ -78,58 +70,96 @@ class _IndentedLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (line.isEmpty) return Text(line, style: style);
+    if (maxWidth <= 0 || !maxWidth.isFinite) return Text(line, style: style);
+
     final painter = TextPainter(
       text: TextSpan(text: line, style: style),
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: maxWidth);
+
     final lineHeight = painter.preferredLineHeight;
-    if (lineHeight <= 0 || painter.height <= lineHeight) {
+    if (lineHeight <= 0) {
       painter.dispose();
       return Text(line, style: style);
     }
 
-    // Find where the first visual line ends.
-    var firstLineEnd = painter
-        .getPositionForOffset(Offset(maxWidth, lineHeight - 1))
-        .offset
-        .clamp(0, line.length);
+    // Does this line wrap? (more than one visual line)
+    final wraps = painter.height > lineHeight + 1;
+    if (!wraps) {
+      painter.dispose();
+      return Text(line, style: style);
+    }
+
+    // Build list of (start, end) character offsets for each visual line.
+    final segmentEnds = <int>[];
+    var y = lineHeight / 2;
+    while (y < painter.height && segmentEnds.length < 100) {
+      final position = painter.getPositionForOffset(Offset(maxWidth - 1, y));
+      var end = position.offset.clamp(0, line.length);
+      // Prefer word boundary so we don't split mid-word.
+      if (end < line.length && end > 0 && line[end] != ' ' && line[end] != '\n') {
+        final lastSpace = line.lastIndexOf(' ', end);
+        if (lastSpace > (segmentEnds.isEmpty ? 0 : segmentEnds.last)) {
+          end = lastSpace + 1;
+        }
+      }
+      segmentEnds.add(end);
+      if (end >= line.length) break;
+      y += lineHeight;
+    }
     painter.dispose();
 
-    if (firstLineEnd >= line.length) return Text(line, style: style);
+    if (segmentEnds.isEmpty) return Text(line, style: style);
 
-    // Break at a word boundary so we don't split mid-word and lose a word when trimming.
-    // Only back up when we'd split a word (current position not after a space).
-    if (firstLineEnd > 0 &&
-        firstLineEnd < line.length &&
-        line[firstLineEnd - 1] != ' ' &&
-        line[firstLineEnd - 1] != '\n') {
-      final lastSpace = line.lastIndexOf(' ', firstLineEnd);
-      if (lastSpace > 0) {
-        firstLineEnd = lastSpace + 1; // include space in first line
+    // Merge any duplicate end offsets (same line) and ensure strictly increasing.
+    final ends = <int>[];
+    var last = 0;
+    for (final e in segmentEnds) {
+      if (e > last) {
+        ends.add(e);
+        last = e;
+      }
+      if (last >= line.length) break;
+    }
+    if (ends.isEmpty) return Text(line, style: style);
+
+    var start = 0;
+    final children = <Widget>[];
+    for (var i = 0; i < ends.length; i++) {
+      final end = ends[i];
+      final segment = line.substring(start, end).trimRight();
+      if (segment.isNotEmpty) {
+        final isFirst = i == 0;
+        final textWidget = Text(segment, style: style);
+        if (isFirst) {
+          children.add(textWidget);
+        } else {
+          children.add(
+            Padding(
+              padding: EdgeInsets.only(left: indent),
+              child: SizedBox(
+                width: (maxWidth - indent).clamp(0.0, double.infinity),
+                child: textWidget,
+              ),
+            ),
+          );
+        }
+      }
+      start = end;
+      if (start >= line.length) break;
+      if (i < ends.length - 1) {
+        children.add(SizedBox(height: (style.fontSize ?? 18) * ((style.height ?? 1.5) - 1.0).clamp(0.0, 20.0)));
       }
     }
 
-    final firstLineText = line.substring(0, firstLineEnd).trimRight();
-    final restText = line.substring(firstLineEnd).trimLeft();
+    if (children.isEmpty) return Text(line, style: style);
+    if (children.length == 1) return children[0];
 
-    if (restText.isEmpty) return Text(line, style: style);
-
-    // Render first line at full width, continuation lines indented.
-    // Constrain continuation width so it wraps at the same effective width and
-    // all wrapped continuation lines stay at the same indent.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(firstLineText, style: style),
-        Padding(
-          padding: EdgeInsets.only(left: indent),
-          child: SizedBox(
-            width: maxWidth - indent,
-            child: Text(restText, style: style),
-          ),
-        ),
-      ],
+      children: children,
     );
   }
 }
