@@ -52,11 +52,19 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
     // that point are stripped — they belong to the outline shown in the banner,
     // not to the readable content.
     bool seenVerse = false;
+    final proseBuffer = <String>[];
+
+    void flushProse() {
+      if (proseBuffer.isEmpty) return;
+      segs.add(_ProseSeg(proseBuffer.join(' ')));
+      proseBuffer.clear();
+    }
 
     for (final raw in text.split('\n')) {
       final t = raw.trim();
 
       if (t.isEmpty) {
+        flushProse();
         if (segs.isNotEmpty && segs.last is! _BlankSeg) {
           segs.add(const _BlankSeg());
         }
@@ -66,6 +74,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
       // Verse ref line (e.g. "1.32") — keep even in preamble
       if (RegExp(r'^\d+\.\d+(?:[a-d]+)?\s*$', caseSensitive: false)
           .hasMatch(t)) {
+        flushProse();
         segs.add(_RefSeg(t));
         continue;
       }
@@ -78,6 +87,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
 
       // Verse text line (>>> prefix)
       if (t.startsWith('>>>')) {
+        flushProse();
         seenVerse = true;
         final verse = t.length > 4
             ? t.substring(4)
@@ -88,9 +98,10 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
 
       // Prose / commentary — also marks end of preamble
       seenVerse = true;
-      segs.add(_ProseSeg(raw.trimRight()));
+      proseBuffer.add(t);
     }
 
+    flushProse();
     return segs;
   }
 
@@ -334,11 +345,7 @@ class _SegmentBody extends StatelessWidget {
         if (children.isNotEmpty) children.add(const SizedBox(height: 16));
       } else if (seg is _ProseSeg) {
         if (children.isNotEmpty) children.add(const SizedBox(height: 12));
-        children.add(BcvVerseText(
-          text: seg.text,
-          style: proseStyle,
-          wrapIndent: 24.0,
-        ));
+        children.add(Text(seg.text, style: proseStyle));
       }
     }
     flushVerse();
