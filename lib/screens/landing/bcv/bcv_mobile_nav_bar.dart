@@ -9,6 +9,7 @@ import 'bcv_read_constants.dart';
 class BcvMobileNavBar extends StatelessWidget {
   const BcvMobileNavBar({
     super.key,
+    this.showChapter = true,
     required this.chaptersCollapsed,
     required this.sectionCollapsed,
     required this.breadcrumbCollapsed,
@@ -17,6 +18,7 @@ class BcvMobileNavBar extends StatelessWidget {
     required this.onToggleBreadcrumb,
   });
 
+  final bool showChapter;
   final bool chaptersCollapsed;
   final bool sectionCollapsed;
   final bool breadcrumbCollapsed;
@@ -44,12 +46,13 @@ class BcvMobileNavBar extends StatelessWidget {
         ),
         child: Row(
           children: [
-            _Segment(
-              label: 'Chapter',
-              selected: !chaptersCollapsed,
-              onTap: onToggleChapter,
-              theme: theme,
-            ),
+            if (showChapter)
+              _Segment(
+                label: 'Chapter',
+                selected: !chaptersCollapsed,
+                onTap: onToggleChapter,
+                theme: theme,
+              ),
             _Segment(
               label: 'Section',
               selected: !sectionCollapsed,

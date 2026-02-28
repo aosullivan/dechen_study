@@ -58,7 +58,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   void initState() {
     super.initState();
     final config = getStudyText(widget.textId);
-    if (config != null && config.hasFullStudySupport) {
+    if (config != null && config.hasCoreStudySupport) {
       unawaited(preloadForText(widget.textId));
     }
   }
@@ -72,31 +72,36 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     final isCompactPhone = viewport.width <= 430 && viewport.height <= 950;
     final isVerySmallPhone = viewport.width <= 375 && viewport.height <= 820;
     final options = <_StudyModeOption>[
-      _StudyModeOption(
-        icon: Icons.today_outlined,
-        label: 'Daily Verses',
-        onTap: () => _openDaily(context),
-      ),
-      _StudyModeOption(
-        icon: Icons.quiz_outlined,
-        label: 'Guess the Chapter',
-        onTap: () => _openGuessTheChapter(context),
-      ),
-      _StudyModeOption(
-        icon: Icons.fact_check_outlined,
-        label: 'Quiz',
-        onTap: () => _openQuiz(context),
-      ),
-      _StudyModeOption(
-        icon: Icons.book_outlined,
-        label: 'Read',
-        onTap: () => _openRead(context),
-      ),
-      _StudyModeOption(
-        icon: Icons.account_tree_outlined,
-        label: 'Textual Structure',
-        onTap: () => _openOverview(context),
-      ),
+      if (supportsStudyMode(textId, 'daily'))
+        _StudyModeOption(
+          icon: Icons.today_outlined,
+          label: 'Daily Verses',
+          onTap: () => _openDaily(context),
+        ),
+      if (supportsStudyMode(textId, 'guess_chapter'))
+        _StudyModeOption(
+          icon: Icons.quiz_outlined,
+          label: 'Guess the Chapter',
+          onTap: () => _openGuessTheChapter(context),
+        ),
+      if (supportsStudyMode(textId, 'quiz'))
+        _StudyModeOption(
+          icon: Icons.fact_check_outlined,
+          label: 'Quiz',
+          onTap: () => _openQuiz(context),
+        ),
+      if (supportsStudyMode(textId, 'read'))
+        _StudyModeOption(
+          icon: Icons.book_outlined,
+          label: 'Read',
+          onTap: () => _openRead(context),
+        ),
+      if (supportsStudyMode(textId, 'overview'))
+        _StudyModeOption(
+          icon: Icons.account_tree_outlined,
+          label: 'Textual Structure',
+          onTap: () => _openOverview(context),
+        ),
     ];
 
     return PopScope<void>(
@@ -131,7 +136,8 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           ),
           children: [
             if (getStudyText(textId) case final config?) ...[
-              if (config.description != null || config.coverAssetPath != null) ...[
+              if (config.description != null ||
+                  config.coverAssetPath != null) ...[
                 _TextHeroCard(
                   config: config,
                   compact: isCompactPhone,
@@ -150,7 +156,8 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
                 onTap: option.onTap,
               ),
             if (getStudyText(textId) case final config?) ...[
-              if (config.purchaseRootTextUrl != null || config.purchaseCommentaryUrl != null) ...[
+              if (config.purchaseRootTextUrl != null ||
+                  config.purchaseCommentaryUrl != null) ...[
                 SizedBox(height: isCompactPhone ? 4 : 8),
                 _PurchaseFooterLinks(
                   compact: isCompactPhone,
@@ -159,13 +166,15 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
                     context,
                     linkType: 'root_text',
                     usUrl: config.purchaseRootTextUrl ?? '',
-                    localizedSearchTerm: config.purchaseRootTextSearchTerm ?? config.title,
+                    localizedSearchTerm:
+                        config.purchaseRootTextSearchTerm ?? config.title,
                   ),
                   onBuyCommentary: () => _openPurchaseLink(
                     context,
                     linkType: 'commentary',
                     usUrl: config.purchaseCommentaryUrl ?? '',
-                    localizedSearchTerm: config.purchaseCommentarySearchTerm ?? '${config.title} commentary',
+                    localizedSearchTerm: config.purchaseCommentarySearchTerm ??
+                        '${config.title} commentary',
                   ),
                 ),
               ],
@@ -210,11 +219,44 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
   }
 
   Future<void> _openRead(BuildContext context) async {
-    _openStudyMode(
-      context,
+    if (!supportsStudyMode(textId, 'read')) {
+      _showComingSoon(context, 'Read');
+      return;
+    }
+
+    unawaited(UsageMetricsService.instance.trackTextOptionTapped(
+      textId: textId,
       targetMode: 'read',
-      screen: _ReadChapterSelectionScreen(title: title, textId: textId),
-      comingSoonLabel: 'Read',
+    ));
+
+    final chapters = await VerseService.instance.getChapters(textId);
+    if (!context.mounted) return;
+
+    // Single-chapter texts (e.g. King of Aspiration Prayers) can go straight
+    // to the reader without a chapter picker step.
+    if (chapters.length <= 1) {
+      final bm = await BookmarkService.instance.load(textId);
+      if (!context.mounted) return;
+      final initialChapter = bm?.chapterNumber ?? chapters.firstOrNull?.number;
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => ReadScreen(
+            textId: textId,
+            title: title,
+            initialChapterNumber: initialChapter,
+            scrollToVerseIndex: bm?.verseIndex,
+            initialSegmentRef: bm?.verseRef,
+          ),
+        ),
+      );
+      return;
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            _ReadChapterSelectionScreen(title: title, textId: textId),
+      ),
     );
   }
 
@@ -268,7 +310,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     required Widget screen,
     required String comingSoonLabel,
   }) {
-    if (hasFullStudySupport(textId)) {
+    if (supportsStudyMode(textId, targetMode)) {
       unawaited(UsageMetricsService.instance.trackTextOptionTapped(
         textId: textId,
         targetMode: targetMode,

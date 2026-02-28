@@ -154,7 +154,7 @@ Audit outputs:
 - `texts/empty_leaf_audit.json` – machine-readable details
 
 Notes:
-- `texts/overviews-pages (EOS).txt` and `texts/verse_commentary_mapping.txt` remain useful for audit/comparison tooling.
+- `texts/bodhicaryavatara/overviews_pages_eos.txt` and `texts/bodhicaryavatara/verse_commentary_mapping.txt` remain useful for audit/comparison tooling.
 
 ## Tests
 

@@ -1,4 +1,4 @@
-/// Configuration for a study text (full five-mode support: Daily, Quiz, Read, etc.).
+/// Configuration for a study text.
 class StudyTextConfig {
   const StudyTextConfig({
     required this.textId,
@@ -36,13 +36,34 @@ class StudyTextConfig {
   final String? purchaseRootTextSearchTerm;
   final String? purchaseCommentarySearchTerm;
 
-  /// True when all required data assets are present for the five study modes.
-  bool get hasFullStudySupport =>
+  /// Core data needed for daily/read/overview flows.
+  bool get hasCoreStudySupport =>
       parsedJsonPath.isNotEmpty &&
       hierarchyPath.isNotEmpty &&
       commentaryPath.isNotEmpty &&
-      sectionCluesPath.isNotEmpty &&
-      (quizBeginnerPath != null && quizBeginnerPath!.isNotEmpty);
+      sectionCluesPath.isNotEmpty;
+
+  /// Quiz data availability.
+  bool get hasQuizSupport =>
+      quizBeginnerPath != null && quizBeginnerPath!.isNotEmpty;
+
+  /// Returns whether a specific study mode is supported for this text.
+  bool supportsMode(String mode) {
+    switch (mode) {
+      case 'daily':
+      case 'read':
+      case 'overview':
+        return hasCoreStudySupport;
+      case 'guess_chapter':
+      case 'quiz':
+        return hasQuizSupport;
+      default:
+        return false;
+    }
+  }
+
+  /// Legacy "full support" (core + quiz).
+  bool get hasFullStudySupport => hasCoreStudySupport && hasQuizSupport;
 }
 
 /// Registry of study texts. Add a new text by appending a [StudyTextConfig] and
@@ -67,6 +88,18 @@ final List<StudyTextConfig> studyTextRegistry = [
     purchaseRootTextSearchTerm: 'Bodhicaryavatara Santideva root text',
     purchaseCommentarySearchTerm: 'Bodhicaryavatara Sonam Tsemo commentary',
   ),
+  const StudyTextConfig(
+    textId: 'kingofaspirations',
+    title: 'The King of Aspiration Prayers',
+    path: '/kingofaspirations',
+    author: 'SAMANTABHADRA',
+    description:
+        'Daily verses, read mode, and structural overview for Samantabhadra’s Aspiration to Good Actions.',
+    parsedJsonPath: 'texts/kingofaspirations/koa_parsed.json',
+    hierarchyPath: 'texts/kingofaspirations/verse_hierarchy_map.json',
+    commentaryPath: 'texts/kingofaspirations/verse_commentary_mapping.txt',
+    sectionCluesPath: 'texts/kingofaspirations/section_clues.json',
+  ),
 ];
 
 /// Returns the config for [textId], or null if not found.
@@ -83,9 +116,24 @@ List<StudyTextConfig> getStudyTextsWithFullSupport() {
   return studyTextRegistry.where((c) => c.hasFullStudySupport).toList();
 }
 
+/// Returns all study texts with core support (daily/read/overview).
+List<StudyTextConfig> getStudyTextsWithCoreSupport() {
+  return studyTextRegistry.where((c) => c.hasCoreStudySupport).toList();
+}
+
+/// Returns true if [textId] has core support.
+bool hasCoreStudySupport(String textId) {
+  return getStudyText(textId)?.hasCoreStudySupport ?? false;
+}
+
 /// Returns true if [textId] has full study support (all five buttons work).
 bool hasFullStudySupport(String textId) {
   return getStudyText(textId)?.hasFullStudySupport ?? false;
+}
+
+/// Returns true if [mode] is supported for [textId].
+bool supportsStudyMode(String textId, String mode) {
+  return getStudyText(textId)?.supportsMode(mode) ?? false;
 }
 
 /// Returns the study text whose [path] matches [path], or null.

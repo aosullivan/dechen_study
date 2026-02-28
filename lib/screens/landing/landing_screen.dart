@@ -18,41 +18,9 @@ class LandingScreen extends StatefulWidget {
 
 class _LandingScreenState extends State<LandingScreen> {
   static const Color _backgroundYellow = AppColors.landingBackground;
-  bool _redirectingToGateway = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (isAppDechenStudyHost()) {
-      _redirectingToGateway = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        replaceAppPath('/gateway-to-knowledge');
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute<void>(
-            builder: (_) => const GatewayLandingScreen(),
-          ),
-        );
-      });
-    }
-    // Do not preload BCV here. Gateway and Bodhicaryavatara are separate in prod;
-    // we only load BCV when the user taps Bodhicaryavatara (see TextOptionsScreen).
-  }
 
   @override
   Widget build(BuildContext context) {
-    if (_redirectingToGateway) {
-      return const Scaffold(
-        backgroundColor: _backgroundYellow,
-        body: Center(
-          child: SizedBox(
-            width: 24,
-            height: 24,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-        ),
-      );
-    }
     return Scaffold(
       backgroundColor: _backgroundYellow,
       body: SafeArea(
@@ -68,16 +36,18 @@ class _LandingScreenState extends State<LandingScreen> {
                   author: 'JAMGON JU MIPHAM',
                   onTap: () => _openGatewayToKnowledge(context),
                 ),
-                ...getStudyTextsWithFullSupport().map(
-                  (config) => [
-                    const SizedBox(height: 20),
-                    _TextLandingCard(
-                      title: config.title,
-                      author: config.author,
-                      onTap: () => _openTextOptions(context, config),
-                    ),
-                  ],
-                ).expand((e) => e),
+                ...getStudyTextsWithCoreSupport()
+                    .map(
+                      (config) => [
+                        const SizedBox(height: 20),
+                        _TextLandingCard(
+                          title: config.title,
+                          author: config.author,
+                          onTap: () => _openTextOptions(context, config),
+                        ),
+                      ],
+                    )
+                    .expand((e) => e),
               ],
             ),
           ),

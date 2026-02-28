@@ -9,7 +9,7 @@ import '../services/verse_hierarchy_service.dart';
 /// Call when the user is entering a study-text flow (e.g. TextOptionsScreen with that textId).
 Future<void> preloadForText(String textId) async {
   final config = getStudyText(textId);
-  if (config == null || !config.hasFullStudySupport) return;
+  if (config == null || !config.hasCoreStudySupport) return;
   await Future.wait([
     VerseService.instance.preload(textId),
     VerseHierarchyService.instance.preload(textId),

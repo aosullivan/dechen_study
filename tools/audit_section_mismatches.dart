@@ -3,7 +3,7 @@
 //
 // Run: dart run tools/audit_section_mismatches.dart
 //
-// Compares section titles in overviews-pages (EOS).txt vs verse_commentary_mapping.txt.
+// Compares section titles in overviews_pages_eos.txt vs verse_commentary_mapping.txt.
 // Reports mapping headings that failed to match or matched only via fuzzy/prefix,
 // and suggests which overview section they may correspond to.
 
@@ -12,9 +12,9 @@ import 'dart:io';
 
 import 'shared/overview_parser.dart';
 
-const overviewPath = 'texts/overviews-pages (EOS).txt';
-const mappingPath = 'texts/verse_commentary_mapping.txt';
-const jsonPath = 'texts/verse_hierarchy_map.json';
+const overviewPath = 'texts/bodhicaryavatara/overviews_pages_eos.txt';
+const mappingPath = 'texts/bodhicaryavatara/verse_commentary_mapping.txt';
+const jsonPath = 'texts/bodhicaryavatara/verse_hierarchy_map.json';
 
 /// Word overlap score (0-1)
 double wordOverlap(String a, String b) {

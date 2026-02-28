@@ -50,6 +50,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   /// Set when a picker changes — the tree scrolls to this path.
   String? _scrollToPath;
 
+  bool get _showWholeStructureByDefault => widget.textId == 'kingofaspirations';
+
   @override
   void initState() {
     super.initState();
@@ -104,7 +106,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   Future<void> _load() async {
     await preloadForText(widget.textId);
     if (!mounted) return;
-    final flatSections = VerseHierarchyService.instance.getFlatSectionsSync(widget.textId);
+    final flatSections =
+        VerseHierarchyService.instance.getFlatSectionsSync(widget.textId);
     final restoredPath = await _loadLastPath();
     if (!mounted) return;
 
@@ -184,7 +187,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   void _onPickerChanged(int depth, String? path) {
     unawaited(_usageMetrics.trackEvent(
       eventName: 'overview_picker_changed',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'overview',
       sectionPath: path,
       properties: {'depth': depth},
@@ -249,7 +252,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   void _onBookTap(({String path, String title, int depth}) section) {
     unawaited(_usageMetrics.trackEvent(
       eventName: 'overview_book_tapped',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'overview',
       sectionPath: section.path,
       sectionTitle: section.title,
@@ -312,7 +315,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   void _openInReaderFromOverview(ReaderOpenParams params) {
     unawaited(_usageMetrics.trackEvent(
       eventName: 'open_full_text_from_overview',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'overview',
       sectionPath: _selectedPath,
       sectionTitle: _selectedTitle,
@@ -353,6 +356,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   /// Filtered flat sections: only the top-level picker (depth 0) filters.
   /// Deeper pickers just scroll, so the full subtree stays visible.
   List<({String path, String title, int depth})> get _filteredSections {
+    if (_showWholeStructureByDefault) return _flatSections;
     if (_pickerSelections.isEmpty) return _flatSections;
     // Only filter by the first (top-level) selection.
     final root = _pickerSelections[0];
@@ -396,6 +400,60 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   Widget _buildBody(BuildContext context) {
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
+    final fullExpandedPaths = _flatSections.map((s) => s.path).toSet();
+
+    if (_showWholeStructureByDefault) {
+      return isDesktop
+          ? Row(
+              children: [
+                Expanded(
+                  child: OverviewTreeView(
+                    flatSections: _filteredSections,
+                    expandedPaths: fullExpandedPaths,
+                    selectedPath: _selectedPath,
+                    onBookTap: _onBookTap,
+                    onCardTap: _onCardTap,
+                    onExpansionChanged: (_, __) {},
+                    scrollToPath: _scrollToPath,
+                    sectionVerseRanges: VerseHierarchyService.instance
+                        .getSectionVerseRangeMapSync(widget.textId),
+                  ),
+                ),
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  width: _selectedPath != null
+                      ? OverviewConstants.versePanelWidth
+                      : 0,
+                  child: _selectedPath != null
+                      ? OverviewVersePanel(
+                          key: ValueKey(_selectedPath),
+                          textId: widget.textId,
+                          sectionPath: _selectedPath!,
+                          sectionTitle: _selectedTitle ?? '',
+                          onClose: () => setState(() {
+                            _selectedPath = null;
+                            _selectedTitle = null;
+                          }),
+                          onOpenInReader: _openInReaderFromOverview,
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            )
+          : OverviewTreeView(
+              flatSections: _filteredSections,
+              expandedPaths: fullExpandedPaths,
+              selectedPath: _selectedPath,
+              onBookTap: _onBookTap,
+              onCardTap: _onCardTap,
+              onExpansionChanged: (_, __) {},
+              scrollToPath: _scrollToPath,
+              sectionVerseRanges: VerseHierarchyService.instance
+                  .getSectionVerseRangeMapSync(widget.textId),
+            );
+    }
+
     final topSections = _childrenOf('')
       ..sort(
           (a, b) => _pathOrderValue(a.path).compareTo(_pathOrderValue(b.path)));
@@ -439,8 +497,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                         onCardTap: _onCardTap,
                         onExpansionChanged: _onExpansionChanged,
                         scrollToPath: _scrollToPath,
-                        sectionVerseRanges:
-                            VerseHierarchyService.instance.getSectionVerseRangeMapSync(widget.textId),
+                        sectionVerseRanges: VerseHierarchyService.instance
+                            .getSectionVerseRangeMapSync(widget.textId),
                       ),
                     ),
                     AnimatedContainer(
@@ -473,8 +531,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                   onCardTap: _onCardTap,
                   onExpansionChanged: _onExpansionChanged,
                   scrollToPath: _scrollToPath,
-                  sectionVerseRanges:
-                      VerseHierarchyService.instance.getSectionVerseRangeMapSync(widget.textId),
+                  sectionVerseRanges: VerseHierarchyService.instance
+                      .getSectionVerseRangeMapSync(widget.textId),
                 ),
         ),
       ],

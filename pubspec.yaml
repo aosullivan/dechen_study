@@ -69,6 +69,11 @@ flutter:
     - texts/bodhicaryavatara/root_text_quiz_400.txt
     - texts/bodhicaryavatara/section_clues.json
     - texts/bodhicaryavatara/overviews_pages_eos.txt
+    - texts/kingofaspirations/koa_parsed.json
+    - texts/kingofaspirations/verse_commentary_mapping.txt
+    - texts/kingofaspirations/verse_hierarchy_map.json
+    - texts/kingofaspirations/section_clues.json
+    - texts/kingofaspirations/overviews_pages_eos.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

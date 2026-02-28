@@ -48,6 +48,7 @@ class ReadScreen extends StatefulWidget {
 
   /// Which study text to load (from [StudyTextConfig]).
   final String textId;
+
   /// Optional starting chapter when opening from the text menu.
   /// The full document still loads; this only changes initial scroll position.
   final int? initialChapterNumber;
@@ -158,6 +159,7 @@ class _ReadScreenState extends State<ReadScreen>
 
   /// True while the user is actively scrolling (finger/wheel down). Gates visibility processing.
   bool _isUserScrolling = false;
+
   /// For plain reader opens (no deep-link/bookmark/chapter target), ignore
   /// visibility-driven section changes until the user intentionally scrolls.
   bool _deferVisibilityUntilUserScroll = false;
@@ -206,6 +208,8 @@ class _ReadScreenState extends State<ReadScreen>
   double get _verseWrapIndent => _isLaptopLayout ? 24.0 : 8.0;
 
   Set<int> get _highlightSet => _highlightVerseIndices ?? const {};
+  bool get _supportsInlineCommentary => _textId == 'bodhicaryavatara';
+  bool get _showsChapterNavigation => _chapters.length > 1;
 
   bool get _hasInitialHighlight =>
       widget.highlightSectionIndices != null &&
@@ -370,11 +374,11 @@ class _ReadScreenState extends State<ReadScreen>
       final chapterNum = _currentChapterNumber;
       if (chapterNum == null) return;
       BookmarkService.instance.save(
-      _textId,
-      verseIndex: verseIndex,
-      chapterNumber: chapterNum,
-      verseRef: _verseService.getVerseRef(_textId, verseIndex),
-    );
+        _textId,
+        verseIndex: verseIndex,
+        chapterNumber: chapterNum,
+        verseRef: _verseService.getVerseRef(_textId, verseIndex),
+      );
     });
   }
 
@@ -405,8 +409,8 @@ class _ReadScreenState extends State<ReadScreen>
       _deferVisibilityUntilUserScroll = false;
     });
     try {
-    final chapters = await _verseService.getChapters(_textId);
-    final verses = _verseService.getVerses(_textId);
+      final chapters = await _verseService.getChapters(_textId);
+      final verses = _verseService.getVerses(_textId);
       if (mounted) {
         setState(() {
           _chapters = chapters;
@@ -473,8 +477,8 @@ class _ReadScreenState extends State<ReadScreen>
             _loadCommentaryForHighlightedSection();
           }
           _scheduleInitialChapterScroll();
-          _hierarchyService
-              .getHierarchyForVerse(_textId, '1.1'); // Preload hierarchy map
+          _hierarchyService.getHierarchyForVerse(
+              _textId, '1.1'); // Preload hierarchy map
           _setInitialBreadcrumb();
         }
       }
@@ -568,10 +572,11 @@ class _ReadScreenState extends State<ReadScreen>
 
   /// Load commentary for the currently highlighted section (e.g. from Daily) so the Commentary button shows.
   Future<void> _loadCommentaryForHighlightedSection() async {
+    if (!_supportsInlineCommentary) return;
     if (_highlightSet.isEmpty) return;
     final firstIndex =
         _minHighlightIndex ?? _highlightSet.reduce((a, b) => a < b ? a : b);
-    final baseRef = _verseService.getVerseRef(_textId,firstIndex);
+    final baseRef = _verseService.getVerseRef(_textId, firstIndex);
     if (baseRef == null) return;
     final preferredRef = _initialSegmentRefForVerseIndex(firstIndex);
     CommentaryEntry? entry = await _getCommentaryForRef(preferredRef ?? baseRef,
@@ -604,9 +609,10 @@ class _ReadScreenState extends State<ReadScreen>
   }
 
   Future<void> _onVerseTap(int globalIndex, {String? segmentRef}) async {
+    if (!_supportsInlineCommentary) return;
     // Prefer the segment ref (e.g. "9.66ab") so split verses each get their own commentary.
     // Fall back to the base ref if the segment ref has no commentary of its own.
-    final baseRef = _verseService.getVerseRef(_textId,globalIndex);
+    final baseRef = _verseService.getVerseRef(_textId, globalIndex);
     if (baseRef == null) return;
     final lookupRef = segmentRef ?? baseRef;
 
@@ -633,13 +639,15 @@ class _ReadScreenState extends State<ReadScreen>
     final loader = widget.commentaryLoader;
     if (loader != null) return loader(ref);
     if (withContinuation) {
-      return _commentaryService.getCommentaryForRefWithContinuation(_textId, ref);
+      return _commentaryService.getCommentaryForRefWithContinuation(
+          _textId, ref);
     }
     return _commentaryService.getCommentaryForRef(_textId, ref);
   }
 
   /// Show commentary as a bottom sheet that gently springs up from the bottom.
   void _showCommentary() {
+    if (!_supportsInlineCommentary) return;
     final entry = _commentaryEntryForSelected;
     if (entry == null) return;
     unawaited(_usageMetrics.trackEvent(
@@ -651,7 +659,7 @@ class _ReadScreenState extends State<ReadScreen>
       chapterNumber: _currentChapterNumber,
       verseRef: _currentSegmentRef ??
           (_visibleVerseIndex != null
-              ? _verseService.getVerseRef(_textId,_visibleVerseIndex!)
+              ? _verseService.getVerseRef(_textId, _visibleVerseIndex!)
               : null),
     ));
     final screenHeight = MediaQuery.of(context).size.height;
@@ -830,16 +838,17 @@ class _ReadScreenState extends State<ReadScreen>
     // Collect the verse refs that belong to the current section so we can
     // find the exact segment for each verse index in the run (e.g. a section
     // may own "9.28cd" of verse 9.28 and "9.29ab" of verse 9.29).
-    final ownSectionRefs =
-        _hierarchyService.getOwnVerseRefsForSectionSync(_textId, _currentSectionPath);
+    final ownSectionRefs = _hierarchyService.getOwnVerseRefsForSectionSync(
+        _textId, _currentSectionPath);
     final sectionRefs = ownSectionRefs.isNotEmpty
         ? ownSectionRefs
-        : _hierarchyService.getVerseRefsForSectionSync(_textId, _currentSectionPath);
+        : _hierarchyService.getVerseRefsForSectionSync(
+            _textId, _currentSectionPath);
     for (final idx in run) {
       // For split verses, use the specific segment key for the half that
       // belongs to the current section (e.g. 9.28cd → segment key index 1).
       GlobalKey? key;
-      final baseRef = _verseService.getVerseRef(_textId,idx);
+      final baseRef = _verseService.getVerseRef(_textId, idx);
       if (baseRef != null && sectionRefs.isNotEmpty) {
         // Find the section ref whose base matches this verse index.
         String? matchRef;
@@ -1017,7 +1026,7 @@ class _ReadScreenState extends State<ReadScreen>
 
     final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
     if (visibleIdx != null) {
-      final baseRef = _verseService.getVerseRef(_textId,visibleIdx);
+      final baseRef = _verseService.getVerseRef(_textId, visibleIdx);
       if (baseRef != null && baseRef.isNotEmpty) {
         return _openingTriadIndexForRef(baseRef);
       }
@@ -1152,7 +1161,7 @@ class _ReadScreenState extends State<ReadScreen>
       // descendant-expanded cache entry for parent-owned sections.
       final indices = <int>{};
       for (final ref in ownRefs) {
-        final i = _verseService.getIndexForRefWithFallback(_textId,ref);
+        final i = _verseService.getIndexForRefWithFallback(_textId, ref);
         if (i != null) indices.add(i);
       }
       if (indices.isNotEmpty) _sectionVerseIndicesCache[sectionPath] = indices;
@@ -1160,10 +1169,11 @@ class _ReadScreenState extends State<ReadScreen>
     }
     final cached = _sectionVerseIndicesCache[sectionPath];
     if (cached != null && cached.isNotEmpty) return cached;
-    final refs = _hierarchyService.getVerseRefsForSectionSync(_textId, sectionPath);
+    final refs =
+        _hierarchyService.getVerseRefsForSectionSync(_textId, sectionPath);
     final indices = <int>{};
     for (final ref in refs) {
-      final i = _verseService.getIndexForRefWithFallback(_textId,ref);
+      final i = _verseService.getIndexForRefWithFallback(_textId, ref);
       if (i != null) indices.add(i);
     }
     if (indices.isNotEmpty) _sectionVerseIndicesCache[sectionPath] = indices;
@@ -1216,7 +1226,8 @@ class _ReadScreenState extends State<ReadScreen>
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data
 
-    final hierarchy = _hierarchyService.getHierarchyForSectionSync(_textId, section);
+    final hierarchy =
+        _hierarchyService.getHierarchyForSectionSync(_textId, section);
     if (hierarchy.isNotEmpty) {
       final verseIndices = _verseIndicesForSection(section);
       // segmentRef resolved below after async load; use null here (early preview).
@@ -1233,11 +1244,13 @@ class _ReadScreenState extends State<ReadScreen>
     // when section has duplicate titles across chapters (e.g. "Abandoning objections")
     await _hierarchyService.getFirstVerseForSection(_textId, section);
     final preferredChapter = _currentChapterNumber;
-    final firstVerseRef = _hierarchyService
-            .getFirstVerseForSectionInChapterSync(_textId, section, preferredChapter) ??
-        _hierarchyService.getFirstVerseForSectionSync(_textId, section);
+    final firstVerseRef =
+        _hierarchyService.getFirstVerseForSectionInChapterSync(
+                _textId, section, preferredChapter) ??
+            _hierarchyService.getFirstVerseForSectionSync(_textId, section);
     if (firstVerseRef == null || firstVerseRef.isEmpty) return;
-    final verseIndex = _verseService.getIndexForRefWithFallback(_textId,firstVerseRef);
+    final verseIndex =
+        _verseService.getIndexForRefWithFallback(_textId, firstVerseRef);
     if (verseIndex == null) return;
 
     // Re-apply section state with the resolved verse so the chapter panel,
@@ -1471,7 +1484,7 @@ class _ReadScreenState extends State<ReadScreen>
       int verseIndex) {
     final cached = _splitSegmentsCache[verseIndex];
     if (cached != null) return cached;
-    final ref = _verseService.getVerseRef(_textId,verseIndex);
+    final ref = _verseService.getVerseRef(_textId, verseIndex);
     if (ref == null || !VerseService.baseVerseRefPattern.hasMatch(ref)) {
       return _splitSegmentsCache[verseIndex] =
           <({String ref, String sectionPath})>[];
@@ -1499,8 +1512,8 @@ class _ReadScreenState extends State<ReadScreen>
     if (currentPath.isEmpty) return;
     _sectionSliderScrollRequestId++;
     final requestId = _sectionSliderScrollRequestId;
-    final flat =
-        _sectionOverviewFlatSections(_hierarchyService.getFlatSectionsSync(_textId));
+    final flat = _sectionOverviewFlatSections(
+        _hierarchyService.getFlatSectionsSync(_textId));
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
     final viewportHeight = BcvReadConstants.sectionSliderLineHeight *
@@ -1565,18 +1578,20 @@ class _ReadScreenState extends State<ReadScreen>
         actions: isMobile
             ? []
             : [
-                IconButton(
-                  icon: Icon(
-                    _chaptersPanelCollapsed
-                        ? Icons.menu_book
-                        : Icons.menu_book_outlined,
-                    color: AppColors.textDark,
+                if (_showsChapterNavigation)
+                  IconButton(
+                    icon: Icon(
+                      _chaptersPanelCollapsed
+                          ? Icons.menu_book
+                          : Icons.menu_book_outlined,
+                      color: AppColors.textDark,
+                    ),
+                    tooltip: _chaptersPanelCollapsed
+                        ? 'Show Chapter'
+                        : 'Hide Chapter',
+                    onPressed: () => setState(() =>
+                        _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
                   ),
-                  tooltip:
-                      _chaptersPanelCollapsed ? 'Show Chapter' : 'Hide Chapter',
-                  onPressed: () => setState(
-                      () => _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
-                ),
                 IconButton(
                   icon: Icon(
                     _breadcrumbCollapsed
@@ -1617,8 +1632,9 @@ class _ReadScreenState extends State<ReadScreen>
       _debouncedArrowNav(() => _scrollToAdjacentSection(-1));
       return KeyEventResult.handled;
     }
-    if (event.logicalKey == LogicalKeyboardKey.enter ||
-        event.logicalKey == LogicalKeyboardKey.space) {
+    if (_supportsInlineCommentary &&
+        (event.logicalKey == LogicalKeyboardKey.enter ||
+            event.logicalKey == LogicalKeyboardKey.space)) {
       final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
       if (visibleIdx != null) {
         _onVerseTap(visibleIdx, segmentRef: _currentSegmentRef);
@@ -1730,17 +1746,19 @@ class _ReadScreenState extends State<ReadScreen>
     _visibilityDebounceTimer = null;
     _verseVisibility.clear(); // Discard stale visibility data
 
-    final hierarchy = _hierarchyService.getHierarchyForSectionSync(_textId, sectionPath);
+    final hierarchy =
+        _hierarchyService.getHierarchyForSectionSync(_textId, sectionPath);
     final verseIndices = _verseIndicesForSection(sectionPath);
 
     final preferredChapter = _currentChapterNumber;
     final firstVerseRef = firstVerseRefOverride ??
-_hierarchyService.getFirstVerseForSectionInChapterSync(
-        _textId, sectionPath, preferredChapter) ??
+        _hierarchyService.getFirstVerseForSectionInChapterSync(
+            _textId, sectionPath, preferredChapter) ??
         _hierarchyService.getFirstVerseForSectionSync(_textId, sectionPath);
     widget.onSectionNavigateForTest?.call(sectionPath, firstVerseRef ?? '');
     if (firstVerseRef == null || firstVerseRef.isEmpty) return false;
-    final verseIndex = _verseService.getIndexForRefWithFallback(_textId,firstVerseRef);
+    final verseIndex =
+        _verseService.getIndexForRefWithFallback(_textId, firstVerseRef);
     if (verseIndex == null) return false;
 
     _applySectionState(
@@ -1760,7 +1778,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
   /// Reader pane: uses leaf sections only so each key down moves exactly one
   /// "lowest level" section forward (no jumps to parents, no skipping).
   bool _scrollToAdjacentSection(int direction) {
-    final leafOrdered = _hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
+    final leafOrdered =
+        _hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
     if (leafOrdered.isEmpty) return false;
 
     final triadIndex = _openingTriadIndexForContext();
@@ -1775,7 +1794,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
         );
       }
       if (direction > 0) {
-        final nextIdx = _hierarchyService.findAdjacentSectionIndex(_textId,
+        final nextIdx = _hierarchyService.findAdjacentSectionIndex(
+          _textId,
           leafOrdered,
           '1.3',
           direction: 1,
@@ -1795,8 +1815,9 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
     }
 
     final visibleIdx = _visibleVerseIndex ?? _scrollTargetVerseIndex;
-    final verseRef =
-        visibleIdx != null ? _verseService.getVerseRef(_textId,visibleIdx) : null;
+    final verseRef = visibleIdx != null
+        ? _verseService.getVerseRef(_textId, visibleIdx)
+        : null;
     final currentPath = _currentSectionPath;
 
     // Prefer moving by verse order when leaf order would skip verses: e.g. at 6.32
@@ -1807,7 +1828,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
       currentIdx = leafOrdered.indexWhere((s) => s.path == currentPath);
     }
     if (currentIdx < 0 && verseRef != null && verseRef.isNotEmpty) {
-      final hierarchy = _hierarchyService.getHierarchyForVerseSync(_textId, verseRef);
+      final hierarchy =
+          _hierarchyService.getHierarchyForVerseSync(_textId, verseRef);
       if (hierarchy.isNotEmpty) {
         final leafPath =
             hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
@@ -1816,24 +1838,31 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
         }
       }
     }
-    if (visibleIdx != null && verseRef != null && verseRef.isNotEmpty && direction != 0) {
+    if (visibleIdx != null &&
+        verseRef != null &&
+        verseRef.isNotEmpty &&
+        direction != 0) {
       final nextVerseIdx = visibleIdx + direction;
       if (nextVerseIdx >= 0 && nextVerseIdx < _verses.length) {
-        final nextRef = _verseService.getVerseRef(_textId,nextVerseIdx);
+        final nextRef = _verseService.getVerseRef(_textId, nextVerseIdx);
         if (nextRef != null && nextRef.isNotEmpty) {
           final leafNextIdx = currentIdx >= 0
               ? currentIdx + direction
-              : _hierarchyService.findAdjacentSectionIndex(_textId,
-                  leafOrdered, verseRef,
+              : _hierarchyService.findAdjacentSectionIndex(
+                  _textId, leafOrdered, verseRef,
                   direction: direction, useFullRefOrder: true);
           if (leafNextIdx >= 0 && leafNextIdx < leafOrdered.length) {
-            final leafFirstRef = _hierarchyService
-                .getFirstVerseForSectionSync(_textId, leafOrdered[leafNextIdx].path);
+            final leafFirstRef = _hierarchyService.getFirstVerseForSectionSync(
+                _textId, leafOrdered[leafNextIdx].path);
             // Use verse-order target if leaf would skip past the next verse.
             final wouldSkip = leafFirstRef != null &&
                 (direction > 0
-                    ? VerseHierarchyService.compareVerseRefs(leafFirstRef, nextRef) > 0
-                    : VerseHierarchyService.compareVerseRefs(leafFirstRef, nextRef) < 0);
+                    ? VerseHierarchyService.compareVerseRefs(
+                            leafFirstRef, nextRef) >
+                        0
+                    : VerseHierarchyService.compareVerseRefs(
+                            leafFirstRef, nextRef) <
+                        0);
             if (wouldSkip) {
               // When the next verse is still in the current section (e.g. 9.12
               // is in karma while we're on karma, or 9.14 is in samsara while
@@ -1848,8 +1877,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
                 // leaf samsara starts at 9.13cd but also contains 9.14).
                 // If so, navigate to the target leaf directly — avoids relying
                 // on verseToPath which can map base refs to the wrong section.
-                final targetLeafIndices = _verseIndicesForSection(
-                    leafOrdered[leafNextIdx].path);
+                final targetLeafIndices =
+                    _verseIndicesForSection(leafOrdered[leafNextIdx].path);
                 if (targetLeafIndices.contains(nextVerseIdx)) {
                   final normalizedPath = _normalizeOpeningNavigationPath(
                       leafOrdered[leafNextIdx].path);
@@ -1858,8 +1887,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
                     firstVerseRefOverride: nextRef,
                   );
                 }
-                final nextHierarchy =
-                    _hierarchyService.getHierarchyForVerseSync(_textId, nextRef);
+                final nextHierarchy = _hierarchyService
+                    .getHierarchyForVerseSync(_textId, nextRef);
                 if (nextHierarchy.isNotEmpty) {
                   final leafPath = nextHierarchy.last['section'] ??
                       nextHierarchy.last['path'] ??
@@ -1881,7 +1910,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
                 _hierarchyService.getHierarchyForVerseSync(_textId, nextRef);
             if (nextHierarchy.isNotEmpty) {
               final leafPath = nextHierarchy.last['section'] ??
-                  nextHierarchy.last['path'] ?? '';
+                  nextHierarchy.last['path'] ??
+                  '';
               if (leafPath.isNotEmpty) {
                 final normalizedPath =
                     _normalizeOpeningNavigationPath(leafPath);
@@ -1900,7 +1930,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
     if (currentIdx >= 0) {
       newIdx = currentIdx + direction;
     } else if (verseRef != null && verseRef.isNotEmpty) {
-      newIdx = _hierarchyService.findAdjacentSectionIndex(_textId,
+      newIdx = _hierarchyService.findAdjacentSectionIndex(
+        _textId,
         leafOrdered,
         verseRef,
         direction: direction,
@@ -2005,7 +2036,7 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
         hierarchy.isNotEmpty ? (hierarchy.last['title'] ?? '').trim() : '';
     final chapterNumber = _chapterNumberForVerseIndex(verseIndex);
     final verseRef =
-        (segmentRef ?? _verseService.getVerseRef(_textId,verseIndex))?.trim();
+        (segmentRef ?? _verseService.getVerseRef(_textId, verseIndex))?.trim();
     final now = DateTime.now().toUtc();
 
     if (_trackedSectionPath == null) {
@@ -2140,6 +2171,7 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
       var wasExpanded = false;
       switch (panel) {
         case _MobileNavPanel.chapter:
+          if (!_showsChapterNavigation) return;
           wasExpanded = !_chaptersPanelCollapsed;
           _chaptersPanelCollapsed = !_chaptersPanelCollapsed;
           if (!_chaptersPanelCollapsed) {
@@ -2209,6 +2241,7 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           BcvMobileNavBar(
+            showChapter: _showsChapterNavigation,
             chaptersCollapsed: _chaptersPanelCollapsed,
             sectionCollapsed: _sectionSliderCollapsed,
             breadcrumbCollapsed: _breadcrumbCollapsed,
@@ -2216,7 +2249,7 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
             onToggleSection: _mobileToggleSection,
             onToggleBreadcrumb: _mobileToggleBreadcrumb,
           ),
-          if (!_chaptersPanelCollapsed)
+          if (_showsChapterNavigation && !_chaptersPanelCollapsed)
             SizedBox(
               height: maxH,
               child: SingleChildScrollView(
@@ -2246,6 +2279,49 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
 
     // Laptop: full collapsible sections with resize handles.
     final sectionSubtitle = breadcrumbSubtitle;
+    if (!_showsChapterNavigation) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          BcvNavSection(
+            collapsed: _sectionSliderCollapsed,
+            label: 'Section',
+            subtitle: sectionSubtitle,
+            expandedChild: _buildSectionSlider(
+              height: _sectionPanelHeight,
+              collapsed: _sectionSliderCollapsed,
+            ),
+            onExpand: () => setState(() => _sectionSliderCollapsed = false),
+            onCollapse: () => setState(() => _sectionSliderCollapsed = true),
+            contentHeight: _sectionPanelHeight,
+          ),
+          BcvVerticalResizeHandle(onDragDelta: (dy) {
+            setState(() {
+              if (_sectionPanelHeight + dy >= BcvReadConstants.panelMinHeight &&
+                  _breadcrumbPanelHeight - dy >=
+                      BcvReadConstants.panelMinHeight) {
+                _sectionPanelHeight += dy;
+                _breadcrumbPanelHeight -= dy;
+              }
+            });
+          }),
+          BcvNavSection(
+            collapsed: _breadcrumbCollapsed,
+            label: 'Breadcrumb',
+            subtitle: sectionSubtitle,
+            expandedChild: BcvBreadcrumbBar(
+              hierarchy: _breadcrumbHierarchy,
+              sectionNumberForDisplay: _sectionNumberForDisplay,
+              onSectionTap: _onBreadcrumbSectionTap,
+            ),
+            onExpand: () => setState(() => _breadcrumbCollapsed = false),
+            onCollapse: () => setState(() => _breadcrumbCollapsed = true),
+          ),
+        ],
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2371,7 +2447,9 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Chapter ${ch.number}: ${ch.title}',
+                                  _showsChapterNavigation
+                                      ? 'Chapter ${ch.number}: ${ch.title}'
+                                      : ch.title,
                                   style: _chapterTitleStyle,
                                 ),
                                 const SizedBox(height: 24),
@@ -2418,7 +2496,8 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
                                               height: 1.5,
                                               color: AppColors.textDark,
                                             );
-                                    final ref = _verseService.getVerseRef(_textId,idx);
+                                    final ref =
+                                        _verseService.getVerseRef(_textId, idx);
                                     Widget refWidget = const SizedBox.shrink();
                                     if (ref != null &&
                                         (segmentIndex == null ||
@@ -2469,8 +2548,10 @@ _hierarchyService.getFirstVerseForSectionInChapterSync(
                                     w = SizedBox(
                                       width: double.infinity,
                                       child: InkWell(
-                                        onTap: () => _onVerseTap(idx,
-                                            segmentRef: segmentRef),
+                                        onTap: _supportsInlineCommentary
+                                            ? () => _onVerseTap(idx,
+                                                segmentRef: segmentRef)
+                                            : null,
                                         hoverColor: Colors.transparent,
                                         child: w,
                                       ),
