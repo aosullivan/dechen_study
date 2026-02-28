@@ -8,6 +8,7 @@ import '../../services/bookmark_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/preload.dart';
+import '../../utils/verse_ref_formatter.dart';
 import '../../utils/web_navigation.dart';
 import 'file_quiz_screen.dart';
 import 'guess_chapter_screen.dart';
@@ -850,6 +851,7 @@ class _ReadChapterSelectionScreenState
             itemBuilder: (context, index) {
               if (bm != null && index == 0) {
                 return _ResumeReadingCard(
+                  textId: widget.textId,
                   verseRef: bm.verseRef,
                   chapterTitle: chapterTitle,
                   onTap: _resumeReading,
@@ -928,11 +930,13 @@ class _ReadChapterSelectionScreenState
 class _ResumeReadingCard extends StatelessWidget {
   const _ResumeReadingCard({
     required this.onTap,
+    required this.textId,
     this.verseRef,
     this.chapterTitle,
   });
 
   final VoidCallback onTap;
+  final String textId;
   final String? verseRef;
   final String? chapterTitle;
 
@@ -940,7 +944,10 @@ class _ResumeReadingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final subtitle = <String>[];
     if (chapterTitle != null) subtitle.add(chapterTitle!);
-    if (verseRef != null) subtitle.add('Verse $verseRef');
+    if (verseRef != null) {
+      final displayRef = formatVerseRefForDisplay(textId, verseRef!);
+      if (displayRef.isNotEmpty) subtitle.add('Verse $displayRef');
+    }
 
     return Card(
       margin: EdgeInsets.zero,

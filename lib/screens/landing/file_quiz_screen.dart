@@ -3,10 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../config/study_text_config.dart';
 import '../../services/file_quiz_service.dart';
 import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import 'bcv/bcv_verse_text.dart';
 
@@ -31,6 +33,9 @@ class _FileQuizScreenState extends State<FileQuizScreen>
   final _usageMetrics = UsageMetricsService.instance;
   final _random = Random();
   DateTime? _screenDwellStartedAt;
+  StudyTextConfig? get _config => getStudyText(widget.textId);
+  bool get _supportsAdvancedQuiz =>
+      (_config?.quizAdvancedPath ?? '').trim().isNotEmpty;
 
   bool _isLoading = true;
   Object? _error;
@@ -138,10 +143,15 @@ class _FileQuizScreenState extends State<FileQuizScreen>
     FileQuizDifficulty difficulty, {
     required bool resetScore,
   }) async {
+    final targetDifficulty =
+        difficulty == FileQuizDifficulty.advanced && !_supportsAdvancedQuiz
+            ? FileQuizDifficulty.beginner
+            : difficulty;
+
     setState(() {
       _isLoading = true;
       _error = null;
-      _difficulty = difficulty;
+      _difficulty = targetDifficulty;
       if (resetScore) {
         _correctAnswers = 0;
         _totalAnswers = 0;
@@ -150,7 +160,8 @@ class _FileQuizScreenState extends State<FileQuizScreen>
     });
 
     try {
-      final loaded = await _quizService.loadQuestions(widget.textId, difficulty);
+      final loaded =
+          await _quizService.loadQuestions(widget.textId, targetDifficulty);
       await _verseService.getChapters(widget.textId);
       final order = _quizService.buildShuffledOrder(loaded.length, _random);
 
@@ -218,7 +229,8 @@ class _FileQuizScreenState extends State<FileQuizScreen>
     }
 
     for (final ref in refs) {
-      final index = _verseService.getIndexForRefWithFallback(widget.textId, ref);
+      final index =
+          _verseService.getIndexForRefWithFallback(widget.textId, ref);
       if (index == null) continue;
       final text = _verseService.getVerseAt(widget.textId, index);
       if (text == null || text.trim().isEmpty) continue;
@@ -236,6 +248,10 @@ class _FileQuizScreenState extends State<FileQuizScreen>
   String? _beginnerChapterHint(List<String> refs) {
     if (_difficulty != FileQuizDifficulty.beginner) return null;
     if (refs.isEmpty) return null;
+    if (!(getStudyText(widget.textId)?.hasChapters ?? true)) {
+      final base = formatBaseVerseRefForDisplay(widget.textId, refs.first);
+      return base.isEmpty ? null : 'Verse $base';
+    }
     final chapter = int.tryParse(refs.first.split('.').first);
     if (chapter == null) return null;
     return 'Chapter $chapter';
@@ -504,11 +520,12 @@ class _FileQuizScreenState extends State<FileQuizScreen>
                     padding: EdgeInsets.symmetric(vertical: 8),
                     child: Divider(height: 1, color: AppColors.borderLight),
                   ),
-                if (verses[i].ref.isNotEmpty)
+                if (formatVerseRefForDisplay(widget.textId, verses[i].ref)
+                    .isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(
-                      'Verse ${verses[i].ref}',
+                      'Verse ${formatVerseRefForDisplay(widget.textId, verses[i].ref)}',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -639,15 +656,17 @@ class _FileQuizScreenState extends State<FileQuizScreen>
                           resetScore: true,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      _buildDifficultyButton(
-                        value: FileQuizDifficulty.advanced,
-                        label: 'Advanced',
-                        onTap: () => _loadDifficulty(
-                          FileQuizDifficulty.advanced,
-                          resetScore: true,
+                      if (_supportsAdvancedQuiz) ...[
+                        const SizedBox(width: 8),
+                        _buildDifficultyButton(
+                          value: FileQuizDifficulty.advanced,
+                          label: 'Advanced',
+                          onTap: () => _loadDifficulty(
+                            FileQuizDifficulty.advanced,
+                            resetScore: true,
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 8),

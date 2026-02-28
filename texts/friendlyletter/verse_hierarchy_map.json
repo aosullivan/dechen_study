@@ -8,13 +8,17 @@
         {
           "title": "Explaining the title of the shastra with the correspondence of the Sanskrit and Tibetan titles",
           "path": "1.1",
-          "verses": [],
+          "verses": [
+            "0.1"
+          ],
           "children": []
         },
         {
           "title": "Homage to Manjushri, supreme deity of wisdom",
           "path": "1.2",
-          "verses": [],
+          "verses": [
+            "0.2"
+          ],
           "children": []
         },
         {
@@ -70,20 +74,24 @@
                   "title": "Having stabilized faith, it is necessary to train in virtue while avoiding sinful actions",
                   "path": "2.1.1.2",
                   "verses": [
-                    "1.5"
+                    "1.5ab"
                   ],
                   "children": []
                 },
                 {
                   "title": "It is necessary to abandon alcohol, the cause of unconcern in acceptance and rejection",
                   "path": "2.1.1.3",
-                  "verses": [],
+                  "verses": [
+                    "1.5c"
+                  ],
                   "children": []
                 },
                 {
                   "title": "Advice on the necessity to rely upon a virtuous livelihood which does not give cause to harming others or unconcern",
                   "path": "2.1.1.4",
-                  "verses": [],
+                  "verses": [
+                    "1.5d"
+                  ],
                   "children": []
                 },
                 {
@@ -98,14 +106,16 @@
                   "title": "In order that the merit of giving not be wasted or exhausted, advice on the necessity to retain flawless moral discipline",
                   "path": "2.1.1.6",
                   "verses": [
-                    "1.7"
+                    "1.7ab"
                   ],
                   "children": []
                 },
                 {
                   "title": "Recounting the qualities of moral discipline",
                   "path": "2.1.1.7",
-                  "verses": [],
+                  "verses": [
+                    "1.7cd"
+                  ],
                   "children": []
                 },
                 {
@@ -206,7 +216,14 @@
                   "title": "Advice on the importance of abandoning negative speech and speaking gently",
                   "path": "2.1.2.7",
                   "verses": [
-                    "1.18",
+                    "1.18"
+                  ],
+                  "children": []
+                },
+                {
+                  "title": "Advice on training in the excellent, having dispensed with negative physical behaviour",
+                  "path": "2.1.2.8",
+                  "verses": [
                     "1.19"
                   ],
                   "children": []
@@ -427,14 +444,16 @@
                           "title": "The actual meditation on love and so on",
                           "path": "2.2.2.1.1.1",
                           "verses": [
-                            "1.40"
+                            "1.40ab"
                           ],
                           "children": []
                         },
                         {
                           "title": "The benefits of such meditation",
                           "path": "2.2.2.1.1.2",
-                          "verses": [],
+                          "verses": [
+                            "1.40cd"
+                          ],
                           "children": []
                         }
                       ]
@@ -448,14 +467,16 @@
                           "title": "Meditation on the absorptions",
                           "path": "2.2.2.1.2.1",
                           "verses": [
-                            "1.41"
+                            "1.41ab"
                           ],
                           "children": []
                         },
                         {
                           "title": "The benefits of such absorptions",
                           "path": "2.2.2.1.2.2",
-                          "verses": [],
+                          "verses": [
+                            "1.41cd"
+                          ],
                           "children": []
                         }
                       ]
@@ -520,6 +541,29 @@
                       "verses": [],
                       "children": [
                         {
+                          "title": "The brief explanation",
+                          "path": "2.2.2.2.3.1",
+                          "verses": [],
+                          "children": [
+                            {
+                              "title": "Showing the benefits of meditation on the correct view",
+                              "path": "2.2.2.2.3.1.1",
+                              "verses": [
+                                "1.47ab"
+                              ],
+                              "children": []
+                            },
+                            {
+                              "title": "Showing the defects of not meditating",
+                              "path": "2.2.2.2.3.1.2",
+                              "verses": [
+                                "1.47cd"
+                              ],
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
                           "title": "The extensive exposition",
                           "path": "2.2.2.2.3.2",
                           "verses": [],
@@ -549,14 +593,16 @@
                                   "title": "Refuting the six erroneous views of the cause of the aggregates",
                                   "path": "2.2.2.2.3.2.1.3",
                                   "verses": [
-                                    "1.50"
+                                    "1.50abc"
                                   ],
                                   "children": []
                                 },
                                 {
                                   "title": "Showing the inerrant cause",
                                   "path": "2.2.2.2.3.2.1.4",
-                                  "verses": [],
+                                  "verses": [
+                                    "1.50d"
+                                  ],
                                   "children": []
                                 }
                               ]
@@ -578,14 +624,16 @@
                                   "title": "For those who do not create their own liberation by depending upon their own meditation, there is no possibility of being propelled to liberation by others",
                                   "path": "2.2.2.2.3.2.2.2",
                                   "verses": [
-                                    "1.52"
+                                    "1.52ab"
                                   ],
                                   "children": []
                                 },
                                 {
                                   "title": "The necessity of meditating on the means of liberation, the Four Truths",
                                   "path": "2.2.2.2.3.2.2.3",
-                                  "verses": [],
+                                  "verses": [
+                                    "1.52cd"
+                                  ],
                                   "children": []
                                 },
                                 {
@@ -731,14 +779,16 @@
                                       "title": "Meditating on immeasurability",
                                       "path": "2.2.2.2.3.2.3.3.1.4",
                                       "verses": [
-                                        "1.68"
+                                        "1.68ab"
                                       ],
                                       "children": []
                                     },
                                     {
                                       "title": "Meditating on taking a body again and again",
                                       "path": "2.2.2.2.3.2.3.3.1.5",
-                                      "verses": [],
+                                      "verses": [
+                                        "1.68cd"
+                                      ],
                                       "children": []
                                     }
                                   ]
@@ -841,28 +891,32 @@
                                               "title": "Specifically meditating on the suffering of crushing",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.2",
                                               "verses": [
-                                                "1.78"
+                                                "1.78ab"
                                               ],
                                               "children": []
                                             },
                                             {
                                               "title": "Meditating on the suffering of the black threads",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.3",
-                                              "verses": [],
+                                              "verses": [
+                                                "1.78cd"
+                                              ],
                                               "children": []
                                             },
                                             {
                                               "title": "Meditating on the suffering of being filled with molten metal of the heating hell",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.4",
                                               "verses": [
-                                                "1.79"
+                                                "1.79ab"
                                               ],
                                               "children": []
                                             },
                                             {
                                               "title": "Meditating on the suffering of being impaled on searing stakes of the heating hell",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.5",
-                                              "verses": [],
+                                              "verses": [
+                                                "1.79cd"
+                                              ],
                                               "children": []
                                             },
                                             {
@@ -885,14 +939,16 @@
                                               "title": "Meditating on the suffering of burning in torturous flames of the heating hell",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.8",
                                               "verses": [
-                                                "1.82"
+                                                "1.82ab"
                                               ],
                                               "children": []
                                             },
                                             {
                                               "title": "Meditating on the suffering of blazing in the great vats of incessant torment",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.9",
-                                              "verses": [],
+                                              "verses": [
+                                                "1.82cd"
+                                              ],
                                               "children": []
                                             },
                                             {
@@ -930,14 +986,15 @@
                                             {
                                               "title": "Meditating that one must experience the suffering of hells for as long as actions are not exhausted",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.14",
-                                              "verses": [],
+                                              "verses": [
+                                                "1.87"
+                                              ],
                                               "children": []
                                             },
                                             {
                                               "title": "Meditating that these hells are not experienced spontaneously or by chance but only those who accumulate non­virtues of body, speech and mind need experience them",
                                               "path": "2.2.2.2.3.2.3.3.3.1.1.15",
                                               "verses": [
-                                                "1.87",
                                                 "1.88"
                                               ],
                                               "children": []
@@ -992,14 +1049,16 @@
                                               "title": "Meditating on the suffering of having disgusting bodies",
                                               "path": "2.2.2.2.3.2.3.3.3.1.3.3",
                                               "verses": [
-                                                "1.93"
+                                                "1.93ab"
                                               ],
                                               "children": []
                                             },
                                             {
                                               "title": "Meditating on the suffering of having obscurations of hunger and thirst",
                                               "path": "2.2.2.2.3.2.3.3.3.1.3.4",
-                                              "verses": [],
+                                              "verses": [
+                                                "1.93cd"
+                                              ],
                                               "children": []
                                             },
                                             {
@@ -1135,27 +1194,6 @@
                               ]
                             }
                           ]
-                        },
-                        {
-                          "title": "The brief explanation",
-                          "path": "2.2.2.2.3.1",
-                          "verses": [],
-                          "children": [
-                            {
-                              "title": "Showing the benefits of meditation on the correct view",
-                              "path": "2.2.2.2.3.1.1",
-                              "verses": [
-                                "1.47"
-                              ],
-                              "children": []
-                            },
-                            {
-                              "title": "Showing the defects of not meditating",
-                              "path": "2.2.2.2.3.1.2",
-                              "verses": [],
-                              "children": []
-                            }
-                          ]
                         }
                       ]
                     }
@@ -1202,14 +1240,16 @@
                       "verses": [
                         "1.109",
                         "1.110",
-                        "1.111"
+                        "1.111abc"
                       ],
                       "children": []
                     },
                     {
                       "title": "How, by reversing this revolution, nirvana is attained",
                       "path": "2.3.2.2.2",
-                      "verses": [],
+                      "verses": [
+                        "1.111d"
+                      ],
                       "children": []
                     },
                     {
@@ -1249,14 +1289,16 @@
                   "title": "Advice to abandon laziness through continual exertion in the Four Truths",
                   "path": "2.3.3.1",
                   "verses": [
-                    "1.115"
+                    "1.115ab"
                   ],
                   "children": []
                 },
                 {
                   "title": "Praising by advising that nirvana is attained even while remaining at home",
                   "path": "2.3.3.2",
-                  "verses": [],
+                  "verses": [
+                    "1.115cd"
+                  ],
                   "children": []
                 },
                 {
@@ -1282,7 +1324,7 @@
       ]
     },
     {
-      "title": "Showing that the three realms are devoid of essence???",
+      "title": "The Conclusion: Virtuous in the End",
       "path": "3",
       "verses": [],
       "children": [
@@ -1295,14 +1337,16 @@
               "title": "Since in this shastra the entirety of practical instructions of the three trainings is contained, it will be difficult to accomplish it fully",
               "path": "3.1.1",
               "verses": [
-                "1.118"
+                "1.118ab"
               ],
               "children": []
             },
             {
               "title": "Nevertheless, showing the necessity of accomplishing whatever one is able to, because even if one accomplishes well just one part, one’s life will be made meaningful by the undiminished accumulation of merit",
               "path": "3.1.2",
-              "verses": [],
+              "verses": [
+                "1.118cd"
+              ],
               "children": []
             }
           ]
@@ -1316,7 +1360,7 @@
               "title": "Rejoicing without jealousy in the virtue accomplished by others and dedicating the roots of virtue to their benefit, and developing bodhichitta",
               "path": "3.2.1",
               "verses": [
-                "1.119"
+                "1.119abc"
               ],
               "children": []
             },
@@ -1324,6 +1368,7 @@
               "title": "Advice that it is necessary to practise great waves of bodhisattva activity for the benefit of others.",
               "path": "3.2.2",
               "verses": [
+                "1.119d",
                 "1.120"
               ],
               "children": []
@@ -1339,7 +1384,7 @@
           ]
         },
         {
-          "title": "Advice to attain the unsurpassable fruit of the ultimate fulfilment of the two benefits",
+          "title": "How through that, one attains the unsurpassable fruit of the ultimate fulfilment of the two benefits",
           "path": "3.3",
           "verses": [
             "1.122",
@@ -1350,13 +1395,35 @@
         {
           "title": "The shastra’s colophon, together with an explanation of its composition",
           "path": "3.4",
-          "verses": [],
+          "verses": [
+            "1.124"
+          ],
           "children": []
         }
       ]
     }
   ],
   "verseToPath": {
+    "0.1": [
+      {
+        "section": "1",
+        "title": "The Introduction: Virtuous in the Beginning"
+      },
+      {
+        "section": "1.1",
+        "title": "Explaining the title of the shastra with the correspondence of the Sanskrit and Tibetan titles"
+      }
+    ],
+    "0.2": [
+      {
+        "section": "1",
+        "title": "The Introduction: Virtuous in the Beginning"
+      },
+      {
+        "section": "1.2",
+        "title": "Homage to Manjushri, supreme deity of wisdom"
+      }
+    ],
     "1.1": [
       {
         "section": "1",
@@ -1405,7 +1472,7 @@
         "title": "As it is the root of all dharma and the cause of merit, increase faith through training in the six things to remember"
       }
     ],
-    "1.5": [
+    "1.5ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -1421,6 +1488,42 @@
       {
         "section": "2.1.1.2",
         "title": "Having stabilized faith, it is necessary to train in virtue while avoiding sinful actions"
+      }
+    ],
+    "1.5c": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.1",
+        "title": "Training in Higher Moral Discipline"
+      },
+      {
+        "section": "2.1.1",
+        "title": "An explanation of that which is generally important for both householders and renunciates"
+      },
+      {
+        "section": "2.1.1.3",
+        "title": "It is necessary to abandon alcohol, the cause of unconcern in acceptance and rejection"
+      }
+    ],
+    "1.5d": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.1",
+        "title": "Training in Higher Moral Discipline"
+      },
+      {
+        "section": "2.1.1",
+        "title": "An explanation of that which is generally important for both householders and renunciates"
+      },
+      {
+        "section": "2.1.1.4",
+        "title": "Advice on the necessity to rely upon a virtuous livelihood which does not give cause to harming others or unconcern"
       }
     ],
     "1.6": [
@@ -1441,7 +1544,7 @@
         "title": "Explaining the necessity to give up all wealth to benefit others, being the most excellent way of stabilizing virtue"
       }
     ],
-    "1.7": [
+    "1.7ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -1457,6 +1560,24 @@
       {
         "section": "2.1.1.6",
         "title": "In order that the merit of giving not be wasted or exhausted, advice on the necessity to retain flawless moral discipline"
+      }
+    ],
+    "1.7cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.1",
+        "title": "Training in Higher Moral Discipline"
+      },
+      {
+        "section": "2.1.1",
+        "title": "An explanation of that which is generally important for both householders and renunciates"
+      },
+      {
+        "section": "2.1.1.7",
+        "title": "Recounting the qualities of moral discipline"
       }
     ],
     "1.8": [
@@ -1687,8 +1808,8 @@
         "title": "An explanation of the specific points of conduct essential for householders"
       },
       {
-        "section": "2.1.2.7",
-        "title": "Advice on the importance of abandoning negative speech and speaking gently"
+        "section": "2.1.2.8",
+        "title": "Advice on training in the excellent, having dispensed with negative physical behaviour"
       }
     ],
     "1.20": [
@@ -2083,7 +2204,7 @@
         "title": "Advice to renunciates and householders to strive in the yoga of not sleeping"
       }
     ],
-    "1.40": [
+    "1.40ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -2109,7 +2230,33 @@
         "title": "The actual meditation on love and so on"
       }
     ],
-    "1.41": [
+    "1.40cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.1",
+        "title": "Meditative absorption which accomplishes higher states"
+      },
+      {
+        "section": "2.2.2.1.1",
+        "title": "Meditation on the four immeasurables"
+      },
+      {
+        "section": "2.2.2.1.1.2",
+        "title": "The benefits of such meditation"
+      }
+    ],
+    "1.41ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -2133,6 +2280,32 @@
       {
         "section": "2.2.2.1.2.1",
         "title": "Meditation on the absorptions"
+      }
+    ],
+    "1.41cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.1",
+        "title": "Meditative absorption which accomplishes higher states"
+      },
+      {
+        "section": "2.2.2.1.2",
+        "title": "Meditating on the four absorptions"
+      },
+      {
+        "section": "2.2.2.1.2.2",
+        "title": "The benefits of such absorptions"
       }
     ],
     "1.42": [
@@ -2253,7 +2426,7 @@
         "title": "How to abandon pride, the obstruction to the path of meditation"
       }
     ],
-    "1.47": [
+    "1.47ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -2281,6 +2454,36 @@
       {
         "section": "2.2.2.2.3.1.1",
         "title": "Showing the benefits of meditation on the correct view"
+      }
+    ],
+    "1.47cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.1",
+        "title": "The brief explanation"
+      },
+      {
+        "section": "2.2.2.2.3.1.2",
+        "title": "Showing the defects of not meditating"
       }
     ],
     "1.48": [
@@ -2351,7 +2554,7 @@
         "title": "Refuting the twenty extremes which regard the aggregates as a self"
       }
     ],
-    "1.50": [
+    "1.50abc": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -2383,6 +2586,40 @@
       {
         "section": "2.2.2.2.3.2.1.3",
         "title": "Refuting the six erroneous views of the cause of the aggregates"
+      }
+    ],
+    "1.50d": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.1",
+        "title": "Meditating on the meaning of non­self as the object of realization"
+      },
+      {
+        "section": "2.2.2.2.3.2.1.4",
+        "title": "Showing the inerrant cause"
       }
     ],
     "1.51": [
@@ -2419,7 +2656,7 @@
         "title": "Showing that even if one wishes for liberation, if one does not abandon practising all three adconditions, one will not attain liberation"
       }
     ],
-    "1.52": [
+    "1.52ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -2451,6 +2688,40 @@
       {
         "section": "2.2.2.2.3.2.2.2",
         "title": "For those who do not create their own liberation by depending upon their own meditation, there is no possibility of being propelled to liberation by others"
+      }
+    ],
+    "1.52cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.2",
+        "title": "Identifying liberation as the object of attainment"
+      },
+      {
+        "section": "2.2.2.2.3.2.2.3",
+        "title": "The necessity of meditating on the means of liberation, the Four Truths"
       }
     ],
     "1.53": [
@@ -3015,7 +3286,7 @@
         "title": "Meditating on dissatisfaction"
       }
     ],
-    "1.68": [
+    "1.68ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -3051,6 +3322,44 @@
       {
         "section": "2.2.2.2.3.2.3.3.1.4",
         "title": "Meditating on immeasurability"
+      }
+    ],
+    "1.68cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.3",
+        "title": "Showing that the three realms are devoid of essence"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.1",
+        "title": "Meditating on the suffering of formations"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.1.5",
+        "title": "Meditating on taking a body again and again"
       }
     ],
     "1.69": [
@@ -3403,7 +3712,7 @@
         "title": "Meditating on the sufferings of the eight hot hells caused by hatred"
       }
     ],
-    "1.78": [
+    "1.78ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -3449,7 +3758,53 @@
         "title": "Specifically meditating on the suffering of crushing"
       }
     ],
-    "1.79": [
+    "1.78cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.3",
+        "title": "Showing that the three realms are devoid of essence"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3",
+        "title": "Meditating on the suffering of suffering"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1",
+        "title": "Meditating on the sufferings of the lower states"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.1",
+        "title": "Meditating on the sufferings of hell beings"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.1.3",
+        "title": "Meditating on the suffering of the black threads"
+      }
+    ],
+    "1.79ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -3493,6 +3848,52 @@
       {
         "section": "2.2.2.2.3.2.3.3.3.1.1.4",
         "title": "Meditating on the suffering of being filled with molten metal of the heating hell"
+      }
+    ],
+    "1.79cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.3",
+        "title": "Showing that the three realms are devoid of essence"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3",
+        "title": "Meditating on the suffering of suffering"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1",
+        "title": "Meditating on the sufferings of the lower states"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.1",
+        "title": "Meditating on the sufferings of hell beings"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.1.5",
+        "title": "Meditating on the suffering of being impaled on searing stakes of the heating hell"
       }
     ],
     "1.80": [
@@ -3587,7 +3988,7 @@
         "title": "Meditating on the suffering of the swamp of rotten corpses"
       }
     ],
-    "1.82": [
+    "1.82ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -3631,6 +4032,52 @@
       {
         "section": "2.2.2.2.3.2.3.3.3.1.1.8",
         "title": "Meditating on the suffering of burning in torturous flames of the heating hell"
+      }
+    ],
+    "1.82cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.3",
+        "title": "Showing that the three realms are devoid of essence"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3",
+        "title": "Meditating on the suffering of suffering"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1",
+        "title": "Meditating on the sufferings of the lower states"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.1",
+        "title": "Meditating on the sufferings of hell beings"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.1.9",
+        "title": "Meditating on the suffering of blazing in the great vats of incessant torment"
       }
     ],
     "1.83": [
@@ -3859,8 +4306,8 @@
         "title": "Meditating on the sufferings of hell beings"
       },
       {
-        "section": "2.2.2.2.3.2.3.3.3.1.1.15",
-        "title": "Meditating that these hells are not experienced spontaneously or by chance but only those who accumulate non­virtues of body, speech and mind need experience them"
+        "section": "2.2.2.2.3.2.3.3.3.1.1.14",
+        "title": "Meditating that one must experience the suffering of hells for as long as actions are not exhausted"
       }
     ],
     "1.88": [
@@ -4093,7 +4540,7 @@
         "title": "Meditating on the suffering of having inner obscurations"
       }
     ],
-    "1.93": [
+    "1.93ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -4137,6 +4584,52 @@
       {
         "section": "2.2.2.2.3.2.3.3.3.1.3.3",
         "title": "Meditating on the suffering of having disgusting bodies"
+      }
+    ],
+    "1.93cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.2",
+        "title": "Training in Higher Meditative Concentration"
+      },
+      {
+        "section": "2.2.2",
+        "title": "The main part of meditative concentration"
+      },
+      {
+        "section": "2.2.2.2",
+        "title": "Meditative absorption which truly and correctly accomplishes the path of liberation"
+      },
+      {
+        "section": "2.2.2.2.3",
+        "title": "Showing that it is important to meditate on the correct view"
+      },
+      {
+        "section": "2.2.2.2.3.2",
+        "title": "The extensive exposition"
+      },
+      {
+        "section": "2.2.2.2.3.2.3",
+        "title": "Showing that the three realms are devoid of essence"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3",
+        "title": "Meditating on the suffering of suffering"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1",
+        "title": "Meditating on the sufferings of the lower states"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.3",
+        "title": "Meditating on the sufferings of pretas"
+      },
+      {
+        "section": "2.2.2.2.3.2.3.3.3.1.3.4",
+        "title": "Meditating on the suffering of having obscurations of hunger and thirst"
       }
     ],
     "1.94": [
@@ -4777,7 +5270,7 @@
         "title": "How samsara arises as the succession of the twelve links of dependent origination of the wheel of existence"
       }
     ],
-    "1.111": [
+    "1.111abc": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -4797,6 +5290,28 @@
       {
         "section": "2.3.2.2.1",
         "title": "How samsara arises as the succession of the twelve links of dependent origination of the wheel of existence"
+      }
+    ],
+    "1.111d": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.3",
+        "title": "Training in higher wisdom"
+      },
+      {
+        "section": "2.3.2",
+        "title": "The beneficial wisdom itself"
+      },
+      {
+        "section": "2.3.2.2",
+        "title": "The wisdom of that which, when contemplated, is very beneficial"
+      },
+      {
+        "section": "2.3.2.2.2",
+        "title": "How, by reversing this revolution, nirvana is attained"
       }
     ],
     "1.112": [
@@ -4865,7 +5380,7 @@
         "title": "Showing that focusing on the truths of the path is the Four Truths of a noble one"
       }
     ],
-    "1.115": [
+    "1.115ab": [
       {
         "section": "2",
         "title": "The Body of the Text: Virtuous in the Interim"
@@ -4881,6 +5396,24 @@
       {
         "section": "2.3.3.1",
         "title": "Advice to abandon laziness through continual exertion in the Four Truths"
+      }
+    ],
+    "1.115cd": [
+      {
+        "section": "2",
+        "title": "The Body of the Text: Virtuous in the Interim"
+      },
+      {
+        "section": "2.3",
+        "title": "Training in higher wisdom"
+      },
+      {
+        "section": "2.3.3",
+        "title": "Advice to train in wisdom"
+      },
+      {
+        "section": "2.3.3.2",
+        "title": "Praising by advising that nirvana is attained even while remaining at home"
       }
     ],
     "1.116": [
@@ -4919,10 +5452,10 @@
         "title": "Advising that taming the mind alone is the root of dharma, and so abandoning discouragement"
       }
     ],
-    "1.118": [
+    "1.118ab": [
       {
         "section": "3",
-        "title": "Showing that the three realms are devoid of essence???"
+        "title": "The Conclusion: Virtuous in the End"
       },
       {
         "section": "3.1",
@@ -4933,10 +5466,24 @@
         "title": "Since in this shastra the entirety of practical instructions of the three trainings is contained, it will be difficult to accomplish it fully"
       }
     ],
-    "1.119": [
+    "1.118cd": [
       {
         "section": "3",
-        "title": "Showing that the three realms are devoid of essence???"
+        "title": "The Conclusion: Virtuous in the End"
+      },
+      {
+        "section": "3.1",
+        "title": "Proclaiming the greatness of these instructions"
+      },
+      {
+        "section": "3.1.2",
+        "title": "Nevertheless, showing the necessity of accomplishing whatever one is able to, because even if one accomplishes well just one part, one’s life will be made meaningful by the undiminished accumulation of merit"
+      }
+    ],
+    "1.119abc": [
+      {
+        "section": "3",
+        "title": "The Conclusion: Virtuous in the End"
       },
       {
         "section": "3.2",
@@ -4947,10 +5494,24 @@
         "title": "Rejoicing without jealousy in the virtue accomplished by others and dedicating the roots of virtue to their benefit, and developing bodhichitta"
       }
     ],
+    "1.119d": [
+      {
+        "section": "3",
+        "title": "The Conclusion: Virtuous in the End"
+      },
+      {
+        "section": "3.2",
+        "title": "Explaining the necessity of training in the path of the Great Vehicle, the essence of dharma"
+      },
+      {
+        "section": "3.2.2",
+        "title": "Advice that it is necessary to practise great waves of bodhisattva activity for the benefit of others."
+      }
+    ],
     "1.120": [
       {
         "section": "3",
-        "title": "Showing that the three realms are devoid of essence???"
+        "title": "The Conclusion: Virtuous in the End"
       },
       {
         "section": "3.2",
@@ -4964,7 +5525,7 @@
     "1.121": [
       {
         "section": "3",
-        "title": "Showing that the three realms are devoid of essence???"
+        "title": "The Conclusion: Virtuous in the End"
       },
       {
         "section": "3.2",
@@ -4978,55 +5539,75 @@
     "1.122": [
       {
         "section": "3",
-        "title": "Showing that the three realms are devoid of essence???"
+        "title": "The Conclusion: Virtuous in the End"
       },
       {
         "section": "3.3",
-        "title": "Advice to attain the unsurpassable fruit of the ultimate fulfilment of the two benefits"
+        "title": "How through that, one attains the unsurpassable fruit of the ultimate fulfilment of the two benefits"
       }
     ],
     "1.123": [
       {
         "section": "3",
-        "title": "Showing that the three realms are devoid of essence???"
+        "title": "The Conclusion: Virtuous in the End"
       },
       {
         "section": "3.3",
-        "title": "Advice to attain the unsurpassable fruit of the ultimate fulfilment of the two benefits"
+        "title": "How through that, one attains the unsurpassable fruit of the ultimate fulfilment of the two benefits"
+      }
+    ],
+    "1.124": [
+      {
+        "section": "3",
+        "title": "The Conclusion: Virtuous in the End"
+      },
+      {
+        "section": "3.4",
+        "title": "The shastra’s colophon, together with an explanation of its composition"
       }
     ]
   },
   "sectionToFirstVerse": {
+    "1": "0.1",
+    "2": "1.4",
+    "3": "1.118ab",
+    "1.1": "0.1",
+    "1.2": "0.2",
     "1.3": "1.1",
     "1.4": "1.2",
     "1.5": "1.3",
-    "1": "1.1",
-    "2.1.1.1": "1.4",
-    "2.1.1.2": "1.5",
-    "2.1.1.5": "1.6",
-    "2.1.1.6": "1.7",
-    "2.1.1.8": "1.8",
+    "2.1": "1.4",
     "2.1.1": "1.4",
+    "2.1.1.1": "1.4",
+    "2.1.1.2": "1.5ab",
+    "2.1.1.3": "1.5c",
+    "2.1.1.4": "1.5d",
+    "2.1.1.5": "1.6",
+    "2.1.1.6": "1.7ab",
+    "2.1.1.7": "1.7cd",
+    "2.1.1.8": "1.8",
+    "2.1.2": "1.9",
     "2.1.2.1": "1.9",
     "2.1.2.2": "1.10",
     "2.1.2.3": "1.12",
+    "2.1.2.4": "1.13",
     "2.1.2.4.1": "1.13",
     "2.1.2.4.2": "1.14",
-    "2.1.2.4": "1.13",
+    "2.1.2.5": "1.15",
     "2.1.2.5.1": "1.15",
     "2.1.2.5.2": "1.16",
-    "2.1.2.5": "1.15",
     "2.1.2.6": "1.17",
     "2.1.2.7": "1.18",
+    "2.1.2.8": "1.19",
     "2.1.2.9": "1.20",
+    "2.1.2.10": "1.21",
     "2.1.2.10.1": "1.21",
     "2.1.2.10.2": "1.22",
     "2.1.2.10.3": "1.23",
     "2.1.2.10.4": "1.24",
     "2.1.2.10.5": "1.25",
     "2.1.2.10.6": "1.26",
-    "2.1.2.10": "1.21",
-    "2.1.2": "1.9",
+    "2.1.3": "1.27",
     "2.1.3.1": "1.27",
     "2.1.3.2": "1.28",
     "2.1.3.3": "1.29",
@@ -5036,50 +5617,63 @@
     "2.1.3.7": "1.33",
     "2.1.3.8": "1.34",
     "2.1.3.9": "1.35",
-    "2.1.3": "1.27",
-    "2.1": "1.4",
+    "2.2": "1.36",
+    "2.2.1": "1.36",
+    "2.2.1.1": "1.36",
     "2.2.1.1.1": "1.36",
     "2.2.1.1.2": "1.37",
-    "2.2.1.1": "1.36",
     "2.2.1.2": "1.38",
     "2.2.1.3": "1.39",
-    "2.2.1": "1.36",
-    "2.2.2.1.1.1": "1.40",
+    "2.2.2": "1.40",
+    "2.2.2.1": "1.40",
     "2.2.2.1.1": "1.40",
-    "2.2.2.1.2.1": "1.41",
+    "2.2.2.1.1.1": "1.40ab",
+    "2.2.2.1.1.2": "1.40cd",
     "2.2.2.1.2": "1.41",
+    "2.2.2.1.2.1": "1.41ab",
+    "2.2.2.1.2.2": "1.41cd",
+    "2.2.2.1.3": "1.42",
     "2.2.2.1.3.1": "1.42",
     "2.2.2.1.3.2": "1.43",
-    "2.2.2.1.3": "1.42",
     "2.2.2.1.4": "1.44",
-    "2.2.2.1": "1.40",
+    "2.2.2.2": "1.45",
     "2.2.2.2.1": "1.45",
     "2.2.2.2.2": "1.46",
+    "2.2.2.2.3": "1.47",
+    "2.2.2.2.3.1": "1.47",
+    "2.2.2.2.3.1.1": "1.47ab",
+    "2.2.2.2.3.1.2": "1.47cd",
+    "2.2.2.2.3.2": "1.48",
+    "2.2.2.2.3.2.1": "1.48",
     "2.2.2.2.3.2.1.1": "1.48",
     "2.2.2.2.3.2.1.2": "1.49",
-    "2.2.2.2.3.2.1.3": "1.50",
-    "2.2.2.2.3.2.1": "1.48",
+    "2.2.2.2.3.2.1.3": "1.50abc",
+    "2.2.2.2.3.2.1.4": "1.50d",
+    "2.2.2.2.3.2.2": "1.51",
     "2.2.2.2.3.2.2.1": "1.51",
-    "2.2.2.2.3.2.2.2": "1.52",
+    "2.2.2.2.3.2.2.2": "1.52ab",
+    "2.2.2.2.3.2.2.3": "1.52cd",
     "2.2.2.2.3.2.2.4": "1.53",
     "2.2.2.2.3.2.2.5": "1.54",
-    "2.2.2.2.3.2.2": "1.51",
+    "2.2.2.2.3.2.3": "1.55",
+    "2.2.2.2.3.2.3.1": "1.55",
     "2.2.2.2.3.2.3.1.1": "1.55",
     "2.2.2.2.3.2.3.1.2": "1.56",
     "2.2.2.2.3.2.3.1.3": "1.57",
     "2.2.2.2.3.2.3.1.4": "1.58",
-    "2.2.2.2.3.2.3.1": "1.55",
+    "2.2.2.2.3.2.3.2": "1.59",
     "2.2.2.2.3.2.3.2.1": "1.59",
     "2.2.2.2.3.2.3.2.2": "1.60",
     "2.2.2.2.3.2.3.2.3": "1.61",
     "2.2.2.2.3.2.3.2.4": "1.62",
     "2.2.2.2.3.2.3.2.5": "1.63",
-    "2.2.2.2.3.2.3.2": "1.59",
+    "2.2.2.2.3.2.3.3.1": "1.65",
     "2.2.2.2.3.2.3.3.1.1": "1.65",
     "2.2.2.2.3.2.3.3.1.2": "1.66",
     "2.2.2.2.3.2.3.3.1.3": "1.67",
-    "2.2.2.2.3.2.3.3.1.4": "1.68",
-    "2.2.2.2.3.2.3.3.1": "1.65",
+    "2.2.2.2.3.2.3.3.1.4": "1.68ab",
+    "2.2.2.2.3.2.3.3.1.5": "1.68cd",
+    "2.2.2.2.3.2.3.3.2": "1.69",
     "2.2.2.2.3.2.3.3.2.1": "1.69",
     "2.2.2.2.3.2.3.3.2.2": "1.70",
     "2.2.2.2.3.2.3.3.2.3": "1.71",
@@ -5088,72 +5682,70 @@
     "2.2.2.2.3.2.3.3.2.6": "1.74",
     "2.2.2.2.3.2.3.3.2.7": "1.75",
     "2.2.2.2.3.2.3.3.2.8": "1.76",
-    "2.2.2.2.3.2.3.3.2": "1.69",
+    "2.2.2.2.3.2.3.3.3": "1.77",
+    "2.2.2.2.3.2.3.3.3.1": "1.77",
+    "2.2.2.2.3.2.3.3.3.1.1": "1.77",
     "2.2.2.2.3.2.3.3.3.1.1.1": "1.77",
-    "2.2.2.2.3.2.3.3.3.1.1.2": "1.78",
-    "2.2.2.2.3.2.3.3.3.1.1.4": "1.79",
+    "2.2.2.2.3.2.3.3.3.1.1.2": "1.78ab",
+    "2.2.2.2.3.2.3.3.3.1.1.3": "1.78cd",
+    "2.2.2.2.3.2.3.3.3.1.1.4": "1.79ab",
+    "2.2.2.2.3.2.3.3.3.1.1.5": "1.79cd",
     "2.2.2.2.3.2.3.3.3.1.1.6": "1.80",
     "2.2.2.2.3.2.3.3.3.1.1.7": "1.81",
-    "2.2.2.2.3.2.3.3.3.1.1.8": "1.82",
+    "2.2.2.2.3.2.3.3.3.1.1.8": "1.82ab",
+    "2.2.2.2.3.2.3.3.3.1.1.9": "1.82cd",
     "2.2.2.2.3.2.3.3.3.1.1.10": "1.83",
     "2.2.2.2.3.2.3.3.3.1.1.11": "1.84",
     "2.2.2.2.3.2.3.3.3.1.1.12": "1.85",
     "2.2.2.2.3.2.3.3.3.1.1.13": "1.86",
-    "2.2.2.2.3.2.3.3.3.1.1.15": "1.87",
-    "2.2.2.2.3.2.3.3.3.1.1": "1.77",
+    "2.2.2.2.3.2.3.3.3.1.1.14": "1.87",
+    "2.2.2.2.3.2.3.3.3.1.1.15": "1.88",
+    "2.2.2.2.3.2.3.3.3.1.2": "1.89",
     "2.2.2.2.3.2.3.3.3.1.2.1": "1.89",
     "2.2.2.2.3.2.3.3.3.1.2.2": "1.90",
-    "2.2.2.2.3.2.3.3.3.1.2": "1.89",
+    "2.2.2.2.3.2.3.3.3.1.3": "1.91",
     "2.2.2.2.3.2.3.3.3.1.3.1": "1.91",
     "2.2.2.2.3.2.3.3.3.1.3.2": "1.92",
-    "2.2.2.2.3.2.3.3.3.1.3.3": "1.93",
+    "2.2.2.2.3.2.3.3.3.1.3.3": "1.93ab",
+    "2.2.2.2.3.2.3.3.3.1.3.4": "1.93cd",
     "2.2.2.2.3.2.3.3.3.1.3.5": "1.94",
     "2.2.2.2.3.2.3.3.3.1.3.6": "1.95",
     "2.2.2.2.3.2.3.3.3.1.3.7": "1.96",
     "2.2.2.2.3.2.3.3.3.1.3.8": "1.97",
-    "2.2.2.2.3.2.3.3.3.1.3": "1.91",
-    "2.2.2.2.3.2.3.3.3.1": "1.77",
+    "2.2.2.2.3.2.3.3.3.2": "1.98",
+    "2.2.2.2.3.2.3.3.3.2.1": "1.98",
     "2.2.2.2.3.2.3.3.3.2.1.1": "1.98",
     "2.2.2.2.3.2.3.3.3.2.1.2": "1.99",
     "2.2.2.2.3.2.3.3.3.2.1.3": "1.101",
-    "2.2.2.2.3.2.3.3.3.2.1": "1.98",
     "2.2.2.2.3.2.3.3.3.2.2": "1.102",
-    "2.2.2.2.3.2.3.3.3.2": "1.98",
-    "2.2.2.2.3.2.3.3.3": "1.77",
+    "2.2.2.2.3.2.3.4": "1.103",
     "2.2.2.2.3.2.3.4.1": "1.103",
     "2.2.2.2.3.2.3.4.2": "1.104",
     "2.2.2.2.3.2.3.4.3": "1.105",
     "2.2.2.2.3.2.3.4.5": "1.106",
-    "2.2.2.2.3.2.3.4": "1.103",
-    "2.2.2.2.3.2.3": "1.55",
-    "2.2.2.2.3.2": "1.48",
-    "2.2.2.2.3.1.1": "1.47",
-    "2.2.2.2.3.1": "1.47",
-    "2.2.2.2.3": "1.47",
-    "2.2.2.2": "1.45",
-    "2.2.2": "1.40",
-    "2.2": "1.36",
+    "2.3": "1.107",
     "2.3.1": "1.107",
+    "2.3.2": "1.108",
     "2.3.2.1": "1.108",
+    "2.3.2.2": "1.109",
     "2.3.2.2.1": "1.109",
+    "2.3.2.2.2": "1.111d",
     "2.3.2.2.3": "1.112",
     "2.3.2.2.4": "1.113",
     "2.3.2.2.5": "1.114",
-    "2.3.2.2": "1.109",
-    "2.3.2": "1.108",
-    "2.3.3.1": "1.115",
+    "2.3.3": "1.115ab",
+    "2.3.3.1": "1.115ab",
+    "2.3.3.2": "1.115cd",
     "2.3.3.3": "1.116",
     "2.3.3.4": "1.117",
-    "2.3.3": "1.115",
-    "2.3": "1.107",
-    "2": "1.4",
-    "3.1.1": "1.118",
-    "3.1": "1.118",
-    "3.2.1": "1.119",
-    "3.2.2": "1.120",
+    "3.1": "1.118ab",
+    "3.1.1": "1.118ab",
+    "3.1.2": "1.118cd",
+    "3.2": "1.119abc",
+    "3.2.1": "1.119abc",
+    "3.2.2": "1.119d",
     "3.2.3": "1.121",
-    "3.2": "1.119",
     "3.3": "1.122",
-    "3": "1.118"
+    "3.4": "1.124"
   }
 }

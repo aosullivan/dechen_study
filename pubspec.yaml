@@ -60,6 +60,7 @@ flutter:
     - assets/gateway.jpg
     - assets/bodhicarya.jpg
     - assets/kingofaspirations.webp
+    - assets/friendlyletter.jpg
     - assets/icons/bodhicarya_style_icon.svg
     - texts/bodhicaryavatara/bcv-root
     - texts/bodhicaryavatara/bcv_parsed.json
@@ -77,6 +78,7 @@ flutter:
     - texts/friendlyletter/friendlyletter_parsed.json
     - texts/friendlyletter/verse_commentary_mapping.txt
     - texts/friendlyletter/verse_hierarchy_map.json
+    - texts/friendlyletter/root_text_quiz.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -13,10 +13,12 @@ class StudyTextConfig {
     this.sectionCluesPath,
     this.quizBeginnerPath,
     this.quizAdvancedPath,
+    this.guessChapterEnabled = true,
     this.purchaseRootTextUrl,
     this.purchaseCommentaryUrl,
     this.purchaseRootTextSearchTerm,
     this.purchaseCommentarySearchTerm,
+    this.hasChapters = true,
   });
 
   final String textId;
@@ -31,10 +33,12 @@ class StudyTextConfig {
   final String? sectionCluesPath;
   final String? quizBeginnerPath;
   final String? quizAdvancedPath;
+  final bool guessChapterEnabled;
   final String? purchaseRootTextUrl;
   final String? purchaseCommentaryUrl;
   final String? purchaseRootTextSearchTerm;
   final String? purchaseCommentarySearchTerm;
+  final bool hasChapters;
 
   /// Core data needed for daily/read/overview flows.
   bool get hasCoreStudySupport =>
@@ -54,6 +58,7 @@ class StudyTextConfig {
       case 'overview':
         return hasCoreStudySupport;
       case 'guess_chapter':
+        return hasQuizSupport && guessChapterEnabled;
       case 'quiz':
         return hasQuizSupport;
       default:
@@ -61,8 +66,9 @@ class StudyTextConfig {
     }
   }
 
-  /// Legacy "full support" (core + quiz).
-  bool get hasFullStudySupport => hasCoreStudySupport && hasQuizSupport;
+  /// Legacy "full support" (daily/read/overview + guess chapter + quiz).
+  bool get hasFullStudySupport =>
+      hasCoreStudySupport && hasQuizSupport && guessChapterEnabled;
 }
 
 /// Registry of study texts. Add a new text by appending a [StudyTextConfig] and
@@ -98,6 +104,7 @@ final List<StudyTextConfig> studyTextRegistry = [
     parsedJsonPath: 'texts/kingofaspirations/koa_parsed.json',
     hierarchyPath: 'texts/kingofaspirations/verse_hierarchy_map.json',
     commentaryPath: 'texts/kingofaspirations/verse_commentary_mapping.txt',
+    hasChapters: false,
   ),
   const StudyTextConfig(
     textId: 'friendlyletter',
@@ -105,10 +112,14 @@ final List<StudyTextConfig> studyTextRegistry = [
     path: '/friendlyletter',
     author: 'NAGARJUNA',
     description:
-        'Daily verses, read mode, and structural overview for The Letter to a Friend (Suhrillekha), mapped to the hierarchy used in The Telescope of Wisdom commentary.',
+        'Daily verses, read mode, and structural overview for The Letter to a Friend (Suhrillekha), mapped to the hierarchy used in The Telescope of Wisdom commentary, composed by Karma Thinley Rinpoche.',
+    coverAssetPath: 'assets/friendlyletter.jpg',
     parsedJsonPath: 'texts/friendlyletter/friendlyletter_parsed.json',
     hierarchyPath: 'texts/friendlyletter/verse_hierarchy_map.json',
     commentaryPath: 'texts/friendlyletter/verse_commentary_mapping.txt',
+    quizBeginnerPath: 'texts/friendlyletter/root_text_quiz.txt',
+    guessChapterEnabled: false,
+    hasChapters: false,
   ),
 ];
 

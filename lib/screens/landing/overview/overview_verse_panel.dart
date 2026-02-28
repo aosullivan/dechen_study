@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../services/verse_service.dart';
 import '../../../services/verse_hierarchy_service.dart';
 import '../../../utils/app_theme.dart';
+import '../../../utils/verse_ref_formatter.dart';
 import '../bcv/bcv_verse_text.dart';
 import 'overview_constants.dart';
 
@@ -69,7 +70,8 @@ class OverviewVersePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final verses = _loadVerses();
     final readerParams = onOpenInReader != null
-        ? VerseHierarchyService.instance.getReaderParamsForSectionSync(textId, sectionPath)
+        ? VerseHierarchyService.instance
+            .getReaderParamsForSectionSync(textId, sectionPath)
         : null;
 
     return Container(
@@ -141,7 +143,8 @@ class OverviewVersePanel extends StatelessWidget {
                 : LayoutBuilder(
                     builder: (context, constraints) {
                       // Ensure verse text has a finite width so wrap+indent works.
-                      final width = constraints.maxWidth.isFinite && constraints.maxWidth > 0
+                      final width = constraints.maxWidth.isFinite &&
+                              constraints.maxWidth > 0
                           ? constraints.maxWidth
                           : OverviewConstants.versePanelWidth;
                       return ListView.separated(
@@ -154,21 +157,25 @@ class OverviewVersePanel extends StatelessWidget {
                         ),
                         itemBuilder: (context, index) {
                           final v = verses[index];
+                          final displayRef =
+                              formatVerseRefForDisplay(textId, v.ref);
                           return SizedBox(
                             width: width,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Verse ${v.ref}',
-                                  style: const TextStyle(
-                                    fontFamily: 'Lora',
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.mutedBrown,
+                                if (displayRef.isNotEmpty) ...[
+                                  Text(
+                                    'Verse $displayRef',
+                                    style: const TextStyle(
+                                      fontFamily: 'Lora',
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.mutedBrown,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 4),
+                                  const SizedBox(height: 4),
+                                ],
                                 BcvVerseText(
                                   text: v.text,
                                   style: const TextStyle(

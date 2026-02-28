@@ -20,6 +20,7 @@ import '../../services/commentary_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 
 /// Notifier for section-related state (breadcrumb, overlay, visible verse).
@@ -2502,20 +2503,25 @@ class _ReadScreenState extends State<ReadScreen>
                                     if (ref != null &&
                                         (segmentIndex == null ||
                                             segmentIndex == 0)) {
-                                      refWidget = Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 0, 0, 8),
-                                        child: Text(
-                                          'Verse $ref',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(
-                                                fontFamily: 'Lora',
-                                                color: AppColors.primary,
-                                              ),
-                                        ),
-                                      );
+                                      final displayRef =
+                                          formatBaseVerseRefForDisplay(
+                                              _textId, ref);
+                                      if (displayRef.isNotEmpty) {
+                                        refWidget = Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 0, 8),
+                                          child: Text(
+                                            'Verse $displayRef',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                  fontFamily: 'Lora',
+                                                  color: AppColors.primary,
+                                                ),
+                                          ),
+                                        );
+                                      }
                                     }
                                     final inner = Padding(
                                       padding: EdgeInsets.fromLTRB(

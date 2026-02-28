@@ -1,5 +1,13 @@
 Friendly Letter: Verse-to-Section Mapping
 
+[0.1]
+Section (1.1): Explaining the title of the shastra with the correspondence of the Sanskrit and Tibetan titles
+In the language of India, it is Suhrillekha. In Tibetan, it is bshes pa’i spring yig.
+
+[0.2]
+Section (1.2): Homage to Manjushri, supreme deity of wisdom
+I bow down to Manjushri Kumarabhuta.
+
 [1.1]
 Section (1.3): Advice to listen to the recounting of the qualities of the mind of the Bhagavan Buddha [A3]
 O virtuous and worthy one with innate qualities,
@@ -16,17 +24,29 @@ Although you may have already heard
 Section (2.1.1.1): As it is the root of all dharma and the cause of merit, increase faith through training in the six things to remember [B1A1]
 The Buddha, dharma and sangha,
 
-[1.5]
+[1.5ab]
 Section (2.1.1.2): Having stabilized faith, it is necessary to train in virtue while avoiding sinful actions [B1A2]
 Always practise the ten paths of virtuous deeds
+
+[1.5c]
+Section (2.1.1.3): It is necessary to abandon alcohol, the cause of unconcern in acceptance and rejection [B1A3]
+Refrain from alcohol and likewise
+
+[1.5d]
+Section (2.1.1.4): Advice on the necessity to rely upon a virtuous livelihood which does not give cause to harming others or unconcern [B1A4]
+Thoroughly delight in a virtuous livelihood.
 
 [1.6]
 Section (2.1.1.5): Explaining the necessity to give up all wealth to benefit others, being the most excellent way of stabilizing virtue [B1A5]
 Knowing that wealth is unstable and devoid of essence,
 
-[1.7]
+[1.7ab]
 Section (2.1.1.6): In order that the merit of giving not be wasted or exhausted, advice on the necessity to retain flawless moral discipline [B1A6]
 You should practise moral discipline which is
+
+[1.7cd]
+Section (2.1.1.7): Recounting the qualities of moral discipline [B1A7]
+Morality is said to be the foundation of all virtues,
 
 [1.8]
 Section (2.1.1.8): Having extensively developed the happiness of the higher realms through such giving and moral discipline, advice on the necessity to train in the six perfections in order to accomplish the bliss of non-­dwelling nirvana [B1A8]
@@ -64,9 +84,13 @@ Section (2.1.2.5.2): Abandoning resentment [B1B5B]
 Section (2.1.2.6): Advice on the necessity that one should not reinforce negative concepts but instead hold stable a virtuous mind [B1B6]
 Recognize thoughts to be like
 
-[1.18] [1.19]
+[1.18]
 Section (2.1.2.7): Advice on the importance of abandoning negative speech and speaking gently [B1B7]
 The Conqueror taught that there are three kinds
+
+[1.19]
+Section (2.1.2.8): Advice on training in the excellent, having dispensed with negative physical behaviour [B1B8]
+Light destined for light, darkness
 
 [1.20]
 Section (2.1.2.9): Advice on the necessity of associating only with excellent friends, having abandoned negative non-­virtuous friends [B1B9]
@@ -148,13 +172,21 @@ With the understanding that food is like medicine,
 Section (2.2.1.3): Advice to renunciates and householders to strive in the yoga of not sleeping [B2A3]
 Lord of reason, recite until the end of the day
 
-[1.40]
+[1.40ab]
 Section (2.2.2.1.1.1): The actual meditation on love and so on [B2B1A1]
 On love, compassion, joy
 
-[1.41]
+[1.40cd]
+Section (2.2.2.1.1.2): The benefits of such meditation [B2B1A2]
+Even if the supreme is not gained now,
+
+[1.41ab]
 Section (2.2.2.1.2.1): Meditation on the absorptions [B2B1B1]
 Sensual pleasure, joy and bliss, and suffering
+
+[1.41cd]
+Section (2.2.2.1.2.2): The benefits of such absorptions [B2B1B2]
+An equal status to that of the Brahma, Clear Light,
 
 [1.42]
 Section (2.2.2.1.3.1): Showing the five particularities [B2B1C1]
@@ -176,9 +208,13 @@ Faith, energy, mindfulness,
 Section (2.2.2.2.2): How to abandon pride, the obstruction to the path of meditation [B2B2B]
 ‘Sickness, ageing, death, separation from what is dear
 
-[1.47]
+[1.47ab]
 Section (2.2.2.2.3.1.1): Showing the benefits of meditation on the correct view [B2B2C1A]
 If you really desire the higher realms or liberation,
+
+[1.47cd]
+Section (2.2.2.2.3.1.2): Showing the defects of not meditating [B2B2C1B]
+Someone with wrong views, although they may practise goodness,
 
 [1.48]
 Section (2.2.2.2.3.2.1.1): Refuting the four perviews in respect of the body [B2B2C2A1]
@@ -188,17 +224,25 @@ Understand that the true nature of humans is unhappiness, Impermanence, selfless
 Section (2.2.2.2.3.2.1.2): Refuting the twenty extremes which regard the aggregates as a self [B2B2C2A2]
 It is taught: ‘Form is not a self.’
 
-[1.50]
+[1.50abc]
 Section (2.2.2.2.3.2.1.3): Refuting the six erroneous views of the cause of the aggregates [B2B2C2A3]
 The aggregates did not come about through their own wishes, nor from time,
+
+[1.50d]
+Section (2.2.2.2.3.2.1.4): Showing the inerrant cause [B2B2C2A4]
+Understand they arise from ignorance, actions and craving.
 
 [1.51]
 Section (2.2.2.2.3.2.2.1): Showing that even if one wishes for liberation, if one does not abandon practising all three adconditions, one will not attain liberation [B2B2C2B1]
 Grasping at moral discipline and asceticism as supreme,
 
-[1.52]
+[1.52ab]
 Section (2.2.2.2.3.2.2.2): For those who do not create their own liberation by depending upon their own meditation, there is no possibility of being propelled to liberation by others [B2B2C2B2]
 Liberation depends upon oneself.
+
+[1.52cd]
+Section (2.2.2.2.3.2.2.3): The necessity of meditating on the means of liberation, the Four Truths [B2B2C2B3]
+With hearing, moral discipline and meditative absorption,
 
 [1.53]
 Section (2.2.2.2.3.2.2.4): How all paths to liberation are contained within the three trainings [B2B2C2B4]
@@ -256,9 +300,13 @@ Fathers become sons, mothers become wives,
 Section (2.2.2.2.3.2.3.3.1.3): Meditating on dissatisfaction [B2B2C2C3A3]
 Everyone has drunk more milk
 
-[1.68]
+[1.68ab]
 Section (2.2.2.2.3.2.3.3.1.4): Meditating on immeasurability [B2B2C2C3A4]
 The heap of each person’s own bones
+
+[1.68cd]
+Section (2.2.2.2.3.2.3.3.1.5): Meditating on taking a body again and again [B2B2C2C3A5]
+If one could count one’s mothers with beads the size of
 
 [1.69]
 Section (2.2.2.2.3.2.3.3.2.1): Meditating on the suffering of change in the instability of superiors and inferiors in samsara [B2B2C2C3B1]
@@ -296,13 +344,21 @@ Accordingly, such faults indeed exist. Now there is merit;
 Section (2.2.2.2.3.2.3.3.3.1.1.1): Meditating on the sufferings of the eight hot hells caused by hatred [B2B2C2C3C1A1]
 Sentient beings who commit negative actions
 
-[1.78]
+[1.78ab]
 Section (2.2.2.2.3.2.3.3.3.1.1.2): Specifically meditating on the suffering of crushing [B2B2C2C3C1A2]
 Some are pressed like sesame;
 
-[1.79]
+[1.78cd]
+Section (2.2.2.2.3.2.3.3.3.1.1.3): Meditating on the suffering of the black threads [B2B2C2C3C1A3]
+Some are sawn apart;
+
+[1.79ab]
 Section (2.2.2.2.3.2.3.3.3.1.1.4): Meditating on the suffering of being filled with molten metal of the heating hell [B2B2C2C3C1A4]
 Likewise, others have blazing streams
+
+[1.79cd]
+Section (2.2.2.2.3.2.3.3.3.1.1.5): Meditating on the suffering of being impaled on searing stakes of the heating hell [B2B2C2C3C1A5]
+Some are completely impaled
 
 [1.80]
 Section (2.2.2.2.3.2.3.3.3.1.1.6): Meditating on the sufferings of the neighbouring hells [B2B2C2C3C1A6]
@@ -312,9 +368,13 @@ Some, overpowered by savage dogs
 Section (2.2.2.2.3.2.3.3.3.1.1.7): Meditating on the suffering of the swamp of rotten corpses [B2B2C2C3C1A7]
 Some, as they are bitten by many kinds of parasites and insects,
 
-[1.82]
+[1.82ab]
 Section (2.2.2.2.3.2.3.3.3.1.1.8): Meditating on the suffering of burning in torturous flames of the heating hell [B2B2C2C3C1A8]
 Some are continually ablaze in a mass
+
+[1.82cd]
+Section (2.2.2.2.3.2.3.3.3.1.1.9): Meditating on the suffering of blazing in the great vats of incessant torment [B2B2C2C3C1A9]
+Some are thrust head first into
 
 [1.83]
 Section (2.2.2.2.3.2.3.3.3.1.1.10): Meditating that it is appropriate to be fearful [B2B2C2C3C1A10]
@@ -332,7 +392,11 @@ Just as among all happiness, the exhaustion of craving
 Section (2.2.2.2.3.2.3.3.3.1.1.13): In summary, meditating that no example can encompass the suffering of the hells [B2B2C2C3C1A13]
 Here, who, in a single day, would suffer
 
-[1.87] [1.88]
+[1.87]
+Section (2.2.2.2.3.2.3.3.3.1.1.14): Meditating that one must experience the suffering of hells for as long as actions are not exhausted [B2B2C2C3C1A14]
+In that way, although extremely unbearable sufferings
+
+[1.88]
 Section (2.2.2.2.3.2.3.3.3.1.1.15): Meditating that these hells are not experienced spontaneously or by chance but only those who accumulate non­virtues of body, speech and mind need experience them [B2B2C2C3C1A15]
 The seeds of these fruitions of non-virtue
 
@@ -352,9 +416,13 @@ For pretas, the constant sufferings
 Section (2.2.2.2.3.2.3.3.3.1.3.2): Meditating on the suffering of having inner obscurations [B2B2C2C3C1C2]
 Some have mouths as small as the eye of a needle
 
-[1.93]
+[1.93ab]
 Section (2.2.2.2.3.2.3.3.3.1.3.3): Meditating on the suffering of having disgusting bodies [B2B2C2C3C1C3]
 Some have bodies of bone and skin and are naked.
+
+[1.93cd]
+Section (2.2.2.2.3.2.3.3.3.1.3.4): Meditating on the suffering of having obscurations of hunger and thirst [B2B2C2C3C1C4]
+Some have flaming mouths by night, and
 
 [1.94]
 Section (2.2.2.2.3.2.3.3.3.1.3.5): Meditating on the suffering of eating one another out of the distress of extreme hunger [B2B2C2C3C1C5]
@@ -412,9 +480,13 @@ Without wisdom, there is no concentration. Yet without concentration, there is n
 Section (2.3.2.1): The wisdom of that which is not to be contemplated [B3B1]
 Fourteen indeterminates in the world Were taught by the Kinsman of the Sun. Why are they not to be contemplated? They do not pacify the mind.
 
-[1.109] [1.110] [1.111]
+[1.109] [1.110] [1.111abc]
 Section (2.3.2.2.1): How samsara arises as the succession of the twelve links of dependent origination of the wheel of existence [B3B2A]
 From unawareness come actions, from which Comes consciousness, from which naming and form
+
+[1.111d]
+Section (2.3.2.2.2): How, by reversing this revolution, nirvana is attained [B3B2B]
+The cessation of birth will cease all of these.
 
 [1.112]
 Section (2.3.2.2.3): The benefits of understanding the essence of the Buddha’s teachings by understanding dependent origination [B3B2C]
@@ -428,9 +500,13 @@ Perfect view, livelihood, effort, Mindfulness, concentration, speech, action
 Section (2.3.2.2.5): Showing that focusing on the truths of the path is the Four Truths of a noble one [B3B2E]
 This birth is suffering; ‘craving’ and its agent Are the vast sources of that.
 
-[1.115]
+[1.115ab]
 Section (2.3.3.1): Advice to abandon laziness through continual exertion in the Four Truths [B3C1]
 Since that is indeed so, one must always endeavour In order to see the Four Truths of a noble one.
+
+[1.115cd]
+Section (2.3.3.2): Praising by advising that nirvana is attained even while remaining at home [B3C2]
+Even householders living in the lap of luxury
 
 [1.116]
 Section (2.3.3.3): Advice not to become disheartened, since those masters of the past who were noble ones became so by their effort and exertion as ordinary people [B3C3]
@@ -440,15 +516,19 @@ Those who directly perceived the dharma Certainly did not descend from the heave
 Section (2.3.3.4): Advising that taming the mind alone is the root of dharma, and so abandoning discouragement [B3C4]
 Fearless one, you have made many requests. These beneficial instructions have real meaning.
 
-[1.118]
+[1.118ab]
 Section (3.1.1): Since in this shastra the entirety of practical instructions of the three trainings is contained, it will be difficult to accomplish it fully [C1A]
 Why are these teachings for you,
 
-[1.119]
+[1.118cd]
+Section (3.1.2): Nevertheless, showing the necessity of accomplishing whatever one is able to, because even if one accomplishes well just one part, one’s life will be made meaningful by the undiminished accumulation of merit [C1B]
+Yet by relying on qualities of the essence of practising
+
+[1.119abc]
 Section (3.2.1): Rejoicing without jealousy in the virtue accomplished by others and dedicating the roots of virtue to their benefit, and developing bodhichitta [C2A]
 Having rejoiced in all the virtue of all and
 
-[1.120]
+[1.119d] [1.120]
 Section (3.2.2): Advice that it is necessary to practise great waves of bodhisattva activity for the benefit of others. [C2B]
 Then, by this heap of virtue,
 
@@ -457,5 +537,9 @@ Section (3.2.3): Encouragement on the necessity of attaining buddhahood, the ult
 Having arisen, sickness and ageing, desire and hatred
 
 [1.122] [1.123]
-Section (3.3): Advice to attain the unsurpassable fruit of the ultimate fulfilment of the two benefits [C3]
+Section (3.3): How through that, one attains the unsurpassable fruit of the ultimate fulfilment of the two benefits [C3]
 Wisdom, moral discipline and giving will arise and great, stainless fame
+
+[1.124]
+Section (3.4): The shastra’s colophon, together with an explanation of its composition [C4]
+This completes The Letter to a Friend, composed as a gift for a friend, King Gautamiputra, by the noble Acharya Nagarjuna.

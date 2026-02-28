@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
@@ -141,7 +142,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     return m?.group(1) ?? ref;
   }
 
-  String _displayRef(String ref) => _baseRef(ref);
+  String _displayRef(String ref) =>
+      formatBaseVerseRefForDisplay(widget.textId, _baseRef(ref));
 
   List<String> _hierarchyCandidatesForRef(String ref) {
     final out = <String>{};
@@ -164,7 +166,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
 
   Future<String?> _leafSectionPathForRef(String ref) async {
     for (final candidate in _hierarchyCandidatesForRef(ref)) {
-      final hierarchy = await _hierarchyService.getHierarchyForVerse(widget.textId, candidate);
+      final hierarchy = await _hierarchyService.getHierarchyForVerse(
+          widget.textId, candidate);
       if (hierarchy.isEmpty) continue;
       final sec = hierarchy.last['section'] ?? hierarchy.last['path'] ?? '';
       if (sec.isNotEmpty) return sec;
@@ -358,7 +361,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   }) async {
     String titleFromPath(String path) {
       if (path.isEmpty) return '';
-      final hierarchy = _hierarchyService.getHierarchyForSectionSync(widget.textId, path);
+      final hierarchy =
+          _hierarchyService.getHierarchyForSectionSync(widget.textId, path);
       if (hierarchy.isEmpty) return '';
       return (hierarchy.last['title'] ?? '').trim();
     }
@@ -370,7 +374,8 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     }
 
     for (final ref in refs) {
-      final hierarchy = await _hierarchyService.getHierarchyForVerse(widget.textId, ref);
+      final hierarchy =
+          await _hierarchyService.getHierarchyForVerse(widget.textId, ref);
       if (hierarchy.isEmpty) continue;
       final title = (hierarchy.last['title'] ?? '').trim();
       if (title.isNotEmpty) return title;
@@ -425,8 +430,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
             _totalLogicalLines(content.texts) < widget.minLinesForSection) {
           final parent = _parentPath(sectionPath);
           if (parent.isEmpty || !visitedParents.add(parent)) break;
-          final parentRefs =
-              _hierarchyService.getVerseRefsForSectionSync(widget.textId, parent).toList();
+          final parentRefs = _hierarchyService
+              .getVerseRefsForSectionSync(widget.textId, parent)
+              .toList();
           if (parentRefs.isEmpty) break;
           parentRefs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
           final runRefs = anchorRef != null
@@ -565,9 +571,10 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                   final text = entry.value;
                   final ref = i < _sectionRefs.length ? _sectionRefs[i] : null;
                   final displayRef = ref == null ? null : _displayRef(ref);
-                  final shouldShowDisplayRef = displayRef != null
-                      ? shownDisplayRefs.add(displayRef)
-                      : false;
+                  final shouldShowDisplayRef =
+                      displayRef != null && displayRef.isNotEmpty
+                          ? shownDisplayRefs.add(displayRef)
+                          : false;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Column(

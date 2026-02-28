@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../config/study_text_config.dart';
+import '../utils/verse_ref_formatter.dart';
 import 'verse_service.dart';
 
 /// Params to open the reader at a section (e.g. "Full text" from overview or daily).
@@ -477,20 +478,15 @@ class VerseHierarchyService {
           .toList()
         ..sort(_compareVerseRefsFull);
       if (refs.isEmpty) continue;
-      out[path] = _formatVerseRange(refs);
+      out[path] = _formatVerseRange(textId, refs);
     }
     s.sectionToVerseRange = out;
     return s.sectionToVerseRange!;
   }
 
   /// Format sorted refs as "v1.1ab" or "v1.2-1.3", "v4.2-v4.3".
-  static String _formatVerseRange(List<String> refs) {
-    if (refs.isEmpty) return '';
-    if (refs.length == 1) return 'v${refs.first}';
-    final first = refs.first;
-    final last = refs.last;
-    return 'v$first-$last';
-  }
+  static String _formatVerseRange(String textId, List<String> refs) =>
+      formatVerseRangeForDisplay(textId, refs);
 
   /// Returns breadcrumb hierarchy for section path (e.g. "3.1.3" -> root to that section).
   /// Call after _ensureLoaded(). Used when user taps a section to update UI immediately.
