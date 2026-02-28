@@ -2446,13 +2446,13 @@ class _ReadScreenState extends State<ReadScreen>
                               key: key,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  _showsChapterNavigation
-                                      ? 'Chapter ${ch.number}: ${ch.title}'
-                                      : ch.title,
-                                  style: _chapterTitleStyle,
-                                ),
-                                const SizedBox(height: 24),
+                                if (_showsChapterNavigation) ...[
+                                  Text(
+                                    'Chapter ${ch.number}: ${ch.title}',
+                                    style: _chapterTitleStyle,
+                                  ),
+                                  const SizedBox(height: 24),
+                                ],
                                 ...() {
                                   final verseStyle = _verseStyle;
 

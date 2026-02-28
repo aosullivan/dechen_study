@@ -20,6 +20,7 @@ class OverviewNodeCard extends StatelessWidget {
     required this.onBookTap,
     this.onCardTap,
     this.verseRange,
+    this.showBookIcon = true,
   });
 
   final String path;
@@ -37,6 +38,7 @@ class OverviewNodeCard extends StatelessWidget {
 
   /// Show verses (book icon tap).
   final VoidCallback onBookTap;
+  final bool showBookIcon;
 
   /// Select this card: highlight, collapse others, update section stack (card body tap).
   final VoidCallback? onCardTap;
@@ -59,22 +61,21 @@ class OverviewNodeCard extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            constraints: const BoxConstraints(
-                maxWidth: OverviewConstants.nodeMaxWidth),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            constraints:
+                const BoxConstraints(maxWidth: OverviewConstants.nodeMaxWidth),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.primary.withValues(alpha: 0.06)
+                  : OverviewConstants.depthColor(depth),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
                 color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.06)
-                    : OverviewConstants.depthColor(depth),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: isSelected
-                      ? AppColors.primary.withValues(alpha: 0.4)
-                      : AppColors.border.withValues(alpha: 0.6),
-                  width: isSelected ? 1.0 : 0.5,
-                ),
+                    ? AppColors.primary.withValues(alpha: 0.4)
+                    : AppColors.border.withValues(alpha: 0.6),
+                width: isSelected ? 1.0 : 0.5,
               ),
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -121,7 +122,8 @@ class OverviewNodeCard extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Lora',
                                     fontSize:
-                                        OverviewConstants.fontSizeForDepth(depth) -
+                                        OverviewConstants.fontSizeForDepth(
+                                                depth) -
                                             1,
                                     fontWeight: FontWeight.w600,
                                     color: isSelected
@@ -134,9 +136,11 @@ class OverviewNodeCard extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: 'Lora',
                                     fontSize:
-                                        OverviewConstants.fontSizeForDepth(depth),
+                                        OverviewConstants.fontSizeForDepth(
+                                            depth),
                                     fontWeight:
-                                        OverviewConstants.fontWeightForDepth(depth),
+                                        OverviewConstants.fontWeightForDepth(
+                                            depth),
                                     color: AppColors.textDark,
                                   ),
                                 ),
@@ -160,22 +164,25 @@ class OverviewNodeCard extends StatelessWidget {
                             ),
                           ),
                         ],
-                        // Book icon — opens verse panel.
-                        const SizedBox(width: 6),
-                        GestureDetector(
-                          onTap: onBookTap,
-                          behavior: HitTestBehavior.opaque,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Icon(
-                              Icons.menu_book_rounded,
-                              size: 16,
+                        if (showBookIcon) ...[
+                          // Book icon — opens verse panel.
+                          const SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: onBookTap,
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2),
+                              child: Icon(
+                                Icons.menu_book_rounded,
+                                size: 16,
                                 color: isSelected
                                     ? AppColors.primary.withValues(alpha: 0.65)
-                                    : AppColors.mutedBrown.withValues(alpha: 0.6),
+                                    : AppColors.mutedBrown
+                                        .withValues(alpha: 0.6),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   ),

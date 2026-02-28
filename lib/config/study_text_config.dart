@@ -10,7 +10,7 @@ class StudyTextConfig {
     required this.parsedJsonPath,
     required this.hierarchyPath,
     required this.commentaryPath,
-    required this.sectionCluesPath,
+    this.sectionCluesPath,
     this.quizBeginnerPath,
     this.quizAdvancedPath,
     this.purchaseRootTextUrl,
@@ -28,7 +28,7 @@ class StudyTextConfig {
   final String parsedJsonPath;
   final String hierarchyPath;
   final String commentaryPath;
-  final String sectionCluesPath;
+  final String? sectionCluesPath;
   final String? quizBeginnerPath;
   final String? quizAdvancedPath;
   final String? purchaseRootTextUrl;
@@ -40,8 +40,7 @@ class StudyTextConfig {
   bool get hasCoreStudySupport =>
       parsedJsonPath.isNotEmpty &&
       hierarchyPath.isNotEmpty &&
-      commentaryPath.isNotEmpty &&
-      sectionCluesPath.isNotEmpty;
+      commentaryPath.isNotEmpty;
 
   /// Quiz data availability.
   bool get hasQuizSupport =>
@@ -98,7 +97,6 @@ final List<StudyTextConfig> studyTextRegistry = [
     parsedJsonPath: 'texts/kingofaspirations/koa_parsed.json',
     hierarchyPath: 'texts/kingofaspirations/verse_hierarchy_map.json',
     commentaryPath: 'texts/kingofaspirations/verse_commentary_mapping.txt',
-    sectionCluesPath: 'texts/kingofaspirations/section_clues.json',
   ),
 ];
 

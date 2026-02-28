@@ -18,6 +18,7 @@ class OverviewTreeView extends StatefulWidget {
     this.onCardTap,
     this.scrollToPath,
     this.sectionVerseRanges,
+    this.sectionHasReaderContent,
   });
 
   final List<({String path, String title, int depth})> flatSections;
@@ -27,6 +28,7 @@ class OverviewTreeView extends StatefulWidget {
 
   /// Pre-computed verse range per section (e.g. "v1.1ab", "v1.2-1.3"). Optional.
   final Map<String, String>? sectionVerseRanges;
+  final Map<String, bool>? sectionHasReaderContent;
 
   final String? selectedPath;
 
@@ -121,8 +123,7 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
     final visibleSections = _visibleSections;
     final parentPaths = _parentPathsCache;
 
-    final totalHeight =
-        visibleSections.length * OverviewConstants.nodeHeight +
+    final totalHeight = visibleSections.length * OverviewConstants.nodeHeight +
         (visibleSections.length > 1
             ? (visibleSections.length - 1) * OverviewConstants.nodeGap
             : 0);
@@ -161,19 +162,21 @@ class _OverviewTreeViewState extends State<OverviewTreeView> {
                     path: visibleSections[i].path,
                     title: visibleSections[i].title,
                     depth: visibleSections[i].depth,
-                    hasChildren:
-                        parentPaths.contains(visibleSections[i].path),
+                    hasChildren: parentPaths.contains(visibleSections[i].path),
                     isExpanded:
                         widget.expandedPaths.contains(visibleSections[i].path),
-                    isSelected:
-                        visibleSections[i].path == widget.selectedPath,
+                    isSelected: visibleSections[i].path == widget.selectedPath,
                     verseRange:
                         widget.sectionVerseRanges?[visibleSections[i].path],
+                    showBookIcon: widget.sectionHasReaderContent?[
+                            visibleSections[i].path] ??
+                        ((widget.sectionVerseRanges?[visibleSections[i].path] ??
+                                '')
+                            .isNotEmpty),
                     onTap: parentPaths.contains(visibleSections[i].path)
                         ? () => _toggleExpanded(visibleSections[i].path)
                         : () {},
-                    onBookTap: () =>
-                        widget.onBookTap(visibleSections[i]),
+                    onBookTap: () => widget.onBookTap(visibleSections[i]),
                     onCardTap: widget.onCardTap != null
                         ? () => widget.onCardTap!(visibleSections[i])
                         : null,

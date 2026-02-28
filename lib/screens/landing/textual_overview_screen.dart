@@ -49,6 +49,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
 
   /// Set when a picker changes — the tree scrolls to this path.
   String? _scrollToPath;
+  Set<String> _fullExpandedPaths = <String>{};
+  Map<String, bool> _sectionHasReaderContent = <String, bool>{};
 
   bool get _showWholeStructureByDefault => widget.textId == 'kingofaspirations';
 
@@ -116,7 +118,8 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
     String? restoredSelectedTitle;
     String? restoredScrollPath;
 
-    if (restoredPath != null &&
+    if (!_showWholeStructureByDefault &&
+        restoredPath != null &&
         flatSections.any((s) => s.path == restoredPath)) {
       restoredSelections = _pickerSelectionsForPath(restoredPath);
       restoredScrollPath = restoredPath;
@@ -134,6 +137,15 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
 
     setState(() {
       _flatSections = flatSections;
+      _fullExpandedPaths = _showWholeStructureByDefault
+          ? <String>{}
+          : flatSections.map((s) => s.path).toSet();
+      _sectionHasReaderContent = {
+        for (final s in flatSections)
+          s.path: VerseHierarchyService.instance
+                  .getReaderParamsForSectionSync(widget.textId, s.path) !=
+              null,
+      };
       _pickerSelections = restoredSelections;
       _selectedPath = restoredSelectedPath;
       _selectedTitle = restoredSelectedTitle;
@@ -335,6 +347,19 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   }
 
   void _onExpansionChanged(String path, bool expanded) {
+    if (_showWholeStructureByDefault) {
+      setState(() {
+        if (expanded) {
+          _fullExpandedPaths = <String>{..._fullExpandedPaths, path};
+        } else {
+          _fullExpandedPaths = <String>{
+            for (final p in _fullExpandedPaths)
+              if (p != path) p,
+          };
+        }
+      });
+      return;
+    }
     setState(() {
       if (expanded) {
         _pickerSelections = _pickerSelectionsForPath(path);
@@ -400,7 +425,6 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   Widget _buildBody(BuildContext context) {
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
-    final fullExpandedPaths = _flatSections.map((s) => s.path).toSet();
 
     if (_showWholeStructureByDefault) {
       return isDesktop
@@ -409,14 +433,15 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                 Expanded(
                   child: OverviewTreeView(
                     flatSections: _filteredSections,
-                    expandedPaths: fullExpandedPaths,
+                    expandedPaths: _fullExpandedPaths,
                     selectedPath: _selectedPath,
                     onBookTap: _onBookTap,
                     onCardTap: _onCardTap,
-                    onExpansionChanged: (_, __) {},
+                    onExpansionChanged: _onExpansionChanged,
                     scrollToPath: _scrollToPath,
                     sectionVerseRanges: VerseHierarchyService.instance
                         .getSectionVerseRangeMapSync(widget.textId),
+                    sectionHasReaderContent: _sectionHasReaderContent,
                   ),
                 ),
                 AnimatedContainer(
@@ -443,14 +468,15 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
             )
           : OverviewTreeView(
               flatSections: _filteredSections,
-              expandedPaths: fullExpandedPaths,
+              expandedPaths: _fullExpandedPaths,
               selectedPath: _selectedPath,
               onBookTap: _onBookTap,
               onCardTap: _onCardTap,
-              onExpansionChanged: (_, __) {},
+              onExpansionChanged: _onExpansionChanged,
               scrollToPath: _scrollToPath,
               sectionVerseRanges: VerseHierarchyService.instance
                   .getSectionVerseRangeMapSync(widget.textId),
+              sectionHasReaderContent: _sectionHasReaderContent,
             );
     }
 
@@ -499,6 +525,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                         scrollToPath: _scrollToPath,
                         sectionVerseRanges: VerseHierarchyService.instance
                             .getSectionVerseRangeMapSync(widget.textId),
+                        sectionHasReaderContent: _sectionHasReaderContent,
                       ),
                     ),
                     AnimatedContainer(
@@ -533,6 +560,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
                   scrollToPath: _scrollToPath,
                   sectionVerseRanges: VerseHierarchyService.instance
                       .getSectionVerseRangeMapSync(widget.textId),
+                  sectionHasReaderContent: _sectionHasReaderContent,
                 ),
         ),
       ],
