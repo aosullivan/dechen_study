@@ -67,3 +67,4 @@ web/supabase_config.js
 credentials.json
 secrets.json
 **/secrets/
+texts/friendlyletter/Telescope of Wisdom.docx

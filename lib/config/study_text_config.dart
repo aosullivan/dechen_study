@@ -93,10 +93,22 @@ final List<StudyTextConfig> studyTextRegistry = [
     path: '/kingofaspirations',
     author: 'SAMANTABHADRA',
     description:
-        'Daily verses, read mode, and structural overview for Samantabhadra’s Aspiration to Good Actions.',
+        'Daily verses, read mode, and structural overview for Samantabhadra’s Aspiration to Good Actions. The structure is based on the commentary written by Drakpa Gyaltsen, a student of Jamyang Khyentse Wangpo.',
+    coverAssetPath: 'assets/kingofaspirations.webp',
     parsedJsonPath: 'texts/kingofaspirations/koa_parsed.json',
     hierarchyPath: 'texts/kingofaspirations/verse_hierarchy_map.json',
     commentaryPath: 'texts/kingofaspirations/verse_commentary_mapping.txt',
+  ),
+  const StudyTextConfig(
+    textId: 'friendlyletter',
+    title: 'Friendly Letter',
+    path: '/friendlyletter',
+    author: 'NAGARJUNA',
+    description:
+        'Daily verses, read mode, and structural overview for The Letter to a Friend (Suhrillekha), mapped to the hierarchy used in The Telescope of Wisdom commentary.',
+    parsedJsonPath: 'texts/friendlyletter/friendlyletter_parsed.json',
+    hierarchyPath: 'texts/friendlyletter/verse_hierarchy_map.json',
+    commentaryPath: 'texts/friendlyletter/verse_commentary_mapping.txt',
   ),
 ];
 
