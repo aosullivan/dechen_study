@@ -2,7 +2,7 @@ import '../config/study_text_config.dart';
 
 final RegExp _baseRefPattern = RegExp(r'^(\d+)\.(\d+)', caseSensitive: false);
 final RegExp _fullRefPattern =
-    RegExp(r'^(\d+)\.(\d+)([a-d]*)$', caseSensitive: false);
+    RegExp(r'^(\d+)\.(\d+)([a-z]*)$', caseSensitive: false);
 const Map<String, Set<String>> _hiddenBaseRefsByText = {
   // Colophon is modeled internally as 1.124 for mapping, but should not display
   // as a numbered verse in the UI.

@@ -114,40 +114,43 @@ class OverviewNodeCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Flexible(
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '$_shortNumber. ',
-                                  style: TextStyle(
-                                    fontFamily: 'Lora',
-                                    fontSize:
-                                        OverviewConstants.fontSizeForDepth(
-                                                depth) -
-                                            1,
-                                    fontWeight: FontWeight.w600,
-                                    color: isSelected
-                                        ? AppColors.primary
-                                        : AppColors.mutedBrown,
+                          child: Tooltip(
+                            message: '$_shortNumber. $title',
+                            child: Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '$_shortNumber. ',
+                                    style: TextStyle(
+                                      fontFamily: 'Lora',
+                                      fontSize:
+                                          OverviewConstants.fontSizeForDepth(
+                                                  depth) -
+                                              1,
+                                      fontWeight: FontWeight.w600,
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.mutedBrown,
+                                    ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: title,
-                                  style: TextStyle(
-                                    fontFamily: 'Lora',
-                                    fontSize:
-                                        OverviewConstants.fontSizeForDepth(
-                                            depth),
-                                    fontWeight:
-                                        OverviewConstants.fontWeightForDepth(
-                                            depth),
-                                    color: AppColors.textDark,
+                                  TextSpan(
+                                    text: title,
+                                    style: TextStyle(
+                                      fontFamily: 'Lora',
+                                      fontSize:
+                                          OverviewConstants.fontSizeForDepth(
+                                              depth),
+                                      fontWeight:
+                                          OverviewConstants.fontWeightForDepth(
+                                              depth),
+                                      color: AppColors.textDark,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         // Verse range (e.g. v1.1ab, v1.2-1.3) — before book icon.

@@ -53,7 +53,9 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   Map<String, bool> _sectionHasReaderContent = <String, bool>{};
 
   bool get _showWholeStructureByDefault =>
-      widget.textId == 'kingofaspirations' || widget.textId == 'friendlyletter';
+      widget.textId == 'kingofaspirations' ||
+      widget.textId == 'friendlyletter' ||
+      widget.textId == 'lampofthepath';
 
   @override
   void initState() {

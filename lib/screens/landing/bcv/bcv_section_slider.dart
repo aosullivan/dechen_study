@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/app_theme.dart';
@@ -20,6 +23,7 @@ class BcvSectionSlider extends StatelessWidget {
     this.nonNavigablePaths = const <String>{},
     this.onToggleExpandPath,
     this.scrollController,
+    this.horizontalScrollController,
     this.height,
   });
 
@@ -33,6 +37,7 @@ class BcvSectionSlider extends StatelessWidget {
   final Set<String> nonNavigablePaths;
   final ValueChanged<String>? onToggleExpandPath;
   final ScrollController? scrollController;
+  final ScrollController? horizontalScrollController;
   final double? height;
 
   /// True when this row starts a new top-level section group.
@@ -41,6 +46,8 @@ class BcvSectionSlider extends StatelessWidget {
     if (index <= 0 || index >= flatSections.length) return false;
     return flatSections[index].depth == 0;
   }
+
+  static const ScrollBehavior _scrollBehavior = _SectionSliderScrollBehavior();
 
   static bool _isCooperatingConditionMainSection(BcvSectionItem item) {
     final segments = item.path.split('.');
@@ -109,113 +116,139 @@ class BcvSectionSlider extends StatelessWidget {
           bottom: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
         ),
       ),
-      child: ListView.builder(
-        controller: scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        itemCount: flatSections.length,
-        itemBuilder: (context, index) {
-          final item = flatSections[index];
-          final hasTopLevelSeparator =
-              isTopLevelGroupStart(flatSections, index);
-          final hasCooperatingMainSeparator =
-              isCooperatingMainSectionStart(flatSections, index);
-          final hasSeparator =
-              hasTopLevelSeparator || hasCooperatingMainSeparator;
-          final topPadding = extraTopPaddingForIndex(flatSections, index);
-          final isCurrent = item.path == currentPath ||
-              additionalHighlightedPaths.contains(item.path);
-          final isExpandable = expandablePaths.contains(item.path);
-          final isExpanded = expandedPaths.contains(item.path);
-          final isNavigable = !nonNavigablePaths.contains(item.path);
-          final isAncestor = currentPath.isNotEmpty &&
-              (item.path == currentPath ||
-                  currentPath.startsWith('${item.path}.'));
-          final indent =
-              item.depth * BcvReadConstants.sectionSliderIndentPerLevel;
-          final numStr = sectionNumberForDisplay(item.path);
-          final label =
-              numStr.isNotEmpty ? '$numStr. ${item.title}' : item.title;
-          return Container(
-            padding: EdgeInsets.only(top: topPadding),
-            decoration: hasSeparator
-                ? BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: AppColors.border.withValues(alpha: 0.65),
-                        width: BcvReadConstants
-                            .sectionSliderTopLevelDividerThickness,
-                      ),
-                    ),
-                  )
-                : null,
-            child: Material(
-              color: isCurrent
-                  ? AppColors.primary.withValues(alpha: 0.12)
-                  : Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  if (!isNavigable) {
-                    if (isExpandable && onToggleExpandPath != null) {
-                      onToggleExpandPath!(item.path);
-                    }
-                    return;
-                  }
-                  onSectionTap({
-                    'section': item.path,
-                    'path': item.path,
-                    'title': item.title,
-                  });
-                },
-                child: SizedBox(
-                  height: BcvReadConstants.sectionSliderLineHeight,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: indent),
-                      child: Row(
-                        children: [
-                          if (isExpandable)
-                            SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: IconButton(
-                                key: Key('section_expand_${item.path}'),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints.tightFor(
-                                    width: 18, height: 18),
-                                iconSize: 16,
-                                tooltip: isExpanded
-                                    ? 'Collapse section'
-                                    : 'Expand section',
-                                color: AppColors.primary,
-                                onPressed: onToggleExpandPath == null
-                                    ? null
-                                    : () => onToggleExpandPath!(item.path),
-                                icon: Icon(
-                                  isExpanded
-                                      ? Icons.expand_more
-                                      : Icons.chevron_right,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final contentWidth = _contentWidthForSlider(
+            context: context,
+            minWidth: constraints.maxWidth,
+          );
+          return ScrollConfiguration(
+            behavior: _scrollBehavior,
+            child: SingleChildScrollView(
+              controller: horizontalScrollController,
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: contentWidth,
+                child: ListView.builder(
+                  controller: scrollController,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  itemCount: flatSections.length,
+                  itemBuilder: (context, index) {
+                    final item = flatSections[index];
+                    final hasTopLevelSeparator =
+                        isTopLevelGroupStart(flatSections, index);
+                    final hasCooperatingMainSeparator =
+                        isCooperatingMainSectionStart(flatSections, index);
+                    final hasSeparator =
+                        hasTopLevelSeparator || hasCooperatingMainSeparator;
+                    final topPadding =
+                        extraTopPaddingForIndex(flatSections, index);
+                    final isCurrent = item.path == currentPath ||
+                        additionalHighlightedPaths.contains(item.path);
+                    final isExpandable = expandablePaths.contains(item.path);
+                    final isExpanded = expandedPaths.contains(item.path);
+                    final isNavigable = !nonNavigablePaths.contains(item.path);
+                    final isAncestor = currentPath.isNotEmpty &&
+                        (item.path == currentPath ||
+                            currentPath.startsWith('${item.path}.'));
+                    final indent = item.depth *
+                        BcvReadConstants.sectionSliderIndentPerLevel;
+                    final numStr = sectionNumberForDisplay(item.path);
+                    final label = numStr.isNotEmpty
+                        ? '$numStr. ${item.title}'
+                        : item.title;
+                    return Container(
+                      padding: EdgeInsets.only(top: topPadding),
+                      decoration: hasSeparator
+                          ? BoxDecoration(
+                              border: Border(
+                                top: BorderSide(
+                                  color:
+                                      AppColors.border.withValues(alpha: 0.65),
+                                  width: BcvReadConstants
+                                      .sectionSliderTopLevelDividerThickness,
+                                ),
+                              ),
+                            )
+                          : null,
+                      child: Material(
+                        color: isCurrent
+                            ? AppColors.primary.withValues(alpha: 0.12)
+                            : Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            if (!isNavigable) {
+                              if (isExpandable && onToggleExpandPath != null) {
+                                onToggleExpandPath!(item.path);
+                              }
+                              return;
+                            }
+                            onSectionTap({
+                              'section': item.path,
+                              'path': item.path,
+                              'title': item.title,
+                            });
+                          },
+                          child: SizedBox(
+                            height: BcvReadConstants.sectionSliderLineHeight,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(left: indent, right: 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (isExpandable)
+                                      SizedBox(
+                                        width: 18,
+                                        height: 18,
+                                        child: IconButton(
+                                          key: Key(
+                                              'section_expand_${item.path}'),
+                                          padding: EdgeInsets.zero,
+                                          constraints:
+                                              const BoxConstraints.tightFor(
+                                                  width: 18, height: 18),
+                                          iconSize: 16,
+                                          tooltip: isExpanded
+                                              ? 'Collapse section'
+                                              : 'Expand section',
+                                          color: AppColors.primary,
+                                          onPressed: onToggleExpandPath == null
+                                              ? null
+                                              : () => onToggleExpandPath!(
+                                                  item.path),
+                                          icon: Icon(
+                                            isExpanded
+                                                ? Icons.expand_more
+                                                : Icons.chevron_right,
+                                          ),
+                                        ),
+                                      ),
+                                    if (isExpandable) const SizedBox(width: 4),
+                                    Text(
+                                      label,
+                                      style: sectionListTextStyle(
+                                        context,
+                                        isCurrent: isCurrent,
+                                        isAncestor: isAncestor,
+                                        isNavigable: isNavigable,
+                                      ),
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          if (isExpandable) const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              label,
-                              style: sectionListTextStyle(
-                                context,
-                                isCurrent: isCurrent,
-                                isAncestor: isAncestor,
-                                isNavigable: isNavigable,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -223,6 +256,38 @@ class BcvSectionSlider extends StatelessWidget {
         },
       ),
     );
+  }
+
+  double _contentWidthForSlider({
+    required BuildContext context,
+    required double minWidth,
+  }) {
+    final textDirection = Directionality.of(context);
+    final textScaler = MediaQuery.textScalerOf(context);
+    final style = sectionListTextStyle(
+      context,
+      isCurrent: false,
+      isAncestor: false,
+      isNavigable: true,
+    );
+    var widestRow = 0.0;
+    for (final item in flatSections) {
+      final numStr = sectionNumberForDisplay(item.path);
+      final label = numStr.isNotEmpty ? '$numStr. ${item.title}' : item.title;
+      final textPainter = TextPainter(
+        text: TextSpan(text: label, style: style),
+        maxLines: 1,
+        textScaler: textScaler,
+        textDirection: textDirection,
+      )..layout();
+      final indent = item.depth * BcvReadConstants.sectionSliderIndentPerLevel;
+      final expandAffordance =
+          expandablePaths.contains(item.path) ? (18.0 + 4.0) : 0.0;
+      final rowWidth = indent + expandAffordance + textPainter.width + 8.0;
+      if (rowWidth > widestRow) widestRow = rowWidth;
+    }
+    final contentWidth = widestRow + 32.0;
+    return math.max(minWidth, contentWidth);
   }
 
   static TextStyle sectionListTextStyle(
@@ -255,4 +320,17 @@ class BcvSectionSlider extends StatelessWidget {
       fontWeight: FontWeight.normal,
     );
   }
+}
+
+class _SectionSliderScrollBehavior extends MaterialScrollBehavior {
+  const _SectionSliderScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => const <PointerDeviceKind>{
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.invertedStylus,
+        PointerDeviceKind.trackpad,
+      };
 }

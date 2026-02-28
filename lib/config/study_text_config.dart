@@ -121,6 +121,21 @@ final List<StudyTextConfig> studyTextRegistry = [
     guessChapterEnabled: false,
     hasChapters: false,
   ),
+  const StudyTextConfig(
+    textId: 'lampofthepath',
+    title: 'Lamp of the Path to Enlightenment',
+    path: '/lampofthepath',
+    author: 'ATIŚA',
+    description:
+        'Daily verses, read mode, textual structure, and beginner quiz for Atiśa’s Lamp of the Path to Enlightenment, mapped to the Full Illumination commentary hierarchy.',
+    coverAssetPath: 'assets/lampofthepath_cover.png',
+    parsedJsonPath: 'texts/lampofthepath/lampofthepath_parsed.json',
+    hierarchyPath: 'texts/lampofthepath/verse_hierarchy_map.json',
+    commentaryPath: 'texts/lampofthepath/verse_commentary_mapping.txt',
+    quizBeginnerPath: 'texts/lampofthepath/root_text_quiz.txt',
+    guessChapterEnabled: false,
+    hasChapters: false,
+  ),
 ];
 
 /// Returns the config for [textId], or null if not found.

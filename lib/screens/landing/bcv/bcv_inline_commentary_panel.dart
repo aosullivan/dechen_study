@@ -72,7 +72,7 @@ class BcvInlineCommentaryPanel extends StatelessWidget {
       }
 
       // Verse ref line (e.g. "1.32") — keep even in preamble
-      if (RegExp(r'^\d+\.\d+(?:[a-d]+)?\s*$', caseSensitive: false)
+      if (RegExp(r'^\d+\.\d+(?:[a-z]+)?\s*$', caseSensitive: false)
           .hasMatch(t)) {
         flushProse();
         segs.add(_RefSeg(t));

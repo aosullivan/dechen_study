@@ -31,7 +31,8 @@ class FileQuizService {
   static final FileQuizService instance = FileQuizService._();
 
   /// Cache: textId -> difficulty -> list of questions.
-  final Map<String, Map<FileQuizDifficulty, List<FileQuizQuestion>>> _cache = {};
+  final Map<String, Map<FileQuizDifficulty, List<FileQuizQuestion>>> _cache =
+      {};
 
   Future<List<FileQuizQuestion>> loadQuestions(
     String textId,
@@ -225,7 +226,7 @@ class FileQuizService {
     final refs = <String>{};
 
     final rangePattern = RegExp(
-      r'(\d+)\.(\d+)(?:[a-d]+)?\s*[-–]\s*(?:(\d+)\.)?(\d+)(?:[a-d]+)?',
+      r'(\d+)\.(\d+)(?:[a-z]+)?\s*[-–]\s*(?:(\d+)\.)?(\d+)(?:[a-z]+)?',
       caseSensitive: false,
     );
     for (final m in rangePattern.allMatches(text)) {
@@ -247,7 +248,7 @@ class FileQuizService {
     }
 
     final singlePattern =
-        RegExp(r'(\d+)\.(\d+)(?:[a-d]+)?', caseSensitive: false);
+        RegExp(r'(\d+)\.(\d+)(?:[a-z]+)?', caseSensitive: false);
     for (final m in singlePattern.allMatches(text)) {
       final c = int.tryParse(m.group(1) ?? '');
       final v = int.tryParse(m.group(2) ?? '');

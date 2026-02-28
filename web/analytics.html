@@ -51,12 +51,20 @@
       <p><span class="stat" id="quiz-attempts">0</span> quiz attempts</p>
     </div>
     <div class="card">
+      <h2>Events by text</h2>
+      <canvas id="chart-text" height="200"></canvas>
+    </div>
+    <div class="card">
       <h2>Events by mode</h2>
       <canvas id="chart-mode" height="200"></canvas>
     </div>
     <div class="card">
       <h2>Events over time (30 days)</h2>
       <canvas id="chart-time" height="200"></canvas>
+    </div>
+    <div class="card">
+      <h2>Events over time by text (30 days)</h2>
+      <canvas id="chart-time-by-text" height="240"></canvas>
     </div>
     <div class="card">
       <h2>Top event types</h2>
@@ -91,11 +99,22 @@
         const modeData = d.events_by_mode || [];
         const timeData = d.events_over_time || [];
         const typeData = d.events_by_type || [];
+        const textData = d.events_by_text || [];
+        const timeByTextData = d.events_over_time_by_text || [];
+
         new Chart(document.getElementById('chart-mode'), {
           type: 'bar',
           data: {
             labels: modeData.map(r => r.mode || ''),
             datasets: [{ label: 'Events', data: modeData.map(r => r.count), backgroundColor: '#8B7355' }]
+          },
+          options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+        new Chart(document.getElementById('chart-text'), {
+          type: 'bar',
+          data: {
+            labels: textData.map(r => r.text_id || ''),
+            datasets: [{ label: 'Events', data: textData.map(r => r.count), backgroundColor: '#8B7355' }]
           },
           options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
@@ -107,6 +126,30 @@
           },
           options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
+        (function() {
+          const days = [...new Set(timeByTextData.map(r => r.day))].sort();
+          const textOrder = textData.map(r => r.text_id);
+          const textIds = [...new Set(timeByTextData.map(r => r.text_id))].sort((a, b) => {
+            const i = textOrder.indexOf(a);
+            const j = textOrder.indexOf(b);
+            return (i === -1 ? 999 : i) - (j === -1 ? 999 : j);
+          });
+          const byDayText = {};
+          timeByTextData.forEach(r => { byDayText[r.day + '\0' + r.text_id] = r.count; });
+          const palette = ['#8B7355', '#6B5344', '#A08060', '#5C4A3D', '#9B7B5E', '#7A634D', '#B09070', '#4A3C30'];
+          const datasets = textIds.slice(0, 8).map((textId, i) => ({
+            label: textId,
+            data: days.map(d => byDayText[d + '\0' + textId] || 0),
+            borderColor: palette[i % palette.length],
+            fill: false,
+            tension: 0.2
+          }));
+          new Chart(document.getElementById('chart-time-by-text'), {
+            type: 'line',
+            data: { labels: days, datasets: datasets },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+          });
+        })();
         const typeLabels = typeData.map(r => (r.event_name || '') + (r.mode ? ' (' + r.mode + ')' : ''));
         new Chart(document.getElementById('chart-type'), {
           type: 'bar',

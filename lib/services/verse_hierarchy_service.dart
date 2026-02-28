@@ -114,6 +114,20 @@ class VerseHierarchyService {
     }
     if ((path == null || path is! List) &&
         VerseService.baseVerseRefPattern.hasMatch(ref)) {
+      final candidates = <String>[];
+      final pattern =
+          RegExp('^${RegExp.escape(ref)}[a-z]+\$', caseSensitive: false);
+      for (final key in verseToPath.keys) {
+        final k = key.toString();
+        if (pattern.hasMatch(k)) candidates.add(k);
+      }
+      if (candidates.isNotEmpty) {
+        candidates.sort((a, b) => _compareVerseRefsFull(a, b));
+        path = verseToPath[candidates.first];
+      }
+    }
+    if ((path == null || path is! List) &&
+        VerseService.baseVerseRefPattern.hasMatch(ref)) {
       path = _pathFromAdjacentVerse(verseToPath, ref);
     }
     if (path is! List) return null;
@@ -598,7 +612,7 @@ class VerseHierarchyService {
     if (index == null || index.isEmpty) return [];
     final byRef = <String, String>{};
     final pattern =
-        RegExp('^${RegExp.escape(baseRef)}([a-d]+)\$', caseSensitive: false);
+        RegExp('^${RegExp.escape(baseRef)}([a-z]+)\$', caseSensitive: false);
     for (final entry in index.entries) {
       final sectionPath = entry.key;
       if (sectionPath.isEmpty) continue;

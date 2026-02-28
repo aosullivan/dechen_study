@@ -45,22 +45,21 @@ class VerseService {
   /// Matches a base verse ref like "1.5" (no suffix). Shared across the app.
   static final RegExp baseVerseRefPattern = RegExp(r'^\d+\.\d+$');
 
-  /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd".
+  /// Matches a trailing segment suffix like "ab", "cd", "a", "bcd", "abc".
   static final RegExp segmentSuffixPattern = RegExp(r'[a-d]+$');
 
   /// Returns the inclusive [start, end] line range for a segmented ref.
   ///
-  /// Letters map to canonical 0-based positions in a 4-line verse:
+  /// Letters map to canonical 0-based positions:
   ///   a=0, b=1, c=2, d=3
   ///
-  /// The suffix must be a non-empty, contiguous run of letters from {a,b,c,d}
-  /// (e.g. "a", "ab", "bc", "cd", "abc", "bcd"). Non-contiguous suffixes
-  /// (e.g. "ac", "bd") and unknown characters return null.
+  /// The suffix must be a non-empty, contiguous run of letters from {a..d}
+  /// (e.g. "a", "ab", "bc", "cd", "abc", "bcd"). Non-contiguous
+  /// suffixes (e.g. "ac", "bd") and unknown characters return null.
   ///
-  /// For verses with 4+ lines the positions are used directly.
-  /// For shorter verses the range is scaled proportionally so that the
-  /// first half of the alphabet (a/b) maps to the first half of the lines
-  /// and the second half (c/d) maps to the second half.
+  /// If the verse has at least as many lines as the highest referenced letter
+  /// slot, the positions are used directly. Otherwise the range is scaled
+  /// proportionally across the available line count.
   static List<int>? lineRangeForSegmentRef(String ref, int lineCount) {
     if (lineCount <= 0) return null;
     final m = RegExp(r'([a-d]+)$', caseSensitive: false).firstMatch(ref);
@@ -68,7 +67,10 @@ class VerseService {
     final suffix = m.group(1)!.toLowerCase();
     if (suffix.isEmpty) return null;
 
-    const letterPos = {'a': 0, 'b': 1, 'c': 2, 'd': 3};
+    const slots = 'abcd';
+    final letterPos = <String, int>{
+      for (var i = 0; i < slots.length; i++) slots[i]: i,
+    };
 
     // Validate: all chars known and strictly contiguous.
     for (var i = 0; i < suffix.length; i++) {
@@ -78,17 +80,19 @@ class VerseService {
       }
     }
 
-    final firstPos = letterPos[suffix[0]]!; // 0–3
-    final lastPos = letterPos[suffix[suffix.length - 1]]!; // 0–3
+    final firstPos = letterPos[suffix[0]]!;
+    final lastPos = letterPos[suffix[suffix.length - 1]]!;
+    const slotCount = 4;
 
     int start, end;
-    if (lineCount >= 4) {
+    if (lineCount >= slotCount) {
       start = firstPos;
       end = lastPos;
     } else {
-      // Scale the 4-slot canonical positions into the actual line count.
-      start = (firstPos * lineCount ~/ 4).clamp(0, lineCount - 1);
-      end = (((lastPos + 1) * lineCount + 3) ~/ 4 - 1).clamp(0, lineCount - 1);
+      // Scale canonical positions into the actual line count.
+      start = (firstPos * lineCount ~/ slotCount).clamp(0, lineCount - 1);
+      end = (((lastPos + 1) * lineCount + slotCount - 1) ~/ slotCount - 1)
+          .clamp(0, lineCount - 1);
       if (start > end) end = start;
     }
 

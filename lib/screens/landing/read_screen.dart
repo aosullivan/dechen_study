@@ -176,6 +176,8 @@ class _ReadScreenState extends State<ReadScreen>
   final _sectionChangeNotifier = _SectionChangeNotifier();
   final ScrollController _mainScrollController = ScrollController();
   final ScrollController _sectionSliderScrollController = ScrollController();
+  final ScrollController _sectionSliderHorizontalScrollController =
+      ScrollController();
 
   /// Incremented on each section slider scroll request. Stale retries check this.
   int _sectionSliderScrollRequestId = 0;
@@ -340,6 +342,7 @@ class _ReadScreenState extends State<ReadScreen>
     _visibilityDebounceTimer?.cancel();
     _mainScrollController.dispose();
     _sectionSliderScrollController.dispose();
+    _sectionSliderHorizontalScrollController.dispose();
     _readerFocusNode.dispose();
     _sectionOverviewFocusNode.dispose();
     _sectionChangeNotifier.dispose();
@@ -962,7 +965,7 @@ class _ReadScreenState extends State<ReadScreen>
 
   Set<String> _openingTriadForRef(String ref) {
     final match = RegExp(
-      r'^1\.(\d+)([a-d]+)?$',
+      r'^1\.(\d+)([a-z]+)?$',
       caseSensitive: false,
     ).firstMatch(ref.trim());
     if (match == null) return const <String>{};
@@ -1039,6 +1042,7 @@ class _ReadScreenState extends State<ReadScreen>
   // Bodhicaryavatara so section 1 never falls back to the legacy complex tree
   // while scrolling (e.g. 2.1 -> 2.2 should stay one-step in the same view).
   bool get _useOpeningSimplifiedMode => _textId == 'bodhicaryavatara';
+  bool get _useLampTrimmedSectionOverview => _textId == 'lampofthepath';
 
   String _openingSummaryPathForSectionPath(String sectionPath) {
     if (sectionPath.startsWith('1.1.1') ||
@@ -1073,35 +1077,51 @@ class _ReadScreenState extends State<ReadScreen>
   }
 
   List<BcvSectionItem> _sectionOverviewFlatSections(List<BcvSectionItem> flat) {
-    if (!_useOpeningSimplifiedMode) return flat;
-    final byPath = <String, BcvSectionItem>{
-      for (final item in flat) item.path: item,
-    };
-    final out = <BcvSectionItem>[];
-    final added = <String>{};
+    if (_useOpeningSimplifiedMode) {
+      final byPath = <String, BcvSectionItem>{
+        for (final item in flat) item.path: item,
+      };
+      final out = <BcvSectionItem>[];
+      final added = <String>{};
 
-    final root = byPath['1'];
-    if (root != null) {
-      out.add(root);
-      added.add(root.path);
+      final root = byPath['1'];
+      if (root != null) {
+        out.add(root);
+        added.add(root.path);
+      }
+
+      for (final summaryPath in _openingOverviewSummaryPaths) {
+        final summary = byPath[summaryPath];
+        if (summary == null) continue;
+        out.add((
+          path: summary.path,
+          title: _openingOverviewSummaryTitles[summary.path] ?? summary.title,
+          depth: 1,
+        ));
+        added.add(summary.path);
+      }
+
+      for (final item in flat) {
+        if (item.path == '1' || item.path.startsWith('1.')) continue;
+        out.add(item);
+      }
+      return out;
     }
 
-    for (final summaryPath in _openingOverviewSummaryPaths) {
-      final summary = byPath[summaryPath];
-      if (summary == null) continue;
-      out.add((
-        path: summary.path,
-        title: _openingOverviewSummaryTitles[summary.path] ?? summary.title,
-        depth: 1,
-      ));
-      added.add(summary.path);
+    if (_useLampTrimmedSectionOverview) {
+      final out = <BcvSectionItem>[];
+      for (final item in flat) {
+        // Lamp of the Path: section 1 is framing only; present section 2's
+        // three branches as top-level entries in reader section navigation.
+        if (item.path == '2') continue;
+        if (!item.path.startsWith('2.')) continue;
+        final rebasedDepth = (item.depth - 1).clamp(0, 1000);
+        out.add((path: item.path, title: item.title, depth: rebasedDepth));
+      }
+      if (out.isNotEmpty) return out;
     }
 
-    for (final item in flat) {
-      if (item.path == '1' || item.path.startsWith('1.')) continue;
-      out.add(item);
-    }
-    return out;
+    return flat;
   }
 
   String _openingTriadPathForIndex(int index) {
@@ -1517,6 +1537,8 @@ class _ReadScreenState extends State<ReadScreen>
         _hierarchyService.getFlatSectionsSync(_textId));
     final idx = flat.indexWhere((s) => s.path == currentPath);
     if (idx < 0) return;
+    final targetHorizontal =
+        (flat[idx].depth * BcvReadConstants.sectionSliderIndentPerLevel) - 24;
     final viewportHeight = BcvReadConstants.sectionSliderLineHeight *
         BcvReadConstants.sectionSliderVisibleLines;
     final extraBeforeRow = BcvSectionSlider.extraHeightBeforeRow(flat, idx);
@@ -1540,6 +1562,17 @@ class _ReadScreenState extends State<ReadScreen>
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeOutCubic,
       );
+      if (_sectionSliderHorizontalScrollController.hasClients) {
+        final maxHorizontal =
+            _sectionSliderHorizontalScrollController.position.maxScrollExtent;
+        final horizontalClamped =
+            targetHorizontal.clamp(0.0, maxHorizontal).toDouble();
+        _sectionSliderHorizontalScrollController.animateTo(
+          horizontalClamped,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOutCubic,
+        );
+      }
     }
 
     if (_sectionSliderScrollController.hasClients) {
@@ -1779,8 +1812,9 @@ class _ReadScreenState extends State<ReadScreen>
   /// Reader pane: uses leaf sections only so each key down moves exactly one
   /// "lowest level" section forward (no jumps to parents, no skipping).
   bool _scrollToAdjacentSection(int direction) {
-    final leafOrdered =
-        _hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
+    final leafOrdered = _readerLeafSectionsForNavigation(
+      _hierarchyService.getLeafSectionsByVerseOrderSync(_textId),
+    );
     if (leafOrdered.isEmpty) return false;
 
     final triadIndex = _openingTriadIndexForContext();
@@ -1949,6 +1983,36 @@ class _ReadScreenState extends State<ReadScreen>
       normalizedPath,
       firstVerseRefOverride: _openingFirstRefOverrideForPath(normalizedPath),
     );
+  }
+
+  List<({String path, String title, int depth})>
+      _readerLeafSectionsForNavigation(
+    List<({String path, String title, int depth})> source,
+  ) {
+    // Lamp has synthetic chapter-0 refs both at the start and end of the text
+    // (e.g. 0.1/0.2 intro, 0.3/0.4 colophon). For keyboard navigation in
+    // reader mode, use actual verse-index order so ArrowUp from 1.1 goes to
+    // 0.2 instead of jumping to trailing colophon sections.
+    if (_textId != 'lampofthepath' || source.length < 2) return source;
+    final sorted = List<({String path, String title, int depth})>.from(source);
+    int firstIndexForPath(String path) {
+      final ref = _hierarchyService.getFirstVerseForSectionSync(_textId, path);
+      if (ref == null || ref.isEmpty) return 1 << 30;
+      return _verseService.getIndexForRefWithFallback(_textId, ref) ??
+          (1 << 30);
+    }
+
+    sorted.sort((a, b) {
+      final ai = firstIndexForPath(a.path);
+      final bi = firstIndexForPath(b.path);
+      if (ai != bi) return ai.compareTo(bi);
+      final ar =
+          _hierarchyService.getFirstVerseForSectionSync(_textId, a.path) ?? '';
+      final br =
+          _hierarchyService.getFirstVerseForSectionSync(_textId, b.path) ?? '';
+      return VerseHierarchyService.compareVerseRefs(ar, br);
+    });
+    return sorted;
   }
 
   Widget _buildBody() {
@@ -2153,6 +2217,7 @@ class _ReadScreenState extends State<ReadScreen>
       onSectionTap: _onBreadcrumbSectionTap,
       sectionNumberForDisplay: _sectionNumberForDisplay,
       scrollController: _sectionSliderScrollController,
+      horizontalScrollController: _sectionSliderHorizontalScrollController,
       height: height,
     );
     return Focus(

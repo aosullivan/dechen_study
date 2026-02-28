@@ -1,6 +1,5 @@
 # New Text Generation Prompt
 
-You are working in this repo: /Users/adrianosullivan/projects/dechen_study
 
 Goal:
 Create all required app files for a NEW text from:

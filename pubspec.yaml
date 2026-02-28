@@ -61,6 +61,7 @@ flutter:
     - assets/bodhicarya.jpg
     - assets/kingofaspirations.webp
     - assets/friendlyletter.jpg
+    - assets/lampofthepath_cover.png
     - assets/icons/bodhicarya_style_icon.svg
     - texts/bodhicaryavatara/bcv-root
     - texts/bodhicaryavatara/bcv_parsed.json
@@ -79,6 +80,10 @@ flutter:
     - texts/friendlyletter/verse_commentary_mapping.txt
     - texts/friendlyletter/verse_hierarchy_map.json
     - texts/friendlyletter/root_text_quiz.txt
+    - texts/lampofthepath/lampofthepath_parsed.json
+    - texts/lampofthepath/verse_commentary_mapping.txt
+    - texts/lampofthepath/verse_hierarchy_map.json
+    - texts/lampofthepath/root_text_quiz.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

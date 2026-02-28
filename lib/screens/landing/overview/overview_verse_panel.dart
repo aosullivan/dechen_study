@@ -83,43 +83,58 @@ class OverviewVersePanel extends StatelessWidget {
         children: [
           // Header.
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: const BoxDecoration(
               border: Border(bottom: BorderSide(color: AppColors.borderLight)),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    sectionTitle,
-                    style: const TextStyle(
-                      fontFamily: 'Lora',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textDark,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxWidth = constraints.maxWidth;
+                final showFullText = readerParams != null && maxWidth >= 260;
+                final closeButtonMinSide = maxWidth < 260 ? 20.0 : 32.0;
+                final horizontalPadding = ((maxWidth - closeButtonMinSide) / 2)
+                    .clamp(0.0, 16.0)
+                    .toDouble();
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: horizontalPadding,
+                    vertical: 12,
                   ),
-                ),
-                if (readerParams != null) ...[
-                  TextButton(
-                    onPressed: () => onOpenInReader!(readerParams),
-                    child: const Text('Full text'),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          sectionTitle,
+                          style: const TextStyle(
+                            fontFamily: 'Lora',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textDark,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (showFullText) ...[
+                        TextButton(
+                          onPressed: () => onOpenInReader!(readerParams),
+                          child: const Text('Full text'),
+                        ),
+                        const SizedBox(width: 4),
+                      ],
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 20),
+                        color: AppColors.mutedBrown,
+                        onPressed: onClose,
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(
+                          minWidth: closeButtonMinSide,
+                          minHeight: closeButtonMinSide,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 4),
-                ],
-                IconButton(
-                  icon: const Icon(Icons.close, size: 20),
-                  color: AppColors.mutedBrown,
-                  onPressed: onClose,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(
-                    minWidth: 32,
-                    minHeight: 32,
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
 
