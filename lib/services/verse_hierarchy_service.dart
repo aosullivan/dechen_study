@@ -97,6 +97,13 @@ class VerseHierarchyService {
     final verseToPath = s.map['verseToPath'];
     if (verseToPath == null || verseToPath is! Map) return null;
     var path = verseToPath[ref];
+    if (path == null || path is! List) {
+      // Segment refs like "1.2abc"/"1.4ab" should resolve through their base.
+      final baseRef = _baseRefFromAny(ref);
+      if (baseRef != null && baseRef != ref) {
+        path = verseToPath[baseRef];
+      }
+    }
     if ((path == null || path is! List) &&
         VerseService.baseVerseRefPattern.hasMatch(ref)) {
       for (final suffix in ['ab', 'cd', 'a', 'bcd']) {
@@ -120,6 +127,11 @@ class VerseHierarchyService {
     }).toList();
   }
 
+  static String? _baseRefFromAny(String ref) {
+    final m = RegExp(r'^(\d+\.\d+)', caseSensitive: false).firstMatch(ref);
+    return m?.group(1);
+  }
+
   /// When [ref] has no path, try adjacent verses (v-1, v+1, v-2, v+2, ...) until one has a path.
   dynamic _pathFromAdjacentVerse(Map verseToPath, String ref) {
     final parts = ref.split('.');
@@ -141,7 +153,8 @@ class VerseHierarchyService {
   }
 
   /// Returns the full section hierarchy for [ref] (e.g. "1.5") for [textId].
-  Future<List<Map<String, String>>> getHierarchyForVerse(String textId, String ref) async {
+  Future<List<Map<String, String>>> getHierarchyForVerse(
+      String textId, String ref) async {
     await _ensureLoaded(textId);
     final s = _get(textId);
     if (s == null) return [];
@@ -149,7 +162,8 @@ class VerseHierarchyService {
   }
 
   /// Returns the first verse ref for a section path (e.g. "3.1.3"), or null.
-  Future<String?> getFirstVerseForSection(String textId, String sectionPath) async {
+  Future<String?> getFirstVerseForSection(
+      String textId, String sectionPath) async {
     await _ensureLoaded(textId);
     return getFirstVerseForSectionSync(textId, sectionPath);
   }
@@ -178,8 +192,9 @@ class VerseHierarchyService {
     final s = _get(textId);
     if (s == null) return null;
     final ownRefs = getOwnVerseRefsForSectionSync(textId, sectionPath);
-    final refs =
-        ownRefs.isNotEmpty ? ownRefs : getVerseRefsForSectionSync(textId, sectionPath);
+    final refs = ownRefs.isNotEmpty
+        ? ownRefs
+        : getVerseRefsForSectionSync(textId, sectionPath);
     if (refs.isEmpty) return getFirstVerseForSectionSync(textId, sectionPath);
 
     if (preferredChapter != null) {
@@ -291,7 +306,8 @@ class VerseHierarchyService {
 
   /// Sections with first verse, sorted by verse order. For arrow-key navigation.
   /// Result is cached after first computation.
-  List<({String path, String title, int depth})> getSectionsByVerseOrderSync(String textId) {
+  List<({String path, String title, int depth})> getSectionsByVerseOrderSync(
+      String textId) {
     final s = _get(textId);
     if (s == null) return [];
     if (s.cachedSectionsByVerseOrder != null) {
@@ -303,8 +319,12 @@ class VerseHierarchyService {
     for (final section in flat) {
       final ref = getFirstVerseForSectionSync(textId, section.path);
       if (ref != null && ref.isNotEmpty) {
-        withFirst
-            .add((path: section.path, title: section.title, depth: section.depth, firstRef: ref));
+        withFirst.add((
+          path: section.path,
+          title: section.title,
+          depth: section.depth,
+          firstRef: ref
+        ));
       }
     }
     withFirst.sort((a, b) => _compareVerseRefsFull(a.firstRef, b.firstRef));
@@ -354,7 +374,8 @@ class VerseHierarchyService {
   }
 
   /// Returns the hierarchy for the verse at [index] for [textId].
-  Future<List<Map<String, String>>> getHierarchyForVerseIndex(String textId, int index) async {
+  Future<List<Map<String, String>>> getHierarchyForVerseIndex(
+      String textId, int index) async {
     final ref = VerseService.instance.getVerseRef(textId, index);
     if (ref == null) return [];
     return getHierarchyForVerse(textId, ref);
@@ -375,7 +396,8 @@ class VerseHierarchyService {
   }
 
   /// Returns refs from the section tree only: [sectionPath] own refs plus all descendants' own refs.
-  Set<String> getTreeVerseRefsForSectionSync(String textId, String sectionPath) {
+  Set<String> getTreeVerseRefsForSectionSync(
+      String textId, String sectionPath) {
     final s = _get(textId);
     if (s == null || sectionPath.isEmpty) return {};
     final ownIndex = s.sectionOwnRefsIndex;
@@ -393,7 +415,8 @@ class VerseHierarchyService {
   }
 
   /// Returns params to open BcvReadScreen at the first verse of [sectionPath] for [textId].
-  ReaderOpenParams? getReaderParamsForSectionSync(String textId, String sectionPath) {
+  ReaderOpenParams? getReaderParamsForSectionSync(
+      String textId, String sectionPath) {
     if (sectionPath.isEmpty) return null;
     final ownRefs = getOwnVerseRefsForSectionSync(textId, sectionPath);
     final treeRefs = getTreeVerseRefsForSectionSync(textId, sectionPath);
@@ -471,7 +494,8 @@ class VerseHierarchyService {
 
   /// Returns breadcrumb hierarchy for section path (e.g. "3.1.3" -> root to that section).
   /// Call after _ensureLoaded(). Used when user taps a section to update UI immediately.
-  List<Map<String, String>> getHierarchyForSectionSync(String textId, String sectionPath) {
+  List<Map<String, String>> getHierarchyForSectionSync(
+      String textId, String sectionPath) {
     if (sectionPath.isEmpty) return [];
     final flat = getFlatSectionsSync(textId);
     final parts = sectionPath.split('.');
@@ -489,7 +513,8 @@ class VerseHierarchyService {
   }
 
   /// Flattened list of all sections in depth-first order. Call after _ensureLoaded().
-  List<({String path, String title, int depth})> getFlatSectionsSync(String textId) {
+  List<({String path, String title, int depth})> getFlatSectionsSync(
+      String textId) {
     final s = _get(textId);
     if (s == null) return [];
     if (s.flatSections != null) return s.flatSections!;
@@ -523,8 +548,7 @@ class VerseHierarchyService {
   List<({String ref, String sectionPath})> getSplitVerseSegmentsSync(
       String textId, String baseRef) {
     final s = _get(textId);
-    if (s == null ||
-        !VerseService.baseVerseRefPattern.hasMatch(baseRef)) {
+    if (s == null || !VerseService.baseVerseRefPattern.hasMatch(baseRef)) {
       return [];
     }
     final verseToPath = s.map['verseToPath'];
@@ -611,7 +635,8 @@ class VerseHierarchyService {
   }
 
   /// Synchronous getter - call after _ensureLoaded() or getHierarchyForVerse has been called.
-  List<Map<String, String>> getHierarchyForVerseSync(String textId, String ref) {
+  List<Map<String, String>> getHierarchyForVerseSync(
+      String textId, String ref) {
     final s = _get(textId);
     if (s == null) return [];
     return _pathForRef(s, ref) ?? [];

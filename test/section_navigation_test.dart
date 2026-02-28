@@ -894,7 +894,9 @@ void main() {
       expect(segs, isEmpty,
           reason:
               '9.110 is directly owned as a whole verse in sections.verses');
-      const path = '4.6.2.3.1.4.4.2.2.3';
+      final hierarchy = hierarchyService.getHierarchyForVerseSync(_textId,'9.110');
+      expect(hierarchy, isNotEmpty);
+      final path = hierarchy.last['section']!;
       final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(_textId,path);
       expect(ownRefs, contains('9.110'));
     });
