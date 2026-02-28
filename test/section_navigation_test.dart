@@ -593,7 +593,7 @@ void main() {
   /// Shows results as a list of lines marked 'missing' or 'non-consecutive'.
   group('verse_hierarchy_map.json validation', () {
     test('verses are consecutive (report missing / non-consecutive)', () {
-      final jsonFile = File('texts/verse_hierarchy_map.json');
+      final jsonFile = File('texts/bodhicaryavatara/verse_hierarchy_map.json');
       expect(jsonFile.existsSync(), true, reason: 'Run from project root');
 
       final map =

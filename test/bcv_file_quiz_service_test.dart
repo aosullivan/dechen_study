@@ -48,7 +48,8 @@ ANSWER: d
   });
 
   test('advanced source question 337 has a resolved verse reference', () {
-    final content = File('texts/root_text_quiz_400.txt').readAsStringSync();
+    final content =
+        File('texts/bodhicaryavatara/root_text_quiz_400.txt').readAsStringSync();
     final parsed = FileQuizService.instance.parseQuestionsForTest(content);
     final q337 = parsed.firstWhere((q) => q.number == 337);
 
