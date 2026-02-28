@@ -36,6 +36,8 @@ class _FileQuizScreenState extends State<FileQuizScreen>
   StudyTextConfig? get _config => getStudyText(widget.textId);
   bool get _supportsAdvancedQuiz =>
       (_config?.quizAdvancedPath ?? '').trim().isNotEmpty;
+  bool get _showDifficultySelector =>
+      _supportsAdvancedQuiz || widget.textId != 'friendlyletter';
 
   bool _isLoading = true;
   Object? _error;
@@ -646,30 +648,32 @@ class _FileQuizScreenState extends State<FileQuizScreen>
                     ],
                   ),
                   const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      _buildDifficultyButton(
-                        value: FileQuizDifficulty.beginner,
-                        label: 'Beginner',
-                        onTap: () => _loadDifficulty(
-                          FileQuizDifficulty.beginner,
-                          resetScore: true,
-                        ),
-                      ),
-                      if (_supportsAdvancedQuiz) ...[
-                        const SizedBox(width: 8),
+                  if (_showDifficultySelector) ...[
+                    Row(
+                      children: [
                         _buildDifficultyButton(
-                          value: FileQuizDifficulty.advanced,
-                          label: 'Advanced',
+                          value: FileQuizDifficulty.beginner,
+                          label: 'Beginner',
                           onTap: () => _loadDifficulty(
-                            FileQuizDifficulty.advanced,
+                            FileQuizDifficulty.beginner,
                             resetScore: true,
                           ),
                         ),
+                        if (_supportsAdvancedQuiz) ...[
+                          const SizedBox(width: 8),
+                          _buildDifficultyButton(
+                            value: FileQuizDifficulty.advanced,
+                            label: 'Advanced',
+                            onTap: () => _loadDifficulty(
+                              FileQuizDifficulty.advanced,
+                              resetScore: true,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
-                  ),
-                  const SizedBox(height: 8),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
                   Container(
                     padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                     decoration: BoxDecoration(
