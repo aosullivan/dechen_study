@@ -932,6 +932,12 @@ class _ReadScreenState extends State<ReadScreen>
     return parts.last;
   }
 
+  String _sectionRangeForDisplay(String section) {
+    if (section.isEmpty) return '';
+    final range = _hierarchyService.getSectionVerseRangeMapSync(_textId)[section];
+    return (range ?? '').trim();
+  }
+
   static const Set<String> _openingHomageTriad = <String>{
     '1.1.1',
     '1.2.1',
@@ -2222,6 +2228,7 @@ class _ReadScreenState extends State<ReadScreen>
       nonNavigablePaths: nonNavigablePaths,
       onSectionTap: _onBreadcrumbSectionTap,
       sectionNumberForDisplay: _sectionNumberForDisplay,
+      sectionRangeForDisplay: _sectionRangeForDisplay,
       scrollController: _sectionSliderScrollController,
       horizontalScrollController: _sectionSliderHorizontalScrollController,
       height: height,

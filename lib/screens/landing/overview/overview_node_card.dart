@@ -50,6 +50,8 @@ class OverviewNodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayRange = (verseRange ?? '').trim();
+    final hasDisplayRange = displayRange.isNotEmpty;
     final indent = depth * OverviewConstants.indentPerLevel +
         OverviewConstants.leftPadding +
         (depth > 0 ? OverviewConstants.stubLength : 0);
@@ -115,7 +117,9 @@ class OverviewNodeCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Tooltip(
-                            message: '$_shortNumber. $title',
+                            message: hasDisplayRange
+                                ? '$_shortNumber. $title ($displayRange)'
+                                : '$_shortNumber. $title',
                             child: Text.rich(
                               TextSpan(
                                 children: [
@@ -146,6 +150,20 @@ class OverviewNodeCard extends StatelessWidget {
                                       color: AppColors.textDark,
                                     ),
                                   ),
+                                  if (hasDisplayRange)
+                                    TextSpan(
+                                      text: '  ($displayRange)',
+                                      style: TextStyle(
+                                        fontFamily: 'Lora',
+                                        fontSize:
+                                            OverviewConstants.fontSizeForDepth(
+                                                    depth) -
+                                                1,
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColors.mutedBrown
+                                            .withValues(alpha: 0.9),
+                                      ),
+                                    ),
                                 ],
                               ),
                               maxLines: 1,

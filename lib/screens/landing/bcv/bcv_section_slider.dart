@@ -17,6 +17,7 @@ class BcvSectionSlider extends StatelessWidget {
     required this.currentPath,
     required this.onSectionTap,
     required this.sectionNumberForDisplay,
+    this.sectionRangeForDisplay,
     this.additionalHighlightedPaths = const <String>{},
     this.expandablePaths = const <String>{},
     this.expandedPaths = const <String>{},
@@ -31,6 +32,7 @@ class BcvSectionSlider extends StatelessWidget {
   final String currentPath;
   final ValueChanged<Map<String, String>> onSectionTap;
   final String Function(String path) sectionNumberForDisplay;
+  final String Function(String path)? sectionRangeForDisplay;
   final Set<String> additionalHighlightedPaths;
   final Set<String> expandablePaths;
   final Set<String> expandedPaths;
@@ -155,9 +157,14 @@ class BcvSectionSlider extends StatelessWidget {
                     final indent = item.depth *
                         BcvReadConstants.sectionSliderIndentPerLevel;
                     final numStr = sectionNumberForDisplay(item.path);
-                    final label = numStr.isNotEmpty
+                    final rangeStr =
+                        sectionRangeForDisplay?.call(item.path).trim() ?? '';
+                    final labelBase = numStr.isNotEmpty
                         ? '$numStr. ${item.title}'
                         : item.title;
+                    final label = rangeStr.isNotEmpty
+                        ? '$labelBase ($rangeStr)'
+                        : labelBase;
                     return Container(
                       padding: EdgeInsets.only(top: topPadding),
                       decoration: hasSeparator
@@ -279,7 +286,9 @@ class BcvSectionSlider extends StatelessWidget {
     var widestRow = 0.0;
     for (final item in flatSections) {
       final numStr = sectionNumberForDisplay(item.path);
-      final label = numStr.isNotEmpty ? '$numStr. ${item.title}' : item.title;
+      final rangeStr = sectionRangeForDisplay?.call(item.path).trim() ?? '';
+      final labelBase = numStr.isNotEmpty ? '$numStr. ${item.title}' : item.title;
+      final label = rangeStr.isNotEmpty ? '$labelBase ($rangeStr)' : labelBase;
       final basePainter = TextPainter(
         text: TextSpan(text: label, style: baseStyle),
         maxLines: 1,
