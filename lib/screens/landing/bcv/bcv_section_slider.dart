@@ -264,18 +264,30 @@ class BcvSectionSlider extends StatelessWidget {
   }) {
     final textDirection = Directionality.of(context);
     final textScaler = MediaQuery.textScalerOf(context);
-    final style = sectionListTextStyle(
+    final baseStyle = sectionListTextStyle(
       context,
       isCurrent: false,
       isAncestor: false,
+      isNavigable: true,
+    );
+    final ancestorStyle = sectionListTextStyle(
+      context,
+      isCurrent: false,
+      isAncestor: true,
       isNavigable: true,
     );
     var widestRow = 0.0;
     for (final item in flatSections) {
       final numStr = sectionNumberForDisplay(item.path);
       final label = numStr.isNotEmpty ? '$numStr. ${item.title}' : item.title;
-      final textPainter = TextPainter(
-        text: TextSpan(text: label, style: style),
+      final basePainter = TextPainter(
+        text: TextSpan(text: label, style: baseStyle),
+        maxLines: 1,
+        textScaler: textScaler,
+        textDirection: textDirection,
+      )..layout();
+      final ancestorPainter = TextPainter(
+        text: TextSpan(text: label, style: ancestorStyle),
         maxLines: 1,
         textScaler: textScaler,
         textDirection: textDirection,
@@ -283,10 +295,12 @@ class BcvSectionSlider extends StatelessWidget {
       final indent = item.depth * BcvReadConstants.sectionSliderIndentPerLevel;
       final expandAffordance =
           expandablePaths.contains(item.path) ? (18.0 + 4.0) : 0.0;
-      final rowWidth = indent + expandAffordance + textPainter.width + 8.0;
+      final textWidth = math.max(basePainter.width, ancestorPainter.width);
+      final rowWidth = indent + expandAffordance + textWidth + 8.0;
       if (rowWidth > widestRow) widestRow = rowWidth;
     }
-    final contentWidth = widestRow + 32.0;
+    // Keep a bit of slack to avoid tiny overflows from glyph metrics rounding.
+    final contentWidth = widestRow + 48.0;
     return math.max(minWidth, contentWidth);
   }
 

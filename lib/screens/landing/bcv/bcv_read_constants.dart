@@ -37,6 +37,6 @@ abstract final class BcvReadConstants {
   static const double sectionListLineHeight = 24.0;
 
   static const int maxSectionOverlayMeasureRetries = 5;
-  static const double sectionSliderIndentPerLevel = 12.0;
+  static const double sectionSliderIndentPerLevel = 16.0;
   static const double breadcrumbIndentPerLevel = 16.0;
 }

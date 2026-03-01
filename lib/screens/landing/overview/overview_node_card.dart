@@ -153,35 +153,27 @@ class OverviewNodeCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // Verse range (e.g. v1.1ab, v1.2-1.3) — before book icon.
-                        if (verseRange != null && verseRange!.isNotEmpty) ...[
-                          const SizedBox(width: 6),
-                          Text(
-                            verseRange!,
-                            style: TextStyle(
-                              fontFamily: 'Lora',
-                              fontSize: 11,
-                              color: isSelected
-                                  ? AppColors.primary.withValues(alpha: 0.7)
-                                  : AppColors.mutedBrown.withValues(alpha: 0.8),
-                            ),
-                          ),
-                        ],
                         if (showBookIcon) ...[
-                          // Book icon — opens verse panel.
+                          // Book icon — opens verse panel. Keep verse range in tooltip to
+                          // preserve horizontal room for long section titles.
                           const SizedBox(width: 6),
-                          GestureDetector(
-                            onTap: onBookTap,
-                            behavior: HitTestBehavior.opaque,
-                            child: Padding(
-                              padding: const EdgeInsets.all(2),
-                              child: Icon(
-                                Icons.menu_book_rounded,
-                                size: 16,
-                                color: isSelected
-                                    ? AppColors.primary.withValues(alpha: 0.65)
-                                    : AppColors.mutedBrown
-                                        .withValues(alpha: 0.6),
+                          Tooltip(
+                            message: (verseRange != null && verseRange!.isNotEmpty)
+                                ? 'Open verses ($verseRange)'
+                                : 'Open verses',
+                            child: GestureDetector(
+                              onTap: onBookTap,
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Icon(
+                                  Icons.menu_book_rounded,
+                                  size: 16,
+                                  color: isSelected
+                                      ? AppColors.primary.withValues(alpha: 0.65)
+                                      : AppColors.mutedBrown
+                                          .withValues(alpha: 0.6),
+                                ),
                               ),
                             ),
                           ),

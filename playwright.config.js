@@ -17,6 +17,9 @@ module.exports = defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    launchOptions: {
+      args: ['--force-renderer-accessibility'],
+    },
     navigationTimeout: 45_000,
     actionTimeout: 20_000,
   },
