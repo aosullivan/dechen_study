@@ -84,6 +84,7 @@ flutter:
     - texts/lampofthepath/verse_commentary_mapping.txt
     - texts/lampofthepath/verse_hierarchy_map.json
     - texts/lampofthepath/root_text_quiz.txt
+    - texts/lampofthepath/root_text_quiz_400.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

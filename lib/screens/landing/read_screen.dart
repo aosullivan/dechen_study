@@ -2010,7 +2010,13 @@ class _ReadScreenState extends State<ReadScreen>
           _hierarchyService.getFirstVerseForSectionSync(_textId, a.path) ?? '';
       final br =
           _hierarchyService.getFirstVerseForSectionSync(_textId, b.path) ?? '';
-      return VerseHierarchyService.compareVerseRefs(ar, br);
+      final baseCmp = VerseHierarchyService.compareVerseRefs(ar, br);
+      if (baseCmp != 0) return baseCmp;
+      // Preserve segment ordering within the same base verse (e.g. 18ab before 18cd).
+      final fullCmp = ar.compareTo(br);
+      if (fullCmp != 0) return fullCmp;
+      // Final deterministic tie-breaker by section path.
+      return a.path.compareTo(b.path);
     });
     return sorted;
   }
