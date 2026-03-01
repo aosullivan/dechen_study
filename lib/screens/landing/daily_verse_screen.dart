@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
@@ -27,6 +29,7 @@ class DailyVerseScreen extends StatefulWidget {
     this.verseTextForIndex,
     this.minLinesForSection = 4,
     this.onResolvedRefsForTest,
+    this.breadcrumbSummariesLoader,
   });
 
   final String textId;
@@ -51,6 +54,10 @@ class DailyVerseScreen extends StatefulWidget {
   /// Test seam: captures resolved refs after min-line expansion logic.
   final void Function(List<String> refs)? onResolvedRefsForTest;
 
+  /// Optional loader for authored breadcrumb summaries keyed by section path.
+  final Future<Map<String, String>> Function(String textId)?
+      breadcrumbSummariesLoader;
+
   @override
   State<DailyVerseScreen> createState() => _DailyVerseScreenState();
 }
@@ -68,6 +75,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   List<String> _sectionVerseTexts = [];
   String _sectionTitle = '';
   String _sectionPath = '';
+  String _sectionBreadcrumbSummary = '';
+  Map<String, String>? _breadcrumbSummaries;
+  bool _breadcrumbSummariesLoadAttempted = false;
 
   /// Verse indices in the flat list for deep link and highlight.
   Set<int> _sectionVerseIndices = {};
@@ -383,6 +393,69 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     return '';
   }
 
+  Future<void> _ensureBreadcrumbSummariesLoaded() async {
+    if (_breadcrumbSummariesLoadAttempted) return;
+    _breadcrumbSummariesLoadAttempted = true;
+    try {
+      if (widget.breadcrumbSummariesLoader != null) {
+        _breadcrumbSummaries =
+            await widget.breadcrumbSummariesLoader!(widget.textId);
+        return;
+      }
+      final raw = await rootBundle
+          .loadString('texts/${widget.textId}/breadcrumb_summaries.json');
+      final decoded = jsonDecode(raw);
+      if (decoded is Map) {
+        _breadcrumbSummaries = decoded.map<String, String>(
+            (key, value) => MapEntry(key.toString(), value?.toString() ?? ''));
+      } else {
+        _breadcrumbSummaries = const <String, String>{};
+      }
+    } catch (_) {
+      _breadcrumbSummaries = const <String, String>{};
+    }
+  }
+
+  String _lookupSummaryForPath(String path) {
+    final summaries = _breadcrumbSummaries;
+    if (summaries == null || summaries.isEmpty || path.isEmpty) return '';
+    var cursor = path;
+    while (cursor.isNotEmpty) {
+      final summary = (summaries[cursor] ?? '').trim();
+      if (summary.isNotEmpty) return summary;
+      final dot = cursor.lastIndexOf('.');
+      if (dot <= 0) break;
+      cursor = cursor.substring(0, dot);
+    }
+    return '';
+  }
+
+  String _breadcrumbSummaryForPath(String path) {
+    final authoredSummary = _lookupSummaryForPath(path);
+    if (authoredSummary.isNotEmpty) return authoredSummary;
+
+    if (path.isEmpty) return '';
+    final hierarchy =
+        _hierarchyService.getHierarchyForSectionSync(widget.textId, path);
+    if (hierarchy.isEmpty) return '';
+    final titles = hierarchy
+        .map((item) => (item['title'] ?? '').trim())
+        .where((title) => title.isNotEmpty)
+        .toList();
+    if (titles.isEmpty) return '';
+    return titles.join(' > ');
+  }
+
+  Future<void> _refreshAuthoredBreadcrumbSummaryForPath(String path) async {
+    await _ensureBreadcrumbSummariesLoaded();
+    if (!mounted) return;
+    final authored = _lookupSummaryForPath(path);
+    if (authored.isEmpty || authored == _sectionBreadcrumbSummary) return;
+    setState(() {
+      _sectionBreadcrumbSummary = authored;
+    });
+  }
+
   Future<void> _loadSection() async {
     setState(() {
       _loading = true;
@@ -391,6 +464,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       _sectionVerseTexts = [];
       _sectionTitle = '';
       _sectionPath = '';
+      _sectionBreadcrumbSummary = '';
       _sectionVerseIndices = {};
     });
     try {
@@ -452,9 +526,12 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
           _sectionVerseTexts = content.texts;
           _sectionTitle = sectionTitle;
           _sectionPath = sectionPath ?? '';
+          _sectionBreadcrumbSummary =
+              _breadcrumbSummaryForPath(sectionPath ?? '');
           _sectionVerseIndices = content.indices;
           _loading = false;
         });
+        unawaited(_refreshAuthoredBreadcrumbSummaryForPath(sectionPath ?? ''));
         unawaited(_usageMetrics.trackEvent(
           eventName: 'daily_section_loaded',
           textId: widget.textId,
@@ -477,9 +554,6 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       }
     }
   }
-
-  String get _sectionHeading =>
-      _sectionTitle.isEmpty ? 'Section' : _sectionTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -558,14 +632,6 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  _sectionHeading,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontFamily: 'Lora',
-                        color: AppColors.primary,
-                      ),
-                ),
-                const SizedBox(height: 16),
                 ..._sectionVerseTexts.asMap().entries.map((entry) {
                   final i = entry.key;
                   final text = entry.value;

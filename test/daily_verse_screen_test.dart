@@ -13,7 +13,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    await VerseHierarchyService.instance.getHierarchyForVerse('bodhicaryavatara', '1.1');
+    await VerseHierarchyService.instance
+        .getHierarchyForVerse('bodhicaryavatara', '1.1');
   });
 
   Future<void> pumpDaily(
@@ -21,6 +22,8 @@ void main() {
     required List<String> refs,
     int minLinesForSection = 0,
     void Function(List<String> refs)? onResolvedRefsForTest,
+    Future<Map<String, String>> Function(String textId)?
+        breadcrumbSummariesLoader,
   }) async {
     const fullVerse = 'Because it will, in this way, pacify harm to myself\n'
         'And pacify the sufferings of others,\n'
@@ -44,6 +47,8 @@ void main() {
           verseTextForIndex: (_) => fullVerse,
           minLinesForSection: minLinesForSection,
           onResolvedRefsForTest: onResolvedRefsForTest,
+          breadcrumbSummariesLoader:
+              breadcrumbSummariesLoader ?? (_) async => const {},
         ),
       ),
     );
@@ -67,8 +72,8 @@ void main() {
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 8.136'), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
-    expect(
-        find.bySemanticsLabel(RegExp(r'I will give myself up for others')), findsNothing);
+    expect(find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
+        findsNothing);
   });
 
   testWidgets('split ref cd renders second-half text',
@@ -78,8 +83,8 @@ void main() {
 
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 8.136'), findsOneWidget);
-    expect(
-        find.bySemanticsLabel(RegExp(r'I will give myself up for others')), findsWidgets);
+    expect(find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
+        findsWidgets);
     expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsNothing);
   });
 
@@ -91,8 +96,8 @@ void main() {
     expect(find.text('Could not load section'), findsNothing);
     expect(find.text('Verse 8.136'), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
-    expect(
-        find.bySemanticsLabel(RegExp(r'I will give myself up for others')), findsWidgets);
+    expect(find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
+        findsWidgets);
   });
 
   testWidgets('split refs in same verse are shown once in daily view',
