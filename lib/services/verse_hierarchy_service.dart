@@ -191,12 +191,14 @@ class VerseHierarchyService {
     if (leafFirst != null && leafFirst.isNotEmpty) return leafFirst;
     final ownRefs = getOwnVerseRefsForSectionSync(textId, sectionPath);
     if (ownRefs.isNotEmpty) {
-      final ownSorted = ownRefs.toList()..sort(_compareVerseRefsFull);
+      final ownSorted = _normalizeRefsForFirstRef(ownRefs).toList()
+        ..sort(_compareVerseRefsFull);
       return ownSorted.first;
     }
     final refs = getVerseRefsForSectionSync(textId, sectionPath);
     if (refs.isEmpty) return null;
-    final sorted = refs.toList()..sort(_compareVerseRefsFull);
+    final sorted = _normalizeRefsForFirstRef(refs).toList()
+      ..sort(_compareVerseRefsFull);
     return sorted.first;
   }
 
@@ -213,7 +215,7 @@ class VerseHierarchyService {
     if (refs.isEmpty) return getFirstVerseForSectionSync(textId, sectionPath);
 
     if (preferredChapter != null) {
-      final inChapter = refs.where((r) {
+      final inChapter = _normalizeRefsForFirstRef(refs).where((r) {
         final parts = r.split('.');
         if (parts.length != 2) return false;
         final ch = int.tryParse(parts[0]);
@@ -224,7 +226,8 @@ class VerseHierarchyService {
         return inChapter.first;
       }
     }
-    final sorted = refs.toList()..sort(_compareVerseRefsFull);
+    final sorted = _normalizeRefsForFirstRef(refs).toList()
+      ..sort(_compareVerseRefsFull);
     return sorted.first;
   }
 
@@ -294,7 +297,8 @@ class VerseHierarchyService {
           : (ownRefs.isNotEmpty ? ownRefs : sectionRefs);
 
       if (path.isNotEmpty && title.isNotEmpty && navigableRefs.isNotEmpty) {
-        final sorted = navigableRefs.toList()..sort(_compareVerseRefsFull);
+        final sorted = _normalizeRefsForFirstRef(navigableRefs).toList()
+          ..sort(_compareVerseRefsFull);
         withFirst.add(
           (
             path: path,
@@ -386,6 +390,27 @@ class VerseHierarchyService {
     final c = _compareVerseRefs(a, b);
     if (c != 0) return c;
     return a.compareTo(b);
+  }
+
+  /// For first-ref selection, prefer explicit segment refs over the same base
+  /// ref when both are present in one section (e.g. keep 4.27cd, drop 4.27).
+  static Set<String> _normalizeRefsForFirstRef(Iterable<String> refs) {
+    final all = refs.toSet();
+    if (all.length < 2) return all;
+
+    final segmentedBases = <String>{};
+    for (final ref in all) {
+      if (!VerseService.segmentSuffixPattern.hasMatch(ref)) continue;
+      final base = _baseRefFromAny(ref);
+      if (base != null && base.isNotEmpty) segmentedBases.add(base);
+    }
+    if (segmentedBases.isEmpty) return all;
+
+    all.removeWhere((ref) {
+      if (VerseService.segmentSuffixPattern.hasMatch(ref)) return false;
+      return segmentedBases.contains(ref);
+    });
+    return all;
   }
 
   /// Returns the hierarchy for the verse at [index] for [textId].

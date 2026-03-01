@@ -21,6 +21,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   late int verseIndex237;
+  late int verseIndex426ab;
   late int verseIndex649;
   late int verseIndex632;
   late int verseIndex92a;
@@ -55,26 +56,38 @@ void main() {
     await verseService.getChapters(textId);
     await hierarchyService.getHierarchyForVerse(textId, '1.1');
     verseIndex237 = verseService.getIndexForRef(textId, '2.37') ?? -1;
+    verseIndex426ab =
+        verseService.getIndexForRefWithFallback(textId, '4.26ab') ?? -1;
     verseIndex649 = verseService.getIndexForRef(textId, '6.49') ?? -1;
     verseIndex632 = verseService.getIndexForRef(textId, '6.32') ?? -1;
-    verseIndex92a = verseService.getIndexForRefWithFallback(textId, '9.2a') ?? -1;
-    verseIndex93cd = verseService.getIndexForRefWithFallback(textId, '9.3cd') ?? -1;
-    verseIndex9150cd = verseService.getIndexForRefWithFallback(textId, '9.150cd') ?? -1;
-    verseIndex8167 = verseService.getIndexForRefWithFallback(textId, '8.167') ?? -1;
-    verseIndex8168 = verseService.getIndexForRefWithFallback(textId, '8.168') ?? -1;
-    verseIndex911 = verseService.getIndexForRefWithFallback(textId, '9.11') ?? -1;
-    verseIndex913cd = verseService.getIndexForRefWithFallback(textId, '9.13cd') ?? -1;
-    verseIndex915cd = verseService.getIndexForRefWithFallback(textId, '9.15cd') ?? -1;
+    verseIndex92a =
+        verseService.getIndexForRefWithFallback(textId, '9.2a') ?? -1;
+    verseIndex93cd =
+        verseService.getIndexForRefWithFallback(textId, '9.3cd') ?? -1;
+    verseIndex9150cd =
+        verseService.getIndexForRefWithFallback(textId, '9.150cd') ?? -1;
+    verseIndex8167 =
+        verseService.getIndexForRefWithFallback(textId, '8.167') ?? -1;
+    verseIndex8168 =
+        verseService.getIndexForRefWithFallback(textId, '8.168') ?? -1;
+    verseIndex911 =
+        verseService.getIndexForRefWithFallback(textId, '9.11') ?? -1;
+    verseIndex913cd =
+        verseService.getIndexForRefWithFallback(textId, '9.13cd') ?? -1;
+    verseIndex915cd =
+        verseService.getIndexForRefWithFallback(textId, '9.15cd') ?? -1;
     verseIndex11 = verseService.getIndexForRefWithFallback(textId, '1.1') ?? -1;
     verseIndex12 = verseService.getIndexForRefWithFallback(textId, '1.2') ?? -1;
-    verseIndex14ab = verseService.getIndexForRefWithFallback(textId, '1.4ab') ?? -1;
+    verseIndex14ab =
+        verseService.getIndexForRefWithFallback(textId, '1.4ab') ?? -1;
     verseIndex15 = verseService.getIndexForRefWithFallback(textId, '1.5') ?? -1;
     leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync(textId);
     firstLeafVerseIndex = -1;
     for (final s in leafOrdered) {
       final ref = hierarchyService.getFirstVerseForSectionSync(textId, s.path);
-      final idx =
-          ref == null ? null : verseService.getIndexForRefWithFallback(textId, ref);
+      final idx = ref == null
+          ? null
+          : verseService.getIndexForRefWithFallback(textId, ref);
       if (idx != null) {
         firstLeafVerseIndex = idx;
         break;
@@ -83,8 +96,9 @@ void main() {
     lastLeafVerseIndex = -1;
     for (final s in leafOrdered.reversed) {
       final ref = hierarchyService.getFirstVerseForSectionSync(textId, s.path);
-      final idx =
-          ref == null ? null : verseService.getIndexForRefWithFallback(textId, ref);
+      final idx = ref == null
+          ? null
+          : verseService.getIndexForRefWithFallback(textId, ref);
       if (idx != null) {
         lastLeafVerseIndex = idx;
         break;
@@ -92,6 +106,8 @@ void main() {
     }
     expect(verseIndex237, greaterThanOrEqualTo(0),
         reason: 'Verse 2.37 must exist');
+    expect(verseIndex426ab, greaterThanOrEqualTo(0),
+        reason: 'Verse 4.26ab must exist');
     expect(verseIndex649, greaterThanOrEqualTo(0),
         reason: 'Verse 6.49 must exist');
     expect(verseIndex632, greaterThanOrEqualTo(0),
@@ -227,6 +243,43 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
     });
 
+    /// Regression: chapter 4 corrected split mapping must navigate
+    /// 4.26ab -> 4.26c -> 4.26d (section containing 4.27ab) -> 4.28cd.
+    testWidgets('chapter 4 split keydown follows corrected sequence',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedFirstRefs = <String>[];
+      void onNavigate(String path, String firstRef) {
+        capturedFirstRefs.add(firstRef);
+      }
+
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex426ab,
+        initialSegmentRef: '4.26ab',
+        onSectionNavigateForTest: onNavigate,
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      await pressArrowUntilLength(
+        tester,
+        LogicalKeyboardKey.arrowDown,
+        capturedFirstRefs,
+        3,
+      );
+
+      expect(capturedFirstRefs.length, greaterThanOrEqualTo(3));
+      expect(capturedFirstRefs[0], '4.26c');
+      expect(capturedFirstRefs[1], '4.26d');
+      expect(capturedFirstRefs[2], '4.28cd');
+
+      // Let programmatic-navigation timers complete (scroll-settle + fallback).
+      await tester.pump(const Duration(seconds: 2));
+    });
+
     /// Regression: from 6.49, key down must go to 6.50 (6.50ab), NOT skip to 6.52.
     testWidgets('key down from 6.49 goes to 6.50 not 6.52',
         (WidgetTester tester) async {
@@ -310,12 +363,13 @@ void main() {
       expect(find.text('Could not load text'), findsNothing);
       expect(find.text('No chapters available.'), findsNothing);
 
-      await tester.ensureVisible(find.textContaining('There is no error in this'));
+      await tester
+          .ensureVisible(find.textContaining('There is no error in this'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 200));
 
-      await tester.tap(
-          find.textContaining('There is no error in this'), warnIfMissed: false);
+      await tester.tap(find.textContaining('There is no error in this'),
+          warnIfMissed: false);
       await tester.pump();
 
       await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
@@ -324,9 +378,12 @@ void main() {
       expect(capturedFirstRef, isNotNull,
           reason: 'Arrow down should trigger navigation');
       expect(capturedFirstRef, equals('6.33'),
-          reason: 'From 6.32 next must be 6.33, not 6.35. Got: $capturedFirstRef');
-      expect(capturedFirstRef, isNot(equals('6.35')),
-          reason: 'Must not skip from 6.32 to 6.35. Got: $capturedFirstRef',
+          reason:
+              'From 6.32 next must be 6.33, not 6.35. Got: $capturedFirstRef');
+      expect(
+        capturedFirstRef,
+        isNot(equals('6.35')),
+        reason: 'Must not skip from 6.32 to 6.35. Got: $capturedFirstRef',
       );
       await tester.pump(const Duration(seconds: 2));
     });
@@ -432,7 +489,9 @@ void main() {
       final _ = sectionEvents.skip(eventsBeforeUp);
       // Let programmatic-navigation timers settle (scroll-settle + fallback).
       await tester.pump(const Duration(seconds: 2));
-    }, skip: true); // Key-down from 8.167/8.168 section reports 8.168 instead of 8.169ab
+    },
+        skip:
+            true); // Key-down from 8.167/8.168 section reports 8.168 instead of 8.169ab
 
     testWidgets(
         'from 9.2a, first key down lands on 9.2bcd (parent-owned section)',
@@ -513,7 +572,8 @@ void main() {
     /// Regression: from 9.11 ("To do with karma"), key down must go directly
     /// to "To do with samsara/nirvana" (9.13cd) - not stay on karma, and
     /// repeated presses must not create a loop between the two sections.
-    testWidgets('key down from 9.11 karma section goes to samsara section, no loop',
+    testWidgets(
+        'key down from 9.11 karma section goes to samsara section, no loop',
         (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -587,8 +647,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
 
       // Find the first event that set samsara path.
-      final samsaraEventIdx = sectionEvents.indexWhere(
-          (e) => e.path == '4.6.2.1.2.2.4');
+      final samsaraEventIdx =
+          sectionEvents.indexWhere((e) => e.path == '4.6.2.1.2.2.4');
       expect(samsaraEventIdx, greaterThanOrEqualTo(0),
           reason: 'Navigation should have set samsara section');
 
@@ -668,8 +728,7 @@ void main() {
     /// Regression: from karma (9.11), key DOWN goes to samsara (9.13cd).
     /// From samsara, the next key DOWN must go forward (to False
     /// Representationalists or beyond) — never back to karma.
-    testWidgets(
-        'key down from karma through samsara goes forward, no loop',
+    testWidgets('key down from karma through samsara goes forward, no loop',
         (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -753,8 +812,7 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
 
       // Verify initial section is karma with correct verse set.
-      final karmaEvents =
-          sectionEvents.where((e) => e.path == '4.6.2.1.2.2.3');
+      final karmaEvents = sectionEvents.where((e) => e.path == '4.6.2.1.2.2.3');
       expect(karmaEvents, isNotEmpty,
           reason: 'Initial section should be karma (4.6.2.1.2.2.3)');
       expect(karmaEvents.first.indices, contains(verseIndex911),
@@ -765,8 +823,8 @@ void main() {
           tester, LogicalKeyboardKey.arrowDown, capturedPaths, 1);
 
       expect(capturedPaths.first, equals('4.6.2.1.2.2.4'));
-      final samsaraStateAfterNav = sectionEvents
-          .where((e) => e.path == '4.6.2.1.2.2.4');
+      final samsaraStateAfterNav =
+          sectionEvents.where((e) => e.path == '4.6.2.1.2.2.4');
       expect(samsaraStateAfterNav, isNotEmpty,
           reason: 'After DOWN, section state should include samsara');
       expect(samsaraStateAfterNav.first.indices, contains(verseIndex913cd),
@@ -778,8 +836,8 @@ void main() {
 
       expect(capturedPaths[1], equals('4.6.2.1.2.3.1.1'),
           reason: 'Second DOWN should reach False Representationalists');
-      final falseRepState = sectionEvents
-          .where((e) => e.path == '4.6.2.1.2.3.1.1');
+      final falseRepState =
+          sectionEvents.where((e) => e.path == '4.6.2.1.2.3.1.1');
       expect(falseRepState, isNotEmpty,
           reason: 'Section state should include False Representationalists');
       expect(falseRepState.first.indices, contains(verseIndex915cd),
@@ -791,8 +849,7 @@ void main() {
           maxPresses: 8);
 
       expect(capturedPaths[2], equals('4.6.2.1.2.2.4'),
-          reason:
-              'UP from False Rep must go to samsara, not karma');
+          reason: 'UP from False Rep must go to samsara, not karma');
       expect(capturedPaths[2], isNot(equals('4.6.2.1.2.2.3')),
           reason: 'Must not navigate to karma');
 
@@ -840,8 +897,7 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
     });
 
-    testWidgets(
-        'plain reader open keeps 1.1ab highlighted until user scrolls',
+    testWidgets('plain reader open keeps 1.1ab highlighted until user scrolls',
         (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1200, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));

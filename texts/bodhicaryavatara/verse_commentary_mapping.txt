@@ -1861,17 +1861,18 @@ The first two lines indicate the fires that harm the body while the latter two i
 3.	It is only logical, therefore, to persevere
 [4.26]
 1. One has attained freedom, the basis
-4.26
+4.26ab
 >>> Having somehow attained this beneficial state,
 >>> Extremely difficult to find,
 Freedom, being extremely difficult to find, is precious and is beneficial, since, being the basis of such things as moral conduct, it brings great benefit. These two lines indicate the attainment of this.
 2. One has clearly distinguished good from bad
+4.26c
 >>> While I have this understanding,
-[4.27]
+[4.27ab]
 3. It is only logical, therefore, to persevere
+4.26d
 >>> If still I am led back to the hells,
-
-4.27
+4.27ab
 >>> Like someone manipulated by mantras,
 >>> I must have lost my mind.
 To behave in this way is to lack autonomy, like being manipulated by an evil mantra which has destroyed one’s perseverance. Thus, the benefits of perseverance are implicitly suggested. ‘Manipulated by mantras’ mean the loss of autonomy by mantras such as wrathful summoning mantras.
@@ -1889,12 +1890,12 @@ To behave in this way is to lack autonomy, like being manipulated by an evil man
 2.	Application to suffering
 3.	Their perpetual presence
 4.	They achieve nothing
-[4.28] [4.29]
+[4.28cd] [4.29]
 1. Loss of autonomy
 >>> I don’t even know who is manipulating me.
 >>> Who is this inside of me?
 The cause of losing autonomy is not knowing by whom one is being manipulated. To ask, ‘who is inside of me?’ indicates that one’s mental activity is not right. [298] Concerning the characteristics of this loss of autonomy:
-4.28
+4.28cd
 >>> Enemies like hatred and craving
 >>> Don’t have hands or feet,
 >>> Aren’t courageous or intelligent,

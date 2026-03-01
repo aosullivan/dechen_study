@@ -12,8 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:dechen_study/services/verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
 
-const _expectedLeafSkipCount = 167;
-const _expectedLeafGapSum = 465;
+const _expectedLeafSkipCount = 168;
+const _expectedLeafGapSum = 467;
 const _expectedLeafMaxGap = 12;
 const _expectedLeafSkipsFirst5 = <String>[
   '1.3.3 (1.2) -> 2.1 (1.4): verse gap 2',
@@ -88,13 +88,16 @@ void main() {
 
     test('leaf sections order split verses 8.136ab before 8.136cd for keydown',
         () {
-      final leafOrdered = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
+      final leafOrdered =
+          hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final abIdx = leafOrdered.indexWhere((s) {
-        final ref = hierarchyService.getFirstVerseForSectionSync(_textId,s.path);
+        final ref =
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path);
         return ref == '8.136ab';
       });
       final cdIdx = leafOrdered.indexWhere((s) {
-        final ref = hierarchyService.getFirstVerseForSectionSync(_textId,s.path);
+        final ref =
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path);
         return ref == '8.136cd';
       });
       if (abIdx >= 0 && cdIdx >= 0) {
@@ -110,7 +113,8 @@ void main() {
 
       String? prevRef;
       for (final s in ordered) {
-        final ref = hierarchyService.getFirstVerseForSectionSync(_textId,s.path);
+        final ref =
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path);
         if (ref != null && prevRef != null) {
           expect(
             VerseHierarchyService.compareVerseRefs(ref, prevRef),
@@ -127,7 +131,8 @@ void main() {
       final ordered = hierarchyService.getSectionsByVerseOrderSync(_textId);
       final bases = <(int, int)>{};
       for (final s in ordered) {
-        final ref = hierarchyService.getFirstVerseForSectionSync(_textId,s.path);
+        final ref =
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path);
         if (ref != null) {
           final base = VerseHierarchyService.baseVerseFromRef(ref);
           expect(bases, isNot(contains(base)), reason: 'Duplicate base $base');
@@ -141,31 +146,81 @@ void main() {
       final refs = hierarchyService.getVerseRefsForSectionSync(_textId, path);
       expect(refs, contains('8.172'));
       expect(refs, contains('8.173'));
-      expect(hierarchyService.getFirstVerseForSectionSync(_textId,path), '8.172');
+      expect(
+          hierarchyService.getFirstVerseForSectionSync(_textId, path), '8.172');
 
-      final path172 = hierarchyService.getHierarchyForVerseSync(_textId,'8.172');
-      final path173 = hierarchyService.getHierarchyForVerseSync(_textId,'8.173');
+      final path172 =
+          hierarchyService.getHierarchyForVerseSync(_textId, '8.172');
+      final path173 =
+          hierarchyService.getHierarchyForVerseSync(_textId, '8.173');
       expect(path172, isNotEmpty);
       expect(path173, isNotEmpty);
       expect(path172.last['section'], path);
       expect(path173.last['section'], path);
     });
 
-    test('4.27 split headings map to non-empty sibling leaves', () {
+    test('chapter 4 split headings map to corrected leaves', () {
+      const path1 = '4.1.2.2.3.4.1';
       const path2 = '4.1.2.2.3.4.2';
       const path3 = '4.1.2.2.3.4.3';
+      const lossPath = '4.1.2.3.1.1.1';
 
+      final refs1 = hierarchyService.getVerseRefsForSectionSync(_textId, path1);
       final refs2 = hierarchyService.getVerseRefsForSectionSync(_textId, path2);
       final refs3 = hierarchyService.getVerseRefsForSectionSync(_textId, path3);
-      expect(refs2, contains('4.27ab'));
-      expect(refs3, contains('4.27cd'));
+      final lossRefs =
+          hierarchyService.getVerseRefsForSectionSync(_textId, lossPath);
+      expect(refs1, contains('4.26ab'));
+      expect(refs2, contains('4.26c'));
+      expect(refs3, contains('4.26d'));
+      expect(refs3, contains('4.27ab'));
+      expect(lossRefs, contains('4.28cd'));
 
-      final path27ab = hierarchyService.getHierarchyForVerseSync(_textId,'4.27ab');
-      final path27cd = hierarchyService.getHierarchyForVerseSync(_textId,'4.27cd');
-      expect(path27ab, isNotEmpty);
-      expect(path27cd, isNotEmpty);
-      expect(path27ab.last['section'], path2);
-      expect(path27cd.last['section'], path3);
+      final path426ab =
+          hierarchyService.getHierarchyForVerseSync(_textId, '4.26ab');
+      final path426c =
+          hierarchyService.getHierarchyForVerseSync(_textId, '4.26c');
+      final path427ab =
+          hierarchyService.getHierarchyForVerseSync(_textId, '4.27ab');
+      final path428cd =
+          hierarchyService.getHierarchyForVerseSync(_textId, '4.28cd');
+      expect(path426ab, isNotEmpty);
+      expect(path426c, isNotEmpty);
+      expect(path427ab, isNotEmpty);
+      expect(path428cd, isNotEmpty);
+      expect(path426ab.last['section'], path1);
+      expect(path426c.last['section'], path2);
+      expect(path427ab.last['section'], path3);
+      expect(path428cd.last['section'], lossPath);
+    });
+
+    test('leaf order keeps 4.26ab -> 4.26c -> 4.26d -> 4.28cd', () {
+      final leafOrdered =
+          hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
+      final refs = <String>[];
+      for (final s in leafOrdered) {
+        final ref =
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path);
+        if (ref != null &&
+            (ref == '4.26ab' ||
+                ref == '4.26c' ||
+                ref == '4.26d' ||
+                ref == '4.28cd')) {
+          refs.add(ref);
+        }
+      }
+
+      final idx426ab = refs.indexOf('4.26ab');
+      final idx426c = refs.indexOf('4.26c');
+      final idx426d = refs.indexOf('4.26d');
+      final idx428cd = refs.indexOf('4.28cd');
+      expect(idx426ab, greaterThanOrEqualTo(0));
+      expect(idx426c, greaterThanOrEqualTo(0));
+      expect(idx426d, greaterThanOrEqualTo(0));
+      expect(idx428cd, greaterThanOrEqualTo(0));
+      expect(idx426ab, lessThan(idx426c));
+      expect(idx426c, lessThan(idx426d));
+      expect(idx426d, lessThan(idx428cd));
     });
 
     test('8.145 split headings map to non-empty sibling leaves', () {
@@ -177,8 +232,10 @@ void main() {
       expect(refs1, contains('8.145ab'));
       expect(refs2, contains('8.145cd'));
 
-      final path145ab = hierarchyService.getHierarchyForVerseSync(_textId,'8.145ab');
-      final path145cd = hierarchyService.getHierarchyForVerseSync(_textId,'8.145cd');
+      final path145ab =
+          hierarchyService.getHierarchyForVerseSync(_textId, '8.145ab');
+      final path145cd =
+          hierarchyService.getHierarchyForVerseSync(_textId, '8.145cd');
       expect(path145ab, isNotEmpty);
       expect(path145cd, isNotEmpty);
       expect(path145ab.last['section'], path1);
@@ -198,8 +255,9 @@ void main() {
       expect(siblingRefs, isNot(contains('6.9')));
       expect(siblingRefs, isNot(contains('6.10')));
 
-      final path69 = hierarchyService.getHierarchyForVerseSync(_textId,'6.9');
-      final path610 = hierarchyService.getHierarchyForVerseSync(_textId,'6.10');
+      final path69 = hierarchyService.getHierarchyForVerseSync(_textId, '6.9');
+      final path610 =
+          hierarchyService.getHierarchyForVerseSync(_textId, '6.10');
       expect(path69, isNotEmpty);
       expect(path610, isNotEmpty);
       expect(path69.last['section'], path);
@@ -212,9 +270,11 @@ void main() {
       const path = '4.4.2';
       final refs = hierarchyService.getVerseRefsForSectionSync(_textId, path);
       expect(refs, contains('7.2a'));
-      expect(hierarchyService.getFirstVerseForSectionSync(_textId,path), '7.2a');
+      expect(
+          hierarchyService.getFirstVerseForSectionSync(_textId, path), '7.2a');
 
-      final hierarchy = hierarchyService.getHierarchyForVerseSync(_textId,'7.2a');
+      final hierarchy =
+          hierarchyService.getHierarchyForVerseSync(_textId, '7.2a');
       expect(hierarchy, isNotEmpty);
       expect(hierarchy.last['section'], path);
     });
@@ -234,9 +294,11 @@ void main() {
       expect(refs3, contains('5.2'));
       expect(refs2, isNot(contains('5.1ab')));
 
-      final path51ab = hierarchyService.getHierarchyForVerseSync(_textId,'5.1ab');
-      final path51cd = hierarchyService.getHierarchyForVerseSync(_textId,'5.1cd');
-      final path52 = hierarchyService.getHierarchyForVerseSync(_textId,'5.2');
+      final path51ab =
+          hierarchyService.getHierarchyForVerseSync(_textId, '5.1ab');
+      final path51cd =
+          hierarchyService.getHierarchyForVerseSync(_textId, '5.1cd');
+      final path52 = hierarchyService.getHierarchyForVerseSync(_textId, '5.2');
       expect(path51ab, isNotEmpty);
       expect(path51cd, isNotEmpty);
       expect(path52, isNotEmpty);
@@ -257,7 +319,8 @@ void main() {
       );
       expect(nextIdx, greaterThanOrEqualTo(0),
           reason: 'Should find next section');
-      final nextRef = hierarchyService.getFirstVerseForSectionSync(_textId,
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+        _textId,
         ordered[nextIdx].path,
       );
       expect(nextRef, isNotNull);
@@ -277,7 +340,8 @@ void main() {
         direction: 1,
       );
       if (nextIdx < 0) return;
-      final nextRef = hierarchyService.getFirstVerseForSectionSync(_textId,
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+        _textId,
         ordered[nextIdx].path,
       );
       expect(nextRef, isNotNull);
@@ -295,7 +359,8 @@ void main() {
         direction: 1,
       );
       expect(nextIdx, greaterThanOrEqualTo(0));
-      final nextRef = hierarchyService.getFirstVerseForSectionSync(_textId,
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+        _textId,
         ordered[nextIdx].path,
       );
       expect(nextRef, isNotNull);
@@ -315,7 +380,8 @@ void main() {
         direction: -1,
       );
       expect(prevIdx, greaterThanOrEqualTo(0));
-      final prevRef = hierarchyService.getFirstVerseForSectionSync(_textId,
+      final prevRef = hierarchyService.getFirstVerseForSectionSync(
+        _textId,
         ordered[prevIdx].path,
       );
       expect(prevRef, isNotNull);
@@ -388,7 +454,8 @@ void main() {
       expect(leaves, isNotEmpty);
       String? prevRef;
       for (final s in leaves) {
-        final ref = hierarchyService.getFirstVerseForSectionSync(_textId,s.path);
+        final ref =
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path);
         if (ref != null && prevRef != null) {
           expect(
             VerseHierarchyService.compareVerseRefs(ref, prevRef),
@@ -416,9 +483,11 @@ void main() {
     test('2.37 -> 2.38: leaf sequence is consecutive (no skip to 2.39)', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final idx237 = leaves.indexWhere((s) =>
-          hierarchyService.getFirstVerseForSectionSync(_textId,s.path) == '2.37');
+          hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ==
+          '2.37');
       final idx238 = leaves.indexWhere((s) =>
-          hierarchyService.getFirstVerseForSectionSync(_textId,s.path) == '2.38');
+          hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ==
+          '2.38');
 
       expect(idx237, greaterThanOrEqualTo(0), reason: '2.37 leaf must exist');
       expect(idx238, greaterThanOrEqualTo(0), reason: '2.38 leaf must exist');
@@ -432,11 +501,11 @@ void main() {
     test('fallback from 2.37: findAdjacentSectionIndex returns 2.38 not 2.39',
         () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
-      final nextIdx = hierarchyService.findAdjacentSectionIndex(_textId, leaves, '2.37',
-          direction: 1);
+      final nextIdx = hierarchyService
+          .findAdjacentSectionIndex(_textId, leaves, '2.37', direction: 1);
       expect(nextIdx, greaterThanOrEqualTo(0));
-      final nextRef =
-          hierarchyService.getFirstVerseForSectionSync(_textId,leaves[nextIdx].path);
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+          _textId, leaves[nextIdx].path);
       expect(nextRef, '2.38',
           reason: 'Fallback from 2.37 must land on 2.38, not 2.39');
     });
@@ -444,9 +513,11 @@ void main() {
     test('8.114 -> 8.115: leaf sequence consecutive (no skip to 8.117)', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final idx114 = leaves.indexWhere((s) =>
-          hierarchyService.getFirstVerseForSectionSync(_textId,s.path) == '8.114');
+          hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ==
+          '8.114');
       final idx115 = leaves.indexWhere((s) =>
-          hierarchyService.getFirstVerseForSectionSync(_textId,s.path) == '8.115');
+          hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ==
+          '8.115');
       expect(idx114, greaterThanOrEqualTo(0));
       expect(idx115, greaterThanOrEqualTo(0));
       expect(idx114 + 1, idx115);
@@ -456,11 +527,11 @@ void main() {
     test('fallback from 9.1: findAdjacentSectionIndex returns 9.2, not 9.116',
         () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
-      final nextIdx = hierarchyService.findAdjacentSectionIndex(_textId, leaves, '9.1',
-          direction: 1);
+      final nextIdx = hierarchyService
+          .findAdjacentSectionIndex(_textId, leaves, '9.1', direction: 1);
       expect(nextIdx, greaterThanOrEqualTo(0));
-      final nextRef =
-          hierarchyService.getFirstVerseForSectionSync(_textId,leaves[nextIdx].path);
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+          _textId, leaves[nextIdx].path);
       final (ch, v) = VerseHierarchyService.baseVerseFromRef(nextRef ?? '');
       expect(ch, 9);
       expect(v, equals(2),
@@ -471,10 +542,11 @@ void main() {
     test('6.49 -> 6.50: leaf sequence has no skip to 6.52', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final idx648 = leaves.indexWhere((s) =>
-          hierarchyService.getFirstVerseForSectionSync(_textId,s.path) == '6.48');
+          hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ==
+          '6.48');
       expect(idx648, greaterThanOrEqualTo(0), reason: '6.48 leaf must exist');
-      final nextRef =
-          hierarchyService.getFirstVerseForSectionSync(_textId,leaves[idx648 + 1].path);
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+          _textId, leaves[idx648 + 1].path);
       expect(
         nextRef,
         anyOf(equals('6.49'), equals('6.50ab'), equals('6.50')),
@@ -491,11 +563,11 @@ void main() {
     test('fallback from 6.49: findAdjacentSectionIndex returns 6.50ab not 6.52',
         () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
-      final nextIdx = hierarchyService.findAdjacentSectionIndex(_textId, leaves, '6.49',
-          direction: 1);
+      final nextIdx = hierarchyService
+          .findAdjacentSectionIndex(_textId, leaves, '6.49', direction: 1);
       expect(nextIdx, greaterThanOrEqualTo(0));
-      final nextRef =
-          hierarchyService.getFirstVerseForSectionSync(_textId,leaves[nextIdx].path);
+      final nextRef = hierarchyService.getFirstVerseForSectionSync(
+          _textId, leaves[nextIdx].path);
       expect(
         nextRef,
         anyOf(equals('6.50ab'), equals('6.50cd'), equals('6.50')),
@@ -510,8 +582,9 @@ void main() {
       const refs = ['2.34', '2.35', '2.36', '2.37', '2.38'];
       final indices = <String, int>{};
       for (final ref in refs) {
-        final idx = leaves.indexWhere(
-            (s) => hierarchyService.getFirstVerseForSectionSync(_textId,s.path) == ref);
+        final idx = leaves.indexWhere((s) =>
+            hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ==
+            ref);
         if (idx >= 0) indices[ref] = idx;
       }
       for (var i = 0; i < refs.length - 1; i++) {
@@ -539,10 +612,10 @@ void main() {
       var gapSum = 0;
       var maxGap = 0;
       for (var i = 0; i < leaves.length - 1; i++) {
-        final refA =
-            hierarchyService.getFirstVerseForSectionSync(_textId,leaves[i].path);
-        final refB =
-            hierarchyService.getFirstVerseForSectionSync(_textId,leaves[i + 1].path);
+        final refA = hierarchyService.getFirstVerseForSectionSync(
+            _textId, leaves[i].path);
+        final refB = hierarchyService.getFirstVerseForSectionSync(
+            _textId, leaves[i + 1].path);
         if (refA == null || refB == null) continue;
 
         final (chA, vA) = VerseHierarchyService.baseVerseFromRef(refA);
@@ -680,7 +753,8 @@ void main() {
 
       final jumps = <String>[];
       for (var i = 0; i < ordered.length; i++) {
-        final ref = hierarchyService.getFirstVerseForSectionSync(_textId,
+        final ref = hierarchyService.getFirstVerseForSectionSync(
+          _textId,
           ordered[i].path,
         );
         if (ref == null) continue;
@@ -768,7 +842,8 @@ void main() {
   // ---------------------------------------------------------------------------
   group('sections.verses indexing', () {
     test('base 1.1 resolves to literal homage section via 1.1ab', () async {
-      final hierarchy = await hierarchyService.getHierarchyForVerse(_textId, '1.1');
+      final hierarchy =
+          await hierarchyService.getHierarchyForVerse(_textId, '1.1');
       expect(hierarchy, isNotEmpty);
       expect(
         hierarchy.last['section'] ?? hierarchy.last['path'],
@@ -784,8 +859,8 @@ void main() {
       expect(refs, contains('9.27cd'),
           reason:
               'sections.verses index should carry the segment ref from the tree');
-      expect(
-          hierarchyService.getFirstVerseForSectionSync(_textId,path), equals('9.27cd'),
+      expect(hierarchyService.getFirstVerseForSectionSync(_textId, path),
+          equals('9.27cd'),
           reason: 'first verse of the section should be 9.27cd');
     });
 
@@ -805,18 +880,18 @@ void main() {
     test('opening discarding-pride literal section owns base 1.2/1.3 block',
         () {
       const path = '1.3.3';
-      final own = hierarchyService.getOwnVerseRefsForSectionSync(_textId,path);
+      final own = hierarchyService.getOwnVerseRefsForSectionSync(_textId, path);
       expect(own, containsAll(['1.2', '1.3']));
       expect(
-        hierarchyService.getFirstVerseForSectionSync(_textId,path),
+        hierarchyService.getFirstVerseForSectionSync(_textId, path),
         equals('1.2'),
       );
-      expect(
-          hierarchyService.getOwnVerseRefsForSectionSync(_textId,'1.3.3.1'), isEmpty);
-      expect(
-          hierarchyService.getOwnVerseRefsForSectionSync(_textId,'1.3.3.2'), isEmpty);
-      expect(
-          hierarchyService.getOwnVerseRefsForSectionSync(_textId,'1.3.3.3'), isEmpty);
+      expect(hierarchyService.getOwnVerseRefsForSectionSync(_textId, '1.3.3.1'),
+          isEmpty);
+      expect(hierarchyService.getOwnVerseRefsForSectionSync(_textId, '1.3.3.2'),
+          isEmpty);
+      expect(hierarchyService.getOwnVerseRefsForSectionSync(_textId, '1.3.3.3'),
+          isEmpty);
     });
 
     test('opening detailed nodes remain available in full hierarchy', () {
@@ -828,8 +903,10 @@ void main() {
     test('2.1 directly owns verse 1.4 and 2.2 owns verse 1.5', () {
       const bodily = '2.1';
       const mental = '2.2';
-      final ownBodily = hierarchyService.getOwnVerseRefsForSectionSync(_textId,bodily);
-      final ownMental = hierarchyService.getOwnVerseRefsForSectionSync(_textId,mental);
+      final ownBodily =
+          hierarchyService.getOwnVerseRefsForSectionSync(_textId, bodily);
+      final ownMental =
+          hierarchyService.getOwnVerseRefsForSectionSync(_textId, mental);
       expect(ownBodily, contains('1.4'));
       expect(ownMental, contains('1.5'));
       expect(ownBodily, isNot(contains('1.4ab')));
@@ -837,9 +914,12 @@ void main() {
       expect(ownMental, isNot(contains('1.5ab')));
       expect(ownMental, isNot(contains('1.5cd')));
 
-      final path14ab = hierarchyService.getHierarchyForVerseSync(_textId,'1.4ab');
-      final path14cd = hierarchyService.getHierarchyForVerseSync(_textId,'1.4cd');
-      final path15ab = hierarchyService.getHierarchyForVerseSync(_textId,'1.5ab');
+      final path14ab =
+          hierarchyService.getHierarchyForVerseSync(_textId, '1.4ab');
+      final path14cd =
+          hierarchyService.getHierarchyForVerseSync(_textId, '1.4cd');
+      final path15ab =
+          hierarchyService.getHierarchyForVerseSync(_textId, '1.5ab');
       expect(path14ab.last['section'], equals('2.1'));
       expect(path14cd.last['section'], equals('2.1'));
       expect(path15ab.last['section'], equals('2.2'));
@@ -847,18 +927,19 @@ void main() {
 
     test('opening condensed discarding-pride section owns 1.2 and 1.3', () {
       const path = '1.2.3';
-      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(_textId,path);
+      final ownRefs =
+          hierarchyService.getOwnVerseRefsForSectionSync(_textId, path);
       expect(ownRefs, containsAll(['1.2', '1.3']));
       expect(ownRefs, isNot(contains('1.1')));
       expect(
-        hierarchyService.getFirstVerseForSectionSync(_textId,path),
+        hierarchyService.getFirstVerseForSectionSync(_textId, path),
         equals('1.2'),
       );
     });
 
     test('getSplitVerseSegmentsSync detects 9.27 split via sections.verses',
         () {
-      final segs = hierarchyService.getSplitVerseSegmentsSync(_textId,'9.27');
+      final segs = hierarchyService.getSplitVerseSegmentsSync(_textId, '9.27');
       expect(segs.length, 2);
       expect(segs.any((s) => s.ref == '9.27ab'), isTrue,
           reason: 'ab half should be detected');
@@ -869,19 +950,19 @@ void main() {
     });
 
     test('getSplitVerseSegmentsSync detects 9.28 and 9.29 splits', () {
-      final seg28 = hierarchyService.getSplitVerseSegmentsSync(_textId,'9.28');
+      final seg28 = hierarchyService.getSplitVerseSegmentsSync(_textId, '9.28');
       expect(seg28.length, 2);
       expect(seg28.any((s) => s.ref == '9.28ab'), isTrue);
       expect(seg28.any((s) => s.ref == '9.28cd'), isTrue);
 
-      final seg29 = hierarchyService.getSplitVerseSegmentsSync(_textId,'9.29');
+      final seg29 = hierarchyService.getSplitVerseSegmentsSync(_textId, '9.29');
       expect(seg29.length, 2);
       expect(seg29.any((s) => s.ref == '9.29ab'), isTrue);
       expect(seg29.any((s) => s.ref == '9.29cd'), isTrue);
     });
 
     test('getSplitVerseSegmentsSync detects 9.4 split as 9.4abc then 9.4d', () {
-      final segs = hierarchyService.getSplitVerseSegmentsSync(_textId,'9.4');
+      final segs = hierarchyService.getSplitVerseSegmentsSync(_textId, '9.4');
       expect(segs.length, 2);
       expect(segs[0].ref, equals('9.4abc'));
       expect(segs[1].ref, equals('9.4d'));
@@ -890,23 +971,26 @@ void main() {
     });
 
     test('getSplitVerseSegmentsSync treats 9.110 as whole verse', () {
-      final segs = hierarchyService.getSplitVerseSegmentsSync(_textId,'9.110');
+      final segs = hierarchyService.getSplitVerseSegmentsSync(_textId, '9.110');
       expect(segs, isEmpty,
           reason:
               '9.110 is directly owned as a whole verse in sections.verses');
-      final hierarchy = hierarchyService.getHierarchyForVerseSync(_textId,'9.110');
+      final hierarchy =
+          hierarchyService.getHierarchyForVerseSync(_textId, '9.110');
       expect(hierarchy, isNotEmpty);
       final path = hierarchy.last['section']!;
-      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(_textId,path);
+      final ownRefs =
+          hierarchyService.getOwnVerseRefsForSectionSync(_textId, path);
       expect(ownRefs, contains('9.110'));
     });
 
     test('section 4.6.2.5.1.1.1 owns 9.151 and 9.152', () {
       const path = '4.6.2.5.1.1.1';
-      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(_textId,path);
+      final ownRefs =
+          hierarchyService.getOwnVerseRefsForSectionSync(_textId, path);
       expect(ownRefs, containsAll(['9.151', '9.152']));
-      expect(
-          hierarchyService.getFirstVerseForSectionSync(_textId,path), equals('9.151'));
+      expect(hierarchyService.getFirstVerseForSectionSync(_textId, path),
+          equals('9.151'));
     });
 
     test(
@@ -920,7 +1004,8 @@ void main() {
     test('own refs for 4.6.2.1.1.3 include only 9.2bcd (exclude child refs)',
         () {
       const path = '4.6.2.1.1.3';
-      final ownRefs = hierarchyService.getOwnVerseRefsForSectionSync(_textId,path);
+      final ownRefs =
+          hierarchyService.getOwnVerseRefsForSectionSync(_textId, path);
       expect(ownRefs, contains('9.2bcd'));
       expect(ownRefs, isNot(contains('9.3ab')));
       expect(ownRefs, isNot(contains('9.3cd')));
@@ -940,7 +1025,8 @@ void main() {
       expect(idx, greaterThanOrEqualTo(0),
           reason: 'Parent section with exclusive ref 9.2bcd must be navigable');
       if (idx >= 0) {
-        expect(hierarchyService.getFirstVerseForSectionSync(_textId,parentPath),
+        expect(
+            hierarchyService.getFirstVerseForSectionSync(_textId, parentPath),
             equals('9.2bcd'));
       }
     });
@@ -971,7 +1057,9 @@ void main() {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final refsByPath = {
         for (final s in leaves)
-          s.path: hierarchyService.getFirstVerseForSectionSync(_textId,s.path) ?? '',
+          s.path:
+              hierarchyService.getFirstVerseForSectionSync(_textId, s.path) ??
+                  '',
       };
       final idx93cd = leaves.indexWhere((s) => refsByPath[s.path] == '9.3cd');
       final idx94d = leaves.indexWhere((s) => refsByPath[s.path] == '9.4d');
@@ -996,7 +1084,8 @@ void main() {
     test('leaf list includes sections for 9.27cd, 9.28ab, 9.28cd, 9.29cd', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final firstRefs = leaves
-          .map((s) => hierarchyService.getFirstVerseForSectionSync(_textId,s.path))
+          .map((s) =>
+              hierarchyService.getFirstVerseForSectionSync(_textId, s.path))
           .toSet();
 
       expect(firstRefs, contains('9.27cd'),
@@ -1079,20 +1168,21 @@ void main() {
 
     test('karma then samsara are consecutive in leaf order', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
-      final karmaIdx =
-          leaves.indexWhere((s) => s.path == '4.6.2.1.2.2.3');
-      final samsaraIdx =
-          leaves.indexWhere((s) => s.path == '4.6.2.1.2.2.4');
+      final karmaIdx = leaves.indexWhere((s) => s.path == '4.6.2.1.2.2.3');
+      final samsaraIdx = leaves.indexWhere((s) => s.path == '4.6.2.1.2.2.4');
       expect(karmaIdx, greaterThanOrEqualTo(0));
       expect(samsaraIdx, greaterThanOrEqualTo(0));
       expect(karmaIdx + 1, equals(samsaraIdx),
-          reason: 'Samsara section must be immediately after karma in leaf order');
+          reason:
+              'Samsara section must be immediately after karma in leaf order');
     });
 
     test('findAdjacentSectionIndex from 9.11 returns samsara not karma', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final nextIdx = hierarchyService.findAdjacentSectionIndex(
-        _textId, leaves, '9.11',
+        _textId,
+        leaves,
+        '9.11',
         direction: 1,
       );
       expect(nextIdx, greaterThanOrEqualTo(0));
@@ -1100,13 +1190,16 @@ void main() {
       // The next section by first-verse after 9.11 should NOT be karma (self).
       // It should be samsara (4.6.2.1.2.2.4) whose firstRef is 9.13cd (base 9.13 > 9.11).
       expect(nextPath, isNot(equals('4.6.2.1.2.2.3')),
-          reason: 'findAdjacentSectionIndex from 9.11 must not return karma (self)');
+          reason:
+              'findAdjacentSectionIndex from 9.11 must not return karma (self)');
     });
 
     test('findAdjacentSectionIndex from 9.12 returns samsara', () {
       final leaves = hierarchyService.getLeafSectionsByVerseOrderSync(_textId);
       final nextIdx = hierarchyService.findAdjacentSectionIndex(
-        _textId, leaves, '9.12',
+        _textId,
+        leaves,
+        '9.12',
         direction: 1,
       );
       expect(nextIdx, greaterThanOrEqualTo(0));

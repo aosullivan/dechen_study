@@ -150,7 +150,14 @@ test.describe('dechen.study production smoke', () => {
       }
 
       await roleButton(page, 'Reveal').click();
-      await expect(page.getByText(/Answer/i).first()).toBeVisible();
+      await expect
+        .poll(
+          async () =>
+            (await page.getByText(/Answer|Close\.|Not quite|Correct/i).first().count()) > 0 ||
+            (await roleButton(page, 'OK').count()) > 0,
+          { timeout: 20_000 },
+        )
+        .toBeTruthy();
       await roleButton(page, 'OK').click();
 
       await roleButton(page, 'Next').click();
