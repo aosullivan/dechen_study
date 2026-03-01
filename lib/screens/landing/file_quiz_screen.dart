@@ -267,7 +267,9 @@ class _FileQuizScreenState extends State<FileQuizScreen>
   void _revealAnswer() {
     final q = _currentQuestion;
     if (q == null || _showAnswer) return;
-    final resolvedVerses = _resolveVerses(q.verseRefs);
+    final resolvedVerses = _difficulty == FileQuizDifficulty.beginner
+        ? _resolveVerses(q.verseRefs)
+        : null;
 
     setState(() {
       _showAnswer = true;
@@ -300,7 +302,9 @@ class _FileQuizScreenState extends State<FileQuizScreen>
 
     final correct = key == q.answerKey;
     final correctText = q.correctAnswerText;
-    final resolvedVerses = _resolveVerses(q.verseRefs);
+    final resolvedVerses = _difficulty == FileQuizDifficulty.beginner
+        ? _resolveVerses(q.verseRefs)
+        : null;
     String message;
 
     if (correct) {
@@ -354,7 +358,7 @@ class _FileQuizScreenState extends State<FileQuizScreen>
     required String message,
     required Color tint,
     required IconData icon,
-    required List<_ResolvedVerse> verses,
+    required List<_ResolvedVerse>? verses,
   }) async {
     if (!mounted) return;
     await showDialog<void>(
@@ -376,8 +380,10 @@ class _FileQuizScreenState extends State<FileQuizScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(message),
-                const SizedBox(height: 12),
-                _buildVerseDialogPanel(verses),
+                if (verses != null) ...[
+                  const SizedBox(height: 12),
+                  _buildVerseDialogPanel(verses),
+                ],
               ],
             ),
           ),

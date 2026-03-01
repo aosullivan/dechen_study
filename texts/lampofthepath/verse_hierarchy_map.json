@@ -675,37 +675,6 @@
                                   "children": []
                                 }
                               ]
-                            },
-                            {
-                              "title": "The reason for composing the text",
-                              "path": "2.3.2.2.3.2.3",
-                              "verses": [
-                                "1.68"
-                              ],
-                              "children": []
-                            },
-                            {
-                              "title": "Colophon",
-                              "path": "2.3.2.2.3.2.4",
-                              "verses": [],
-                              "children": [
-                                {
-                                  "title": "Who wrote the text",
-                                  "path": "2.3.2.2.3.2.4.1",
-                                  "verses": [
-                                    "0.3"
-                                  ],
-                                  "children": []
-                                },
-                                {
-                                  "title": "Who translated it",
-                                  "path": "2.3.2.2.3.2.4.2",
-                                  "verses": [
-                                    "0.4"
-                                  ],
-                                  "children": []
-                                }
-                              ]
                             }
                           ]
                         }
@@ -714,6 +683,37 @@
                   ]
                 }
               ]
+            },
+            {
+              "title": "The reason for composing the text",
+              "path": "2.3.3",
+              "verses": [
+                "1.68"
+              ],
+              "children": []
+            }
+          ]
+        },
+        {
+          "title": "Colophon",
+          "path": "2.4",
+          "verses": [],
+          "children": [
+            {
+              "title": "Who wrote the text",
+              "path": "2.4.1",
+              "verses": [
+                "0.3"
+              ],
+              "children": []
+            },
+            {
+              "title": "Who translated it",
+              "path": "2.4.2",
+              "verses": [
+                "0.4"
+              ],
+              "children": []
             }
           ]
         }
@@ -4721,23 +4721,7 @@
         "title": "The text itself"
       },
       {
-        "section": "2.3.2",
-        "title": "Main exegesis of the text"
-      },
-      {
-        "section": "2.3.2.2",
-        "title": "Exegesis of the characteristics of each of the three paths"
-      },
-      {
-        "section": "2.3.2.2.3",
-        "title": "Characteristics of the superior person’s path"
-      },
-      {
-        "section": "2.3.2.2.3.2",
-        "title": "Detailed explanation of the characteristics of the superior person’s path"
-      },
-      {
-        "section": "2.3.2.2.3.2.3",
+        "section": "2.3.3",
         "title": "The reason for composing the text"
       }
     ],
@@ -4943,26 +4927,35 @@
     ],
     "0.3": [
       {
-        "section": "2.3.2.2.3.2.4",
+        "section": "2",
+        "title": "The meaning of the main instructions"
+      },
+      {
+        "section": "2.4",
         "title": "Colophon"
       },
       {
-        "section": "2.3.2.2.3.2.4.1",
+        "section": "2.4.1",
         "title": "Who wrote the text"
       }
     ],
     "0.4": [
       {
-        "section": "2.3.2.2.3.2.4",
+        "section": "2",
+        "title": "The meaning of the main instructions"
+      },
+      {
+        "section": "2.4",
         "title": "Colophon"
       },
       {
-        "section": "2.3.2.2.3.2.4.2",
+        "section": "2.4.2",
         "title": "Who translated it"
       }
     ]
   },
   "sectionToFirstVerse": {
+    "2": "0.1",
     "2.1": "0.1",
     "2.2": "0.2",
     "2.3.1": "1.1",
@@ -5045,7 +5038,6 @@
     "2.3.2.2": "1.3",
     "2.3.2": "1.2",
     "2.3": "1.1",
-    "2": "0.1",
     "2.3.2.2.3.2.4.1": "0.3",
     "2.3.2.2.3.2.4.2": "0.4",
     "2.3.2.2.3.2.4": "0.3"

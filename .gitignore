@@ -51,6 +51,11 @@ app.*.map.json
 /web/flutter_service_worker.js
 /web/version.json
 
+# JS/Playwright
+node_modules/
+playwright-report/
+test-results/
+
 # Environment variables and secrets
 .env
 .env.*

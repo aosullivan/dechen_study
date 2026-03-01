@@ -1,0 +1,14 @@
+{
+  "name": "dechen-study-e2e",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Production e2e smoke tests for dechen.study",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}
