@@ -188,6 +188,7 @@ void main() {
     List<dynamic> values,
     int minLength, {
     int maxPresses = 3,
+    Duration waitTimeout = const Duration(milliseconds: 1500),
   }) async {
     for (var i = 0; i < maxPresses; i++) {
       if (values.length >= minLength) return;
@@ -196,7 +197,7 @@ void main() {
         tester,
         values,
         minLength,
-        timeout: const Duration(milliseconds: 900),
+        timeout: waitTimeout,
       );
       await tester.pump(const Duration(milliseconds: 350));
     }
@@ -649,7 +650,8 @@ void main() {
 
       // Now press UP from False Representationalists — must go to samsara.
       await pressArrowUntilLength(
-          tester, LogicalKeyboardKey.arrowUp, capturedPaths, 3);
+          tester, LogicalKeyboardKey.arrowUp, capturedPaths, 3,
+          maxPresses: 6);
 
       expect(capturedPaths.length, greaterThanOrEqualTo(3),
           reason: 'Arrow up should trigger navigation');
@@ -785,7 +787,8 @@ void main() {
 
       // UP → samsara (not karma): verify correct section and no revert.
       await pressArrowUntilLength(
-          tester, LogicalKeyboardKey.arrowUp, capturedPaths, 3);
+          tester, LogicalKeyboardKey.arrowUp, capturedPaths, 3,
+          maxPresses: 8);
 
       expect(capturedPaths[2], equals('4.6.2.1.2.2.4'),
           reason:

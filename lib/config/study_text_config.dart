@@ -127,7 +127,7 @@ final List<StudyTextConfig> studyTextRegistry = [
     path: '/lampofthepath',
     author: 'ATIŚA',
     description:
-        ‘Daily verses, read mode, textual structure, and beginner and advanced quizzes for Atiśa’s Lamp of the Path to Enlightenment, mapped to the Full Illumination commentary hierarchy.’,
+        "Daily verses, read mode, textual structure, and beginner and advanced quizzes for Atiśa's Lamp of the Path to Enlightenment, mapped to the Full Illumination commentary hierarchy.",
     coverAssetPath: 'assets/lampofthepath_cover.png',
     parsedJsonPath: 'texts/lampofthepath/lampofthepath_parsed.json',
     hierarchyPath: 'texts/lampofthepath/verse_hierarchy_map.json',
