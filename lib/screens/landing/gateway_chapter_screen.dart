@@ -116,6 +116,7 @@ class GatewayChapterScreen extends StatelessWidget {
 
             return SelectionArea(
               child: ListView(
+                cacheExtent: 9999,
                 padding: const EdgeInsets.fromLTRB(14, 10, 14, 20),
                 children: [
                   _ChapterIntroCard(
@@ -436,6 +437,11 @@ class _GatewayTopicCard extends StatelessWidget {
             classificationIcons: classMap,
           ),
         );
+        continue;
+      }
+      if (block.type == 'classification-matrix') {
+        children
+            .add(const RepaintBoundary(child: _ClassificationOverlapsView()));
         continue;
       }
       children.add(_GatewayBlockView(block: block));
@@ -1731,6 +1737,514 @@ const _ayatanaInnerBorder = Color(0xFFB8D8CC);
 const _ayatanaOuterIcon = Color(0xFF5B7BA5);
 const _ayatanaOuterBg = Color(0xFFEEF3F9);
 const _ayatanaOuterBorder = Color(0xFFB8CCE0);
+
+// ─────────────────────────────────────────────────────────────────────────
+// Classification Overlaps – interactive matrix + region cards
+// ─────────────────────────────────────────────────────────────────────────
+
+/// One of the 18 dhatus for the overlap matrix.
+class _DhatuEntry {
+  const _DhatuEntry(this.id, this.name, this.icon, this.triad);
+  final String id;
+  final String name;
+  final IconData icon;
+  final _TriadCategory triad;
+}
+
+/// One of the 10 classification sets.
+class _SetEntry {
+  const _SetEntry(this.id, this.name, this.icon);
+  final String id;
+  final String name;
+  final IconData icon;
+}
+
+/// An overlap region (group of dhatus with the same membership pattern).
+class _OverlapRegion {
+  const _OverlapRegion(this.title, this.dhatuIds, this.setIds);
+  final String title;
+  final List<String> dhatuIds;
+  final List<String> setIds;
+}
+
+const _kDhatus = <_DhatuEntry>[
+  _DhatuEntry('eye-fac', 'Eye Faculty', Icons.visibility_outlined, _TriadCategory.faculties),
+  _DhatuEntry('ear-fac', 'Ear Faculty', Icons.hearing_outlined, _TriadCategory.faculties),
+  _DhatuEntry('nose-fac', 'Nose Faculty', Icons.air_outlined, _TriadCategory.faculties),
+  _DhatuEntry('tongue-fac', 'Tongue Faculty', Icons.water_drop_outlined, _TriadCategory.faculties),
+  _DhatuEntry('body-fac', 'Body Faculty', Icons.pan_tool_outlined, _TriadCategory.faculties),
+  _DhatuEntry('mind-fac', 'Mind Faculty', Icons.psychology_outlined, _TriadCategory.faculties),
+  _DhatuEntry('visual-obj', 'Visual Form', Icons.visibility_outlined, _TriadCategory.objects),
+  _DhatuEntry('sound-obj', 'Sound', Icons.hearing_outlined, _TriadCategory.objects),
+  _DhatuEntry('smell-obj', 'Smell', Icons.air_outlined, _TriadCategory.objects),
+  _DhatuEntry('taste-obj', 'Taste', Icons.water_drop_outlined, _TriadCategory.objects),
+  _DhatuEntry('texture-obj', 'Texture', Icons.pan_tool_outlined, _TriadCategory.objects),
+  _DhatuEntry('mental-obj', 'Mental Object', Icons.psychology_outlined, _TriadCategory.objects),
+  _DhatuEntry('eye-con', 'Eye Consc.', Icons.visibility_outlined, _TriadCategory.consciousnesses),
+  _DhatuEntry('ear-con', 'Ear Consc.', Icons.hearing_outlined, _TriadCategory.consciousnesses),
+  _DhatuEntry('nose-con', 'Nose Consc.', Icons.air_outlined, _TriadCategory.consciousnesses),
+  _DhatuEntry('tongue-con', 'Tongue Consc.', Icons.water_drop_outlined, _TriadCategory.consciousnesses),
+  _DhatuEntry('body-con', 'Body Consc.', Icons.pan_tool_outlined, _TriadCategory.consciousnesses),
+  _DhatuEntry('mind-con', 'Mind Consc.', Icons.psychology_outlined, _TriadCategory.consciousnesses),
+];
+
+const _kSets = <_SetEntry>[
+  _SetEntry('physical-form', 'Physical Form', Icons.widgets_outlined),
+  _SetEntry('mut-obstruct', 'Mut. Obstructive', Icons.block_outlined),
+  _SetEntry('outer', 'Outer', Icons.open_in_new_outlined),
+  _SetEntry('personal-sens', 'Personal Sens.', Icons.person_outline),
+  _SetEntry('desire-realm', 'Desire Realm', Icons.layers_outlined),
+  _SetEntry('form-realm', 'Form Realm', Icons.layers_outlined),
+  _SetEntry('formless-realm', 'Formless Realm', Icons.layers_outlined),
+  _SetEntry('undefiling', 'Undefiling', Icons.auto_awesome_outlined),
+  _SetEntry('focus', 'Focus', Icons.center_focus_strong_outlined),
+  _SetEntry('concepts', 'Concepts', Icons.lightbulb_outlined),
+];
+
+/// Membership: dhatu id → set of classification ids it belongs to.
+const _kMembership = <String, Set<String>>{
+  'eye-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm'},
+  'ear-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm'},
+  'nose-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm'},
+  'tongue-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm'},
+  'body-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm'},
+  'mind-fac': {'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts'},
+  'visual-obj': {'physical-form', 'mut-obstruct', 'outer', 'desire-realm', 'form-realm'},
+  'sound-obj': {'physical-form', 'mut-obstruct', 'outer', 'desire-realm', 'form-realm'},
+  'smell-obj': {'physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm'},
+  'taste-obj': {'physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm'},
+  'texture-obj': {'physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm', 'form-realm'},
+  'mental-obj': {'physical-form', 'outer', 'personal-sens', 'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts'},
+  'eye-con': {'desire-realm', 'form-realm', 'focus'},
+  'ear-con': {'desire-realm', 'form-realm', 'focus'},
+  'nose-con': {'desire-realm', 'form-realm', 'focus'},
+  'tongue-con': {'desire-realm', 'form-realm', 'focus'},
+  'body-con': {'desire-realm', 'form-realm', 'focus'},
+  'mind-con': {'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts'},
+};
+
+const _kRegions = <_OverlapRegion>[
+  _OverlapRegion('Sense Faculties in Form Realm', ['eye-fac', 'ear-fac', 'body-fac'],
+      ['physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm']),
+  _OverlapRegion('Sense Faculties not in Form Realm', ['nose-fac', 'tongue-fac'],
+      ['physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm']),
+  _OverlapRegion('Distant Sense Objects', ['visual-obj', 'sound-obj'],
+      ['physical-form', 'mut-obstruct', 'outer', 'desire-realm', 'form-realm']),
+  _OverlapRegion('Proximate Objects (Desire only)', ['smell-obj', 'taste-obj'],
+      ['physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm']),
+  _OverlapRegion('Texture (unique 6-set)', ['texture-obj'],
+      ['physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm', 'form-realm']),
+  _OverlapRegion('Mental Object (9 of 10)', ['mental-obj'],
+      ['physical-form', 'outer', 'personal-sens', 'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts']),
+  _OverlapRegion('The Mental Pair', ['mind-fac', 'mind-con'],
+      ['desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts']),
+  _OverlapRegion('Five Sense Consciousnesses', ['eye-con', 'ear-con', 'nose-con', 'tongue-con', 'body-con'],
+      ['desire-realm', 'form-realm', 'focus']),
+];
+
+// Reverse lookup: set id → list of member dhatu ids.
+final Map<String, List<String>> _kSetMembers = () {
+  final m = <String, List<String>>{};
+  for (final s in _kSets) {
+    m[s.id] = [
+      for (final d in _kDhatus)
+        if (_kMembership[d.id]?.contains(s.id) ?? false) d.id,
+    ];
+  }
+  return m;
+}();
+
+// Quick lookup maps.
+final Map<String, _DhatuEntry> _kDhatuMap = {for (final d in _kDhatus) d.id: d};
+final Map<String, _SetEntry> _kSetMap = {for (final s in _kSets) s.id: s};
+
+class _ClassificationOverlapsView extends StatefulWidget {
+  const _ClassificationOverlapsView();
+
+  @override
+  State<_ClassificationOverlapsView> createState() =>
+      _ClassificationOverlapsViewState();
+}
+
+class _ClassificationOverlapsViewState
+    extends State<_ClassificationOverlapsView> {
+  String? _selectedDhatu;
+  String? _selectedSet;
+
+  void _tapDhatu(String id) {
+    setState(() {
+      if (_selectedDhatu == id) {
+        _selectedDhatu = null;
+      } else {
+        _selectedDhatu = id;
+        _selectedSet = null;
+      }
+    });
+  }
+
+  void _tapSet(String id) {
+    setState(() {
+      if (_selectedSet == id) {
+        _selectedSet = null;
+      } else {
+        _selectedSet = id;
+        _selectedDhatu = null;
+      }
+    });
+  }
+
+  bool _isDhatuHighlighted(String dhatuId) {
+    if (_selectedDhatu != null) return dhatuId == _selectedDhatu;
+    if (_selectedSet != null) {
+      return _kMembership[dhatuId]?.contains(_selectedSet) ?? false;
+    }
+    return true; // nothing selected → all visible
+  }
+
+  bool _isSetHighlighted(String setId) {
+    if (_selectedSet != null) return setId == _selectedSet;
+    if (_selectedDhatu != null) {
+      return _kMembership[_selectedDhatu]?.contains(setId) ?? false;
+    }
+    return true;
+  }
+
+  bool get _hasSelection => _selectedDhatu != null || _selectedSet != null;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 8),
+        _buildMatrix(context),
+        _buildInfoSummary(context),
+        const SizedBox(height: 16),
+        _buildRegionCards(context),
+      ],
+    );
+  }
+
+  // ── Interactive matrix ──
+
+  Widget _buildMatrix(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header row
+          Row(
+            children: [
+              const SizedBox(width: 120), // row-header spacer
+              for (final s in _kSets) _buildColHeader(context, s),
+            ],
+          ),
+          // Dhatu rows
+          for (var i = 0; i < _kDhatus.length; i++) ...[
+            if (i == 6 || i == 12) // separators between triads
+              Container(height: 1, width: 120.0 + _kSets.length * 38, color: AppColors.border),
+            _buildRow(context, _kDhatus[i]),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColHeader(BuildContext context, _SetEntry s) {
+    final highlighted = _isSetHighlighted(s.id);
+    final active = _selectedSet == s.id;
+    return GestureDetector(
+      onTap: () => _tapSet(s.id),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: _hasSelection && !highlighted ? 0.2 : 1.0,
+        child: Container(
+          width: 38,
+          height: 110,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: active ? AppColors.primary : const Color(0xFFF8EFE2),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: active ? AppColors.primary : AppColors.borderLight,
+              width: active ? 1.5 : 0.5,
+            ),
+          ),
+          child: Column(
+            children: [
+              Icon(s.icon, size: 11, color: active ? Colors.white : AppColors.mutedBrown),
+              const SizedBox(height: 2),
+              RotatedBox(
+                quarterTurns: 3,
+                child: Text(
+                  s.name,
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w600,
+                    color: active ? Colors.white : AppColors.mutedBrown,
+                    letterSpacing: 0.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRow(BuildContext context, _DhatuEntry d) {
+    final highlighted = _isDhatuHighlighted(d.id);
+    final active = _selectedDhatu == d.id;
+    final sets = _kMembership[d.id] ?? const <String>{};
+
+    return GestureDetector(
+      onTap: () => _tapDhatu(d.id),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: _hasSelection && !highlighted ? 0.2 : 1.0,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          color: active ? const Color(0x308B7355) : Colors.transparent,
+          child: Row(
+            children: [
+              // Row header
+              Container(
+                width: 120,
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                child: Row(
+                  children: [
+                    _IconBadge(
+                      icon: d.icon,
+                      size: 11,
+                      backgroundColor: d.triad.background,
+                      borderColor: d.triad.border,
+                      iconColor: d.triad.icon,
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        d.name,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                          color: d.triad.icon ?? AppColors.primary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Cells
+              for (final s in _kSets)
+                _buildCell(sets.contains(s.id), s.id, d.id),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCell(bool isMember, String setId, String dhatuId) {
+    final setActive = _selectedSet == setId;
+    final dhatuActive = _selectedDhatu == dhatuId;
+    final cellHighlighted = setActive || dhatuActive;
+
+    return Container(
+      width: 38,
+      height: 26,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: isMember && cellHighlighted
+            ? const Color(0x40D4A017)
+            : isMember
+                ? const Color(0xFFFFF8E1)
+                : const Color(0xFFFAFAF5),
+        border: Border.all(color: AppColors.borderLight, width: 0.3),
+      ),
+      child: isMember
+          ? AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: cellHighlighted ? 10 : 7,
+              height: cellHighlighted ? 10 : 7,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: cellHighlighted ? AppColors.primary : const Color(0xFFB8960F),
+              ),
+            )
+          : null,
+    );
+  }
+
+  // ── Info summary ──
+
+  Widget _buildInfoSummary(BuildContext context) {
+    if (!_hasSelection) return const SizedBox(height: 8);
+
+    final String title;
+    final String subtitle;
+    final List<Widget> tags;
+
+    if (_selectedDhatu != null) {
+      final d = _kDhatuMap[_selectedDhatu]!;
+      final sets = _kMembership[_selectedDhatu] ?? const <String>{};
+      title = d.name;
+      subtitle = 'Member of ${sets.length} of 10 classifications';
+      tags = [
+        for (final sId in _kSets.map((s) => s.id))
+          if (sets.contains(sId)) _buildSetPill(_kSetMap[sId]!, true),
+      ];
+    } else {
+      final s = _kSetMap[_selectedSet]!;
+      final members = _kSetMembers[_selectedSet] ?? [];
+      title = s.name;
+      subtitle = 'Contains ${members.length} of 18 dhatus';
+      tags = [
+        for (final dId in members)
+          _buildDhatuPill(_kDhatuMap[dId]!, true),
+      ];
+    }
+
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 250),
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFF7EA),
+          borderRadius: BorderRadius.circular(9),
+          border: Border(
+            left: BorderSide(
+              color: AppColors.primary.withValues(alpha: 0.7),
+              width: 3,
+            ),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textDark,
+            )),
+            const SizedBox(height: 2),
+            Text(subtitle, style: TextStyle(
+              fontSize: 12, color: AppColors.mutedBrown,
+            )),
+            const SizedBox(height: 6),
+            Wrap(spacing: 4, runSpacing: 4, children: tags),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSetPill(_SetEntry s, bool highlighted) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: highlighted ? AppColors.cardBeige : AppColors.scaffoldBackground,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: AppColors.borderLight),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(s.icon, size: 10, color: AppColors.mutedBrown),
+          const SizedBox(width: 4),
+          Text(s.name, style: const TextStyle(fontSize: 10.5, color: AppColors.mutedBrown)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDhatuPill(_DhatuEntry d, bool highlighted) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: d.triad.background,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: d.triad.border),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(d.icon, size: 10, color: d.triad.icon ?? AppColors.primary),
+          const SizedBox(width: 4),
+          Text(d.name, style: TextStyle(
+            fontSize: 10.5, color: d.triad.icon ?? AppColors.primary,
+          )),
+        ],
+      ),
+    );
+  }
+
+  // ── Region cards ──
+
+  Widget _buildRegionCards(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [for (final r in _kRegions) _buildRegionCard(context, r)],
+    );
+  }
+
+  Widget _buildRegionCard(BuildContext context, _OverlapRegion region) {
+    final hasOverlap = !_hasSelection ||
+        region.dhatuIds.any((d) => _isDhatuHighlighted(d));
+
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 200),
+      opacity: hasOverlap ? 1.0 : 0.2,
+      child: Container(
+        width: 300,
+        padding: const EdgeInsets.all(9),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFEFB),
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(color: const Color(0xFFEADFCF)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(region.title, style: TextStyle(
+              fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDark,
+            )),
+            const SizedBox(height: 5),
+            Wrap(
+              spacing: 4,
+              runSpacing: 4,
+              children: [
+                for (final dId in region.dhatuIds)
+                  GestureDetector(
+                    onTap: () => _tapDhatu(dId),
+                    child: _buildDhatuPill(_kDhatuMap[dId]!, _isDhatuHighlighted(dId)),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Wrap(
+              spacing: 3,
+              runSpacing: 3,
+              children: [
+                for (final sId in region.setIds)
+                  GestureDetector(
+                    onTap: () => _tapSet(sId),
+                    child: _buildSetPill(_kSetMap[sId]!, _isSetHighlighted(sId)),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 bool _isSkandhaLabel(String text) {
   var t = text.toLowerCase().trim();

@@ -860,6 +860,32 @@ class GatewayRichContentService {
                     ],
                     styleClass: 'sense-list-subset'),
               ]),
+          GatewayRichTopic(
+              title: 'Classification Overlaps',
+              blocks: <GatewayRichBlock>[
+                GatewayRichBlock(
+                    type: 'p',
+                    text:
+                        'The ten classifications above overlap in structured ways. Tap any element or classification to see how it relates to the others.',
+                    styleClass: 'topic-copy'),
+                GatewayRichBlock(
+                    type: 'classification-matrix', styleClass: ''),
+                GatewayRichBlock(
+                    type: 'p',
+                    text:
+                        'Mental Object belongs to 9 of 10 classifications — every set except Mutually Obstructive. It uniquely bridges the material side (Physical Form, Outer) with the mental side (Formless, Concepts, Focus).',
+                    styleClass: 'callout'),
+                GatewayRichBlock(
+                    type: 'p',
+                    text:
+                        'Formless Realm and Elements with Concepts contain exactly the same three dhatus: Mind Faculty, Mental Object, and Mind Consciousness. Undefiling adds unconditioned things beyond the 18 dhatus.',
+                    styleClass: 'callout'),
+                GatewayRichBlock(
+                    type: 'p',
+                    text:
+                        'Mind Faculty and Mind Consciousness have identical classification membership across all 10 sets, despite being in different triads (faculty vs. consciousness).',
+                    styleClass: 'callout'),
+              ]),
         ]),
     GatewayRichChapter(
         number: 3,

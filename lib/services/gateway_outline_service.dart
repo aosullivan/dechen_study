@@ -60,6 +60,8 @@ class GatewayOutlineService {
             path: '2.3', title: 'Six Elements of a Person', depth: 0),
         GatewayOutlineSection(
             path: '2.4', title: 'Element Classifications', depth: 0),
+        GatewayOutlineSection(
+            path: '2.5', title: 'Classification Overlaps', depth: 0),
       ],
     ),
     GatewayOutlineChapter(
