@@ -32,7 +32,7 @@ void main() {
       expect(chapter, isNotNull);
       expect(chapter!.number, 2);
       expect(chapter.title, 'The Elements (Dhatu)');
-      expect(chapter.sections.length, 4);
+      expect(chapter.sections.length, 5);
     });
 
     test('getChapter returns null for non-existent chapter', () async {
