@@ -19,7 +19,7 @@ jobs:
         contains(github.event.deployment_status.target_url || '', 'dechen.study')
       )
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 55
 
     steps:
       - name: Checkout

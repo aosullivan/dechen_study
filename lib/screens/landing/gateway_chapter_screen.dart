@@ -128,13 +128,15 @@ class GatewayChapterScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   ...topicAnchors.map(
-                    (anchor) => _GatewayTopicCard(
-                      key: anchor.key,
-                      topic: anchor.topic,
-                      onChipTap: (label) {
-                        openTopic(label);
-                      },
-                      canOpenTopic: canOpenTopic,
+                    (anchor) => RepaintBoundary(
+                      child: _GatewayTopicCard(
+                        key: anchor.key,
+                        topic: anchor.topic,
+                        onChipTap: (label) {
+                          openTopic(label);
+                        },
+                        canOpenTopic: canOpenTopic,
+                      ),
                     ),
                   ),
                 ],
@@ -354,16 +356,18 @@ class _GatewayTopicCard extends StatelessWidget {
           blocks[i + 2].type == 'ul' &&
           blocks[i + 2].styleClass == 'sense-list') {
         children.add(
-          _TriadCards(
-            columns: [
-              ('Faculties', blocks[i].items, _TriadCategory.faculties),
-              ('Objects', blocks[i + 1].items, _TriadCategory.objects),
-              (
-                'Consciousnesses',
-                blocks[i + 2].items,
-                _TriadCategory.consciousnesses
-              ),
-            ],
+          RepaintBoundary(
+            child: _TriadCards(
+              columns: [
+                ('Faculties', blocks[i].items, _TriadCategory.faculties),
+                ('Objects', blocks[i + 1].items, _TriadCategory.objects),
+                (
+                  'Consciousnesses',
+                  blocks[i + 2].items,
+                  _TriadCategory.consciousnesses
+                ),
+              ],
+            ),
           ),
         );
         i += 2;
@@ -388,18 +392,20 @@ class _GatewayTopicCard extends StatelessWidget {
           skipCount = 4;
         }
         children.add(
-          _SubsetTriadSection(
-            title: block.text ?? '',
-            note: note,
-            columns: [
-              ('Faculties', blocks[i + 1].items, _TriadCategory.faculties),
-              ('Objects', blocks[i + 2].items, _TriadCategory.objects),
-              (
-                'Consciousnesses',
-                blocks[i + 3].items,
-                _TriadCategory.consciousnesses
-              ),
-            ],
+          RepaintBoundary(
+            child: _SubsetTriadSection(
+              title: block.text ?? '',
+              note: note,
+              columns: [
+                ('Faculties', blocks[i + 1].items, _TriadCategory.faculties),
+                ('Objects', blocks[i + 2].items, _TriadCategory.objects),
+                (
+                  'Consciousnesses',
+                  blocks[i + 3].items,
+                  _TriadCategory.consciousnesses
+                ),
+              ],
+            ),
           ),
         );
         i += skipCount;
@@ -411,11 +417,13 @@ class _GatewayTopicCard extends StatelessWidget {
           blocks[i + 1].type == 'ul' &&
           blocks[i + 1].styleClass == 'duality-list') {
         children.add(
-          _TriadCards(
-            columns: [
-              ('Inner Sources', blocks[i].items, null),
-              ('Outer Sources', blocks[i + 1].items, null),
-            ],
+          RepaintBoundary(
+            child: _TriadCards(
+              columns: [
+                ('Inner Sources', blocks[i].items, null),
+                ('Outer Sources', blocks[i + 1].items, null),
+              ],
+            ),
           ),
         );
         i += 1;
@@ -923,6 +931,13 @@ class _TriadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 14.5,
+        );
+    final disabledItemStyle = itemStyle?.copyWith(
+          color: AppColors.bodyText.withValues(alpha: 0.18),
+        );
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -962,31 +977,25 @@ class _TriadCard extends StatelessWidget {
               final displayItem = isDisabled ? item.substring(1) : item;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 5),
-                child: Opacity(
-                  opacity: isDisabled ? 0.18 : 1.0,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _IconBadge(
-                        icon: _iconForLabel(displayItem),
-                        size: 12,
-                        backgroundColor: category?.background,
-                        borderColor: category?.border,
-                        iconColor: category?.icon,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _IconBadge(
+                      icon: _iconForLabel(displayItem),
+                      size: 12,
+                      backgroundColor: category?.background,
+                      borderColor: category?.border,
+                      iconColor: category?.icon,
+                      opacity: isDisabled ? 0.18 : 1.0,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        displayItem,
+                        style: isDisabled ? disabledItemStyle : itemStyle,
                       ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          displayItem,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.bodyText,
-                                    fontSize: 14.5,
-                                  ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },
@@ -1138,6 +1147,7 @@ class _IconBadge extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.iconColor,
+    this.opacity = 1.0,
   });
 
   final IconData icon;
@@ -1145,22 +1155,27 @@ class _IconBadge extends StatelessWidget {
   final Color? backgroundColor;
   final Color? borderColor;
   final Color? iconColor;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
+    final bg = backgroundColor ?? Colors.white;
+    final bd = borderColor ?? const Color(0xFFE6D8C3);
+    final ic = iconColor ?? AppColors.primary;
     return Container(
       width: size + 10,
       height: size + 10,
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.white,
+        color: opacity < 1.0 ? bg.withValues(alpha: opacity) : bg,
         borderRadius: BorderRadius.circular((size + 10) / 3),
-        border: Border.all(color: borderColor ?? const Color(0xFFE6D8C3)),
+        border: Border.all(
+            color: opacity < 1.0 ? bd.withValues(alpha: opacity) : bd),
       ),
       alignment: Alignment.center,
       child: Icon(
         icon,
         size: size,
-        color: iconColor ?? AppColors.primary,
+        color: opacity < 1.0 ? ic.withValues(alpha: opacity) : ic,
       ),
     );
   }
@@ -1267,7 +1282,17 @@ String _normalizeTopicLabel(String input) {
   return input.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();
 }
 
+final _iconCache = <String, IconData>{};
+
 IconData _iconForLabel(String text) {
+  final cached = _iconCache[text];
+  if (cached != null) return cached;
+  final result = _computeIcon(text);
+  _iconCache[text] = result;
+  return result;
+}
+
+IconData _computeIcon(String text) {
   final t = text.toLowerCase();
   if (t.contains('eye') || t.contains('visual')) {
     return Icons.visibility_outlined;
