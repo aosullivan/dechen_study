@@ -32,6 +32,9 @@ dependencies:
   # Local key-value storage (bookmark, preferences)
   shared_preferences: ^2.3.0
 
+  # HTTP for geo lookup (country) in usage metrics
+  http: ^1.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -195,6 +195,7 @@
       <a href="#section-by-mode">By mode</a>
       <a href="#section-over-time">Over time</a>
       <a href="#section-over-time-by-text">Over time by text</a>
+      <a href="#section-by-country">By country</a>
       <a href="#section-event-types">Event types</a>
     </nav>
     <div class="filter-wrap" id="filter-wrap" style="display:none;">
@@ -226,6 +227,14 @@
         <div class="stat-item">
           <span class="stat-value" id="unique-sessions">0</span>
           <span class="stat-label">Unique sessions</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="unique-anon-users">0</span>
+          <span class="stat-label">Unique anonymous users</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="unique-auth-users">0</span>
+          <span class="stat-label">Unique logged-in users</span>
         </div>
         <div class="stat-item">
           <span class="stat-value" id="quiz-attempts">0</span>
@@ -266,6 +275,15 @@
       <div class="card chart-card">
         <div class="chart-wrap chart-tall">
           <canvas id="chart-time-by-text"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-by-country" class="section">
+      <h2 class="section-title">Events by country</h2>
+      <div class="card chart-card">
+        <div class="chart-wrap chart-wide">
+          <canvas id="chart-country"></canvas>
         </div>
       </div>
     </section>
@@ -325,6 +343,7 @@
     const typeData = d.events_by_type || [];
     const textData = d.events_by_text || [];
     const timeByTextData = d.events_over_time_by_text || [];
+    const countryData = d.events_by_country || [];
 
     const modeLabels = modeData.map(r => r.mode || '');
     const byModeText = {};
@@ -412,6 +431,22 @@
       }
     });
 
+    const countryLabels = countryData.map(r => r.country_code || '');
+    const countryColors = countryLabels.map((_, i) => palette[i % palette.length]);
+    chartInstances.country = new Chart(document.getElementById('chart-country'), {
+      type: 'bar',
+      data: {
+        labels: countryLabels,
+        datasets: [{ label: 'Events', data: countryData.map(r => r.count), backgroundColor: countryColors }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
     const typeLabels = typeData.map(r => (r.event_name || '') + (r.mode ? ' (' + r.mode + ')' : ''));
     chartInstances.type = new Chart(document.getElementById('chart-type'), {
       type: 'bar',
@@ -476,6 +511,8 @@
       const d = filterData(rawData, textId || null);
     document.getElementById('total-events').textContent = (d.totals && d.totals.total_events) || 0;
     document.getElementById('unique-sessions').textContent = (d.totals && d.totals.unique_sessions) || 0;
+    document.getElementById('unique-anon-users').textContent = (d.totals && d.totals.unique_anon_users) != null ? d.totals.unique_anon_users : 0;
+    document.getElementById('unique-auth-users').textContent = (d.totals && d.totals.unique_authenticated_users) != null ? d.totals.unique_authenticated_users : 0;
     document.getElementById('quiz-attempts').textContent = (d.quiz_summary && d.quiz_summary.quiz_attempts) || 0;
     renderCharts(d);
   }

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/constants.dart';
@@ -27,6 +29,8 @@ class UsageMetricsService {
   bool _initialized = false;
   bool _isFlushing = false;
   String? _anonId;
+  String? _countryCode;
+  Future<void>? _countryCodeFuture;
   int _minDwellMs = _defaultMinDwellMs;
   bool _disabledForSession = false;
   String? _disabledReason;
@@ -59,6 +63,35 @@ class UsageMetricsService {
       debugPrint('usage_metrics init error: $e');
       // Keep analytics best-effort; fallback ID remains process-local.
       _anonId ??= _createAnonId();
+    }
+    unawaited(_fetchCountryCode());
+  }
+
+  static const _geoUrl = 'https://ipapi.co/json/';
+
+  Future<void> _fetchCountryCode() async {
+    if (_countryCodeFuture != null) return;
+    _countryCodeFuture = _fetchCountryCodeImpl();
+    await _countryCodeFuture;
+  }
+
+  Future<void> _fetchCountryCodeImpl() async {
+    try {
+      final response = await http.get(Uri.parse(_geoUrl)).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => http.Response('', 408),
+      );
+      if (response.statusCode != 200) return;
+      final map = jsonDecode(response.body) as Map<String, dynamic>?;
+      final code = map?['country_code'] as String?;
+      if (code != null && code.trim().isNotEmpty) {
+        _countryCode = code.trim().toUpperCase();
+        for (final event in _pending) {
+          if (event['country_code'] == null) event['country_code'] = _countryCode;
+        }
+      }
+    } catch (_) {
+      // Best-effort; leave _countryCode null.
     }
   }
 
@@ -175,6 +208,7 @@ class UsageMetricsService {
       'session_id': _sessionId,
       'user_id': actorUserId,
       'anon_id': actorAnonId,
+      'country_code': _countryCode,
       'text_id': _normalizeText(textId),
       'mode': _normalizeText(mode),
       'section_path': _normalizeText(sectionPath),
@@ -318,6 +352,8 @@ class UsageMetricsService {
     _isFlushing = false;
     _initialized = false;
     _anonId = null;
+    _countryCode = null;
+    _countryCodeFuture = null;
     _minDwellMs = _defaultMinDwellMs;
     _disabledForSession = false;
     _disabledReason = null;
