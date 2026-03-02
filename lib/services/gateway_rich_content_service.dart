@@ -251,10 +251,10 @@ class GatewayRichContentService {
                     text:
                         'Four variables: sleep, regret, conception, discernment.',
                     styleClass: 'topic-copy'),
-              ]),
-          GatewayRichTopic(
-              title: 'Non-current Formations',
-              blocks: <GatewayRichBlock>[
+                GatewayRichBlock(
+                    type: 'p',
+                    text: 'Non-current Formations',
+                    styleClass: 'subset-title'),
                 GatewayRichBlock(
                     type: 'p',
                     text:
@@ -296,6 +296,18 @@ class GatewayRichContentService {
                     text:
                         'Presented as seven categories: the mind element plus six consciousness elements.',
                     styleClass: 'topic-copy'),
+                GatewayRichBlock(
+                    type: 'ul',
+                    items: <String>[
+                      'Mind Element',
+                      'Eye Consciousness Element',
+                      'Ear Consciousness Element',
+                      'Nose Consciousness Element',
+                      'Tongue Consciousness Element',
+                      'Body Consciousness Element',
+                      'Mind Consciousness Element',
+                    ],
+                    styleClass: 'icon-list-grid'),
               ]),
         ]),
     GatewayRichChapter(

@@ -286,6 +286,7 @@ class _TopicLink extends StatelessWidget {
           fontWeight: FontWeight.w500,
         );
 
+    final isSkandha = _isSkandhaLabel(label);
     final child = Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -293,14 +294,16 @@ class _TopicLink extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 3),
-            child: Icon(
-              Icons.circle,
-              size: 5,
-              color: AppColors.mutedBrown.withValues(alpha: 0.6),
+            padding: const EdgeInsets.only(top: 2),
+            child: _IconBadge(
+              icon: _iconForLabel(label),
+              size: 10,
+              backgroundColor: isSkandha ? _skandhaBadgeBg : null,
+              borderColor: isSkandha ? _skandhaBadgeBorder : null,
+              iconColor: isSkandha ? _skandhaIconColor : null,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Flexible(child: Text(label, style: textStyle)),
         ],
       ),
@@ -373,7 +376,8 @@ class _GatewayTopicCard extends StatelessWidget {
         i += 2;
         continue;
       }
-      // Detect subset-title + 3 sense-list-subset blocks
+      // Skip subset-title + 3 sense-list-subset blocks (already shown via
+      // the classification-summary list above).
       if (block.type == 'p' &&
           block.styleClass == 'subset-title' &&
           i + 3 < blocks.length &&
@@ -383,31 +387,12 @@ class _GatewayTopicCard extends StatelessWidget {
           blocks[i + 2].styleClass == 'sense-list-subset' &&
           blocks[i + 3].type == 'ul' &&
           blocks[i + 3].styleClass == 'sense-list-subset') {
-        String? note;
         var skipCount = 3;
         if (i + 4 < blocks.length &&
             blocks[i + 4].type == 'p' &&
             blocks[i + 4].styleClass == 'subset-note') {
-          note = blocks[i + 4].text;
           skipCount = 4;
         }
-        children.add(
-          RepaintBoundary(
-            child: _SubsetTriadSection(
-              title: block.text ?? '',
-              note: note,
-              columns: [
-                ('Faculties', blocks[i + 1].items, _TriadCategory.faculties),
-                ('Objects', blocks[i + 2].items, _TriadCategory.objects),
-                (
-                  'Consciousnesses',
-                  blocks[i + 3].items,
-                  _TriadCategory.consciousnesses
-                ),
-              ],
-            ),
-          ),
-        );
         i += skipCount;
         continue;
       }
@@ -418,11 +403,9 @@ class _GatewayTopicCard extends StatelessWidget {
           blocks[i + 1].styleClass == 'duality-list') {
         children.add(
           RepaintBoundary(
-            child: _TriadCards(
-              columns: [
-                ('Inner Sources', blocks[i].items, null),
-                ('Outer Sources', blocks[i + 1].items, null),
-              ],
+            child: _DualityPairView(
+              innerItems: blocks[i].items,
+              outerItems: blocks[i + 1].items,
             ),
           ),
         );
@@ -473,7 +456,16 @@ class _GatewayTopicCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _IconBadge(icon: _iconForLabel(topic.title), size: 18),
+                _IconBadge(
+                  icon: _iconForLabel(topic.title),
+                  size: 18,
+                  backgroundColor:
+                      _isSkandhaLabel(topic.title) ? _skandhaBadgeBg : null,
+                  borderColor:
+                      _isSkandhaLabel(topic.title) ? _skandhaBadgeBorder : null,
+                  iconColor:
+                      _isSkandhaLabel(topic.title) ? _skandhaIconColor : null,
+                ),
                 const SizedBox(width: 9),
                 Expanded(
                   child: Text(
@@ -563,6 +555,48 @@ class _GatewayBlockView extends StatelessWidget {
                     color: AppColors.bodyText,
                     fontSize: 15.5,
                   ),
+            ),
+          );
+        }
+        if (block.styleClass == 'topic-copy') {
+          return Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              block.text ?? '',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.bodyText,
+                    fontSize: 15.5,
+                    height: 1.45,
+                  ),
+            ),
+          );
+        }
+        if (block.styleClass == 'subset-title') {
+          final subTitle = block.text ?? '';
+          final isSkandha = _isSkandhaLabel(subTitle);
+          return Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 2),
+            child: Row(
+              children: [
+                _IconBadge(
+                  icon: _iconForLabel(subTitle),
+                  size: 14,
+                  backgroundColor: isSkandha ? _skandhaBadgeBg : null,
+                  borderColor: isSkandha ? _skandhaBadgeBorder : null,
+                  iconColor: isSkandha ? _skandhaIconColor : null,
+                ),
+                const SizedBox(width: 7),
+                Expanded(
+                  child: Text(
+                    subTitle,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textDark,
+                        ),
+                  ),
+                ),
+              ],
             ),
           );
         }
@@ -793,12 +827,22 @@ class _GatewayChipLink extends StatelessWidget {
           decoration: enabled ? TextDecoration.underline : TextDecoration.none,
           fontWeight: enabled ? FontWeight.w600 : FontWeight.w400,
         );
+    final isSkandha = _isSkandhaLabel(label);
+    final chipBg = isSkandha ? _skandhaChipBg : const Color(0xFFFFF9EF);
+    final chipBorder =
+        isSkandha ? _skandhaChipBorder : const Color(0xFFE7DAC7);
     final child = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _IconBadge(icon: _iconForLabel(label), size: 14),
+          _IconBadge(
+            icon: _iconForLabel(label),
+            size: 14,
+            backgroundColor: isSkandha ? _skandhaBadgeBg : null,
+            borderColor: isSkandha ? _skandhaBadgeBorder : null,
+            iconColor: isSkandha ? _skandhaIconColor : null,
+          ),
           const SizedBox(width: 6),
           Text(label, style: textStyle),
         ],
@@ -808,9 +852,9 @@ class _GatewayChipLink extends StatelessWidget {
     if (!enabled || onTap == null) {
       return Container(
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF9EF),
+          color: chipBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFE7DAC7)),
+          border: Border.all(color: chipBorder),
         ),
         child: child,
       );
@@ -820,9 +864,10 @@ class _GatewayChipLink extends StatelessWidget {
       color: Colors.transparent,
       child: Ink(
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF9EF),
+          color: chipBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFE1D1BA)),
+          border: Border.all(
+              color: isSkandha ? _skandhaChipBorder : const Color(0xFFE1D1BA)),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -834,51 +879,6 @@ class _GatewayChipLink extends StatelessWidget {
   }
 }
 
-class _SubsetTriadSection extends StatelessWidget {
-  const _SubsetTriadSection({
-    required this.title,
-    required this.columns,
-    this.note,
-  });
-
-  final String title;
-  final String? note;
-  final List<(String title, List<String> items, _TriadCategory? category)>
-      columns;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 2),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textDark,
-                ),
-          ),
-        ),
-        _TriadCards(columns: columns),
-        if (note != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(
-              note!,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.mutedBrown,
-                    fontStyle: FontStyle.italic,
-                    fontSize: 13.5,
-                  ),
-            ),
-          ),
-      ],
-    );
-  }
-}
 
 class _TriadCards extends StatelessWidget {
   const _TriadCards({required this.columns});
@@ -1010,6 +1010,194 @@ class _TriadCard extends StatelessWidget {
                 ),
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DualityPairView extends StatelessWidget {
+  const _DualityPairView({
+    required this.innerItems,
+    required this.outerItems,
+  });
+
+  final List<String> innerItems;
+  final List<String> outerItems;
+
+  @override
+  Widget build(BuildContext context) {
+    final pairs = <(String, String)>[];
+    final count =
+        innerItems.length < outerItems.length ? innerItems.length : outerItems.length;
+    for (var i = 0; i < count; i++) {
+      pairs.add((innerItems[i], outerItems[i]));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Column(
+        children: [
+          // Header row
+          Row(
+            children: [
+              Expanded(
+                child: _DualityHeader(
+                  label: 'Inner Sources',
+                  icon: Icons.adjust_outlined,
+                  backgroundColor: _ayatanaInnerBg,
+                  borderColor: _ayatanaInnerBorder,
+                  iconColor: _ayatanaInnerIcon,
+                ),
+              ),
+              const SizedBox(width: 24),
+              Expanded(
+                child: _DualityHeader(
+                  label: 'Outer Sources',
+                  icon: Icons.open_in_new_outlined,
+                  backgroundColor: _ayatanaOuterBg,
+                  borderColor: _ayatanaOuterBorder,
+                  iconColor: _ayatanaOuterIcon,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          ...pairs.map(
+            (pair) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _DualityItem(
+                      label: pair.$1,
+                      backgroundColor: _ayatanaInnerBg,
+                      borderColor: _ayatanaInnerBorder,
+                      iconColor: _ayatanaInnerIcon,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Icon(
+                      Icons.compare_arrows_rounded,
+                      size: 16,
+                      color: AppColors.mutedBrown.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  Expanded(
+                    child: _DualityItem(
+                      label: pair.$2,
+                      backgroundColor: _ayatanaOuterBg,
+                      borderColor: _ayatanaOuterBorder,
+                      iconColor: _ayatanaOuterIcon,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DualityHeader extends StatelessWidget {
+  const _DualityHeader({
+    required this.label,
+    required this.icon,
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.iconColor,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: borderColor),
+      ),
+      child: Row(
+        children: [
+          _IconBadge(
+            icon: icon,
+            size: 12,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            iconColor: iconColor,
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textDark,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DualityItem extends StatelessWidget {
+  const _DualityItem({
+    required this.label,
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.iconColor,
+  });
+
+  final String label;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFEFB),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 1),
+            child: _IconBadge(
+              icon: _iconForLabel(label),
+              size: 11,
+              backgroundColor: backgroundColor,
+              borderColor: borderColor,
+              iconColor: iconColor,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.bodyText,
+                    fontSize: 13.5,
+                  ),
+            ),
           ),
         ],
       ),
@@ -1439,7 +1627,29 @@ IconData _iconForLabel(String text) {
 }
 
 IconData _computeIcon(String text) {
-  final t = text.toLowerCase();
+  var t = text.toLowerCase();
+  // Strip leading "the " for titles like "The Aggregate of Forms"
+  if (t.startsWith('the ')) t = t.substring(4);
+  // Skandha (aggregate) patterns – checked first so "Aggregate of Form"
+  // doesn't fall through to the generic 'aggregate' → list-bullet icon.
+  if (t == 'form' || t == 'forms' || t == 'aggregate of form' ||
+      t == 'aggregate of forms') {
+    return Icons.category_outlined;
+  }
+  if (t == 'sensation' || t == 'aggregate of sensation') {
+    return Icons.sensors_outlined;
+  }
+  if (t.startsWith('perceptions') || t == 'aggregate of perceptions') {
+    return Icons.remove_red_eye_outlined;
+  }
+  if (t == 'formations' || t == 'aggregate of formations') {
+    return Icons.settings_outlined;
+  }
+  if (t == 'consciousness' || t == 'aggregate of consciousness') {
+    return Icons.psychology_outlined;
+  }
+  if (t == 'five aggregates') return Icons.format_list_bulleted;
+  // Dhatu / sense patterns
   if (t.contains('eye') || t.contains('visual')) {
     return Icons.visibility_outlined;
   }
@@ -1505,6 +1715,32 @@ IconData _computeIcon(String text) {
   if (t.contains('inner')) return Icons.adjust_outlined;
   if (t.contains('element')) return Icons.grain_outlined;
   return Icons.circle_outlined;
+}
+
+// ── Skandha (aggregate) colours ──────────────────────────────────────────
+const _skandhaIconColor = Color(0xFFB85450);
+const _skandhaBadgeBg = Color(0xFFFFF0EF);
+const _skandhaBadgeBorder = Color(0xFFE0B4B1);
+const _skandhaChipBg = Color(0xFFFFF5F4);
+const _skandhaChipBorder = Color(0xFFE8C4C2);
+
+// Ayatana (sense source) colours – teal-green for inner/outer duality
+const _ayatanaInnerIcon = Color(0xFF4A7C6F);
+const _ayatanaInnerBg = Color(0xFFEDF6F3);
+const _ayatanaInnerBorder = Color(0xFFB8D8CC);
+const _ayatanaOuterIcon = Color(0xFF5B7BA5);
+const _ayatanaOuterBg = Color(0xFFEEF3F9);
+const _ayatanaOuterBorder = Color(0xFFB8CCE0);
+
+bool _isSkandhaLabel(String text) {
+  var t = text.toLowerCase().trim();
+  if (t.startsWith('the ')) t = t.substring(4);
+  if (t.startsWith('aggregate of ')) t = t.substring(13);
+  // Normalize plurals: "forms" → "form"
+  const bases = {'form', 'sensation', 'perceptions', 'formations', 'consciousness'};
+  if (bases.contains(t) || t == 'forms') return true;
+  if (t == 'five aggregates') return true;
+  return false;
 }
 
 /// Colour tints that distinguish dhatu categories while keeping badge

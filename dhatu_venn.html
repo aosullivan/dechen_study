@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhatu Classifications — Venn / Euler Diagram</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  /* ── App Colour Tokens (from app_theme.dart) ── */
+  :root {
+    --primary:          #8B7355;
+    --scaffold-bg:      #FAFAF5;
+    --text-dark:        #2C2416;
+    --body-text:        #3D3426;
+    --border:           #D4C4B0;
+    --landing-bg:       #EADCC4;
+    --card-beige:       #F4ECDD;
+    --border-light:     #E8E4DC;
+    --muted-brown:      #5C4A3A;
+    /* Triad – Faculties (warm amber) */
+    --fac-bg:           #FFF8E1;
+    --fac-border:       #E8D99A;
+    --fac-icon:         #B8960F;
+    /* Triad – Objects (cool blue) */
+    --obj-bg:           #ECF1F9;
+    --obj-border:       #B8C8DC;
+    --obj-icon:         #4A6FA5;
+    /* Triad – Consciousnesses (neutral) */
+    --con-bg:           #FFFFFF;
+    --con-border:       #E6D8C3;
+    --con-icon:         #8B7355;
+    /* Chip */
+    --chip-bg:          #FFF9EF;
+    --chip-border:      #E7DAC7;
+    /* Callout */
+    --callout-bg:       #FFF7EA;
+    /* Table header */
+    --table-header-bg:  #F8EFE2;
+    /* Item box */
+    --item-bg:          #FFFEFB;
+    --item-border:      #EADFCF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--landing-bg);
+    color: var(--body-text);
+    padding: 1.5rem;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .page-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    letter-spacing: 0.01em;
+  }
+  .page-header .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted-brown);
+    margin-top: 0.2rem;
+  }
+
+  /* ── Section headings (styled like gateway subset-title) ── */
+  h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--text-dark);
+    margin: 2rem 0 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  h2 .icon-badge { flex-shrink: 0; }
+
+  /* ── Card (matches gateway card container) ── */
+  .card {
+    background: var(--card-beige);
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    padding: 11px;
+    overflow-x: auto;
+  }
+  /* Introduction card (gradient) */
+  .intro-card {
+    background: linear-gradient(135deg, #FFFDF8, #F6EFE2);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  /* ── Icon Badge (matches _IconBadge) ── */
+  .icon-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid var(--con-border);
+    flex-shrink: 0;
+  }
+  .icon-badge .material-icons-outlined { font-size: 14px; color: var(--primary); }
+  .icon-badge.sm { width: 22px; height: 22px; border-radius: 7px; }
+  .icon-badge.sm .material-icons-outlined { font-size: 12px; }
+  .icon-badge.xs { width: 20px; height: 20px; border-radius: 6px; }
+  .icon-badge.xs .material-icons-outlined { font-size: 11px; }
+  /* Triad-coloured badges */
+  .icon-badge.fac { background: var(--fac-bg); border-color: var(--fac-border); }
+  .icon-badge.fac .material-icons-outlined { color: var(--fac-icon); }
+  .icon-badge.obj { background: var(--obj-bg); border-color: var(--obj-border); }
+  .icon-badge.obj .material-icons-outlined { color: var(--obj-icon); }
+  .icon-badge.con { background: var(--con-bg); border-color: var(--con-border); }
+  .icon-badge.con .material-icons-outlined { color: var(--con-icon); }
+
+  /* ── Chip / Pill (matches _GatewayChipLink) ── */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--chip-bg);
+    border: 1px solid var(--chip-border);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--body-text);
+    white-space: nowrap;
+    margin: 2px;
+  }
+  .chip .icon-badge { width: 20px; height: 20px; border-radius: 6px; }
+  .chip .icon-badge .material-icons-outlined { font-size: 11px; }
+
+  /* ── Euler Diagram ── */
+  .euler-wrap { overflow-x: auto; }
+  svg.euler { display: block; margin: 0 auto; }
+
+  /* ── Matrix ── */
+  table.matrix {
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    width: 100%;
+    min-width: 960px;
+  }
+  table.matrix th, table.matrix td {
+    padding: 5px 7px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+  }
+  table.matrix thead th {
+    background: var(--table-header-bg);
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    color: var(--muted-brown);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    height: 130px;
+    white-space: nowrap;
+    padding: 8px 6px;
+  }
+  table.matrix thead th.corner { background: transparent; border: none; }
+  table.matrix tbody th {
+    text-align: left;
+    font-weight: 400;
+    background: var(--item-bg);
+    white-space: nowrap;
+    padding: 4px 8px;
+    font-size: 0.78rem;
+    color: var(--body-text);
+  }
+  table.matrix tbody th .row-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  /* Triad left-border accent */
+  table.matrix tbody th.triad-fac { border-left: 3px solid var(--fac-icon); }
+  table.matrix tbody th.triad-obj { border-left: 3px solid var(--obj-icon); }
+  table.matrix tbody th.triad-con { border-left: 3px solid var(--con-icon); }
+  /* In / Out cells */
+  table.matrix td.in { background: var(--fac-bg); }
+  table.matrix td.in::after { content: ""; display:block; width:8px; height:8px; margin:auto; border-radius:50%; background: var(--primary); }
+  table.matrix td.out { background: var(--scaffold-bg); }
+  /* Separator rows */
+  table.matrix tr.sep td, table.matrix tr.sep th { border-top: 2px solid var(--border); }
+  /* Count row */
+  .count-row td, .count-row th {
+    font-weight: 600; font-size: 0.72rem; color: var(--muted-brown);
+    background: var(--table-header-bg) !important;
+  }
+  .count-row td::after { content: none !important; display: none !important; }
+
+  /* ── Hasse / Subset diagram ── */
+  .subset-wrap { overflow-x: auto; }
+
+  /* ── Overlap region cards ── */
+  .regions { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+  .region-card {
+    background: var(--item-bg);
+    border: 1px solid var(--item-border);
+    border-radius: 9px;
+    padding: 10px 12px;
+  }
+  .region-card h3 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .region-card .members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .region-card .set-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .set-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--card-beige);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    color: var(--muted-brown);
+  }
+  .set-tag .material-icons-outlined { font-size: 10px; }
+
+  /* ── Observation callouts (matches gateway callout box) ── */
+  .observations { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .callout {
+    background: var(--callout-bg);
+    border-left: 3px solid rgba(139, 115, 85, 0.7);
+    border-radius: 0 9px 9px 0;
+    padding: 10px 14px;
+  }
+  .callout h3 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+  .callout p {
+    font-size: 0.78rem;
+    color: var(--muted-brown);
+    line-height: 1.55;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--border);
+  }
+
+  /* ── Triad-note box (matches gateway triad-note) ── */
+  .triad-note {
+    background: #FFF8EE;
+    border: 1px solid #E8DCC8;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: var(--muted-brown);
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<div class="page-header">
+  <h1>The Eighteen Dhatus — Classification Overlaps</h1>
+  <div class="subtitle">Gateway to Knowledge, Chapter 2: Element Classifications</div>
+</div>
+
+<!-- ═══════════════ EULER DIAGRAM ═══════════════ -->
+<h2>
+  <span class="icon-badge"><span class="material-icons-outlined">account_tree</span></span>
+  Euler Diagram — Structural Overlaps
+</h2>
+<div class="card euler-wrap">
+<svg class="euler" viewBox="0 0 1020 700" width="1020" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .sl  { font: 600 11px -apple-system, sans-serif; }
+      .sl2 { font: 600 9.5px -apple-system, sans-serif; }
+      .dl  { font: 500 9.5px -apple-system, sans-serif; }
+      .nl  { font: italic 9px -apple-system, sans-serif; fill: #B0A898; }
+    </style>
+  </defs>
+
+  <!-- ── Desire Realm (universal set) ── -->
+  <rect x="8" y="8" width="1004" height="684" rx="14" fill="none" stroke="#D4C4B0" stroke-width="2" stroke-dasharray="8,4"/>
+  <rect x="30" y="18" rx="6" width="180" height="24" fill="#F4ECDD"/>
+  <text x="38" y="34" class="sl" fill="#8B7355">
+    <tspan>&#xe53b;</tspan> DESIRE REALM
+  </text>
+  <text x="168" y="34" class="sl2" fill="#B0A898">(all 18)</text>
+
+  <!-- ── Form Realm ── -->
+  <rect x="24" y="48" width="972" height="574" rx="12" fill="#F4ECDD20" stroke="#8B7355" stroke-width="1.2" stroke-dasharray="6,3"/>
+  <rect x="42" y="56" rx="5" width="160" height="22" fill="#F4ECDD"/>
+  <text x="50" y="71" class="sl" fill="#8B7355">
+    <tspan>&#xe53b;</tspan> FORM REALM
+  </text>
+  <text x="160" y="71" class="sl2" fill="#B0A898">(14)</text>
+
+  <!-- ════ LEFT SIDE: Physical / Material ════ -->
+
+  <!-- Physical Form -->
+  <rect x="44" y="86" width="460" height="526" rx="10" fill="#FFF9EF" stroke="#E7DAC7" stroke-width="1.2"/>
+  <text x="274" y="106" text-anchor="middle" class="sl" fill="#8B7355">
+    <tspan>&#xe1c7;</tspan> PHYSICAL FORM (11)
+  </text>
+
+  <!-- Mutually Obstructive -->
+  <rect x="58" y="116" width="300" height="488" rx="8" fill="#FFFEFB" stroke="#EADFCF" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="208" y="136" text-anchor="middle" class="sl" fill="#5C4A3A">
+    <tspan>&#xe14b;</tspan> MUTUALLY OBSTRUCTIVE (10)
+  </text>
+
+  <!-- Outer Elements -->
+  <rect x="162" y="146" width="326" height="258" rx="8" fill="#ECF1F908" stroke="#B8C8DC" stroke-width="1"/>
+  <text x="325" y="164" text-anchor="middle" class="sl" fill="#4A6FA5">
+    <tspan>&#xe89e;</tspan> OUTER (6)
+  </text>
+
+  <!-- Personal Sensation -->
+  <rect x="58" y="280" width="430" height="326" rx="8" fill="#FFF8E108" stroke="#E8D99A" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="273" y="298" text-anchor="middle" class="sl" fill="#B8960F">
+    <tspan>&#xe7fd;</tspan> PERSONAL SENSATION (9)
+  </text>
+
+  <!-- ── Region A: Eye-F, Ear-F, Body-F ── -->
+  <g transform="translate(80, 316)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe8f4;</text>
+    <text x="28" y="16" class="dl" fill="#B8960F">Eye Faculty</text>
+  </g>
+  <g transform="translate(80, 344)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe023;</text>
+    <text x="28" y="16" class="dl" fill="#B8960F">Ear Faculty</text>
+  </g>
+  <g transform="translate(80, 372)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe925;</text>
+    <text x="28" y="16" class="dl" fill="#B8960F">Body Faculty</text>
+  </g>
+
+  <!-- ── Region C: Visual Form, Sound (MO ∩ FR ∩ Outer, not PS) ── -->
+  <g transform="translate(180, 188)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe8f4;</text>
+    <text x="28" y="16" class="dl" fill="#4A6FA5">Visual Form</text>
+  </g>
+  <g transform="translate(180, 214)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe023;</text>
+    <text x="28" y="16" class="dl" fill="#4A6FA5">Sound</text>
+  </g>
+
+  <!-- ── Region E: Texture (MO ∩ FR ∩ Outer ∩ PS) ── -->
+  <g transform="translate(180, 316)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe925;</text>
+    <text x="28" y="16" class="dl" fill="#4A6FA5">Texture</text>
+  </g>
+
+  <!-- ── Region F: Mental Object (the 9-set bridge) ── -->
+  <g transform="translate(350, 430)">
+    <rect x="-6" y="-6" width="160" height="50" rx="8" fill="#FFF7EA" stroke="rgba(139,115,85,0.4)" stroke-width="1"/>
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe88a;</text>
+    <text x="28" y="16" class="dl" fill="#4A6FA5" font-weight="700">Mental Object</text>
+    <text x="0" y="34" class="nl" font-style="normal" fill="#8B7355" font-size="8.5">in 9 of 10 classifications</text>
+  </g>
+  <!-- Dashed connector to right side -->
+  <line x1="504" y1="448" x2="540" y2="378" stroke="#D4C4B0" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+  <!-- ── Items OUTSIDE Form Realm (Desire-only strip) ── -->
+  <rect x="44" y="632" width="460" height="54" rx="8" fill="#FFFEFB" stroke="#EADFCF" stroke-width="0.8"/>
+  <text x="274" y="648" text-anchor="middle" class="nl" font-size="8.5" fill="#B0A898">Desire Realm only (excluded from Form Realm)</text>
+
+  <!-- Region B: Nose-F, Tongue-F -->
+  <g transform="translate(60, 654)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe63e;</text>
+    <text x="28" y="16" class="dl" fill="#B8960F">Nose Faculty</text>
+  </g>
+  <g transform="translate(180, 654)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe798;</text>
+    <text x="28" y="16" class="dl" fill="#B8960F">Tongue Faculty</text>
+  </g>
+
+  <!-- Region D: Smell, Taste -->
+  <g transform="translate(310, 654)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe63e;</text>
+    <text x="28" y="16" class="dl" fill="#4A6FA5">Smell</text>
+  </g>
+  <g transform="translate(400, 654)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe798;</text>
+    <text x="28" y="16" class="dl" fill="#4A6FA5">Taste</text>
+  </g>
+
+  <!-- ════ RIGHT SIDE: Mental / Consciousness ════ -->
+
+  <!-- Elements with Focus -->
+  <rect x="520" y="86" width="466" height="526" rx="10" fill="#FFFEFB08" stroke="#EADFCF" stroke-width="1.2"/>
+  <text x="753" y="106" text-anchor="middle" class="sl" fill="#5C4A3A">
+    <tspan>&#xe3b4;</tspan> ELEMENTS WITH FOCUS (8)
+  </text>
+
+  <!-- Undefiling -->
+  <rect x="540" y="118" width="210" height="320" rx="8" fill="#FFF9EF08" stroke="#E7DAC7" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="645" y="138" text-anchor="middle" class="sl" fill="#5C4A3A">
+    <tspan>&#xe65f;</tspan> UNDEFILING (3+)
+  </text>
+
+  <!-- Formless Realm = Concepts (innermost) -->
+  <rect x="556" y="152" width="180" height="200" rx="8" fill="#FFF7EA" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="646" y="172" text-anchor="middle" class="sl" fill="#8B7355">
+    <tspan>&#xe53b;</tspan> FORMLESS REALM (3)
+  </text>
+  <text x="646" y="188" text-anchor="middle" class="sl2" fill="#8B7355">
+    = <tspan>&#xe90f;</tspan> CONCEPTS (3)
+  </text>
+
+  <!-- Region G: Mind-F, Mind-C -->
+  <g transform="translate(576, 206)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe88a;</text>
+    <text x="28" y="16" class="dl" fill="#B8960F">Mind Faculty</text>
+  </g>
+  <g transform="translate(576, 234)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe88a;</text>
+    <text x="28" y="16" class="dl" fill="#8B7355">Mind Consciousness</text>
+  </g>
+  <text x="576" y="276" class="nl" font-size="8.5">identical set membership</text>
+  <text x="576" y="290" class="nl" font-size="8.5">across all 10 classifications</text>
+
+  <!-- Mental Object connector note -->
+  <text x="560" y="325" class="nl" font-size="8.5" fill="#8B7355">+ Mental Object</text>
+  <text x="560" y="340" class="nl" font-size="8">(bridges material &amp; mental)</text>
+
+  <!-- Unconditioned things note -->
+  <rect x="556" y="368" width="164" height="36" rx="6" fill="#FFF8EE" stroke="#E8DCC8" stroke-width="0.7"/>
+  <text x="564" y="383" class="nl" font-size="8.5" fill="#5C4A3A">+ Unconditioned Things</text>
+  <text x="564" y="396" class="nl" font-size="8">(beyond the 18 dhatus)</text>
+
+  <!-- Region H: 5 sense consciousnesses -->
+  <rect x="762" y="128" width="210" height="210" rx="8" fill="#FFFEFB" stroke="#E6D8C3" stroke-width="0.8"/>
+  <text x="867" y="150" text-anchor="middle" class="sl2" fill="#8B7355">5 Sense Consciousnesses</text>
+
+  <g transform="translate(782, 162)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe8f4;</text>
+    <text x="28" y="16" class="dl" fill="#8B7355">Eye Consc.</text>
+  </g>
+  <g transform="translate(782, 190)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe023;</text>
+    <text x="28" y="16" class="dl" fill="#8B7355">Ear Consc.</text>
+  </g>
+  <g transform="translate(782, 218)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe63e;</text>
+    <text x="28" y="16" class="dl" fill="#8B7355">Nose Consc.</text>
+  </g>
+  <g transform="translate(782, 246)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe798;</text>
+    <text x="28" y="16" class="dl" fill="#8B7355">Tongue Consc.</text>
+  </g>
+  <g transform="translate(782, 274)">
+    <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
+    <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe925;</text>
+    <text x="28" y="16" class="dl" fill="#8B7355">Body Consc.</text>
+  </g>
+  <text x="782" y="314" class="nl" font-size="8.5">in only 3 of 10 sets</text>
+  <text x="782" y="327" class="nl" font-size="8">(Desire Realm, Form Realm, Focus)</text>
+
+  <!-- ── LEGEND ── -->
+  <rect x="762" y="440" width="210" height="162" rx="8" fill="#F4ECDD" stroke="#E8E4DC" stroke-width="1"/>
+  <text x="867" y="460" text-anchor="middle" font-size="9.5" font-weight="600" fill="#5C4A3A" font-family="-apple-system, sans-serif">TRIAD COLOURS</text>
+
+  <rect x="782" y="472" width="16" height="16" rx="5" fill="#FFF8E1" stroke="#E8D99A"/>
+  <text x="804" y="484" font-size="9" fill="#5C4A3A" font-family="-apple-system, sans-serif">Faculties (6)</text>
+
+  <rect x="782" y="494" width="16" height="16" rx="5" fill="#ECF1F9" stroke="#B8C8DC"/>
+  <text x="804" y="506" font-size="9" fill="#5C4A3A" font-family="-apple-system, sans-serif">Objects (6)</text>
+
+  <rect x="782" y="516" width="16" height="16" rx="5" fill="#FFFFFF" stroke="#E6D8C3"/>
+  <text x="804" y="528" font-size="9" fill="#5C4A3A" font-family="-apple-system, sans-serif">Consciousnesses (6)</text>
+
+  <line x1="782" y1="542" x2="952" y2="542" stroke="#E8E4DC" stroke-width="0.7"/>
+  <text x="867" y="558" text-anchor="middle" font-size="9.5" font-weight="600" fill="#5C4A3A" font-family="-apple-system, sans-serif">IDENTICAL SETS</text>
+  <text x="782" y="574" font-size="8.5" fill="#5C4A3A" font-family="-apple-system, sans-serif">Formless Realm = Concepts</text>
+  <text x="782" y="588" font-size="8.5" fill="#B0A898" font-family="-apple-system, sans-serif">Formless ⊂ Undefiling ⊂ Focus</text>
+</svg>
+</div>
+
+<!-- ═══════════════ MEMBERSHIP MATRIX ═══════════════ -->
+<h2>
+  <span class="icon-badge"><span class="material-icons-outlined">grid_on</span></span>
+  Membership Matrix
+</h2>
+<div class="card">
+<table class="matrix">
+<thead>
+  <tr>
+    <th class="corner"></th>
+    <th><span class="material-icons-outlined" style="font-size:10px">widgets</span><br>Physical<br>Form</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">block</span><br>Mutually<br>Obstructive</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">open_in_new</span><br>Outer</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">person_outline</span><br>Personal<br>Sensation</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Desire<br>Realm</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Form<br>Realm</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Formless<br>Realm</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">auto_awesome</span><br>Undefiling</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">center_focus_strong</span><br>Focus</th>
+    <th><span class="material-icons-outlined" style="font-size:10px">lightbulb</span><br>Concepts</th>
+  </tr>
+</thead>
+<tbody>
+  <!-- FACULTIES -->
+  <tr>
+    <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">visibility</span></span> Eye Faculty</span></th>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">hearing</span></span> Ear Faculty</span></th>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">air</span></span> Nose Faculty</span></th>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
+    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">water_drop</span></span> Tongue Faculty</span></th>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
+    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">pan_tool</span></span> Body Faculty</span></th>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr class="sep">
+    <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">psychology</span></span> Mind Faculty</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+  </tr>
+  <!-- OBJECTS -->
+  <tr class="sep">
+    <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">visibility</span></span> Visual Form</span></th>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">hearing</span></span> Sound</span></th>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">air</span></span> Smell</span></th>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">water_drop</span></span> Taste</span></th>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">pan_tool</span></span> Texture</span></th>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+  </tr>
+  <tr class="sep">
+    <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">psychology</span></span> Mental Object</span></th>
+    <td class="in"></td><td class="out"></td><td class="in"></td><td class="in"></td>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+  </tr>
+  <!-- CONSCIOUSNESSES -->
+  <tr class="sep">
+    <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">visibility</span></span> Eye Consc.</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">hearing</span></span> Ear Consc.</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">air</span></span> Nose Consc.</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">water_drop</span></span> Tongue Consc.</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+  </tr>
+  <tr>
+    <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">pan_tool</span></span> Body Consc.</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+  </tr>
+  <tr class="sep">
+    <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">psychology</span></span> Mind Consc.</span></th>
+    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+  </tr>
+  <!-- COUNTS -->
+  <tr class="sep count-row">
+    <th>Total members</th>
+    <td>11</td><td>10</td><td>6</td><td>9</td>
+    <td>18</td><td>14</td><td>3</td><td>3+</td><td>8</td><td>3</td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════ HASSE DIAGRAM ═══════════════ -->
+<h2>
+  <span class="icon-badge"><span class="material-icons-outlined">device_hub</span></span>
+  Subset Relationships
+</h2>
+<div class="card subset-wrap">
+<svg viewBox="0 0 920 400" width="920" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .hnode { font: 500 11px -apple-system, sans-serif; }
+      .hnote { font: italic 9.5px -apple-system, sans-serif; fill: #B0A898; }
+    </style>
+  </defs>
+
+  <!-- Level 0 -->
+  <rect x="350" y="12" width="220" height="30" rx="8" fill="#F4ECDD" stroke="#D4C4B0"/>
+  <text x="368" y="32" class="hnode" fill="#8B7355"><tspan font-family="Material Icons Outlined" font-size="12">&#xe53b;</tspan>  Desire Realm (all 18)</text>
+
+  <!-- Lines L0 → L1 -->
+  <line x1="410" y1="42" x2="190" y2="88" stroke="#E8E4DC" stroke-width="1.2"/>
+  <line x1="460" y1="42" x2="460" y2="88" stroke="#E8E4DC" stroke-width="1.2"/>
+  <line x1="510" y1="42" x2="730" y2="88" stroke="#E8E4DC" stroke-width="1.2"/>
+
+  <!-- Level 1 -->
+  <rect x="100" y="88" width="180" height="30" rx="8" fill="#FFF9EF" stroke="#E7DAC7"/>
+  <text x="118" y="108" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe1c7;</tspan>  Physical Form (11)</text>
+
+  <rect x="375" y="88" width="170" height="30" rx="8" fill="#F4ECDD" stroke="#D4C4B0"/>
+  <text x="393" y="108" class="hnode" fill="#8B7355"><tspan font-family="Material Icons Outlined" font-size="11">&#xe53b;</tspan>  Form Realm (14)</text>
+
+  <rect x="640" y="88" width="180" height="30" rx="8" fill="#FFFEFB" stroke="#EADFCF"/>
+  <text x="658" y="108" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe3b4;</tspan>  Focus (8)</text>
+
+  <!-- Lines L1 → L2 -->
+  <line x1="160" y1="118" x2="130" y2="178" stroke="#E8E4DC" stroke-width="1.2"/>
+  <line x1="230" y1="118" x2="355" y2="178" stroke="#E8E4DC" stroke-width="1.2"/>
+  <line x1="700" y1="118" x2="650" y2="178" stroke="#E8E4DC" stroke-width="1.2"/>
+
+  <!-- Level 2 -->
+  <rect x="26" y="178" width="210" height="30" rx="8" fill="#FFFEFB" stroke="#EADFCF"/>
+  <text x="44" y="198" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe14b;</tspan>  Mutually Obstructive (10)</text>
+
+  <rect x="280" y="178" width="150" height="30" rx="8" fill="#ECF1F9" stroke="#B8C8DC"/>
+  <text x="298" y="198" class="hnode" fill="#4A6FA5"><tspan font-family="Material Icons Outlined" font-size="11">&#xe89e;</tspan>  Outer (6)</text>
+
+  <rect x="565" y="178" width="170" height="30" rx="8" fill="#FFF9EF" stroke="#E7DAC7"/>
+  <text x="583" y="198" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe65f;</tspan>  Undefiling (3+)</text>
+
+  <!-- Lines L2 → L3 -->
+  <line x1="460" y1="118" x2="570" y2="268" stroke="#E8E4DC" stroke-width="1.2"/>
+  <line x1="650" y1="208" x2="600" y2="268" stroke="#E8E4DC" stroke-width="1.2"/>
+
+  <!-- Level 3 -->
+  <rect x="470" y="268" width="220" height="48" rx="8" fill="#FFF7EA" stroke="#8B7355" stroke-width="1.5"/>
+  <text x="488" y="289" class="hnode" fill="#8B7355" font-weight="600"><tspan font-family="Material Icons Outlined" font-size="11">&#xe53b;</tspan>  Formless Realm (3)</text>
+  <text x="488" y="306" class="hnode" fill="#8B7355" font-size="10">= <tspan font-family="Material Icons Outlined" font-size="10">&#xe90f;</tspan> Concepts (3)</text>
+
+  <!-- Members -->
+  <text x="580" y="342" text-anchor="middle" class="hnote" font-size="9.5">{Mind Faculty, Mental Object, Mind Consciousness}</text>
+
+  <!-- Notes -->
+  <text x="460" y="374" text-anchor="middle" class="hnote">Lines show ⊂ (subset) — lower sets are contained within higher ones</text>
+  <text x="460" y="392" text-anchor="middle" class="hnote">Personal Sensation (9) overlaps Physical Form &amp; Outer but is not a subset of either</text>
+</svg>
+</div>
+
+<!-- ═══════════════ OVERLAP REGIONS ═══════════════ -->
+<h2>
+  <span class="icon-badge"><span class="material-icons-outlined">category</span></span>
+  Distinct Overlap Regions (8 unique membership patterns)
+</h2>
+<div class="regions">
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm fac"><span class="material-icons-outlined">visibility</span></span>
+      Sense Faculties in Form Realm
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">visibility</span></span> Eye</span>
+      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">hearing</span></span> Ear</span>
+      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">pan_tool</span></span> Body</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+    </div>
+  </div>
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm fac"><span class="material-icons-outlined">air</span></span>
+      Sense Faculties not in Form Realm
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">air</span></span> Nose</span>
+      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">water_drop</span></span> Tongue</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+    </div>
+  </div>
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm obj"><span class="material-icons-outlined">visibility</span></span>
+      Distant Sense Objects
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">visibility</span></span> Visual Form</span>
+      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">hearing</span></span> Sound</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+    </div>
+  </div>
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm obj"><span class="material-icons-outlined">air</span></span>
+      Proximate Objects not in Form Realm
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">air</span></span> Smell</span>
+      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">water_drop</span></span> Taste</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+    </div>
+  </div>
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm obj"><span class="material-icons-outlined">pan_tool</span></span>
+      Texture (unique 6-set pattern)
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">pan_tool</span></span> Texture</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+    </div>
+  </div>
+
+  <div class="region-card" style="border-color: rgba(139,115,85,0.4); border-left: 3px solid #8B7355;">
+    <h3>
+      <span class="icon-badge sm obj"><span class="material-icons-outlined">psychology</span></span>
+      Mental Object (in 9 of 10 sets)
+    </h3>
+    <div class="members">
+      <span class="chip" style="background:#FFF7EA; border-color: rgba(139,115,85,0.3);"><span class="icon-badge obj"><span class="material-icons-outlined">psychology</span></span> Mental Object</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Formless Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">auto_awesome</span> Undefiling</span>
+      <span class="set-tag"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
+      <span class="set-tag"><span class="material-icons-outlined">lightbulb</span> Concepts</span>
+    </div>
+  </div>
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm"><span class="material-icons-outlined">psychology</span></span>
+      The Mental Pair (identical membership)
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">psychology</span></span> Mind Faculty</span>
+      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">psychology</span></span> Mind Consc.</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Formless Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">auto_awesome</span> Undefiling</span>
+      <span class="set-tag"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
+      <span class="set-tag"><span class="material-icons-outlined">lightbulb</span> Concepts</span>
+    </div>
+  </div>
+
+  <div class="region-card">
+    <h3>
+      <span class="icon-badge sm con"><span class="material-icons-outlined">visibility</span></span>
+      Five Sense Consciousnesses
+    </h3>
+    <div class="members">
+      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">visibility</span></span> Eye</span>
+      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">hearing</span></span> Ear</span>
+      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">air</span></span> Nose</span>
+      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">water_drop</span></span> Tongue</span>
+      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">pan_tool</span></span> Body</span>
+    </div>
+    <div class="set-tags">
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ OBSERVATIONS ═══════════════ -->
+<h2>
+  <span class="icon-badge"><span class="material-icons-outlined">lightbulb</span></span>
+  Key Observations
+</h2>
+<div class="observations">
+  <div class="callout">
+    <h3>Mental Object is the great bridge</h3>
+    <p>It belongs to 9 of 10 classifications — every set except Mutually Obstructive. It uniquely bridges the material side (Physical Form, Outer) with the mental side (Formless, Concepts, Focus).</p>
+  </div>
+  <div class="callout">
+    <h3>Three identical sets</h3>
+    <p>Formless Realm = Elements with Concepts — both contain exactly {Mind Faculty, Mental Object, Mind Consciousness}. Undefiling adds unconditioned things beyond the 18 dhatus.</p>
+  </div>
+  <div class="callout">
+    <h3>Mind Faculty = Mind Consciousness</h3>
+    <p>These two dhatus have identical classification membership across all 10 sets, despite being in different triads (faculty vs. consciousness).</p>
+  </div>
+  <div class="callout">
+    <h3>The material / mental divide</h3>
+    <p>The 5 sense faculties and 5 sense objects cluster in Physical Form / Mutually Obstructive. The 6 consciousnesses cluster in Focus. Mind Faculty and Mental Object span both sides.</p>
+  </div>
+</div>
+
+<div class="footer">Gateway to Knowledge, Chapter 2 — Element Classifications</div>
+</body>
+</html>
