@@ -21,6 +21,9 @@ void main() {
     WidgetTester tester, {
     required List<String> refs,
     int minLinesForSection = 0,
+    int maxLinesForSection = 20,
+    int? Function(String ref)? verseIndexForRef,
+    String? Function(int index)? verseTextForIndex,
     void Function(List<String> refs)? onResolvedRefsForTest,
     Future<Map<String, String>> Function(String textId)?
         breadcrumbSummariesLoader,
@@ -43,9 +46,10 @@ void main() {
             refsInBlock: refs,
             commentaryText: 'test',
           ),
-          verseIndexForRef: (_) => 0,
-          verseTextForIndex: (_) => fullVerse,
+          verseIndexForRef: verseIndexForRef ?? (_) => 0,
+          verseTextForIndex: verseTextForIndex ?? (_) => fullVerse,
           minLinesForSection: minLinesForSection,
+          maxLinesForSection: maxLinesForSection,
           onResolvedRefsForTest: onResolvedRefsForTest,
           breadcrumbSummariesLoader:
               breadcrumbSummariesLoader ?? (_) async => const {},
@@ -252,5 +256,56 @@ void main() {
         .whereType<String>()
         .toSet();
     expect(chapters, equals({'6'}));
+  });
+
+  testWidgets('sections over max lines are skipped and another is picked',
+      (WidgetTester tester) async {
+    var calls = 0;
+    List<String>? resolvedRefs;
+    int? indexForRef(String ref) {
+      final m = RegExp(r'^(\d+)\.(\d+)', caseSensitive: false).firstMatch(ref);
+      if (m == null) return null;
+      final ch = int.tryParse(m.group(1)!);
+      final verse = int.tryParse(m.group(2)!);
+      if (ch == null || verse == null) return null;
+      return (ch * 1000) + verse;
+    }
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+          scaffoldBackgroundColor: AppColors.scaffoldBackground,
+        ),
+        home: DailyVerseScreen(
+          textId: 'bodhicaryavatara',
+          title: 'Bodhicaryavatara',
+          randomSectionLoader: () async {
+            calls++;
+            if (calls == 1) {
+              return const CommentaryEntry(
+                refsInBlock: ['1.1', '1.2', '1.3', '1.4', '1.5', '1.6'],
+                commentaryText: 'test',
+              );
+            }
+            return const CommentaryEntry(
+              refsInBlock: ['2.1', '2.2'],
+              commentaryText: 'test',
+            );
+          },
+          verseIndexForRef: indexForRef,
+          verseTextForIndex: (_) => 'l1\nl2\nl3\nl4',
+          minLinesForSection: 0,
+          maxLinesForSection: 20,
+          onResolvedRefsForTest: (refs) => resolvedRefs = refs,
+          breadcrumbSummariesLoader: (_) async => const {},
+        ),
+      ),
+    );
+    await waitForDailyLoad(tester);
+
+    expect(calls, greaterThanOrEqualTo(2));
+    expect(resolvedRefs, equals(const ['2.1', '2.2']));
   });
 }

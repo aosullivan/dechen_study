@@ -29,6 +29,7 @@ class DailyVerseScreen extends StatefulWidget {
     this.verseIndexForRef,
     this.verseTextForIndex,
     this.minLinesForSection = 4,
+    this.maxLinesForSection = 20,
     this.onResolvedRefsForTest,
     this.breadcrumbSummariesLoader,
   });
@@ -51,6 +52,10 @@ class DailyVerseScreen extends StatefulWidget {
   /// Minimum total displayed logical lines for the daily block.
   /// If fewer, the block expands to parent section refs.
   final int minLinesForSection;
+
+  /// Maximum total displayed logical lines for the daily block.
+  /// Sections above this are skipped and another section is selected.
+  final int maxLinesForSection;
 
   /// Test seam: captures resolved refs after min-line expansion logic.
   final void Function(List<String> refs)? onResolvedRefsForTest;
@@ -460,16 +465,6 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     try {
       final sectionLoader = widget.randomSectionLoader ??
           () => _commentaryService.getRandomSection(widget.textId);
-      final section = await sectionLoader();
-      if (section == null || section.refsInBlock.isEmpty) {
-        if (mounted) {
-          setState(() {
-            _loading = false;
-            _error = 'No sections available';
-          });
-        }
-        return;
-      }
       final indexForRef = widget.verseIndexForRef ??
           (ref) => _verseService.getIndexForRefWithFallback(widget.textId, ref);
       final textForIndex = widget.verseTextForIndex ??
@@ -479,33 +474,69 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       if (!usingCustomResolvers) {
         await _verseService.getChapters(widget.textId);
       }
-      var refs = List<String>.from(section.refsInBlock);
-      refs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
-      var content = _buildSectionContent(refs, indexForRef, textForIndex);
-      var sectionPath = await _deepestCommonLeafPath(content.refs);
-      final anchorRef =
-          content.refs.isNotEmpty ? content.refs.first : refs.firstOrNull;
 
-      if (widget.minLinesForSection > 0 &&
-          _totalLogicalLines(content.texts) < widget.minLinesForSection) {
-        final visitedParents = <String>{};
-        while (sectionPath != null &&
-            sectionPath.isNotEmpty &&
-            _totalLogicalLines(content.texts) < widget.minLinesForSection) {
-          final parent = _parentPath(sectionPath);
-          if (parent.isEmpty || !visitedParents.add(parent)) break;
-          final parentRefs = _hierarchyService
-              .getVerseRefsForSectionSync(widget.textId, parent)
-              .toList();
-          if (parentRefs.isEmpty) break;
-          parentRefs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
-          final runRefs = anchorRef != null
-              ? _consecutiveRunAroundAnchor(parentRefs, anchorRef: anchorRef)
-              : parentRefs;
-          content = _buildSectionContent(runRefs, indexForRef, textForIndex);
-          sectionPath = await _deepestCommonLeafPath(content.refs) ?? parent;
+      const maxPickAttempts = 60;
+      ({List<String> refs, List<String> texts, Set<int> indices})? picked;
+      String? pickedSectionPath;
+      for (var attempt = 0; attempt < maxPickAttempts; attempt++) {
+        final section = await sectionLoader();
+        if (section == null || section.refsInBlock.isEmpty) {
+          continue;
         }
+
+        var refs = List<String>.from(section.refsInBlock);
+        refs.sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
+        var content = _buildSectionContent(refs, indexForRef, textForIndex);
+        var sectionPath = await _deepestCommonLeafPath(content.refs);
+        final anchorRef =
+            content.refs.isNotEmpty ? content.refs.first : refs.firstOrNull;
+
+        if (widget.minLinesForSection > 0 &&
+            _totalLogicalLines(content.texts) < widget.minLinesForSection) {
+          final visitedParents = <String>{};
+          while (sectionPath != null &&
+              sectionPath.isNotEmpty &&
+              _totalLogicalLines(content.texts) < widget.minLinesForSection) {
+            final parent = _parentPath(sectionPath);
+            if (parent.isEmpty || !visitedParents.add(parent)) break;
+            final parentRefs = _hierarchyService
+                .getVerseRefsForSectionSync(widget.textId, parent)
+                .toList();
+            if (parentRefs.isEmpty) break;
+            parentRefs
+                .sort((a, b) => _compareRefsForDisplay(a, b, indexForRef));
+            final runRefs = anchorRef != null
+                ? _consecutiveRunAroundAnchor(parentRefs, anchorRef: anchorRef)
+                : parentRefs;
+            content = _buildSectionContent(runRefs, indexForRef, textForIndex);
+            sectionPath = await _deepestCommonLeafPath(content.refs) ?? parent;
+          }
+        }
+
+        final lineCount = _totalLogicalLines(content.texts);
+        if (widget.maxLinesForSection > 0 &&
+            lineCount > widget.maxLinesForSection) {
+          continue;
+        }
+
+        picked = content;
+        pickedSectionPath = sectionPath;
+        break;
       }
+
+      if (picked == null) {
+        if (mounted) {
+          setState(() {
+            _loading = false;
+            _error = widget.maxLinesForSection > 0
+                ? 'No sections available at or under ${widget.maxLinesForSection} lines'
+                : 'No sections available';
+          });
+        }
+        return;
+      }
+      final content = picked!;
+      final sectionPath = pickedSectionPath;
       final sectionTitle =
           await _sectionTitleForRefs(content.refs, sectionPath: sectionPath);
 

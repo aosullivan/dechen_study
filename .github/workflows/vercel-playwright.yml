@@ -11,6 +11,7 @@ jobs:
   e2e:
     if: |
       github.event.deployment_status.state == 'success' &&
+      (github.event.deployment_status.environment == 'Production' || github.event.deployment_status.environment == 'production') &&
       (
         contains(github.event.deployment_status.environment_url || '', 'vercel.app') ||
         contains(github.event.deployment_status.target_url || '', 'vercel.app') ||
@@ -19,13 +20,6 @@ jobs:
       )
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      SMTP_HOST: ${{ secrets.SMTP_HOST }}
-      SMTP_PORT: ${{ secrets.SMTP_PORT }}
-      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-      EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-      EMAIL_TO: ${{ secrets.EMAIL_TO }}
 
     steps:
       - name: Checkout
@@ -39,12 +33,10 @@ jobs:
           if [ -z "$URL" ]; then
             URL="${{ github.event.deployment_status.target_url }}"
           fi
-
           if [ -z "$URL" ]; then
             echo "No deployment URL found in deployment_status payload"
             exit 1
           fi
-
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
@@ -71,23 +63,3 @@ jobs:
           name: playwright-report-${{ github.run_id }}
           path: playwright-report
           if-no-files-found: ignore
-
-      - name: Send failure email
-        if: failure() && env.SMTP_HOST != '' && env.EMAIL_TO != '' && env.EMAIL_FROM != ''
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ env.SMTP_HOST }}
-          server_port: ${{ env.SMTP_PORT }}
-          username: ${{ env.SMTP_USERNAME }}
-          password: ${{ env.SMTP_PASSWORD }}
-          secure: true
-          subject: "[dechen_study] Playwright failed after Vercel deploy"
-          to: ${{ env.EMAIL_TO }}
-          from: ${{ env.EMAIL_FROM }}
-          html_body: |
-            <p>Playwright tests failed after a Vercel deployment.</p>
-            <p><strong>Repo:</strong> ${{ github.repository }}</p>
-            <p><strong>Branch/Ref:</strong> ${{ github.event.deployment.ref }}</p>
-            <p><strong>Environment:</strong> ${{ github.event.deployment_status.environment }}</p>
-            <p><strong>Deployment URL:</strong> <a href="${{ steps.deployment_url.outputs.url }}">${{ steps.deployment_url.outputs.url }}</a></p>
-            <p><strong>Workflow run:</strong> <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">Open run details</a></p>
