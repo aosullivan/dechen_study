@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dhatu Classifications — Venn / Euler Diagram</title>
+<title>Dhatu Classifications — Interactive Venn / Euler Diagram</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 <style>
   /* ── App Colour Tokens (from app_theme.dart) ── */
@@ -17,28 +17,23 @@
     --card-beige:       #F4ECDD;
     --border-light:     #E8E4DC;
     --muted-brown:      #5C4A3A;
-    /* Triad – Faculties (warm amber) */
     --fac-bg:           #FFF8E1;
     --fac-border:       #E8D99A;
     --fac-icon:         #B8960F;
-    /* Triad – Objects (cool blue) */
     --obj-bg:           #ECF1F9;
     --obj-border:       #B8C8DC;
     --obj-icon:         #4A6FA5;
-    /* Triad – Consciousnesses (neutral) */
     --con-bg:           #FFFFFF;
     --con-border:       #E6D8C3;
     --con-icon:         #8B7355;
-    /* Chip */
     --chip-bg:          #FFF9EF;
     --chip-border:      #E7DAC7;
-    /* Callout */
     --callout-bg:       #FFF7EA;
-    /* Table header */
     --table-header-bg:  #F8EFE2;
-    /* Item box */
     --item-bg:          #FFFEFB;
     --item-border:      #EADFCF;
+    --highlight:        #8B735530;
+    --highlight-strong: #8B735550;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -52,69 +47,34 @@
   }
 
   /* ── Page header ── */
-  .page-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  .page-header h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    letter-spacing: 0.01em;
-  }
-  .page-header .subtitle {
-    font-size: 0.85rem;
-    color: var(--muted-brown);
-    margin-top: 0.2rem;
-  }
+  .page-header { text-align: center; margin-bottom: 1.5rem; }
+  .page-header h1 { font-size: 1.5rem; font-weight: 600; color: var(--text-dark); }
+  .page-header .subtitle { font-size: 0.85rem; color: var(--muted-brown); margin-top: 0.2rem; }
 
-  /* ── Section headings (styled like gateway subset-title) ── */
+  /* ── Section headings ── */
   h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    font-style: italic;
-    color: var(--text-dark);
-    margin: 2rem 0 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-size: 1rem; font-weight: 600; font-style: italic; color: var(--text-dark);
+    margin: 2rem 0 0.8rem; display: flex; align-items: center; gap: 0.5rem;
   }
-  h2 .icon-badge { flex-shrink: 0; }
 
-  /* ── Card (matches gateway card container) ── */
+  /* ── Card ── */
   .card {
-    background: var(--card-beige);
-    border: 1px solid var(--border-light);
-    border-radius: 9px;
-    padding: 11px;
-    overflow-x: auto;
-  }
-  /* Introduction card (gradient) */
-  .intro-card {
-    background: linear-gradient(135deg, #FFFDF8, #F6EFE2);
-    border: 1px solid var(--border-light);
-    border-radius: 14px;
-    padding: 14px;
+    background: var(--card-beige); border: 1px solid var(--border-light);
+    border-radius: 9px; padding: 11px; overflow-x: auto;
   }
 
-  /* ── Icon Badge (matches _IconBadge) ── */
+  /* ── Icon Badge ── */
   .icon-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 8px;
-    background: #fff;
-    border: 1px solid var(--con-border);
-    flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 8px;
+    background: #fff; border: 1px solid var(--con-border); flex-shrink: 0;
+    transition: box-shadow 0.2s, transform 0.15s;
   }
   .icon-badge .material-icons-outlined { font-size: 14px; color: var(--primary); }
   .icon-badge.sm { width: 22px; height: 22px; border-radius: 7px; }
   .icon-badge.sm .material-icons-outlined { font-size: 12px; }
   .icon-badge.xs { width: 20px; height: 20px; border-radius: 6px; }
   .icon-badge.xs .material-icons-outlined { font-size: 11px; }
-  /* Triad-coloured badges */
   .icon-badge.fac { background: var(--fac-bg); border-color: var(--fac-border); }
   .icon-badge.fac .material-icons-outlined { color: var(--fac-icon); }
   .icon-badge.obj { background: var(--obj-bg); border-color: var(--obj-border); }
@@ -122,165 +82,166 @@
   .icon-badge.con { background: var(--con-bg); border-color: var(--con-border); }
   .icon-badge.con .material-icons-outlined { color: var(--con-icon); }
 
-  /* ── Chip / Pill (matches _GatewayChipLink) ── */
+  /* ── Chip ── */
   .chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--chip-bg);
-    border: 1px solid var(--chip-border);
-    border-radius: 10px;
-    padding: 5px 10px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--body-text);
-    white-space: nowrap;
-    margin: 2px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--chip-bg); border: 1px solid var(--chip-border);
+    border-radius: 10px; padding: 5px 10px;
+    font-size: 0.82rem; font-weight: 500; color: var(--body-text);
+    white-space: nowrap; margin: 2px;
+    cursor: pointer; transition: all 0.2s ease; user-select: none;
   }
   .chip .icon-badge { width: 20px; height: 20px; border-radius: 6px; }
   .chip .icon-badge .material-icons-outlined { font-size: 11px; }
+  .chip:hover { box-shadow: 0 1px 6px rgba(139,115,85,0.2); transform: translateY(-1px); }
 
-  /* ── Euler Diagram ── */
+  /* ── Set tag ── */
+  .set-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--card-beige); border: 1px solid var(--border-light);
+    border-radius: 6px; padding: 2px 7px;
+    font-size: 0.68rem; color: var(--muted-brown);
+    cursor: pointer; transition: all 0.2s ease; user-select: none;
+  }
+  .set-tag .material-icons-outlined { font-size: 10px; }
+  .set-tag:hover { box-shadow: 0 1px 4px rgba(139,115,85,0.15); background: var(--chip-bg); }
+
+  /* ── Euler ── */
   .euler-wrap { overflow-x: auto; }
   svg.euler { display: block; margin: 0 auto; }
+  .euler-set { cursor: pointer; }
+  .euler-set > rect { transition: stroke-width 0.2s, opacity 0.2s; }
+  .euler-set:hover > rect { stroke-width: 2.5; }
+  .euler-dhatu { cursor: pointer; }
+  .euler-dhatu:hover > rect { stroke-width: 2; }
+  .euler-dhatu:hover text { font-weight: 700; }
 
   /* ── Matrix ── */
   table.matrix {
-    border-collapse: collapse;
-    font-size: 0.8rem;
-    width: 100%;
-    min-width: 960px;
+    border-collapse: collapse; font-size: 0.8rem; width: 100%; min-width: 960px;
   }
   table.matrix th, table.matrix td {
-    padding: 5px 7px;
-    text-align: center;
-    border: 1px solid var(--border-light);
+    padding: 5px 7px; text-align: center; border: 1px solid var(--border-light);
+    transition: background 0.2s, opacity 0.2s;
   }
   table.matrix thead th {
-    background: var(--table-header-bg);
-    font-weight: 600;
-    font-size: 0.7rem;
-    letter-spacing: 0.02em;
-    color: var(--muted-brown);
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    height: 130px;
-    white-space: nowrap;
-    padding: 8px 6px;
+    background: var(--table-header-bg); font-weight: 600; font-size: 0.7rem;
+    letter-spacing: 0.02em; color: var(--muted-brown);
+    writing-mode: vertical-rl; text-orientation: mixed;
+    height: 130px; white-space: nowrap; padding: 8px 6px;
+    cursor: pointer; transition: all 0.2s; user-select: none;
   }
-  table.matrix thead th.corner { background: transparent; border: none; }
+  table.matrix thead th:hover { background: var(--highlight-strong); }
+  table.matrix thead th.corner { background: transparent; border: none; cursor: default; }
   table.matrix tbody th {
-    text-align: left;
-    font-weight: 400;
-    background: var(--item-bg);
-    white-space: nowrap;
-    padding: 4px 8px;
-    font-size: 0.78rem;
-    color: var(--body-text);
+    text-align: left; font-weight: 400; background: var(--item-bg);
+    white-space: nowrap; padding: 4px 8px; font-size: 0.78rem;
+    color: var(--body-text); cursor: pointer; user-select: none;
   }
-  table.matrix tbody th .row-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  /* Triad left-border accent */
+  table.matrix tbody th:hover { background: var(--highlight); }
+  table.matrix tbody th .row-label { display: inline-flex; align-items: center; gap: 6px; }
   table.matrix tbody th.triad-fac { border-left: 3px solid var(--fac-icon); }
   table.matrix tbody th.triad-obj { border-left: 3px solid var(--obj-icon); }
   table.matrix tbody th.triad-con { border-left: 3px solid var(--con-icon); }
-  /* In / Out cells */
   table.matrix td.in { background: var(--fac-bg); }
-  table.matrix td.in::after { content: ""; display:block; width:8px; height:8px; margin:auto; border-radius:50%; background: var(--primary); }
+  table.matrix td.in::after { content: ""; display: block; width: 8px; height: 8px; margin: auto; border-radius: 50%; background: var(--primary); transition: transform 0.2s; }
   table.matrix td.out { background: var(--scaffold-bg); }
-  /* Separator rows */
   table.matrix tr.sep td, table.matrix tr.sep th { border-top: 2px solid var(--border); }
-  /* Count row */
-  .count-row td, .count-row th {
-    font-weight: 600; font-size: 0.72rem; color: var(--muted-brown);
-    background: var(--table-header-bg) !important;
-  }
+  .count-row td, .count-row th { font-weight: 600; font-size: 0.72rem; color: var(--muted-brown); background: var(--table-header-bg) !important; }
   .count-row td::after { content: none !important; display: none !important; }
 
-  /* ── Hasse / Subset diagram ── */
-  .subset-wrap { overflow-x: auto; }
-
-  /* ── Overlap region cards ── */
+  /* ── Regions ── */
   .regions { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
   .region-card {
-    background: var(--item-bg);
-    border: 1px solid var(--item-border);
-    border-radius: 9px;
-    padding: 10px 12px;
+    background: var(--item-bg); border: 1px solid var(--item-border);
+    border-radius: 9px; padding: 10px 12px; transition: all 0.25s ease;
   }
-  .region-card h3 {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .region-card .members {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 6px;
-  }
-  .region-card .set-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
-  }
-  .set-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    background: var(--card-beige);
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
-    padding: 2px 7px;
-    font-size: 0.68rem;
-    color: var(--muted-brown);
-  }
-  .set-tag .material-icons-outlined { font-size: 10px; }
+  .region-card h3 { font-size: 0.82rem; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .region-card .members { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .region-card .set-tags { display: flex; flex-wrap: wrap; gap: 3px; }
 
-  /* ── Observation callouts (matches gateway callout box) ── */
+  /* ── Observations ── */
   .observations { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
   .callout {
-    background: var(--callout-bg);
-    border-left: 3px solid rgba(139, 115, 85, 0.7);
-    border-radius: 0 9px 9px 0;
-    padding: 10px 14px;
+    background: var(--callout-bg); border-left: 3px solid rgba(139,115,85,0.7);
+    border-radius: 0 9px 9px 0; padding: 10px 14px; transition: opacity 0.25s;
   }
-  .callout h3 {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 4px;
-  }
-  .callout p {
-    font-size: 0.78rem;
-    color: var(--muted-brown);
-    line-height: 1.55;
-  }
+  .callout h3 { font-size: 0.82rem; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+  .callout p { font-size: 0.78rem; color: var(--muted-brown); line-height: 1.55; }
+  .footer { margin-top: 2rem; text-align: center; font-size: 0.72rem; color: var(--border); }
 
-  /* ── Footer ── */
-  .footer {
-    margin-top: 2rem;
-    text-align: center;
-    font-size: 0.72rem;
-    color: var(--border);
-  }
+  /* ══════════════════════════════════════════
+     INTERACTIVE STATES
+     ══════════════════════════════════════════ */
 
-  /* ── Triad-note box (matches gateway triad-note) ── */
-  .triad-note {
-    background: #FFF8EE;
-    border: 1px solid #E8DCC8;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 0.78rem;
-    color: var(--muted-brown);
-    margin-top: 8px;
+  /* Highlighted dhatu chip */
+  .chip.highlighted { box-shadow: 0 0 0 2px var(--primary), 0 2px 8px rgba(139,115,85,0.3); transform: translateY(-1px); }
+  /* Highlighted set tag */
+  .set-tag.highlighted { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .set-tag.highlighted .material-icons-outlined { color: #fff; }
+  /* Dimmed */
+  .chip.dimmed { opacity: 0.25; transform: none; }
+  .set-tag.dimmed { opacity: 0.25; }
+  .region-card.dimmed { opacity: 0.2; transform: scale(0.98); }
+  .callout.dimmed { opacity: 0.2; }
+
+  /* Matrix row highlight */
+  table.matrix tr.highlighted th { background: var(--highlight-strong) !important; }
+  table.matrix tr.highlighted td.in { background: #D4A01740 !important; }
+  table.matrix tr.highlighted td.in::after { transform: scale(1.5); }
+  table.matrix tr.dimmed th, table.matrix tr.dimmed td { opacity: 0.2; }
+  /* Matrix column highlight */
+  table.matrix td.col-highlighted { background: var(--highlight) !important; }
+  table.matrix td.col-highlighted.in { background: #D4A01740 !important; }
+  table.matrix td.col-highlighted.in::after { transform: scale(1.5); }
+  table.matrix thead th.highlighted { background: var(--highlight-strong) !important; box-shadow: inset 0 -3px 0 var(--primary); }
+  table.matrix thead th.dimmed { opacity: 0.3; }
+  /* Intersection */
+  table.matrix td.intersection { background: var(--primary) !important; }
+  table.matrix td.intersection::after { background: #fff !important; transform: scale(1.8); }
+
+  /* Euler SVG states */
+  .euler-set.highlighted > rect { stroke-width: 3 !important; filter: drop-shadow(0 0 4px rgba(139,115,85,0.4)); }
+  .euler-set.dimmed > rect { opacity: 0.15; }
+  .euler-set.dimmed > text { opacity: 0.15; }
+  .euler-dhatu.highlighted > rect { stroke-width: 2.5 !important; filter: drop-shadow(0 0 3px rgba(139,115,85,0.5)); }
+  .euler-dhatu.highlighted text:not([font-family]) { font-weight: 700 !important; }
+  .euler-dhatu.dimmed { opacity: 0.15; }
+
+  /* ── Floating info panel ── */
+  #info-panel {
+    position: fixed; bottom: 20px; right: 20px;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px;
+    box-shadow: 0 4px 20px rgba(44,36,24,0.15);
+    max-width: 320px; min-width: 200px;
+    font-size: 0.82rem; color: var(--body-text);
+    transform: translateY(10px); opacity: 0;
+    transition: all 0.25s ease; pointer-events: none;
+    z-index: 1000;
+  }
+  #info-panel.visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  #info-panel .panel-title {
+    font-weight: 600; color: var(--text-dark); font-size: 0.9rem;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+  }
+  #info-panel .panel-subtitle { font-size: 0.75rem; color: var(--muted-brown); margin-bottom: 8px; }
+  #info-panel .panel-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  #info-panel .panel-tag {
+    display: inline-block; background: var(--card-beige); border: 1px solid var(--border-light);
+    border-radius: 5px; padding: 1px 6px; font-size: 0.7rem; color: var(--muted-brown);
+  }
+  #info-panel .panel-close {
+    position: absolute; top: 8px; right: 10px;
+    background: none; border: none; cursor: pointer;
+    font-size: 16px; color: var(--border); line-height: 1;
+  }
+  #info-panel .panel-close:hover { color: var(--primary); }
+
+  /* ── Hint ── */
+  .hint {
+    text-align: center; font-size: 0.75rem; color: var(--border);
+    margin-top: 6px; font-style: italic;
   }
 </style>
 </head>
@@ -295,7 +256,7 @@
 <!-- ═══════════════ EULER DIAGRAM ═══════════════ -->
 <h2>
   <span class="icon-badge"><span class="material-icons-outlined">account_tree</span></span>
-  Euler Diagram — Structural Overlaps
+  Euler Diagram
 </h2>
 <div class="card euler-wrap">
 <svg class="euler" viewBox="0 0 1020 700" width="1020" height="700" xmlns="http://www.w3.org/2000/svg">
@@ -308,153 +269,148 @@
     </style>
   </defs>
 
-  <!-- ── Desire Realm (universal set) ── -->
-  <rect x="8" y="8" width="1004" height="684" rx="14" fill="none" stroke="#D4C4B0" stroke-width="2" stroke-dasharray="8,4"/>
-  <rect x="30" y="18" rx="6" width="180" height="24" fill="#F4ECDD"/>
-  <text x="38" y="34" class="sl" fill="#8B7355">
-    <tspan>&#xe53b;</tspan> DESIRE REALM
-  </text>
-  <text x="168" y="34" class="sl2" fill="#B0A898">(all 18)</text>
+  <!-- ── Desire Realm ── -->
+  <g class="euler-set" data-set="desire-realm">
+    <rect x="8" y="8" width="1004" height="684" rx="14" fill="none" stroke="#D4C4B0" stroke-width="2" stroke-dasharray="8,4"/>
+    <rect x="30" y="18" rx="6" width="180" height="24" fill="#F4ECDD"/>
+    <text x="38" y="34" class="sl" fill="#8B7355">DESIRE REALM</text>
+    <text x="168" y="34" class="sl2" fill="#B0A898">(all 18)</text>
+  </g>
 
   <!-- ── Form Realm ── -->
-  <rect x="24" y="48" width="972" height="574" rx="12" fill="#F4ECDD20" stroke="#8B7355" stroke-width="1.2" stroke-dasharray="6,3"/>
-  <rect x="42" y="56" rx="5" width="160" height="22" fill="#F4ECDD"/>
-  <text x="50" y="71" class="sl" fill="#8B7355">
-    <tspan>&#xe53b;</tspan> FORM REALM
-  </text>
-  <text x="160" y="71" class="sl2" fill="#B0A898">(14)</text>
+  <g class="euler-set" data-set="form-realm">
+    <rect x="24" y="48" width="972" height="574" rx="12" fill="#F4ECDD20" stroke="#8B7355" stroke-width="1.2" stroke-dasharray="6,3"/>
+    <rect x="42" y="56" rx="5" width="160" height="22" fill="#F4ECDD"/>
+    <text x="50" y="71" class="sl" fill="#8B7355">FORM REALM</text>
+    <text x="160" y="71" class="sl2" fill="#B0A898">(14)</text>
+  </g>
 
-  <!-- ════ LEFT SIDE: Physical / Material ════ -->
+  <!-- ── Physical Form ── -->
+  <g class="euler-set" data-set="physical-form">
+    <rect x="44" y="86" width="460" height="526" rx="10" fill="#FFF9EF" stroke="#E7DAC7" stroke-width="1.2"/>
+    <text x="274" y="106" text-anchor="middle" class="sl" fill="#8B7355">PHYSICAL FORM (11)</text>
+  </g>
 
-  <!-- Physical Form -->
-  <rect x="44" y="86" width="460" height="526" rx="10" fill="#FFF9EF" stroke="#E7DAC7" stroke-width="1.2"/>
-  <text x="274" y="106" text-anchor="middle" class="sl" fill="#8B7355">
-    <tspan>&#xe1c7;</tspan> PHYSICAL FORM (11)
-  </text>
+  <!-- ── Mutually Obstructive ── -->
+  <g class="euler-set" data-set="mutually-obstructive">
+    <rect x="58" y="116" width="300" height="488" rx="8" fill="#FFFEFB" stroke="#EADFCF" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="208" y="136" text-anchor="middle" class="sl" fill="#5C4A3A">MUTUALLY OBSTRUCTIVE (10)</text>
+  </g>
 
-  <!-- Mutually Obstructive -->
-  <rect x="58" y="116" width="300" height="488" rx="8" fill="#FFFEFB" stroke="#EADFCF" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="208" y="136" text-anchor="middle" class="sl" fill="#5C4A3A">
-    <tspan>&#xe14b;</tspan> MUTUALLY OBSTRUCTIVE (10)
-  </text>
+  <!-- ── Outer ── -->
+  <g class="euler-set" data-set="outer">
+    <rect x="162" y="146" width="326" height="258" rx="8" fill="#ECF1F908" stroke="#B8C8DC" stroke-width="1"/>
+    <text x="325" y="164" text-anchor="middle" class="sl" fill="#4A6FA5">OUTER (6)</text>
+  </g>
 
-  <!-- Outer Elements -->
-  <rect x="162" y="146" width="326" height="258" rx="8" fill="#ECF1F908" stroke="#B8C8DC" stroke-width="1"/>
-  <text x="325" y="164" text-anchor="middle" class="sl" fill="#4A6FA5">
-    <tspan>&#xe89e;</tspan> OUTER (6)
-  </text>
+  <!-- ── Personal Sensation ── -->
+  <g class="euler-set" data-set="personal-sensation">
+    <rect x="58" y="280" width="430" height="326" rx="8" fill="#FFF8E108" stroke="#E8D99A" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="273" y="298" text-anchor="middle" class="sl" fill="#B8960F">PERSONAL SENSATION (9)</text>
+  </g>
 
-  <!-- Personal Sensation -->
-  <rect x="58" y="280" width="430" height="326" rx="8" fill="#FFF8E108" stroke="#E8D99A" stroke-width="1" stroke-dasharray="3,2"/>
-  <text x="273" y="298" text-anchor="middle" class="sl" fill="#B8960F">
-    <tspan>&#xe7fd;</tspan> PERSONAL SENSATION (9)
-  </text>
-
-  <!-- ── Region A: Eye-F, Ear-F, Body-F ── -->
-  <g transform="translate(80, 316)">
+  <!-- Region A: Eye-F, Ear-F, Body-F -->
+  <g class="euler-dhatu" data-dhatu="eye-fac" transform="translate(80, 316)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe8f4;</text>
     <text x="28" y="16" class="dl" fill="#B8960F">Eye Faculty</text>
   </g>
-  <g transform="translate(80, 344)">
+  <g class="euler-dhatu" data-dhatu="ear-fac" transform="translate(80, 344)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe023;</text>
     <text x="28" y="16" class="dl" fill="#B8960F">Ear Faculty</text>
   </g>
-  <g transform="translate(80, 372)">
+  <g class="euler-dhatu" data-dhatu="body-fac" transform="translate(80, 372)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe925;</text>
     <text x="28" y="16" class="dl" fill="#B8960F">Body Faculty</text>
   </g>
 
-  <!-- ── Region C: Visual Form, Sound (MO ∩ FR ∩ Outer, not PS) ── -->
-  <g transform="translate(180, 188)">
+  <!-- Region C: Visual Form, Sound -->
+  <g class="euler-dhatu" data-dhatu="visual-obj" transform="translate(180, 188)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe8f4;</text>
     <text x="28" y="16" class="dl" fill="#4A6FA5">Visual Form</text>
   </g>
-  <g transform="translate(180, 214)">
+  <g class="euler-dhatu" data-dhatu="sound-obj" transform="translate(180, 214)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe023;</text>
     <text x="28" y="16" class="dl" fill="#4A6FA5">Sound</text>
   </g>
 
-  <!-- ── Region E: Texture (MO ∩ FR ∩ Outer ∩ PS) ── -->
-  <g transform="translate(180, 316)">
+  <!-- Region E: Texture -->
+  <g class="euler-dhatu" data-dhatu="texture-obj" transform="translate(180, 316)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe925;</text>
     <text x="28" y="16" class="dl" fill="#4A6FA5">Texture</text>
   </g>
 
-  <!-- ── Region F: Mental Object (the 9-set bridge) ── -->
-  <g transform="translate(350, 430)">
+  <!-- Region F: Mental Object -->
+  <g class="euler-dhatu" data-dhatu="mental-obj" transform="translate(350, 430)">
     <rect x="-6" y="-6" width="160" height="50" rx="8" fill="#FFF7EA" stroke="rgba(139,115,85,0.4)" stroke-width="1"/>
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe88a;</text>
     <text x="28" y="16" class="dl" fill="#4A6FA5" font-weight="700">Mental Object</text>
     <text x="0" y="34" class="nl" font-style="normal" fill="#8B7355" font-size="8.5">in 9 of 10 classifications</text>
   </g>
-  <!-- Dashed connector to right side -->
   <line x1="504" y1="448" x2="540" y2="378" stroke="#D4C4B0" stroke-width="0.8" stroke-dasharray="4,3"/>
 
-  <!-- ── Items OUTSIDE Form Realm (Desire-only strip) ── -->
+  <!-- Desire-only strip -->
   <rect x="44" y="632" width="460" height="54" rx="8" fill="#FFFEFB" stroke="#EADFCF" stroke-width="0.8"/>
   <text x="274" y="648" text-anchor="middle" class="nl" font-size="8.5" fill="#B0A898">Desire Realm only (excluded from Form Realm)</text>
 
   <!-- Region B: Nose-F, Tongue-F -->
-  <g transform="translate(60, 654)">
+  <g class="euler-dhatu" data-dhatu="nose-fac" transform="translate(60, 654)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe63e;</text>
     <text x="28" y="16" class="dl" fill="#B8960F">Nose Faculty</text>
   </g>
-  <g transform="translate(180, 654)">
+  <g class="euler-dhatu" data-dhatu="tongue-fac" transform="translate(180, 654)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe798;</text>
     <text x="28" y="16" class="dl" fill="#B8960F">Tongue Faculty</text>
   </g>
 
   <!-- Region D: Smell, Taste -->
-  <g transform="translate(310, 654)">
+  <g class="euler-dhatu" data-dhatu="smell-obj" transform="translate(310, 654)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe63e;</text>
     <text x="28" y="16" class="dl" fill="#4A6FA5">Smell</text>
   </g>
-  <g transform="translate(400, 654)">
+  <g class="euler-dhatu" data-dhatu="taste-obj" transform="translate(400, 654)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#ECF1F9" stroke="#B8C8DC"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#4A6FA5">&#xe798;</text>
     <text x="28" y="16" class="dl" fill="#4A6FA5">Taste</text>
   </g>
 
-  <!-- ════ RIGHT SIDE: Mental / Consciousness ════ -->
+  <!-- ═══ RIGHT SIDE ═══ -->
 
-  <!-- Elements with Focus -->
-  <rect x="520" y="86" width="466" height="526" rx="10" fill="#FFFEFB08" stroke="#EADFCF" stroke-width="1.2"/>
-  <text x="753" y="106" text-anchor="middle" class="sl" fill="#5C4A3A">
-    <tspan>&#xe3b4;</tspan> ELEMENTS WITH FOCUS (8)
-  </text>
+  <!-- Focus -->
+  <g class="euler-set" data-set="focus">
+    <rect x="520" y="86" width="466" height="526" rx="10" fill="#FFFEFB08" stroke="#EADFCF" stroke-width="1.2"/>
+    <text x="753" y="106" text-anchor="middle" class="sl" fill="#5C4A3A">ELEMENTS WITH FOCUS (8)</text>
+  </g>
 
   <!-- Undefiling -->
-  <rect x="540" y="118" width="210" height="320" rx="8" fill="#FFF9EF08" stroke="#E7DAC7" stroke-width="1" stroke-dasharray="4,3"/>
-  <text x="645" y="138" text-anchor="middle" class="sl" fill="#5C4A3A">
-    <tspan>&#xe65f;</tspan> UNDEFILING (3+)
-  </text>
+  <g class="euler-set" data-set="undefiling">
+    <rect x="540" y="118" width="210" height="320" rx="8" fill="#FFF9EF08" stroke="#E7DAC7" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="645" y="138" text-anchor="middle" class="sl" fill="#5C4A3A">UNDEFILING (3+)</text>
+  </g>
 
-  <!-- Formless Realm = Concepts (innermost) -->
-  <rect x="556" y="152" width="180" height="200" rx="8" fill="#FFF7EA" stroke="#8B7355" stroke-width="1.5"/>
-  <text x="646" y="172" text-anchor="middle" class="sl" fill="#8B7355">
-    <tspan>&#xe53b;</tspan> FORMLESS REALM (3)
-  </text>
-  <text x="646" y="188" text-anchor="middle" class="sl2" fill="#8B7355">
-    = <tspan>&#xe90f;</tspan> CONCEPTS (3)
-  </text>
+  <!-- Formless = Concepts -->
+  <g class="euler-set" data-set="formless-realm">
+    <rect x="556" y="152" width="180" height="200" rx="8" fill="#FFF7EA" stroke="#8B7355" stroke-width="1.5"/>
+    <text x="646" y="172" text-anchor="middle" class="sl" fill="#8B7355">FORMLESS REALM (3)</text>
+    <text x="646" y="188" text-anchor="middle" class="sl2" fill="#8B7355">= CONCEPTS (3)</text>
+  </g>
 
   <!-- Region G: Mind-F, Mind-C -->
-  <g transform="translate(576, 206)">
+  <g class="euler-dhatu" data-dhatu="mind-fac" transform="translate(576, 206)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFF8E1" stroke="#E8D99A"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#B8960F">&#xe88a;</text>
     <text x="28" y="16" class="dl" fill="#B8960F">Mind Faculty</text>
   </g>
-  <g transform="translate(576, 234)">
+  <g class="euler-dhatu" data-dhatu="mind-con" transform="translate(576, 234)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe88a;</text>
     <text x="28" y="16" class="dl" fill="#8B7355">Mind Consciousness</text>
@@ -462,11 +418,9 @@
   <text x="576" y="276" class="nl" font-size="8.5">identical set membership</text>
   <text x="576" y="290" class="nl" font-size="8.5">across all 10 classifications</text>
 
-  <!-- Mental Object connector note -->
   <text x="560" y="325" class="nl" font-size="8.5" fill="#8B7355">+ Mental Object</text>
   <text x="560" y="340" class="nl" font-size="8">(bridges material &amp; mental)</text>
 
-  <!-- Unconditioned things note -->
   <rect x="556" y="368" width="164" height="36" rx="6" fill="#FFF8EE" stroke="#E8DCC8" stroke-width="0.7"/>
   <text x="564" y="383" class="nl" font-size="8.5" fill="#5C4A3A">+ Unconditioned Things</text>
   <text x="564" y="396" class="nl" font-size="8">(beyond the 18 dhatus)</text>
@@ -475,27 +429,27 @@
   <rect x="762" y="128" width="210" height="210" rx="8" fill="#FFFEFB" stroke="#E6D8C3" stroke-width="0.8"/>
   <text x="867" y="150" text-anchor="middle" class="sl2" fill="#8B7355">5 Sense Consciousnesses</text>
 
-  <g transform="translate(782, 162)">
+  <g class="euler-dhatu" data-dhatu="eye-con" transform="translate(782, 162)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe8f4;</text>
     <text x="28" y="16" class="dl" fill="#8B7355">Eye Consc.</text>
   </g>
-  <g transform="translate(782, 190)">
+  <g class="euler-dhatu" data-dhatu="ear-con" transform="translate(782, 190)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe023;</text>
     <text x="28" y="16" class="dl" fill="#8B7355">Ear Consc.</text>
   </g>
-  <g transform="translate(782, 218)">
+  <g class="euler-dhatu" data-dhatu="nose-con" transform="translate(782, 218)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe63e;</text>
     <text x="28" y="16" class="dl" fill="#8B7355">Nose Consc.</text>
   </g>
-  <g transform="translate(782, 246)">
+  <g class="euler-dhatu" data-dhatu="tongue-con" transform="translate(782, 246)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe798;</text>
     <text x="28" y="16" class="dl" fill="#8B7355">Tongue Consc.</text>
   </g>
-  <g transform="translate(782, 274)">
+  <g class="euler-dhatu" data-dhatu="body-con" transform="translate(782, 274)">
     <rect x="0" y="0" width="22" height="22" rx="7" fill="#FFFFFF" stroke="#E6D8C3"/>
     <text x="11" y="16" text-anchor="middle" font-family="Material Icons Outlined" font-size="12" fill="#8B7355">&#xe925;</text>
     <text x="28" y="16" class="dl" fill="#8B7355">Body Consc.</text>
@@ -503,24 +457,21 @@
   <text x="782" y="314" class="nl" font-size="8.5">in only 3 of 10 sets</text>
   <text x="782" y="327" class="nl" font-size="8">(Desire Realm, Form Realm, Focus)</text>
 
-  <!-- ── LEGEND ── -->
+  <!-- Legend -->
   <rect x="762" y="440" width="210" height="162" rx="8" fill="#F4ECDD" stroke="#E8E4DC" stroke-width="1"/>
   <text x="867" y="460" text-anchor="middle" font-size="9.5" font-weight="600" fill="#5C4A3A" font-family="-apple-system, sans-serif">TRIAD COLOURS</text>
-
   <rect x="782" y="472" width="16" height="16" rx="5" fill="#FFF8E1" stroke="#E8D99A"/>
   <text x="804" y="484" font-size="9" fill="#5C4A3A" font-family="-apple-system, sans-serif">Faculties (6)</text>
-
   <rect x="782" y="494" width="16" height="16" rx="5" fill="#ECF1F9" stroke="#B8C8DC"/>
   <text x="804" y="506" font-size="9" fill="#5C4A3A" font-family="-apple-system, sans-serif">Objects (6)</text>
-
   <rect x="782" y="516" width="16" height="16" rx="5" fill="#FFFFFF" stroke="#E6D8C3"/>
   <text x="804" y="528" font-size="9" fill="#5C4A3A" font-family="-apple-system, sans-serif">Consciousnesses (6)</text>
-
   <line x1="782" y1="542" x2="952" y2="542" stroke="#E8E4DC" stroke-width="0.7"/>
-  <text x="867" y="558" text-anchor="middle" font-size="9.5" font-weight="600" fill="#5C4A3A" font-family="-apple-system, sans-serif">IDENTICAL SETS</text>
-  <text x="782" y="574" font-size="8.5" fill="#5C4A3A" font-family="-apple-system, sans-serif">Formless Realm = Concepts</text>
-  <text x="782" y="588" font-size="8.5" fill="#B0A898" font-family="-apple-system, sans-serif">Formless ⊂ Undefiling ⊂ Focus</text>
+  <text x="867" y="558" text-anchor="middle" font-size="9.5" font-weight="600" fill="#5C4A3A" font-family="-apple-system, sans-serif">CLICK TO INTERACT</text>
+  <text x="782" y="574" font-size="8.5" fill="#5C4A3A" font-family="-apple-system, sans-serif">Click dhatu or set label</text>
+  <text x="782" y="588" font-size="8.5" fill="#B0A898" font-family="-apple-system, sans-serif">Shift-click for intersection</text>
 </svg>
+<p class="hint">Click any element or set label to highlight across all sections. Shift-click to compare sets.</p>
 </div>
 
 <!-- ═══════════════ MEMBERSHIP MATRIX ═══════════════ -->
@@ -529,124 +480,120 @@
   Membership Matrix
 </h2>
 <div class="card">
-<table class="matrix">
+<table class="matrix" id="matrix">
 <thead>
   <tr>
     <th class="corner"></th>
-    <th><span class="material-icons-outlined" style="font-size:10px">widgets</span><br>Physical<br>Form</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">block</span><br>Mutually<br>Obstructive</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">open_in_new</span><br>Outer</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">person_outline</span><br>Personal<br>Sensation</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Desire<br>Realm</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Form<br>Realm</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Formless<br>Realm</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">auto_awesome</span><br>Undefiling</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">center_focus_strong</span><br>Focus</th>
-    <th><span class="material-icons-outlined" style="font-size:10px">lightbulb</span><br>Concepts</th>
+    <th data-set="physical-form"><span class="material-icons-outlined" style="font-size:10px">widgets</span><br>Physical<br>Form</th>
+    <th data-set="mutually-obstructive"><span class="material-icons-outlined" style="font-size:10px">block</span><br>Mutually<br>Obstructive</th>
+    <th data-set="outer"><span class="material-icons-outlined" style="font-size:10px">open_in_new</span><br>Outer</th>
+    <th data-set="personal-sensation"><span class="material-icons-outlined" style="font-size:10px">person_outline</span><br>Personal<br>Sensation</th>
+    <th data-set="desire-realm"><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Desire<br>Realm</th>
+    <th data-set="form-realm"><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Form<br>Realm</th>
+    <th data-set="formless-realm"><span class="material-icons-outlined" style="font-size:10px">layers</span><br>Formless<br>Realm</th>
+    <th data-set="undefiling"><span class="material-icons-outlined" style="font-size:10px">auto_awesome</span><br>Undefiling</th>
+    <th data-set="focus"><span class="material-icons-outlined" style="font-size:10px">center_focus_strong</span><br>Focus</th>
+    <th data-set="concepts"><span class="material-icons-outlined" style="font-size:10px">lightbulb</span><br>Concepts</th>
   </tr>
 </thead>
 <tbody>
-  <!-- FACULTIES -->
-  <tr>
+  <tr data-dhatu="eye-fac">
     <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">visibility</span></span> Eye Faculty</span></th>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="ear-fac">
     <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">hearing</span></span> Ear Faculty</span></th>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="nose-fac">
     <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">air</span></span> Nose Faculty</span></th>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
-    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="out" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="tongue-fac">
     <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">water_drop</span></span> Tongue Faculty</span></th>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
-    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="out" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="body-fac">
     <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">pan_tool</span></span> Body Faculty</span></th>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="in"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr class="sep">
+  <tr class="sep" data-dhatu="mind-fac">
     <th class="triad-fac"><span class="row-label"><span class="icon-badge xs fac"><span class="material-icons-outlined">psychology</span></span> Mind Faculty</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="in" data-set="formless-realm"></td><td class="in" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="in" data-set="concepts"></td>
   </tr>
-  <!-- OBJECTS -->
-  <tr class="sep">
+  <tr class="sep" data-dhatu="visual-obj">
     <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">visibility</span></span> Visual Form</span></th>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="in" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="sound-obj">
     <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">hearing</span></span> Sound</span></th>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="in" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="smell-obj">
     <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">air</span></span> Smell</span></th>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
-    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="in" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="out" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="taste-obj">
     <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">water_drop</span></span> Taste</span></th>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
-    <td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="in" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="out" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="texture-obj">
     <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">pan_tool</span></span> Texture</span></th>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
+    <td class="in" data-set="physical-form"></td><td class="in" data-set="mutually-obstructive"></td><td class="in" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="out" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr class="sep">
+  <tr class="sep" data-dhatu="mental-obj">
     <th class="triad-obj"><span class="row-label"><span class="icon-badge xs obj"><span class="material-icons-outlined">psychology</span></span> Mental Object</span></th>
-    <td class="in"></td><td class="out"></td><td class="in"></td><td class="in"></td>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+    <td class="in" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="in" data-set="outer"></td><td class="in" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="in" data-set="formless-realm"></td><td class="in" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="in" data-set="concepts"></td>
   </tr>
-  <!-- CONSCIOUSNESSES -->
-  <tr class="sep">
+  <tr class="sep" data-dhatu="eye-con">
     <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">visibility</span></span> Eye Consc.</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="ear-con">
     <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">hearing</span></span> Ear Consc.</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="nose-con">
     <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">air</span></span> Nose Consc.</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="tongue-con">
     <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">water_drop</span></span> Tongue Consc.</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr>
+  <tr data-dhatu="body-con">
     <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">pan_tool</span></span> Body Consc.</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="out"></td><td class="out"></td><td class="in"></td><td class="out"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="out" data-set="formless-realm"></td><td class="out" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="out" data-set="concepts"></td>
   </tr>
-  <tr class="sep">
+  <tr class="sep" data-dhatu="mind-con">
     <th class="triad-con"><span class="row-label"><span class="icon-badge xs con"><span class="material-icons-outlined">psychology</span></span> Mind Consc.</span></th>
-    <td class="out"></td><td class="out"></td><td class="out"></td><td class="out"></td>
-    <td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td><td class="in"></td>
+    <td class="out" data-set="physical-form"></td><td class="out" data-set="mutually-obstructive"></td><td class="out" data-set="outer"></td><td class="out" data-set="personal-sensation"></td>
+    <td class="in" data-set="desire-realm"></td><td class="in" data-set="form-realm"></td><td class="in" data-set="formless-realm"></td><td class="in" data-set="undefiling"></td><td class="in" data-set="focus"></td><td class="in" data-set="concepts"></td>
   </tr>
-  <!-- COUNTS -->
   <tr class="sep count-row">
     <th>Total members</th>
-    <td>11</td><td>10</td><td>6</td><td>9</td>
-    <td>18</td><td>14</td><td>3</td><td>3+</td><td>8</td><td>3</td>
+    <td>11</td><td>10</td><td>6</td><td>9</td><td>18</td><td>14</td><td>3</td><td>3+</td><td>8</td><td>3</td>
   </tr>
 </tbody>
 </table>
+<p class="hint">Click a row to highlight a dhatu. Click a column header to highlight a set. Shift-click a second column to see the intersection.</p>
 </div>
 
 <!-- ═══════════════ HASSE DIAGRAM ═══════════════ -->
@@ -656,60 +603,27 @@
 </h2>
 <div class="card subset-wrap">
 <svg viewBox="0 0 920 400" width="920" height="400" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style>
-      .hnode { font: 500 11px -apple-system, sans-serif; }
-      .hnote { font: italic 9.5px -apple-system, sans-serif; fill: #B0A898; }
-    </style>
-  </defs>
-
-  <!-- Level 0 -->
-  <rect x="350" y="12" width="220" height="30" rx="8" fill="#F4ECDD" stroke="#D4C4B0"/>
-  <text x="368" y="32" class="hnode" fill="#8B7355"><tspan font-family="Material Icons Outlined" font-size="12">&#xe53b;</tspan>  Desire Realm (all 18)</text>
-
-  <!-- Lines L0 → L1 -->
+  <defs><style>
+    .hnode { font: 500 11px -apple-system, sans-serif; }
+    .hnote { font: italic 9.5px -apple-system, sans-serif; fill: #B0A898; }
+  </style></defs>
+  <g class="euler-set" data-set="desire-realm"><rect x="350" y="12" width="220" height="30" rx="8" fill="#F4ECDD" stroke="#D4C4B0"/><text x="368" y="32" class="hnode" fill="#8B7355">Desire Realm (all 18)</text></g>
   <line x1="410" y1="42" x2="190" y2="88" stroke="#E8E4DC" stroke-width="1.2"/>
   <line x1="460" y1="42" x2="460" y2="88" stroke="#E8E4DC" stroke-width="1.2"/>
   <line x1="510" y1="42" x2="730" y2="88" stroke="#E8E4DC" stroke-width="1.2"/>
-
-  <!-- Level 1 -->
-  <rect x="100" y="88" width="180" height="30" rx="8" fill="#FFF9EF" stroke="#E7DAC7"/>
-  <text x="118" y="108" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe1c7;</tspan>  Physical Form (11)</text>
-
-  <rect x="375" y="88" width="170" height="30" rx="8" fill="#F4ECDD" stroke="#D4C4B0"/>
-  <text x="393" y="108" class="hnode" fill="#8B7355"><tspan font-family="Material Icons Outlined" font-size="11">&#xe53b;</tspan>  Form Realm (14)</text>
-
-  <rect x="640" y="88" width="180" height="30" rx="8" fill="#FFFEFB" stroke="#EADFCF"/>
-  <text x="658" y="108" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe3b4;</tspan>  Focus (8)</text>
-
-  <!-- Lines L1 → L2 -->
+  <g class="euler-set" data-set="physical-form"><rect x="100" y="88" width="180" height="30" rx="8" fill="#FFF9EF" stroke="#E7DAC7"/><text x="118" y="108" class="hnode" fill="#5C4A3A">Physical Form (11)</text></g>
+  <g class="euler-set" data-set="form-realm"><rect x="375" y="88" width="170" height="30" rx="8" fill="#F4ECDD" stroke="#D4C4B0"/><text x="393" y="108" class="hnode" fill="#8B7355">Form Realm (14)</text></g>
+  <g class="euler-set" data-set="focus"><rect x="640" y="88" width="180" height="30" rx="8" fill="#FFFEFB" stroke="#EADFCF"/><text x="658" y="108" class="hnode" fill="#5C4A3A">Focus (8)</text></g>
   <line x1="160" y1="118" x2="130" y2="178" stroke="#E8E4DC" stroke-width="1.2"/>
   <line x1="230" y1="118" x2="355" y2="178" stroke="#E8E4DC" stroke-width="1.2"/>
   <line x1="700" y1="118" x2="650" y2="178" stroke="#E8E4DC" stroke-width="1.2"/>
-
-  <!-- Level 2 -->
-  <rect x="26" y="178" width="210" height="30" rx="8" fill="#FFFEFB" stroke="#EADFCF"/>
-  <text x="44" y="198" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe14b;</tspan>  Mutually Obstructive (10)</text>
-
-  <rect x="280" y="178" width="150" height="30" rx="8" fill="#ECF1F9" stroke="#B8C8DC"/>
-  <text x="298" y="198" class="hnode" fill="#4A6FA5"><tspan font-family="Material Icons Outlined" font-size="11">&#xe89e;</tspan>  Outer (6)</text>
-
-  <rect x="565" y="178" width="170" height="30" rx="8" fill="#FFF9EF" stroke="#E7DAC7"/>
-  <text x="583" y="198" class="hnode" fill="#5C4A3A"><tspan font-family="Material Icons Outlined" font-size="11">&#xe65f;</tspan>  Undefiling (3+)</text>
-
-  <!-- Lines L2 → L3 -->
+  <g class="euler-set" data-set="mutually-obstructive"><rect x="26" y="178" width="210" height="30" rx="8" fill="#FFFEFB" stroke="#EADFCF"/><text x="44" y="198" class="hnode" fill="#5C4A3A">Mutually Obstructive (10)</text></g>
+  <g class="euler-set" data-set="outer"><rect x="280" y="178" width="150" height="30" rx="8" fill="#ECF1F9" stroke="#B8C8DC"/><text x="298" y="198" class="hnode" fill="#4A6FA5">Outer (6)</text></g>
+  <g class="euler-set" data-set="undefiling"><rect x="565" y="178" width="170" height="30" rx="8" fill="#FFF9EF" stroke="#E7DAC7"/><text x="583" y="198" class="hnode" fill="#5C4A3A">Undefiling (3+)</text></g>
   <line x1="460" y1="118" x2="570" y2="268" stroke="#E8E4DC" stroke-width="1.2"/>
   <line x1="650" y1="208" x2="600" y2="268" stroke="#E8E4DC" stroke-width="1.2"/>
-
-  <!-- Level 3 -->
-  <rect x="470" y="268" width="220" height="48" rx="8" fill="#FFF7EA" stroke="#8B7355" stroke-width="1.5"/>
-  <text x="488" y="289" class="hnode" fill="#8B7355" font-weight="600"><tspan font-family="Material Icons Outlined" font-size="11">&#xe53b;</tspan>  Formless Realm (3)</text>
-  <text x="488" y="306" class="hnode" fill="#8B7355" font-size="10">= <tspan font-family="Material Icons Outlined" font-size="10">&#xe90f;</tspan> Concepts (3)</text>
-
-  <!-- Members -->
+  <g class="euler-set" data-set="formless-realm"><rect x="470" y="268" width="220" height="48" rx="8" fill="#FFF7EA" stroke="#8B7355" stroke-width="1.5"/><text x="488" y="289" class="hnode" fill="#8B7355" font-weight="600">Formless Realm (3)</text><text x="488" y="306" class="hnode" fill="#8B7355" font-size="10">= Concepts (3)</text></g>
   <text x="580" y="342" text-anchor="middle" class="hnote" font-size="9.5">{Mind Faculty, Mental Object, Mind Consciousness}</text>
-
-  <!-- Notes -->
   <text x="460" y="374" text-anchor="middle" class="hnote">Lines show ⊂ (subset) — lower sets are contained within higher ones</text>
   <text x="460" y="392" text-anchor="middle" class="hnote">Personal Sensation (9) overlaps Physical Form &amp; Outer but is not a subset of either</text>
 </svg>
@@ -718,159 +632,126 @@
 <!-- ═══════════════ OVERLAP REGIONS ═══════════════ -->
 <h2>
   <span class="icon-badge"><span class="material-icons-outlined">category</span></span>
-  Distinct Overlap Regions (8 unique membership patterns)
+  Distinct Overlap Regions
 </h2>
 <div class="regions">
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm fac"><span class="material-icons-outlined">visibility</span></span>
-      Sense Faculties in Form Realm
-    </h3>
+  <div class="region-card" data-dhatus="eye-fac,ear-fac,body-fac">
+    <h3><span class="icon-badge sm fac"><span class="material-icons-outlined">visibility</span></span> Sense Faculties in Form Realm</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">visibility</span></span> Eye</span>
-      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">hearing</span></span> Ear</span>
-      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">pan_tool</span></span> Body</span>
+      <span class="chip" data-dhatu="eye-fac"><span class="icon-badge fac"><span class="material-icons-outlined">visibility</span></span> Eye</span>
+      <span class="chip" data-dhatu="ear-fac"><span class="icon-badge fac"><span class="material-icons-outlined">hearing</span></span> Ear</span>
+      <span class="chip" data-dhatu="body-fac"><span class="icon-badge fac"><span class="material-icons-outlined">pan_tool</span></span> Body</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
-      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
-      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag" data-set="physical-form"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag" data-set="mutually-obstructive"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag" data-set="personal-sensation"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="form-realm"><span class="material-icons-outlined">layers</span> Form Realm</span>
     </div>
   </div>
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm fac"><span class="material-icons-outlined">air</span></span>
-      Sense Faculties not in Form Realm
-    </h3>
+  <div class="region-card" data-dhatus="nose-fac,tongue-fac">
+    <h3><span class="icon-badge sm fac"><span class="material-icons-outlined">air</span></span> Sense Faculties not in Form Realm</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">air</span></span> Nose</span>
-      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">water_drop</span></span> Tongue</span>
+      <span class="chip" data-dhatu="nose-fac"><span class="icon-badge fac"><span class="material-icons-outlined">air</span></span> Nose</span>
+      <span class="chip" data-dhatu="tongue-fac"><span class="icon-badge fac"><span class="material-icons-outlined">water_drop</span></span> Tongue</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
-      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
-      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="physical-form"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag" data-set="mutually-obstructive"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag" data-set="personal-sensation"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
     </div>
   </div>
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm obj"><span class="material-icons-outlined">visibility</span></span>
-      Distant Sense Objects
-    </h3>
+  <div class="region-card" data-dhatus="visual-obj,sound-obj">
+    <h3><span class="icon-badge sm obj"><span class="material-icons-outlined">visibility</span></span> Distant Sense Objects</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">visibility</span></span> Visual Form</span>
-      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">hearing</span></span> Sound</span>
+      <span class="chip" data-dhatu="visual-obj"><span class="icon-badge obj"><span class="material-icons-outlined">visibility</span></span> Visual Form</span>
+      <span class="chip" data-dhatu="sound-obj"><span class="icon-badge obj"><span class="material-icons-outlined">hearing</span></span> Sound</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
-      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
-      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag" data-set="physical-form"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag" data-set="mutually-obstructive"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag" data-set="outer"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="form-realm"><span class="material-icons-outlined">layers</span> Form Realm</span>
     </div>
   </div>
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm obj"><span class="material-icons-outlined">air</span></span>
-      Proximate Objects not in Form Realm
-    </h3>
+  <div class="region-card" data-dhatus="smell-obj,taste-obj">
+    <h3><span class="icon-badge sm obj"><span class="material-icons-outlined">air</span></span> Proximate Objects not in Form Realm</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">air</span></span> Smell</span>
-      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">water_drop</span></span> Taste</span>
+      <span class="chip" data-dhatu="smell-obj"><span class="icon-badge obj"><span class="material-icons-outlined">air</span></span> Smell</span>
+      <span class="chip" data-dhatu="taste-obj"><span class="icon-badge obj"><span class="material-icons-outlined">water_drop</span></span> Taste</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
-      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
-      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
-      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="physical-form"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag" data-set="mutually-obstructive"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag" data-set="outer"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag" data-set="personal-sensation"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
     </div>
   </div>
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm obj"><span class="material-icons-outlined">pan_tool</span></span>
-      Texture (unique 6-set pattern)
-    </h3>
+  <div class="region-card" data-dhatus="texture-obj">
+    <h3><span class="icon-badge sm obj"><span class="material-icons-outlined">pan_tool</span></span> Texture (unique 6-set pattern)</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge obj"><span class="material-icons-outlined">pan_tool</span></span> Texture</span>
+      <span class="chip" data-dhatu="texture-obj"><span class="icon-badge obj"><span class="material-icons-outlined">pan_tool</span></span> Texture</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
-      <span class="set-tag"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
-      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
-      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag" data-set="physical-form"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag" data-set="mutually-obstructive"><span class="material-icons-outlined">block</span> Mut. Obstructive</span>
+      <span class="set-tag" data-set="outer"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag" data-set="personal-sensation"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="form-realm"><span class="material-icons-outlined">layers</span> Form Realm</span>
     </div>
   </div>
-
-  <div class="region-card" style="border-color: rgba(139,115,85,0.4); border-left: 3px solid #8B7355;">
-    <h3>
-      <span class="icon-badge sm obj"><span class="material-icons-outlined">psychology</span></span>
-      Mental Object (in 9 of 10 sets)
-    </h3>
+  <div class="region-card" data-dhatus="mental-obj" style="border-color: rgba(139,115,85,0.4); border-left: 3px solid #8B7355;">
+    <h3><span class="icon-badge sm obj"><span class="material-icons-outlined">psychology</span></span> Mental Object (in 9 of 10 sets)</h3>
     <div class="members">
-      <span class="chip" style="background:#FFF7EA; border-color: rgba(139,115,85,0.3);"><span class="icon-badge obj"><span class="material-icons-outlined">psychology</span></span> Mental Object</span>
+      <span class="chip" data-dhatu="mental-obj" style="background:#FFF7EA; border-color: rgba(139,115,85,0.3);"><span class="icon-badge obj"><span class="material-icons-outlined">psychology</span></span> Mental Object</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">widgets</span> Physical Form</span>
-      <span class="set-tag"><span class="material-icons-outlined">open_in_new</span> Outer</span>
-      <span class="set-tag"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Formless Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">auto_awesome</span> Undefiling</span>
-      <span class="set-tag"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
-      <span class="set-tag"><span class="material-icons-outlined">lightbulb</span> Concepts</span>
+      <span class="set-tag" data-set="physical-form"><span class="material-icons-outlined">widgets</span> Physical Form</span>
+      <span class="set-tag" data-set="outer"><span class="material-icons-outlined">open_in_new</span> Outer</span>
+      <span class="set-tag" data-set="personal-sensation"><span class="material-icons-outlined">person_outline</span> Personal Sensation</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="form-realm"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag" data-set="formless-realm"><span class="material-icons-outlined">layers</span> Formless Realm</span>
+      <span class="set-tag" data-set="undefiling"><span class="material-icons-outlined">auto_awesome</span> Undefiling</span>
+      <span class="set-tag" data-set="focus"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
+      <span class="set-tag" data-set="concepts"><span class="material-icons-outlined">lightbulb</span> Concepts</span>
     </div>
   </div>
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm"><span class="material-icons-outlined">psychology</span></span>
-      The Mental Pair (identical membership)
-    </h3>
+  <div class="region-card" data-dhatus="mind-fac,mind-con">
+    <h3><span class="icon-badge sm"><span class="material-icons-outlined">psychology</span></span> The Mental Pair (identical membership)</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge fac"><span class="material-icons-outlined">psychology</span></span> Mind Faculty</span>
-      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">psychology</span></span> Mind Consc.</span>
+      <span class="chip" data-dhatu="mind-fac"><span class="icon-badge fac"><span class="material-icons-outlined">psychology</span></span> Mind Faculty</span>
+      <span class="chip" data-dhatu="mind-con"><span class="icon-badge con"><span class="material-icons-outlined">psychology</span></span> Mind Consc.</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Formless Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">auto_awesome</span> Undefiling</span>
-      <span class="set-tag"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
-      <span class="set-tag"><span class="material-icons-outlined">lightbulb</span> Concepts</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="form-realm"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag" data-set="formless-realm"><span class="material-icons-outlined">layers</span> Formless Realm</span>
+      <span class="set-tag" data-set="undefiling"><span class="material-icons-outlined">auto_awesome</span> Undefiling</span>
+      <span class="set-tag" data-set="focus"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
+      <span class="set-tag" data-set="concepts"><span class="material-icons-outlined">lightbulb</span> Concepts</span>
     </div>
   </div>
-
-  <div class="region-card">
-    <h3>
-      <span class="icon-badge sm con"><span class="material-icons-outlined">visibility</span></span>
-      Five Sense Consciousnesses
-    </h3>
+  <div class="region-card" data-dhatus="eye-con,ear-con,nose-con,tongue-con,body-con">
+    <h3><span class="icon-badge sm con"><span class="material-icons-outlined">visibility</span></span> Five Sense Consciousnesses</h3>
     <div class="members">
-      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">visibility</span></span> Eye</span>
-      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">hearing</span></span> Ear</span>
-      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">air</span></span> Nose</span>
-      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">water_drop</span></span> Tongue</span>
-      <span class="chip"><span class="icon-badge con"><span class="material-icons-outlined">pan_tool</span></span> Body</span>
+      <span class="chip" data-dhatu="eye-con"><span class="icon-badge con"><span class="material-icons-outlined">visibility</span></span> Eye</span>
+      <span class="chip" data-dhatu="ear-con"><span class="icon-badge con"><span class="material-icons-outlined">hearing</span></span> Ear</span>
+      <span class="chip" data-dhatu="nose-con"><span class="icon-badge con"><span class="material-icons-outlined">air</span></span> Nose</span>
+      <span class="chip" data-dhatu="tongue-con"><span class="icon-badge con"><span class="material-icons-outlined">water_drop</span></span> Tongue</span>
+      <span class="chip" data-dhatu="body-con"><span class="icon-badge con"><span class="material-icons-outlined">pan_tool</span></span> Body</span>
     </div>
     <div class="set-tags">
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Desire Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">layers</span> Form Realm</span>
-      <span class="set-tag"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
+      <span class="set-tag" data-set="desire-realm"><span class="material-icons-outlined">layers</span> Desire Realm</span>
+      <span class="set-tag" data-set="form-realm"><span class="material-icons-outlined">layers</span> Form Realm</span>
+      <span class="set-tag" data-set="focus"><span class="material-icons-outlined">center_focus_strong</span> Focus</span>
     </div>
   </div>
-
 </div>
 
 <!-- ═══════════════ OBSERVATIONS ═══════════════ -->
@@ -879,24 +760,349 @@
   Key Observations
 </h2>
 <div class="observations">
-  <div class="callout">
-    <h3>Mental Object is the great bridge</h3>
-    <p>It belongs to 9 of 10 classifications — every set except Mutually Obstructive. It uniquely bridges the material side (Physical Form, Outer) with the mental side (Formless, Concepts, Focus).</p>
-  </div>
-  <div class="callout">
-    <h3>Three identical sets</h3>
-    <p>Formless Realm = Elements with Concepts — both contain exactly {Mind Faculty, Mental Object, Mind Consciousness}. Undefiling adds unconditioned things beyond the 18 dhatus.</p>
-  </div>
-  <div class="callout">
-    <h3>Mind Faculty = Mind Consciousness</h3>
-    <p>These two dhatus have identical classification membership across all 10 sets, despite being in different triads (faculty vs. consciousness).</p>
-  </div>
-  <div class="callout">
-    <h3>The material / mental divide</h3>
-    <p>The 5 sense faculties and 5 sense objects cluster in Physical Form / Mutually Obstructive. The 6 consciousnesses cluster in Focus. Mind Faculty and Mental Object span both sides.</p>
-  </div>
+  <div class="callout"><h3>Mental Object is the great bridge</h3><p>It belongs to 9 of 10 classifications — every set except Mutually Obstructive. It uniquely bridges the material side (Physical Form, Outer) with the mental side (Formless, Concepts, Focus).</p></div>
+  <div class="callout"><h3>Three identical sets</h3><p>Formless Realm = Elements with Concepts — both contain exactly {Mind Faculty, Mental Object, Mind Consciousness}. Undefiling adds unconditioned things beyond the 18 dhatus.</p></div>
+  <div class="callout"><h3>Mind Faculty = Mind Consciousness</h3><p>These two dhatus have identical classification membership across all 10 sets, despite being in different triads (faculty vs. consciousness).</p></div>
+  <div class="callout"><h3>The material / mental divide</h3><p>The 5 sense faculties and 5 sense objects cluster in Physical Form / Mutually Obstructive. The 6 consciousnesses cluster in Focus. Mind Faculty and Mental Object span both sides.</p></div>
 </div>
 
 <div class="footer">Gateway to Knowledge, Chapter 2 — Element Classifications</div>
+
+<!-- ═══════════════ INFO PANEL ═══════════════ -->
+<div id="info-panel">
+  <button class="panel-close" onclick="clearSelection()">&times;</button>
+  <div class="panel-title" id="panel-title"></div>
+  <div class="panel-subtitle" id="panel-subtitle"></div>
+  <div class="panel-list" id="panel-list"></div>
+</div>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+(() => {
+  // ── Data model ──
+  const DHATU_NAMES = {
+    'eye-fac': 'Eye Faculty', 'ear-fac': 'Ear Faculty', 'nose-fac': 'Nose Faculty',
+    'tongue-fac': 'Tongue Faculty', 'body-fac': 'Body Faculty', 'mind-fac': 'Mind Faculty',
+    'visual-obj': 'Visual Form', 'sound-obj': 'Sound', 'smell-obj': 'Smell',
+    'taste-obj': 'Taste', 'texture-obj': 'Texture', 'mental-obj': 'Mental Object',
+    'eye-con': 'Eye Consciousness', 'ear-con': 'Ear Consciousness', 'nose-con': 'Nose Consciousness',
+    'tongue-con': 'Tongue Consciousness', 'body-con': 'Body Consciousness', 'mind-con': 'Mind Consciousness'
+  };
+  const SET_NAMES = {
+    'physical-form': 'Physical Form', 'mutually-obstructive': 'Mutually Obstructive',
+    'outer': 'Outer', 'personal-sensation': 'Personal Sensation',
+    'desire-realm': 'Desire Realm', 'form-realm': 'Form Realm',
+    'formless-realm': 'Formless Realm', 'undefiling': 'Undefiling',
+    'focus': 'Focus', 'concepts': 'Concepts'
+  };
+  const SET_ICONS = {
+    'physical-form': 'widgets', 'mutually-obstructive': 'block',
+    'outer': 'open_in_new', 'personal-sensation': 'person_outline',
+    'desire-realm': 'layers', 'form-realm': 'layers',
+    'formless-realm': 'layers', 'undefiling': 'auto_awesome',
+    'focus': 'center_focus_strong', 'concepts': 'lightbulb'
+  };
+
+  // Build membership maps from the matrix data-attributes
+  const dhatuToSets = {};
+  const setToDhatus = {};
+  Object.keys(SET_NAMES).forEach(s => setToDhatus[s] = []);
+  document.querySelectorAll('#matrix tbody tr[data-dhatu]').forEach(tr => {
+    const d = tr.dataset.dhatu;
+    dhatuToSets[d] = [];
+    tr.querySelectorAll('td.in').forEach(td => {
+      const s = td.dataset.set;
+      dhatuToSets[d].push(s);
+      if (!setToDhatus[s].includes(d)) setToDhatus[s].push(d);
+    });
+  });
+
+  // ── State ──
+  let selectedDhatus = new Set();
+  let selectedSets = new Set();
+  let mode = null; // 'dhatu' | 'set' | 'intersection'
+
+  // ── Panel ──
+  const panel = document.getElementById('info-panel');
+  const panelTitle = document.getElementById('panel-title');
+  const panelSubtitle = document.getElementById('panel-subtitle');
+  const panelList = document.getElementById('panel-list');
+
+  function showPanel(title, subtitle, tags) {
+    panelTitle.textContent = title;
+    panelSubtitle.textContent = subtitle;
+    panelList.innerHTML = tags.map(t => `<span class="panel-tag">${t}</span>`).join('');
+    panel.classList.add('visible');
+  }
+  function hidePanel() { panel.classList.remove('visible'); }
+
+  // ── Clear ──
+  window.clearSelection = function() {
+    selectedDhatus.clear();
+    selectedSets.clear();
+    mode = null;
+    // Remove all interactive classes
+    document.querySelectorAll('.highlighted, .dimmed, .col-highlighted, .intersection').forEach(el => {
+      el.classList.remove('highlighted', 'dimmed', 'col-highlighted', 'intersection');
+    });
+    hidePanel();
+  };
+
+  // ── Highlight a single dhatu ──
+  function highlightDhatu(dhatuId) {
+    clearSelection();
+    selectedDhatus.add(dhatuId);
+    mode = 'dhatu';
+    const memberSets = dhatuToSets[dhatuId] || [];
+
+    // Matrix: highlight row, dim others
+    document.querySelectorAll('#matrix tbody tr[data-dhatu]').forEach(tr => {
+      tr.classList.toggle('highlighted', tr.dataset.dhatu === dhatuId);
+      tr.classList.toggle('dimmed', tr.dataset.dhatu !== dhatuId);
+    });
+
+    // Matrix: highlight column headers for member sets
+    document.querySelectorAll('#matrix thead th[data-set]').forEach(th => {
+      th.classList.toggle('highlighted', memberSets.includes(th.dataset.set));
+      th.classList.toggle('dimmed', !memberSets.includes(th.dataset.set));
+    });
+
+    // Chips
+    document.querySelectorAll('.chip[data-dhatu]').forEach(el => {
+      el.classList.toggle('highlighted', el.dataset.dhatu === dhatuId);
+      el.classList.toggle('dimmed', el.dataset.dhatu !== dhatuId);
+    });
+
+    // Set tags
+    document.querySelectorAll('.set-tag[data-set]').forEach(el => {
+      el.classList.toggle('highlighted', memberSets.includes(el.dataset.set));
+    });
+
+    // Region cards
+    document.querySelectorAll('.region-card[data-dhatus]').forEach(card => {
+      const dhatus = card.dataset.dhatus.split(',');
+      card.classList.toggle('dimmed', !dhatus.includes(dhatuId));
+    });
+
+    // Euler dhatus
+    document.querySelectorAll('.euler-dhatu[data-dhatu]').forEach(g => {
+      g.classList.toggle('highlighted', g.dataset.dhatu === dhatuId);
+      g.classList.toggle('dimmed', g.dataset.dhatu !== dhatuId);
+    });
+
+    // Euler sets
+    document.querySelectorAll('.euler-set[data-set]').forEach(g => {
+      g.classList.toggle('highlighted', memberSets.includes(g.dataset.set));
+      g.classList.toggle('dimmed', !memberSets.includes(g.dataset.set));
+    });
+
+    // Callouts dim
+    document.querySelectorAll('.callout').forEach(c => c.classList.add('dimmed'));
+
+    // Panel
+    showPanel(
+      DHATU_NAMES[dhatuId],
+      `Member of ${memberSets.length} of 10 classifications`,
+      memberSets.map(s => SET_NAMES[s])
+    );
+  }
+
+  // ── Highlight a single set ──
+  function highlightSet(setId) {
+    const wasSelected = selectedSets.has(setId) && selectedSets.size === 1;
+    if (wasSelected) { clearSelection(); return; }
+
+    clearSelection();
+    selectedSets.add(setId);
+    mode = 'set';
+    const memberDhatus = setToDhatus[setId] || [];
+
+    // Matrix: highlight column
+    document.querySelectorAll('#matrix tbody tr[data-dhatu]').forEach(tr => {
+      const d = tr.dataset.dhatu;
+      const isMember = memberDhatus.includes(d);
+      tr.classList.toggle('highlighted', isMember);
+      tr.classList.toggle('dimmed', !isMember);
+      tr.querySelectorAll(`td[data-set="${setId}"]`).forEach(td => td.classList.add('col-highlighted'));
+    });
+
+    // Column header
+    document.querySelectorAll('#matrix thead th[data-set]').forEach(th => {
+      th.classList.toggle('highlighted', th.dataset.set === setId);
+      th.classList.toggle('dimmed', th.dataset.set !== setId);
+    });
+
+    // Chips
+    document.querySelectorAll('.chip[data-dhatu]').forEach(el => {
+      el.classList.toggle('highlighted', memberDhatus.includes(el.dataset.dhatu));
+      el.classList.toggle('dimmed', !memberDhatus.includes(el.dataset.dhatu));
+    });
+
+    // Set tags
+    document.querySelectorAll('.set-tag[data-set]').forEach(el => {
+      el.classList.toggle('highlighted', el.dataset.set === setId);
+    });
+
+    // Region cards
+    document.querySelectorAll('.region-card[data-dhatus]').forEach(card => {
+      const dhatus = card.dataset.dhatus.split(',');
+      const hasOverlap = dhatus.some(d => memberDhatus.includes(d));
+      card.classList.toggle('dimmed', !hasOverlap);
+    });
+
+    // Euler
+    document.querySelectorAll('.euler-dhatu[data-dhatu]').forEach(g => {
+      g.classList.toggle('highlighted', memberDhatus.includes(g.dataset.dhatu));
+      g.classList.toggle('dimmed', !memberDhatus.includes(g.dataset.dhatu));
+    });
+    document.querySelectorAll('.euler-set[data-set]').forEach(g => {
+      g.classList.toggle('highlighted', g.dataset.set === setId);
+    });
+
+    document.querySelectorAll('.callout').forEach(c => c.classList.add('dimmed'));
+
+    showPanel(
+      SET_NAMES[setId],
+      `Contains ${memberDhatus.length} of 18 dhatus`,
+      memberDhatus.map(d => DHATU_NAMES[d])
+    );
+  }
+
+  // ── Intersection of two sets ──
+  function highlightIntersection(setId1, setId2) {
+    const members1 = new Set(setToDhatus[setId1] || []);
+    const members2 = new Set(setToDhatus[setId2] || []);
+    const intersection = [...members1].filter(d => members2.has(d));
+    const union = [...new Set([...members1, ...members2])];
+
+    // Remove previous state
+    document.querySelectorAll('.highlighted, .dimmed, .col-highlighted, .intersection').forEach(el => {
+      el.classList.remove('highlighted', 'dimmed', 'col-highlighted', 'intersection');
+    });
+
+    // Matrix rows
+    document.querySelectorAll('#matrix tbody tr[data-dhatu]').forEach(tr => {
+      const d = tr.dataset.dhatu;
+      const inBoth = intersection.includes(d);
+      const inEither = union.includes(d);
+      tr.classList.toggle('highlighted', inBoth);
+      tr.classList.toggle('dimmed', !inEither);
+      // Mark intersection cells
+      if (inBoth) {
+        tr.querySelectorAll(`td[data-set="${setId1}"], td[data-set="${setId2}"]`).forEach(td => {
+          if (td.classList.contains('in')) td.classList.add('intersection');
+        });
+      }
+      // Column highlight for both sets
+      tr.querySelectorAll(`td[data-set="${setId1}"], td[data-set="${setId2}"]`).forEach(td => {
+        td.classList.add('col-highlighted');
+      });
+    });
+
+    // Column headers
+    document.querySelectorAll('#matrix thead th[data-set]').forEach(th => {
+      const s = th.dataset.set;
+      th.classList.toggle('highlighted', s === setId1 || s === setId2);
+      th.classList.toggle('dimmed', s !== setId1 && s !== setId2);
+    });
+
+    // Chips
+    document.querySelectorAll('.chip[data-dhatu]').forEach(el => {
+      el.classList.toggle('highlighted', intersection.includes(el.dataset.dhatu));
+      el.classList.toggle('dimmed', !union.includes(el.dataset.dhatu));
+    });
+
+    // Set tags
+    document.querySelectorAll('.set-tag[data-set]').forEach(el => {
+      el.classList.toggle('highlighted', el.dataset.set === setId1 || el.dataset.set === setId2);
+    });
+
+    // Region cards
+    document.querySelectorAll('.region-card[data-dhatus]').forEach(card => {
+      const dhatus = card.dataset.dhatus.split(',');
+      const hasIntersection = dhatus.some(d => intersection.includes(d));
+      card.classList.toggle('dimmed', !hasIntersection);
+    });
+
+    // Euler
+    document.querySelectorAll('.euler-dhatu[data-dhatu]').forEach(g => {
+      g.classList.toggle('highlighted', intersection.includes(g.dataset.dhatu));
+      g.classList.toggle('dimmed', !union.includes(g.dataset.dhatu));
+    });
+    document.querySelectorAll('.euler-set[data-set]').forEach(g => {
+      g.classList.toggle('highlighted', g.dataset.set === setId1 || g.dataset.set === setId2);
+    });
+
+    document.querySelectorAll('.callout').forEach(c => c.classList.add('dimmed'));
+
+    showPanel(
+      `${SET_NAMES[setId1]} \u2229 ${SET_NAMES[setId2]}`,
+      `${intersection.length} dhatu${intersection.length !== 1 ? 's' : ''} in common (of ${members1.size} and ${members2.size})`,
+      intersection.map(d => DHATU_NAMES[d])
+    );
+  }
+
+  // ── Event delegation ──
+  document.body.addEventListener('click', (e) => {
+    // Find closest interactive element
+    const chip = e.target.closest('.chip[data-dhatu]');
+    const setTag = e.target.closest('.set-tag[data-set]');
+    const eulerDhatu = e.target.closest('.euler-dhatu[data-dhatu]');
+    const eulerSet = e.target.closest('.euler-set[data-set]');
+    const matrixRowTh = e.target.closest('#matrix tbody th');
+    const matrixColTh = e.target.closest('#matrix thead th[data-set]');
+    const matrixTd = e.target.closest('#matrix tbody td[data-set]');
+
+    // Dhatu click
+    const dhatuEl = chip || eulerDhatu;
+    if (dhatuEl) {
+      highlightDhatu(dhatuEl.dataset.dhatu);
+      e.stopPropagation();
+      return;
+    }
+
+    // Matrix row header click
+    if (matrixRowTh) {
+      const tr = matrixRowTh.closest('tr[data-dhatu]');
+      if (tr) { highlightDhatu(tr.dataset.dhatu); e.stopPropagation(); return; }
+    }
+
+    // Matrix cell click — highlight its dhatu
+    if (matrixTd) {
+      const tr = matrixTd.closest('tr[data-dhatu]');
+      if (tr) { highlightDhatu(tr.dataset.dhatu); e.stopPropagation(); return; }
+    }
+
+    // Set click (with shift for intersection)
+    const setEl = setTag || eulerSet || matrixColTh;
+    if (setEl) {
+      const setId = setEl.dataset.set;
+      if (e.shiftKey && mode === 'set' && selectedSets.size === 1) {
+        const firstSet = [...selectedSets][0];
+        if (firstSet !== setId) {
+          selectedSets.add(setId);
+          mode = 'intersection';
+          highlightIntersection(firstSet, setId);
+          e.stopPropagation();
+          return;
+        }
+      }
+      highlightSet(setId);
+      e.stopPropagation();
+      return;
+    }
+
+    // Click on empty space: clear
+    if (!e.target.closest('#info-panel') && !e.target.closest('.panel-close')) {
+      clearSelection();
+    }
+  });
+
+  // Keyboard: Escape to clear
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') clearSelection();
+  });
+})();
+</script>
 </body>
 </html>
