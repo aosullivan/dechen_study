@@ -1,23 +1,21 @@
+# Migrated from deployment_status to repository_dispatch for reliable deployment URL.
+# See: https://vercel.com/docs/git/vercel-for-github#repository-dispatch-events
 name: Playwright After Vercel Deploy
 
 on:
-  deployment_status:
+  repository_dispatch:
+    types:
+      - vercel.deployment.success
 
 concurrency:
-  group: playwright-vercel-${{ github.event.deployment.id }}
+  group: playwright-vercel-production
   cancel-in-progress: true
 
 jobs:
   e2e:
     if: |
-      github.event.deployment_status.state == 'success' &&
-      (github.event.deployment_status.environment == 'Production' || github.event.deployment_status.environment == 'production') &&
-      (
-        contains(github.event.deployment_status.environment_url || '', 'vercel.app') ||
-        contains(github.event.deployment_status.target_url || '', 'vercel.app') ||
-        contains(github.event.deployment_status.environment_url || '', 'dechen.study') ||
-        contains(github.event.deployment_status.target_url || '', 'dechen.study')
-      )
+      github.event_name == 'repository_dispatch' &&
+      (github.event.client_payload.environment == 'Production' || github.event.client_payload.environment == 'production')
     runs-on: ubuntu-latest
     timeout-minutes: 55
 
@@ -25,19 +23,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Resolve deployment URL
-        id: deployment_url
-        shell: bash
+      - name: Set deployment URL
+        id: url
         run: |
-          URL="${{ github.event.deployment_status.environment_url }}"
+          URL="${{ github.event.client_payload.url }}"
           if [ -z "$URL" ]; then
-            URL="${{ github.event.deployment_status.target_url }}"
-          fi
-          if [ -z "$URL" ]; then
-            echo "No deployment URL found in deployment_status payload"
+            echo "::error::client_payload.url missing"
             exit 1
           fi
+          # Ensure scheme
+          case "$URL" in
+            http://*|https://*) ;;
+            *) URL="https://$URL" ;;
+          esac
           echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "BASE_URL=$URL"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -53,7 +53,7 @@ jobs:
 
       - name: Run Playwright tests
         env:
-          BASE_URL: ${{ steps.deployment_url.outputs.url }}
+          BASE_URL: ${{ steps.url.outputs.url }}
         run: npm run test:e2e
 
       - name: Upload Playwright report
