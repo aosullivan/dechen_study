@@ -64,7 +64,10 @@ class DailyVerseScreen extends StatefulWidget {
 }
 
 class _DailyVerseScreenState extends State<DailyVerseScreen>
-    with WidgetLifecycleObserver, WidgetsBindingObserver, SurfaceDwellTracker {
+    with
+        WidgetLifecycleObserver,
+        WidgetsBindingObserver,
+        SurfaceDwellTracker<DailyVerseScreen> {
   final _usageMetrics = UsageMetricsService.instance;
   late final VerseService _verseService;
   late final CommentaryService _commentaryService;
@@ -120,10 +123,12 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   String? get dwellSectionTitle => _sectionTitle;
 
   @override
-  String? get dwellVerseRef => _sectionRefs.isNotEmpty ? _sectionRefs.first : null;
+  String? get dwellVerseRef =>
+      _sectionRefs.isNotEmpty ? _sectionRefs.first : null;
 
   @override
-  Map<String, dynamic>? get dwellProperties => {'refs_count': _sectionRefs.length};
+  Map<String, dynamic>? get dwellProperties =>
+      {'refs_count': _sectionRefs.length};
 
   String _segmentTextForRef(String ref, String fullText) {
     final lines = fullText.split('\n');

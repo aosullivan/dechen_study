@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/study_models.dart';
 import '../utils/constants.dart';
@@ -10,7 +11,33 @@ class StudyService {
   static final StudyService _instance = StudyService._();
   static StudyService get instance => _instance;
 
-  Future<T> _guard<T>(String operation, T fallback, Future<T> Function() fn) async {
+  ({DateTime startOfDayUtc, DateTime endOfDayUtc}) _utcDayWindow(
+      DateTime nowUtc) {
+    final startOfDayUtc = DateTime.utc(nowUtc.year, nowUtc.month, nowUtc.day);
+    final endOfDayUtc = startOfDayUtc.add(const Duration(days: 1));
+    return (startOfDayUtc: startOfDayUtc, endOfDayUtc: endOfDayUtc);
+  }
+
+  Future<DailySection?> _loadDailySectionForUtcDay(
+    String userId, {
+    required DateTime startOfDayUtc,
+    required DateTime endOfDayUtc,
+  }) async {
+    final response = await supabase
+        .from('daily_sections')
+        .select('*')
+        .eq('user_id', userId)
+        .gte('date', startOfDayUtc.toIso8601String())
+        .lt('date', endOfDayUtc.toIso8601String())
+        .order('date', ascending: false)
+        .limit(1)
+        .maybeSingle();
+    if (response == null) return null;
+    return DailySection.fromJson(response);
+  }
+
+  Future<T> _guard<T>(
+      String operation, T fallback, Future<T> Function() fn) async {
     try {
       return await fn();
     } catch (e) {
@@ -60,30 +87,35 @@ class StudyService {
   // Get today's daily section
   Future<DailySection?> getTodaysDailySection(String userId) async {
     return _guard<DailySection?>('fetching daily section', null, () async {
-      final today = DateTime.now();
-      final startOfDay = DateTime(today.year, today.month, today.day);
-      final endOfDay = startOfDay.add(const Duration(days: 1));
-
-      final response = await supabase
-          .from('daily_sections')
-          .select('*')
-          .eq('user_id', userId)
-          .gte('date', startOfDay.toIso8601String())
-          .lt('date', endOfDay.toIso8601String())
-          .maybeSingle();
+      final nowUtc = DateTime.now().toUtc();
+      final dayWindow = _utcDayWindow(nowUtc);
+      final response = await _loadDailySectionForUtcDay(
+        userId,
+        startOfDayUtc: dayWindow.startOfDayUtc,
+        endOfDayUtc: dayWindow.endOfDayUtc,
+      );
 
       if (response == null) {
         // Create new daily section for today
         return await createDailySection(userId);
       }
 
-      return DailySection.fromJson(response);
+      return response;
     });
   }
 
   // Create a new daily section
   Future<DailySection?> createDailySection(String userId) async {
     return _guard<DailySection?>('creating daily section', null, () async {
+      final nowUtc = DateTime.now().toUtc();
+      final dayWindow = _utcDayWindow(nowUtc);
+      final existing = await _loadDailySectionForUtcDay(
+        userId,
+        startOfDayUtc: dayWindow.startOfDayUtc,
+        endOfDayUtc: dayWindow.endOfDayUtc,
+      );
+      if (existing != null) return existing;
+
       // Get the last completed section to pick the next one
       final lastDaily = await supabase
           .from('daily_sections')
@@ -111,18 +143,29 @@ class StudyService {
         }
       }
 
-      final response = await supabase
-          .from('daily_sections')
-          .insert({
-            'user_id': userId,
-            'section_id': nextSection.id,
-            'date': DateTime.now().toIso8601String(),
-            'completed': false,
-          })
-          .select()
-          .single();
-
-      return DailySection.fromJson(response);
+      final dailySectionsTable = supabase.from('daily_sections');
+      try {
+        final inserted = await dailySectionsTable
+            .insert({
+              'user_id': userId,
+              'section_id': nextSection.id,
+              'date': nowUtc.toIso8601String(),
+              'completed': false,
+            })
+            .select()
+            .single();
+        return DailySection.fromJson(inserted);
+      } on PostgrestException catch (error) {
+        // Another request may have inserted today's row first.
+        if (error.code == '23505') {
+          return _loadDailySectionForUtcDay(
+            userId,
+            startOfDayUtc: dayWindow.startOfDayUtc,
+            endOfDayUtc: dayWindow.endOfDayUtc,
+          );
+        }
+        rethrow;
+      }
     });
   }
 
@@ -131,8 +174,7 @@ class StudyService {
     return _guard<bool>('marking section complete', false, () async {
       await supabase
           .from('daily_sections')
-          .update({'completed': true})
-          .eq('id', dailySectionId);
+          .update({'completed': true}).eq('id', dailySectionId);
       return true;
     });
   }

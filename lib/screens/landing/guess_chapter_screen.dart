@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../utils/app_theme.dart';
+import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import '../../services/verse_service.dart';
 import '../../services/commentary_service.dart';
@@ -26,12 +27,14 @@ class GuessChapterScreen extends StatefulWidget {
 }
 
 class _GuessChapterScreenState extends State<GuessChapterScreen>
-    with WidgetLifecycleObserver, WidgetsBindingObserver {
+    with
+        WidgetLifecycleObserver,
+        WidgetsBindingObserver,
+        SurfaceDwellTracker<GuessChapterScreen> {
   final _verseService = VerseService.instance;
   final _commentaryService = CommentaryService.instance;
   final _clueService = SectionClueService.instance;
   final _usageMetrics = UsageMetricsService.instance;
-  DateTime? _screenDwellStartedAt;
 
   bool _isLoading = true;
   List<String> _sectionVerseTexts = [];
@@ -126,54 +129,40 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
   @override
   void initState() {
     super.initState();
-    _screenDwellStartedAt = DateTime.now().toUtc();
+    startSurfaceDwellTracking();
     _loadQuiz();
   }
 
   @override
   void dispose() {
-    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-    unawaited(_usageMetrics.flush(all: true));
+    flushSurfaceDwell(resetStart: true);
+    flushSurfaceDwellQueue();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached ||
-        state == AppLifecycleState.hidden) {
-      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-      unawaited(_usageMetrics.flush(all: true));
-      return;
-    }
-    if (state == AppLifecycleState.resumed) {
-      _screenDwellStartedAt ??= DateTime.now().toUtc();
-    }
+    handleSurfaceLifecycleState(state);
   }
 
-  void _trackSurfaceDwell({
-    required DateTime nowUtc,
-    required bool resetStart,
-  }) {
-    final startedAt = _screenDwellStartedAt;
-    if (startedAt == null) return;
-    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
-    if (durationMs >= _usageMetrics.minDwellMs) {
-      unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: widget.textId,
-        mode: 'guess_chapter',
-        durationMs: durationMs,
-        chapterNumber: _correctChapterNumber > 0 ? _correctChapterNumber : null,
-        verseRef: _correctVerseRef,
-        properties: {
-          'total_answers': _totalAnswers,
-          'correct_answers': _correctAnswers,
-        },
-      ));
-    }
-    if (resetStart) _screenDwellStartedAt = null;
-  }
+  @override
+  String get dwellTextId => widget.textId;
+
+  @override
+  String get dwellMode => 'guess_chapter';
+
+  @override
+  int? get dwellChapterNumber =>
+      _correctChapterNumber > 0 ? _correctChapterNumber : null;
+
+  @override
+  String? get dwellVerseRef => _correctVerseRef;
+
+  @override
+  Map<String, dynamic>? get dwellProperties => {
+        'total_answers': _totalAnswers,
+        'correct_answers': _correctAnswers,
+      };
 
   Future<void> _loadQuiz() async {
     setState(() {
@@ -197,7 +186,8 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
         }
         return;
       }
-      final clue = await _clueService.getClueForRef(widget.textId, section.verseRef);
+      final clue =
+          await _clueService.getClueForRef(widget.textId, section.verseRef);
       if (mounted) {
         setState(() {
           _sectionVerseTexts = section.verseTexts;
@@ -659,10 +649,7 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
                       if (i > 0) const SizedBox(height: 14),
                       BcvVerseText(
                         text: _sectionVerseTexts[i],
-                        style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                   fontFamily: 'Crimson Text',
                                   fontSize: 20,
                                   height: 1.5,
@@ -738,11 +725,11 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
                           final number = index + 1;
                           return _buildChapterPadKey(
                             context: context,
-                            chapter: _chapters
-                                .firstWhere((c) => c.number == number),
+                            chapter:
+                                _chapters.firstWhere((c) => c.number == number),
                             isSelected: _selectedChapter == number,
-                            isCorrect: _showAnswer &&
-                                _correctChapterNumber == number,
+                            isCorrect:
+                                _showAnswer && _correctChapterNumber == number,
                             isWrong: _showAnswer &&
                                 _selectedChapter == number &&
                                 _correctChapterNumber != number,
@@ -802,11 +789,11 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
                         final number = index + 1;
                         return _buildChapterPadKey(
                           context: context,
-                          chapter: _chapters
-                              .firstWhere((c) => c.number == number),
+                          chapter:
+                              _chapters.firstWhere((c) => c.number == number),
                           isSelected: _selectedChapter == number,
-                          isCorrect: _showAnswer &&
-                              _correctChapterNumber == number,
+                          isCorrect:
+                              _showAnswer && _correctChapterNumber == number,
                           isWrong: _showAnswer &&
                               _selectedChapter == number &&
                               _correctChapterNumber != number,
@@ -825,11 +812,9 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
                       if (index == 10) {
                         return _buildChapterPadKey(
                           context: context,
-                          chapter:
-                              _chapters.firstWhere((c) => c.number == 10),
+                          chapter: _chapters.firstWhere((c) => c.number == 10),
                           isSelected: _selectedChapter == 10,
-                          isCorrect:
-                              _showAnswer && _correctChapterNumber == 10,
+                          isCorrect: _showAnswer && _correctChapterNumber == 10,
                           isWrong: _showAnswer &&
                               _selectedChapter == 10 &&
                               _correctChapterNumber != 10,
@@ -839,9 +824,8 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
                       return _buildActionPadKey(
                         context: context,
                         label: _showAnswer ? 'Next' : 'Skip',
-                        icon: _showAnswer
-                            ? Icons.arrow_forward
-                            : Icons.skip_next,
+                        icon:
+                            _showAnswer ? Icons.arrow_forward : Icons.skip_next,
                         onTap: _nextQuestion,
                         filled: true,
                       );
@@ -858,9 +842,7 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
                         setState(() => _showClue = !_showClue);
                       },
                       icon: Icon(
-                        _showClue
-                            ? Icons.lightbulb
-                            : Icons.lightbulb_outline,
+                        _showClue ? Icons.lightbulb : Icons.lightbulb_outline,
                         size: 18,
                       ),
                       label: Text(

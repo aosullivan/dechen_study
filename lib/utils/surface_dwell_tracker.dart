@@ -5,7 +5,8 @@ import 'package:flutter/widgets.dart';
 import '../services/usage_metrics_service.dart';
 
 /// Shared lifecycle + dwell tracking for top-level study surfaces.
-mixin SurfaceDwellTracker<T extends StatefulWidget> on State<T>, WidgetsBindingObserver {
+mixin SurfaceDwellTracker<T extends StatefulWidget>
+    on State<T>, WidgetsBindingObserver {
   final UsageMetricsService _usageMetrics = UsageMetricsService.instance;
   DateTime? _surfaceDwellStartedAt;
 

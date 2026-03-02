@@ -66,6 +66,8 @@ CREATE INDEX idx_chapters_study_text ON chapters(study_text_id);
 CREATE INDEX idx_sections_chapter ON sections(chapter_id);
 CREATE INDEX idx_daily_sections_user ON daily_sections(user_id);
 CREATE INDEX idx_daily_sections_date ON daily_sections(date);
+CREATE UNIQUE INDEX idx_daily_sections_user_day_utc_unique
+  ON daily_sections(user_id, ((date AT TIME ZONE 'utc')::date));
 CREATE INDEX idx_app_usage_events_occurred_at ON app_usage_events(occurred_at);
 CREATE INDEX idx_app_usage_events_event_name_occurred_at ON app_usage_events(event_name, occurred_at);
 CREATE INDEX idx_app_usage_events_text_mode_occurred_at ON app_usage_events(text_id, mode, occurred_at);

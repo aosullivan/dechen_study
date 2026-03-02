@@ -8,6 +8,7 @@ import '../../services/file_quiz_service.dart';
 import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import 'bcv/bcv_verse_text.dart';
@@ -27,12 +28,14 @@ class FileQuizScreen extends StatefulWidget {
 }
 
 class _FileQuizScreenState extends State<FileQuizScreen>
-    with WidgetLifecycleObserver, WidgetsBindingObserver {
+    with
+        WidgetLifecycleObserver,
+        WidgetsBindingObserver,
+        SurfaceDwellTracker<FileQuizScreen> {
   final _quizService = FileQuizService.instance;
   final _verseService = VerseService.instance;
   final _usageMetrics = UsageMetricsService.instance;
   final _random = Random();
-  DateTime? _screenDwellStartedAt;
   StudyTextConfig? get _config => getStudyText(widget.textId);
   bool get _supportsAdvancedQuiz =>
       (_config?.quizAdvancedPath ?? '').trim().isNotEmpty;
@@ -93,53 +96,34 @@ class _FileQuizScreenState extends State<FileQuizScreen>
   @override
   void initState() {
     super.initState();
-    _screenDwellStartedAt = DateTime.now().toUtc();
+    startSurfaceDwellTracking();
     _loadDifficulty(_difficulty, resetScore: true);
   }
 
   @override
   void dispose() {
-    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-    unawaited(_usageMetrics.flush(all: true));
+    flushSurfaceDwell(resetStart: true);
+    flushSurfaceDwellQueue();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached ||
-        state == AppLifecycleState.hidden) {
-      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-      unawaited(_usageMetrics.flush(all: true));
-      return;
-    }
-    if (state == AppLifecycleState.resumed) {
-      _screenDwellStartedAt ??= DateTime.now().toUtc();
-    }
+    handleSurfaceLifecycleState(state);
   }
 
-  void _trackSurfaceDwell({
-    required DateTime nowUtc,
-    required bool resetStart,
-  }) {
-    final startedAt = _screenDwellStartedAt;
-    if (startedAt == null) return;
-    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
-    if (durationMs >= _usageMetrics.minDwellMs) {
-      unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: widget.textId,
-        mode: 'quiz',
-        durationMs: durationMs,
-        properties: {
-          'difficulty': _difficulty.name,
-          'total_answers': _totalAnswers,
-          'correct_answers': _correctAnswers,
-        },
-      ));
-    }
-    if (resetStart) _screenDwellStartedAt = null;
-  }
+  @override
+  String get dwellTextId => widget.textId;
+
+  @override
+  String get dwellMode => 'quiz';
+
+  @override
+  Map<String, dynamic>? get dwellProperties => {
+        'difficulty': _difficulty.name,
+        'total_answers': _totalAnswers,
+        'correct_answers': _correctAnswers,
+      };
 
   Future<void> _loadDifficulty(
     FileQuizDifficulty difficulty, {

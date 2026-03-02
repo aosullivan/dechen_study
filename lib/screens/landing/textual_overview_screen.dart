@@ -8,6 +8,7 @@ import '../../services/usage_metrics_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/preload.dart';
+import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import 'overview/overview_constants.dart';
 import 'overview/overview_tree_view.dart';
@@ -32,14 +33,16 @@ class TextualOverviewScreen extends StatefulWidget {
 }
 
 class _TextualOverviewScreenState extends State<TextualOverviewScreen>
-    with WidgetLifecycleObserver, WidgetsBindingObserver {
+    with
+        WidgetLifecycleObserver,
+        WidgetsBindingObserver,
+        SurfaceDwellTracker<TextualOverviewScreen> {
   static String _lastPathPrefsKey(String textId) =>
       '${textId}_textual_structure_last_path';
 
   final _usageMetrics = UsageMetricsService.instance;
   bool _loading = true;
   List<({String path, String title, int depth})> _flatSections = [];
-  DateTime? _screenDwellStartedAt;
 
   String? _selectedPath;
   String? _selectedTitle;
@@ -60,53 +63,38 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   @override
   void initState() {
     super.initState();
-    _screenDwellStartedAt = DateTime.now().toUtc();
+    startSurfaceDwellTracking();
     _load();
   }
 
   @override
   void dispose() {
-    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-    unawaited(_usageMetrics.flush(all: true));
+    flushSurfaceDwell(resetStart: true);
+    flushSurfaceDwellQueue();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached ||
-        state == AppLifecycleState.hidden) {
-      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-      unawaited(_usageMetrics.flush(all: true));
-      return;
-    }
-    if (state == AppLifecycleState.resumed) {
-      _screenDwellStartedAt ??= DateTime.now().toUtc();
-    }
+    handleSurfaceLifecycleState(state);
   }
 
-  void _trackSurfaceDwell({
-    required DateTime nowUtc,
-    required bool resetStart,
-  }) {
-    final startedAt = _screenDwellStartedAt;
-    if (startedAt == null) return;
-    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
-    if (durationMs >= _usageMetrics.minDwellMs) {
-      unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: widget.textId,
-        mode: 'overview',
-        durationMs: durationMs,
-        sectionPath: _selectedPath,
-        sectionTitle: _selectedTitle,
-        properties: {
-          'selected_depth': _selectedPath?.split('.').length,
-        },
-      ));
-    }
-    if (resetStart) _screenDwellStartedAt = null;
-  }
+  @override
+  String get dwellTextId => widget.textId;
+
+  @override
+  String get dwellMode => 'overview';
+
+  @override
+  String? get dwellSectionPath => _selectedPath;
+
+  @override
+  String? get dwellSectionTitle => _selectedTitle;
+
+  @override
+  Map<String, dynamic>? get dwellProperties => {
+        'selected_depth': _selectedPath?.split('.').length,
+      };
 
   Future<void> _load() async {
     await preloadForText(widget.textId);
@@ -428,58 +416,18 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
   Widget _buildBody(BuildContext context) {
     final isDesktop =
         MediaQuery.sizeOf(context).width >= OverviewConstants.laptopBreakpoint;
+    final sectionVerseRanges = VerseHierarchyService.instance
+        .getSectionVerseRangeMapSync(widget.textId);
 
     if (_showWholeStructureByDefault) {
       return isDesktop
-          ? Row(
-              children: [
-                Expanded(
-                  child: OverviewTreeView(
-                    flatSections: _filteredSections,
-                    expandedPaths: _fullExpandedPaths,
-                    selectedPath: _selectedPath,
-                    onBookTap: _onBookTap,
-                    onCardTap: _onCardTap,
-                    onExpansionChanged: _onExpansionChanged,
-                    scrollToPath: _scrollToPath,
-                    sectionVerseRanges: VerseHierarchyService.instance
-                        .getSectionVerseRangeMapSync(widget.textId),
-                    sectionHasReaderContent: _sectionHasReaderContent,
-                  ),
-                ),
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeInOut,
-                  width: _selectedPath != null
-                      ? OverviewConstants.versePanelWidth
-                      : 0,
-                  child: _selectedPath != null
-                      ? OverviewVersePanel(
-                          key: ValueKey(_selectedPath),
-                          textId: widget.textId,
-                          sectionPath: _selectedPath!,
-                          sectionTitle: _selectedTitle ?? '',
-                          onClose: () => setState(() {
-                            _selectedPath = null;
-                            _selectedTitle = null;
-                          }),
-                          onOpenInReader: _openInReaderFromOverview,
-                        )
-                      : const SizedBox.shrink(),
-                ),
-              ],
-            )
-          : OverviewTreeView(
-              flatSections: _filteredSections,
+          ? _buildDesktopTreeWithPanel(
               expandedPaths: _fullExpandedPaths,
-              selectedPath: _selectedPath,
-              onBookTap: _onBookTap,
-              onCardTap: _onCardTap,
-              onExpansionChanged: _onExpansionChanged,
-              scrollToPath: _scrollToPath,
-              sectionVerseRanges: VerseHierarchyService.instance
-                  .getSectionVerseRangeMapSync(widget.textId),
-              sectionHasReaderContent: _sectionHasReaderContent,
+              sectionVerseRanges: sectionVerseRanges,
+            )
+          : _buildTreeView(
+              expandedPaths: _fullExpandedPaths,
+              sectionVerseRanges: sectionVerseRanges,
             );
     }
 
@@ -515,58 +463,71 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
         _buildPickers(),
         Expanded(
           child: isDesktop
-              ? Row(
-                  children: [
-                    Expanded(
-                      child: OverviewTreeView(
-                        flatSections: _filteredSections,
-                        expandedPaths: Set.from(_pickerSelections),
-                        selectedPath: _selectedPath,
-                        onBookTap: _onBookTap,
-                        onCardTap: _onCardTap,
-                        onExpansionChanged: _onExpansionChanged,
-                        scrollToPath: _scrollToPath,
-                        sectionVerseRanges: VerseHierarchyService.instance
-                            .getSectionVerseRangeMapSync(widget.textId),
-                        sectionHasReaderContent: _sectionHasReaderContent,
-                      ),
-                    ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeInOut,
-                      width: _selectedPath != null
-                          ? OverviewConstants.versePanelWidth
-                          : 0,
-                      child: _selectedPath != null
-                          ? OverviewVersePanel(
-                              key: ValueKey(_selectedPath),
-                              textId: widget.textId,
-                              sectionPath: _selectedPath!,
-                              sectionTitle: _selectedTitle ?? '',
-                              onClose: () => setState(() {
-                                _selectedPath = null;
-                                _selectedTitle = null;
-                              }),
-                              onOpenInReader: _openInReaderFromOverview,
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                  ],
-                )
-              : OverviewTreeView(
-                  flatSections: _filteredSections,
+              ? _buildDesktopTreeWithPanel(
                   expandedPaths: Set.from(_pickerSelections),
-                  selectedPath: _selectedPath,
-                  onBookTap: _onBookTap,
-                  onCardTap: _onCardTap,
-                  onExpansionChanged: _onExpansionChanged,
-                  scrollToPath: _scrollToPath,
-                  sectionVerseRanges: VerseHierarchyService.instance
-                      .getSectionVerseRangeMapSync(widget.textId),
-                  sectionHasReaderContent: _sectionHasReaderContent,
+                  sectionVerseRanges: sectionVerseRanges,
+                )
+              : _buildTreeView(
+                  expandedPaths: Set.from(_pickerSelections),
+                  sectionVerseRanges: sectionVerseRanges,
                 ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDesktopTreeWithPanel({
+    required Set<String> expandedPaths,
+    required Map<String, String> sectionVerseRanges,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildTreeView(
+            expandedPaths: expandedPaths,
+            sectionVerseRanges: sectionVerseRanges,
+          ),
+        ),
+        _buildVersePanel(),
+      ],
+    );
+  }
+
+  Widget _buildTreeView({
+    required Set<String> expandedPaths,
+    required Map<String, String> sectionVerseRanges,
+  }) {
+    return OverviewTreeView(
+      flatSections: _filteredSections,
+      expandedPaths: expandedPaths,
+      selectedPath: _selectedPath,
+      onBookTap: _onBookTap,
+      onCardTap: _onCardTap,
+      onExpansionChanged: _onExpansionChanged,
+      scrollToPath: _scrollToPath,
+      sectionVerseRanges: sectionVerseRanges,
+      sectionHasReaderContent: _sectionHasReaderContent,
+    );
+  }
+
+  Widget _buildVersePanel() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      width: _selectedPath != null ? OverviewConstants.versePanelWidth : 0,
+      child: _selectedPath != null
+          ? OverviewVersePanel(
+              key: ValueKey(_selectedPath),
+              textId: widget.textId,
+              sectionPath: _selectedPath!,
+              sectionTitle: _selectedTitle ?? '',
+              onClose: () => setState(() {
+                _selectedPath = null;
+                _selectedTitle = null;
+              }),
+              onOpenInReader: _openInReaderFromOverview,
+            )
+          : const SizedBox.shrink(),
     );
   }
 

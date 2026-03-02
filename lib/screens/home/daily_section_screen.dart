@@ -28,17 +28,23 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
     setState(() => _isLoading = true);
 
     final userId = supabase.auth.currentUser?.id;
-    if (userId == null) return;
+    if (userId == null) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      return;
+    }
 
     final daily = await _studyService.getTodaysDailySection(userId);
     if (daily != null) {
       final section = await _studyService.getSection(daily.sectionId);
+      if (!mounted) return;
       setState(() {
         _dailySection = daily;
         _section = section;
         _isLoading = false;
       });
     } else {
+      if (!mounted) return;
       setState(() => _isLoading = false);
     }
   }
@@ -46,7 +52,8 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
   Future<void> _markComplete() async {
     if (_dailySection == null) return;
 
-    final success = await _studyService.markDailySectionComplete(_dailySection!.id);
+    final success =
+        await _studyService.markDailySectionComplete(_dailySection!.id);
     if (success) {
       setState(() {
         _dailySection = DailySection(
@@ -61,7 +68,8 @@ class _DailySectionScreenState extends State<DailySectionScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Section completed! Come back tomorrow for the next one.'),
+            content:
+                Text('Section completed! Come back tomorrow for the next one.'),
             backgroundColor: AppColors.primary,
           ),
         );

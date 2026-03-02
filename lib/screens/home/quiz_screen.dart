@@ -33,6 +33,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
     final chapters = await _studyService.getChapters();
     final section = await _studyService.getRandomSection();
+    if (!mounted) return;
 
     setState(() {
       _chapters = chapters;
@@ -150,7 +151,8 @@ class _QuizScreenState extends State<QuizScreen> {
                             _selectedChapter = chapter.number;
                             _showAnswer = true;
                             _totalAnswers++;
-                            if (chapter.number == _currentSection!.chapterNumber) {
+                            if (chapter.number ==
+                                _currentSection!.chapterNumber) {
                               _correctAnswers++;
                             }
                           });
