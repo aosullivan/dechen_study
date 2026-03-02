@@ -560,7 +560,7 @@ class _GatewayBlockView extends StatelessWidget {
           child: Text(
             block.text ?? '',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 17,
+                  fontSize: 20,
                   height: 1.4,
                 ),
           ),

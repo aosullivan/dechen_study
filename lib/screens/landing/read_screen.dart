@@ -309,7 +309,7 @@ class _ReadScreenState extends State<ReadScreen>
     final theme = Theme.of(context).textTheme;
     _verseStyle = theme.bodyLarge?.copyWith(
       fontFamily: 'Crimson Text',
-      fontSize: 18,
+      fontSize: 20,
       height: 1.5,
       color: AppColors.textDark,
     );
@@ -2571,7 +2571,7 @@ class _ReadScreenState extends State<ReadScreen>
                                             .bodyLarge!
                                             .copyWith(
                                               fontFamily: 'Crimson Text',
-                                              fontSize: 18,
+                                              fontSize: 20,
                                               height: 1.5,
                                               color: AppColors.textDark,
                                             );

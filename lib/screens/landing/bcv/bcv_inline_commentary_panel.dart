@@ -275,14 +275,14 @@ class _SegmentBody extends StatelessWidget {
     /// Root verse lines (>>> in source): indented, bold, tight line spacing.
     final verseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontFamily: 'Crimson Text',
-              fontSize: 18,
+              fontSize: 20,
               height: 1.2,
               fontWeight: FontWeight.bold,
               color: AppColors.textDark,
             ) ??
         const TextStyle(
           fontFamily: 'Crimson Text',
-          fontSize: 18,
+          fontSize: 20,
           height: 1.2,
           fontWeight: FontWeight.bold,
           color: AppColors.textDark,
@@ -290,13 +290,13 @@ class _SegmentBody extends StatelessWidget {
 
     final proseStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontFamily: 'Crimson Text',
-              fontSize: 18,
+              fontSize: 20,
               height: 1.5,
               color: AppColors.textDark,
             ) ??
         const TextStyle(
           fontFamily: 'Crimson Text',
-          fontSize: 18,
+          fontSize: 20,
           height: 1.5,
           color: AppColors.textDark,
         );

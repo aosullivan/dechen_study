@@ -134,7 +134,12 @@ class _ReadScreenState extends State<ReadScreen> {
                       ),
                       child: Text(
                         section.text,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontFamily: 'Crimson Text',
+                              fontSize: 20,
+                              height: 1.5,
+                            ) ??
+                            Theme.of(context).textTheme.bodyLarge,
                       ),
                     ),
                   );
