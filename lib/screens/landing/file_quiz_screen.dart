@@ -472,6 +472,7 @@ class _FileQuizScreenState extends State<FileQuizScreen>
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         color: AppColors.textDark,
                         fontWeight: FontWeight.w700,
+                        fontSize: 16,
                       ),
                 ),
               ),
@@ -481,6 +482,7 @@ class _FileQuizScreenState extends State<FileQuizScreen>
                   text,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textDark,
+                        fontSize: 16,
                         height: 1.35,
                       ),
                 ),
@@ -690,10 +692,11 @@ class _FileQuizScreenState extends State<FileQuizScreen>
                         Text(
                           question.prompt,
                           style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontSize: 21,
-                                    height: 1.25,
-                                    fontWeight: FontWeight.w700,
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontFamily: 'Crimson Text',
+                                    fontSize: 20,
+                                    height: 1.5,
+                                    fontWeight: FontWeight.w400,
                                     color: AppColors.textDark,
                                   ),
                         ),

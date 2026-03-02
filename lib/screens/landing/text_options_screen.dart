@@ -699,7 +699,7 @@ class _OptionTile extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: compact ? (verySmallPhone ? 17.5 : 19) : 22,
+                fontSize: compact ? (verySmallPhone ? 19.5 : 21) : 24,
               ),
         ),
         trailing: Icon(

@@ -190,7 +190,7 @@ class _DetailsButton extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'Lora',
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
             ),

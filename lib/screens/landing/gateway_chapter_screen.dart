@@ -444,6 +444,17 @@ class _GatewayTopicCard extends StatelessWidget {
         );
         continue;
       }
+      if (block.type == 'ul' &&
+          block.styleClass == 'classification-summary') {
+        final classMap = _buildClassificationIconMap(blocks);
+        children.add(
+          _ClassificationSummaryList(
+            items: block.items,
+            classificationIcons: classMap,
+          ),
+        );
+        continue;
+      }
       children.add(_GatewayBlockView(block: block));
     }
 
@@ -1134,6 +1145,141 @@ class _PlainList extends StatelessWidget {
                     ? bodyStyle?.copyWith(fontWeight: FontWeight.w600)
                     : bodyStyle),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Scans blocks for subset-title + sense-list-subset patterns and builds
+/// a map from lowercase classification title → list of (element, category).
+Map<String, List<(String, _TriadCategory)>> _buildClassificationIconMap(
+    List<GatewayRichBlock> blocks) {
+  final map = <String, List<(String, _TriadCategory)>>{};
+  const categories = [
+    _TriadCategory.faculties,
+    _TriadCategory.objects,
+    _TriadCategory.consciousnesses,
+  ];
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].type == 'p' && blocks[i].styleClass == 'subset-title') {
+      final title = (blocks[i].text ?? '').toLowerCase();
+      final activeElements = <(String, _TriadCategory)>[];
+      var catIndex = 0;
+      for (var j = i + 1;
+          j < blocks.length &&
+              blocks[j].type == 'ul' &&
+              blocks[j].styleClass == 'sense-list-subset';
+          j++) {
+        final cat = catIndex < categories.length
+            ? categories[catIndex]
+            : _TriadCategory.consciousnesses;
+        for (final item in blocks[j].items) {
+          if (!item.startsWith('~')) {
+            activeElements.add((item, cat));
+          }
+        }
+        catIndex++;
+      }
+      map[title] = activeElements;
+    }
+  }
+  return map;
+}
+
+class _ClassificationSummaryList extends StatelessWidget {
+  const _ClassificationSummaryList({
+    required this.items,
+    required this.classificationIcons,
+  });
+
+  final List<String> items;
+  final Map<String, List<(String, _TriadCategory)>> classificationIcons;
+
+  @override
+  Widget build(BuildContext context) {
+    final bodyStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 15.5,
+        );
+    final labelStyle = bodyStyle?.copyWith(fontWeight: FontWeight.w600);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final item in items)
+            _buildItem(context, item, bodyStyle, labelStyle),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildItem(
+    BuildContext context,
+    String item,
+    TextStyle? bodyStyle,
+    TextStyle? labelStyle,
+  ) {
+    final colonIndex = item.indexOf(':');
+    final label =
+        colonIndex > 0 ? item.substring(0, colonIndex + 1) : item;
+    final description =
+        colonIndex > 0 ? item.substring(colonIndex + 1).trim() : '';
+    final classKey = colonIndex > 0
+        ? item.substring(0, colonIndex).trim().toLowerCase()
+        : item.toLowerCase();
+
+    final activeElements = classificationIcons[classKey] ?? [];
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: _IconBadge(icon: _iconForLabel(label), size: 13),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(text: label, style: labelStyle),
+                      if (description.isNotEmpty)
+                        TextSpan(text: ' $description', style: bodyStyle),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (activeElements.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 33, top: 4),
+              child: Wrap(
+                spacing: 3,
+                runSpacing: 3,
+                children: [
+                  for (final (element, category) in activeElements)
+                    Tooltip(
+                      message: element,
+                      child: _IconBadge(
+                        icon: _iconForLabel(element),
+                        size: 11,
+                        backgroundColor: category.background,
+                        borderColor: category.border,
+                        iconColor: category.icon,
+                      ),
+                    ),
+                ],
+              ),
+            ),
         ],
       ),
     );

@@ -310,7 +310,9 @@ class _GatewayChapterTile extends StatelessWidget {
         leading: Icon(Icons.book_outlined, color: AppColors.primary),
         title: Text(
           'Chapter ${chapter.number}: ${chapter.title}',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontSize: 24,
+              ),
         ),
         trailing: const Icon(
           Icons.arrow_forward_ios,

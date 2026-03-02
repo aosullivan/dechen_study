@@ -669,8 +669,10 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
               const SizedBox(height: 6),
               Text(
                 'To which chapter does this belong?',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontSize: 19,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontFamily: 'Crimson Text',
+                      fontSize: 20,
+                      height: 1.5,
                       fontWeight: FontWeight.w400,
                       color: AppColors.textDark,
                     ),

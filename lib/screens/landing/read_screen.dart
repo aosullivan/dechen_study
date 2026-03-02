@@ -206,7 +206,7 @@ class _ReadScreenState extends State<ReadScreen>
   double get _readerLeftPadding => _isLaptopLayout ? 12.0 : 16.0;
   double get _readerRightPadding => _isLaptopLayout ? 20.0 : 16.0;
   double get _overlayLeftInset => _isLaptopLayout ? 12.0 : 8.0;
-  double get _overlayRightInset => _isLaptopLayout ? 20.0 : 8.0;
+  double get _overlayRightInset => _isLaptopLayout ? 12.0 : 8.0;
   double get _verseHorizontalInset => _isLaptopLayout ? 28.0 : 18.0;
   double get _verseWrapIndent => _isLaptopLayout ? 24.0 : 8.0;
 

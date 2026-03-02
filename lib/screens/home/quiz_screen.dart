@@ -125,7 +125,11 @@ class _QuizScreenState extends State<QuizScreen> {
           Text(
             'To which chapter does this belong?',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Crimson Text',
+                  fontSize: 20,
+                  height: 1.5,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.textDark,
                 ),
           ),
           const SizedBox(height: 16),

@@ -462,7 +462,7 @@ class GatewayRichContentService {
                       'Elements with concepts: mind element, mental object element, mind consciousness element.',
                       'Nine elements embraced by personal sensation: eye, ear, nose, tongue, body elements; smell, taste, texture, and mental object element.'
                     ],
-                    styleClass: ''),
+                    styleClass: 'classification-summary'),
                 // --- Elements with Physical Form ---
                 GatewayRichBlock(
                     type: 'p',
