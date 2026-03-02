@@ -6,6 +6,12 @@ on:
   repository_dispatch:
     types:
       - vercel.deployment.success
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Base URL for e2e tests'
+        required: false
+        default: 'https://app.dechen.study'
 
 concurrency:
   group: playwright-vercel-production
@@ -14,8 +20,9 @@ concurrency:
 jobs:
   e2e:
     if: |
-      github.event_name == 'repository_dispatch' &&
-      (github.event.client_payload.environment == 'Production' || github.event.client_payload.environment == 'production')
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'repository_dispatch' &&
+       (github.event.client_payload.environment == 'Production' || github.event.client_payload.environment == 'production'))
     runs-on: ubuntu-latest
     timeout-minutes: 55
 
@@ -26,7 +33,11 @@ jobs:
       - name: Set deployment URL
         id: url
         run: |
-          URL="${{ github.event.client_payload.url }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            URL="${{ github.event.inputs.base_url }}"
+          else
+            URL="${{ github.event.client_payload.url }}"
+          fi
           if [ -z "$URL" ]; then
             # Production fallback when payload omits url
             URL="https://app.dechen.study"
