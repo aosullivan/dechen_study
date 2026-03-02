@@ -2,7 +2,7 @@
 (Root verses with commentary by Jamgon Kongtrul Lodro Thaye)
 =======================================================
 
-INTRODUCTION AND PRELIMINARY MATTERS (Q1-Q15)
+INTRODUCTION AND PRELIMINARY MATTERS (Q1-Q14)
 ==============================================
 
 Q1. According to the commentary, what three key points did the scholars of Vikramaśilā assert should be given in a preliminary account before explaining a text?
@@ -75,40 +75,12 @@ c) An encyclopaedic work covering all the philosophical systems of the Indian Bu
 d) A manual for the proper bestowal of monastic ordination according to the Mahāsāṃghika lineage
 ANSWER: a
 
-Q11. What three lineages did Atiśa bring together in composing the Lamp of the Path, according to the Introduction?
-a) The Sakya, Kagyu and Nyingma lineages of Tibetan Buddhism that existed before his arrival
-b) The lineage of Vasubandhu's Abhidharma, the lineage of Dignāga's logic, and the lineage of Nāgārjuna's ethics
-c) The Lineage of Vast Activity from Maitreya, the Lineage of Profound View from Mañjuśrī, and the Lineage of Blessings from Vajrayāna masters
-d) The oral lineage of Nāropā, the textual lineage of Nālandā, and the terma lineage of Padmasambhava
-ANSWER: c
-
-Q12. According to the Introduction, who was Dharmakīrti of Sumatra and why was he important to Atiśa?
-a) He was a logician who taught Atiśa the art of debate, enabling him to defeat tīrthikas at Bodhgayā
-b) He was a Theravāda monk who gave Atiśa the Vinaya ordination that he subsequently carried to Tibet
-c) He was a tantric adept who bestowed upon Atiśa the highest yoga tantra empowerments of the Kālacakra
-d) He was the master renowned for especially powerful bodhicitta teachings, for whom Atiśa expressed the highest devotion
-ANSWER: d
-
-Q13. According to the Introduction, what did the goddess Tārā reveal to Atiśa about his journey to Tibet?
-a) That the trip would bring great wealth to the monasteries of India through Tibetan patronage
-b) That he should go to Tibet only if accompanied by at least fifty learned paṇḍitas from Vikramaśilā
-c) That although the trip would shorten his life, it would nevertheless bring great benefit to others
-d) That the Tibetans were ready to receive the highest tantric teachings without any further preparation
-ANSWER: c
-
 Q14. What was the relationship between Jamgon Kongtrul's commentary and the work of Panchen Lozang Chokyi Gyaltsen?
 a) Kongtrul Rinpoche rejected Panchen Lozang Chokyi Gyaltsen's commentary as sectarian and unreliable
 b) Kongtrul Rinpoche's commentary is based closely upon the earlier authoritative work of Panchen Lozang Chokyi Gyaltsen
 c) Panchen Lozang Chokyi Gyaltsen wrote only a brief outline which Kongtrul expanded into a full commentary
 d) The two commentaries were composed independently and only later discovered to be in agreement
 ANSWER: b
-
-Q15. What two long passages in Kongtrul Rinpoche's commentary are closely based on excerpts from Tsongkhapa?
-a) The explanation of the Four Noble Truths and the classification of the seven kinds of prātimokṣa vows
-b) The description of the six higher knowledges and the instructions for the fire pūjā ritual of the Vajrayāna
-c) The account of Atiśa's life and the explanation of the colophon at the end of the root text
-d) An overview of the stages of the path elaborating each of the Three Persons, and a detailed presentation of the Mādhyamaka prāsaṅgika view
-ANSWER: d
 
 THE THREE PERSONS: OVERVIEW AND DEFINITIONS (Q16-Q40)
 =====================================================
@@ -280,13 +252,6 @@ b) The development of renunciation through contemplation of impermanence and dea
 c) The generation of bodhicitta through the practice of exchanging self and other
 d) The understanding of emptiness through study of the Madhyamaka treatises
 ANSWER: a
-
-Q40. According to the Introduction, what Madhyamaka view does Kongtrul Rinpoche himself generally hold as supreme, and how does he handle this in the present commentary?
-a) He holds the Svātantrika view as supreme but presents the Prāsaṅgika view to honour Atiśa's position
-b) He holds the Yogācāra-Madhyamaka view as supreme and presents Atiśa's text through that lens
-c) He holds the Prāsaṅgika view as supreme and criticises all other Madhyamaka positions throughout
-d) He holds the Zhentong or 'Empty of Other' view as supreme elsewhere, but demonstrates the rime spirit by remaining true to Atiśa's prāsaṅgika position in this text
-ANSWER: d
 
 ASPIRATION BODHICITTA AND ITS TRAINING (Q41-Q70)
 =================================================
@@ -934,7 +899,7 @@ c) That nonarising means things exist permanently without any change, arising, o
 d) That nonarising and arising are two perspectives on the same reality that can both be held simultaneously
 ANSWER: b
 
-Q132. According to the commentary's presentation based on Tsongkhapa, why do śrāvakas and pratyekabuddhas not attain Buddhahood despite understanding emptiness?
+Q132. According to the commentary's presentation of Madhyamaka, why do śrāvakas and pratyekabuddhas not attain Buddhahood despite understanding emptiness?
 a) Because they meditate on emptiness only for as long as their afflictions remain, and when afflictions are extinguished they are satisfied and do not persist in meditation to eliminate cognitive obscurations
 b) Because they lack the devotion to the lama that is necessary for the attainment of complete omniscience
 c) Because their understanding of emptiness is entirely mistaken and does not correspond to the actual nature of reality
@@ -1140,41 +1105,6 @@ c) As the last in a long line of Kadampa masters stretching back to Atiśa and D
 d) As one who merely holds the external signs of a bodhisattva, in emulation of a nonsectarian follower of the Buddha's teachings
 ANSWER: d
 
-Q161. According to the Introduction, who translated the root text and commentary into English?
-a) A team of translators at the Library of Tibetan Works and Archives in Dharamsala, India
-b) Adrian O'Sullivan
-c) The Kalu Rinpoche Translation Group under the guidance of Kalu Rinpoche himself
-d) A collaborative effort between Tibetan and Western scholars at a major American university
-ANSWER: b
-
-Q162. According to the Introduction, in which of the Five Treasuries is the Lamp of the Path to Enlightenment preserved?
-a) The Treasury of the Kagyu School, which preserves the major empowerments and rituals of that tradition
-b) The Treasury of Precious Termas, which collects revelatory treasure teachings from over one hundred tertons
-c) The Treasury Great and Vast, which contains Kongtrul Rinpoche's own commentaries and practice manuals
-d) The Treasury of Spiritual Advice, of which two volumes are dedicated to the works of the Kadampa tradition
-ANSWER: d
-
-Q163. According to the Introduction, at what age did Atiśa receive full monastic ordination, and into which lineage?
-a) At twenty-nine, at Bodhgayā, into the ancient Mahāsāṃghika lineage
-b) At twenty-one, into the Sarvāstivāda lineage at the great monastery of Nālandā
-c) At thirty-five, at Vikramaśilā, into the Mūlasarvāstivāda lineage
-d) At twenty, at Odantapurī, into the Theravāda lineage brought from Sri Lanka
-ANSWER: a
-
-Q164. According to the Introduction, who encouraged Atiśa to take monastic ordination and in what manner?
-a) His parents insisted he become a monk rather than inherit the throne of their kingdom in Bengal
-b) His teacher Dharmakīrti of Sumatra told him that bodhicitta could only be fully developed within the monastic framework
-c) The scholars of Vikramaśilā required ordination as a prerequisite for holding a teaching position at their institution
-d) Śākyamuni Buddha himself advised Atiśa in a vision to take full ordination as the most suitable means to benefit sentient beings
-ANSWER: d
-
-Q165. According to the Introduction, what was Dromton Gyalwa'i Jungne's significance to Atiśa, and what prophecy did it fulfil?
-a) Dromton was the first Tibetan to memorise the Lamp of the Path, fulfilling a prophecy that the text would be transmitted orally
-b) He was a Tibetan layman whose arrival fulfilled a prophecy by Tārā that Atiśa's most important disciple in Tibet would be a layman
-c) He was the head monk of Reting monastery who organised the printing of Atiśa's collected works as prophesied
-d) He was a Tibetan king who offered Atiśa permanent residence in central Tibet as prophesied by his Indian teachers
-ANSWER: b
-
 ADDITIONAL COMMENTARY AND INTRODUCTION KNOWLEDGE (Q166-Q200)
 =============================================================
 
@@ -1283,27 +1213,6 @@ c) He explains the invitation of guests in terms of the Four Noble Truths — as
 d) He reads it as referring exclusively to the aspiration aspect of bodhicitta without any application component
 ANSWER: c
 
-Q181. According to the Introduction, what two lineages of monastic ordination did Jamgon Kongtrul receive?
-a) The Tibetan lineage and the Chinese lineage of monastic vows brought to Tibet by different Indian masters
-b) The 'lower' lineage from the Nyingma tradition dating back to Śāntarakṣita, and the 'upper' lineage from the Kashmiri master Śākyaśrī Bhadra
-c) The Mahāsāṃghika lineage and the Mūlasarvāstivāda lineage as the two oldest Indian ordination traditions
-d) The forest-dwelling lineage and the monastery-dwelling lineage as two different styles of monastic life
-ANSWER: b
-
-Q182. According to the Introduction, who gave Kongtrul Rinpoche the bodhisattva vow and the name 'Lodro Thaye'?
-a) The ninth Tai Situ, Pema Nyingje Wangpo, during a grand ceremony at Palpung monastery
-b) The Fourteenth Karmapa, from whom he received the bodhisattva vow and the name meaning 'limitless intelligence'
-c) Jamyang Khyentse Wangpo, his principal non-sectarian collaborator and spiritual companion
-d) Chokgyur Dechen Lingpa, the great treasure revealer of the Nyingma tradition
-ANSWER: b
-
-Q183. According to the Introduction, what are the Five Treasuries compiled by Jamgon Kongtrul?
-a) The Treasury of the Kagyu School, the Treasury of the Knowledge of Omniscience, the Treasury of Spiritual Advice, the Treasury of Precious Termas, and the Treasury Great and Vast
-b) Five volumes of biography covering the lives of the greatest masters of the five major Tibetan Buddhist traditions
-c) Five collections of meditation manuals for the five stages of the highest yoga tantra completion stage
-d) Five anthologies of poetry and devotional verse from the Indian and Tibetan Buddhist literary traditions
-ANSWER: a
-
 Q184. According to the commentary's overview, what must one do if one commits a root downfall of the tantric vows?
 a) Even if one retakes the vow, since its continuity has been broken, it will be difficult to develop qualities — so one should not violate vows by committing root downfalls
 b) One should simply confess and the vow will be automatically restored without any further action
@@ -1324,13 +1233,6 @@ b) That one should separate material wishes from spiritual aspirations and pursu
 c) That one should use wisdom to distinguish between beneficial and harmful actions like a swan separating milk from water
 d) That the distinction between saṃsāra and nirvāṇa is itself a wish that must ultimately be abandoned
 ANSWER: c
-
-Q187. According to the Introduction, how many masters did Atiśa eventually meet and receive teachings from?
-a) Exactly twelve root lamas and an unknown number of secondary teachers
-b) Precisely fifty-two teachers corresponding to the fifty-two stages of the bodhisattva path
-c) Seven principal masters corresponding to the seven branches of the path to enlightenment
-d) Over one hundred and fifty masters, receiving countless teachings on sūtra, tantra, and worldly fields of knowledge
-ANSWER: d
 
 Q188. According to the commentary, what is the 'Four Branches of Purpose and Relation' (anubandha-catuṣṭaya)?
 a) An explanatory system from the Sanskrit literary tradition concerning the purpose of a textual composition — comprising the explanandum, the immediate purpose, the meta-purpose, and the relation
@@ -1381,13 +1283,6 @@ c) They abandon all worldly activities and enter into permanent solitary retreat
 d) They attain the first bhūmi of the bodhisattva path and begin to perceive the Buddhas of the ten directions
 ANSWER: b
 
-Q195. According to the Introduction, who were the three masters whom both Kongtrul and Khyentse collaborated with over many years?
-a) The Fourteenth Karmapa, the Ninth Tai Situ, and the Fifth Dzogchen Rinpoche
-b) The commentary specifically mentions Chokgyur Dechen Lingpa as a master with whom both Kongtrul and Khyentse collaborated
-c) Mipham Rinpoche, Patrul Rinpoche, and Shechen Gyaltsab as the four pillars of the rime movement
-d) The Thirteenth Dalai Lama, the Ninth Panchen Lama, and Jamyang Loter Wangpo
-ANSWER: b
-
 Q196. According to the commentary, what categorisation of the Three Persons is taught in other texts besides the Lamp of the Path?
 a) Only in the Prajñāpāramitā sūtras and their associated Indian commentaries by Haribhadra and Vimuktisena
 b) In many places, such as Asaṅga's Yogācārabhūmi Viniścayasaṃgrahanī and Vasubandhu's Commentary on the Abhidharmakośa
@@ -1407,13 +1302,6 @@ a) The ritual for going for refuge is the beginning of the ritual for generating
 b) The vow of refuge is taken separately, several days before the ritual of aspiration bodhicitta
 c) The vow of refuge is taken only after aspiration bodhicitta has been fully stabilised through practice
 d) Refuge and aspiration bodhicitta are two completely separate rituals that have no structural connection
-ANSWER: a
-
-Q199. According to the Introduction, where did Atiśa pass away and what did he predict?
-a) He passed away at Nyethang after predicting he would take rebirth in the Tuṣita heaven in the presence of Maitreya
-b) He passed away at Palpung monastery after predicting that the Kagyu lineage would flourish for a thousand years
-c) He passed away at Samye monastery after predicting the coming of Padmasambhava's future emanation
-d) He passed away at Reting monastery after predicting the founding of the four major schools of Tibetan Buddhism
 ANSWER: a
 
 Q200. According to the commentary, what does Kongtrul Rinpoche say he has done in writing this commentary?
