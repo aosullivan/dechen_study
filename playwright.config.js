@@ -1,6 +1,6 @@
 const { defineConfig, devices } = require('@playwright/test');
 
-const baseURL = process.env.BASE_URL || 'https://www.dechen.study';
+const baseURL = process.env.BASE_URL || 'https://app.dechen.study';
 
 module.exports = defineConfig({
   testDir: './e2e/tests',

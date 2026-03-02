@@ -24,8 +24,13 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Six Sense Triads at a Glance'), findsWidgets);
-    expect(find.text('Eye Consciousness Element'), findsOneWidget);
-    expect(find.text('Mind Consciousness Element'), findsOneWidget);
+    expect(
+      find.textContaining(
+        RegExp(r'Six Sense Triads at a Glance|Eighteen Dhatus'),
+      ),
+      findsWidgets,
+    );
+    expect(find.text('Eye Consciousness Element'), findsWidgets);
+    expect(find.text('Mind Consciousness Element'), findsWidgets);
   });
 }

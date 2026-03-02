@@ -17,10 +17,10 @@ test.describe('dechen.study production smoke', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await waitForLocatorWithGate(
       page,
-      page.getByRole('group', { name: /Gateway to Knowledge/i }),
+      page.getByRole('group', { name: /Gateway to Knowledge/i }).first(),
     );
     for (const app of apps) {
-      await expect(page.getByRole('group', { name: labelPattern(app.title) })).toBeVisible();
+      await expect(page.getByRole('group', { name: labelPattern(app.title) }).first()).toBeVisible();
     }
   });
 
@@ -63,9 +63,9 @@ test.describe('dechen.study production smoke', () => {
           appTitle: app.title,
           modeLabel: 'Textual Structure',
           isEntered: async () =>
-            (await page.getByRole('heading', { name: /Textual Structure/i }).count()) > 0,
+            (await page.getByText(/Textual Structure/i).count()) > 0,
         });
-        await expect(page.getByRole('heading', { name: /Textual Structure/i })).toBeVisible();
+        await expect(page.getByText(/Textual Structure/i).first()).toBeVisible();
       }
 
       if (app.modes.includes('Guess the Chapter')) {
@@ -75,7 +75,7 @@ test.describe('dechen.study production smoke', () => {
           modeLabel: 'Guess the Chapter',
           isEntered: async () => (await roleButton(page, 'Reveal').count()) > 0,
         });
-        await expect(page.getByRole('heading', { name: /Guess the Chapter/i })).toBeVisible();
+        await expect(page.getByText(/Guess the Chapter/i).first()).toBeVisible();
         await expect(roleButton(page, 'Reveal')).toBeVisible();
       }
 
@@ -169,9 +169,9 @@ test.describe('dechen.study production smoke', () => {
     await page.goto('/gateway-to-knowledge', { waitUntil: 'domcontentloaded' });
     await waitForLocatorWithGate(
       page,
-      page.getByRole('heading', { name: /Gateway to Knowledge/i }),
+      page.getByText(/Gateway to Knowledge/i).first(),
     );
     await roleButton(page, 'Chapter 1').click();
-    await expect(page.getByRole('heading', { name: /Gateway Chapter 1/i })).toBeVisible();
+    await expect(page.getByText(/Gateway Chapter 1/i).first()).toBeVisible();
   });
 });

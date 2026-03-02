@@ -53,7 +53,7 @@ class GatewayOutlineService {
       title: 'The Elements (Dhatu)',
       sections: <GatewayOutlineSection>[
         GatewayOutlineSection(
-            path: '2.1', title: 'Six Sense Triads at a Glance', depth: 0),
+            path: '2.1', title: 'Eighteen Dhatus', depth: 0),
         GatewayOutlineSection(
             path: '2.2', title: 'Mental Object Sources (Ayatana)', depth: 0),
         GatewayOutlineSection(
@@ -70,9 +70,8 @@ class GatewayOutlineService {
             path: '3.1',
             title: 'Inner and Outer Sources (Duality View)',
             depth: 0),
-        GatewayOutlineSection(path: '3.2', title: 'Reference Table', depth: 0),
         GatewayOutlineSection(
-            path: '3.3', title: 'The Five Bases of Knowables', depth: 0),
+            path: '3.2', title: 'The Five Base Knowables', depth: 0),
       ],
     ),
     GatewayOutlineChapter(

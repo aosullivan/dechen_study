@@ -279,22 +279,39 @@ class _TopicLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: enabled ? AppColors.primary : AppColors.mutedBrown,
-          fontSize: 15.5,
-          fontWeight: enabled ? FontWeight.w600 : FontWeight.w500,
-          decoration: enabled ? TextDecoration.underline : TextDecoration.none,
+          color: AppColors.textDark,
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
         );
-    if (!enabled) return Text(label, style: textStyle);
+
+    final child = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Icon(
+              Icons.circle,
+              size: 5,
+              color: AppColors.mutedBrown.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Flexible(child: Text(label, style: textStyle)),
+        ],
+      ),
+    );
+
+    if (!enabled) return child;
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(4),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-          child: Text(label, style: textStyle),
-        ),
+        child: child,
       ),
     );
   }
@@ -350,6 +367,42 @@ class _GatewayTopicCard extends StatelessWidget {
           ),
         );
         i += 2;
+        continue;
+      }
+      // Detect subset-title + 3 sense-list-subset blocks
+      if (block.type == 'p' &&
+          block.styleClass == 'subset-title' &&
+          i + 3 < blocks.length &&
+          blocks[i + 1].type == 'ul' &&
+          blocks[i + 1].styleClass == 'sense-list-subset' &&
+          blocks[i + 2].type == 'ul' &&
+          blocks[i + 2].styleClass == 'sense-list-subset' &&
+          blocks[i + 3].type == 'ul' &&
+          blocks[i + 3].styleClass == 'sense-list-subset') {
+        String? note;
+        var skipCount = 3;
+        if (i + 4 < blocks.length &&
+            blocks[i + 4].type == 'p' &&
+            blocks[i + 4].styleClass == 'subset-note') {
+          note = blocks[i + 4].text;
+          skipCount = 4;
+        }
+        children.add(
+          _SubsetTriadSection(
+            title: block.text ?? '',
+            note: note,
+            columns: [
+              ('Faculties', blocks[i + 1].items, _TriadCategory.faculties),
+              ('Objects', blocks[i + 2].items, _TriadCategory.objects),
+              (
+                'Consciousnesses',
+                blocks[i + 3].items,
+                _TriadCategory.consciousnesses
+              ),
+            ],
+          ),
+        );
+        i += skipCount;
         continue;
       }
       if (block.type == 'ul' &&
@@ -762,6 +815,52 @@ class _GatewayChipLink extends StatelessWidget {
   }
 }
 
+class _SubsetTriadSection extends StatelessWidget {
+  const _SubsetTriadSection({
+    required this.title,
+    required this.columns,
+    this.note,
+  });
+
+  final String title;
+  final String? note;
+  final List<(String title, List<String> items, _TriadCategory? category)>
+      columns;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 2),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDark,
+                ),
+          ),
+        ),
+        _TriadCards(columns: columns),
+        if (note != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              note!,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.mutedBrown,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 13.5,
+                  ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _TriadCards extends StatelessWidget {
   const _TriadCards({required this.columns});
 
@@ -858,31 +957,39 @@ class _TriadCard extends StatelessWidget {
           ),
           const SizedBox(height: 7),
           ...items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _IconBadge(
-                    icon: _iconForLabel(item),
-                    size: 12,
-                    backgroundColor: category?.background,
-                    borderColor: category?.border,
-                    iconColor: category?.icon,
+            (item) {
+              final isDisabled = item.startsWith('~');
+              final displayItem = isDisabled ? item.substring(1) : item;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Opacity(
+                  opacity: isDisabled ? 0.18 : 1.0,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _IconBadge(
+                        icon: _iconForLabel(displayItem),
+                        size: 12,
+                        backgroundColor: category?.background,
+                        borderColor: category?.border,
+                        iconColor: category?.icon,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          displayItem,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.bodyText,
+                                    fontSize: 14.5,
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      item,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.bodyText,
-                            fontSize: 14.5,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -917,11 +1024,16 @@ class _PlainList extends StatelessWidget {
           fontSize: 14.5,
         );
 
+    // If any sibling has a sublist, bold all top-level items for consistency.
+    final hasSublistSibling =
+        !isNumbered && items.any((item) => _parseSublist(item) != null);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var i = 0; i < items.length; i++)
-          _buildItem(context, i, bodyStyle, numberStyle, subItemStyle),
+          _buildItem(
+              context, i, bodyStyle, numberStyle, subItemStyle, hasSublistSibling),
       ],
     );
   }
@@ -932,6 +1044,7 @@ class _PlainList extends StatelessWidget {
     TextStyle? bodyStyle,
     TextStyle? numberStyle,
     TextStyle? subItemStyle,
+    bool boldTopLevel,
   ) {
     final parsed = isNumbered ? null : _parseSublist(items[i]);
 
@@ -1007,7 +1120,10 @@ class _PlainList extends StatelessWidget {
             ),
           if (!isNumbered) const SizedBox(width: 8),
           Expanded(
-            child: Text(items[i], style: bodyStyle),
+            child: Text(items[i],
+                style: boldTopLevel
+                    ? bodyStyle?.copyWith(fontWeight: FontWeight.w600)
+                    : bodyStyle),
           ),
         ],
       ),
@@ -1060,8 +1176,9 @@ class _IconBadge extends StatelessWidget {
   final label = item.substring(0, colonIndex + 1).trim();
   final remainder = item.substring(colonIndex + 1).trim();
 
-  // Split by commas
-  final parts = remainder.split(',').map((p) => p.trim()).toList();
+  // Split by commas and semicolons
+  final parts =
+      remainder.split(RegExp(r'[,;]')).map((p) => p.trim()).toList();
   if (parts.length < 2) return null;
 
   final subItems = <String>[];
@@ -1202,7 +1319,9 @@ IconData _iconForLabel(String text) {
   if (t.contains('classif') || t.contains('categor')) {
     return Icons.category_outlined;
   }
-  if (t.contains('triad')) return Icons.account_tree_outlined;
+  if (t.contains('triad') || t.contains('dhatu')) {
+    return Icons.account_tree_outlined;
+  }
   if (t.contains('source') || t.contains('ayatana')) {
     return Icons.swap_horiz_outlined;
   }
@@ -1224,19 +1343,19 @@ IconData _iconForLabel(String text) {
 ///   • Consciousnesses – soft cool-grey
 enum _TriadCategory {
   faculties(
-    background: Color(0xFFFDF1DC),
-    border: Color(0xFFD4B88E),
-    icon: Color(0xFF8B6914),
+    background: Color(0xFFFFF8E1),
+    border: Color(0xFFE8D99A),
+    icon: Color(0xFFB8960F),
   ),
   objects(
+    background: Color(0xFFECF1F9),
+    border: Color(0xFFB8C8DC),
+    icon: Color(0xFF4A6FA5),
+  ),
+  consciousnesses(
     background: Color(0xFFFFFFFF),
     border: Color(0xFFE6D8C3),
     icon: null, // uses AppColors.primary
-  ),
-  consciousnesses(
-    background: Color(0xFFF2EEF6),
-    border: Color(0xFFCFC4D8),
-    icon: Color(0xFF6B5B7B),
   );
 
   const _TriadCategory({

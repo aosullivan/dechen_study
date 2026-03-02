@@ -535,7 +535,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
         }
         return;
       }
-      final content = picked!;
+      final content = picked;
       final sectionPath = pickedSectionPath;
       final sectionTitle =
           await _sectionTitleForRefs(content.refs, sectionPath: sectionPath);

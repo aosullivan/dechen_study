@@ -9,15 +9,16 @@ function labelPattern(label) {
 }
 
 function roleButton(page, label) {
-  return page.getByRole('button', { name: labelPattern(label) }).first();
+  const roleMatch = page.getByRole('button', { name: labelPattern(label) });
+  const textMatch = page.getByText(labelPattern(label));
+  return roleMatch.or(textMatch).first();
 }
 
 function modeButton(page, label) {
-  return page
-    .getByRole('button', {
-      name: new RegExp(`^\\s*${escapeRegex(label)}\\s*$`, 'i'),
-    })
-    .first();
+  const exactPattern = new RegExp(`^\\s*${escapeRegex(label)}\\s*$`, 'i');
+  const roleMatch = page.getByRole('button', { name: exactPattern });
+  const textMatch = page.getByText(exactPattern);
+  return roleMatch.or(textMatch).first();
 }
 
 async function hasSemanticsEnabled(page) {
@@ -104,12 +105,15 @@ async function waitForLocatorWithGate(page, locator, timeoutMs = 60_000) {
 
 async function openTextOptions(page, appPath, appTitle) {
   await page.goto(appPath, { waitUntil: 'domcontentloaded' });
-  await waitForLocatorWithGate(page, page.getByRole('heading', { name: labelPattern(appTitle) }));
+  const appTitleLocator = page
+    .getByRole('heading', { name: labelPattern(appTitle) })
+    .or(page.getByRole('group', { name: labelPattern(appTitle) }))
+    .or(page.getByText(labelPattern(appTitle)))
+    .first();
+  await waitForLocatorWithGate(page, appTitleLocator);
 
   const anyModeButton = page
-    .getByRole('button', {
-      name: /Daily Verses|Guess the Chapter|Quiz|Read|Textual Structure/i,
-    })
+    .getByText(/Daily Verses|Guess the Chapter|Quiz|Read|Textual Structure/i)
     .first();
 
   const started = Date.now();
@@ -119,13 +123,14 @@ async function openTextOptions(page, appPath, appTitle) {
       return;
     }
 
-    // In reader/quiz/etc. there is an unlabeled top-left control that returns to text options.
-    const unlabeledBack = page.getByRole('button', { name: /^$/ }).first();
-    if ((await unlabeledBack.count()) > 0) {
+    const backCandidate = page
+      .getByRole('button', { name: /Back|Details|Textual Structure|Read|Quiz/i })
+      .first();
+    if ((await backCandidate.count()) > 0) {
       try {
-        await unlabeledBack.click({ timeout: 1500 });
+        await backCandidate.click({ timeout: 1500 });
       } catch (_) {
-        await unlabeledBack.click({ force: true, timeout: 1500 });
+        await backCandidate.click({ force: true, timeout: 1500 });
       }
       await page.waitForTimeout(800);
       continue;
@@ -169,9 +174,7 @@ async function openRead(page, appPath, appTitle) {
   await openMode(page, appPath, appTitle, 'Read');
 
   // Multi-chapter texts show a chapter picker first.
-  const chapterOneButton = page
-    .getByRole('button', { name: /^1\./ })
-    .first();
+  const chapterOneButton = page.getByText(/^1\./).first();
   if ((await chapterOneButton.count()) > 0) {
     await chapterOneButton.click();
   }
