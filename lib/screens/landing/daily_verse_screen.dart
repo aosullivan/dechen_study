@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
+import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
 import '../../services/commentary_service.dart';
@@ -63,12 +64,11 @@ class DailyVerseScreen extends StatefulWidget {
 }
 
 class _DailyVerseScreenState extends State<DailyVerseScreen>
-    with WidgetLifecycleObserver, WidgetsBindingObserver {
+    with WidgetLifecycleObserver, WidgetsBindingObserver, SurfaceDwellTracker {
   final _usageMetrics = UsageMetricsService.instance;
   late final VerseService _verseService;
   late final CommentaryService _commentaryService;
   late final VerseHierarchyService _hierarchyService;
-  DateTime? _screenDwellStartedAt;
 
   /// Current section: refs and their verse texts (in order).
   List<String> _sectionRefs = [];
@@ -87,7 +87,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   @override
   void initState() {
     super.initState();
-    _screenDwellStartedAt = DateTime.now().toUtc();
+    startSurfaceDwellTracking();
     _verseService = widget.verseService ?? VerseService.instance;
     _commentaryService = widget.commentaryService ?? CommentaryService.instance;
     _hierarchyService =
@@ -97,48 +97,33 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
 
   @override
   void dispose() {
-    _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-    unawaited(_usageMetrics.flush(all: true));
+    flushSurfaceDwell(resetStart: true);
+    flushSurfaceDwellQueue();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached ||
-        state == AppLifecycleState.hidden) {
-      _trackSurfaceDwell(nowUtc: DateTime.now().toUtc(), resetStart: true);
-      unawaited(_usageMetrics.flush(all: true));
-      return;
-    }
-    if (state == AppLifecycleState.resumed) {
-      _screenDwellStartedAt ??= DateTime.now().toUtc();
-    }
+    handleSurfaceLifecycleState(state);
   }
 
-  void _trackSurfaceDwell({
-    required DateTime nowUtc,
-    required bool resetStart,
-  }) {
-    final startedAt = _screenDwellStartedAt;
-    if (startedAt == null) return;
-    final durationMs = nowUtc.difference(startedAt).inMilliseconds;
-    if (durationMs >= _usageMetrics.minDwellMs) {
-      unawaited(_usageMetrics.trackSurfaceDwell(
-        textId: widget.textId,
-        mode: 'daily',
-        durationMs: durationMs,
-        sectionPath: _sectionPath,
-        sectionTitle: _sectionTitle,
-        verseRef: _sectionRefs.isNotEmpty ? _sectionRefs.first : null,
-        properties: {
-          'refs_count': _sectionRefs.length,
-        },
-      ));
-    }
-    if (resetStart) _screenDwellStartedAt = null;
-  }
+  @override
+  String get dwellTextId => widget.textId;
+
+  @override
+  String get dwellMode => 'daily';
+
+  @override
+  String? get dwellSectionPath => _sectionPath;
+
+  @override
+  String? get dwellSectionTitle => _sectionTitle;
+
+  @override
+  String? get dwellVerseRef => _sectionRefs.isNotEmpty ? _sectionRefs.first : null;
+
+  @override
+  Map<String, dynamic>? get dwellProperties => {'refs_count': _sectionRefs.length};
 
   String _segmentTextForRef(String ref, String fullText) {
     final lines = fullText.split('\n');
