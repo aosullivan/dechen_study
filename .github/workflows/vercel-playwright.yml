@@ -15,7 +15,7 @@ on:
 
 concurrency:
   group: playwright-vercel-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   e2e:
