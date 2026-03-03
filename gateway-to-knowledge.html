@@ -544,6 +544,101 @@
       color: #3c3023;
     }
 
+    .duality-map {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .duality-map-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .duality-head-chip {
+      border-radius: 999px;
+      border: 1px solid #e8dcc8;
+      background: #fff8ee;
+      padding: 6px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #3c3023;
+      font-family: "Crimson Text", "Palatino Linotype", Palatino, serif;
+    }
+
+    .duality-head-chip.inner .mini-icon {
+      border-color: #b8d8cc;
+      background: #edf6f3;
+      color: #4a7c6f;
+    }
+
+    .duality-head-chip.outer .mini-icon {
+      border-color: #b8cce0;
+      background: #eef3f9;
+      color: #5b7ba5;
+    }
+
+    .duality-map-row {
+      border: 1px solid #eadfcf;
+      border-radius: 12px;
+      background: #fffefb;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+
+    .duality-node {
+      border-radius: 9px;
+      border: 1px solid;
+      padding: 7px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      font-size: 0.88rem;
+      color: #3c3023;
+    }
+
+    .duality-node.inner {
+      background: #edf6f3;
+      border-color: #b8d8cc;
+    }
+
+    .duality-node.outer {
+      background: #eef3f9;
+      border-color: #b8cce0;
+    }
+
+    .duality-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #7b6751;
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .duality-link::before {
+      content: "";
+      height: 1px;
+      width: 20px;
+      background: rgba(98, 78, 58, 0.35);
+    }
+
+    .duality-link .mini-icon {
+      width: 20px;
+      height: 20px;
+    }
+
     .icon-list-grid {
       list-style: none;
       margin: 8px 0 0;
@@ -819,6 +914,19 @@
       .duality-grid,
       .icon-list-grid {
         grid-template-columns: 1fr;
+      }
+
+      .duality-map-head,
+      .duality-map-row {
+        grid-template-columns: 1fr;
+      }
+
+      .duality-head-chip {
+        width: 100%;
+      }
+
+      .duality-link::before {
+        display: none;
       }
 
       .chapter-picker-fab {
@@ -1158,7 +1266,7 @@
             <p class="topic-copy"><strong>Physical form</strong> includes:</p>
             <ul>
               <li><strong>4 primary elements:</strong> earth, water, fire, wind.</li>
-              <li><strong>11 resultant forms:</strong> five sense faculties, five sense objects, and imperceptible form.</li>
+              <li><strong>11 resultant forms:</strong> five sense-faculty dhatus, five sense-object dhatus, and imperceptible form.</li>
             </ul>
             <p class="topic-copy" style="margin-top:8px;">In the Abhidharma Samuccaya, the five forms of mental objects are listed as:</p>
             <ul>
@@ -1385,51 +1493,43 @@
           <section class="topic">
             <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Inner and Outer Sources (Duality View)</h3>
             <p class="triad-note"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span>Sense sources are shown as a dual structure: what apprehends and what is apprehended.</p>
-            <div class="duality-grid">
-              <div class="duality-card">
-                <h4><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Inner Sources (What Apprehends)</h4>
-                <ul class="duality-list">
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Eye Source (Eye Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-ear"></use></svg></span>Ear Source (Ear Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-nose"></use></svg></span>Nose Source (Nose Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-tongue"></use></svg></span>Tongue Source (Tongue Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Body Source (Body Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-mind"></use></svg></span>Mind Source (Seven Consciousness Elements)</li>
-                </ul>
+            <div class="duality-map">
+              <div class="duality-map-head">
+                <div class="duality-head-chip inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Inner Sources</div>
+                <div></div>
+                <div class="duality-head-chip outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Outer Sources</div>
               </div>
-              <div class="duality-card">
-                <h4><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Outer Sources (What Is Apprehended)</h4>
-                <ul class="duality-list">
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Visual Object Source (Visual Form Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-sound"></use></svg></span>Sound Object Source (Sound Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-smell"></use></svg></span>Olfactory Object Source (Smell Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-taste"></use></svg></span>Taste Object Source (Taste Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-texture"></use></svg></span>Tactile Object Source (Texture Element)</li>
-                  <li><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-thought"></use></svg></span>Mental Object Source (Mental Object Element)</li>
-                </ul>
+              <div class="duality-map-row">
+                <div class="duality-node inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-eye"></use></svg></span>Eye Source (Eye Element)</div>
+                <div class="duality-link"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span></div>
+                <div class="duality-node outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-visual"></use></svg></span>Visual Object Source (Visual Form Element)</div>
+              </div>
+              <div class="duality-map-row">
+                <div class="duality-node inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-ear"></use></svg></span>Ear Source (Ear Element)</div>
+                <div class="duality-link"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span></div>
+                <div class="duality-node outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-sound"></use></svg></span>Sound Object Source (Sound Element)</div>
+              </div>
+              <div class="duality-map-row">
+                <div class="duality-node inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-nose"></use></svg></span>Nose Source (Nose Element)</div>
+                <div class="duality-link"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span></div>
+                <div class="duality-node outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-smell"></use></svg></span>Olfactory Object Source (Smell Element)</div>
+              </div>
+              <div class="duality-map-row">
+                <div class="duality-node inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-tongue"></use></svg></span>Tongue Source (Tongue Element)</div>
+                <div class="duality-link"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span></div>
+                <div class="duality-node outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-taste"></use></svg></span>Taste Object Source (Taste Element)</div>
+              </div>
+              <div class="duality-map-row">
+                <div class="duality-node inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-body"></use></svg></span>Body Source (Body Element)</div>
+                <div class="duality-link"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span></div>
+                <div class="duality-node outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-texture"></use></svg></span>Tactile Object Source (Texture Element)</div>
+              </div>
+              <div class="duality-map-row">
+                <div class="duality-node inner"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-mind"></use></svg></span>Mind Source (Seven Consciousness Elements)</div>
+                <div class="duality-link"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-link"></use></svg></span></div>
+                <div class="duality-node outer"><span class="mini-icon"><svg viewBox="0 0 24 24"><use href="#i-thought"></use></svg></span>Mental Object Source (Mental Object Element)</div>
               </div>
             </div>
-            <p class="callout">Inner and outer sources work as a complementary pair: each inner source engages a corresponding outer source.</p>
-          </section>
-
-          <section class="topic">
-            <h3 class="topic-title"><span class="icon-box"><svg viewBox="0 0 24 24"><use href="#i-table"></use></svg></span>Reference Table</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Inner Sources (What Apprehends)</th>
-                  <th>Outer Sources (What Is Apprehended)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>Eye Source (Eye Element)</td><td>Visual Object Source (Visual Form Element)</td></tr>
-                <tr><td>Ear Source (Ear Element)</td><td>Sound Object Source (Sound Element)</td></tr>
-                <tr><td>Nose Source (Nose Element)</td><td>Olfactory Object Source (Smell Element)</td></tr>
-                <tr><td>Tongue Source (Tongue Element)</td><td>Taste Object Source (Taste Element)</td></tr>
-                <tr><td>Body Source (Body Element)</td><td>Tactile Object Source (Texture Element)</td></tr>
-                <tr><td>Mind Source (Seven Consciousness Elements)</td><td>Mental Object Source (Mental Object Element)</td></tr>
-              </tbody>
-            </table>
           </section>
 
           <section class="topic">
