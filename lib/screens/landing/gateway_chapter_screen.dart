@@ -46,28 +46,7 @@ class GatewayChapterScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
             onPressed: () => _openChapterPicker(context),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: TextButton.icon(
-                onPressed: () => _openChapterPicker(context),
-                icon: const Icon(
-                  Icons.arrow_back_rounded,
-                  size: 18,
-                  color: AppColors.primary,
-                ),
-                label: const Text('Back to Start'),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.primary,
-                  textStyle: const TextStyle(
-                    fontFamily: 'Lora',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          actions: const [],
         ),
         body: FutureBuilder<GatewayRichChapter?>(
           future: GatewayRichContentService.instance.getChapter(chapterNumber),
@@ -117,7 +96,7 @@ class GatewayChapterScreen extends StatelessWidget {
             return SelectionArea(
               child: ListView(
                 cacheExtent: 9999,
-                padding: const EdgeInsets.fromLTRB(14, 10, 14, 20),
+                padding: const EdgeInsets.fromLTRB(10, 8, 10, 16),
                 children: [
                   _ChapterIntroCard(
                     chapter: chapter,
@@ -127,7 +106,7 @@ class GatewayChapterScreen extends StatelessWidget {
                     },
                     canOpenTopic: canOpenTopic,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   ...topicAnchors.map(
                     (anchor) => RepaintBoundary(
                       child: _GatewayTopicCard(
@@ -428,8 +407,7 @@ class _GatewayTopicCard extends StatelessWidget {
         );
         continue;
       }
-      if (block.type == 'ul' &&
-          block.styleClass == 'classification-summary') {
+      if (block.type == 'ul' && block.styleClass == 'classification-summary') {
         final classMap = _buildClassificationIconMap(blocks);
         children.add(
           _ClassificationSummaryList(
@@ -448,14 +426,14 @@ class _GatewayTopicCard extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         color: AppColors.cardBeige,
         borderRadius: BorderRadius.circular(9),
         border: Border.all(color: AppColors.borderLight),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 9),
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -464,7 +442,7 @@ class _GatewayTopicCard extends StatelessWidget {
               children: [
                 _IconBadge(
                   icon: _iconForLabel(topic.title),
-                  size: 18,
+                  size: 15,
                   backgroundColor:
                       _isSkandhaLabel(topic.title) ? _skandhaBadgeBg : null,
                   borderColor:
@@ -472,17 +450,17 @@ class _GatewayTopicCard extends StatelessWidget {
                   iconColor:
                       _isSkandhaLabel(topic.title) ? _skandhaIconColor : null,
                 ),
-                const SizedBox(width: 9),
+                const SizedBox(width: 7),
                 Expanded(
                   child: Text(
                     topic.title,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontSize: 24,
+                              fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ) ??
                         const TextStyle(
                           fontFamily: 'Crimson Text',
-                          fontSize: 24,
+                          fontSize: 20,
                           fontWeight: FontWeight.w600,
                           color: AppColors.textDark,
                         ),
@@ -490,13 +468,13 @@ class _GatewayTopicCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Divider(
               height: 1,
               thickness: 1,
               color: AppColors.border.withValues(alpha: 0.45),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 3),
             ...children,
           ],
         ),
@@ -516,8 +494,8 @@ class _GatewayBlockView extends StatelessWidget {
       case 'p':
         if (block.styleClass == 'triad-note') {
           return Container(
-            margin: const EdgeInsets.only(top: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+            margin: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
             decoration: BoxDecoration(
               color: const Color(0xFFFFF8EE),
               borderRadius: BorderRadius.circular(999),
@@ -526,14 +504,14 @@ class _GatewayBlockView extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _IconBadge(icon: _iconForLabel(block.text ?? ''), size: 14),
-                const SizedBox(width: 7),
+                _IconBadge(icon: _iconForLabel(block.text ?? ''), size: 12),
+                const SizedBox(width: 5),
                 Flexible(
                   child: Text(
                     block.text ?? '',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.bodyText,
-                          fontSize: 14,
+                          fontSize: 12.5,
                         ),
                   ),
                 ),
@@ -543,15 +521,15 @@ class _GatewayBlockView extends StatelessWidget {
         }
         if (block.styleClass == 'callout') {
           return Container(
-            margin: const EdgeInsets.only(top: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            margin: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             decoration: BoxDecoration(
               color: const Color(0xFFFFF7EA),
               borderRadius: BorderRadius.circular(8),
               border: Border(
                 left: BorderSide(
                   color: AppColors.primary.withValues(alpha: 0.7),
-                  width: 3,
+                  width: 2.5,
                 ),
               ),
             ),
@@ -559,20 +537,20 @@ class _GatewayBlockView extends StatelessWidget {
               block.text ?? '',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.bodyText,
-                    fontSize: 15.5,
+                    fontSize: 13.5,
                   ),
             ),
           );
         }
         if (block.styleClass == 'topic-copy') {
           return Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.only(top: 5),
             child: Text(
               block.text ?? '',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.bodyText,
-                    fontSize: 15.5,
-                    height: 1.45,
+                    fontSize: 13.5,
+                    height: 1.4,
                   ),
             ),
           );
@@ -581,12 +559,12 @@ class _GatewayBlockView extends StatelessWidget {
           final subTitle = block.text ?? '';
           final isSkandha = _isSkandhaLabel(subTitle);
           return Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 2),
+            padding: const EdgeInsets.only(top: 10, bottom: 1),
             child: Row(
               children: [
                 _IconBadge(
                   icon: _iconForLabel(subTitle),
-                  size: 14,
+                  size: 12,
                   backgroundColor: isSkandha ? _skandhaBadgeBg : null,
                   borderColor: isSkandha ? _skandhaBadgeBorder : null,
                   iconColor: isSkandha ? _skandhaIconColor : null,
@@ -607,11 +585,11 @@ class _GatewayBlockView extends StatelessWidget {
           );
         }
         return Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.only(top: 5),
           child: Text(
             block.text ?? '',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontSize: 20,
+                  fontSize: 16,
                   height: 1.4,
                 ),
           ),
@@ -620,23 +598,37 @@ class _GatewayBlockView extends StatelessWidget {
       case 'ol':
         final isNumbered = block.type == 'ol';
         final items = block.items;
+        if (block.styleClass == 'consciousness-stack') {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = 0; i < items.length; i++) ...[
+                  if (i > 0) const SizedBox(height: 2),
+                  _ConsciousnessStackItem(label: items[i]),
+                ],
+              ],
+            ),
+          );
+        }
         if (block.styleClass == 'icon-list-grid' ||
             block.styleClass == 'links-grid') {
           return Padding(
-            padding: const EdgeInsets.only(top: 7),
+            padding: const EdgeInsets.only(top: 5),
             child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 5,
+              runSpacing: 5,
               children: [
                 for (var i = 0; i < items.length; i++)
                   Container(
                     constraints:
-                        const BoxConstraints(minWidth: 180, maxWidth: 330),
+                        const BoxConstraints(minWidth: 150, maxWidth: 280),
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFFEFB),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: const Color(0xFFEADFCF)),
                     ),
                     child: Row(
@@ -644,8 +636,8 @@ class _GatewayBlockView extends StatelessWidget {
                       children: [
                         if (block.styleClass == 'links-grid')
                           Container(
-                            width: 21,
-                            height: 21,
+                            width: 18,
+                            height: 18,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFF8EC),
@@ -661,12 +653,13 @@ class _GatewayBlockView extends StatelessWidget {
                                   ?.copyWith(
                                     color: AppColors.mutedBrown,
                                     fontWeight: FontWeight.w600,
+                                    fontSize: 11,
                                   ),
                             ),
                           )
                         else
-                          _IconBadge(icon: _iconForLabel(items[i]), size: 14),
-                        const SizedBox(width: 7),
+                          _IconBadge(icon: _iconForLabel(items[i]), size: 11),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Text(
                             items[i],
@@ -675,7 +668,7 @@ class _GatewayBlockView extends StatelessWidget {
                                 .bodyMedium
                                 ?.copyWith(
                                   color: AppColors.bodyText,
-                                  fontSize: 15,
+                                  fontSize: 13,
                                 ),
                           ),
                         ),
@@ -728,8 +721,17 @@ class _GatewayBlockView extends StatelessWidget {
           child: _PlainList(items: items, isNumbered: isNumbered),
         );
       case 'table':
+        if (block.styleClass == 'ayatana-dhatu-map') {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: _AyatanaDhatuMapView(
+              headers: block.headers,
+              rows: block.rows,
+            ),
+          );
+        }
         return Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.only(top: 5),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Table(
@@ -741,14 +743,15 @@ class _GatewayBlockView extends StatelessWidget {
                   children: [
                     for (final header in block.headers)
                       Padding(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 4),
                         child: Text(
                           header,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.textDark,
-                                    fontSize: 15,
+                                    fontSize: 13,
                                   ),
                         ),
                       ),
@@ -759,7 +762,8 @@ class _GatewayBlockView extends StatelessWidget {
                     children: [
                       for (var i = 0; i < block.headers.length; i++)
                         Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 4),
                           child: Text(
                             i < row.length ? row[i] : '',
                             style: Theme.of(context)
@@ -767,7 +771,7 @@ class _GatewayBlockView extends StatelessWidget {
                                 .bodyMedium
                                 ?.copyWith(
                                   color: AppColors.bodyText,
-                                  fontSize: 15,
+                                  fontSize: 13,
                                 ),
                           ),
                         ),
@@ -799,8 +803,8 @@ class _GatewayChipWrap extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 6),
       child: Wrap(
-        spacing: 8,
-        runSpacing: 8,
+        spacing: 5,
+        runSpacing: 5,
         children: [
           for (final item in items)
             _GatewayChipLink(
@@ -829,22 +833,21 @@ class _GatewayChipLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: enabled ? AppColors.primary : AppColors.bodyText,
-          fontSize: 15,
+          fontSize: 13,
           decoration: enabled ? TextDecoration.underline : TextDecoration.none,
           fontWeight: enabled ? FontWeight.w600 : FontWeight.w400,
         );
     final isSkandha = _isSkandhaLabel(label);
     final chipBg = isSkandha ? _skandhaChipBg : const Color(0xFFFFF9EF);
-    final chipBorder =
-        isSkandha ? _skandhaChipBorder : const Color(0xFFE7DAC7);
+    final chipBorder = isSkandha ? _skandhaChipBorder : const Color(0xFFE7DAC7);
     final child = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           _IconBadge(
             icon: _iconForLabel(label),
-            size: 14,
+            size: 11,
             backgroundColor: isSkandha ? _skandhaBadgeBg : null,
             borderColor: isSkandha ? _skandhaBadgeBorder : null,
             iconColor: isSkandha ? _skandhaIconColor : null,
@@ -885,7 +888,6 @@ class _GatewayChipLink extends StatelessWidget {
   }
 }
 
-
 class _TriadCards extends StatelessWidget {
   const _TriadCards({required this.columns});
 
@@ -895,7 +897,7 @@ class _TriadCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 5),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final oneColumn = constraints.maxWidth < 860;
@@ -904,7 +906,7 @@ class _TriadCards extends StatelessWidget {
               children: [
                 for (final column in columns)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.only(bottom: 5),
                     child: _TriadCard(
                         title: column.$1,
                         items: column.$2,
@@ -920,7 +922,7 @@ class _TriadCards extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding:
-                        EdgeInsets.only(right: i == columns.length - 1 ? 0 : 8),
+                        EdgeInsets.only(right: i == columns.length - 1 ? 0 : 5),
                     child: _TriadCard(
                         title: columns[i].$1,
                         items: columns[i].$2,
@@ -950,16 +952,16 @@ class _TriadCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           color: AppColors.bodyText,
-          fontSize: 14.5,
+          fontSize: 12.5,
         );
     final disabledItemStyle = itemStyle?.copyWith(
-          color: AppColors.bodyText.withValues(alpha: 0.18),
-        );
+      color: AppColors.bodyText.withValues(alpha: 0.18),
+    );
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFEFB),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: const Color(0xFFEADFCF)),
       ),
       child: Column(
@@ -969,37 +971,37 @@ class _TriadCard extends StatelessWidget {
             children: [
               _IconBadge(
                 icon: _iconForLabel(title),
-                size: 14,
+                size: 11,
                 backgroundColor: category?.background,
                 borderColor: category?.border,
                 iconColor: category?.icon,
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 5),
               Expanded(
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textDark,
                         fontWeight: FontWeight.w700,
-                        fontSize: 15.5,
+                        fontSize: 13,
                       ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 7),
+          const SizedBox(height: 4),
           ...items.map(
             (item) {
               final isDisabled = item.startsWith('~');
               final displayItem = isDisabled ? item.substring(1) : item;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 3),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _IconBadge(
                       icon: _iconForLabel(displayItem),
-                      size: 12,
+                      size: 10,
                       backgroundColor: category?.background,
                       borderColor: category?.border,
                       iconColor: category?.icon,
@@ -1035,69 +1037,60 @@ class _DualityPairView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pairs = <(String, String)>[];
-    final count =
-        innerItems.length < outerItems.length ? innerItems.length : outerItems.length;
+    final count = innerItems.length < outerItems.length
+        ? innerItems.length
+        : outerItems.length;
     for (var i = 0; i < count; i++) {
       pairs.add((innerItems[i], outerItems[i]));
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 5),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header row
           Row(
-            children: [
+            children: const [
               Expanded(
-                child: _DualityHeader(
+                child: _DualityMapHeader(
                   label: 'Inner Sources',
                   icon: Icons.adjust_outlined,
-                  backgroundColor: _ayatanaInnerBg,
-                  borderColor: _ayatanaInnerBorder,
-                  iconColor: _ayatanaInnerIcon,
+                  color: _ayatanaInnerIcon,
                 ),
               ),
-              const SizedBox(width: 24),
+              SizedBox(width: 10),
               Expanded(
-                child: _DualityHeader(
+                child: _DualityMapHeader(
                   label: 'Outer Sources',
                   icon: Icons.open_in_new_outlined,
-                  backgroundColor: _ayatanaOuterBg,
-                  borderColor: _ayatanaOuterBorder,
-                  iconColor: _ayatanaOuterIcon,
+                  color: _ayatanaOuterIcon,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 2),
           ...pairs.map(
             (pair) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const EdgeInsets.only(bottom: 2),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: _DualityItem(
+                    child: _DualityMapNode(
                       label: pair.$1,
+                      color: _ayatanaInnerIcon,
                       backgroundColor: _ayatanaInnerBg,
                       borderColor: _ayatanaInnerBorder,
-                      iconColor: _ayatanaInnerIcon,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Icon(
-                      Icons.compare_arrows_rounded,
-                      size: 16,
-                      color: AppColors.mutedBrown.withValues(alpha: 0.5),
-                    ),
-                  ),
+                  const SizedBox(width: 4),
+                  const _PerceptionConnector(),
+                  const SizedBox(width: 4),
                   Expanded(
-                    child: _DualityItem(
+                    child: _DualityMapNode(
                       label: pair.$2,
+                      color: _ayatanaOuterIcon,
                       backgroundColor: _ayatanaOuterBg,
                       borderColor: _ayatanaOuterBorder,
-                      iconColor: _ayatanaOuterIcon,
                     ),
                   ),
                 ],
@@ -1110,47 +1103,43 @@ class _DualityPairView extends StatelessWidget {
   }
 }
 
-class _DualityHeader extends StatelessWidget {
-  const _DualityHeader({
+class _DualityMapHeader extends StatelessWidget {
+  const _DualityMapHeader({
     required this.label,
     required this.icon,
-    required this.backgroundColor,
-    required this.borderColor,
-    required this.iconColor,
+    required this.color,
   });
 
   final String label;
   final IconData icon;
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color iconColor;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: borderColor),
+        color: const Color(0xFFFFF8EE),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: const Color(0xFFE8DCC8)),
       ),
       child: Row(
         children: [
           _IconBadge(
             icon: icon,
-            size: 12,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            iconColor: iconColor,
+            size: 10,
+            backgroundColor: const Color(0xFFFFF8EE),
+            borderColor: color.withValues(alpha: 0.35),
+            iconColor: color,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 5),
           Expanded(
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textDark,
                     fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
             ),
           ),
@@ -1160,48 +1149,221 @@ class _DualityHeader extends StatelessWidget {
   }
 }
 
-class _DualityItem extends StatelessWidget {
-  const _DualityItem({
+class _DualityMapNode extends StatelessWidget {
+  const _DualityMapNode({
     required this.label,
+    required this.color,
     required this.backgroundColor,
     required this.borderColor,
-    required this.iconColor,
   });
 
   final String label;
+  final Color color;
   final Color backgroundColor;
   final Color borderColor;
-  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _IconBadge(
+          icon: _iconForLabel(label),
+          size: 11,
+          backgroundColor: backgroundColor,
+          borderColor: borderColor,
+          iconColor: color,
+        ),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.textDark,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Perception connector: inner source apprehends outer source.
+/// Shows a directed arrow (→) indicating perceptual engagement.
+class _PerceptionConnector extends StatelessWidget {
+  const _PerceptionConnector();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 22,
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: 1,
+              color: AppColors.mutedBrown.withValues(alpha: 0.35),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_rounded,
+            size: 10,
+            color: AppColors.mutedBrown.withValues(alpha: 0.7),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Identity connector: ayatana corresponds to / equals a dhatu.
+/// Shows an equals sign (≡) indicating structural equivalence.
+class _IdentityConnector extends StatelessWidget {
+  const _IdentityConnector();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 22,
+      child: Center(
+        child: Text(
+          '≡',
+          style: TextStyle(
+            fontSize: 13,
+            color: AppColors.mutedBrown.withValues(alpha: 0.65),
+            fontWeight: FontWeight.w700,
+            height: 1,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AyatanaDhatuMapView extends StatelessWidget {
+  const _AyatanaDhatuMapView({
+    required this.headers,
+    required this.rows,
+  });
+
+  final List<String> headers;
+  final List<List<String>> rows;
+
+  @override
+  Widget build(BuildContext context) {
+    final leftHeader = headers.isNotEmpty ? headers.first : '12 Ayatanas';
+    final rightHeader = headers.length > 1 ? headers[1] : '18 Dhatus';
+
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFEFB),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE8D9C5)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final stacked = constraints.maxWidth < 760;
+              if (stacked) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _AyatanaMapHeadChip(
+                      label: leftHeader,
+                      icon: Icons.account_tree_outlined,
+                      color: _ayatanaInnerIcon,
+                    ),
+                    const SizedBox(height: 3),
+                    _AyatanaMapHeadChip(
+                      label: rightHeader,
+                      icon: Icons.widgets_outlined,
+                      color: _ayatanaOuterIcon,
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(
+                    child: _AyatanaMapHeadChip(
+                      label: leftHeader,
+                      icon: Icons.account_tree_outlined,
+                      color: _ayatanaInnerIcon,
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  Expanded(
+                    child: _AyatanaMapHeadChip(
+                      label: rightHeader,
+                      icon: Icons.widgets_outlined,
+                      color: _ayatanaOuterIcon,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 3),
+          ...rows.where((r) => r.length >= 2).map((r) {
+            final left = r[0];
+            final right = r[1];
+            final mindRow = left.toLowerCase().contains('mind source');
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 3),
+              child: _AyatanaMapRow(
+                leftLabel: left,
+                rightLabel: right,
+                isMindRow: mindRow,
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+class _AyatanaMapHeadChip extends StatelessWidget {
+  const _AyatanaMapHeadChip({
+    required this.label,
+    required this.icon,
+    required this.color,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFEFB),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
+        color: const Color(0xFFFFF8EE),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: const Color(0xFFE8DCC8)),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 1),
-            child: _IconBadge(
-              icon: _iconForLabel(label),
-              size: 11,
-              backgroundColor: backgroundColor,
-              borderColor: borderColor,
-              iconColor: iconColor,
-            ),
+          _IconBadge(
+            icon: icon,
+            size: 9,
+            backgroundColor: color.withValues(alpha: 0.1),
+            borderColor: color.withValues(alpha: 0.35),
+            iconColor: color,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 4),
           Expanded(
             child: Text(
               label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.bodyText,
-                    fontSize: 13.5,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textDark,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 11,
                   ),
             ),
           ),
@@ -1209,6 +1371,298 @@ class _DualityItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class _AyatanaMapRow extends StatelessWidget {
+  const _AyatanaMapRow({
+    required this.leftLabel,
+    required this.rightLabel,
+    required this.isMindRow,
+  });
+
+  final String leftLabel;
+  final String rightLabel;
+  final bool isMindRow;
+
+  @override
+  Widget build(BuildContext context) {
+    final dhatuCategory = _dhatuCategoryForLabel(rightLabel);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final stacked = constraints.maxWidth < 760;
+
+        // --- Mind Source row: 7 individual bars on the right ---
+        if (isMindRow) {
+          return _buildMindRow(context, stacked);
+        }
+
+        if (stacked) {
+          return Column(
+            children: [
+              _AyatanaMapNode(
+                label: leftLabel,
+                tint: _ayatanaInnerBg,
+                border: _ayatanaInnerBorder,
+                iconColor: _ayatanaInnerIcon,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1),
+                child: Text(
+                  '≡',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: AppColors.mutedBrown.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              _AyatanaMapNode(
+                label: rightLabel,
+                tint: dhatuCategory?.background ?? _ayatanaOuterBg,
+                border: dhatuCategory?.border ?? _ayatanaOuterBorder,
+                iconColor: dhatuCategory?.icon ?? _ayatanaOuterIcon,
+                dhatuCategory: dhatuCategory,
+              ),
+            ],
+          );
+        }
+
+        return Row(
+          children: [
+            Expanded(
+              child: _AyatanaMapNode(
+                label: leftLabel,
+                tint: _ayatanaInnerBg,
+                border: _ayatanaInnerBorder,
+                iconColor: _ayatanaInnerIcon,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const _IdentityConnector(),
+            const SizedBox(width: 4),
+            Expanded(
+              child: _AyatanaMapNode(
+                label: rightLabel,
+                tint: dhatuCategory?.background ?? _ayatanaOuterBg,
+                border: dhatuCategory?.border ?? _ayatanaOuterBorder,
+                iconColor: dhatuCategory?.icon ?? _ayatanaOuterIcon,
+                dhatuCategory: dhatuCategory,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Builds the Mind Source row with 7 separate bars on the right:
+  /// 1 × Mind Element (faculty yellow) + 6 × consciousness elements (white).
+  Widget _buildMindRow(BuildContext context, bool stacked) {
+    const mindBars = <({String label, IconData icon, _TriadCategory cat})>[
+      (
+        label: 'Mind Element',
+        icon: Icons.psychology_outlined,
+        cat: _TriadCategory.faculties,
+      ),
+      (
+        label: 'Eye Consciousness Element',
+        icon: Icons.visibility_outlined,
+        cat: _TriadCategory.consciousnesses,
+      ),
+      (
+        label: 'Ear Consciousness Element',
+        icon: Icons.hearing_outlined,
+        cat: _TriadCategory.consciousnesses,
+      ),
+      (
+        label: 'Nose Consciousness Element',
+        icon: Icons.air_outlined,
+        cat: _TriadCategory.consciousnesses,
+      ),
+      (
+        label: 'Tongue Consciousness Element',
+        icon: Icons.water_drop_outlined,
+        cat: _TriadCategory.consciousnesses,
+      ),
+      (
+        label: 'Body Consciousness Element',
+        icon: Icons.pan_tool_outlined,
+        cat: _TriadCategory.consciousnesses,
+      ),
+      (
+        label: 'Mind Consciousness Element',
+        icon: Icons.psychology_outlined,
+        cat: _TriadCategory.consciousnesses,
+      ),
+    ];
+
+    Widget buildRightBars() {
+      return Column(
+        children: [
+          for (var i = 0; i < mindBars.length; i++) ...[
+            if (i > 0) const SizedBox(height: 2),
+            _AyatanaMapNode(
+              label: mindBars[i].label,
+              tint: mindBars[i].cat.background,
+              border: mindBars[i].cat.border,
+              iconColor: mindBars[i].cat.icon ?? AppColors.primary,
+              dhatuCategory: mindBars[i].cat,
+            ),
+          ],
+        ],
+      );
+    }
+
+    if (stacked) {
+      return Column(
+        children: [
+          _AyatanaMapNode(
+            label: leftLabel,
+            tint: _ayatanaInnerBg,
+            border: _ayatanaInnerBorder,
+            iconColor: _ayatanaInnerIcon,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 1),
+            child: Text(
+              '≡',
+              style: TextStyle(
+                fontSize: 11,
+                color: AppColors.mutedBrown.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          buildRightBars(),
+        ],
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: _AyatanaMapNode(
+            label: leftLabel,
+            tint: _ayatanaInnerBg,
+            border: _ayatanaInnerBorder,
+            iconColor: _ayatanaInnerIcon,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: const _IdentityConnector(),
+        ),
+        const SizedBox(width: 4),
+        Expanded(child: buildRightBars()),
+      ],
+    );
+  }
+}
+
+class _AyatanaMapNode extends StatelessWidget {
+  const _AyatanaMapNode({
+    required this.label,
+    required this.tint,
+    required this.border,
+    required this.iconColor,
+    this.dhatuCategory,
+  });
+
+  final String label;
+  final Color tint;
+  final Color border;
+  final Color iconColor;
+  final _TriadCategory? dhatuCategory;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveTint = dhatuCategory?.background ?? tint;
+    final effectiveBorder = dhatuCategory?.border ?? border;
+    final effectiveIconColor = dhatuCategory?.icon ??
+        (dhatuCategory != null ? AppColors.primary : iconColor);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 1),
+      child: Row(
+        children: [
+          _IconBadge(
+            icon: _iconForLabel(label),
+            size: 11,
+            backgroundColor: effectiveTint,
+            borderColor: effectiveBorder,
+            iconColor: effectiveIconColor,
+          ),
+          const SizedBox(width: 5),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.textDark,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A single plain row for the Aggregate of Consciousness stack.
+/// Mind Element gets faculty (yellow) badge; consciousness elements get
+/// neutral badges.
+class _ConsciousnessStackItem extends StatelessWidget {
+  const _ConsciousnessStackItem({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final cat = _dhatuCategoryForLabel(label) ?? _TriadCategory.consciousnesses;
+    final iconColor = cat.icon ?? AppColors.primary;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _IconBadge(
+          icon: _iconForLabel(label),
+          size: 12,
+          backgroundColor: cat.background,
+          borderColor: cat.border,
+          iconColor: iconColor,
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.bodyText,
+                fontSize: 13,
+              ),
+        ),
+      ],
+    );
+  }
+}
+
+_TriadCategory? _dhatuCategoryForLabel(String label) {
+  final t = label.toLowerCase();
+  if (RegExp(r'\b(eye|ear|nose|tongue|body|mind) element\b').hasMatch(t)) {
+    return _TriadCategory.faculties;
+  }
+  if (t.contains('visual form element') ||
+      t.contains('sound element') ||
+      t.contains('smell element') ||
+      t.contains('taste element') ||
+      t.contains('texture element') ||
+      t.contains('mental object element')) {
+    return _TriadCategory.objects;
+  }
+  if (t.contains('consciousness element')) {
+    return _TriadCategory.consciousnesses;
+  }
+  return null;
 }
 
 class _PlainList extends StatelessWidget {
@@ -1226,16 +1680,16 @@ class _PlainList extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: AppColors.bodyText,
-          fontSize: 15.5,
+          fontSize: 13.5,
         );
     final numberStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: AppColors.mutedBrown,
           fontWeight: FontWeight.w600,
-          fontSize: 15.5,
+          fontSize: 13.5,
         );
     final subItemStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: AppColors.bodyText,
-          fontSize: 14.5,
+          fontSize: 12.5,
         );
 
     // If any sibling has a sublist, bold all top-level items for consistency.
@@ -1246,8 +1700,8 @@ class _PlainList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var i = 0; i < items.length; i++)
-          _buildItem(
-              context, i, bodyStyle, numberStyle, subItemStyle, hasSublistSibling),
+          _buildItem(context, i, bodyStyle, numberStyle, subItemStyle,
+              hasSublistSibling),
       ],
     );
   }
@@ -1394,12 +1848,12 @@ class _ClassificationSummaryList extends StatelessWidget {
   Widget build(BuildContext context) {
     final bodyStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: AppColors.bodyText,
-          fontSize: 15.5,
+          fontSize: 13.5,
         );
     final labelStyle = bodyStyle?.copyWith(fontWeight: FontWeight.w600);
 
     return Padding(
-      padding: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.only(top: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1417,8 +1871,7 @@ class _ClassificationSummaryList extends StatelessWidget {
     TextStyle? labelStyle,
   ) {
     final colonIndex = item.indexOf(':');
-    final label =
-        colonIndex > 0 ? item.substring(0, colonIndex + 1) : item;
+    final label = colonIndex > 0 ? item.substring(0, colonIndex + 1) : item;
     final description =
         colonIndex > 0 ? item.substring(colonIndex + 1).trim() : '';
     final classKey = colonIndex > 0
@@ -1428,7 +1881,7 @@ class _ClassificationSummaryList extends StatelessWidget {
     final activeElements = classificationIcons[classKey] ?? [];
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1437,9 +1890,9 @@ class _ClassificationSummaryList extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: _IconBadge(icon: _iconForLabel(label), size: 13),
+                child: _IconBadge(icon: _iconForLabel(label), size: 11),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 6),
               Expanded(
                 child: Text.rich(
                   TextSpan(
@@ -1532,8 +1985,7 @@ class _IconBadge extends StatelessWidget {
   final remainder = item.substring(colonIndex + 1).trim();
 
   // Split by commas and semicolons
-  final parts =
-      remainder.split(RegExp(r'[,;]')).map((p) => p.trim()).toList();
+  final parts = remainder.split(RegExp(r'[,;]')).map((p) => p.trim()).toList();
   if (parts.length < 2) return null;
 
   final subItems = <String>[];
@@ -1638,7 +2090,9 @@ IconData _computeIcon(String text) {
   if (t.startsWith('the ')) t = t.substring(4);
   // Skandha (aggregate) patterns – checked first so "Aggregate of Form"
   // doesn't fall through to the generic 'aggregate' → list-bullet icon.
-  if (t == 'form' || t == 'forms' || t == 'aggregate of form' ||
+  if (t == 'form' ||
+      t == 'forms' ||
+      t == 'aggregate of form' ||
       t == 'aggregate of forms') {
     return Icons.category_outlined;
   }
@@ -1730,13 +2184,13 @@ const _skandhaBadgeBorder = Color(0xFFE0B4B1);
 const _skandhaChipBg = Color(0xFFFFF5F4);
 const _skandhaChipBorder = Color(0xFFE8C4C2);
 
-// Ayatana (sense source) colours – teal-green for inner/outer duality
-const _ayatanaInnerIcon = Color(0xFF4A7C6F);
-const _ayatanaInnerBg = Color(0xFFEDF6F3);
-const _ayatanaInnerBorder = Color(0xFFB8D8CC);
-const _ayatanaOuterIcon = Color(0xFF5B7BA5);
-const _ayatanaOuterBg = Color(0xFFEEF3F9);
-const _ayatanaOuterBorder = Color(0xFFB8CCE0);
+// Ayatana (sense source) colours – lighter green for inner, darker green for outer
+const _ayatanaInnerIcon = Color(0xFF7EAE96);
+const _ayatanaInnerBg = Color(0xFFF0F8F4);
+const _ayatanaInnerBorder = Color(0xFFC8E2D4);
+const _ayatanaOuterIcon = Color(0xFF3D6B56);
+const _ayatanaOuterBg = Color(0xFFE6F0EA);
+const _ayatanaOuterBorder = Color(0xFFA3C9B3);
 
 // ─────────────────────────────────────────────────────────────────────────
 // Classification Overlaps – interactive matrix + region cards
@@ -1768,24 +2222,41 @@ class _OverlapRegion {
 }
 
 const _kDhatus = <_DhatuEntry>[
-  _DhatuEntry('eye-fac', 'Eye Faculty', Icons.visibility_outlined, _TriadCategory.faculties),
-  _DhatuEntry('ear-fac', 'Ear Faculty', Icons.hearing_outlined, _TriadCategory.faculties),
-  _DhatuEntry('nose-fac', 'Nose Faculty', Icons.air_outlined, _TriadCategory.faculties),
-  _DhatuEntry('tongue-fac', 'Tongue Faculty', Icons.water_drop_outlined, _TriadCategory.faculties),
-  _DhatuEntry('body-fac', 'Body Faculty', Icons.pan_tool_outlined, _TriadCategory.faculties),
-  _DhatuEntry('mind-fac', 'Mind Faculty', Icons.psychology_outlined, _TriadCategory.faculties),
-  _DhatuEntry('visual-obj', 'Visual Form', Icons.visibility_outlined, _TriadCategory.objects),
-  _DhatuEntry('sound-obj', 'Sound', Icons.hearing_outlined, _TriadCategory.objects),
+  _DhatuEntry('eye-fac', 'Eye Faculty', Icons.visibility_outlined,
+      _TriadCategory.faculties),
+  _DhatuEntry('ear-fac', 'Ear Faculty', Icons.hearing_outlined,
+      _TriadCategory.faculties),
+  _DhatuEntry(
+      'nose-fac', 'Nose Faculty', Icons.air_outlined, _TriadCategory.faculties),
+  _DhatuEntry('tongue-fac', 'Tongue Faculty', Icons.water_drop_outlined,
+      _TriadCategory.faculties),
+  _DhatuEntry('body-fac', 'Body Faculty', Icons.pan_tool_outlined,
+      _TriadCategory.faculties),
+  _DhatuEntry('mind-fac', 'Mind Faculty', Icons.psychology_outlined,
+      _TriadCategory.faculties),
+  _DhatuEntry('visual-obj', 'Visual Form', Icons.visibility_outlined,
+      _TriadCategory.objects),
+  _DhatuEntry(
+      'sound-obj', 'Sound', Icons.hearing_outlined, _TriadCategory.objects),
   _DhatuEntry('smell-obj', 'Smell', Icons.air_outlined, _TriadCategory.objects),
-  _DhatuEntry('taste-obj', 'Taste', Icons.water_drop_outlined, _TriadCategory.objects),
-  _DhatuEntry('texture-obj', 'Texture', Icons.pan_tool_outlined, _TriadCategory.objects),
-  _DhatuEntry('mental-obj', 'Mental Object', Icons.psychology_outlined, _TriadCategory.objects),
-  _DhatuEntry('eye-con', 'Eye Consc.', Icons.visibility_outlined, _TriadCategory.consciousnesses),
-  _DhatuEntry('ear-con', 'Ear Consc.', Icons.hearing_outlined, _TriadCategory.consciousnesses),
-  _DhatuEntry('nose-con', 'Nose Consc.', Icons.air_outlined, _TriadCategory.consciousnesses),
-  _DhatuEntry('tongue-con', 'Tongue Consc.', Icons.water_drop_outlined, _TriadCategory.consciousnesses),
-  _DhatuEntry('body-con', 'Body Consc.', Icons.pan_tool_outlined, _TriadCategory.consciousnesses),
-  _DhatuEntry('mind-con', 'Mind Consc.', Icons.psychology_outlined, _TriadCategory.consciousnesses),
+  _DhatuEntry(
+      'taste-obj', 'Taste', Icons.water_drop_outlined, _TriadCategory.objects),
+  _DhatuEntry('texture-obj', 'Texture', Icons.pan_tool_outlined,
+      _TriadCategory.objects),
+  _DhatuEntry('mental-obj', 'Mental Object', Icons.psychology_outlined,
+      _TriadCategory.objects),
+  _DhatuEntry('eye-con', 'Eye Consc.', Icons.visibility_outlined,
+      _TriadCategory.consciousnesses),
+  _DhatuEntry('ear-con', 'Ear Consc.', Icons.hearing_outlined,
+      _TriadCategory.consciousnesses),
+  _DhatuEntry('nose-con', 'Nose Consc.', Icons.air_outlined,
+      _TriadCategory.consciousnesses),
+  _DhatuEntry('tongue-con', 'Tongue Consc.', Icons.water_drop_outlined,
+      _TriadCategory.consciousnesses),
+  _DhatuEntry('body-con', 'Body Consc.', Icons.pan_tool_outlined,
+      _TriadCategory.consciousnesses),
+  _DhatuEntry('mind-con', 'Mind Consc.', Icons.psychology_outlined,
+      _TriadCategory.consciousnesses),
 ];
 
 const _kSets = <_SetEntry>[
@@ -1803,42 +2274,174 @@ const _kSets = <_SetEntry>[
 
 /// Membership: dhatu id → set of classification ids it belongs to.
 const _kMembership = <String, Set<String>>{
-  'eye-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm'},
-  'ear-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm'},
-  'nose-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm'},
-  'tongue-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm'},
-  'body-fac': {'physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm'},
-  'mind-fac': {'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts'},
-  'visual-obj': {'physical-form', 'mut-obstruct', 'outer', 'desire-realm', 'form-realm'},
-  'sound-obj': {'physical-form', 'mut-obstruct', 'outer', 'desire-realm', 'form-realm'},
-  'smell-obj': {'physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm'},
-  'taste-obj': {'physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm'},
-  'texture-obj': {'physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm', 'form-realm'},
-  'mental-obj': {'physical-form', 'outer', 'personal-sens', 'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts'},
+  'eye-fac': {
+    'physical-form',
+    'mut-obstruct',
+    'personal-sens',
+    'desire-realm',
+    'form-realm'
+  },
+  'ear-fac': {
+    'physical-form',
+    'mut-obstruct',
+    'personal-sens',
+    'desire-realm',
+    'form-realm'
+  },
+  'nose-fac': {
+    'physical-form',
+    'mut-obstruct',
+    'personal-sens',
+    'desire-realm'
+  },
+  'tongue-fac': {
+    'physical-form',
+    'mut-obstruct',
+    'personal-sens',
+    'desire-realm'
+  },
+  'body-fac': {
+    'physical-form',
+    'mut-obstruct',
+    'personal-sens',
+    'desire-realm',
+    'form-realm'
+  },
+  'mind-fac': {
+    'desire-realm',
+    'form-realm',
+    'formless-realm',
+    'undefiling',
+    'focus',
+    'concepts'
+  },
+  'visual-obj': {
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'desire-realm',
+    'form-realm'
+  },
+  'sound-obj': {
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'desire-realm',
+    'form-realm'
+  },
+  'smell-obj': {
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'personal-sens',
+    'desire-realm'
+  },
+  'taste-obj': {
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'personal-sens',
+    'desire-realm'
+  },
+  'texture-obj': {
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'personal-sens',
+    'desire-realm',
+    'form-realm'
+  },
+  'mental-obj': {
+    'physical-form',
+    'outer',
+    'personal-sens',
+    'desire-realm',
+    'form-realm',
+    'formless-realm',
+    'undefiling',
+    'focus',
+    'concepts'
+  },
   'eye-con': {'desire-realm', 'form-realm', 'focus'},
   'ear-con': {'desire-realm', 'form-realm', 'focus'},
   'nose-con': {'desire-realm', 'form-realm', 'focus'},
   'tongue-con': {'desire-realm', 'form-realm', 'focus'},
   'body-con': {'desire-realm', 'form-realm', 'focus'},
-  'mind-con': {'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts'},
+  'mind-con': {
+    'desire-realm',
+    'form-realm',
+    'formless-realm',
+    'undefiling',
+    'focus',
+    'concepts'
+  },
 };
 
 const _kRegions = <_OverlapRegion>[
-  _OverlapRegion('Sense Faculties in Form Realm', ['eye-fac', 'ear-fac', 'body-fac'],
-      ['physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm', 'form-realm']),
-  _OverlapRegion('Sense Faculties not in Form Realm', ['nose-fac', 'tongue-fac'],
+  _OverlapRegion('Sense Faculties in Form Realm', [
+    'eye-fac',
+    'ear-fac',
+    'body-fac'
+  ], [
+    'physical-form',
+    'mut-obstruct',
+    'personal-sens',
+    'desire-realm',
+    'form-realm'
+  ]),
+  _OverlapRegion(
+      'Sense Faculties not in Form Realm',
+      ['nose-fac', 'tongue-fac'],
       ['physical-form', 'mut-obstruct', 'personal-sens', 'desire-realm']),
   _OverlapRegion('Distant Sense Objects', ['visual-obj', 'sound-obj'],
       ['physical-form', 'mut-obstruct', 'outer', 'desire-realm', 'form-realm']),
-  _OverlapRegion('Proximate Objects (Desire only)', ['smell-obj', 'taste-obj'],
-      ['physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm']),
-  _OverlapRegion('Texture (unique 6-set)', ['texture-obj'],
-      ['physical-form', 'mut-obstruct', 'outer', 'personal-sens', 'desire-realm', 'form-realm']),
-  _OverlapRegion('Mental Object (9 of 10)', ['mental-obj'],
-      ['physical-form', 'outer', 'personal-sens', 'desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts']),
-  _OverlapRegion('The Mental Pair', ['mind-fac', 'mind-con'],
-      ['desire-realm', 'form-realm', 'formless-realm', 'undefiling', 'focus', 'concepts']),
-  _OverlapRegion('Five Sense Consciousnesses', ['eye-con', 'ear-con', 'nose-con', 'tongue-con', 'body-con'],
+  _OverlapRegion('Proximate Objects (Desire only)', [
+    'smell-obj',
+    'taste-obj'
+  ], [
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'personal-sens',
+    'desire-realm'
+  ]),
+  _OverlapRegion('Texture (unique 6-set)', [
+    'texture-obj'
+  ], [
+    'physical-form',
+    'mut-obstruct',
+    'outer',
+    'personal-sens',
+    'desire-realm',
+    'form-realm'
+  ]),
+  _OverlapRegion('Mental Object (9 of 10)', [
+    'mental-obj'
+  ], [
+    'physical-form',
+    'outer',
+    'personal-sens',
+    'desire-realm',
+    'form-realm',
+    'formless-realm',
+    'undefiling',
+    'focus',
+    'concepts'
+  ]),
+  _OverlapRegion('The Mental Pair', [
+    'mind-fac',
+    'mind-con'
+  ], [
+    'desire-realm',
+    'form-realm',
+    'formless-realm',
+    'undefiling',
+    'focus',
+    'concepts'
+  ]),
+  _OverlapRegion(
+      'Five Sense Consciousnesses',
+      ['eye-con', 'ear-con', 'nose-con', 'tongue-con', 'body-con'],
       ['desire-realm', 'form-realm', 'focus']),
 ];
 
@@ -1943,7 +2546,10 @@ class _ClassificationOverlapsViewState
           // Dhatu rows
           for (var i = 0; i < _kDhatus.length; i++) ...[
             if (i == 6 || i == 12) // separators between triads
-              Container(height: 1, width: 120.0 + _kSets.length * 38, color: AppColors.border),
+              Container(
+                  height: 1,
+                  width: 120.0 + _kSets.length * 38,
+                  color: AppColors.border),
             _buildRow(context, _kDhatus[i]),
           ],
         ],
@@ -1974,7 +2580,9 @@ class _ClassificationOverlapsViewState
           ),
           child: Column(
             children: [
-              Icon(s.icon, size: 11, color: active ? Colors.white : AppColors.mutedBrown),
+              Icon(s.icon,
+                  size: 11,
+                  color: active ? Colors.white : AppColors.mutedBrown),
               const SizedBox(height: 2),
               RotatedBox(
                 quarterTurns: 3,
@@ -2031,7 +2639,8 @@ class _ClassificationOverlapsViewState
                         d.name,
                         style: TextStyle(
                           fontSize: 10.5,
-                          fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                          fontWeight:
+                              active ? FontWeight.w700 : FontWeight.w500,
                           color: d.triad.icon ?? AppColors.primary,
                         ),
                         maxLines: 1,
@@ -2075,7 +2684,9 @@ class _ClassificationOverlapsViewState
               height: cellHighlighted ? 10 : 7,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: cellHighlighted ? AppColors.primary : const Color(0xFFB8960F),
+                color: cellHighlighted
+                    ? AppColors.primary
+                    : const Color(0xFFB8960F),
               ),
             )
           : null,
@@ -2106,8 +2717,7 @@ class _ClassificationOverlapsViewState
       title = s.name;
       subtitle = 'Contains ${members.length} of 18 dhatus';
       tags = [
-        for (final dId in members)
-          _buildDhatuPill(_kDhatuMap[dId]!, true),
+        for (final dId in members) _buildDhatuPill(_kDhatuMap[dId]!, true),
       ];
     }
 
@@ -2129,13 +2739,18 @@ class _ClassificationOverlapsViewState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textDark,
-            )),
+            Text(title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDark,
+                )),
             const SizedBox(height: 2),
-            Text(subtitle, style: TextStyle(
-              fontSize: 12, color: AppColors.mutedBrown,
-            )),
+            Text(subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.mutedBrown,
+                )),
             const SizedBox(height: 6),
             Wrap(spacing: 4, runSpacing: 4, children: tags),
           ],
@@ -2157,7 +2772,9 @@ class _ClassificationOverlapsViewState
         children: [
           Icon(s.icon, size: 10, color: AppColors.mutedBrown),
           const SizedBox(width: 4),
-          Text(s.name, style: const TextStyle(fontSize: 10.5, color: AppColors.mutedBrown)),
+          Text(s.name,
+              style:
+                  const TextStyle(fontSize: 10.5, color: AppColors.mutedBrown)),
         ],
       ),
     );
@@ -2176,9 +2793,11 @@ class _ClassificationOverlapsViewState
         children: [
           Icon(d.icon, size: 10, color: d.triad.icon ?? AppColors.primary),
           const SizedBox(width: 4),
-          Text(d.name, style: TextStyle(
-            fontSize: 10.5, color: d.triad.icon ?? AppColors.primary,
-          )),
+          Text(d.name,
+              style: TextStyle(
+                fontSize: 10.5,
+                color: d.triad.icon ?? AppColors.primary,
+              )),
         ],
       ),
     );
@@ -2195,8 +2814,8 @@ class _ClassificationOverlapsViewState
   }
 
   Widget _buildRegionCard(BuildContext context, _OverlapRegion region) {
-    final hasOverlap = !_hasSelection ||
-        region.dhatuIds.any((d) => _isDhatuHighlighted(d));
+    final hasOverlap =
+        !_hasSelection || region.dhatuIds.any((d) => _isDhatuHighlighted(d));
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 200),
@@ -2212,9 +2831,12 @@ class _ClassificationOverlapsViewState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(region.title, style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textDark,
-            )),
+            Text(region.title,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textDark,
+                )),
             const SizedBox(height: 5),
             Wrap(
               spacing: 4,
@@ -2223,7 +2845,8 @@ class _ClassificationOverlapsViewState
                 for (final dId in region.dhatuIds)
                   GestureDetector(
                     onTap: () => _tapDhatu(dId),
-                    child: _buildDhatuPill(_kDhatuMap[dId]!, _isDhatuHighlighted(dId)),
+                    child: _buildDhatuPill(
+                        _kDhatuMap[dId]!, _isDhatuHighlighted(dId)),
                   ),
               ],
             ),
@@ -2235,7 +2858,8 @@ class _ClassificationOverlapsViewState
                 for (final sId in region.setIds)
                   GestureDetector(
                     onTap: () => _tapSet(sId),
-                    child: _buildSetPill(_kSetMap[sId]!, _isSetHighlighted(sId)),
+                    child:
+                        _buildSetPill(_kSetMap[sId]!, _isSetHighlighted(sId)),
                   ),
               ],
             ),
@@ -2251,7 +2875,13 @@ bool _isSkandhaLabel(String text) {
   if (t.startsWith('the ')) t = t.substring(4);
   if (t.startsWith('aggregate of ')) t = t.substring(13);
   // Normalize plurals: "forms" → "form"
-  const bases = {'form', 'sensation', 'perceptions', 'formations', 'consciousness'};
+  const bases = {
+    'form',
+    'sensation',
+    'perceptions',
+    'formations',
+    'consciousness'
+  };
   if (bases.contains(t) || t == 'forms') return true;
   if (t == 'five aggregates') return true;
   return false;

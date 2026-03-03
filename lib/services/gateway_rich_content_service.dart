@@ -49,7 +49,7 @@ class GatewayRichContentService {
   static const List<GatewayRichChapter> _chapters = <GatewayRichChapter>[
     GatewayRichChapter(
         number: 1,
-        title: 'The Aggregates (Skandhas)',
+        title: 'The Aggregates',
         topics: <GatewayRichTopic>[
           GatewayRichTopic(title: 'Five Aggregates', blocks: <GatewayRichBlock>[
             GatewayRichBlock(
@@ -307,126 +307,124 @@ class GatewayRichContentService {
                       'Body Consciousness Element',
                       'Mind Consciousness Element',
                     ],
-                    styleClass: 'icon-list-grid'),
+                    styleClass: 'consciousness-stack'),
               ]),
         ]),
     GatewayRichChapter(
         number: 2,
-        title: 'The Elements (Dhatu)',
+        title: 'The Elements',
         topics: <GatewayRichTopic>[
-          GatewayRichTopic(
-              title: 'Eighteen Dhatus',
-              blocks: <GatewayRichBlock>[
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Eye Element',
-                      'Ear Element',
-                      'Nose Element',
-                      'Tongue Element',
-                      'Body Element',
-                      'Mind Element'
-                    ],
-                    styleClass: 'sense-list'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Visual Form Element',
-                      'Sound Element',
-                      'Smell Element',
-                      'Taste Element',
-                      'Texture Element',
-                      'Mental Object Element'
-                    ],
-                    styleClass: 'sense-list'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Eye Consciousness Element',
-                      'Ear Consciousness Element',
-                      'Nose Consciousness Element',
-                      'Tongue Consciousness Element',
-                      'Body Consciousness Element',
-                      'Mind Consciousness Element'
-                    ],
-                    styleClass: 'sense-list'),
-                // --- Aggregate of Form ---
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'The Aggregate of Forms',
-                    styleClass: 'subset-title'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Eye Element',
-                      'Ear Element',
-                      'Nose Element',
-                      'Tongue Element',
-                      'Body Element',
-                      '~Mind Element'
-                    ],
-                    styleClass: 'sense-list-subset'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Visual Form Element',
-                      'Sound Element',
-                      'Smell Element',
-                      'Taste Element',
-                      'Texture Element',
-                      '~Mental Object Element'
-                    ],
-                    styleClass: 'sense-list-subset'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      '~Eye Consciousness Element',
-                      '~Ear Consciousness Element',
-                      '~Nose Consciousness Element',
-                      '~Tongue Consciousness Element',
-                      '~Body Consciousness Element',
-                      '~Mind Consciousness Element'
-                    ],
-                    styleClass: 'sense-list-subset'),
-                // --- Aggregate of Consciousness ---
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'The Aggregate of Consciousness',
-                    styleClass: 'subset-title'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      '~Eye Element',
-                      '~Ear Element',
-                      '~Nose Element',
-                      '~Tongue Element',
-                      '~Body Element',
-                      'Mind Element'
-                    ],
-                    styleClass: 'sense-list-subset'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      '~Visual Form Element',
-                      '~Sound Element',
-                      '~Smell Element',
-                      '~Taste Element',
-                      '~Texture Element',
-                      '~Mental Object Element'
-                    ],
-                    styleClass: 'sense-list-subset'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Eye Consciousness Element',
-                      'Ear Consciousness Element',
-                      'Nose Consciousness Element',
-                      'Tongue Consciousness Element',
-                      'Body Consciousness Element',
-                      'Mind Consciousness Element'
-                    ],
-                    styleClass: 'sense-list-subset'),
-              ]),
+          GatewayRichTopic(title: 'Eighteen Dhatus', blocks: <GatewayRichBlock>[
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  'Eye Element',
+                  'Ear Element',
+                  'Nose Element',
+                  'Tongue Element',
+                  'Body Element',
+                  'Mind Element'
+                ],
+                styleClass: 'sense-list'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  'Visual Form Element',
+                  'Sound Element',
+                  'Smell Element',
+                  'Taste Element',
+                  'Texture Element',
+                  'Mental Object Element'
+                ],
+                styleClass: 'sense-list'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  'Eye Consciousness Element',
+                  'Ear Consciousness Element',
+                  'Nose Consciousness Element',
+                  'Tongue Consciousness Element',
+                  'Body Consciousness Element',
+                  'Mind Consciousness Element'
+                ],
+                styleClass: 'sense-list'),
+            // --- Aggregate of Form ---
+            GatewayRichBlock(
+                type: 'p',
+                text: 'The Aggregate of Forms',
+                styleClass: 'subset-title'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  'Eye Element',
+                  'Ear Element',
+                  'Nose Element',
+                  'Tongue Element',
+                  'Body Element',
+                  '~Mind Element'
+                ],
+                styleClass: 'sense-list-subset'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  'Visual Form Element',
+                  'Sound Element',
+                  'Smell Element',
+                  'Taste Element',
+                  'Texture Element',
+                  '~Mental Object Element'
+                ],
+                styleClass: 'sense-list-subset'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  '~Eye Consciousness Element',
+                  '~Ear Consciousness Element',
+                  '~Nose Consciousness Element',
+                  '~Tongue Consciousness Element',
+                  '~Body Consciousness Element',
+                  '~Mind Consciousness Element'
+                ],
+                styleClass: 'sense-list-subset'),
+            // --- Aggregate of Consciousness ---
+            GatewayRichBlock(
+                type: 'p',
+                text: 'The Aggregate of Consciousness',
+                styleClass: 'subset-title'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  '~Eye Element',
+                  '~Ear Element',
+                  '~Nose Element',
+                  '~Tongue Element',
+                  '~Body Element',
+                  'Mind Element'
+                ],
+                styleClass: 'sense-list-subset'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  '~Visual Form Element',
+                  '~Sound Element',
+                  '~Smell Element',
+                  '~Taste Element',
+                  '~Texture Element',
+                  '~Mental Object Element'
+                ],
+                styleClass: 'sense-list-subset'),
+            GatewayRichBlock(
+                type: 'ul',
+                items: <String>[
+                  'Eye Consciousness Element',
+                  'Ear Consciousness Element',
+                  'Nose Consciousness Element',
+                  'Tongue Consciousness Element',
+                  'Body Consciousness Element',
+                  'Mind Consciousness Element'
+                ],
+                styleClass: 'sense-list-subset'),
+          ]),
           GatewayRichTopic(
               title: 'Mental Object Sources (Ayatana)',
               blocks: <GatewayRichBlock>[
@@ -868,8 +866,7 @@ class GatewayRichContentService {
                     text:
                         'The ten classifications above overlap in structured ways. Tap any element or classification to see how it relates to the others.',
                     styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'classification-matrix', styleClass: ''),
+                GatewayRichBlock(type: 'classification-matrix', styleClass: ''),
                 GatewayRichBlock(
                     type: 'p',
                     text:
@@ -889,84 +886,75 @@ class GatewayRichContentService {
         ]),
     GatewayRichChapter(
         number: 3,
-        title: 'The Sense Sources (Ayatana)',
+        title: 'The Sense Sources',
         topics: <GatewayRichTopic>[
           GatewayRichTopic(
-              title: 'Inner and Outer Sources (Duality View)',
+              title: 'Inner and Outer Sources',
+              blocks: <GatewayRichBlock>[
+                GatewayRichBlock(
+                    type: 'ul',
+                    items: <String>[
+                      'Eye Source',
+                      'Ear Source',
+                      'Nose Source',
+                      'Tongue Source',
+                      'Body Source',
+                      'Mind Source'
+                    ],
+                    styleClass: 'duality-list'),
+                GatewayRichBlock(
+                    type: 'ul',
+                    items: <String>[
+                      'Visual Object Source',
+                      'Sound Object Source',
+                      'Olfactory Object Source',
+                      'Taste Object Source',
+                      'Tactile Object Source',
+                      'Mental Object Source'
+                    ],
+                    styleClass: 'duality-list'),
+              ]),
+          GatewayRichTopic(
+              title: 'Mapping Ayatanas to Dhatus',
               blocks: <GatewayRichBlock>[
                 GatewayRichBlock(
                     type: 'p',
                     text:
-                        'Sense sources are shown as a dual structure: what apprehends and what is apprehended.',
+                        'The 12 ayatanas and the 18 dhatus overlap extensively. The dhatus expand on the ayatanas by splitting the Mind Source into its constituent consciousness elements and adding the Mind Faculty Element.',
                     styleClass: 'triad-note'),
                 GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Eye Source (Eye Element)',
-                      'Ear Source (Ear Element)',
-                      'Nose Source (Nose Element)',
-                      'Tongue Source (Tongue Element)',
-                      'Body Source (Body Element)',
-                      'Mind Source (Seven Consciousness Elements)'
+                    type: 'table',
+                    headers: <String>['12 Ayatanas', '18 Dhatus'],
+                    rows: <List<String>>[
+                      <String>['Eye Source', 'Eye Element'],
+                      <String>['Ear Source', 'Ear Element'],
+                      <String>['Nose Source', 'Nose Element'],
+                      <String>['Tongue Source', 'Tongue Element'],
+                      <String>['Body Source', 'Body Element'],
+                      <String>['Visual Object Source', 'Visual Form Element'],
+                      <String>['Sound Object Source', 'Sound Element'],
+                      <String>['Olfactory Object Source', 'Smell Element'],
+                      <String>['Taste Object Source', 'Taste Element'],
+                      <String>['Tactile Object Source', 'Texture Element'],
+                      <String>['Mental Object Source', 'Mental Object Element'],
+                      <String>[
+                        'Mind Source',
+                        'Mind Element + 6 Consciousness Elements'
+                      ]
                     ],
-                    styleClass: 'duality-list'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Visual Object Source (Visual Form Element)',
-                      'Sound Object Source (Sound Element)',
-                      'Olfactory Object Source (Smell Element)',
-                      'Taste Object Source (Taste Element)',
-                      'Tactile Object Source (Texture Element)',
-                      'Mental Object Source (Mental Object Element)'
-                    ],
-                    styleClass: 'duality-list'),
+                    styleClass: 'ayatana-dhatu-map'),
                 GatewayRichBlock(
                     type: 'p',
                     text:
-                        'Inner and outer sources work as a complementary pair: each inner source engages a corresponding outer source.',
+                        'The 5 inner ayatanas (Eye, Ear, Nose, Tongue, Body) match the first 5 faculty elements directly. The 6 outer ayatanas match the 6 object elements. The 6 consciousness elements plus the Mind Faculty Element all map to the single Mind Source ayatana.',
                     styleClass: 'callout'),
-                GatewayRichBlock(
-                    type: 'table',
-                    headers: <String>[
-                      'Inner Sources (What Apprehends)',
-                      'Outer Sources (What Is Apprehended)'
-                    ],
-                    rows: <List<String>>[
-                      <String>[
-                        'Eye Source (Eye Element)',
-                        'Visual Object Source (Visual Form Element)'
-                      ],
-                      <String>[
-                        'Ear Source (Ear Element)',
-                        'Sound Object Source (Sound Element)'
-                      ],
-                      <String>[
-                        'Nose Source (Nose Element)',
-                        'Olfactory Object Source (Smell Element)'
-                      ],
-                      <String>[
-                        'Tongue Source (Tongue Element)',
-                        'Taste Object Source (Taste Element)'
-                      ],
-                      <String>[
-                        'Body Source (Body Element)',
-                        'Tactile Object Source (Texture Element)'
-                      ],
-                      <String>[
-                        'Mind Source (Seven Consciousness Elements)',
-                        'Mental Object Source (Mental Object Element)'
-                      ]
-                    ],
-                    styleClass: ''),
               ]),
           GatewayRichTopic(
               title: 'The Five Base Knowables',
               blocks: <GatewayRichBlock>[
                 GatewayRichBlock(
                     type: 'p',
-                    text:
-                        'All phenomena can be classified into five bases:',
+                    text: 'All phenomena can be classified into five bases:',
                     styleClass: 'topic-copy'),
                 GatewayRichBlock(
                     type: 'ol',

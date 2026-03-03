@@ -31,7 +31,7 @@ class GatewayOutlineService {
   static const List<GatewayOutlineChapter> _chapters = <GatewayOutlineChapter>[
     GatewayOutlineChapter(
       number: 1,
-      title: 'The Aggregates (Skandhas)',
+      title: 'The Aggregates',
       sections: <GatewayOutlineSection>[
         GatewayOutlineSection(path: '1.1', title: 'Five Aggregates', depth: 0),
         GatewayOutlineSection(
@@ -50,7 +50,7 @@ class GatewayOutlineService {
     ),
     GatewayOutlineChapter(
       number: 2,
-      title: 'The Elements (Dhatu)',
+      title: 'The Elements',
       sections: <GatewayOutlineSection>[
         GatewayOutlineSection(
             path: '2.1', title: 'Eighteen Dhatus', depth: 0),
@@ -66,14 +66,18 @@ class GatewayOutlineService {
     ),
     GatewayOutlineChapter(
       number: 3,
-      title: 'The Sense Sources (Ayatana)',
+      title: 'The Sense Sources',
       sections: <GatewayOutlineSection>[
         GatewayOutlineSection(
             path: '3.1',
-            title: 'Inner and Outer Sources (Duality View)',
+            title: 'Inner and Outer Sources',
             depth: 0),
         GatewayOutlineSection(
-            path: '3.2', title: 'The Five Base Knowables', depth: 0),
+            path: '3.2',
+            title: 'Mapping Ayatanas to Dhatus',
+            depth: 0),
+        GatewayOutlineSection(
+            path: '3.3', title: 'The Five Base Knowables', depth: 0),
       ],
     ),
     GatewayOutlineChapter(

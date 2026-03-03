@@ -298,8 +298,12 @@ class _GatewayChapterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewport = MediaQuery.sizeOf(context);
+    final compact = viewport.width <= 430 && viewport.height <= 950;
+    final verySmall = viewport.width <= 375 && viewport.height <= 820;
+
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: compact ? 6 : 12),
       color: AppColors.cardBeige,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -307,16 +311,24 @@ class _GatewayChapterTile extends StatelessWidget {
       ),
       child: ListTile(
         onTap: onTap,
-        leading: Icon(Icons.book_outlined, color: AppColors.primary),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: compact ? (verySmall ? 10 : 12) : 16,
+          vertical: compact ? 2 : 4,
+        ),
+        leading: Icon(
+          Icons.book_outlined,
+          color: AppColors.primary,
+          size: compact ? (verySmall ? 20 : 22) : 24,
+        ),
         title: Text(
-          'Chapter ${chapter.number}: ${chapter.title}',
+          '${chapter.number}. ${chapter.title}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: 24,
+                fontSize: compact ? (verySmall ? 19.5 : 21) : 24,
               ),
         ),
-        trailing: const Icon(
+        trailing: Icon(
           Icons.arrow_forward_ios,
-          size: 13,
+          size: compact ? (verySmall ? 13 : 14) : 13,
           color: AppColors.mutedBrown,
         ),
       ),
