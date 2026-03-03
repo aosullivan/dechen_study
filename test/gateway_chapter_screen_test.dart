@@ -61,12 +61,12 @@ void main() {
     expect(_leadingIconColorForLabel(tester, 'Visual Object Source'),
         const Color(0xFF2C5F8A));
 
-    // Dhatu-side consistency: faculties amber, objects blue, consciousnesses violet.
+    // Dhatu-side consistency: faculties yellow, objects orange, consciousnesses white.
     expect(_leadingIconColorForLabel(tester, 'Eye Element'),
-        const Color(0xFF7C5600));
+        const Color(0xFF7A6000));
     expect(_leadingIconColorForLabel(tester, 'Visual Form Element'),
-        const Color(0xFF1F5F9E));
+        const Color(0xFF96490A));
     expect(_leadingIconColorForLabel(tester, 'Eye Consciousness Element'),
-        const Color(0xFF5A3AA8));
+        const Color(0xFF8B7355));
   });
 }

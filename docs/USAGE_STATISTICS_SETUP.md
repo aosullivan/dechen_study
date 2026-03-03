@@ -23,7 +23,20 @@ For web (local), either sync from `.env` once:
 bash scripts/sync_supabase_config.sh
 ```
 
-or ensure `web/supabase_config.js` sets `window.SUPABASE_URL` and `window.SUPABASE_ANON_KEY`. For production (e.g. Vercel), set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in the build environment and inject them into `web/supabase_config.js` (e.g. via your build script).
+or ensure `web/supabase_config.js` sets `window.SUPABASE_URL` and `window.SUPABASE_ANON_KEY`.
+
+**Vercel (production):** The analytics page at `https://your-app.vercel.app/analytics.html` will show “Analytics require Supabase config” until you add:
+
+1. **Vercel Dashboard** → your project (e.g. dechen-study) → **Settings** → **Environment Variables**.
+2. Add:
+   - **Name:** `SUPABASE_URL`  
+     **Value:** `https://vzcfwipgpcscmlaqqfko.supabase.co`  
+     **Environments:** Production, Preview (optional).
+   - **Name:** `SUPABASE_ANON_KEY`  
+     **Value:** your project’s anon key (Supabase Dashboard → Project Settings → API → anon public).
+3. **Redeploy:** Deployments → … on latest → **Redeploy**, or push a new commit.
+
+The build script writes `web/supabase_config.js` from these vars; after redeploy, the analytics page will load data.
 
 ## 2. Verify it works
 
