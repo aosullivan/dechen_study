@@ -10,6 +10,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/preload.dart';
 import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/widget_lifecycle_observer.dart';
+import '../../widgets/dechen_home_action.dart';
 import 'overview/overview_constants.dart';
 import 'overview/overview_tree_view.dart';
 import 'overview/overview_verse_panel.dart';
@@ -400,6 +401,7 @@ class _TextualOverviewScreenState extends State<TextualOverviewScreen>
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        actions: const [DechenHomeAction()],
       ),
       body: _loading
           ? const Center(

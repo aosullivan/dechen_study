@@ -10,6 +10,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/preload.dart';
 import '../../utils/verse_ref_formatter.dart';
 import '../../utils/web_navigation.dart';
+import '../../widgets/dechen_home_action.dart';
 import 'file_quiz_screen.dart';
 import 'guess_chapter_screen.dart';
 import 'read_screen.dart';
@@ -123,6 +124,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
+          actions: const [DechenHomeAction()],
           leading: _canShowTopBackButton(context)
               ? IconButton(
                   icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
@@ -777,6 +779,7 @@ class _ReadChapterSelectionScreenState
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        actions: const [DechenHomeAction()],
       ),
       body: FutureBuilder<List<Chapter>>(
         future: _chaptersFuture,

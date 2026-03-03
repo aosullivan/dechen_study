@@ -11,6 +11,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
+import '../../widgets/dechen_home_action.dart';
 import 'bcv/bcv_verse_text.dart';
 
 class FileQuizScreen extends StatefulWidget {
@@ -560,6 +561,7 @@ class _FileQuizScreenState extends State<FileQuizScreen>
           ),
           title: Text('Quiz', style: Theme.of(context).textTheme.titleLarge),
           centerTitle: true,
+          actions: const [DechenHomeAction()],
         ),
         body: const Center(child: SizedBox.shrink()),
       );
@@ -577,6 +579,7 @@ class _FileQuizScreenState extends State<FileQuizScreen>
           ),
           title: Text('Quiz', style: Theme.of(context).textTheme.titleLarge),
           centerTitle: true,
+          actions: const [DechenHomeAction()],
         ),
         body: Center(
           child: Padding(
@@ -616,6 +619,7 @@ class _FileQuizScreenState extends State<FileQuizScreen>
         ),
         title: Text('Quiz', style: Theme.of(context).textTheme.titleLarge),
         centerTitle: true,
+        actions: const [DechenHomeAction()],
       ),
       body: SafeArea(
         child: Padding(

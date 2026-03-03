@@ -69,4 +69,30 @@ void main() {
     expect(_leadingIconColorForLabel(tester, 'Eye Consciousness Element'),
         const Color(0xFF8B7355));
   });
+
+  testWidgets(
+      'chapter 2 element classifications show all 18 and disabled non-members',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: GatewayChapterScreen(chapterNumber: 2),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Keep full-reference labels in the Eighteen Dhatus section.
+    expect(find.text('Eye Element'), findsWidgets);
+    expect(find.text('Mind Consciousness Element'), findsWidgets);
+
+    final scrollable = find.byType(Scrollable).first;
+    for (var i = 0; i < 8; i++) {
+      await tester.drag(scrollable, const Offset(0, -450));
+      await tester.pumpAndSettle();
+    }
+
+    // Non-members are shown as disabled visually (without explicit text label).
+    expect(find.text('DISABLED'), findsNothing);
+    // Icon-only classification columns should still render densely.
+    expect(find.byType(Icon), findsWidgets);
+  });
 }

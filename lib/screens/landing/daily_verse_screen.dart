@@ -10,6 +10,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
+import '../../widgets/dechen_home_action.dart';
 import '../../services/commentary_service.dart';
 import '../../services/verse_hierarchy_service.dart';
 import 'bcv/bcv_verse_text.dart';
@@ -591,6 +592,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        actions: const [DechenHomeAction()],
       ),
       body: SafeArea(
         child: _buildBody(),

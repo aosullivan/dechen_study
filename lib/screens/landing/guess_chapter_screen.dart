@@ -9,6 +9,7 @@ import '../../services/verse_service.dart';
 import '../../services/commentary_service.dart';
 import '../../services/section_clue_service.dart';
 import '../../services/usage_metrics_service.dart';
+import '../../widgets/dechen_home_action.dart';
 import 'bcv/bcv_verse_text.dart';
 
 /// Guess the Chapter: pick which chapter a random section belongs to.
@@ -555,6 +556,7 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
+          actions: const [DechenHomeAction()],
         ),
         body: const Center(child: SizedBox.shrink()),
       );
@@ -575,6 +577,7 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
+          actions: const [DechenHomeAction()],
         ),
         body: Center(
           child: Padding(
@@ -613,6 +616,7 @@ class _GuessChapterScreenState extends State<GuessChapterScreen>
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
+        actions: const [DechenHomeAction()],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

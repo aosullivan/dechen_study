@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../services/gateway_rich_content_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
+import '../../widgets/dechen_home_action.dart';
 import 'gateway_landing_screen.dart';
 
 class GatewayChapterScreen extends StatelessWidget {
@@ -46,7 +47,7 @@ class GatewayChapterScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
             onPressed: () => _openChapterPicker(context),
           ),
-          actions: const [],
+          actions: const [DechenHomeAction()],
         ),
         body: FutureBuilder<GatewayRichChapter?>(
           future: GatewayRichContentService.instance.getChapter(chapterNumber),
@@ -1826,6 +1827,8 @@ class _ClassificationSummaryList extends StatelessWidget {
         : item.toLowerCase();
 
     final activeElements = classificationIcons[classKey] ?? [];
+    final activeNames =
+        activeElements.map((e) => e.$1.toLowerCase().trim()).toSet();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),
@@ -1856,42 +1859,18 @@ class _ClassificationSummaryList extends StatelessWidget {
           if (activeElements.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(left: 33, top: 4),
-              child: Wrap(
-                spacing: 5,
-                runSpacing: 4,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final (element, category) in activeElements)
-                    Tooltip(
-                      message: element,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: category.background,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: category.border),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _iconForLabel(element),
-                              size: 11,
-                              color: category.icon ?? AppColors.primary,
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              _shortElementName(element),
-                              style: TextStyle(
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.w600,
-                                color: category.icon ?? AppColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                  for (var g = 0; g < _kClassificationGroups.length; g++) ...[
+                    _buildClassificationColumn(
+                      context,
+                      _kClassificationGroups[g],
+                      activeNames,
                     ),
+                    if (g < _kClassificationGroups.length - 1)
+                      const SizedBox(width: 8),
+                  ],
                 ],
               ),
             ),
@@ -1899,7 +1878,87 @@ class _ClassificationSummaryList extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildClassificationColumn(
+    BuildContext context,
+    _ClassificationGroup group,
+    Set<String> activeNames,
+  ) {
+    return Column(
+      children: [
+        for (var i = 0; i < group.elements.length; i++) ...[
+          if (i > 0) const SizedBox(height: 4),
+          _buildElementIconCell(
+            context,
+            group.elements[i],
+            group.category,
+            activeNames.contains(group.elements[i].toLowerCase()),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildElementIconCell(
+    BuildContext context,
+    String element,
+    _TriadCategory category,
+    bool enabled,
+  ) {
+    final iconColor = category.icon ?? AppColors.primary;
+    final fg =
+        enabled ? iconColor : AppColors.mutedBrown.withValues(alpha: 0.45);
+    return _IconBadge(
+      icon: _iconForLabel(element),
+      size: 11,
+      backgroundColor: enabled ? category.background : const Color(0xFFF2ECE3),
+      borderColor: enabled ? category.border : const Color(0xFFD9CCB8),
+      iconColor: fg,
+    );
+  }
 }
+
+class _ClassificationGroup {
+  const _ClassificationGroup(this.category, this.elements);
+  final _TriadCategory category;
+  final List<String> elements;
+}
+
+const _kClassificationGroups = <_ClassificationGroup>[
+  _ClassificationGroup(
+    _TriadCategory.faculties,
+    <String>[
+      'Eye Element',
+      'Ear Element',
+      'Nose Element',
+      'Tongue Element',
+      'Body Element',
+      'Mind Element',
+    ],
+  ),
+  _ClassificationGroup(
+    _TriadCategory.objects,
+    <String>[
+      'Visual Form Element',
+      'Sound Element',
+      'Smell Element',
+      'Taste Element',
+      'Texture Element',
+      'Mental Object Element',
+    ],
+  ),
+  _ClassificationGroup(
+    _TriadCategory.consciousnesses,
+    <String>[
+      'Eye Consciousness Element',
+      'Ear Consciousness Element',
+      'Nose Consciousness Element',
+      'Tongue Consciousness Element',
+      'Body Consciousness Element',
+      'Mind Consciousness Element',
+    ],
+  ),
+];
 
 class _IconBadge extends StatelessWidget {
   const _IconBadge({
@@ -2573,18 +2632,23 @@ class _ClassificationOverlapsViewState
                   size: 11,
                   color: active ? Colors.white : AppColors.mutedBrown),
               const SizedBox(height: 2),
-              RotatedBox(
-                quarterTurns: 3,
-                child: Text(
-                  s.name,
-                  style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w600,
-                    color: active ? Colors.white : AppColors.mutedBrown,
-                    letterSpacing: 0.2,
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      s.name,
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w600,
+                        color: active ? Colors.white : AppColors.mutedBrown,
+                        letterSpacing: 0.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
                 ),
               ),
             ],

@@ -22,6 +22,7 @@ import '../../services/verse_hierarchy_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/verse_ref_formatter.dart';
 import '../../utils/widget_lifecycle_observer.dart';
+import '../../widgets/dechen_home_action.dart';
 
 /// Notifier for section-related state (breadcrumb, overlay, visible verse).
 /// Allows panels and overlay to rebuild independently of the verse list.
@@ -934,7 +935,8 @@ class _ReadScreenState extends State<ReadScreen>
 
   String _sectionRangeForDisplay(String section) {
     if (section.isEmpty) return '';
-    final range = _hierarchyService.getSectionVerseRangeMapSync(_textId)[section];
+    final range =
+        _hierarchyService.getSectionVerseRangeMapSync(_textId)[section];
     return (range ?? '').trim();
   }
 
@@ -1614,48 +1616,47 @@ class _ReadScreenState extends State<ReadScreen>
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
-        // On mobile, nav is the segment bar below; no duplicate icons in app bar.
-        actions: isMobile
-            ? []
-            : [
-                if (_showsChapterNavigation)
-                  IconButton(
-                    icon: Icon(
-                      _chaptersPanelCollapsed
-                          ? Icons.menu_book
-                          : Icons.menu_book_outlined,
-                      color: AppColors.textDark,
-                    ),
-                    tooltip: _chaptersPanelCollapsed
-                        ? 'Show Chapter'
-                        : 'Hide Chapter',
-                    onPressed: () => setState(() =>
-                        _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
-                  ),
-                IconButton(
-                  icon: Icon(
-                    _breadcrumbCollapsed
-                        ? Icons.account_tree
-                        : Icons.account_tree_outlined,
-                    color: AppColors.textDark,
-                  ),
-                  tooltip: _breadcrumbCollapsed
-                      ? 'Show Breadcrumb'
-                      : 'Hide Breadcrumb',
-                  onPressed: () => setState(
-                      () => _breadcrumbCollapsed = !_breadcrumbCollapsed),
+        // On mobile, nav is the segment bar below; keep only home in app bar.
+        actions: [
+          const DechenHomeAction(),
+          if (!isMobile) ...[
+            if (_showsChapterNavigation)
+              IconButton(
+                icon: Icon(
+                  _chaptersPanelCollapsed
+                      ? Icons.menu_book
+                      : Icons.menu_book_outlined,
+                  color: AppColors.textDark,
                 ),
-                IconButton(
-                  icon: Icon(
-                    _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
-                    color: AppColors.textDark,
-                  ),
-                  tooltip:
-                      _sectionSliderCollapsed ? 'Show Section' : 'Hide Section',
-                  onPressed: () => setState(
-                      () => _sectionSliderCollapsed = !_sectionSliderCollapsed),
-                ),
-              ],
+                tooltip:
+                    _chaptersPanelCollapsed ? 'Show Chapter' : 'Hide Chapter',
+                onPressed: () => setState(
+                    () => _chaptersPanelCollapsed = !_chaptersPanelCollapsed),
+              ),
+            IconButton(
+              icon: Icon(
+                _breadcrumbCollapsed
+                    ? Icons.account_tree
+                    : Icons.account_tree_outlined,
+                color: AppColors.textDark,
+              ),
+              tooltip:
+                  _breadcrumbCollapsed ? 'Show Breadcrumb' : 'Hide Breadcrumb',
+              onPressed: () =>
+                  setState(() => _breadcrumbCollapsed = !_breadcrumbCollapsed),
+            ),
+            IconButton(
+              icon: Icon(
+                _sectionSliderCollapsed ? Icons.list : Icons.list_alt,
+                color: AppColors.textDark,
+              ),
+              tooltip:
+                  _sectionSliderCollapsed ? 'Show Section' : 'Hide Section',
+              onPressed: () => setState(
+                  () => _sectionSliderCollapsed = !_sectionSliderCollapsed),
+            ),
+          ],
+        ],
       ),
       body: _buildBody(),
     );

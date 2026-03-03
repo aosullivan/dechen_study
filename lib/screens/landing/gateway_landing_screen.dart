@@ -6,6 +6,7 @@ import '../../services/gateway_outline_service.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
+import '../../widgets/dechen_home_action.dart';
 import 'gateway_chapter_screen.dart';
 
 class GatewayLandingScreen extends StatefulWidget {
@@ -49,6 +50,7 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           centerTitle: true,
+          actions: const [DechenHomeAction()],
           leading: _canShowTopBackButton(context)
               ? IconButton(
                   icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
