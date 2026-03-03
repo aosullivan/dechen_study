@@ -2878,25 +2878,24 @@ bool _isSkandhaLabel(String text) {
 
 /// Colour tints that distinguish dhatu categories while keeping badge
 /// shape and size identical for consistent spacing.
-///   • Faculties – amber/gold
-///   • Objects   – cool blue
-///   • Consciousnesses – violet/lilac
-/// Tuned for stronger contrast and easier discrimination.
+///   • Faculties – yellow
+///   • Objects   – orange
+///   • Consciousnesses – white
 enum _TriadCategory {
   faculties(
-    background: Color(0xFFFFF2C6),
-    border: Color(0xFFD2A63A),
-    icon: Color(0xFF7C5600),
+    background: Color(0xFFFFF9C4),
+    border: Color(0xFFC8A830),
+    icon: Color(0xFF7A6000),
   ),
   objects(
-    background: Color(0xFFE7F1FF),
-    border: Color(0xFF77A6D6),
-    icon: Color(0xFF1F5F9E),
+    background: Color(0xFFFFE6C0),
+    border: Color(0xFFCC8838),
+    icon: Color(0xFF96490A),
   ),
   consciousnesses(
-    background: Color(0xFFF1ECFF),
-    border: Color(0xFFB5A2DC),
-    icon: Color(0xFF5A3AA8),
+    background: Color(0xFFFFFFFF),
+    border: Color(0xFFD4C0A4),
+    icon: null, // uses AppColors.primary
   );
 
   const _TriadCategory({
