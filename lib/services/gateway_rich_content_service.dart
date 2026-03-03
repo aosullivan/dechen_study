@@ -461,7 +461,7 @@ class GatewayRichContentService {
                 GatewayRichBlock(
                     type: 'ul',
                     items: <String>[
-                      'Elements with physical form: five sensory triads plus mental object element.',
+                      'Elements with physical form: five sense faculties plus mental object element.',
                       'Mutually obstructive elements: five sense faculties and five sense objects.',
                       'Undefiling elements: mind element, mental object element, mind consciousness element, plus unconditioned things.',
                       'Desire realm elements: full set of six faculties, six objects, six consciousnesses.',
@@ -965,7 +965,7 @@ class GatewayRichContentService {
                       'Non-current formations.',
                       'Base of unconditioned things: the mental object elements.'
                     ],
-                    styleClass: 'links-grid'),
+                    styleClass: 'links-compact'),
               ]),
         ]),
     GatewayRichChapter(

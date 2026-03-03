@@ -680,6 +680,57 @@ class _GatewayBlockView extends StatelessWidget {
             ),
           );
         }
+        if (block.styleClass == 'links-compact') {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i = 0; i < items.length; i++) ...[
+                  if (i > 0) const SizedBox(height: 4),
+                  Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFFBF4),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFE0D3BF)),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 18,
+                          height: 18,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF8EC),
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(color: const Color(0xFFCFBDA0)),
+                          ),
+                          child: Text(
+                            '${i + 1}',
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.mutedBrown,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 11,
+                                    ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: _CompactColonItemText(text: items[i]),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          );
+        }
         if (block.styleClass == 'split-list' &&
             isNumbered &&
             items.length > 8) {
@@ -785,6 +836,39 @@ class _GatewayBlockView extends StatelessWidget {
       default:
         return const SizedBox.shrink();
     }
+  }
+}
+
+class _CompactColonItemText extends StatelessWidget {
+  const _CompactColonItemText({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 12,
+          height: 1.3,
+        );
+    final colonIndex = text.indexOf(':');
+    if (colonIndex <= 0 || colonIndex >= text.length - 1) {
+      return Text(text, style: baseStyle);
+    }
+    final lead = text.substring(0, colonIndex + 1);
+    final tail = text.substring(colonIndex + 1);
+    return Text.rich(
+      TextSpan(
+        style: baseStyle,
+        children: [
+          TextSpan(
+            text: lead,
+            style: baseStyle?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          TextSpan(text: tail),
+        ],
+      ),
+    );
   }
 }
 
@@ -1037,6 +1121,8 @@ class _DualityPairView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const connectorSpan = 24.0; // 4 + 16 + 4
+    const maxLaneWidth = 300.0;
     final pairs = <(String, String)>[];
     final count = innerItems.length < outerItems.length
         ? innerItems.length
@@ -1047,58 +1133,79 @@ class _DualityPairView extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(top: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Expanded(
-                child: _DualityMapHeader(
-                  label: 'Inner Sources',
-                  icon: Icons.adjust_outlined,
-                  color: _ayatanaInnerIcon,
-                ),
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: _DualityMapHeader(
-                  label: 'Outer Sources',
-                  icon: Icons.open_in_new_outlined,
-                  color: _ayatanaOuterIcon,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 2),
-          ...pairs.map(
-            (pair) => Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: Row(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final available = constraints.maxWidth;
+          final compact = available < 860;
+          final laneWidth = compact
+              ? ((available - connectorSpan) / 2).clamp(140.0, 420.0)
+              : ((available - connectorSpan) / 2).clamp(140.0, maxLaneWidth);
+          final contentWidth = (laneWidth * 2) + connectorSpan;
+
+          return Align(
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: contentWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: _DualityMapNode(
-                      label: pair.$1,
-                      color: _ayatanaInnerIcon,
-                      backgroundColor: _ayatanaInnerBg,
-                      borderColor: _ayatanaInnerBorder,
-                    ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: laneWidth,
+                        child: const _DualityMapHeader(
+                          label: 'Inner Sources',
+                          icon: Icons.adjust_outlined,
+                          color: _ayatanaInnerIcon,
+                        ),
+                      ),
+                      const SizedBox(width: connectorSpan),
+                      SizedBox(
+                        width: laneWidth,
+                        child: const _DualityMapHeader(
+                          label: 'Outer Sources',
+                          icon: Icons.open_in_new_outlined,
+                          color: _ayatanaOuterIcon,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 4),
-                  const _PerceptionConnector(),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: _DualityMapNode(
-                      label: pair.$2,
-                      color: _ayatanaOuterIcon,
-                      backgroundColor: _ayatanaOuterBg,
-                      borderColor: _ayatanaOuterBorder,
+                  const SizedBox(height: 2),
+                  ...pairs.map(
+                    (pair) => Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: laneWidth,
+                            child: _DualityMapNode(
+                              label: pair.$1,
+                              color: _ayatanaInnerIcon,
+                              backgroundColor: _ayatanaInnerBg,
+                              borderColor: _ayatanaInnerBorder,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const _PerceptionConnector(),
+                          const SizedBox(width: 4),
+                          SizedBox(
+                            width: laneWidth,
+                            child: _DualityMapNode(
+                              label: pair.$2,
+                              color: _ayatanaOuterIcon,
+                              backgroundColor: _ayatanaOuterBg,
+                              borderColor: _ayatanaOuterBorder,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -1198,7 +1305,7 @@ class _PerceptionConnector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 22,
+      width: 16,
       child: Row(
         children: [
           Expanded(
@@ -1242,6 +1349,36 @@ class _IdentityConnector extends StatelessWidget {
   }
 }
 
+/// One-to-many connector used for Mind Source mapping to 7 dhatus.
+class _OneToManyConnector extends StatelessWidget {
+  const _OneToManyConnector();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 22,
+      child: Column(
+        children: [
+          Text(
+            '≡',
+            style: TextStyle(
+              fontSize: 13,
+              color: AppColors.mutedBrown.withValues(alpha: 0.65),
+              fontWeight: FontWeight.w700,
+              height: 1,
+            ),
+          ),
+          Icon(
+            Icons.call_split_outlined,
+            size: 10,
+            color: AppColors.mutedBrown.withValues(alpha: 0.7),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _AyatanaDhatuMapView extends StatelessWidget {
   const _AyatanaDhatuMapView({
     required this.headers,
@@ -1253,6 +1390,8 @@ class _AyatanaDhatuMapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const connectorSpan = 30.0; // 4 + 22 + 4
+    const maxLaneWidth = 260.0;
     final leftHeader = headers.isNotEmpty ? headers.first : '12 Ayatanas';
     final rightHeader = headers.length > 1 ? headers[1] : '18 Dhatus';
 
@@ -1268,41 +1407,63 @@ class _AyatanaDhatuMapView extends StatelessWidget {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: _AyatanaMapHeadChip(
-                      label: leftHeader,
-                      icon: Icons.account_tree_outlined,
-                      color: _ayatanaInnerIcon,
-                    ),
+              final available = constraints.maxWidth;
+              final compact = available < 860;
+              final laneWidth = compact
+                  ? ((available - connectorSpan) / 2).clamp(140.0, 420.0)
+                  : ((available - connectorSpan) / 2)
+                      .clamp(140.0, maxLaneWidth);
+              final contentWidth = (laneWidth * 2) + connectorSpan;
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  width: contentWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: laneWidth,
+                            child: _AyatanaMapHeadChip(
+                              label: leftHeader,
+                              icon: Icons.account_tree_outlined,
+                              color: _ayatanaInnerIcon,
+                            ),
+                          ),
+                          const SizedBox(width: connectorSpan),
+                          SizedBox(
+                            width: laneWidth,
+                            child: _AyatanaMapHeadChip(
+                              label: rightHeader,
+                              icon: Icons.widgets_outlined,
+                              color: _ayatanaOuterIcon,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 3),
+                      ...rows.where((r) => r.length >= 2).map((r) {
+                        final left = r[0];
+                        final right = r[1];
+                        final mindRow =
+                            left.toLowerCase().contains('mind source');
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 3),
+                          child: _AyatanaMapRow(
+                            leftLabel: left,
+                            rightLabel: right,
+                            isMindRow: mindRow,
+                            laneWidth: laneWidth,
+                          ),
+                        );
+                      }),
+                    ],
                   ),
-                  const SizedBox(width: 30),
-                  Expanded(
-                    child: _AyatanaMapHeadChip(
-                      label: rightHeader,
-                      icon: Icons.widgets_outlined,
-                      color: _ayatanaOuterIcon,
-                    ),
-                  ),
-                ],
+                ),
               );
             },
           ),
-          const SizedBox(height: 3),
-          ...rows.where((r) => r.length >= 2).map((r) {
-            final left = r[0];
-            final right = r[1];
-            final mindRow = left.toLowerCase().contains('mind source');
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 3),
-              child: _AyatanaMapRow(
-                leftLabel: left,
-                rightLabel: right,
-                isMindRow: mindRow,
-              ),
-            );
-          }),
         ],
       ),
     );
@@ -1360,11 +1521,13 @@ class _AyatanaMapRow extends StatelessWidget {
     required this.leftLabel,
     required this.rightLabel,
     required this.isMindRow,
+    required this.laneWidth,
   });
 
   final String leftLabel;
   final String rightLabel;
   final bool isMindRow;
+  final double laneWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -1376,7 +1539,8 @@ class _AyatanaMapRow extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(
+        SizedBox(
+          width: laneWidth,
           child: _AyatanaMapNode(
             label: leftLabel,
             tint: sourceStyle.background,
@@ -1387,7 +1551,8 @@ class _AyatanaMapRow extends StatelessWidget {
         const SizedBox(width: 4),
         const _IdentityConnector(),
         const SizedBox(width: 4),
-        Expanded(
+        SizedBox(
+          width: laneWidth,
           child: _AyatanaMapNode(
             label: rightLabel,
             tint: dhatuCategory?.background ?? _ayatanaOuterBg,
@@ -1442,26 +1607,46 @@ class _AyatanaMapRow extends StatelessWidget {
     ];
 
     Widget buildRightBars() {
-      return Column(
-        children: [
-          for (var i = 0; i < mindBars.length; i++) ...[
-            if (i > 0) const SizedBox(height: 2),
-            _AyatanaMapNode(
-              label: mindBars[i].label,
-              tint: mindBars[i].cat.background,
-              border: mindBars[i].cat.border,
-              iconColor: mindBars[i].cat.icon ?? AppColors.primary,
-              dhatuCategory: mindBars[i].cat,
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFBF4),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFE0D3BF)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'maps to all 7 dhatus',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.mutedBrown,
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w700,
+                    height: 1.1,
+                  ),
             ),
+            const SizedBox(height: 2),
+            for (var i = 0; i < mindBars.length; i++) ...[
+              if (i > 0) const SizedBox(height: 1),
+              _AyatanaMapNode(
+                label: mindBars[i].label,
+                tint: mindBars[i].cat.background,
+                border: mindBars[i].cat.border,
+                iconColor: mindBars[i].cat.icon ?? AppColors.primary,
+                dhatuCategory: mindBars[i].cat,
+              ),
+            ],
           ],
-        ],
+        ),
       );
     }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
+        SizedBox(
+          width: laneWidth,
           child: _AyatanaMapNode(
             label: leftLabel,
             tint: _ayatanaInnerBg,
@@ -1472,10 +1657,10 @@ class _AyatanaMapRow extends StatelessWidget {
         const SizedBox(width: 4),
         Padding(
           padding: const EdgeInsets.only(top: 2),
-          child: const _IdentityConnector(),
+          child: const _OneToManyConnector(),
         ),
         const SizedBox(width: 4),
-        Expanded(child: buildRightBars()),
+        SizedBox(width: laneWidth, child: buildRightBars()),
       ],
     );
   }
@@ -1596,6 +1781,13 @@ class _ConsciousnessStackItem extends StatelessWidget {
 
 _TriadCategory? _dhatuCategoryForLabel(String label) {
   final t = label.toLowerCase();
+  if (t.contains('sense-faculty dhatus') ||
+      t.contains('sense-faculty dhātus')) {
+    return _TriadCategory.faculties;
+  }
+  if (t.contains('sense-object dhatus') || t.contains('sense-object dhātus')) {
+    return _TriadCategory.objects;
+  }
   if (RegExp(r'\b(eye|ear|nose|tongue|body|mind) element\b').hasMatch(t)) {
     return _TriadCategory.faculties;
   }
@@ -1676,7 +1868,7 @@ class _PlainList extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
-                  child: _IconBadge(icon: _iconForLabel(items[i]), size: 13),
+                  child: _semanticIconBadge(items[i], size: 13),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -1708,6 +1900,8 @@ class _PlainList extends StatelessWidget {
                               ),
                             ),
                           ),
+                          _semanticIconBadge(subItems[si], size: 11),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: Text(subItems[si], style: subItemStyle),
                           ),
@@ -1732,7 +1926,7 @@ class _PlainList extends StatelessWidget {
           else
             Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: _IconBadge(icon: _iconForLabel(items[i]), size: 13),
+              child: _semanticIconBadge(items[i], size: 13),
             ),
           if (!isNumbered) const SizedBox(width: 8),
           Expanded(
@@ -1745,6 +1939,81 @@ class _PlainList extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _semanticIconBadge(String label, {required double size}) {
+  final t = label.toLowerCase();
+
+  if (t.contains('five sense-faculty dhatus') ||
+      t.contains('five sense-faculty dhātus')) {
+    return _fiveDhatuStrip(_TriadCategory.faculties);
+  }
+  if (t.contains('five sense-object dhatus') ||
+      t.contains('five sense-object dhātus')) {
+    return _fiveDhatuStrip(_TriadCategory.objects);
+  }
+
+  // Keep all imperceptible-form variants visually unified across chapter 1.
+  if (t.contains('imperceptible form')) {
+    return _IconBadge(
+      icon: _iconForLabel(label),
+      size: size,
+      backgroundColor: _skandhaBadgeBg,
+      borderColor: _skandhaBadgeBorder,
+      iconColor: _skandhaIconColor,
+    );
+  }
+
+  // Reuse chapter-2 dhatu category colours when a label points to dhatus.
+  final cat = _dhatuCategoryForLabel(label);
+  if (cat != null) {
+    return _IconBadge(
+      icon: _iconForLabel(label),
+      size: size,
+      backgroundColor: cat.background,
+      borderColor: cat.border,
+      iconColor: cat.icon ?? AppColors.primary,
+    );
+  }
+
+  // Keep form-type labels in the same pink family as Aggregate of Form.
+  if (t.contains(' form') || t.startsWith('form ')) {
+    return _IconBadge(
+      icon: _iconForLabel(label),
+      size: size,
+      backgroundColor: _skandhaBadgeBg,
+      borderColor: _skandhaBadgeBorder,
+      iconColor: _skandhaIconColor,
+    );
+  }
+
+  return _IconBadge(icon: _iconForLabel(label), size: size);
+}
+
+Widget _fiveDhatuStrip(_TriadCategory category) {
+  const icons = <IconData>[
+    Icons.visibility_outlined,
+    Icons.hearing_outlined,
+    Icons.air_outlined,
+    Icons.water_drop_outlined,
+    Icons.pan_tool_outlined,
+  ];
+
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      for (var i = 0; i < icons.length; i++) ...[
+        if (i > 0) const SizedBox(width: 2),
+        _IconBadge(
+          icon: icons[i],
+          size: 8,
+          backgroundColor: category.background,
+          borderColor: category.border,
+          iconColor: category.icon ?? AppColors.primary,
+        ),
+      ],
+    ],
+  );
 }
 
 /// Scans blocks for subset-title + sense-list-subset patterns and builds
@@ -2101,20 +2370,6 @@ String _normalizeTopicLabel(String input) {
   return input.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();
 }
 
-/// Abbreviates a dhatu element name for compact inline chips.
-/// "Eye Consciousness Element" → "Eye Consc."
-/// "Visual Form Element" → "Form"
-/// "Eye Element" → "Eye"
-String _shortElementName(String name) {
-  var s = name
-      .replaceAll(' Element', '')
-      .replaceAll(' Consciousness', ' Consc.')
-      .replaceAll('Visual Form', 'Form')
-      .replaceAll('Mental Object', 'Mental Obj.');
-  if (s.length > 14) s = '${s.substring(0, 12)}…';
-  return s;
-}
-
 final _iconCache = <String, IconData>{};
 
 IconData _iconForLabel(String text) {
@@ -2150,6 +2405,21 @@ IconData _computeIcon(String text) {
     return Icons.psychology_outlined;
   }
   if (t == 'five aggregates') return Icons.format_list_bulleted;
+  // Chapter 1: five forms of mental objects.
+  if (t.contains('deduced form')) return Icons.manage_search_outlined;
+  if (t.contains('spatial form')) return Icons.crop_free_outlined;
+  if (t.contains('imperceptible form')) return Icons.visibility_off_outlined;
+  if (t.contains('imagined form')) return Icons.lightbulb_outline;
+  if (t.contains('mastered form') || t.contains('through meditation')) {
+    return Icons.self_improvement_outlined;
+  }
+  if (t.contains('sense-faculty dhatus') ||
+      t.contains('sense-faculty dhātus')) {
+    return Icons.pan_tool_outlined;
+  }
+  if (t.contains('sense-object dhatus') || t.contains('sense-object dhātus')) {
+    return Icons.visibility_outlined;
+  }
   if ((t.contains('sense faculties') && t.contains('sense objects')) ||
       (t.contains('sense-faculty dhatus') &&
           t.contains('sense-object dhatus')) ||
