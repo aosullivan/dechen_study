@@ -9,43 +9,60 @@ Design principles and visual vocabulary for all Gateway to Knowledge chapter scr
 - **Compact** — minimise padding, spacing, and font sizes; density over whitespace.
 - **Clarity** — every visual element has a specific semantic meaning.
 - **Consistency** — same concept always uses the same colour, icon, and connector.
+- **No coloured backdrops** — items use icon badges for colour coding, not full-width coloured bars.
 
 ---
 
-## 2. Colour Palette
+## 2. Colour System
 
-### Category colours (Dhatu triads)
+Colours encode semantic category. Each classification uses a distinct hue family:
 
-| Category         | Background   | Border       | Icon         | Usage                    |
-|------------------|-------------|-------------|-------------|--------------------------|
-| **Faculties**    | `#FFF8E1`   | `#E8D99A`   | `#B8960F`   | Warm amber/yellow        |
-| **Objects**      | `#ECF1F9`   | `#B8C8DC`   | `#4A6FA5`   | Cool blue-grey           |
-| **Consciousnesses** | `#FFFFFF` | `#E6D8C3`   | `AppColors.primary` | White, neutral border |
+| Classification   | Hue Family           | Mnemonic                         |
+|------------------|----------------------|----------------------------------|
+| **Skandhas**     | **Reds**             | Aggregates = warm / embodied     |
+| **Dhatus**       | **Yellows / Oranges / Whites** | Elements = earthy spectrum |
+| **Ayatanas**     | **Blues / Greens**    | Sources = cool / perceptual      |
 
-### Ayatana source colours (green spectrum)
+### Dhatu triad colours (`_TriadCategory`)
+
+| Category             | Background   | Border       | Icon         | Hue        |
+|----------------------|-------------|-------------|-------------|------------|
+| **Faculties**        | `#FFF9C4`   | `#C8A830`   | `#7A6000`   | Lemon gold |
+| **Objects**          | `#FFE6C0`   | `#CC8838`   | `#96490A`   | Burnt orange|
+| **Consciousnesses**  | `#FFFFFE`   | `#D4C0A4`   | `AppColors.primary` | White/neutral |
+
+### Skandha colours (reds)
 
 | Role             | Background   | Border       | Icon         |
 |------------------|-------------|-------------|-------------|
-| **Inner** (lighter) | `#F0F8F4` | `#C8E2D4`   | `#7EAE96`   |
-| **Outer** (darker)  | `#E6F0EA` | `#A3C9B3`   | `#3D6B56`   |
+| Badge            | `#FDEBEA`   | `#CF9290`   | `#9E3532`   |
+| Chip             | `#FDF0EF`   | `#D4A09E`   | —            |
 
-Inner and outer use the same green hue family, differentiated only by lightness.
+### Ayatana source colours (green + blue)
 
-### Skandha colours
+| Role                 | Background   | Border       | Icon         | Hue        |
+|----------------------|-------------|-------------|-------------|------------|
+| **Inner** (green)    | `#E6F4EC`   | `#88C4A0`   | `#2E7D52`   | Forest green |
+| **Outer** (blue)     | `#E4EEF6`   | `#85B0D4`   | `#2C5F8A`   | Steel blue |
 
-| Role             | Background   | Border       | Icon         |
-|------------------|-------------|-------------|-------------|
-| Badge            | `#FFF0EF`   | `#E0B4B1`   | `#C07A75`   |
-| Chip             | `#FFF5F4`   | `#E8C4C2`   | —            |
+Inner uses green (what apprehends); outer uses blue (what is apprehended). Distinct hue families for instant differentiation.
 
 ### Surface colours
 
-| Surface          | Colour       | Usage                                  |
-|------------------|-------------|----------------------------------------|
-| Card background  | `AppColors.cardBeige` | Topic card fill                 |
-| Row container    | `#FFFCF7`   | Mapping row wrapper                    |
-| Header pill      | `#FFF8EE`   | Section headers, triad-note pills      |
-| Callout          | `#FFF7EA`   | Left-bordered callout blocks           |
+| Surface              | Colour       | Usage                                  |
+|----------------------|-------------|----------------------------------------|
+| Card background      | `AppColors.cardBeige` (`#F4ECDD`) | Topic card fill       |
+| Header pill          | `#FFF4E0`   | Section headers, triad-note pills      |
+| Header pill border   | `#DDD0B8`   | Pill and header borders                |
+| Callout background   | `#FFF2DA`   | Left-bordered callout blocks           |
+| Grid card background | `#FFFBF4`   | Icon-list-grid items, triad cards      |
+| Grid card border     | `#E0D3BF`   | Grid item and triad card borders       |
+| Chip background      | `#FFF5E4`   | Cross-reference topic chips            |
+| Chip border          | `#DDcEB8`   | Chip borders                           |
+| Table header         | `#F4E8D5`   | Table header row background            |
+| Map container        | `#FFFBF4`   | Ayatana-dhatu outer wrapper            |
+| Map container border | `#DDCDB6`   | Map wrapper border                     |
+| _IconBadge default border | `#D6C5AA` | When no category colour specified   |
 
 ---
 
@@ -71,9 +88,16 @@ Two distinct connector types with different semantics:
 
 All element/concept labels are prefixed with a circular `_IconBadge`.
 
-- Badge sizes scale with context: topic title (15), section headers (10–12), list items (8–11).
-- Badge colour matches its category (faculty amber, object blue, consciousness neutral, ayatana green).
+- Badge sizes scale with context: topic title (15), section headers (10–12), list items (9–12).
+- Badge colour matches its category:
+  - **Skandha** → red badge (`#9E3532` icon, `#FDEBEA` bg)
+  - **Faculty dhatu** → lemon-gold badge (`#7A6000` icon, `#FFF9C4` bg)
+  - **Object dhatu** → burnt-orange badge (`#96490A` icon, `#FFE6C0` bg)
+  - **Consciousness dhatu** → neutral badge (`AppColors.primary` icon, white bg)
+  - **Ayatana inner** → green badge (`#2E7D52` icon, `#E6F4EC` bg)
+  - **Ayatana outer** → blue badge (`#2C5F8A` icon, `#E4EEF6` bg)
 - Icons are Material `_outlined` variants chosen by `_iconForLabel()`.
+- Items do NOT use coloured background bars; colour lives only in the badge.
 
 ---
 
@@ -87,11 +111,11 @@ All element/concept labels are prefixed with a circular `_IconBadge`.
 | Callout              | 13.5      | normal | Left-bordered highlight     |
 | Triad-note pill      | 12.5      | normal | Intro summary pill          |
 | List items           | 12–13.5   | normal | Plain lists, grid items     |
-| Map node labels      | 11        | w600   | Ayatana/dhatu bar labels    |
+| Map node labels      | 12        | w600   | Ayatana/dhatu labels        |
 | Chip labels          | 13        | w400/600 | Topic cross-reference chips |
 | Triad card title     | 13        | w700   | Faculty/Object/Consc. header|
 | Triad card items     | 12.5      | normal | Element names within triads |
-| Consciousness stack  | 12        | normal | Vertical element bars       |
+| Consciousness stack  | 13        | normal | Vertical element items      |
 
 ---
 
@@ -105,10 +129,10 @@ All element/concept labels are prefixed with a circular `_IconBadge`.
 | Divider → content        | 3      |                               |
 | Card bottom margin       | 6      | Between topic cards           |
 | Between triad cards      | 5      |                               |
-| Duality pair rows        | 3      | Between inner/outer pairs     |
+| Duality pair rows        | 2      | Between inner/outer pairs     |
 | Map rows                 | 3      | Between ayatana–dhatu rows    |
-| Consciousness stack gap  | 2      | Between stacked bars          |
-| Icon → label gap         | 4–5    | Inside bars and nodes         |
+| Consciousness stack gap  | 2      | Between stacked items         |
+| Icon → label gap         | 5–6    | Inside nodes and list items   |
 
 ---
 
@@ -120,9 +144,9 @@ All element/concept labels are prefixed with a circular `_IconBadge`.
 | `_TriadCards` / `_TriadCard`  | Three-column faculty/object/consciousness view    |
 | `_DualityPairView`            | Inner ↔ Outer source pairing (perception arrows)  |
 | `_AyatanaDhatuMapView`        | 12 ayatana ≡ 18 dhatu mapping                     |
-| `_AyatanaMapRow`              | Single mapping row (or mind row with 7 bars)       |
-| `_AyatanaMapNode`             | Single coloured bar with icon + label              |
-| `_ConsciousnessStackItem`     | Compact vertical bar for consciousness lists       |
+| `_AyatanaMapRow`              | Single mapping row (or mind row with 7 items)      |
+| `_AyatanaMapNode`             | Plain icon-badge + label (no backdrop)             |
+| `_ConsciousnessStackItem`     | Plain icon-badge + label for consciousness lists   |
 | `_PerceptionConnector`        | Arrow connector (inner → outer)                    |
 | `_IdentityConnector`          | Equivalence connector (≡)                          |
 | `_IconBadge`                  | Circular icon with category colouring              |
@@ -139,10 +163,10 @@ All element/concept labels are prefixed with a circular `_IconBadge`.
 | `sense-list`            | `_TriadCards`               | Three consecutive = triad        |
 | `sense-list-subset`     | Skipped (shown via summary) | Greyed-out subset lists          |
 | `duality-list`          | `_DualityPairView`          | Two consecutive = inner/outer    |
-| `consciousness-stack`   | `_ConsciousnessStackItem`   | Vertical bars, yellow Mind El.   |
+| `consciousness-stack`   | `_ConsciousnessStackItem`   | Vertical items, gold Mind El.    |
 | `icon-list-grid`        | Wrap grid with icon badges  | General icon-prefixed items      |
 | `links-grid`            | Wrap grid with numbers      | Numbered reference items         |
-| `ayatana-dhatu-map`     | `_AyatanaDhatuMapView`      | Custom mapping table             |
+| `ayatana-dhatu-map`     | `_AyatanaDhatuMapView`      | Custom mapping view              |
 | `classification-summary`| `_ClassificationSummaryList`| Expandable classification items  |
 | `triad-note`            | Pill container              | Intro text in rounded pill       |
 | `callout`               | Left-bordered box           | Highlighted explanatory text     |

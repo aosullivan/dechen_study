@@ -78,7 +78,7 @@ class GatewayRichContentService {
                     type: 'ul',
                     items: <String>[
                       '4 primary elements: earth, water, fire, wind.',
-                      '11 resultant forms: five sense faculties, five sense objects, and imperceptible form.'
+                      '11 resultant forms: five sense-faculty dhatus, five sense-object dhatus, and imperceptible form.'
                     ],
                     styleClass: ''),
                 GatewayRichBlock(

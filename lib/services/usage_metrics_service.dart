@@ -235,6 +235,14 @@ class UsageMetricsService {
     _flushTimer = null;
     _isFlushing = true;
     try {
+      // If country is still unknown, give the in-flight geo request a short time
+      // so we don't send a batch with null country_code (e.g. UK users missing from dashboard).
+      if (_countryCode == null && _countryCodeFuture != null) {
+        await _countryCodeFuture!.timeout(
+          const Duration(seconds: 2),
+          onTimeout: () {},
+        ).catchError((_) {});
+      }
       do {
         final batchSize =
             all ? _pending.length : min(_flushBatchSize, _pending.length);

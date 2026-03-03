@@ -10,7 +10,7 @@ void main() {
       final chapters = await service.getChapters();
       expect(chapters.length, 4);
       expect(chapters[0].number, 1);
-      expect(chapters[0].title, 'The Aggregates (Skandhas)');
+      expect(chapters[0].title, 'The Aggregates');
       expect(chapters[1].number, 2);
       expect(chapters[2].number, 3);
       expect(chapters[3].number, 4);
@@ -20,7 +20,7 @@ void main() {
       final chapter = await service.getChapter(1);
       expect(chapter, isNotNull);
       expect(chapter!.number, 1);
-      expect(chapter.title, 'The Aggregates (Skandhas)');
+      expect(chapter.title, 'The Aggregates');
       expect(chapter.sections.length, 7);
       expect(chapter.sections[0].path, '1.1');
       expect(chapter.sections[0].title, 'Five Aggregates');
@@ -31,7 +31,7 @@ void main() {
       final chapter = await service.getChapter(2);
       expect(chapter, isNotNull);
       expect(chapter!.number, 2);
-      expect(chapter.title, 'The Elements (Dhatu)');
+      expect(chapter.title, 'The Elements');
       expect(chapter.sections.length, 5);
     });
 

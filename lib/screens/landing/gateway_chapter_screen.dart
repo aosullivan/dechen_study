@@ -497,9 +497,9 @@ class _GatewayBlockView extends StatelessWidget {
             margin: const EdgeInsets.only(top: 5),
             padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF8EE),
+              color: const Color(0xFFFFF4E0),
               borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: const Color(0xFFE8DCC8)),
+              border: Border.all(color: const Color(0xFFDDD0B8)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -524,7 +524,7 @@ class _GatewayBlockView extends StatelessWidget {
             margin: const EdgeInsets.only(top: 5),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF7EA),
+              color: const Color(0xFFFFF2DA),
               borderRadius: BorderRadius.circular(8),
               border: Border(
                 left: BorderSide(
@@ -627,9 +627,9 @@ class _GatewayBlockView extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFFEFB),
+                      color: const Color(0xFFFFFBF4),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFEADFCF)),
+                      border: Border.all(color: const Color(0xFFE0D3BF)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -643,7 +643,7 @@ class _GatewayBlockView extends StatelessWidget {
                               color: const Color(0xFFFFF8EC),
                               borderRadius: BorderRadius.circular(999),
                               border:
-                                  Border.all(color: const Color(0xFFDAC8AD)),
+                                  Border.all(color: const Color(0xFFCFBDA0)),
                             ),
                             child: Text(
                               '${i + 1}',
@@ -739,7 +739,7 @@ class _GatewayBlockView extends StatelessWidget {
               defaultColumnWidth: const IntrinsicColumnWidth(),
               children: [
                 TableRow(
-                  decoration: const BoxDecoration(color: Color(0xFFF8EFE2)),
+                  decoration: const BoxDecoration(color: Color(0xFFF4E8D5)),
                   children: [
                     for (final header in block.headers)
                       Padding(
@@ -838,8 +838,8 @@ class _GatewayChipLink extends StatelessWidget {
           fontWeight: enabled ? FontWeight.w600 : FontWeight.w400,
         );
     final isSkandha = _isSkandhaLabel(label);
-    final chipBg = isSkandha ? _skandhaChipBg : const Color(0xFFFFF9EF);
-    final chipBorder = isSkandha ? _skandhaChipBorder : const Color(0xFFE7DAC7);
+    final chipBg = isSkandha ? _skandhaChipBg : const Color(0xFFFFF5E4);
+    final chipBorder = isSkandha ? _skandhaChipBorder : const Color(0xFFDDCEB8);
     final child = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
       child: Row(
@@ -876,7 +876,7 @@ class _GatewayChipLink extends StatelessWidget {
           color: chipBg,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: isSkandha ? _skandhaChipBorder : const Color(0xFFE1D1BA)),
+              color: isSkandha ? _skandhaChipBorder : const Color(0xFFD6C5AB)),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -960,9 +960,9 @@ class _TriadCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFEFB),
+        color: const Color(0xFFFFFBF4),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFEADFCF)),
+        border: Border.all(color: const Color(0xFFE0D3BF)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1119,16 +1119,16 @@ class _DualityMapHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF8EE),
+        color: const Color(0xFFFFF4E0),
         borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: const Color(0xFFE8DCC8)),
+        border: Border.all(color: const Color(0xFFDDD0B8)),
       ),
       child: Row(
         children: [
           _IconBadge(
             icon: icon,
             size: 10,
-            backgroundColor: const Color(0xFFFFF8EE),
+            backgroundColor: const Color(0xFFFFF4E0),
             borderColor: color.withValues(alpha: 0.35),
             iconColor: color,
           ),
@@ -1258,34 +1258,15 @@ class _AyatanaDhatuMapView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFEFB),
+        color: const Color(0xFFFFFBF4),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE8D9C5)),
+        border: Border.all(color: const Color(0xFFDDCDB6)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              final stacked = constraints.maxWidth < 760;
-              if (stacked) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _AyatanaMapHeadChip(
-                      label: leftHeader,
-                      icon: Icons.account_tree_outlined,
-                      color: _ayatanaInnerIcon,
-                    ),
-                    const SizedBox(height: 3),
-                    _AyatanaMapHeadChip(
-                      label: rightHeader,
-                      icon: Icons.widgets_outlined,
-                      color: _ayatanaOuterIcon,
-                    ),
-                  ],
-                );
-              }
               return Row(
                 children: [
                   Expanded(
@@ -1343,9 +1324,9 @@ class _AyatanaMapHeadChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF8EE),
+        color: const Color(0xFFFFF4E0),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFE8DCC8)),
+        border: Border.all(color: const Color(0xFFDDD0B8)),
       ),
       child: Row(
         children: [
@@ -1387,77 +1368,40 @@ class _AyatanaMapRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dhatuCategory = _dhatuCategoryForLabel(rightLabel);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final stacked = constraints.maxWidth < 760;
+    final sourceStyle = _ayatanaSourceStyleForLabel(leftLabel);
+    if (isMindRow) {
+      return _buildMindRow(context);
+    }
 
-        // --- Mind Source row: 7 individual bars on the right ---
-        if (isMindRow) {
-          return _buildMindRow(context, stacked);
-        }
-
-        if (stacked) {
-          return Column(
-            children: [
-              _AyatanaMapNode(
-                label: leftLabel,
-                tint: _ayatanaInnerBg,
-                border: _ayatanaInnerBorder,
-                iconColor: _ayatanaInnerIcon,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 1),
-                child: Text(
-                  '≡',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.mutedBrown.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              _AyatanaMapNode(
-                label: rightLabel,
-                tint: dhatuCategory?.background ?? _ayatanaOuterBg,
-                border: dhatuCategory?.border ?? _ayatanaOuterBorder,
-                iconColor: dhatuCategory?.icon ?? _ayatanaOuterIcon,
-                dhatuCategory: dhatuCategory,
-              ),
-            ],
-          );
-        }
-
-        return Row(
-          children: [
-            Expanded(
-              child: _AyatanaMapNode(
-                label: leftLabel,
-                tint: _ayatanaInnerBg,
-                border: _ayatanaInnerBorder,
-                iconColor: _ayatanaInnerIcon,
-              ),
-            ),
-            const SizedBox(width: 4),
-            const _IdentityConnector(),
-            const SizedBox(width: 4),
-            Expanded(
-              child: _AyatanaMapNode(
-                label: rightLabel,
-                tint: dhatuCategory?.background ?? _ayatanaOuterBg,
-                border: dhatuCategory?.border ?? _ayatanaOuterBorder,
-                iconColor: dhatuCategory?.icon ?? _ayatanaOuterIcon,
-                dhatuCategory: dhatuCategory,
-              ),
-            ),
-          ],
-        );
-      },
+    return Row(
+      children: [
+        Expanded(
+          child: _AyatanaMapNode(
+            label: leftLabel,
+            tint: sourceStyle.background,
+            border: sourceStyle.border,
+            iconColor: sourceStyle.icon,
+          ),
+        ),
+        const SizedBox(width: 4),
+        const _IdentityConnector(),
+        const SizedBox(width: 4),
+        Expanded(
+          child: _AyatanaMapNode(
+            label: rightLabel,
+            tint: dhatuCategory?.background ?? _ayatanaOuterBg,
+            border: dhatuCategory?.border ?? _ayatanaOuterBorder,
+            iconColor: dhatuCategory?.icon ?? _ayatanaOuterIcon,
+            dhatuCategory: dhatuCategory,
+          ),
+        ),
+      ],
     );
   }
 
   /// Builds the Mind Source row with 7 separate bars on the right:
   /// 1 × Mind Element (faculty yellow) + 6 × consciousness elements (white).
-  Widget _buildMindRow(BuildContext context, bool stacked) {
+  Widget _buildMindRow(BuildContext context) {
     const mindBars = <({String label, IconData icon, _TriadCategory cat})>[
       (
         label: 'Mind Element',
@@ -1513,31 +1457,6 @@ class _AyatanaMapRow extends StatelessWidget {
       );
     }
 
-    if (stacked) {
-      return Column(
-        children: [
-          _AyatanaMapNode(
-            label: leftLabel,
-            tint: _ayatanaInnerBg,
-            border: _ayatanaInnerBorder,
-            iconColor: _ayatanaInnerIcon,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 1),
-            child: Text(
-              '≡',
-              style: TextStyle(
-                fontSize: 11,
-                color: AppColors.mutedBrown.withValues(alpha: 0.6),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-          buildRightBars(),
-        ],
-      );
-    }
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1559,6 +1478,34 @@ class _AyatanaMapRow extends StatelessWidget {
       ],
     );
   }
+}
+
+_AyatanaSourceStyle _ayatanaSourceStyleForLabel(String label) {
+  final t = label.toLowerCase();
+  if (t.contains('object source')) {
+    return const _AyatanaSourceStyle(
+      background: _ayatanaOuterBg,
+      border: _ayatanaOuterBorder,
+      icon: _ayatanaOuterIcon,
+    );
+  }
+  return const _AyatanaSourceStyle(
+    background: _ayatanaInnerBg,
+    border: _ayatanaInnerBorder,
+    icon: _ayatanaInnerIcon,
+  );
+}
+
+class _AyatanaSourceStyle {
+  const _AyatanaSourceStyle({
+    required this.background,
+    required this.border,
+    required this.icon,
+  });
+
+  final Color background;
+  final Color border;
+  final Color icon;
 }
 
 class _AyatanaMapNode extends StatelessWidget {
@@ -1910,18 +1857,39 @@ class _ClassificationSummaryList extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 33, top: 4),
               child: Wrap(
-                spacing: 3,
-                runSpacing: 3,
+                spacing: 5,
+                runSpacing: 4,
                 children: [
                   for (final (element, category) in activeElements)
                     Tooltip(
                       message: element,
-                      child: _IconBadge(
-                        icon: _iconForLabel(element),
-                        size: 11,
-                        backgroundColor: category.background,
-                        borderColor: category.border,
-                        iconColor: category.icon,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: category.background,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: category.border),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              _iconForLabel(element),
+                              size: 11,
+                              color: category.icon ?? AppColors.primary,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              _shortElementName(element),
+                              style: TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w600,
+                                color: category.icon ?? AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],
@@ -1953,7 +1921,7 @@ class _IconBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = backgroundColor ?? Colors.white;
-    final bd = borderColor ?? const Color(0xFFE6D8C3);
+    final bd = borderColor ?? const Color(0xFFD6C5AA);
     final ic = iconColor ?? AppColors.primary;
     return Container(
       width: size + 10,
@@ -2074,6 +2042,20 @@ String _normalizeTopicLabel(String input) {
   return input.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();
 }
 
+/// Abbreviates a dhatu element name for compact inline chips.
+/// "Eye Consciousness Element" → "Eye Consc."
+/// "Visual Form Element" → "Form"
+/// "Eye Element" → "Eye"
+String _shortElementName(String name) {
+  var s = name
+      .replaceAll(' Element', '')
+      .replaceAll(' Consciousness', ' Consc.')
+      .replaceAll('Visual Form', 'Form')
+      .replaceAll('Mental Object', 'Mental Obj.');
+  if (s.length > 14) s = '${s.substring(0, 12)}…';
+  return s;
+}
+
 final _iconCache = <String, IconData>{};
 
 IconData _iconForLabel(String text) {
@@ -2109,6 +2091,13 @@ IconData _computeIcon(String text) {
     return Icons.psychology_outlined;
   }
   if (t == 'five aggregates') return Icons.format_list_bulleted;
+  if ((t.contains('sense faculties') && t.contains('sense objects')) ||
+      (t.contains('sense-faculty dhatus') &&
+          t.contains('sense-object dhatus')) ||
+      (t.contains('sense-faculty dhātus') &&
+          t.contains('sense-object dhātus'))) {
+    return Icons.account_tree_outlined;
+  }
   // Dhatu / sense patterns
   if (t.contains('eye') || t.contains('visual')) {
     return Icons.visibility_outlined;
@@ -2177,20 +2166,20 @@ IconData _computeIcon(String text) {
   return Icons.circle_outlined;
 }
 
-// ── Skandha (aggregate) colours ──────────────────────────────────────────
-const _skandhaIconColor = Color(0xFFB85450);
-const _skandhaBadgeBg = Color(0xFFFFF0EF);
-const _skandhaBadgeBorder = Color(0xFFE0B4B1);
-const _skandhaChipBg = Color(0xFFFFF5F4);
-const _skandhaChipBorder = Color(0xFFE8C4C2);
+// ── Skandha (aggregate) colours – rich reds ─────────────────────────────
+const _skandhaIconColor = Color(0xFF9E3532);
+const _skandhaBadgeBg = Color(0xFFFDEBEA);
+const _skandhaBadgeBorder = Color(0xFFCF9290);
+const _skandhaChipBg = Color(0xFFFDF0EF);
+const _skandhaChipBorder = Color(0xFFD4A09E);
 
-// Ayatana (sense source) colours – lighter green for inner, darker green for outer
-const _ayatanaInnerIcon = Color(0xFF7EAE96);
-const _ayatanaInnerBg = Color(0xFFF0F8F4);
-const _ayatanaInnerBorder = Color(0xFFC8E2D4);
-const _ayatanaOuterIcon = Color(0xFF3D6B56);
-const _ayatanaOuterBg = Color(0xFFE6F0EA);
-const _ayatanaOuterBorder = Color(0xFFA3C9B3);
+// Ayatana (sense source) colours – green for inner, blue for outer
+const _ayatanaInnerIcon = Color(0xFF2E7D52);
+const _ayatanaInnerBg = Color(0xFFE6F4EC);
+const _ayatanaInnerBorder = Color(0xFF88C4A0);
+const _ayatanaOuterIcon = Color(0xFF2C5F8A);
+const _ayatanaOuterBg = Color(0xFFE4EEF6);
+const _ayatanaOuterBorder = Color(0xFF85B0D4);
 
 // ─────────────────────────────────────────────────────────────────────────
 // Classification Overlaps – interactive matrix + region cards
@@ -2571,7 +2560,7 @@ class _ClassificationOverlapsViewState
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
-            color: active ? AppColors.primary : const Color(0xFFF8EFE2),
+            color: active ? AppColors.primary : const Color(0xFFF4E8D5),
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
               color: active ? AppColors.primary : AppColors.borderLight,
@@ -2727,7 +2716,7 @@ class _ClassificationOverlapsViewState
         margin: const EdgeInsets.only(top: 10),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF7EA),
+          color: const Color(0xFFFFF2DA),
           borderRadius: BorderRadius.circular(9),
           border: Border(
             left: BorderSide(
@@ -2824,9 +2813,9 @@ class _ClassificationOverlapsViewState
         width: 300,
         padding: const EdgeInsets.all(9),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFEFB),
+          color: const Color(0xFFFFFBF4),
           borderRadius: BorderRadius.circular(9),
-          border: Border.all(color: const Color(0xFFEADFCF)),
+          border: Border.all(color: const Color(0xFFE0D3BF)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -2889,24 +2878,25 @@ bool _isSkandhaLabel(String text) {
 
 /// Colour tints that distinguish dhatu categories while keeping badge
 /// shape and size identical for consistent spacing.
-///   • Faculties – warm amber (subtle physical form)
-///   • Objects   – neutral/default
-///   • Consciousnesses – soft cool-grey
+///   • Faculties – amber/gold
+///   • Objects   – cool blue
+///   • Consciousnesses – violet/lilac
+/// Tuned for stronger contrast and easier discrimination.
 enum _TriadCategory {
   faculties(
-    background: Color(0xFFFFF8E1),
-    border: Color(0xFFE8D99A),
-    icon: Color(0xFFB8960F),
+    background: Color(0xFFFFF2C6),
+    border: Color(0xFFD2A63A),
+    icon: Color(0xFF7C5600),
   ),
   objects(
-    background: Color(0xFFECF1F9),
-    border: Color(0xFFB8C8DC),
-    icon: Color(0xFF4A6FA5),
+    background: Color(0xFFE7F1FF),
+    border: Color(0xFF77A6D6),
+    icon: Color(0xFF1F5F9E),
   ),
   consciousnesses(
-    background: Color(0xFFFFFFFF),
-    border: Color(0xFFE6D8C3),
-    icon: null, // uses AppColors.primary
+    background: Color(0xFFF1ECFF),
+    border: Color(0xFFB5A2DC),
+    icon: Color(0xFF5A3AA8),
   );
 
   const _TriadCategory({

@@ -2,6 +2,18 @@ import 'package:dechen_study/screens/landing/gateway_chapter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+Color _leadingIconColorForLabel(WidgetTester tester, String label) {
+  final textFinder = find.text(label);
+  expect(textFinder, findsWidgets);
+  final rowFinder =
+      find.ancestor(of: textFinder.first, matching: find.byType(Row)).first;
+  final iconFinder =
+      find.descendant(of: rowFinder, matching: find.byType(Icon)).first;
+  final icon = tester.widget<Icon>(iconFinder);
+  expect(icon.color, isNotNull);
+  return icon.color!;
+}
+
 void main() {
   testWidgets('chapter 1 renders rich aggregate chips', (tester) async {
     await tester.pumpWidget(
@@ -32,5 +44,29 @@ void main() {
     );
     expect(find.text('Eye Consciousness Element'), findsWidgets);
     expect(find.text('Mind Consciousness Element'), findsWidgets);
+  });
+
+  testWidgets('chapter 3 mapping uses consistent source/dhatu colors',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: GatewayChapterScreen(chapterNumber: 3),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Source-side consistency (Ayatanas): inner sources are green, outer sources are blue.
+    expect(_leadingIconColorForLabel(tester, 'Eye Source'),
+        const Color(0xFF2E7D52));
+    expect(_leadingIconColorForLabel(tester, 'Visual Object Source'),
+        const Color(0xFF2C5F8A));
+
+    // Dhatu-side consistency: faculties amber, objects blue, consciousnesses violet.
+    expect(_leadingIconColorForLabel(tester, 'Eye Element'),
+        const Color(0xFF7C5600));
+    expect(_leadingIconColorForLabel(tester, 'Visual Form Element'),
+        const Color(0xFF1F5F9E));
+    expect(_leadingIconColorForLabel(tester, 'Eye Consciousness Element'),
+        const Color(0xFF5A3AA8));
   });
 }
