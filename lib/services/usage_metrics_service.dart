@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/constants.dart';
+import 'usage_metrics_anon_id_stub.dart'
+    if (dart.library.html) 'usage_metrics_anon_id_web.dart' as anon_id_loader;
 
 /// Centralized usage analytics sink for app product metrics.
 ///
@@ -50,10 +53,27 @@ class UsageMetricsService {
     if (!_isEnabled) return;
 
     try {
+      if (kIsWeb) {
+        final fromServer = await anon_id_loader.fetchAnonIdFromServer(
+          supabaseUrl,
+          supabaseAnonKey,
+        );
+        if (fromServer != null && fromServer.isNotEmpty) {
+          _anonId = fromServer;
+          try {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString(_anonIdKey, fromServer);
+          } catch (_) {}
+          unawaited(_fetchCountryCode());
+          return;
+        }
+      }
+
       final prefs = await SharedPreferences.getInstance();
       final existing = prefs.getString(_anonIdKey)?.trim();
       if (existing != null && existing.isNotEmpty) {
         _anonId = existing;
+        unawaited(_fetchCountryCode());
         return;
       }
       final created = _createAnonId();
@@ -61,7 +81,6 @@ class UsageMetricsService {
       _anonId = created;
     } catch (e) {
       debugPrint('usage_metrics init error: $e');
-      // Keep analytics best-effort; fallback ID remains process-local.
       _anonId ??= _createAnonId();
     }
     unawaited(_fetchCountryCode());
