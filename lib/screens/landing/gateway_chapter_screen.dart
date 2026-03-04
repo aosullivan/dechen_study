@@ -1318,34 +1318,6 @@ class _DualityMapNode extends StatelessWidget {
   }
 }
 
-/// Perception connector: inner source apprehends outer source.
-/// Shows a directed arrow (→) indicating perceptual engagement.
-class _PerceptionConnector extends StatelessWidget {
-  const _PerceptionConnector();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 16,
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: 1,
-              color: AppColors.mutedBrown.withValues(alpha: 0.35),
-            ),
-          ),
-          Icon(
-            Icons.arrow_forward_rounded,
-            size: 10,
-            color: AppColors.mutedBrown.withValues(alpha: 0.7),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// Identity connector: ayatana corresponds to / equals a dhatu.
 /// Shows an equals sign (≡) indicating structural equivalence.
 class _IdentityConnector extends StatelessWidget {
