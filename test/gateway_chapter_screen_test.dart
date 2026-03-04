@@ -1,4 +1,5 @@
 import 'package:dechen_study/screens/landing/gateway_chapter_screen.dart';
+import 'package:dechen_study/services/gateway_rich_content_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -58,6 +59,36 @@ void main() {
     );
     expect(find.text('Eye Consciousness Element'), findsWidgets);
     expect(find.text('Mind Consciousness Element'), findsWidgets);
+  });
+
+  test('chapter 2 mental-object section data shows required composition',
+      () async {
+    final chapter = await GatewayRichContentService.instance.getChapter(2);
+    expect(chapter, isNotNull);
+
+    final topic = chapter!.topics.firstWhere(
+      (t) =>
+          t.title ==
+          'Mental Object Element (Dhatu) and Mental Object Source (Ayatana)',
+    );
+
+    final allTexts = <String>[
+      for (final block in topic.blocks)
+        if (block.text != null) block.text!,
+      for (final block in topic.blocks) ...block.items,
+    ];
+
+    expect(
+      allTexts,
+      contains(
+          'The Element of Mental Objects (Dhatu) and Mental Object Source (Ayatana) are comprised of:'),
+    );
+    expect(allTexts, contains('Sensation'));
+    expect(allTexts, contains('Perceptions'));
+    expect(allTexts, contains('Formations'));
+    expect(allTexts, contains('Cessation due to discrimination'));
+    expect(allTexts, contains('Cessation not due to discrimination'));
+    expect(allTexts, contains('Suchness of neutral'));
   });
 
   testWidgets('chapter 3 mapping uses consistent source/dhatu colors',

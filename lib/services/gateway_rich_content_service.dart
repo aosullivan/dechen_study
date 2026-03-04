@@ -146,147 +146,12 @@ class GatewayRichContentService {
           GatewayRichTopic(
               title: 'Aggregate of Formations',
               blocks: <GatewayRichBlock>[
+                GatewayRichBlock(type: 'formations-membership'),
                 GatewayRichBlock(
                     type: 'p',
-                    text: 'Five ever-present mental states:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Attraction',
-                      'Sensation',
-                      'Perception',
-                      'Attention',
-                      'Contact'
-                    ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Five object-determining mental states:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Intention',
-                      'Interest',
-                      'Recollection',
-                      'Concentration',
-                      'Discrimination'
-                    ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'These ten are called the Ten General Mind Bases.',
-                    styleClass: 'callout'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Eleven virtuous mental states:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Faith',
-                      'Conscientiousness',
-                      'Pliancy',
-                      'Equanimity',
-                      'Conscience',
-                      'Shame',
-                      'Non-attachment',
-                      'Non-aggression',
-                      'Non-delusion',
-                      'Non-violence',
-                      'Diligence'
-                    ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Root disturbing emotions (6): ignorance, attachment, anger, arrogance, doubt, belief.',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Belief has 5 types:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Belief in transitory collection',
-                      'Belief of holding extremes',
-                      'Perverted belief',
-                      'Holding a belief to be paramount',
-                      'Holding a discipline or ritual'
-                    ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Twenty subsidiary disturbing emotions:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ol',
-                    items: <String>[
-                      'Fury',
-                      'Resentment',
-                      'Spite',
-                      'Hostility',
-                      'Envy',
-                      'Hypocrisy',
-                      'Pretense',
-                      'Lack of engagement',
-                      'Shamelessness',
-                      'Concealment',
-                      'Stinginess',
-                      'Self-infatuation',
-                      'Lack of faith',
-                      'Laziness',
-                      'Heedlessness',
-                      'Forgetfulness',
-                      'Non-alertness',
-                      'Lethargy',
-                      'Excitement',
-                      'Distraction'
-                    ],
-                    styleClass: 'split-list'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Four variables: sleep, regret, conception, discernment.',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Non-current Formations',
+                    text: 'Non-Concurrent Formations (separate category)',
                     styleClass: 'subset-title'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'A quality newly obtained in a being (virtuous, non-virtuous, or neutral). Listed examples include:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ul',
-                    items: <String>[
-                      'Dispossession',
-                      'Same status or similar class',
-                      'Perceptionless serenity',
-                      'State of non-perception',
-                      'Serenity of cessation',
-                      'Ongoing all-ground not blocked by non-perception',
-                      'Life faculty and life span of similar classes of beings'
-                    ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Four characteristics of conditioned things: birth, subsistence, aging, impermanence.',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Dharmas of formation: category of names, words, and letters.',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Additional non-current formations: ordinary person, regular sequence, definitive distinctiveness, connected link, speed, sequence, time, location, number, gathering.',
-                    styleClass: 'topic-copy'),
+                GatewayRichBlock(type: 'noncurrent-formations-membership'),
               ]),
           GatewayRichTopic(
               title: 'Aggregate of Consciousness',
@@ -426,14 +291,56 @@ class GatewayRichContentService {
                 styleClass: 'sense-list-subset'),
           ]),
           GatewayRichTopic(
-              title: 'Mental Object Sources (Ayatana)',
+              title:
+                  'Mental Object Element (Dhatu) and Mental Object Source (Ayatana)',
               blocks: <GatewayRichBlock>[
+                GatewayRichBlock(
+                    type: 'p',
+                    text:
+                        'The Element of Mental Objects (Dhatu) and Mental Object Source (Ayatana) are comprised of:',
+                    styleClass: 'topic-copy'),
+                GatewayRichBlock(
+                    type: 'p',
+                    text: 'Three aggregates:',
+                    styleClass: 'topic-copy'),
                 GatewayRichBlock(
                     type: 'ul',
                     items: <String>[
-                      'Three aggregates: sensation, perceptions, formations.',
-                      'Five imperceptible forms (mental-object forms).',
-                      'Unconditioned things: cessation due to discrimination, cessation not due to discrimination, space, suchness of virtue, suchness of non-virtue, suchness of neutral, occasion of blocked cognition during non-perception serenity, and occasion of blocked cognition during serenity of cessation.'
+                      'Sensation',
+                      'Perceptions',
+                      'Formations',
+                    ],
+                    styleClass: ''),
+                GatewayRichBlock(
+                    type: 'p',
+                    text:
+                        'Five imperceptible forms (five types of forms that are mental objects):',
+                    styleClass: 'topic-copy'),
+                GatewayRichBlock(
+                    type: 'ul',
+                    items: <String>[
+                      'Deduced form',
+                      'Spatial forms',
+                      'Imperceptible forms (from taking a vow)',
+                      'Imagined forms',
+                      'Mastered forms through meditation',
+                    ],
+                    styleClass: ''),
+                GatewayRichBlock(
+                    type: 'p',
+                    text: 'Unconditioned things include:',
+                    styleClass: 'topic-copy'),
+                GatewayRichBlock(
+                    type: 'ul',
+                    items: <String>[
+                      'Cessation due to discrimination',
+                      'Cessation not due to discrimination',
+                      'Space',
+                      'Suchness of virtue',
+                      'Suchness of non virtue',
+                      'Suchness of neutral',
+                      'Occasion of blocked cognition at the time of serenity of non perception',
+                      'Occasion of blocked cognition at the time of serenity of cessation',
                     ],
                     styleClass: ''),
               ]),
@@ -917,11 +824,6 @@ class GatewayRichContentService {
           GatewayRichTopic(
               title: 'Mapping Ayatanas to Dhatus',
               blocks: <GatewayRichBlock>[
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'The 12 ayatanas and the 18 dhatus overlap extensively. The dhatus expand on the ayatanas by splitting the Mind Source into its constituent consciousness elements and adding the Mind Faculty Element.',
-                    styleClass: 'triad-note'),
                 GatewayRichBlock(
                     type: 'table',
                     headers: <String>['12 Ayatanas', '18 Dhatus'],

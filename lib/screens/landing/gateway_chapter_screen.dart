@@ -659,7 +659,7 @@ class _GatewayBlockView extends StatelessWidget {
                             ),
                           )
                         else
-                          _IconBadge(icon: _iconForLabel(items[i]), size: 11),
+                          _semanticIconBadge(items[i], size: 11),
                         const SizedBox(width: 5),
                         Expanded(
                           child: Text(
@@ -844,6 +844,16 @@ class _GatewayBlockView extends StatelessWidget {
             ),
           ),
         );
+      case 'formations-membership':
+        return const Padding(
+          padding: EdgeInsets.only(top: 6),
+          child: _FormationsMembershipView(),
+        );
+      case 'noncurrent-formations-membership':
+        return const Padding(
+          padding: EdgeInsets.only(top: 6),
+          child: _NonCurrentFormationsMembershipView(),
+        );
       default:
         return const SizedBox.shrink();
     }
@@ -914,6 +924,466 @@ class _GatewayChipWrap extends StatelessWidget {
   }
 }
 
+class _FormationsCategory {
+  const _FormationsCategory({
+    required this.title,
+    required this.items,
+    this.beliefTypes,
+  });
+
+  final String title;
+  final List<String> items;
+  final List<String>? beliefTypes;
+}
+
+class _FormationsMembershipView extends StatelessWidget {
+  const _FormationsMembershipView();
+
+  static const categories = <_FormationsCategory>[
+    _FormationsCategory(
+      title: 'Five Ever-Present Mental States',
+      items: <String>[
+        'Attraction',
+        'Sensation',
+        'Perception',
+        'Attention',
+        'Contact',
+      ],
+    ),
+    _FormationsCategory(
+      title: 'Five Object-Determining Mental States',
+      items: <String>[
+        'Intention',
+        'Interest',
+        'Recollection',
+        'Concentration',
+        'Discrimination',
+      ],
+    ),
+    _FormationsCategory(
+      title: 'Eleven Virtuous Mental States',
+      items: <String>[
+        'Faith',
+        'Conscientiousness',
+        'Pliancy',
+        'Equanimity',
+        'Conscience',
+        'Shame',
+        'Non-attachment',
+        'Non-aggression',
+        'Non-delusion',
+        'Non-violence',
+        'Diligence',
+      ],
+    ),
+    _FormationsCategory(
+      title: 'Six Root Disturbing Emotions',
+      items: <String>[
+        'Ignorance',
+        'Attachment',
+        'Anger',
+        'Arrogance',
+        'Doubt',
+        'Belief',
+      ],
+      beliefTypes: <String>[
+        'Belief in transitory collection',
+        'Belief of holding extremes',
+        'Perverted belief',
+        'Holding a belief to be paramount',
+        'Holding a discipline or ritual',
+      ],
+    ),
+    _FormationsCategory(
+      title: 'Twenty Subsidiary Disturbing Emotions',
+      items: <String>[
+        'Fury',
+        'Resentment',
+        'Spite',
+        'Hostility',
+        'Envy',
+        'Hypocrisy',
+        'Pretense',
+        'Lack of engagement',
+        'Shamelessness',
+        'Concealment',
+        'Stinginess',
+        'Self-infatuation',
+        'Lack of faith',
+        'Laziness',
+        'Heedlessness',
+        'Forgetfulness',
+        'Non-alertness',
+        'Lethargy',
+        'Excitement',
+        'Distraction',
+      ],
+    ),
+    _FormationsCategory(
+      title: 'Four Variables',
+      items: <String>[
+        'Sleep',
+        'Regret',
+        'Conception',
+        'Discernment',
+      ],
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(7),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFBF4FC),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFC9B1D2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _IconBadge(
+                icon: Icons.psychology_outlined,
+                size: 11,
+                backgroundColor: const Color(0xFFEDE3F2),
+                borderColor: const Color(0xFF8C6AA0),
+                iconColor: const Color(0xFF5A2D6B),
+              ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  'Concurrent Formations (51 Mental States)',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textDark,
+                      ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth;
+              final columns = width < 640
+                  ? 1
+                  : width < 980
+                      ? 2
+                      : 3;
+              final gap = 5.0;
+              final panelWidth = (width - ((columns - 1) * gap)) / columns;
+              return Wrap(
+                spacing: gap,
+                runSpacing: gap,
+                children: [
+                  for (final category in categories)
+                    SizedBox(
+                      width: panelWidth,
+                      child: _FormationsCategoryPanel(category: category),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FormationsCategoryPanel extends StatelessWidget {
+  const _FormationsCategoryPanel({required this.category});
+
+  final _FormationsCategory category;
+
+  @override
+  Widget build(BuildContext context) {
+    final itemStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 12,
+          height: 1.25,
+        );
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFBF4),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: const Color(0xFFE0D3BF)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            category.title,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textDark,
+                ),
+          ),
+          const SizedBox(height: 3),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final twoCols =
+                  category.items.length >= 8 && constraints.maxWidth >= 400;
+              final colWidth = twoCols
+                  ? ((constraints.maxWidth - 4) / 2).clamp(120.0, 360.0)
+                  : constraints.maxWidth;
+              return Wrap(
+                spacing: twoCols ? 4 : 0,
+                runSpacing: 2,
+                children: [
+                  for (final item in category.items)
+                    SizedBox(
+                      width: colWidth,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _formationsBadge(item, 9),
+                          const SizedBox(width: 5),
+                          Expanded(child: Text(item, style: itemStyle)),
+                        ],
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+          if (category.beliefTypes != null) ...[
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7EEF8),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: const Color(0xFFCFBCD6)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Belief has 5 types',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textDark,
+                        ),
+                  ),
+                  const SizedBox(height: 2),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final twoCols = constraints.maxWidth >= 420;
+                      final colWidth = twoCols
+                          ? ((constraints.maxWidth - 4) / 2).clamp(120.0, 360.0)
+                          : constraints.maxWidth;
+                      return Wrap(
+                        spacing: twoCols ? 4 : 0,
+                        runSpacing: 2,
+                        children: [
+                          for (final item in category.beliefTypes!)
+                            SizedBox(
+                              width: colWidth,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _IconBadge(
+                                      icon: _iconForLabel(item), size: 8),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(item, style: itemStyle),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+Widget _formationsBadge(String item, double size) {
+  final t = item.toLowerCase().trim();
+  if (t == 'sensation' || t == 'perception' || t == 'perceptions') {
+    return _IconBadge(
+      icon: _iconForLabel(item),
+      size: size,
+      backgroundColor: _skandhaBadgeBg,
+      borderColor: _skandhaBadgeBorder,
+      iconColor: _skandhaIconColor,
+    );
+  }
+  return _IconBadge(icon: _iconForLabel(item), size: size);
+}
+
+class _NonCurrentMajorPanel {
+  const _NonCurrentMajorPanel({
+    required this.title,
+    required this.groups,
+  });
+
+  final String title;
+  final List<List<String>> groups;
+}
+
+class _NonCurrentFormationsMembershipView extends StatelessWidget {
+  const _NonCurrentFormationsMembershipView();
+
+  static const panels = <_NonCurrentMajorPanel>[
+    _NonCurrentMajorPanel(
+      title:
+          'Fourteen Non-Current Formations According to the Abhidharma Kosha',
+      groups: <List<String>>[
+        <String>[
+          'Acquisition',
+          'Dispossession',
+          'Same status',
+        ],
+        <String>[
+          'Non-perception',
+          'Serenity of cessation',
+          'Ongoing all-ground not blocked by the state of non-perception',
+        ],
+        <String>[
+          'Life faculty',
+        ],
+        <String>[
+          'Birth',
+          'Subsistence',
+          'Ageing',
+          'Impermanence',
+        ],
+        <String>[
+          'Categories of names, words, and syllables',
+        ],
+      ],
+    ),
+    _NonCurrentMajorPanel(
+      title:
+          'Additional Non-Current Formations According to the Abhidharma Samucchaya',
+      groups: <List<String>>[
+        <String>[
+          'Ordinary person',
+          'Regular sequence',
+          'Definitive distinctiveness',
+          'Connected link',
+          'Speed',
+          'Sequence',
+          'Time',
+          'Location',
+          'Number',
+          'Gathering',
+        ],
+      ],
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final wide = constraints.maxWidth >= 900;
+        return Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            for (final panel in panels)
+              SizedBox(
+                width: wide
+                    ? ((constraints.maxWidth - 6) / 2).clamp(220.0, 700.0)
+                    : constraints.maxWidth,
+                child: _NonCurrentMajorPanelView(panel: panel),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _NonCurrentMajorPanelView extends StatelessWidget {
+  const _NonCurrentMajorPanelView({required this.panel});
+
+  final _NonCurrentMajorPanel panel;
+
+  @override
+  Widget build(BuildContext context) {
+    final itemStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.bodyText,
+          fontSize: 12,
+          height: 1.22,
+        );
+    final noteStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.mutedBrown,
+          fontSize: 11.2,
+          height: 1.2,
+          fontStyle: FontStyle.italic,
+        );
+
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFFBF4),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: const Color(0xFFE0D3BF)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            panel.title,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textDark,
+                ),
+          ),
+          const SizedBox(height: 4),
+          for (var gi = 0; gi < panel.groups.length; gi++) ...[
+            if (gi > 0)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3),
+                child: Divider(height: 1, color: Color(0xFFE7DBCA)),
+              ),
+            for (final item in panel.groups[gi]) ...[
+              if (item == 'Birth') ...[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: Text(
+                    'Characteristics indicating a conditioned thing:',
+                    style: noteStyle,
+                  ),
+                ),
+              ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _IconBadge(icon: _iconForLabel(item), size: 9),
+                    const SizedBox(width: 5),
+                    Expanded(child: Text(item, style: itemStyle)),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _GatewayChipLink extends StatelessWidget {
   const _GatewayChipLink({
     required this.label,
@@ -927,27 +1397,32 @@ class _GatewayChipLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lower = label.toLowerCase().trim();
+    final classical = _classicalElementForLabel(label);
+    final isSkandha = _isSkandhaLabel(label);
     final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: enabled ? AppColors.primary : AppColors.bodyText,
           fontSize: 13,
           decoration: enabled ? TextDecoration.underline : TextDecoration.none,
           fontWeight: enabled ? FontWeight.w600 : FontWeight.w400,
         );
-    final isSkandha = _isSkandhaLabel(label);
-    final chipBg = isSkandha ? _skandhaChipBg : const Color(0xFFFFF5E4);
-    final chipBorder = isSkandha ? _skandhaChipBorder : const Color(0xFFDDCEB8);
+    var chipBg = const Color(0xFFFFF5E4);
+    var chipBorder = const Color(0xFFDDCEB8);
+    if (isSkandha || lower == 'consciousness') {
+      chipBg = _skandhaChipBg;
+      chipBorder = _skandhaChipBorder;
+    } else if (classical != null) {
+      final colors = _classicalElementColors(classical);
+      chipBg = colors.$1.withValues(alpha: 0.4);
+      chipBorder = colors.$2;
+    }
+    final leadingIcon = _semanticIconBadge(label, size: 11);
     final child = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _IconBadge(
-            icon: _iconForLabel(label),
-            size: 11,
-            backgroundColor: isSkandha ? _skandhaBadgeBg : null,
-            borderColor: isSkandha ? _skandhaBadgeBorder : null,
-            iconColor: isSkandha ? _skandhaIconColor : null,
-          ),
+          leadingIcon,
           const SizedBox(width: 6),
           Text(label, style: textStyle),
         ],
@@ -971,8 +1446,7 @@ class _GatewayChipLink extends StatelessWidget {
         decoration: BoxDecoration(
           color: chipBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: isSkandha ? _skandhaChipBorder : const Color(0xFFD6C5AB)),
+          border: Border.all(color: chipBorder),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -1400,6 +1874,66 @@ class _BracePainter extends CustomPainter {
   bool shouldRepaint(covariant _BracePainter oldDelegate) {
     return oldDelegate.color != color;
   }
+}
+
+class _EarthElementPainter extends CustomPainter {
+  const _EarthElementPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.8
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    final w = size.width;
+    final h = size.height;
+    final triangle = Path()
+      ..moveTo(w * 0.18, h * 0.24)
+      ..lineTo(w * 0.82, h * 0.24)
+      ..lineTo(w * 0.50, h * 0.86)
+      ..close();
+    canvas.drawPath(triangle, paint);
+    canvas.drawLine(
+        Offset(w * 0.20, h * 0.56), Offset(w * 0.80, h * 0.56), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _EarthElementPainter oldDelegate) =>
+      oldDelegate.color != color;
+}
+
+class _WaterElementPainter extends CustomPainter {
+  const _WaterElementPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6
+      ..strokeCap = StrokeCap.round;
+    final w = size.width;
+    final h = size.height;
+    for (var i = 0; i < 3; i++) {
+      final y = h * (0.30 + i * 0.20);
+      final path = Path()
+        ..moveTo(w * 0.16, y)
+        ..quadraticBezierTo(w * 0.30, y - h * 0.10, w * 0.44, y)
+        ..quadraticBezierTo(w * 0.58, y + h * 0.10, w * 0.72, y)
+        ..quadraticBezierTo(w * 0.84, y - h * 0.10, w * 0.90, y);
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _WaterElementPainter oldDelegate) =>
+      oldDelegate.color != color;
 }
 
 class _AyatanaDhatuMapView extends StatelessWidget {
@@ -1892,6 +2426,11 @@ class _PlainList extends StatelessWidget {
 
     if (parsed != null) {
       final (label, subItems) = parsed;
+      final hideParentIcon = label.toLowerCase().startsWith(
+                'four primary elements:',
+              ) ||
+          label.toLowerCase().startsWith('11 resultant forms:') ||
+          label.toLowerCase().startsWith('eleven resultant forms:');
       return Padding(
         padding: const EdgeInsets.only(bottom: 6),
         child: Column(
@@ -1900,11 +2439,13 @@ class _PlainList extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: _semanticIconBadge(items[i], size: iconSize),
-                ),
-                const SizedBox(width: 8),
+                if (!hideParentIcon) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: _semanticIconBadge(items[i], size: iconSize),
+                  ),
+                  const SizedBox(width: 8),
+                ],
                 Expanded(
                   child: Text(label,
                       style: bodyStyle?.copyWith(
@@ -1979,6 +2520,28 @@ class _PlainList extends StatelessWidget {
 Widget _semanticIconBadge(String label, {required double size}) {
   final t = label.toLowerCase();
 
+  if (_isSkandhaLabel(label) || t.contains('three aggregates')) {
+    return _IconBadge(
+      icon: _iconForLabel(label),
+      size: size,
+      backgroundColor: _skandhaBadgeBg,
+      borderColor: _skandhaBadgeBorder,
+      iconColor: _skandhaIconColor,
+    );
+  }
+
+  if (_classicalElementForLabel(label) case final element?) {
+    final colors = _classicalElementColors(element);
+    return _IconBadge(
+      icon: _iconForLabel(label),
+      size: size,
+      backgroundColor: colors.$1,
+      borderColor: colors.$2,
+      iconColor: colors.$3,
+      glyph: _classicalElementGlyph(element, size, colors.$3),
+    );
+  }
+
   if (t.contains('physical or verbal action')) {
     return _IconBadge(
       icon: Icons.directions_run,
@@ -2033,6 +2596,65 @@ Widget _semanticIconBadge(String label, {required double size}) {
   }
 
   return _IconBadge(icon: _iconForLabel(label), size: size);
+}
+
+enum _ClassicalElement { earth, water, fire, wind }
+
+_ClassicalElement? _classicalElementForLabel(String label) {
+  final t = label.toLowerCase();
+  if (RegExp(r'\bearth\b').hasMatch(t)) return _ClassicalElement.earth;
+  if (RegExp(r'\bwater\b').hasMatch(t)) return _ClassicalElement.water;
+  if (RegExp(r'\bfire\b').hasMatch(t)) return _ClassicalElement.fire;
+  if (RegExp(r'\bwind\b').hasMatch(t)) return _ClassicalElement.wind;
+  return null;
+}
+
+(Color, Color, Color) _classicalElementColors(_ClassicalElement element) {
+  switch (element) {
+    case _ClassicalElement.earth:
+      return (
+        const Color(0xFFFFF7D8),
+        const Color(0xFFC6A628),
+        const Color(0xFF8B6A00),
+      );
+    case _ClassicalElement.water:
+      return (
+        const Color(0xFFE8F4FF),
+        const Color(0xFF5A95CC),
+        const Color(0xFF2F6EA6),
+      );
+    case _ClassicalElement.fire:
+      return (
+        const Color(0xFFFDEBE7),
+        const Color(0xFFC75A4A),
+        const Color(0xFF9F3A2D),
+      );
+    case _ClassicalElement.wind:
+      return (
+        const Color(0xFFE9F7EC),
+        const Color(0xFF66A978),
+        const Color(0xFF2F7B45),
+      );
+  }
+}
+
+Widget? _classicalElementGlyph(
+    _ClassicalElement element, double size, Color color) {
+  switch (element) {
+    case _ClassicalElement.earth:
+      return CustomPaint(
+        size: Size.square(size),
+        painter: _EarthElementPainter(color),
+      );
+    case _ClassicalElement.water:
+      return CustomPaint(
+        size: Size.square(size),
+        painter: _WaterElementPainter(color),
+      );
+    case _ClassicalElement.fire:
+    case _ClassicalElement.wind:
+      return null;
+  }
 }
 
 Widget _fiveDhatuStrip(_TriadCategory category, {required double size}) {
@@ -2282,6 +2904,7 @@ class _IconBadge extends StatelessWidget {
     this.borderColor,
     this.iconColor,
     this.opacity = 1.0,
+    this.glyph,
   });
 
   final IconData icon;
@@ -2290,6 +2913,7 @@ class _IconBadge extends StatelessWidget {
   final Color? borderColor;
   final Color? iconColor;
   final double opacity;
+  final Widget? glyph;
 
   @override
   Widget build(BuildContext context) {
@@ -2306,11 +2930,12 @@ class _IconBadge extends StatelessWidget {
             color: opacity < 1.0 ? bd.withValues(alpha: opacity) : bd),
       ),
       alignment: Alignment.center,
-      child: Icon(
-        icon,
-        size: size,
-        color: opacity < 1.0 ? ic.withValues(alpha: opacity) : ic,
-      ),
+      child: glyph ??
+          Icon(
+            icon,
+            size: size,
+            color: opacity < 1.0 ? ic.withValues(alpha: opacity) : ic,
+          ),
     );
   }
 }
@@ -2472,6 +3097,12 @@ IconData _computeIcon(String text) {
           t.contains('sense-object dhātus'))) {
     return Icons.account_tree_outlined;
   }
+  if (RegExp(r'\bearth\b').hasMatch(t)) return Icons.change_history;
+  if (RegExp(r'\bwater\b').hasMatch(t)) return Icons.waves;
+  if (RegExp(r'\bfire\b').hasMatch(t)) {
+    return Icons.local_fire_department_outlined;
+  }
+  if (RegExp(r'\bwind\b').hasMatch(t)) return Icons.air_outlined;
   // Dhatu / sense patterns
   if (t.contains('eye') || t.contains('visual')) {
     return Icons.visibility_outlined;
@@ -2487,10 +3118,6 @@ IconData _computeIcon(String text) {
   if (t.contains('mind') || t.contains('conscious')) {
     return Icons.psychology_outlined;
   }
-  if (t.contains('earth')) return Icons.landscape_outlined;
-  if (t.contains('water')) return Icons.water_outlined;
-  if (t.contains('fire')) return Icons.local_fire_department_outlined;
-  if (t.contains('wind')) return Icons.air_outlined;
   if (t.contains('space')) return Icons.public_outlined;
   if (t.contains('time')) return Icons.schedule_outlined;
   if (t.contains('seed')) return Icons.eco_outlined;
