@@ -768,6 +768,17 @@ class _GatewayBlockView extends StatelessWidget {
             ),
           );
         }
+        if (block.styleClass == 'inner-list') {
+          return Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: _PlainList(
+              items: items,
+              isNumbered: isNumbered,
+              iconSize: 11,
+              nestedIconSize: 9,
+            ),
+          );
+        }
         return Padding(
           padding: const EdgeInsets.only(top: 6),
           child: _PlainList(items: items, isNumbered: isNumbered),
@@ -1121,8 +1132,9 @@ class _DualityPairView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const connectorSpan = 24.0; // 4 + 16 + 4
-    const maxLaneWidth = 300.0;
+    const sideGap = 8.0;
+    const centerSpan = sideGap;
+    const maxLaneWidth = _compactMapMaxLaneWidth;
     final pairs = <(String, String)>[];
     final count = innerItems.length < outerItems.length
         ? innerItems.length
@@ -1138,9 +1150,9 @@ class _DualityPairView extends StatelessWidget {
           final available = constraints.maxWidth;
           final compact = available < 860;
           final laneWidth = compact
-              ? ((available - connectorSpan) / 2).clamp(140.0, 420.0)
-              : ((available - connectorSpan) / 2).clamp(140.0, maxLaneWidth);
-          final contentWidth = (laneWidth * 2) + connectorSpan;
+              ? ((available - centerSpan) / 2).clamp(120.0, 420.0)
+              : ((available - centerSpan) / 2).clamp(120.0, maxLaneWidth);
+          final contentWidth = (laneWidth * 2) + centerSpan;
 
           return Align(
             alignment: Alignment.centerLeft,
@@ -1153,53 +1165,30 @@ class _DualityPairView extends StatelessWidget {
                     children: [
                       SizedBox(
                         width: laneWidth,
-                        child: const _DualityMapHeader(
+                        child: _DualityMapPanel(
                           label: 'Inner Sources',
                           icon: Icons.adjust_outlined,
                           color: _ayatanaInnerIcon,
+                          items: pairs.map((p) => p.$1).toList(),
+                          itemColor: _ayatanaInnerIcon,
+                          itemBackgroundColor: _ayatanaInnerBg,
+                          itemBorderColor: _ayatanaInnerBorder,
                         ),
                       ),
-                      const SizedBox(width: connectorSpan),
+                      const SizedBox(width: sideGap),
                       SizedBox(
                         width: laneWidth,
-                        child: const _DualityMapHeader(
+                        child: _DualityMapPanel(
                           label: 'Outer Sources',
                           icon: Icons.open_in_new_outlined,
                           color: _ayatanaOuterIcon,
+                          items: pairs.map((p) => p.$2).toList(),
+                          itemColor: _ayatanaOuterIcon,
+                          itemBackgroundColor: _ayatanaOuterBg,
+                          itemBorderColor: _ayatanaOuterBorder,
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 2),
-                  ...pairs.map(
-                    (pair) => Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: laneWidth,
-                            child: _DualityMapNode(
-                              label: pair.$1,
-                              color: _ayatanaInnerIcon,
-                              backgroundColor: _ayatanaInnerBg,
-                              borderColor: _ayatanaInnerBorder,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          const _PerceptionConnector(),
-                          const SizedBox(width: 4),
-                          SizedBox(
-                            width: laneWidth,
-                            child: _DualityMapNode(
-                              label: pair.$2,
-                              color: _ayatanaOuterIcon,
-                              backgroundColor: _ayatanaOuterBg,
-                              borderColor: _ayatanaOuterBorder,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -1211,46 +1200,76 @@ class _DualityPairView extends StatelessWidget {
   }
 }
 
-class _DualityMapHeader extends StatelessWidget {
-  const _DualityMapHeader({
+class _DualityMapPanel extends StatelessWidget {
+  const _DualityMapPanel({
     required this.label,
     required this.icon,
     required this.color,
+    required this.items,
+    required this.itemColor,
+    required this.itemBackgroundColor,
+    required this.itemBorderColor,
   });
 
   final String label;
   final IconData icon;
   final Color color;
+  final List<String> items;
+  final Color itemColor;
+  final Color itemBackgroundColor;
+  final Color itemBorderColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      padding: const EdgeInsets.all(_compactMapPanelPadding),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF4E0),
-        borderRadius: BorderRadius.circular(7),
-        border: Border.all(color: const Color(0xFFDDD0B8)),
+        color: const Color(0xFFFFFBF4),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE0D3BF)),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _IconBadge(
-            icon: icon,
-            size: 10,
-            backgroundColor: const Color(0xFFFFF4E0),
-            borderColor: color.withValues(alpha: 0.35),
-            iconColor: color,
-          ),
-          const SizedBox(width: 5),
-          Expanded(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textDark,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
+          SizedBox(
+            height: _compactMapTitleHeight,
+            child: Row(
+              children: [
+                _IconBadge(
+                  icon: icon,
+                  size: _compactMapHeaderIconSize,
+                  backgroundColor: itemBackgroundColor,
+                  borderColor: itemBorderColor,
+                  iconColor: color,
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textDark,
+                          fontWeight: FontWeight.w700,
+                          fontSize: _compactMapTitleFontSize,
+                        ),
                   ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: _compactMapHeaderBottomSpacing),
+          for (var i = 0; i < items.length; i++) ...[
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: i == items.length - 1 ? 0 : _compactMapRowSpacing,
+              ),
+              child: _DualityMapNode(
+                label: items[i],
+                color: itemColor,
+                backgroundColor: itemBackgroundColor,
+                borderColor: itemBorderColor,
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -1276,19 +1295,21 @@ class _DualityMapNode extends StatelessWidget {
       children: [
         _IconBadge(
           icon: _iconForLabel(label),
-          size: 11,
+          size: _compactMapItemIconSize,
           backgroundColor: backgroundColor,
           borderColor: borderColor,
           iconColor: color,
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: _compactMapItemGap),
         Expanded(
           child: Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textDark,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                  color: AppColors.bodyText,
+                  fontSize: _compactMapItemFontSize,
+                  fontWeight: FontWeight.w400,
                 ),
           ),
         ),
@@ -1333,7 +1354,7 @@ class _IdentityConnector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 22,
+      width: 14,
       child: Center(
         child: Text(
           '≡',
@@ -1349,33 +1370,63 @@ class _IdentityConnector extends StatelessWidget {
   }
 }
 
-/// One-to-many connector used for Mind Source mapping to 7 dhatus.
-class _OneToManyConnector extends StatelessWidget {
-  const _OneToManyConnector();
+/// One-to-many brace connector used for Mind Source → 7 dhatus.
+class _OneToManyBraceConnector extends StatelessWidget {
+  const _OneToManyBraceConnector({required this.height});
+
+  final double height;
 
   @override
   Widget build(BuildContext context) {
+    final color = AppColors.mutedBrown.withValues(alpha: 0.7);
     return SizedBox(
-      width: 22,
-      child: Column(
+      width: 14,
+      height: height,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Text(
-            '≡',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.mutedBrown.withValues(alpha: 0.65),
-              fontWeight: FontWeight.w700,
-              height: 1,
-            ),
-          ),
-          Icon(
-            Icons.call_split_outlined,
-            size: 10,
-            color: AppColors.mutedBrown.withValues(alpha: 0.7),
+          CustomPaint(
+            size: Size(14, height),
+            painter: _BracePainter(color: color),
           ),
         ],
       ),
     );
+  }
+}
+
+class _BracePainter extends CustomPainter {
+  const _BracePainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.7
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+
+    final w = size.width;
+    final h = size.height;
+    final x = w * 0.82;
+    final inner = w * 0.32;
+    final mid = h * 0.5;
+    final path = Path()
+      ..moveTo(x, 0)
+      ..quadraticBezierTo(inner, 0, inner, h * 0.20)
+      ..quadraticBezierTo(inner, h * 0.36, w * 0.08, mid - 1)
+      ..quadraticBezierTo(inner, mid, inner, h * 0.64)
+      ..quadraticBezierTo(inner, h * 0.80, x, h);
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _BracePainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }
 
@@ -1390,8 +1441,8 @@ class _AyatanaDhatuMapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const connectorSpan = 30.0; // 4 + 22 + 4
-    const maxLaneWidth = 260.0;
+    const connectorSpan = 18.0; // 2 + 14 + 2
+    const maxLaneWidth = _compactMapMaxLaneWidth;
     final leftHeader = headers.isNotEmpty ? headers.first : '12 Ayatanas';
     final rightHeader = headers.length > 1 ? headers[1] : '18 Dhatus';
 
@@ -1410,9 +1461,9 @@ class _AyatanaDhatuMapView extends StatelessWidget {
               final available = constraints.maxWidth;
               final compact = available < 860;
               final laneWidth = compact
-                  ? ((available - connectorSpan) / 2).clamp(140.0, 420.0)
+                  ? ((available - connectorSpan) / 2).clamp(120.0, 420.0)
                   : ((available - connectorSpan) / 2)
-                      .clamp(140.0, maxLaneWidth);
+                      .clamp(120.0, maxLaneWidth);
               final contentWidth = (laneWidth * 2) + connectorSpan;
               return Align(
                 alignment: Alignment.centerLeft,
@@ -1442,14 +1493,16 @@ class _AyatanaDhatuMapView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 3),
+                      const SizedBox(height: _compactMapHeaderBottomSpacing),
                       ...rows.where((r) => r.length >= 2).map((r) {
                         final left = r[0];
                         final right = r[1];
                         final mindRow =
                             left.toLowerCase().contains('mind source');
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 3),
+                          padding: const EdgeInsets.only(
+                            bottom: _compactMapRowSpacing,
+                          ),
                           child: _AyatanaMapRow(
                             leftLabel: left,
                             rightLabel: right,
@@ -1483,30 +1536,25 @@ class _AyatanaMapHeadChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF4E0),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: const Color(0xFFDDD0B8)),
-      ),
+    return SizedBox(
+      height: _compactMapTitleHeight,
       child: Row(
         children: [
           _IconBadge(
             icon: icon,
-            size: 9,
+            size: _compactMapHeaderIconSize,
             backgroundColor: color.withValues(alpha: 0.1),
             borderColor: color.withValues(alpha: 0.35),
             iconColor: color,
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: _compactMapHeaderGap),
           Expanded(
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.textDark,
                     fontWeight: FontWeight.w700,
-                    fontSize: 11,
+                    fontSize: _compactMapTitleFontSize,
                   ),
             ),
           ),
@@ -1548,9 +1596,9 @@ class _AyatanaMapRow extends StatelessWidget {
             iconColor: sourceStyle.icon,
           ),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 2),
         const _IdentityConnector(),
-        const SizedBox(width: 4),
+        const SizedBox(width: 2),
         SizedBox(
           width: laneWidth,
           child: _AyatanaMapNode(
@@ -1607,59 +1655,52 @@ class _AyatanaMapRow extends StatelessWidget {
     ];
 
     Widget buildRightBars() {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 4),
-        decoration: BoxDecoration(
-          color: const Color(0xFFFFFBF4),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xFFE0D3BF)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'maps to all 7 dhatus',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.mutedBrown,
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    height: 1.1,
-                  ),
-            ),
-            const SizedBox(height: 2),
-            for (var i = 0; i < mindBars.length; i++) ...[
-              if (i > 0) const SizedBox(height: 1),
-              _AyatanaMapNode(
-                label: mindBars[i].label,
-                tint: mindBars[i].cat.background,
-                border: mindBars[i].cat.border,
-                iconColor: mindBars[i].cat.icon ?? AppColors.primary,
-                dhatuCategory: mindBars[i].cat,
+      return Column(
+        children: [
+          for (var i = 0; i < mindBars.length; i++) ...[
+            if (i > 0)
+              const SizedBox(
+                height: _compactMapRowSpacing,
               ),
-            ],
+            _AyatanaMapNode(
+              label: mindBars[i].label,
+              tint: mindBars[i].cat.background,
+              border: mindBars[i].cat.border,
+              iconColor: mindBars[i].cat.icon ?? AppColors.primary,
+              dhatuCategory: mindBars[i].cat,
+              fixedHeight: _compactMapMindRowHeight,
+            ),
           ],
-        ),
+        ],
       );
     }
+
+    const rowCount = 7;
+    const rowHeight = _compactMapMindRowHeight;
+    const rowGap = _compactMapRowSpacing;
+    const braceHeight = (rowCount * rowHeight) + ((rowCount - 1) * rowGap);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: laneWidth,
-          child: _AyatanaMapNode(
-            label: leftLabel,
-            tint: _ayatanaInnerBg,
-            border: _ayatanaInnerBorder,
-            iconColor: _ayatanaInnerIcon,
+          child: SizedBox(
+            height: braceHeight,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: _AyatanaMapNode(
+                label: leftLabel,
+                tint: _ayatanaInnerBg,
+                border: _ayatanaInnerBorder,
+                iconColor: _ayatanaInnerIcon,
+              ),
+            ),
           ),
         ),
-        const SizedBox(width: 4),
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: const _OneToManyConnector(),
-        ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 2),
+        const _OneToManyBraceConnector(height: braceHeight),
+        const SizedBox(width: 2),
         SizedBox(width: laneWidth, child: buildRightBars()),
       ],
     );
@@ -1701,6 +1742,7 @@ class _AyatanaMapNode extends StatelessWidget {
     required this.border,
     required this.iconColor,
     this.dhatuCategory,
+    this.fixedHeight,
   });
 
   final String label;
@@ -1708,6 +1750,7 @@ class _AyatanaMapNode extends StatelessWidget {
   final Color border;
   final Color iconColor;
   final _TriadCategory? dhatuCategory;
+  final double? fixedHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -1716,33 +1759,48 @@ class _AyatanaMapNode extends StatelessWidget {
     final effectiveIconColor = dhatuCategory?.icon ??
         (dhatuCategory != null ? AppColors.primary : iconColor);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 1),
-      child: Row(
-        children: [
-          _IconBadge(
-            icon: _iconForLabel(label),
-            size: 11,
-            backgroundColor: effectiveTint,
-            borderColor: effectiveBorder,
-            iconColor: effectiveIconColor,
+    final row = Row(
+      children: [
+        _IconBadge(
+          icon: _iconForLabel(label),
+          size: _compactMapItemIconSize,
+          backgroundColor: effectiveTint,
+          borderColor: effectiveBorder,
+          iconColor: effectiveIconColor,
+        ),
+        const SizedBox(width: _compactMapItemGap),
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.bodyText,
+                  fontSize: _compactMapItemFontSize,
+                  fontWeight: FontWeight.w400,
+                ),
           ),
-          const SizedBox(width: 5),
-          Expanded(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textDark,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
+    if (fixedHeight == null) return row;
+    return SizedBox(height: fixedHeight, child: row);
   }
 }
+
+// Shared compact mapping style tokens to keep chapter-3 map sections consistent.
+const _compactMapMaxLaneWidth = 210.0;
+const _compactMapPanelPadding = 7.0;
+const _compactMapTitleHeight = 28.0;
+const _compactMapTitleFontSize = 13.0;
+const _compactMapHeaderIconSize = 10.0;
+const _compactMapHeaderGap = 5.0;
+const _compactMapHeaderBottomSpacing = 4.0;
+const _compactMapItemIconSize = 10.0;
+const _compactMapItemGap = 6.0;
+const _compactMapItemFontSize = 12.5;
+const _compactMapRowSpacing = 3.0;
+const _compactMapMindRowHeight = 24.0;
 
 /// A single plain row for the Aggregate of Consciousness stack.
 /// Mind Element gets faculty (yellow) badge; consciousness elements get
@@ -1810,11 +1868,15 @@ class _PlainList extends StatelessWidget {
     required this.items,
     required this.isNumbered,
     this.startIndex = 1,
+    this.iconSize = 13,
+    this.nestedIconSize = 11,
   });
 
   final List<String> items;
   final bool isNumbered;
   final int startIndex;
+  final double iconSize;
+  final double nestedIconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -1868,7 +1930,7 @@ class _PlainList extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
-                  child: _semanticIconBadge(items[i], size: 13),
+                  child: _semanticIconBadge(items[i], size: iconSize),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -1900,7 +1962,8 @@ class _PlainList extends StatelessWidget {
                               ),
                             ),
                           ),
-                          _semanticIconBadge(subItems[si], size: 11),
+                          _semanticIconBadge(subItems[si],
+                              size: nestedIconSize),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(subItems[si], style: subItemStyle),
@@ -1926,7 +1989,7 @@ class _PlainList extends StatelessWidget {
           else
             Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: _semanticIconBadge(items[i], size: 13),
+              child: _semanticIconBadge(items[i], size: iconSize),
             ),
           if (!isNumbered) const SizedBox(width: 8),
           Expanded(
@@ -1944,13 +2007,23 @@ class _PlainList extends StatelessWidget {
 Widget _semanticIconBadge(String label, {required double size}) {
   final t = label.toLowerCase();
 
+  if (t.contains('physical or verbal action')) {
+    return _IconBadge(
+      icon: Icons.directions_run,
+      size: size,
+      backgroundColor: _skandhaBadgeBg,
+      borderColor: _skandhaBadgeBorder,
+      iconColor: _skandhaIconColor,
+    );
+  }
+
   if (t.contains('five sense-faculty dhatus') ||
       t.contains('five sense-faculty dhātus')) {
-    return _fiveDhatuStrip(_TriadCategory.faculties);
+    return _fiveDhatuStrip(_TriadCategory.faculties, size: size);
   }
   if (t.contains('five sense-object dhatus') ||
       t.contains('five sense-object dhātus')) {
-    return _fiveDhatuStrip(_TriadCategory.objects);
+    return _fiveDhatuStrip(_TriadCategory.objects, size: size);
   }
 
   // Keep all imperceptible-form variants visually unified across chapter 1.
@@ -1990,7 +2063,7 @@ Widget _semanticIconBadge(String label, {required double size}) {
   return _IconBadge(icon: _iconForLabel(label), size: size);
 }
 
-Widget _fiveDhatuStrip(_TriadCategory category) {
+Widget _fiveDhatuStrip(_TriadCategory category, {required double size}) {
   const icons = <IconData>[
     Icons.visibility_outlined,
     Icons.hearing_outlined,
@@ -2006,7 +2079,7 @@ Widget _fiveDhatuStrip(_TriadCategory category) {
         if (i > 0) const SizedBox(width: 2),
         _IconBadge(
           icon: icons[i],
-          size: 8,
+          size: size,
           backgroundColor: category.background,
           borderColor: category.border,
           iconColor: category.icon ?? AppColors.primary,
@@ -2496,11 +2569,11 @@ IconData _computeIcon(String text) {
 }
 
 // ── Skandha (aggregate) colours – rich reds ─────────────────────────────
-const _skandhaIconColor = Color(0xFF9E3532);
-const _skandhaBadgeBg = Color(0xFFFDEBEA);
-const _skandhaBadgeBorder = Color(0xFFCF9290);
-const _skandhaChipBg = Color(0xFFFDF0EF);
-const _skandhaChipBorder = Color(0xFFD4A09E);
+const _skandhaIconColor = Color(0xFF5A2D6B);
+const _skandhaBadgeBg = Color(0xFFEDE3F2);
+const _skandhaBadgeBorder = Color(0xFF8C6AA0);
+const _skandhaChipBg = Color(0xFFF2EAF6);
+const _skandhaChipBorder = Color(0xFF6E4A83);
 
 // Ayatana (sense source) colours – green for inner, blue for outer
 const _ayatanaInnerIcon = Color(0xFF2E7D52);
@@ -2899,7 +2972,7 @@ class _ClassificationOverlapsViewState
           child: Column(
             children: [
               Icon(s.icon,
-                  size: 11,
+                  size: 12,
                   color: active ? Colors.white : AppColors.mutedBrown),
               const SizedBox(height: 2),
               Expanded(
@@ -2910,10 +2983,10 @@ class _ClassificationOverlapsViewState
                     child: Text(
                       s.name,
                       style: TextStyle(
-                        fontSize: 8,
+                        fontSize: 9.5,
                         fontWeight: FontWeight.w600,
                         color: active ? Colors.white : AppColors.mutedBrown,
-                        letterSpacing: 0.2,
+                        letterSpacing: 0.1,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.clip,

@@ -14,6 +14,20 @@ Color _leadingIconColorForLabel(WidgetTester tester, String label) {
   return icon.color!;
 }
 
+TextStyle _textStyleForLabel(WidgetTester tester, String label) {
+  final finder = find.text(label);
+  expect(finder, findsWidgets);
+  final text = tester.widget<Text>(finder.first);
+  expect(text.style, isNotNull);
+  return text.style!;
+}
+
+double _labelDy(WidgetTester tester, String label) {
+  final finder = find.text(label);
+  expect(finder, findsWidgets);
+  return tester.getTopLeft(finder.first).dy;
+}
+
 void main() {
   testWidgets('chapter 1 renders rich aggregate chips', (tester) async {
     await tester.pumpWidget(
@@ -68,6 +82,55 @@ void main() {
         const Color(0xFF96490A));
     expect(_leadingIconColorForLabel(tester, 'Eye Consciousness Element'),
         const Color(0xFF8B7355));
+  });
+
+  testWidgets('chapter 3 mapping uses consistent compact typography',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: GatewayChapterScreen(chapterNumber: 3),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final sourceStyle = _textStyleForLabel(tester, 'Eye Source');
+    final objectSourceStyle =
+        _textStyleForLabel(tester, 'Visual Object Source');
+    final dhatuStyle = _textStyleForLabel(tester, 'Eye Element');
+    final objectDhatuStyle = _textStyleForLabel(tester, 'Visual Form Element');
+
+    expect(sourceStyle.fontSize, 12.5);
+    expect(sourceStyle.fontWeight, FontWeight.w400);
+    expect(objectSourceStyle.fontSize, sourceStyle.fontSize);
+    expect(objectSourceStyle.fontWeight, sourceStyle.fontWeight);
+    expect(dhatuStyle.fontSize, sourceStyle.fontSize);
+    expect(dhatuStyle.fontWeight, sourceStyle.fontWeight);
+    expect(objectDhatuStyle.fontSize, sourceStyle.fontSize);
+    expect(objectDhatuStyle.fontWeight, sourceStyle.fontWeight);
+  });
+
+  testWidgets('chapter 3 mapping keeps compact and consistent row spacing',
+      (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: GatewayChapterScreen(chapterNumber: 3),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final sourceGap =
+        _labelDy(tester, 'Ear Source') - _labelDy(tester, 'Eye Source');
+    final outerGap = _labelDy(tester, 'Sound Object Source') -
+        _labelDy(tester, 'Visual Object Source');
+    final dhatuGap =
+        _labelDy(tester, 'Ear Element') - _labelDy(tester, 'Eye Element');
+
+    expect(sourceGap, lessThanOrEqualTo(48));
+    expect(outerGap, lessThanOrEqualTo(48));
+    expect(dhatuGap, lessThanOrEqualTo(48));
+
+    expect((sourceGap - outerGap).abs(), lessThanOrEqualTo(2));
+    expect((sourceGap - dhatuGap).abs(), lessThanOrEqualTo(4));
   });
 
   testWidgets(

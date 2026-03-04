@@ -107,7 +107,7 @@ class GatewayRichContentService {
                       'Imperceptible form arising from elements embraced by the stream of mind',
                       'A certain kind of physical or verbal action'
                     ],
-                    styleClass: ''),
+                    styleClass: 'inner-list'),
                 GatewayRichBlock(
                     type: 'p',
                     text:
