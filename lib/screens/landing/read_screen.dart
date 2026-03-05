@@ -421,8 +421,11 @@ class _ReadScreenState extends State<ReadScreen>
           _chapters = chapters;
           _verses = verses;
           _loading = false;
-          _deferVisibilityUntilUserScroll =
-              !_isDeepLinkOpen && widget.initialChapterNumber == null;
+          final hasInitialSectionHighlight =
+              widget.highlightSectionIndices != null &&
+                  widget.highlightSectionIndices!.isNotEmpty;
+          _deferVisibilityUntilUserScroll = hasInitialSectionHighlight ||
+              (!_isDeepLinkOpen && widget.initialChapterNumber == null);
           if (widget.highlightSectionIndices != null &&
               widget.highlightSectionIndices!.isNotEmpty) {
             _highlightVerseIndices =
@@ -635,6 +638,18 @@ class _ReadScreenState extends State<ReadScreen>
       _commentaryEntryForSelected = entry;
     });
     _showCommentary();
+  }
+
+  void _onReaderVerseTap(int globalIndex, {String? segmentRef}) {
+    // On mobile, tapping verse content should advance section (phone-friendly
+    // replacement for arrow-key navigation).
+    if (!_isLaptopLayout) {
+      _debouncedArrowNav(() => _scrollToAdjacentSection(1));
+      return;
+    }
+    if (_supportsInlineCommentary) {
+      _onVerseTap(globalIndex, segmentRef: segmentRef);
+    }
   }
 
   Future<CommentaryEntry?> _getCommentaryForRef(
@@ -853,8 +868,15 @@ class _ReadScreenState extends State<ReadScreen>
       // For split verses, use the specific segment key for the half that
       // belongs to the current section (e.g. 9.28cd → segment key index 1).
       GlobalKey? key;
+      final activeSegmentRef = _currentSegmentRef;
+      if (activeSegmentRef != null && _highlightSet.contains(idx)) {
+        final activeSegIdx = _segmentIndexForRef(idx, activeSegmentRef);
+        if (activeSegIdx > 0) {
+          key = _verseSegmentKeys[(idx, activeSegIdx)];
+        }
+      }
       final baseRef = _verseService.getVerseRef(_textId, idx);
-      if (baseRef != null && sectionRefs.isNotEmpty) {
+      if (key == null && baseRef != null && sectionRefs.isNotEmpty) {
         // Find the section ref whose base matches this verse index.
         String? matchRef;
         for (final r in sectionRefs) {
@@ -1519,6 +1541,11 @@ class _ReadScreenState extends State<ReadScreen>
           <({String ref, String sectionPath})>[];
     }
     final segments = _hierarchyService.getSplitVerseSegmentsSync(_textId, ref);
+    if (segments.isEmpty && _breadcrumbHierarchy.isEmpty) {
+      // Hierarchy may still be loading on first frame; avoid caching an
+      // empty result permanently for split verses.
+      return const <({String ref, String sectionPath})>[];
+    }
     _splitSegmentsCache[verseIndex] = segments;
     return segments;
   }
@@ -2508,13 +2535,8 @@ class _ReadScreenState extends State<ReadScreen>
               children: [
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    final overlayHorizontalMargin =
-                        _overlayLeftInset + _overlayRightInset;
-                    final contentMaxWidth =
-                        (constraints.maxWidth - overlayHorizontalMargin)
-                            .clamp(0.0, double.infinity);
-                    return ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: contentMaxWidth),
+                    return SizedBox(
+                      width: constraints.maxWidth,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2636,10 +2658,10 @@ class _ReadScreenState extends State<ReadScreen>
                                     w = SizedBox(
                                       width: double.infinity,
                                       child: InkWell(
-                                        onTap: _supportsInlineCommentary
-                                            ? () => _onVerseTap(idx,
-                                                segmentRef: segmentRef)
-                                            : null,
+                                        onTap: () => _onReaderVerseTap(
+                                          idx,
+                                          segmentRef: segmentRef,
+                                        ),
                                         hoverColor: Colors.transparent,
                                         child: w,
                                       ),

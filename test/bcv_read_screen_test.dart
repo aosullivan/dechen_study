@@ -9,9 +9,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:dechen_study/screens/landing/read_screen.dart';
+import 'package:dechen_study/screens/landing/bcv/bcv_verse_text.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_breadcrumb_bar.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_chapters_panel.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_mobile_nav_bar.dart';
+import 'package:dechen_study/screens/landing/bcv/bcv_section_overlay.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_section_slider.dart';
 import 'package:dechen_study/services/verse_service.dart';
 import 'package:dechen_study/services/verse_hierarchy_service.dart';
@@ -146,6 +148,7 @@ void main() {
     WidgetTester tester, {
     int? scrollToVerseIndex,
     String? initialSegmentRef,
+    Set<int>? highlightSectionIndices,
     Size? mediaSize,
     void Function(String sectionPath, String firstVerseRef)?
         onSectionNavigateForTest,
@@ -156,6 +159,7 @@ void main() {
       textId: 'bodhicaryavatara',
       scrollToVerseIndex: scrollToVerseIndex,
       initialSegmentRef: initialSegmentRef,
+      highlightSectionIndices: highlightSectionIndices,
       title: 'Bodhicaryavatara',
       onSectionNavigateForTest: onSectionNavigateForTest,
       onSectionStateForTest: onSectionStateForTest,
@@ -277,6 +281,105 @@ void main() {
       expect(capturedFirstRefs[2], '4.28cd');
 
       // Let programmatic-navigation timers complete (scroll-settle + fallback).
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets('chapter 4 split section 4.26c uses segment-only highlight',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedPaths = <String>[];
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex426ab,
+        initialSegmentRef: '4.26ab',
+        onSectionNavigateForTest: (path, firstRef) {
+          capturedPaths.add(path);
+          capturedRefs.add(firstRef);
+        },
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      final overlayBoxFinder = find.descendant(
+        of: find.byType(BcvSectionOverlay),
+        matching: find.byWidgetPredicate((w) {
+          if (w is! Container) return false;
+          final decoration = w.decoration;
+          return decoration is BoxDecoration && decoration.border != null;
+        }),
+      );
+      expect(overlayBoxFinder, findsOneWidget);
+      final abRect = tester.getRect(overlayBoxFinder);
+
+      await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
+      await tester.pump(const Duration(milliseconds: 450));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(capturedRefs, isNotEmpty);
+      expect(capturedRefs.first, equals('4.26c'));
+      expect(capturedPaths.first, equals('4.1.2.2.3.4.2'));
+
+      expect(overlayBoxFinder, findsOneWidget);
+      final cRect = tester.getRect(overlayBoxFinder);
+      expect(
+        cRect.height,
+        lessThan(abRect.height - 20),
+        reason:
+            '4.26c should highlight only its segment, not the full 4.26 block',
+      );
+
+      await tester.pump(const Duration(seconds: 2));
+    });
+
+    testWidgets(
+        'chapter 4 split section 4.26c stays segment-only when opened with highlight set',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final overlayBoxFinder = find.descendant(
+        of: find.byType(BcvSectionOverlay),
+        matching: find.byWidgetPredicate((w) {
+          if (w is! Container) return false;
+          final decoration = w.decoration;
+          return decoration is BoxDecoration && decoration.border != null;
+        }),
+      );
+
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex426ab,
+        initialSegmentRef: '4.26c',
+        highlightSectionIndices: {verseIndex426ab},
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+      expect(overlayBoxFinder, findsOneWidget);
+      final cRect = tester.getRect(overlayBoxFinder);
+      final firstLineY = tester
+          .getTopLeft(
+              find.textContaining('Having somehow attained this beneficial'))
+          .dy;
+      final cLineY = tester
+          .getTopLeft(find.textContaining('While I have this understanding,'))
+          .dy;
+
+      expect(
+        firstLineY,
+        lessThan(cRect.top),
+        reason:
+            'First 4.26 line should not be inside the 4.26c highlight overlay',
+      );
+      expect(
+        cLineY,
+        inInclusiveRange(cRect.top, cRect.bottom),
+        reason:
+            'Opening at 4.26c with highlightSectionIndices should not highlight all of 4.26',
+      );
+
       await tester.pump(const Duration(seconds: 2));
     });
 
@@ -1102,6 +1205,35 @@ void main() {
       expect(find.byType(ChaptersPanel), findsOneWidget);
       expect(find.byType(BcvSectionSlider), findsOneWidget);
       expect(find.byType(BcvBreadcrumbBar), findsOneWidget);
+    });
+
+    testWidgets('mobile verse tap advances to next section',
+        (WidgetTester tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final capturedRefs = <String>[];
+      await pumpBcvReadScreen(
+        tester,
+        scrollToVerseIndex: verseIndex426ab,
+        initialSegmentRef: '4.26ab',
+        mediaSize: const Size(390, 844),
+        onSectionNavigateForTest: (_, firstRef) => capturedRefs.add(firstRef),
+      );
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
+
+      final verseLabel = find.text('Verse 4.26');
+      expect(verseLabel, findsOneWidget);
+      await tester.ensureVisible(verseLabel);
+      await tester.pump();
+      await tester.tap(verseLabel);
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(capturedRefs, isNotEmpty);
+      expect(capturedRefs.first, equals('4.26c'));
+      await tester.pump(const Duration(seconds: 2));
     });
   });
 

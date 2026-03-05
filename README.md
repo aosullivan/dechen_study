@@ -1,56 +1,251 @@
-Here are the **minutes** for the Dechen Foundation board meeting held on **February 28, 2026**, from 1:00 PM to 2:00 PM PST via Google Meet.
+# Dechen Study
 
-**Meeting Details**  
-- **Date**: February 28, 2026  
-- **Time**: 1:00 PM – 2:00 PM PST  
-- **Location**: Google Meet (link: https://meet.google.com/bwn-ezsg-hki; Dial-in: (US) +1 339-526-4693, PIN: 726 915 808#)  
-- **Attendees**: Paul Haddon, Rosalind Haddon, Fred Tyler, Adrian O’Sullivan, Andrew Gutmann  
+Dechen Study is a Flutter app for studying Buddhist texts with guided reading, daily practice, quiz modes, and optional Supabase-backed analytics/auth.
 
-### 1. Housekeeping/Compliance
+## Tech Stack
 
-- **Dechen Foundation Filing Requirements**  
-  - **Santa Monica Business License**: Renews annually, expires June 30 each year. Last renewed in June 2025 by Fred Tyler. Document saved to Finance and Tax/2025 folder on Google Drive.  
-  - **CA Secretary of State Corporate Registration**: Annual filing required before January 30. Filed online via https://bizfileonline.sos.ca.gov/ on January 19, 2026, by Adrian O’Sullivan. Confirmed business address and officers; $20 filing fee paid.  
+- Flutter (Dart)
+- Supabase (`supabase_flutter`)
+- Playwright (production smoke tests)
+- iOS/Android via native Flutter targets
 
-- **Collins Management (e.g., insurance)**: Noted for ongoing review.  
-- **Annual Review of Contents Insurance Coverage/Amounts**: Fred Tyler to increase contents insurance coverage as needed.  
-- **Conflicts of Interest**: All directors confirmed no conflicts of interest (e.g., no payments received from the centre for contract work or other financial benefits).  
-- **Unincorporated Contractors**: Confirmed no contractors paid over $600 in the year, so no additional filing requirements apply.  
+## Prerequisites
 
-### 2. 2025 Year-end Accounts
+- Flutter stable (Dart 3+)
+- Xcode + CocoaPods (for iOS builds)
+- Android Studio SDK (for Android builds)
+- Node.js 18+ (for Playwright)
 
-The 2025 year-end financial position and statement of activity were reviewed (links shared in agenda).  
-- The accounts were discussed, reviewed, and re-approved by the board.  
+## Setup
 
-### 3. Re-approve 2026 Budget
+1. Install Flutter dependencies:
 
-The 2026 budget was presented with adjustments made by Andrew Gutmann:  
-- Program revenue (courses and teachings) halved to reflect actual 2025 figures more realistically.  
-- Venue hire placeholder for Lama-la's May teaching reduced from $5,000 to $800 (actual invoice amount).  
-- Agreement with Dechen UK to share half of transatlantic flight costs, starting with the autumn flight this year.  
-- Telecoms/internet costs increased to $100 per month.  
+```bash
+flutter pub get
+```
 
-The adjusted 2026 budget was re-approved. Andrew Gutmann to resend the latest version to all board members.  
+2. Install Playwright dependencies:
 
-### Additional Items Discussed
+```bash
+npm install
+npx playwright install chromium
+```
 
-- **Risks Review**  
-  - Tepequeset sale has resolved all related risks.  
-  - Building being sold remains a potential risk; no immediate action required at this time.  
-  - Security risk: Agreed to use an extra partition when the shrine room is not in use.  
+3. Create a local `.env` file in the project root:
 
-- **New Instructors**  
-  - Ari, Andy, and Vicki are now instructors.  
-  - Paul Haddon and Rosalind Haddon to ensure they confirm in writing that they have read and understood the Code of Conduct. New instructors to sign the Code of Conduct.  
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your_anon_public_key
+SUPABASE_URL_TEST=https://your-test-project.supabase.co
+SUPABASE_ANON_KEY_TEST=your_test_anon_public_key
+```
 
-- **Re-waxing of Rupa**  
-  - Agreed to engage an external professional for re-waxing (not to attempt DIY).  
+Notes:
+- `SUPABASE_URL_TEST` and `SUPABASE_ANON_KEY_TEST` are optional.
+- If Supabase keys are missing, the app still runs, but backend-dependent features (for example auth/analytics) are disabled.
 
-**Action Items**  
-- Fred Tyler: Increase contents insurance coverage.  
-- Paul Haddon and Rosalind Haddon: Follow up with Ari, Andy, and Vicki to confirm they have read the Code of Conduct and arrange signatures.  
-- Andrew Gutmann: Resend the latest adjusted 2026 budget to the board.  
+4. For local web analytics page (`web/analytics.html`), sync `.env` to `web/supabase_config.js`:
 
-Meeting adjourned at approximately 2:00 PM. No further business.  
+```bash
+bash scripts/sync_supabase_config.sh
+```
 
-Minutes prepared by [Your Name/Adrian O’Sullivan, as drafter]. Please review and confirm any corrections.
+## Run Locally
+
+Web:
+
+```bash
+flutter run -d chrome --dart-define=APP_ENV=test
+```
+
+iOS Simulator:
+
+```bash
+flutter run -d ios --dart-define=APP_ENV=test
+```
+
+Android emulator/device:
+
+```bash
+flutter run -d android --dart-define=APP_ENV=test
+```
+
+## Testing
+
+Static analysis:
+
+```bash
+flutter analyze
+```
+
+Unit/widget tests:
+
+```bash
+flutter test
+```
+
+Coverage:
+
+```bash
+flutter test --coverage
+```
+
+## Playwright E2E
+
+This suite runs browser smoke checks against a deployed environment.
+
+Default base URL is configured in `playwright.config.js`.
+
+Run:
+
+```bash
+npm run test:e2e
+```
+
+Headed run:
+
+```bash
+npm run test:e2e:headed
+```
+
+UI mode:
+
+```bash
+npm run test:e2e:ui
+```
+
+Override target URL:
+
+```bash
+BASE_URL=https://your-deployment.example npm run test:e2e
+```
+
+## Build
+
+Production web build:
+
+```bash
+flutter build web --release --dart-define=APP_ENV=prod
+```
+
+Android Play Store bundle:
+
+```bash
+flutter build appbundle --release
+```
+
+Android APK:
+
+```bash
+flutter build apk --release
+```
+
+## iOS Build and Release (CLI)
+
+### One-time signing setup
+
+1. Open `ios/Runner.xcworkspace` in Xcode.
+2. Select target `Runner` -> `Signing & Capabilities`.
+3. Enable `Automatically manage signing` and choose your Apple Developer Team.
+4. Ensure Apple certificates/profiles are available in Xcode account settings.
+
+### 1) Build archive
+
+```bash
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+flutter build ipa --release --export-method app-store --no-codesign
+```
+
+Archive output:
+
+`build/ios/archive/Runner.xcarchive`
+
+### 2) Export signed IPA
+
+Create `ios/ExportOptions.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>method</key>
+  <string>app-store-connect</string>
+  <key>destination</key>
+  <string>export</string>
+  <key>signingStyle</key>
+  <string>automatic</string>
+  <key>teamID</key>
+  <string>YOUR_TEAM_ID</string>
+  <key>uploadSymbols</key>
+  <true/>
+</dict>
+</plist>
+```
+
+Export:
+
+```bash
+xcodebuild -exportArchive \
+  -archivePath build/ios/archive/Runner.xcarchive \
+  -exportPath build/ios/ipa \
+  -exportOptionsPlist ios/ExportOptions.plist \
+  -allowProvisioningUpdates
+```
+
+IPA output:
+
+`build/ios/ipa/*.ipa`
+
+### 3) Upload to App Store Connect (used by TestFlight)
+
+Create `ios/UploadOptions.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>method</key>
+  <string>app-store-connect</string>
+  <key>destination</key>
+  <string>upload</string>
+  <key>signingStyle</key>
+  <string>automatic</string>
+  <key>teamID</key>
+  <string>YOUR_TEAM_ID</string>
+  <key>uploadSymbols</key>
+  <true/>
+</dict>
+</plist>
+```
+
+Upload:
+
+```bash
+xcodebuild -exportArchive \
+  -archivePath build/ios/archive/Runner.xcarchive \
+  -exportPath build/ios/upload \
+  -exportOptionsPlist ios/UploadOptions.plist \
+  -allowProvisioningUpdates
+```
+
+After upload, the build appears in App Store Connect and can be enabled in TestFlight after processing.
+
+## CI
+
+GitHub Actions (`.github/workflows/flutter.yml`) runs on push/PR to `main`:
+
+- `flutter pub get`
+- `flutter analyze`
+- `flutter test --coverage`
+- `flutter build web --release`
+
+On `main`, it also deploys web output to GitHub Pages.
+
+## Useful Docs
+
+- `docs/APP_RELEASE.md`
+- `docs/USAGE_STATISTICS_SETUP.md`
+- `e2e/README.md`

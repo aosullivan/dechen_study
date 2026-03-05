@@ -8,69 +8,85 @@ class VerseLineBreaker {
   /// Returns segments and the [lineHeight] used for layout (for computing total height).
   /// First segment is flush; rest are continuation lines (to be indented).
   static ({List<String> segments, double lineHeight}) getVisualLineSegments(
+      String line, TextStyle style, double maxWidth,
+      {double continuationIndent = 0.0}) {
+    final fallbackLineHeight = (style.fontSize ?? 14) * (style.height ?? 1.5);
+    if (line.isEmpty || maxWidth <= 0 || !maxWidth.isFinite) {
+      return (
+        segments: line.isEmpty ? <String>[] : [line],
+        lineHeight: fallbackLineHeight
+      );
+    }
+
+    final probePainter = TextPainter(
+      text: TextSpan(text: 'Ag', style: style),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    final lineHeight = probePainter.preferredLineHeight > 0
+        ? probePainter.preferredLineHeight
+        : fallbackLineHeight;
+    probePainter.dispose();
+
+    final continuationWidth = (maxWidth - continuationIndent).clamp(
+      1.0,
+      double.infinity,
+    );
+
+    final segments = <String>[];
+    var remaining = line;
+    var isFirst = true;
+
+    while (remaining.isNotEmpty) {
+      final width = isFirst ? maxWidth : continuationWidth;
+      final split = _lineBreakOffsetForWidth(remaining, style, width);
+      final end = split.clamp(1, remaining.length);
+      final segment = remaining.substring(0, end).trimRight();
+      if (segment.isNotEmpty) {
+        segments.add(segment);
+      }
+      if (end >= remaining.length) break;
+      remaining = remaining.substring(end).trimLeft();
+      isFirst = false;
+    }
+
+    return (
+      segments: segments.isEmpty ? [line.trimRight()] : segments,
+      lineHeight: lineHeight,
+    );
+  }
+
+  static int _lineBreakOffsetForWidth(
     String line,
     TextStyle style,
     double maxWidth,
   ) {
-    if (line.isEmpty || maxWidth <= 0 || !maxWidth.isFinite) {
-      final h = (style.fontSize ?? 14) * (style.height ?? 1.5);
-      return (segments: line.isEmpty ? <String>[] : [line], lineHeight: h);
-    }
-
     final painter = TextPainter(
       text: TextSpan(text: line, style: style),
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: maxWidth);
-
-    final lineHeight = painter.preferredLineHeight;
-    if (lineHeight <= 0) {
+    final metrics = painter.computeLineMetrics();
+    if (metrics.length <= 1) {
       painter.dispose();
-      return (segments: [line], lineHeight: (style.fontSize ?? 14) * (style.height ?? 1.5));
+      return line.length;
     }
-
-    final numVisualLines = (painter.height / lineHeight).round().clamp(1, 200);
-    if (numVisualLines <= 1) {
-      painter.dispose();
-      return (segments: [line], lineHeight: lineHeight);
-    }
-
-    final ends = <int>[];
-    for (var i = 0; i < numVisualLines; i++) {
-      final yNextLine = (i + 1) * lineHeight;
-      if (yNextLine >= painter.height) {
-        ends.add(line.length);
-        break;
-      }
-      final position = painter.getPositionForOffset(Offset(0, yNextLine));
-      var end = position.offset.clamp(0, line.length);
-      if (end < line.length && end > 0 && line[end] != ' ' && line[end] != '\n') {
-        final segmentStart = ends.isEmpty ? 0 : ends.last;
-        final lastSpace = line.lastIndexOf(' ', end);
-        if (lastSpace >= segmentStart) end = lastSpace + 1;
-      }
-      if (ends.isNotEmpty && end <= ends.last) {
-        end = (ends.last + 1).clamp(0, line.length);
-      }
-      ends.add(end);
-      if (end >= line.length) break;
-    }
+    final probeY =
+        (painter.preferredLineHeight * 0.5).clamp(0.0, painter.height);
+    final breakOffset = painter
+        .getPositionForOffset(Offset(maxWidth, probeY))
+        .offset
+        .clamp(0, line.length)
+        .toInt();
     painter.dispose();
+    if (breakOffset <= 0) return 1;
+    if (breakOffset >= line.length) return line.length;
 
-    if (ends.isEmpty) return (segments: [line], lineHeight: lineHeight);
-
-    final segments = <String>[];
-    var start = 0;
-    for (final end in ends) {
-      final seg = line.substring(start, end).trimRight();
-      if (seg.isNotEmpty) segments.add(seg);
-      start = end;
-      if (start >= line.length) break;
+    if (line[breakOffset - 1] != ' ' && line[breakOffset] != ' ') {
+      final lastWhitespace = line.lastIndexOf(' ', breakOffset - 1);
+      if (lastWhitespace >= 0) {
+        return lastWhitespace + 1;
+      }
     }
-
-    return (
-      segments: segments.isEmpty ? [line] : segments,
-      lineHeight: lineHeight,
-    );
+    return breakOffset;
   }
 }
 
@@ -95,9 +111,10 @@ class BcvVerseText extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final logicalLines = text.split('\n');
-        final maxWidth = constraints.maxWidth.isFinite && constraints.maxWidth > 0
-            ? constraints.maxWidth
-            : 400.0;
+        final maxWidth =
+            constraints.maxWidth.isFinite && constraints.maxWidth > 0
+                ? constraints.maxWidth
+                : 400.0;
         if (maxWidth <= 0) return Text(text, style: style);
 
         final lineGap = (style.fontSize ?? 18) *
@@ -162,9 +179,13 @@ class _PaintedIndentedLine extends StatelessWidget {
       return Text(line, style: style);
     }
 
-    final result = VerseLineBreaker.getVisualLineSegments(line, style, maxWidth);
+    final result = VerseLineBreaker.getVisualLineSegments(
+      line,
+      style,
+      maxWidth,
+      continuationIndent: indent,
+    );
     final segments = result.segments;
-    final lineHeight = result.lineHeight;
 
     if (segments.length <= 1) {
       return SizedBox(
@@ -173,8 +194,19 @@ class _PaintedIndentedLine extends StatelessWidget {
       );
     }
 
-    final totalHeight =
-        segments.length * lineHeight + (segments.length - 1) * lineGap;
+    var totalHeight = 0.0;
+    for (var i = 0; i < segments.length; i++) {
+      final isFirst = i == 0;
+      final width =
+          isFirst ? maxWidth : (maxWidth - indent).clamp(1.0, double.infinity);
+      final painter = TextPainter(
+        text: TextSpan(text: segments[i], style: style),
+        textDirection: TextDirection.ltr,
+      )..layout(maxWidth: width);
+      totalHeight += painter.height;
+      painter.dispose();
+      if (i < segments.length - 1) totalHeight += lineGap;
+    }
 
     return SizedBox(
       width: maxWidth,
@@ -186,7 +218,6 @@ class _PaintedIndentedLine extends StatelessWidget {
           style: style,
           maxWidth: maxWidth,
           indent: indent,
-          lineHeight: lineHeight,
           lineGap: lineGap,
         ),
       ),
@@ -202,7 +233,6 @@ class _VerseLinePainter extends CustomPainter {
     required this.style,
     required this.maxWidth,
     required this.indent,
-    required this.lineHeight,
     required this.lineGap,
   });
 
@@ -210,7 +240,6 @@ class _VerseLinePainter extends CustomPainter {
   final TextStyle style;
   final double maxWidth;
   final double indent;
-  final double lineHeight;
   final double lineGap;
 
   @override
@@ -219,7 +248,8 @@ class _VerseLinePainter extends CustomPainter {
     for (var i = 0; i < segments.length; i++) {
       final segment = segments[i];
       final isFirst = i == 0;
-      final width = isFirst ? maxWidth : (maxWidth - indent).clamp(1.0, double.infinity);
+      final width =
+          isFirst ? maxWidth : (maxWidth - indent).clamp(1.0, double.infinity);
       final x = isFirst ? 0.0 : indent;
 
       final painter = TextPainter(
@@ -228,9 +258,11 @@ class _VerseLinePainter extends CustomPainter {
       )..layout(maxWidth: width);
 
       painter.paint(canvas, Offset(x, y));
+      final paintedHeight = painter.height;
       painter.dispose();
 
-      y += lineHeight + lineGap;
+      y += paintedHeight;
+      if (i < segments.length - 1) y += lineGap;
     }
   }
 
@@ -240,6 +272,9 @@ class _VerseLinePainter extends CustomPainter {
     for (var i = 0; i < segments.length; i++) {
       if (oldDelegate.segments[i] != segments[i]) return true;
     }
-    return oldDelegate.maxWidth != maxWidth || oldDelegate.indent != indent;
+    return oldDelegate.maxWidth != maxWidth ||
+        oldDelegate.indent != indent ||
+        oldDelegate.lineGap != lineGap ||
+        oldDelegate.style != style;
   }
 }

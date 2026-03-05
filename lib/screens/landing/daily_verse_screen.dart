@@ -682,13 +682,15 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       );
     }
     final shownDisplayRefs = <String>{};
+    final isWideLayout = MediaQuery.of(context).size.width >= 1000;
+    final wrapIndent = isWideLayout ? 24.0 : 8.0;
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 24, 16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(28, 24, 24, 24),
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
             decoration: BoxDecoration(
               color: AppSurfaceColors.cardBackground(context),
               borderRadius: BorderRadius.circular(8),
@@ -739,6 +741,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                                 height: 1.5,
                                 color: AppSurfaceColors.textDark(context),
                               ),
+                          wrapIndent: wrapIndent,
                         ),
                       ],
                     ),

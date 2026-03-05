@@ -3,6 +3,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:dechen_study/screens/landing/bcv/bcv_verse_text.dart';
 import 'package:dechen_study/screens/landing/daily_verse_screen.dart';
 import 'package:dechen_study/screens/landing/read_screen.dart';
 import 'package:dechen_study/services/commentary_service.dart';
@@ -78,6 +79,35 @@ void main() {
     expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
     expect(find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
         findsNothing);
+  });
+
+  testWidgets(
+      'daily card uses symmetric horizontal margins and mobile wrap indent',
+      (WidgetTester tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await pumpDaily(tester, refs: const ['8.136ab']);
+    await waitForDailyLoad(tester);
+
+    final scroll = tester
+        .widget<SingleChildScrollView>(find.byType(SingleChildScrollView));
+    final scrollPadding = scroll.padding! as EdgeInsets;
+    expect(scrollPadding.left, equals(16));
+    expect(scrollPadding.right, equals(16));
+
+    final cardFinder = find.byWidgetPredicate((w) {
+      if (w is! Container) return false;
+      final decoration = w.decoration;
+      if (decoration is! BoxDecoration) return false;
+      return decoration.border != null && w.padding is EdgeInsets;
+    }).first;
+    final card = tester.widget<Container>(cardFinder);
+    final cardPadding = card.padding! as EdgeInsets;
+    expect(cardPadding.left, equals(24));
+    expect(cardPadding.right, equals(24));
+
+    final verse = tester.widget<BcvVerseText>(find.byType(BcvVerseText).first);
+    expect(verse.wrapIndent, equals(8));
   });
 
   testWidgets('split ref cd renders second-half text',
