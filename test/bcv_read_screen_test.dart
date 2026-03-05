@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:dechen_study/screens/landing/read_screen.dart';
-import 'package:dechen_study/screens/landing/bcv/bcv_verse_text.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_breadcrumb_bar.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_chapters_panel.dart';
 import 'package:dechen_study/screens/landing/bcv/bcv_mobile_nav_bar.dart';
