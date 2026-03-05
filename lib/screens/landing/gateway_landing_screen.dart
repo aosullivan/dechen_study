@@ -66,7 +66,7 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.landingBackground,
+        backgroundColor: AppSurfaceColors.landingBackground(context),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -79,7 +79,10 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
           actions: const [DechenHomeAction()],
           leading: _canShowTopBackButton(context)
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: AppSurfaceColors.textDark(context),
+                  ),
                   onPressed: () => _handleBackPressed(context),
                 )
               : null,
@@ -237,13 +240,22 @@ class _GatewayHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = AppSurfaceColors.cardBackground(context);
+    final borderColor = AppSurfaceColors.borderLight(context);
+    final headingColor = AppSurfaceColors.textDark(context);
+    final secondaryColor = AppSurfaceColors.isDark(context)
+        ? const Color(0xFFD0C2AD)
+        : AppColors.mutedBrown;
+    final bodyColor = AppSurfaceColors.isDark(context)
+        ? const Color(0xFFE3D6C2)
+        : AppColors.bodyText;
     return Card(
       margin: EdgeInsets.zero,
-      color: AppColors.cardBeige,
+      color: cardColor,
       elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: AppColors.borderLight),
+        side: BorderSide(color: borderColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -258,13 +270,13 @@ class _GatewayHeroCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontSize: 12,
                             letterSpacing: 1.5,
-                            color: AppColors.mutedBrown,
+                            color: secondaryColor,
                           ) ??
-                      const TextStyle(
+                      TextStyle(
                         fontFamily: 'Crimson Text',
                         fontSize: 12,
                         letterSpacing: 1.5,
-                        color: AppColors.mutedBrown,
+                        color: secondaryColor,
                       ),
                 ),
                 const SizedBox(height: 4),
@@ -273,13 +285,14 @@ class _GatewayHeroCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.displayMedium?.copyWith(
                             fontSize: 38,
                             height: 1,
+                            color: headingColor,
                           ) ??
-                      const TextStyle(
+                      TextStyle(
                         fontFamily: 'Crimson Text',
                         fontSize: 38,
                         height: 1,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textDark,
+                        color: headingColor,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -288,12 +301,13 @@ class _GatewayHeroCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: 15,
                             height: 1.45,
+                            color: bodyColor,
                           ) ??
-                      const TextStyle(
+                      TextStyle(
                         fontFamily: 'Lora',
                         fontSize: 15,
                         height: 1.45,
-                        color: AppColors.bodyText,
+                        color: bodyColor,
                       ),
                 ),
                 const SizedBox(height: 8),
@@ -305,8 +319,8 @@ class _GatewayHeroCard extends StatelessWidget {
                     label: const Text('Buy Book'),
                     style: OutlinedButton.styleFrom(
                       visualDensity: VisualDensity.compact,
-                      foregroundColor: AppColors.textDark,
-                      side: const BorderSide(color: AppColors.borderLight),
+                      foregroundColor: headingColor,
+                      side: BorderSide(color: borderColor),
                     ),
                   ),
                 ),
@@ -355,17 +369,24 @@ class _GatewayChapterGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = AppSurfaceColors.cardBackground(context);
+    final borderColor = AppSurfaceColors.borderLight(context);
     if (chapters.isEmpty) {
       return Card(
         margin: EdgeInsets.zero,
-        color: AppColors.cardBeige,
+        color: cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: AppColors.borderLight),
+          side: BorderSide(color: borderColor),
         ),
-        child: const Padding(
-          padding: EdgeInsets.all(16),
-          child: Text('No chapters found.'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'No chapters found.',
+            style: TextStyle(
+              color: AppSurfaceColors.textDark(context),
+            ),
+          ),
         ),
       );
     }
@@ -395,13 +416,19 @@ class _GatewayChapterTile extends StatelessWidget {
     final viewport = MediaQuery.sizeOf(context);
     final compact = viewport.width <= 430 && viewport.height <= 950;
     final verySmall = viewport.width <= 375 && viewport.height <= 820;
+    final cardColor = AppSurfaceColors.cardBackground(context);
+    final borderColor = AppSurfaceColors.borderLight(context);
+    final textColor = AppSurfaceColors.textDark(context);
+    final trailingColor = AppSurfaceColors.isDark(context)
+        ? const Color(0xFFCDBBA0)
+        : AppColors.mutedBrown;
 
     return Card(
       margin: EdgeInsets.only(bottom: compact ? 6 : 12),
-      color: AppColors.cardBeige,
+      color: cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: const BorderSide(color: AppColors.borderLight),
+        side: BorderSide(color: borderColor),
       ),
       child: ListTile(
         onTap: onTap,
@@ -418,12 +445,13 @@ class _GatewayChapterTile extends StatelessWidget {
           '${chapter.number}. ${chapter.title}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontSize: compact ? (verySmall ? 19.5 : 21) : 24,
+                color: textColor,
               ),
         ),
         trailing: Icon(
           Icons.arrow_forward_ios,
           size: compact ? (verySmall ? 13 : 14) : 13,
-          color: AppColors.mutedBrown,
+          color: trailingColor,
         ),
       ),
     );
@@ -435,13 +463,17 @@ class _GatewayCoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final borderColor = AppSurfaceColors.borderLight(context);
+    final bgColor = AppSurfaceColors.isDark(context)
+        ? const Color(0xFF222E43)
+        : const Color(0xFFF6F2EB);
     return AspectRatio(
       aspectRatio: 907 / 1360,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.zero,
-          border: Border.all(color: AppColors.borderLight),
-          color: const Color(0xFFF6F2EB),
+          border: Border.all(color: borderColor),
+          color: bgColor,
         ),
         child: Image.asset(
           'assets/gateway.jpg',

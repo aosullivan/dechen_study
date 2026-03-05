@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import '../../services/verse_service.dart';
 import '../../services/usage_metrics_service.dart';
+import '../../services/daily_verse_picker_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/surface_dwell_tracker.dart';
 import '../../utils/verse_ref_formatter.dart';
@@ -33,6 +34,8 @@ class DailyVerseScreen extends StatefulWidget {
     this.maxLinesForSection = 20,
     this.onResolvedRefsForTest,
     this.breadcrumbSummariesLoader,
+    this.targetLocalDate,
+    this.dailyVersePickerService,
   });
 
   final String textId;
@@ -65,6 +68,12 @@ class DailyVerseScreen extends StatefulWidget {
   final Future<Map<String, String>> Function(String textId)?
       breadcrumbSummariesLoader;
 
+  /// Optional date used for deterministic daily picking. Defaults to now.
+  final DateTime? targetLocalDate;
+
+  /// Test seam: override deterministic daily picker.
+  final DailyVersePickerService? dailyVersePickerService;
+
   @override
   State<DailyVerseScreen> createState() => _DailyVerseScreenState();
 }
@@ -78,6 +87,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   late final VerseService _verseService;
   late final CommentaryService _commentaryService;
   late final VerseHierarchyService _hierarchyService;
+  late final DailyVersePickerService _dailyVersePickerService;
 
   /// Current section: refs and their verse texts (in order).
   List<String> _sectionRefs = [];
@@ -92,6 +102,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
   Set<int> _sectionVerseIndices = {};
   bool _loading = true;
   Object? _error;
+  bool _usedInitialDeterministicPick = false;
 
   @override
   void initState() {
@@ -101,7 +112,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     _commentaryService = widget.commentaryService ?? CommentaryService.instance;
     _hierarchyService =
         widget.hierarchyService ?? VerseHierarchyService.instance;
-    _loadSection();
+    _dailyVersePickerService =
+        widget.dailyVersePickerService ?? DailyVersePickerService.instance;
+    _loadSection(useDeterministic: true);
   }
 
   @override
@@ -452,7 +465,10 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     });
   }
 
-  Future<void> _loadSection() async {
+  Future<void> _loadSection({required bool useDeterministic}) async {
+    if (useDeterministic) {
+      _usedInitialDeterministicPick = true;
+    }
     setState(() {
       _loading = true;
       _error = null;
@@ -464,8 +480,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
       _sectionVerseIndices = {};
     });
     try {
-      final sectionLoader = widget.randomSectionLoader ??
-          () => _commentaryService.getRandomSection(widget.textId);
+      final sectionLoader = _buildSectionLoader(useDeterministic);
       final indexForRef = widget.verseIndexForRef ??
           (ref) => _verseService.getIndexForRefWithFallback(widget.textId, ref);
       final textForIndex = widget.verseTextForIndex ??
@@ -564,6 +579,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
           properties: {
             'refs_count': _sectionRefs.length,
             'line_count': _totalLogicalLines(_sectionVerseTexts),
+            'deterministic': useDeterministic,
           },
         ));
       }
@@ -577,6 +593,27 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     }
   }
 
+  Future<CommentaryEntry?> Function() _buildSectionLoader(
+      bool useDeterministic) {
+    if (widget.randomSectionLoader != null) {
+      return widget.randomSectionLoader!;
+    }
+
+    if (!useDeterministic) {
+      return () => _commentaryService.getRandomSection(widget.textId);
+    }
+
+    final targetDate = widget.targetLocalDate ?? DateTime.now();
+    return () async {
+      final picked = await _dailyVersePickerService.pickDailySection(
+        widget.textId,
+        targetDate,
+      );
+      if (picked != null) return picked;
+      return _commentaryService.getRandomSection(widget.textId);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -584,7 +621,10 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppSurfaceColors.textDark(context),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -623,7 +663,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
               ),
               const SizedBox(height: 24),
               TextButton(
-                onPressed: _loadSection,
+                onPressed: () => _loadSection(
+                  useDeterministic: !_usedInitialDeterministicPick,
+                ),
                 child: const Text('Try again'),
               ),
             ],
@@ -648,9 +690,9 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
           Container(
             padding: const EdgeInsets.fromLTRB(28, 24, 24, 24),
             decoration: BoxDecoration(
-              color: AppColors.cardBeige,
+              color: AppSurfaceColors.cardBackground(context),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.borderLight),
+              border: Border.all(color: AppSurfaceColors.borderLight(context)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -682,19 +724,21 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                         ],
                         BcvVerseText(
                           text: text,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        fontFamily: 'Crimson Text',
-                                        fontSize: 20,
-                                        height: 1.5,
-                                        color: const Color(0xFF2C2416),
-                                      ) ??
-                                  const TextStyle(
+                          style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
                                     fontFamily: 'Crimson Text',
                                     fontSize: 20,
                                     height: 1.5,
-                                    color: AppColors.textDark,
-                                  ),
+                                    color: AppSurfaceColors.textDark(context),
+                                  ) ??
+                              TextStyle(
+                                fontFamily: 'Crimson Text',
+                                fontSize: 20,
+                                height: 1.5,
+                                color: AppSurfaceColors.textDark(context),
+                              ),
                         ),
                       ],
                     ),
@@ -721,7 +765,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                                 ? _sectionRefs.first
                                 : null,
                           ));
-                          _loadSection();
+                          _loadSection(useDeterministic: false);
                         },
                   icon: const Icon(Icons.refresh, size: 20),
                   label: const Text('More Verses'),
@@ -757,7 +801,7 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     if (_sectionVerseIndices.isEmpty) return;
     unawaited(_usageMetrics.trackEvent(
       eventName: 'open_full_text_from_daily',
-      textId: 'bodhicaryavatara',
+      textId: widget.textId,
       mode: 'daily',
       sectionPath: _sectionPath,
       sectionTitle: _sectionTitle,

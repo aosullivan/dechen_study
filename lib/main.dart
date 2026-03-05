@@ -1,10 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import 'screens/auth/splash_screen.dart';
+import 'services/app_preferences_service.dart';
+import 'services/daily_notification_navigation.dart';
+import 'services/daily_notification_service.dart';
 import 'services/usage_metrics_service.dart';
+import 'utils/app_navigation.dart';
 import 'utils/app_theme.dart';
 import 'utils/constants.dart';
 
@@ -40,6 +46,20 @@ void main() async {
   }
 
   WidgetsBinding.instance.addObserver(_usageMetricsLifecycleObserver);
+  await DailyNotificationService.instance.init();
+  if (!kIsWeb) {
+    final preferences = await AppPreferencesService.instance.load();
+    await DailyNotificationService.instance.applySchedule(preferences);
+  }
+  DailyNotificationService.instance.intentStream.listen((intent) {
+    if (intent.type == DailyNotificationIntentType.dailyVerse && !kIsWeb) {
+      unawaited(
+        DailyNotificationNavigation.openTodayFromNotification(
+          replaceStack: false,
+        ),
+      );
+    }
+  });
 
   runApp(const MyApp());
 }
@@ -54,81 +74,22 @@ class _UsageMetricsLifecycleObserver with WidgetsBindingObserver {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  bool _useDesktopLightMode() {
+    if (kIsWeb) return true;
+    return defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.linux;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: appNavigatorKey,
       title: 'Dechen Study',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Lora',
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          brightness: Brightness.light,
-        ),
-        scaffoldBackgroundColor: AppColors.scaffoldBackground,
-        textTheme: const TextTheme(
-          displayLarge: TextStyle(
-            fontFamily: 'Crimson Text',
-            fontSize: 32,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textDark,
-          ),
-          displayMedium: TextStyle(
-            fontFamily: 'Crimson Text',
-            fontSize: 28,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textDark,
-          ),
-          titleLarge: TextStyle(
-            fontFamily: 'Crimson Text',
-            fontSize: 22,
-            fontWeight: FontWeight.w500,
-            color: AppColors.textDark,
-          ),
-          bodyLarge: TextStyle(
-            fontFamily: 'Lora',
-            fontSize: 16,
-            height: 1.8,
-            color: AppColors.bodyText,
-          ),
-          bodyMedium: TextStyle(
-            fontFamily: 'Lora',
-            fontSize: 14,
-            height: 1.7,
-            color: AppColors.bodyText,
-          ),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.scaffoldBackground,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            elevation: 0,
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: AppColors.border),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: AppColors.border),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        ),
-      ),
+      theme: AppTheme.lightTheme(),
+      darkTheme: AppTheme.darkTheme(),
+      themeMode: _useDesktopLightMode() ? ThemeMode.light : ThemeMode.system,
       home: const SplashScreen(),
     );
   }

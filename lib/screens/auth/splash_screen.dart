@@ -1,10 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/study_text_config.dart';
+import '../../services/app_preferences_service.dart';
+import '../../services/daily_notification_service.dart';
+import '../../services/daily_verse_picker_service.dart';
 import '../../utils/web_navigation.dart';
+import '../landing/daily_verse_screen.dart';
 import '../landing/gateway_landing_screen.dart';
 import '../landing/landing_screen.dart';
 import '../landing/text_options_screen.dart';
+import '../mobile/mobile_home_screen.dart';
+import '../mobile/mobile_text_selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,6 +32,61 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
 
+    if (!kIsWeb) {
+      await _redirectMobile();
+      return;
+    }
+
+    _redirectWeb();
+  }
+
+  Future<void> _redirectMobile() async {
+    final prefs = await AppPreferencesService.instance.load();
+    if (!mounted) return;
+
+    if (!prefs.onboardingCompleted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const MobileTextSelectionScreen()),
+      );
+      return;
+    }
+
+    final pendingIntent =
+        DailyNotificationService.instance.takePendingLaunchIntent();
+    if (pendingIntent?.type == DailyNotificationIntentType.dailyVerse) {
+      final now = DateTime.now();
+      final textId = DailyVersePickerService.instance.pickDailyTextId(
+        now,
+        prefs.selectedTextIds,
+      );
+      if (textId != null) {
+        final title = getStudyText(textId)?.title ?? 'Daily verses';
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => DailyVerseScreen(
+              textId: textId,
+              title: title,
+              targetLocalDate: now,
+            ),
+          ),
+        );
+        return;
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const MobileHomeScreen(showDailySettingsPrompt: true),
+        ),
+      );
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const MobileHomeScreen()),
+    );
+  }
+
+  void _redirectWeb() {
     final path = currentAppPath();
 
     final studyText = getStudyTextByPath(path);

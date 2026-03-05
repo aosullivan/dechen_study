@@ -35,6 +35,13 @@ dependencies:
   # HTTP for geo lookup (country) in usage metrics
   http: ^1.2.0
 
+  # Local device notifications
+  flutter_local_notifications: ^19.4.2
+
+  # Timezone scheduling for notifications
+  timezone: ^0.10.1
+  flutter_timezone: ^4.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

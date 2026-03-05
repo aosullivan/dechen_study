@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../config/study_text_config.dart';
+import '../../config/study_destination_catalog.dart';
 import '../../services/usage_metrics_service.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/web_navigation.dart';
@@ -17,12 +17,12 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  static const Color _backgroundYellow = AppColors.landingBackground;
+  final List<StudyDestination> _destinations = getStudyDestinations();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _backgroundYellow,
+      backgroundColor: AppSurfaceColors.landingBackground(context),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -30,25 +30,25 @@ class _LandingScreenState extends State<LandingScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _TextLandingCard(
-                  title: 'Gateway to Knowledge',
-                  author: 'JAMGON JU MIPHAM',
-                  onTap: () => _openGatewayToKnowledge(context),
-                ),
-                ...getStudyTextsWithCoreSupport()
-                    .map(
-                      (config) => [
-                        const SizedBox(height: 20),
-                        _TextLandingCard(
-                          title: config.title,
-                          author: config.author,
-                          onTap: () => _openTextOptions(context, config),
+              children: _destinations
+                  .asMap()
+                  .entries
+                  .map((entry) {
+                    final destination = entry.value;
+                    return [
+                      if (entry.key > 0) const SizedBox(height: 20),
+                      _TextLandingCard(
+                        title: destination.title,
+                        author: destination.author,
+                        onTap: () => _openDestination(
+                          context,
+                          destination: destination,
                         ),
-                      ],
-                    )
-                    .expand((e) => e),
-              ],
+                      ),
+                    ];
+                  })
+                  .expand((items) => items)
+                  .toList(),
             ),
           ),
         ),
@@ -56,39 +56,22 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
-  void _openTextOptions(BuildContext context, StudyTextConfig config) {
-    _openText(
-      context,
-      textId: config.textId,
-      path: config.path,
-      screen: TextOptionsScreen(
-        textId: config.textId,
-        title: config.title,
-      ),
-    );
-  }
-
-  void _openGatewayToKnowledge(BuildContext context) {
-    _openText(
-      context,
-      textId: 'gateway_to_knowledge',
-      path: '/gateway-to-knowledge',
-      screen: const GatewayLandingScreen(),
-    );
-  }
-
-  void _openText(
+  void _openDestination(
     BuildContext context, {
-    required String textId,
-    required String path,
-    required Widget screen,
+    required StudyDestination destination,
   }) {
-    pushAppPath(path);
+    pushAppPath(destination.path);
     unawaited(UsageMetricsService.instance.trackEvent(
       eventName: 'text_opened',
-      textId: textId,
+      textId: destination.id,
       mode: 'text_options',
     ));
+    final screen = destination.isGateway
+        ? const GatewayLandingScreen()
+        : TextOptionsScreen(
+            textId: destination.textId!,
+            title: destination.title,
+          );
     Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => screen),
     );
@@ -106,13 +89,13 @@ class _TextLandingCard extends StatelessWidget {
   final String author;
   final VoidCallback onTap;
 
-  static const Color _cardBeige = AppColors.cardBeige;
-  static const Color _textDark = AppColors.textDark;
-
   @override
   Widget build(BuildContext context) {
+    final cardColor = AppSurfaceColors.cardBackground(context);
+    final textColor = AppSurfaceColors.textDark(context);
+    final borderColor = AppSurfaceColors.borderLight(context);
     return Material(
-      color: _cardBeige,
+      color: cardColor,
       borderRadius: BorderRadius.circular(12),
       elevation: 1,
       shadowColor: Colors.black12,
@@ -123,7 +106,7 @@ class _TextLandingCard extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.borderLight, width: 1),
+            border: Border.all(color: borderColor, width: 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -133,14 +116,14 @@ class _TextLandingCard extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                           fontFamily: 'Crimson Text',
-                          color: _textDark,
+                          color: textColor,
                           fontWeight: FontWeight.w600,
                         ) ??
-                    const TextStyle(
+                    TextStyle(
                       fontFamily: 'Crimson Text',
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
-                      color: _textDark,
+                      color: textColor,
                     ),
               ),
               const SizedBox(height: 8),
@@ -148,14 +131,14 @@ class _TextLandingCard extends StatelessWidget {
                 author,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontFamily: 'Crimson Text',
-                          color: _textDark,
+                          color: textColor,
                           fontSize: 16,
                           letterSpacing: 1.2,
                         ) ??
-                    const TextStyle(
+                    TextStyle(
                       fontFamily: 'Crimson Text',
                       fontSize: 16,
-                      color: _textDark,
+                      color: textColor,
                       letterSpacing: 1.2,
                     ),
               ),

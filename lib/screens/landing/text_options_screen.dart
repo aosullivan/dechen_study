@@ -78,8 +78,9 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     final isCompactPhone = viewport.width <= 430 && viewport.height <= 950;
     final isVerySmallPhone = viewport.width <= 375 && viewport.height <= 820;
     final config = getStudyText(textId);
-    final hasRootPurchaseLink = !_commentaryOnlyPurchaseTextIds.contains(textId) &&
-        (config?.purchaseRootTextUrl?.isNotEmpty ?? false);
+    final hasRootPurchaseLink =
+        !_commentaryOnlyPurchaseTextIds.contains(textId) &&
+            (config?.purchaseRootTextUrl?.isNotEmpty ?? false);
     final hasCommentaryPurchaseLink =
         config?.purchaseCommentaryUrl?.isNotEmpty ?? false;
     final options = <_StudyModeOption>[
@@ -122,7 +123,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.landingBackground,
+        backgroundColor: AppSurfaceColors.landingBackground(context),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -136,7 +137,10 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
           actions: const [DechenHomeAction()],
           leading: _canShowTopBackButton(context)
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: AppSurfaceColors.textDark(context),
+                  ),
                   onPressed: () => _handleTopBackPressed(context),
                 )
               : null,
@@ -790,12 +794,15 @@ class _ReadChapterSelectionScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.landingBackground,
+      backgroundColor: AppSurfaceColors.landingBackground(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppSurfaceColors.textDark(context),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(

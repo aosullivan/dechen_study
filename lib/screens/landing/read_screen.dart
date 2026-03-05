@@ -1608,7 +1608,10 @@ class _ReadScreenState extends State<ReadScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppSurfaceColors.textDark(context),
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(

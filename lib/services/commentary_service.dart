@@ -173,7 +173,8 @@ class CommentaryService {
   }
 
   /// Returns the commentary for [ref] (e.g. "1.5") for [textId], or null if none.
-  Future<CommentaryEntry?> getCommentaryForRef(String textId, String ref) async {
+  Future<CommentaryEntry?> getCommentaryForRef(
+      String textId, String ref) async {
     await _ensureLoaded(textId);
     final c = _get(textId);
     if (c == null) return null;
@@ -236,6 +237,22 @@ class CommentaryService {
       refsInBlock: mergedRefs,
       commentaryText: mergedText,
     );
+  }
+
+  /// Returns total number of parsed commentary sections for [textId].
+  Future<int> getSectionCount(String textId) async {
+    await _ensureLoaded(textId);
+    final c = _get(textId);
+    return c?.allSections.length ?? 0;
+  }
+
+  /// Returns section by [index] for [textId], or null when out of range.
+  Future<CommentaryEntry?> getSectionAtIndex(String textId, int index) async {
+    await _ensureLoaded(textId);
+    final c = _get(textId);
+    if (c == null || c.allSections.isEmpty) return null;
+    if (index < 0 || index >= c.allSections.length) return null;
+    return c.allSections[index];
   }
 
   /// Returns a random commentary section for [textId]. Null if none.
