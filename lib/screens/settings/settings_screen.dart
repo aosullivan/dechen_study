@@ -123,6 +123,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     setState(() => _selectedIds = updated);
     await AppPreferencesService.instance.updateSelectedTextIds(updated);
+    final prefs = await AppPreferencesService.instance.load();
+    if (prefs.dailyNotificationsEnabled) {
+      final granted =
+          await DailyNotificationService.instance.requestPermissionIfNeeded();
+      if (granted) {
+        await DailyNotificationService.instance.applySchedule(prefs);
+      } else {
+        await DailyNotificationService.instance.cancel();
+      }
+    }
   }
 
   Future<void> _toggleDailyNotifications(bool enabled) async {

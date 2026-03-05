@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../config/study_destination_catalog.dart';
 import '../../services/app_preferences_service.dart';
+import '../../services/daily_notification_service.dart';
 import '../../utils/app_theme.dart';
 import 'mobile_home_screen.dart';
 
@@ -95,6 +96,17 @@ class _MobileTextSelectionScreenState extends State<MobileTextSelectionScreen> {
     setState(() => _saving = true);
     try {
       await AppPreferencesService.instance.completeOnboarding(_selectedIds);
+      final updatedPreferences = await AppPreferencesService.instance.load();
+      if (updatedPreferences.dailyNotificationsEnabled) {
+        final granted =
+            await DailyNotificationService.instance.requestPermissionIfNeeded();
+        if (granted) {
+          await DailyNotificationService.instance
+              .applySchedule(updatedPreferences);
+        } else {
+          await DailyNotificationService.instance.cancel();
+        }
+      }
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(builder: (_) => const MobileHomeScreen()),
