@@ -22,6 +22,32 @@ class GatewayLandingScreen extends StatefulWidget {
 }
 
 class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
+  static const String _gatewayUsPurchaseUrl = 'https://amzn.to/3P0Puut';
+  static const String _gatewayPurchaseSearchTerm =
+      'Gateway to Knowledge Jamgon Mipham';
+  static const Map<String, String> _amazonBaseByCountryCode = <String, String>{
+    'US': 'https://www.amazon.com',
+    'GB': 'https://www.amazon.co.uk',
+    'UK': 'https://www.amazon.co.uk',
+    'CA': 'https://www.amazon.ca',
+    'AU': 'https://www.amazon.com.au',
+    'DE': 'https://www.amazon.de',
+    'FR': 'https://www.amazon.fr',
+    'IT': 'https://www.amazon.it',
+    'ES': 'https://www.amazon.es',
+    'NL': 'https://www.amazon.nl',
+    'PL': 'https://www.amazon.pl',
+    'SE': 'https://www.amazon.se',
+    'TR': 'https://www.amazon.com.tr',
+    'BR': 'https://www.amazon.com.br',
+    'MX': 'https://www.amazon.com.mx',
+    'IN': 'https://www.amazon.in',
+    'JP': 'https://www.amazon.co.jp',
+    'SG': 'https://www.amazon.sg',
+    'AE': 'https://www.amazon.ae',
+    'SA': 'https://www.amazon.sa',
+  };
+
   late final Future<List<GatewayOutlineChapter>> _chaptersFuture =
       GatewayOutlineService.instance.getChapters();
   bool _openedInitialChapter = false;
@@ -90,7 +116,9 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
             return ListView(
               padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
               children: [
-                _GatewayHeroCard(),
+                _GatewayHeroCard(
+                  onBuyBook: () => _openGatewayPurchaseLink(context),
+                ),
                 const SizedBox(height: 10),
                 _GatewayChapterGrid(
                   chapters: chapters,
@@ -154,9 +182,59 @@ class _GatewayLandingScreenState extends State<GatewayLandingScreen> {
       ),
     );
   }
+
+  void _openGatewayPurchaseLink(BuildContext context) {
+    final localeCode = Localizations.maybeLocaleOf(context)?.countryCode;
+    final targetUrl = _resolveRegionalAmazonUrl(
+      usUrl: _gatewayUsPurchaseUrl,
+      localizedSearchTerm: _gatewayPurchaseSearchTerm,
+      countryCode: localeCode,
+    );
+    final opened = openExternalUrl(targetUrl);
+    unawaited(UsageMetricsService.instance.trackEvent(
+      eventName: 'purchase_link_tapped',
+      textId: 'gateway_to_knowledge',
+      mode: 'landing',
+      properties: {
+        'link_type': 'book',
+        'country_code': localeCode?.toUpperCase(),
+        'target_url': targetUrl,
+        'opened_in_web': opened,
+      },
+    ));
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('External links are currently available on web.'),
+          backgroundColor: AppColors.primary,
+        ),
+      );
+    }
+  }
+
+  String _resolveRegionalAmazonUrl({
+    required String usUrl,
+    required String localizedSearchTerm,
+    required String? countryCode,
+  }) {
+    final normalizedCountryCode = countryCode?.toUpperCase().trim();
+    if (normalizedCountryCode == null ||
+        normalizedCountryCode.isEmpty ||
+        normalizedCountryCode == 'US') {
+      return usUrl;
+    }
+    final amazonBase = _amazonBaseByCountryCode[normalizedCountryCode];
+    if (amazonBase == null) return usUrl;
+    final encodedQuery = Uri.encodeQueryComponent(localizedSearchTerm);
+    return '$amazonBase/s?k=$encodedQuery';
+  }
 }
 
 class _GatewayHeroCard extends StatelessWidget {
+  const _GatewayHeroCard({required this.onBuyBook});
+
+  final VoidCallback onBuyBook;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -217,6 +295,20 @@ class _GatewayHeroCard extends StatelessWidget {
                         height: 1.45,
                         color: AppColors.bodyText,
                       ),
+                ),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: onBuyBook,
+                    icon: const Icon(Icons.local_library_outlined, size: 16),
+                    label: const Text('Buy Book'),
+                    style: OutlinedButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      foregroundColor: AppColors.textDark,
+                      side: const BorderSide(color: AppColors.borderLight),
+                    ),
+                  ),
                 ),
               ],
             );
