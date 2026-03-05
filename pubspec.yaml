@@ -46,6 +46,9 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+  # Generate app launcher icons for Android and iOS from a single image
+  flutter_launcher_icons: ^0.14.3
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -65,6 +68,7 @@ flutter:
     - assets/kingofaspirations.webp
     - assets/friendlyletter.jpg
     - assets/lampofthepath_cover.png
+    - assets/icons/app_icon.png
     - assets/icons/bodhicarya_style_icon.svg
     - texts/bodhicaryavatara/bcv-root
     - texts/bodhicaryavatara/bcv_parsed.json
@@ -111,3 +115,15 @@ flutter:
         # Variable font (supports multiple weights)
         - asset: fonts/Lora[wght].ttf
         - asset: fonts/Lora-Italic[wght].ttf
+
+# App launcher icons: source is web/favicon.svg only. PNG is generated from it; run "dart run flutter_launcher_icons" to update Android/iOS.
+# To regenerate app_icon.png after editing the SVG: npx @resvg/resvg-js-cli --fit-width 1024 --background "#F4ECDD" web/favicon.svg assets/icons/app_icon.png
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icons/app_icon.png
+  min_sdk_android: 21
+  # Match SVG background so icons are never blank/transparent
+  background_color_ios: "#F4ECDD"
+  adaptive_icon_background: "#F4ECDD"
+  remove_alpha_ios: true

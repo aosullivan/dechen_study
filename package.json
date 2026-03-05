@@ -6,7 +6,8 @@
   "scripts": {
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "generate-app-icon": "npx --yes @resvg/resvg-js-cli --fit-width 1024 --background \"#F4ECDD\" web/favicon.svg assets/icons/app_icon.png && dart run flutter_launcher_icons"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0"

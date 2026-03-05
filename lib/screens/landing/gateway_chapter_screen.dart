@@ -325,6 +325,37 @@ class _GatewayTopicCard extends StatelessWidget {
   final ValueChanged<String> onChipTap;
   final bool Function(String topicTitle) canOpenTopic;
 
+  static bool _shouldSkipChipWrap({
+    required List<String> chipTexts,
+    required List<GatewayRichBlock> blocks,
+    required int chipEndIndex,
+  }) {
+    if (chipEndIndex + 1 >= blocks.length) return false;
+    final nextBlock = blocks[chipEndIndex + 1];
+    if (nextBlock.type != 'table' || nextBlock.headers.isEmpty) return false;
+    if (chipTexts.length > nextBlock.headers.length) return false;
+    for (var idx = 0; idx < chipTexts.length; idx++) {
+      final chip = _normalizeLabel(chipTexts[idx]);
+      final header = _normalizeLabel(nextBlock.headers[idx]);
+      if (chip.isEmpty || header.isEmpty) return false;
+      if (!(chip == header ||
+          header.startsWith(chip) ||
+          chip.startsWith(header))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static String _normalizeLabel(String value) {
+    final withoutParen = value.replaceAll(RegExp(r'\([^)]*\)'), '');
+    final collapsed = withoutParen
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
+        .trim();
+    return collapsed;
+  }
+
   @override
   Widget build(BuildContext context) {
     final blocks = topic.blocks;
@@ -399,9 +430,24 @@ class _GatewayTopicCard extends StatelessWidget {
           i += 1;
           chipTexts.add(blocks[i].text ?? '');
         }
+        final uniqueChipTexts = <String>[];
+        final seen = <String>{};
+        for (final text in chipTexts) {
+          final normalized = _normalizeLabel(text);
+          if (normalized.isEmpty || seen.contains(normalized)) continue;
+          seen.add(normalized);
+          uniqueChipTexts.add(text);
+        }
+        if (_shouldSkipChipWrap(
+          chipTexts: uniqueChipTexts,
+          blocks: blocks,
+          chipEndIndex: i,
+        )) {
+          continue;
+        }
         children.add(
           _GatewayChipWrap(
-            items: chipTexts,
+            items: uniqueChipTexts,
             onChipTap: onChipTap,
             canOpenTopic: canOpenTopic,
           ),
@@ -651,62 +697,55 @@ class _GatewayBlockView extends StatelessWidget {
           );
         }
         if (block.styleClass == 'icon-list-grid' ||
-            block.styleClass == 'links-grid') {
+            block.styleClass == 'links-grid' ||
+            block.styleClass == 'icon-list-compact-grid' ||
+            block.styleClass == 'links-grid-compact') {
+          final compact = block.styleClass == 'icon-list-compact-grid' ||
+              block.styleClass == 'links-grid-compact';
+          final minCardWidth = compact ? 96.0 : 150.0;
+          final maxCardWidth = compact ? 180.0 : 280.0;
+          final cardPadH = compact ? 4.0 : 6.0;
+          final cardPadV = compact ? 3.0 : 5.0;
+          final chipSize = compact ? 9.5 : 11.0;
+          final bodyFont = compact ? 11.5 : 13.0;
           return Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Wrap(
-              spacing: 5,
-              runSpacing: 5,
+              spacing: compact ? 3 : 5,
+              runSpacing: compact ? 3 : 5,
               children: [
                 for (var i = 0; i < items.length; i++)
                   Container(
-                    constraints:
-                        const BoxConstraints(minWidth: 150, maxWidth: 280),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+                    constraints: BoxConstraints(
+                        minWidth: minCardWidth, maxWidth: maxCardWidth),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: cardPadH, vertical: cardPadV),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFFBF4),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(compact ? 7 : 8),
                       border: Border.all(color: const Color(0xFFE0D3BF)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (block.styleClass == 'links-grid')
-                          Container(
-                            width: 18,
-                            height: 18,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFF8EC),
-                              borderRadius: BorderRadius.circular(999),
-                              border:
-                                  Border.all(color: const Color(0xFFCFBDA0)),
-                            ),
-                            child: Text(
-                              '${i + 1}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: AppColors.mutedBrown,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 11,
-                                  ),
-                            ),
+                        if (block.styleClass == 'links-grid' ||
+                            block.styleClass == 'links-grid-compact')
+                          _DependentLinkBadge(
+                            palette: _dependentOriginationPalette(items[i]),
                           )
                         else
-                          _semanticIconBadge(items[i], size: 11),
-                        const SizedBox(width: 5),
+                          _dependentOriginationIconBadge(items[i],
+                              size: chipSize),
+                        SizedBox(width: compact ? 4 : 5),
                         Expanded(
                           child: Text(
-                            items[i],
+                            _withDependentLinkNumber(items[i]),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
                                   color: AppColors.bodyText,
-                                  fontSize: 13,
+                                  fontSize: bodyFont,
                                 ),
                           ),
                         ),
@@ -832,52 +871,70 @@ class _GatewayBlockView extends StatelessWidget {
         }
         return Padding(
           padding: const EdgeInsets.only(top: 5),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Table(
-              border: TableBorder.all(color: AppColors.borderLight),
-              defaultColumnWidth: const IntrinsicColumnWidth(),
-              children: [
-                TableRow(
-                  decoration: const BoxDecoration(color: Color(0xFFF4E8D5)),
-                  children: [
-                    for (final header in block.headers)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 4),
-                        child: Text(
-                          header,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.textDark,
-                                    fontSize: 13,
-                                  ),
-                        ),
-                      ),
-                  ],
-                ),
-                for (final row in block.rows)
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFFBF4),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFE0D3BF)),
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Table(
+                border: TableBorder.all(color: const Color(0xFFD9CCB8)),
+                defaultColumnWidth: const IntrinsicColumnWidth(),
+                children: [
                   TableRow(
+                    decoration: const BoxDecoration(color: Color(0xFFF2E3CC)),
                     children: [
-                      for (var i = 0; i < block.headers.length; i++)
+                      for (final header in block.headers)
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 4),
+                              horizontal: 7, vertical: 5),
                           child: Text(
-                            i < row.length ? row[i] : '',
+                            header,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: AppColors.bodyText,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textDark,
                                   fontSize: 13,
                                 ),
                           ),
                         ),
                     ],
                   ),
-              ],
+                  for (var r = 0; r < block.rows.length; r++)
+                    TableRow(
+                      decoration: BoxDecoration(
+                        color: r.isEven
+                            ? const Color(0xFFFFFDF8)
+                            : const Color(0xFFFFF7EA),
+                      ),
+                      children: [
+                        for (var i = 0; i < block.headers.length; i++)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 5),
+                            child: Text(
+                              i < block.rows[r].length
+                                  ? _withDependentLinkNumber(block.rows[r][i])
+                                  : '',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: AppColors.bodyText,
+                                    fontSize: 12.8,
+                                  ),
+                            ),
+                          ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
         );
@@ -894,6 +951,111 @@ class _GatewayBlockView extends StatelessWidget {
       default:
         return const SizedBox.shrink();
     }
+  }
+}
+
+class _DepPalette {
+  const _DepPalette({
+    required this.bg,
+    required this.border,
+    required this.fg,
+  });
+
+  final Color bg;
+  final Color border;
+  final Color fg;
+}
+
+const _kDepCausePalette = _DepPalette(
+  bg: Color(0xFFEDF4E4),
+  border: Color(0xFF7F985A),
+  fg: Color(0xFF4C6B2F),
+);
+
+const _kDepConditionPalette = _DepPalette(
+  bg: Color(0xFFF9EBDD),
+  border: Color(0xFFCA8456),
+  fg: Color(0xFFA16035),
+);
+
+const _kDepLinkPalette = _DepPalette(
+  bg: Color(0xFFEEF2F8),
+  border: Color(0xFF8294AD),
+  fg: Color(0xFF3F4F63),
+);
+
+const _kDepCauseLabels = <String>{
+  'seed',
+  'sprout',
+  'stamen',
+  'stalk',
+  'bud',
+  'flower',
+  'fruit',
+};
+
+const _kDepConditionLabels = <String>{
+  'earth',
+  'water',
+  'fire',
+  'wind',
+  'space',
+  'time',
+};
+
+_DepPalette _dependentOriginationPalette(String label) {
+  final t = label.toLowerCase().trim();
+  if (_kDepCauseLabels.contains(t)) return _kDepCausePalette;
+  if (_kDepConditionLabels.contains(t)) return _kDepConditionPalette;
+  return _kDepLinkPalette;
+}
+
+Widget _dependentOriginationIconBadge(String label, {required double size}) {
+  if (_classicalElementForLabel(label) case final element?) {
+    final colors = _classicalElementColors(element);
+    return _IconBadge(
+      icon: _iconForLabel(label),
+      size: size,
+      backgroundColor: colors.$1,
+      borderColor: colors.$2,
+      iconColor: colors.$3,
+      glyph: _classicalElementGlyph(element, size, colors.$3),
+    );
+  }
+  final palette = _dependentOriginationPalette(label);
+  return _IconBadge(
+    icon: _iconForLabel(label),
+    size: size,
+    backgroundColor: palette.bg,
+    borderColor: palette.border,
+    iconColor: palette.fg,
+  );
+}
+
+class _DependentLinkBadge extends StatelessWidget {
+  const _DependentLinkBadge({
+    required this.palette,
+  });
+
+  final _DepPalette palette;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 18,
+      height: 18,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: palette.bg,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: palette.border),
+      ),
+      child: Icon(
+        Icons.link_outlined,
+        size: 11,
+        color: palette.fg,
+      ),
+    );
   }
 }
 
@@ -928,6 +1090,32 @@ class _CompactColonItemText extends StatelessWidget {
       ),
     );
   }
+}
+
+const _kDependentLinkOrder = <String, int>{
+  'ignorance': 1,
+  'formation': 2,
+  'consciousness': 3,
+  'name and form': 4,
+  'the six sense sources': 5,
+  'six sense sources': 5,
+  'contact': 6,
+  'sensation': 7,
+  'craving': 8,
+  'grasping': 9,
+  'becoming': 10,
+  'rebirth': 11,
+  'old age and death': 12,
+};
+
+String _withDependentLinkNumber(String text) {
+  final raw = text.trim();
+  if (raw.isEmpty) return text;
+  final stripped = raw.replaceFirst(RegExp(r'^\d+\.\s*'), '');
+  final normalized = stripped.toLowerCase().trim();
+  final n = _kDependentLinkOrder[normalized];
+  if (n == null) return text;
+  return '$n. $stripped';
 }
 
 class _GatewayChipWrap extends StatelessWidget {

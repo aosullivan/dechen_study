@@ -1,0 +1,11 @@
+# Copy this file to key.properties and fill in your release keystore details.
+# key.properties is gitignored; never commit it or your keystore.
+#
+# Create a keystore (one-time) with:
+#   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+#
+# Then set:
+storePassword=your-keystore-password
+keyPassword=your-key-password
+keyAlias=upload
+storeFile=upload-keystore.jks

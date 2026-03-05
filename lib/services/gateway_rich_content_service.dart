@@ -872,7 +872,7 @@ class GatewayRichContentService {
                       'Flower',
                       'Fruit'
                     ],
-                    styleClass: 'icon-list-grid'),
+                    styleClass: 'icon-list-compact-grid'),
               ]),
           GatewayRichTopic(
               title: 'Six Related Conditions',
@@ -887,7 +887,7 @@ class GatewayRichContentService {
                       'Space',
                       'Time'
                     ],
-                    styleClass: 'icon-list-grid'),
+                    styleClass: 'icon-list-compact-grid'),
               ]),
           GatewayRichTopic(
               title: 'The Twelve Links of Dependent Origination',
@@ -908,7 +908,7 @@ class GatewayRichContentService {
                       'Rebirth',
                       'Old age and death'
                     ],
-                    styleClass: 'links-grid'),
+                    styleClass: 'links-grid-compact'),
               ]),
           GatewayRichTopic(
               title: 'First Subdivision of the Twelve Links',
@@ -942,19 +942,26 @@ class GatewayRichContentService {
                         'Ignorance',
                         'Name and Form',
                         'Craving',
-                        'Rebirth'
+                        'Rebirth',
                       ],
                       <String>[
                         'Formation',
                         'The Six Sense Sources',
                         'Grasping',
-                        'Old Age and Death'
+                        'Old Age and Death',
                       ],
                       <String>[
                         'Consciousness',
-                        'Contact / Sensation',
-                        'Becoming'
-                      ]
+                        'Contact',
+                        'Becoming',
+                        '',
+                      ],
+                      <String>[
+                        '',
+                        'Sensation',
+                        '',
+                        '',
+                      ],
                     ],
                     styleClass: ''),
               ]),
@@ -982,10 +989,40 @@ class GatewayRichContentService {
                     ],
                     rows: <List<String>>[
                       <String>[
-                        'Ignorance, Craving, Grasping',
-                        'Formation, Becoming',
-                        'Consciousness, Name and Form, Six Sense Sources, Contact, Sensation, Rebirth, Old Age and Death'
-                      ]
+                        'Ignorance',
+                        'Formation',
+                        'Consciousness',
+                      ],
+                      <String>[
+                        'Craving',
+                        'Becoming',
+                        'Name and Form',
+                      ],
+                      <String>[
+                        'Grasping',
+                        '',
+                        'Six Sense Sources',
+                      ],
+                      <String>[
+                        '',
+                        '',
+                        'Contact',
+                      ],
+                      <String>[
+                        '',
+                        '',
+                        'Sensation',
+                      ],
+                      <String>[
+                        '',
+                        '',
+                        'Rebirth',
+                      ],
+                      <String>[
+                        '',
+                        '',
+                        'Old Age and Death',
+                      ],
                     ],
                     styleClass: ''),
                 GatewayRichBlock(
@@ -1010,9 +1047,33 @@ class GatewayRichContentService {
                     headers: <String>['Truth of Origin', 'Truth of Suffering'],
                     rows: <List<String>>[
                       <String>[
-                        'Ignorance, Craving, Grasping, Formation, Becoming',
-                        'Consciousness, Name and Form, Six Sense Sources, Contact, Sensation, Rebirth, Old Age and Death'
-                      ]
+                        'Ignorance',
+                        'Consciousness',
+                      ],
+                      <String>[
+                        'Craving',
+                        'Name and Form',
+                      ],
+                      <String>[
+                        'Grasping',
+                        'Six Sense Sources',
+                      ],
+                      <String>[
+                        'Formation',
+                        'Contact',
+                      ],
+                      <String>[
+                        'Becoming',
+                        'Sensation',
+                      ],
+                      <String>[
+                        '',
+                        'Rebirth',
+                      ],
+                      <String>[
+                        '',
+                        'Old Age and Death',
+                      ],
                     ],
                     styleClass: ''),
               ]),
@@ -1035,9 +1096,33 @@ class GatewayRichContentService {
                     ],
                     rows: <List<String>>[
                       <String>[
-                        'Ignorance, Craving, Grasping, Formation, Becoming',
-                        'Consciousness, Name and Form, Six Sense Sources, Contact, Sensation, Rebirth, Old Age and Death'
-                      ]
+                        'Ignorance',
+                        'Consciousness',
+                      ],
+                      <String>[
+                        'Craving',
+                        'Name and Form',
+                      ],
+                      <String>[
+                        'Grasping',
+                        'Six Sense Sources',
+                      ],
+                      <String>[
+                        'Formation',
+                        'Contact',
+                      ],
+                      <String>[
+                        'Becoming',
+                        'Sensation',
+                      ],
+                      <String>[
+                        '',
+                        'Rebirth',
+                      ],
+                      <String>[
+                        '',
+                        'Old Age and Death',
+                      ],
                     ],
                     styleClass: ''),
               ]),

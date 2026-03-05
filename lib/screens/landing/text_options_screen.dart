@@ -33,6 +33,10 @@ class TextOptionsScreen extends StatefulWidget {
 }
 
 class _TextOptionsScreenState extends State<TextOptionsScreen> {
+  static const Set<String> _commentaryOnlyPurchaseTextIds = <String>{
+    'lampofthepath',
+  };
+
   static const Map<String, String> _amazonBaseByCountryCode = <String, String>{
     'US': 'https://www.amazon.com',
     'GB': 'https://www.amazon.co.uk',
@@ -73,6 +77,11 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
     final viewport = MediaQuery.sizeOf(context);
     final isCompactPhone = viewport.width <= 430 && viewport.height <= 950;
     final isVerySmallPhone = viewport.width <= 375 && viewport.height <= 820;
+    final config = getStudyText(textId);
+    final hasRootPurchaseLink = !_commentaryOnlyPurchaseTextIds.contains(textId) &&
+        (config?.purchaseRootTextUrl?.isNotEmpty ?? false);
+    final hasCommentaryPurchaseLink =
+        config?.purchaseCommentaryUrl?.isNotEmpty ?? false;
     final options = <_StudyModeOption>[
       if (supportsStudyMode(textId, 'daily'))
         _StudyModeOption(
@@ -138,7 +147,7 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
             vertical: isCompactPhone ? 4 : 8,
           ),
           children: [
-            if (getStudyText(textId) case final config?) ...[
+            if (config != null) ...[
               if (config.description != null ||
                   config.coverAssetPath != null) ...[
                 _TextHeroCard(
@@ -146,6 +155,26 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
                   compact: isCompactPhone,
                   verySmallPhone: isVerySmallPhone,
                   onOpenReader: () => _openReaderView(context),
+                  onBuyRootText: hasRootPurchaseLink
+                      ? () => _openPurchaseLink(
+                            context,
+                            linkType: 'root_text',
+                            usUrl: config.purchaseRootTextUrl!,
+                            localizedSearchTerm:
+                                config.purchaseRootTextSearchTerm ??
+                                    config.title,
+                          )
+                      : null,
+                  onBuyCommentary: hasCommentaryPurchaseLink
+                      ? () => _openPurchaseLink(
+                            context,
+                            linkType: 'commentary',
+                            usUrl: config.purchaseCommentaryUrl!,
+                            localizedSearchTerm:
+                                config.purchaseCommentarySearchTerm ??
+                                    '${config.title} commentary',
+                          )
+                      : null,
                 ),
                 SizedBox(height: isCompactPhone ? 6 : 10),
               ],
@@ -158,30 +187,6 @@ class _TextOptionsScreenState extends State<TextOptionsScreen> {
                 label: option.label,
                 onTap: option.onTap,
               ),
-            if (getStudyText(textId) case final config?) ...[
-              if (config.purchaseRootTextUrl != null ||
-                  config.purchaseCommentaryUrl != null) ...[
-                SizedBox(height: isCompactPhone ? 4 : 8),
-                _PurchaseFooterLinks(
-                  compact: isCompactPhone,
-                  verySmallPhone: isVerySmallPhone,
-                  onBuyRootText: () => _openPurchaseLink(
-                    context,
-                    linkType: 'root_text',
-                    usUrl: config.purchaseRootTextUrl ?? '',
-                    localizedSearchTerm:
-                        config.purchaseRootTextSearchTerm ?? config.title,
-                  ),
-                  onBuyCommentary: () => _openPurchaseLink(
-                    context,
-                    linkType: 'commentary',
-                    usUrl: config.purchaseCommentaryUrl ?? '',
-                    localizedSearchTerm: config.purchaseCommentarySearchTerm ??
-                        '${config.title} commentary',
-                  ),
-                ),
-              ],
-            ],
           ],
         ),
       ),
@@ -402,12 +407,16 @@ class _TextHeroCard extends StatelessWidget {
     required this.compact,
     required this.verySmallPhone,
     required this.onOpenReader,
+    required this.onBuyRootText,
+    required this.onBuyCommentary,
   });
 
   final StudyTextConfig config;
   final bool compact;
   final bool verySmallPhone;
   final VoidCallback onOpenReader;
+  final VoidCallback? onBuyRootText;
+  final VoidCallback? onBuyCommentary;
 
   @override
   Widget build(BuildContext context) {
@@ -441,6 +450,8 @@ class _TextHeroCard extends StatelessWidget {
                       config: config,
                       compact: compact && !isWide,
                       verySmallPhone: verySmallPhone && !isWide,
+                      onBuyRootText: onBuyRootText,
+                      onBuyCommentary: onBuyCommentary,
                     ),
                   ),
                   SizedBox(width: gap),
@@ -462,6 +473,8 @@ class _TextHeroCard extends StatelessWidget {
                   config: config,
                   compact: true,
                   verySmallPhone: verySmallPhone,
+                  onBuyRootText: onBuyRootText,
+                  onBuyCommentary: onBuyCommentary,
                 ),
                 if (coverPath != null) ...[
                   const SizedBox(height: 10),
@@ -490,11 +503,15 @@ class _TextHeroContent extends StatelessWidget {
     required this.config,
     required this.compact,
     required this.verySmallPhone,
+    required this.onBuyRootText,
+    required this.onBuyCommentary,
   });
 
   final StudyTextConfig config;
   final bool compact;
   final bool verySmallPhone;
+  final VoidCallback? onBuyRootText;
+  final VoidCallback? onBuyCommentary;
 
   @override
   Widget build(BuildContext context) {
@@ -547,6 +564,15 @@ class _TextHeroContent extends StatelessWidget {
                 ),
           ),
         ],
+        if (onBuyRootText != null || onBuyCommentary != null) ...[
+          SizedBox(height: compact ? 8 : 10),
+          _PurchaseInlineLinks(
+            compact: compact,
+            verySmallPhone: verySmallPhone,
+            onBuyRootText: onBuyRootText,
+            onBuyCommentary: onBuyCommentary,
+          ),
+        ],
       ],
     );
   }
@@ -589,8 +615,8 @@ class _BookCoverCard extends StatelessWidget {
   }
 }
 
-class _PurchaseFooterLinks extends StatelessWidget {
-  const _PurchaseFooterLinks({
+class _PurchaseInlineLinks extends StatelessWidget {
+  const _PurchaseInlineLinks({
     required this.compact,
     required this.verySmallPhone,
     required this.onBuyRootText,
@@ -599,8 +625,8 @@ class _PurchaseFooterLinks extends StatelessWidget {
 
   final bool compact;
   final bool verySmallPhone;
-  final VoidCallback onBuyRootText;
-  final VoidCallback onBuyCommentary;
+  final VoidCallback? onBuyRootText;
+  final VoidCallback? onBuyCommentary;
 
   @override
   Widget build(BuildContext context) {
@@ -611,37 +637,35 @@ class _PurchaseFooterLinks extends StatelessWidget {
       decoration: TextDecoration.underline,
     );
     return Padding(
-      padding: EdgeInsets.only(
-        left: compact ? 2 : 4,
-        top: compact ? 4 : 4,
-        bottom: compact ? 8 : 10,
-      ),
+      padding: EdgeInsets.only(left: compact ? 2 : 4, top: compact ? 1 : 2),
       child: Wrap(
         spacing: compact ? (verySmallPhone ? 10 : 14) : 20,
         runSpacing: compact ? 6 : 8,
         children: [
-          TextButton(
-            onPressed: onBuyRootText,
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.textDark,
-              padding: EdgeInsets.zero,
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              textStyle: textStyle,
+          if (onBuyRootText != null)
+            TextButton(
+              onPressed: onBuyRootText,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.textDark,
+                padding: EdgeInsets.zero,
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textStyle: textStyle,
+              ),
+              child: const Text('Purchase root text'),
             ),
-            child: const Text('Purchase root text'),
-          ),
-          TextButton(
-            onPressed: onBuyCommentary,
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.textDark,
-              padding: EdgeInsets.zero,
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              textStyle: textStyle,
+          if (onBuyCommentary != null)
+            TextButton(
+              onPressed: onBuyCommentary,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.textDark,
+                padding: EdgeInsets.zero,
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textStyle: textStyle,
+              ),
+              child: const Text('Purchase commentary'),
             ),
-            child: const Text('Purchase commentary'),
-          ),
         ],
       ),
     );

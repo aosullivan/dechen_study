@@ -72,4 +72,9 @@ web/supabase_config.js
 credentials.json
 secrets.json
 **/secrets/
+
+# Android release signing (never commit keystore or key.properties)
+android/key.properties
+android/*.jks
+android/*.keystore
 texts/friendlyletter/Telescope of Wisdom.docx
