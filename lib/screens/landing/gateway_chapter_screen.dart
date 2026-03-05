@@ -613,6 +613,43 @@ class _GatewayBlockView extends StatelessWidget {
             ),
           );
         }
+        if (block.styleClass == 'labeled-panel-list') {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBF4),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: const Color(0xFFE0D3BF)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if ((block.text ?? '').trim().isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        block.text!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.textDark,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                      ),
+                    ),
+                  _PlainList(
+                    items: items,
+                    isNumbered: false,
+                    iconSize: 11,
+                    nestedIconSize: 9,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
         if (block.styleClass == 'icon-list-grid' ||
             block.styleClass == 'links-grid') {
           return Padding(
@@ -944,8 +981,8 @@ class _FormationsMembershipView extends StatelessWidget {
       title: 'Five Ever-Present Mental States',
       items: <String>[
         'Attraction',
-        'Sensation',
-        'Perception',
+        'Sensation (Aggregate of Sensation above)',
+        'Perception (Aggregate of Perceptions above)',
         'Attention',
         'Contact',
       ],
@@ -1106,6 +1143,11 @@ class _FormationsCategoryPanel extends StatelessWidget {
           fontSize: 12,
           height: 1.25,
         );
+    final numberStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.mutedBrown,
+          fontSize: 11.5,
+          fontWeight: FontWeight.w700,
+        );
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -1136,15 +1178,19 @@ class _FormationsCategoryPanel extends StatelessWidget {
                 spacing: twoCols ? 4 : 0,
                 runSpacing: 2,
                 children: [
-                  for (final item in category.items)
+                  for (final entry in category.items.asMap().entries)
                     SizedBox(
                       width: colWidth,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _formationsBadge(item, 9),
+                          SizedBox(
+                            width: 18,
+                            child:
+                                Text('${entry.key + 1}.', style: numberStyle),
+                          ),
                           const SizedBox(width: 5),
-                          Expanded(child: Text(item, style: itemStyle)),
+                          Expanded(child: Text(entry.value, style: itemStyle)),
                         ],
                       ),
                     ),
@@ -1183,17 +1229,21 @@ class _FormationsCategoryPanel extends StatelessWidget {
                         spacing: twoCols ? 4 : 0,
                         runSpacing: 2,
                         children: [
-                          for (final item in category.beliefTypes!)
+                          for (final entry
+                              in category.beliefTypes!.asMap().entries)
                             SizedBox(
                               width: colWidth,
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _IconBadge(
-                                      icon: _iconForLabel(item), size: 8),
+                                  SizedBox(
+                                    width: 16,
+                                    child: Text('${entry.key + 1}.',
+                                        style: numberStyle),
+                                  ),
                                   const SizedBox(width: 4),
                                   Expanded(
-                                    child: Text(item, style: itemStyle),
+                                    child: Text(entry.value, style: itemStyle),
                                   ),
                                 ],
                               ),
@@ -1210,20 +1260,6 @@ class _FormationsCategoryPanel extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _formationsBadge(String item, double size) {
-  final t = item.toLowerCase().trim();
-  if (t == 'sensation' || t == 'perception' || t == 'perceptions') {
-    return _IconBadge(
-      icon: _iconForLabel(item),
-      size: size,
-      backgroundColor: _skandhaBadgeBg,
-      borderColor: _skandhaBadgeBorder,
-      iconColor: _skandhaIconColor,
-    );
-  }
-  return _IconBadge(icon: _iconForLabel(item), size: size);
 }
 
 class _NonCurrentMajorPanel {
@@ -1264,7 +1300,9 @@ class _NonCurrentFormationsMembershipView extends StatelessWidget {
           'Impermanence',
         ],
         <String>[
-          'Categories of names, words, and syllables',
+          'Category of names',
+          'Category of words',
+          'Category of syllables',
         ],
       ],
     ),
@@ -1323,12 +1361,18 @@ class _NonCurrentMajorPanelView extends StatelessWidget {
           fontSize: 12,
           height: 1.22,
         );
+    final numberStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: AppColors.mutedBrown,
+          fontSize: 11.5,
+          fontWeight: FontWeight.w700,
+        );
     final noteStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
           color: AppColors.mutedBrown,
           fontSize: 11.2,
           height: 1.2,
           fontStyle: FontStyle.italic,
         );
+    var itemIndex = 0;
 
     return Container(
       padding: const EdgeInsets.all(5),
@@ -1350,32 +1394,60 @@ class _NonCurrentMajorPanelView extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           for (var gi = 0; gi < panel.groups.length; gi++) ...[
-            if (gi > 0)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 3),
-                child: Divider(height: 1, color: Color(0xFFE7DBCA)),
-              ),
-            for (final item in panel.groups[gi]) ...[
-              if (item == 'Birth') ...[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
-                  child: Text(
-                    'Characteristics indicating a conditioned thing:',
-                    style: noteStyle,
-                  ),
+            if (gi == 3) ...[
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF8EF),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: const Color(0xFFE4D6C2)),
                 ),
-              ],
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _IconBadge(icon: _iconForLabel(item), size: 9),
-                    const SizedBox(width: 5),
-                    Expanded(child: Text(item, style: itemStyle)),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Text(
+                        'Characteristics indicating a conditioned thing:',
+                        style: noteStyle,
+                      ),
+                    ),
+                    for (final item in panel.groups[gi])
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 2),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 18,
+                              child:
+                                  Text('${++itemIndex}.', style: numberStyle),
+                            ),
+                            const SizedBox(width: 5),
+                            Expanded(child: Text(item, style: itemStyle)),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
+            ] else ...[
+              for (final item in panel.groups[gi])
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 18,
+                        child: Text('${++itemIndex}.', style: numberStyle),
+                      ),
+                      const SizedBox(width: 5),
+                      Expanded(child: Text(item, style: itemStyle)),
+                    ],
+                  ),
+                ),
             ],
           ],
         ],
@@ -1965,11 +2037,8 @@ class _AyatanaDhatuMapView extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final available = constraints.maxWidth;
-              final compact = available < 860;
-              final laneWidth = compact
-                  ? ((available - connectorSpan) / 2).clamp(120.0, 420.0)
-                  : ((available - connectorSpan) / 2)
-                      .clamp(120.0, maxLaneWidth);
+              final laneWidth =
+                  ((available - connectorSpan) / 2).clamp(120.0, maxLaneWidth);
               final contentWidth = (laneWidth * 2) + connectorSpan;
               return Align(
                 alignment: Alignment.centerLeft,
@@ -3103,6 +3172,22 @@ IconData _computeIcon(String text) {
     return Icons.local_fire_department_outlined;
   }
   if (RegExp(r'\bwind\b').hasMatch(t)) return Icons.air_outlined;
+  // Unconditioned things (abstract icon set, avoid person/action glyphs).
+  if (t.contains('cessation due to discrimination')) {
+    return Icons.rule_folder_outlined;
+  }
+  if (t.contains('cessation not due to discrimination')) {
+    return Icons.block_outlined;
+  }
+  if (t.contains('suchness of virtue')) return Icons.auto_awesome_outlined;
+  if (t.contains('suchness of non virtue') ||
+      t.contains('suchness of non-virtue')) {
+    return Icons.change_history_outlined;
+  }
+  if (t.contains('suchness of neutral')) return Icons.horizontal_rule_outlined;
+  if (t.contains('occasion of blocked cognition')) {
+    return Icons.hourglass_empty_outlined;
+  }
   // Dhatu / sense patterns
   if (t.contains('eye') || t.contains('visual')) {
     return Icons.visibility_outlined;
@@ -3164,7 +3249,25 @@ IconData _computeIcon(String text) {
   if (t.contains('subdivision')) return Icons.vertical_split_outlined;
   if (t.contains('inner')) return Icons.adjust_outlined;
   if (t.contains('element')) return Icons.grain_outlined;
-  return Icons.circle_outlined;
+  return _personActionFallbackIcon(text);
+}
+
+IconData _personActionFallbackIcon(String label) {
+  final key = label.toLowerCase().trim();
+  if (key.isEmpty) return Icons.circle_outlined;
+  const personActionIcons = <IconData>[
+    Icons.directions_walk,
+    Icons.directions_run,
+    Icons.self_improvement,
+    Icons.accessibility_new,
+    Icons.emoji_people,
+    Icons.record_voice_over,
+    Icons.follow_the_signs,
+    Icons.accessible_forward,
+    Icons.transfer_within_a_station,
+    Icons.escalator_warning,
+  ];
+  return personActionIcons[key.hashCode.abs() % personActionIcons.length];
 }
 
 // ── Skandha (aggregate) colours – rich reds ─────────────────────────────
@@ -3464,6 +3567,13 @@ class _ClassificationOverlapsViewState
   String? _selectedDhatu;
   String? _selectedSet;
 
+  void _clearSelection() {
+    setState(() {
+      _selectedDhatu = null;
+      _selectedSet = null;
+    });
+  }
+
   void _tapDhatu(String id) {
     setState(() {
       if (_selectedDhatu == id) {
@@ -3510,8 +3620,9 @@ class _ClassificationOverlapsViewState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
-        _buildMatrix(context),
         _buildInfoSummary(context),
+        const SizedBox(height: 6),
+        _buildMatrix(context),
         const SizedBox(height: 16),
         _buildRegionCards(context),
       ],
@@ -3691,7 +3802,24 @@ class _ClassificationOverlapsViewState
   // ── Info summary ──
 
   Widget _buildInfoSummary(BuildContext context) {
-    if (!_hasSelection) return const SizedBox(height: 8);
+    if (!_hasSelection) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFFBF4),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFE0D3BF)),
+        ),
+        child: Text(
+          'Tap any element or classification to inspect membership.',
+          style: TextStyle(
+            fontSize: 12,
+            color: AppColors.mutedBrown,
+          ),
+        ),
+      );
+    }
 
     final String title;
     final String subtitle;
@@ -3719,33 +3847,65 @@ class _ClassificationOverlapsViewState
     return AnimatedSize(
       duration: const Duration(milliseconds: 250),
       child: Container(
-        margin: const EdgeInsets.only(top: 10),
+        width: double.infinity,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: const Color(0xFFFFF2DA),
           borderRadius: BorderRadius.circular(9),
-          border: Border(
-            left: BorderSide(
-              color: AppColors.primary.withValues(alpha: 0.7),
-              width: 3,
-            ),
-          ),
+          border: Border.all(color: const Color(0xFFE0D3BF)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textDark,
-                )),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textDark,
+                      )),
+                ),
+                TextButton(
+                  onPressed: _clearSelection,
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Text('Clear'),
+                ),
+                const SizedBox(width: 2),
+                Tooltip(
+                  message: 'Close details',
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(999),
+                    onTap: _clearSelection,
+                    child: const Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Icon(Icons.close, size: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 2),
             Text(subtitle,
                 style: TextStyle(
                   fontSize: 12,
                   color: AppColors.mutedBrown,
                 )),
+            const SizedBox(height: 2),
+            Text(
+              'Tap Clear or × to close.',
+              style: TextStyle(
+                fontSize: 11,
+                color: AppColors.mutedBrown.withValues(alpha: 0.9),
+              ),
+            ),
             const SizedBox(height: 6),
             Wrap(spacing: 4, runSpacing: 4, children: tags),
           ],

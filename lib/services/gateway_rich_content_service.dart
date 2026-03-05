@@ -82,12 +82,9 @@ class GatewayRichContentService {
                     ],
                     styleClass: ''),
                 GatewayRichBlock(
-                    type: 'p',
+                    type: 'ul',
                     text:
                         'In the Abhidharma Samuccaya, the five forms of mental objects are listed as:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
-                    type: 'ul',
                     items: <String>[
                       'Deduced form',
                       'Spatial forms',
@@ -95,24 +92,16 @@ class GatewayRichContentService {
                       'Imagined forms',
                       'Mastered forms through meditation'
                     ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Imperceptible form is described as:',
-                    styleClass: 'topic-copy'),
+                    styleClass: 'labeled-panel-list'),
                 GatewayRichBlock(
                     type: 'ul',
+                    text: 'Imperceptible form is described as:',
                     items: <String>[
                       'Imperceptible form after obtaining a vow',
                       'Imperceptible form arising from elements embraced by the stream of mind',
                       'A certain kind of physical or verbal action'
                     ],
-                    styleClass: 'inner-list'),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Form can be visible and obstructive, invisible and obstructive, or invisible and non-obstructive.',
-                    styleClass: 'callout'),
+                    styleClass: 'labeled-panel-list'),
               ]),
           GatewayRichTopic(
               title: 'Aggregate of Sensation',
@@ -149,7 +138,7 @@ class GatewayRichContentService {
                 GatewayRichBlock(type: 'formations-membership'),
                 GatewayRichBlock(
                     type: 'p',
-                    text: 'Non-Concurrent Formations (separate category)',
+                    text: 'Non-Concurrent Formations',
                     styleClass: 'subset-title'),
                 GatewayRichBlock(type: 'noncurrent-formations-membership'),
               ]),
@@ -300,24 +289,18 @@ class GatewayRichContentService {
                         'The Element of Mental Objects (Dhatu) and Mental Object Source (Ayatana) are comprised of:',
                     styleClass: 'topic-copy'),
                 GatewayRichBlock(
-                    type: 'p',
-                    text: 'Three aggregates:',
-                    styleClass: 'topic-copy'),
-                GatewayRichBlock(
                     type: 'ul',
+                    text: 'Three aggregates:',
                     items: <String>[
                       'Sensation',
                       'Perceptions',
                       'Formations',
                     ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text:
-                        'Five imperceptible forms (five types of forms that are mental objects):',
-                    styleClass: 'topic-copy'),
+                    styleClass: 'labeled-panel-list'),
                 GatewayRichBlock(
                     type: 'ul',
+                    text:
+                        'Five imperceptible forms (five types of forms that are mental objects):',
                     items: <String>[
                       'Deduced form',
                       'Spatial forms',
@@ -325,13 +308,10 @@ class GatewayRichContentService {
                       'Imagined forms',
                       'Mastered forms through meditation',
                     ],
-                    styleClass: ''),
-                GatewayRichBlock(
-                    type: 'p',
-                    text: 'Unconditioned things include:',
-                    styleClass: 'topic-copy'),
+                    styleClass: 'labeled-panel-list'),
                 GatewayRichBlock(
                     type: 'ul',
+                    text: 'Unconditioned things include:',
                     items: <String>[
                       'Cessation due to discrimination',
                       'Cessation not due to discrimination',
@@ -342,7 +322,7 @@ class GatewayRichContentService {
                       'Occasion of blocked cognition at the time of serenity of non perception',
                       'Occasion of blocked cognition at the time of serenity of cessation',
                     ],
-                    styleClass: ''),
+                    styleClass: 'labeled-panel-list'),
               ]),
           GatewayRichTopic(
               title: 'Six Elements of a Person',
