@@ -827,6 +827,10 @@ class GatewayRichContentService {
                     styleClass: 'ayatana-dhatu-map'),
                 GatewayRichBlock(
                     type: 'p',
+                    text: 'Ayatana–Dhatu Correspondence at a Glance',
+                    styleClass: 'topic-copy'),
+                GatewayRichBlock(
+                    type: 'p',
                     text:
                         'The 5 inner ayatanas (Eye, Ear, Nose, Tongue, Body) match the first 5 faculty elements directly. The 6 outer ayatanas match the 6 object elements. The 6 consciousness elements plus the Mind Faculty Element all map to the single Mind Source ayatana.',
                     styleClass: 'callout'),
@@ -841,11 +845,11 @@ class GatewayRichContentService {
                 GatewayRichBlock(
                     type: 'ol',
                     items: <String>[
-                      'Form base of appearance: the form aggregate.',
-                      'Chief mind base: six or eight collections of consciousness (according to school).',
-                      'Accompanying base of mental states: all mental states (51).',
-                      'Non-current formations.',
-                      'Base of unconditioned things: the mental object elements.'
+                      'Form base of appearance: the form aggregate',
+                      'Chief mind base: six or eight collections of consciousness (according to school)',
+                      'Accompanying base of mental states: all mental states (51)',
+                      'Non-current formations',
+                      'Base of unconditioned things: the mental object elements'
                     ],
                     styleClass: 'links-compact'),
               ]),
