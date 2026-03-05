@@ -51,71 +51,45 @@ abstract final class AppTheme {
   AppTheme._();
 
   static ThemeData lightTheme() {
-    return _buildTheme(
-      brightness: Brightness.light,
-      scaffoldBackground: AppColors.scaffoldBackground,
-      textDark: AppColors.textDark,
-      bodyText: AppColors.bodyText,
-      inputFill: Colors.white,
-    );
-  }
-
-  static ThemeData darkTheme() {
-    return _buildTheme(
-      brightness: Brightness.dark,
-      scaffoldBackground: const Color(0xFF17140F),
-      textDark: const Color(0xFFF1E6D5),
-      bodyText: const Color(0xFFE3D6C2),
-      inputFill: const Color(0xFF221D17),
-    );
-  }
-
-  static ThemeData _buildTheme({
-    required Brightness brightness,
-    required Color scaffoldBackground,
-    required Color textDark,
-    required Color bodyText,
-    required Color inputFill,
-  }) {
     return ThemeData(
       useMaterial3: true,
-      brightness: brightness,
+      brightness: Brightness.light,
       fontFamily: 'Lora',
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
-        brightness: brightness,
+        brightness: Brightness.light,
       ),
-      scaffoldBackgroundColor: scaffoldBackground,
+      scaffoldBackgroundColor: AppColors.scaffoldBackground,
       textTheme: TextTheme(
         displayLarge: TextStyle(
           fontFamily: 'Crimson Text',
           fontSize: 32,
           fontWeight: FontWeight.w600,
-          color: textDark,
+          color: AppColors.textDark,
         ),
         displayMedium: TextStyle(
           fontFamily: 'Crimson Text',
           fontSize: 28,
           fontWeight: FontWeight.w600,
-          color: textDark,
+          color: AppColors.textDark,
         ),
         titleLarge: TextStyle(
           fontFamily: 'Crimson Text',
           fontSize: 22,
           fontWeight: FontWeight.w500,
-          color: textDark,
+          color: AppColors.textDark,
         ),
         bodyLarge: TextStyle(
           fontFamily: 'Lora',
           fontSize: 16,
           height: 1.8,
-          color: bodyText,
+          color: AppColors.bodyText,
         ),
         bodyMedium: TextStyle(
           fontFamily: 'Lora',
           fontSize: 14,
           height: 1.7,
-          color: bodyText,
+          color: AppColors.bodyText,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -131,7 +105,7 @@ abstract final class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: inputFill,
+        fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4),
           borderSide: const BorderSide(color: AppColors.border),
@@ -154,18 +128,14 @@ abstract final class AppTheme {
 abstract final class AppSurfaceColors {
   AppSurfaceColors._();
 
-  static bool isDark(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   static Color landingBackground(BuildContext context) =>
-      isDark(context) ? const Color(0xFF17140F) : AppColors.landingBackground;
+      AppColors.landingBackground;
 
   static Color cardBackground(BuildContext context) =>
-      isDark(context) ? const Color(0xFF2A241C) : AppColors.cardBeige;
+      AppColors.cardBeige;
 
   static Color borderLight(BuildContext context) =>
-      isDark(context) ? const Color(0xFF3D3328) : AppColors.borderLight;
+      AppColors.borderLight;
 
-  static Color textDark(BuildContext context) =>
-      isDark(context) ? const Color(0xFFF1E6D5) : AppColors.textDark;
+  static Color textDark(BuildContext context) => AppColors.textDark;
 }

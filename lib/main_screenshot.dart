@@ -61,7 +61,6 @@ class _ScreenshotApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme(),
-      darkTheme: AppTheme.lightTheme(),
       themeMode: ThemeMode.light,
       home: _homeForScene(),
     );

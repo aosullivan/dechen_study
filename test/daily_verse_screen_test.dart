@@ -75,10 +75,21 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Could not load section'), findsNothing);
+    expect(find.text('Bodhicaryavatara'), findsOneWidget);
     expect(find.text('Verse 8.136'), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp(r'Because it will')), findsWidgets);
     expect(find.bySemanticsLabel(RegExp(r'I will give myself up for others')),
         findsNothing);
+  });
+
+  testWidgets('daily header shows text name beside top verse reference',
+      (WidgetTester tester) async {
+    await pumpDaily(tester, refs: const ['7.7a']);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load section'), findsNothing);
+    expect(find.text('Bodhicaryavatara'), findsOneWidget);
+    expect(find.text('Verse 7.7'), findsOneWidget);
   });
 
   testWidgets(

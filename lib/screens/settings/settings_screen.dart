@@ -78,7 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text('Theme'),
-                  subtitle: Text('Follows your system light/dark setting'),
+                  subtitle: Text('Using the default light theme'),
                 ),
               ],
             ),

@@ -684,6 +684,10 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
     final shownDisplayRefs = <String>{};
     final isWideLayout = MediaQuery.of(context).size.width >= 1000;
     final wrapIndent = isWideLayout ? 24.0 : 8.0;
+    final topDisplayRef =
+        _sectionRefs.isNotEmpty ? _displayRef(_sectionRefs.first) : '';
+    final showTopMetadata =
+        widget.title.trim().isNotEmpty || topDisplayRef.isNotEmpty;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: Column(
@@ -699,6 +703,42 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (showTopMetadata) ...[
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      if (widget.title.trim().isNotEmpty)
+                        Text(
+                          widget.title,
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        fontFamily: 'Lora',
+                                        color: AppColors.mutedBrown,
+                                      ) ??
+                                  const TextStyle(
+                                    fontFamily: 'Lora',
+                                    color: AppColors.mutedBrown,
+                                  ),
+                        ),
+                      if (topDisplayRef.isNotEmpty)
+                        Text(
+                          'Verse $topDisplayRef',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        fontFamily: 'Lora',
+                                        color: AppColors.primary,
+                                      ) ??
+                                  const TextStyle(
+                                    fontFamily: 'Lora',
+                                    color: AppColors.primary,
+                                  ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                ],
                 ..._sectionVerseTexts.asMap().entries.map((entry) {
                   final i = entry.key;
                   final text = entry.value;
@@ -708,12 +748,15 @@ class _DailyVerseScreenState extends State<DailyVerseScreen>
                       displayRef != null && displayRef.isNotEmpty
                           ? shownDisplayRefs.add(displayRef)
                           : false;
+                  final isTopDisplayRef = shouldShowDisplayRef &&
+                      i == 0 &&
+                      displayRef == topDisplayRef;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (shouldShowDisplayRef) ...[
+                        if (shouldShowDisplayRef && !isTopDisplayRef) ...[
                           Text(
                             'Verse $displayRef',
                             style:

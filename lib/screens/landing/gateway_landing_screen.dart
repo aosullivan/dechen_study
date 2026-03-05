@@ -243,12 +243,8 @@ class _GatewayHeroCard extends StatelessWidget {
     final cardColor = AppSurfaceColors.cardBackground(context);
     final borderColor = AppSurfaceColors.borderLight(context);
     final headingColor = AppSurfaceColors.textDark(context);
-    final secondaryColor = AppSurfaceColors.isDark(context)
-        ? const Color(0xFFD0C2AD)
-        : AppColors.mutedBrown;
-    final bodyColor = AppSurfaceColors.isDark(context)
-        ? const Color(0xFFE3D6C2)
-        : AppColors.bodyText;
+    final secondaryColor = AppColors.mutedBrown;
+    final bodyColor = AppColors.bodyText;
     return Card(
       margin: EdgeInsets.zero,
       color: cardColor,
@@ -419,9 +415,7 @@ class _GatewayChapterTile extends StatelessWidget {
     final cardColor = AppSurfaceColors.cardBackground(context);
     final borderColor = AppSurfaceColors.borderLight(context);
     final textColor = AppSurfaceColors.textDark(context);
-    final trailingColor = AppSurfaceColors.isDark(context)
-        ? const Color(0xFFCDBBA0)
-        : AppColors.mutedBrown;
+    final trailingColor = AppColors.mutedBrown;
 
     return Card(
       margin: EdgeInsets.only(bottom: compact ? 6 : 12),
@@ -464,9 +458,7 @@ class _GatewayCoverImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor = AppSurfaceColors.borderLight(context);
-    final bgColor = AppSurfaceColors.isDark(context)
-        ? const Color(0xFF222E43)
-        : const Color(0xFFF6F2EB);
+    const bgColor = Color(0xFFF6F2EB);
     return AspectRatio(
       aspectRatio: 907 / 1360,
       child: Container(

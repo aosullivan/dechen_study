@@ -74,13 +74,6 @@ class _UsageMetricsLifecycleObserver with WidgetsBindingObserver {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  bool _useDesktopLightMode() {
-    if (kIsWeb) return true;
-    return defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.windows ||
-        defaultTargetPlatform == TargetPlatform.linux;
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -88,8 +81,7 @@ class MyApp extends StatelessWidget {
       title: 'Dechen Study',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme(),
-      darkTheme: AppTheme.darkTheme(),
-      themeMode: _useDesktopLightMode() ? ThemeMode.light : ThemeMode.system,
+      themeMode: ThemeMode.light,
       home: const SplashScreen(),
     );
   }
