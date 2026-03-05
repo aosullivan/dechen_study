@@ -212,7 +212,8 @@ class _ReadScreenState extends State<ReadScreen>
   double get _verseWrapIndent => _isLaptopLayout ? 24.0 : 8.0;
 
   Set<int> get _highlightSet => _highlightVerseIndices ?? const {};
-  bool get _supportsInlineCommentary => _textId == 'bodhicaryavatara';
+  // Keep BCV reader behavior aligned with other readers: no inline commentary popup.
+  bool get _supportsInlineCommentary => false;
   bool get _showsChapterNavigation => _chapters.length > 1;
 
   bool get _hasInitialHighlight =>
@@ -1692,7 +1693,7 @@ class _ReadScreenState extends State<ReadScreen>
     );
   }
 
-  /// Handler for reader pane: arrow keys for section nav, Enter/Space to show commentary.
+  /// Handler for reader pane: arrow keys for section navigation.
   KeyEventResult _handleReaderKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
     if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
@@ -2499,8 +2500,7 @@ class _ReadScreenState extends State<ReadScreen>
       onKeyEvent: _handleReaderKeyEvent,
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        // No onTap here: verse InkWells must receive taps to open commentary.
-        // On mobile, use the section nav bar for prev/next section.
+        // On mobile, verse taps advance section and section nav bar remains available.
         child: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification is ScrollStartNotification) {

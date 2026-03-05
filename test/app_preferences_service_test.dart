@@ -13,7 +13,10 @@ void main() {
 
     expect(prefs.onboardingCompleted, isFalse);
     expect(prefs.selectedTextIds, isEmpty);
-    expect(prefs.dailyNotificationsEnabled, isFalse);
+    expect(
+      prefs.dailyNotificationsEnabled,
+      AppPreferencesService.defaultDailyNotificationsEnabled,
+    );
     expect(
       prefs.dailyNotificationMinutesLocal,
       AppPreferencesService.defaultDailyNotificationMinutesLocal,

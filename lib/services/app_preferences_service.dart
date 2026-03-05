@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/study_destination_catalog.dart';
@@ -45,6 +46,11 @@ class AppPreferencesService {
       'daily_notification_minutes_local';
 
   static const int defaultDailyNotificationMinutesLocal = 8 * 60;
+  static bool get defaultDailyNotificationsEnabled {
+    if (kIsWeb) return false;
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS;
+  }
 
   SharedPreferences? _prefs;
 
@@ -56,7 +62,8 @@ class AppPreferencesService {
 
     final onboardingCompleted = prefs.getBool(_onboardingCompletedKey) ?? false;
     final dailyNotificationsEnabled =
-        prefs.getBool(_dailyNotificationsEnabledKey) ?? false;
+        prefs.getBool(_dailyNotificationsEnabledKey) ??
+            defaultDailyNotificationsEnabled;
 
     final persistedMinutes = prefs.getInt(_dailyNotificationMinutesLocalKey) ??
         defaultDailyNotificationMinutesLocal;

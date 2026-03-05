@@ -8,7 +8,10 @@ import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../config/study_destination_catalog.dart';
+import '../config/study_text_config.dart';
 import 'app_preferences_service.dart';
+import 'daily_verse_picker_service.dart';
+import 'verse_service.dart';
 
 enum DailyNotificationIntentType { dailyVerse }
 
@@ -29,6 +32,7 @@ class DailyNotificationService {
 
   static const int _dailyNotificationId = 41001;
   static const String _androidChannelId = 'daily_verses_channel';
+  static const int _maxPreviewBodyLength = 120;
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -132,10 +136,21 @@ class DailyNotificationService {
       scheduled = scheduled.add(const Duration(days: 1));
     }
 
+    final scheduledLocalDate = DateTime(
+      scheduled.year,
+      scheduled.month,
+      scheduled.day,
+    );
+    final preview = await _buildPreviewForDate(scheduledLocalDate, preferences);
+    const fallbackTitle = 'Daily verses';
+    const fallbackBody = 'Open Dechen Study to read today\'s verses.';
+    final title = preview?.title ?? fallbackTitle;
+    final body = preview?.body ?? fallbackBody;
+
     await _plugin.zonedSchedule(
       _dailyNotificationId,
-      'Daily verses',
-      'Open Dechen Study to read today\'s verses.',
+      title,
+      body,
       scheduled,
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -156,6 +171,62 @@ class DailyNotificationService {
   Future<void> cancel() async {
     if (!_isSupportedPlatform) return;
     await _plugin.cancel(_dailyNotificationId);
+  }
+
+  Future<({String title, String body})?> _buildPreviewForDate(
+    DateTime localDate,
+    AppPreferences preferences,
+  ) async {
+    try {
+      final eligible =
+          getDailyEligibleDestinations(preferences.selectedTextIds);
+      if (eligible.isEmpty) return null;
+
+      final textId = DailyVersePickerService.instance.pickDailyTextId(
+        localDate,
+        preferences.selectedTextIds,
+      );
+      if (textId == null) return null;
+
+      final section = await DailyVersePickerService.instance.pickDailySection(
+        textId,
+        localDate,
+      );
+      if (section == null || section.refsInBlock.isEmpty) return null;
+
+      await VerseService.instance.getChapters(textId);
+
+      String? previewText;
+      for (final ref in section.refsInBlock) {
+        final index = VerseService.instance
+            .getIndexForRefWithFallback(textId, ref);
+        if (index == null) continue;
+        final fullText = VerseService.instance.getVerseAt(textId, index);
+        if (fullText == null) continue;
+        final lines = fullText.split('\n');
+        final range =
+            VerseService.lineRangeForSegmentRef(ref, lines.length);
+        if (range != null && range.length >= 2) {
+          final start = range[0].clamp(0, lines.length - 1);
+          final end = (range[1] + 1).clamp(start, lines.length);
+          previewText = lines.sublist(start, end).join('\n').trim();
+        } else {
+          previewText = fullText.trim();
+        }
+        if (previewText.isNotEmpty) break;
+      }
+      if (previewText == null || previewText.isEmpty) return null;
+
+      var body = previewText.replaceAll(RegExp(r'\s+'), ' ').trim();
+      if (body.length > _maxPreviewBodyLength) {
+        body = '${body.substring(0, _maxPreviewBodyLength)}…';
+      }
+      final title =
+          getStudyText(textId)?.title ?? 'Daily verses';
+      return (title: title, body: body);
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> _ensureTimeZoneInitialized() async {
