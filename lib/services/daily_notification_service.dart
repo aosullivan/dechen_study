@@ -30,7 +30,8 @@ class DailyNotificationService {
 
   static final DailyNotificationService instance = DailyNotificationService._();
 
-  static const int _dailyNotificationId = 41001;
+  static const int _dailyNotificationBaseId = 41000;
+  static const int _dailyNotificationSlotCount = 30;
   static const String _androidChannelId = 'daily_verses_channel';
   static const int _maxPreviewBodyLength = 120;
 
@@ -120,11 +121,13 @@ class DailyNotificationService {
       return;
     }
 
+    await _cancelScheduledDailyNotifications();
+
     final hour = preferences.dailyNotificationMinutesLocal ~/ 60;
     final minute = preferences.dailyNotificationMinutesLocal % 60;
 
     final now = tz.TZDateTime.now(tz.local);
-    var scheduled = tz.TZDateTime(
+    var firstScheduled = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
@@ -132,45 +135,67 @@ class DailyNotificationService {
       hour,
       minute,
     );
-    if (!scheduled.isAfter(now)) {
-      scheduled = scheduled.add(const Duration(days: 1));
+    if (!firstScheduled.isAfter(now)) {
+      firstScheduled = firstScheduled.add(const Duration(days: 1));
     }
 
-    final scheduledLocalDate = DateTime(
-      scheduled.year,
-      scheduled.month,
-      scheduled.day,
+    final firstLocalDate = DateTime(
+      firstScheduled.year,
+      firstScheduled.month,
+      firstScheduled.day,
     );
-    final preview = await _buildPreviewForDate(scheduledLocalDate, preferences);
+
     const fallbackTitle = 'Daily verses';
     const fallbackBody = 'Open Dechen Study to read today\'s verses.';
-    final title = preview?.title ?? fallbackTitle;
-    final body = preview?.body ?? fallbackBody;
+    for (var i = 0; i < _dailyNotificationSlotCount; i++) {
+      final localDate = firstLocalDate.add(Duration(days: i));
+      final scheduled = tz.TZDateTime(
+        tz.local,
+        localDate.year,
+        localDate.month,
+        localDate.day,
+        hour,
+        minute,
+      );
 
-    await _plugin.zonedSchedule(
-      _dailyNotificationId,
-      title,
-      body,
-      scheduled,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _androidChannelId,
-          'Daily verses',
-          channelDescription: 'Daily reminder to review verses.',
-          importance: Importance.defaultImportance,
-          priority: Priority.defaultPriority,
+      if (!scheduled.isAfter(now)) {
+        continue;
+      }
+
+      final preview = await _buildPreviewForDate(localDate, preferences);
+      final title = preview?.title ?? fallbackTitle;
+      final body = preview?.body ?? fallbackBody;
+      final payload = jsonEncode({
+        'type': 'daily',
+        'date': '${localDate.year.toString().padLeft(4, '0')}-'
+            '${localDate.month.toString().padLeft(2, '0')}-'
+            '${localDate.day.toString().padLeft(2, '0')}',
+      });
+
+      await _plugin.zonedSchedule(
+        _dailyNotificationBaseId + i,
+        title,
+        body,
+        scheduled,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            _androidChannelId,
+            'Daily verses',
+            channelDescription: 'Daily reminder to review verses.',
+            importance: Importance.defaultImportance,
+            priority: Priority.defaultPriority,
+          ),
+          iOS: DarwinNotificationDetails(),
         ),
-        iOS: DarwinNotificationDetails(),
-      ),
-      payload: jsonEncode({'type': 'daily'}),
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
+        payload: payload,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      );
+    }
   }
 
   Future<void> cancel() async {
     if (!_isSupportedPlatform) return;
-    await _plugin.cancel(_dailyNotificationId);
+    await _cancelScheduledDailyNotifications();
   }
 
   Future<({String title, String body})?> _buildPreviewForDate(
@@ -198,14 +223,13 @@ class DailyNotificationService {
 
       String? previewText;
       for (final ref in section.refsInBlock) {
-        final index = VerseService.instance
-            .getIndexForRefWithFallback(textId, ref);
+        final index =
+            VerseService.instance.getIndexForRefWithFallback(textId, ref);
         if (index == null) continue;
         final fullText = VerseService.instance.getVerseAt(textId, index);
         if (fullText == null) continue;
         final lines = fullText.split('\n');
-        final range =
-            VerseService.lineRangeForSegmentRef(ref, lines.length);
+        final range = VerseService.lineRangeForSegmentRef(ref, lines.length);
         if (range != null && range.length >= 2) {
           final start = range[0].clamp(0, lines.length - 1);
           final end = (range[1] + 1).clamp(start, lines.length);
@@ -221,8 +245,7 @@ class DailyNotificationService {
       if (body.length > _maxPreviewBodyLength) {
         body = '${body.substring(0, _maxPreviewBodyLength)}…';
       }
-      final title =
-          getStudyText(textId)?.title ?? 'Daily verses';
+      final title = getStudyText(textId)?.title ?? 'Daily verses';
       return (title: title, body: body);
     } catch (_) {
       return null;
@@ -272,6 +295,12 @@ class DailyNotificationService {
     if (kIsWeb) return false;
     return defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
+  }
+
+  Future<void> _cancelScheduledDailyNotifications() async {
+    for (var i = 0; i < _dailyNotificationSlotCount; i++) {
+      await _plugin.cancel(_dailyNotificationBaseId + i);
+    }
   }
 }
 
