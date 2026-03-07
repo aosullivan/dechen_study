@@ -9,9 +9,15 @@ function labelPattern(label) {
 }
 
 function roleButton(page, label) {
-  const roleMatch = page.getByRole('button', { name: labelPattern(label) });
-  const textMatch = page.getByText(labelPattern(label));
-  return roleMatch.or(textMatch).first();
+  const exactPattern = new RegExp(`^\\s*${escapeRegex(label)}\\s*$`, 'i');
+  const boundedPattern = new RegExp(
+    `(^|[^A-Za-z0-9])${escapeRegex(label)}([^A-Za-z0-9]|$)`,
+    'i',
+  );
+  const roleExact = page.getByRole('button', { name: exactPattern });
+  const roleBounded = page.getByRole('button', { name: boundedPattern });
+  const textExact = page.getByText(exactPattern);
+  return roleExact.or(roleBounded).or(textExact).first();
 }
 
 function modeButton(page, label) {
@@ -188,7 +194,32 @@ function firstVerseRefLocator(page) {
 }
 
 async function firstVerseRefText(page) {
-  const text = (await firstVerseRefLocator(page).innerText()).trim();
+  const topVisibleVerseLabel = await page.evaluate(() => {
+    const refPattern = /^\s*Verse\s+\d+(?:\.\d+)?/i;
+    const entries = [];
+
+    for (const node of document.querySelectorAll('*')) {
+      const text = (node.textContent || '').trim();
+      if (!refPattern.test(text)) continue;
+
+      const rect = node.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) continue;
+      if (rect.bottom <= 0 || rect.top >= window.innerHeight) continue;
+
+      const styles = window.getComputedStyle(node);
+      if (styles.display === 'none' || styles.visibility === 'hidden') continue;
+
+      const label = text.split('\n')[0].trim();
+      entries.push({ label, y: Math.max(rect.top, 0) });
+    }
+
+    entries.sort((a, b) => a.y - b.y);
+    return entries.length ? entries[0].label : null;
+  });
+
+  const text = topVisibleVerseLabel?.trim().length
+    ? topVisibleVerseLabel.trim()
+    : (await firstVerseRefLocator(page).innerText()).trim();
   const match = text.match(/Verse\s+(\d+)(?:\.(\d+))?/i);
   if (!match) {
     throw new Error(`Unable to parse verse ref from "${text}"`);

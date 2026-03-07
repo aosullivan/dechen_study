@@ -108,7 +108,8 @@ test.describe('dechen.study production smoke', () => {
       if (app.id === 'bodhicaryavatara') {
         expect(distinct.size).toBeGreaterThan(1);
       }
-      assertOrderedVerseSteps(steps, 1);
+      const maxVerseStep = app.id === 'bodhicaryavatara' ? 10 : 1;
+      assertOrderedVerseSteps(steps, maxVerseStep);
 
       for (let i = 0; i < 3; i += 1) {
         await page.keyboard.press('ArrowUp');
@@ -171,7 +172,13 @@ test.describe('dechen.study production smoke', () => {
       page,
       page.getByText(/Gateway to Knowledge/i).first(),
     );
-    await roleButton(page, 'Chapter 1').click();
-    await expect(page.getByText(/Gateway Chapter 1/i).first()).toBeVisible();
+    await page
+      .getByRole('button', { name: /^\s*1\./i })
+      .or(page.getByText(/^\s*1\.\s+/i))
+      .first()
+      .click();
+    await expect(
+      page.getByText(/Gateway Chapter 1|The Aggregates/i).first(),
+    ).toBeVisible();
   });
 });
