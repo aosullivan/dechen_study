@@ -473,6 +473,8 @@ void main() {
       await tester.tap(find.textContaining('There is no error in this'),
           warnIfMissed: false);
       await tester.pump();
+      // Allow visibility/section state to settle so arrow-down uses 6.32 (CI can be slower).
+      await tester.pump(const Duration(milliseconds: 600));
 
       await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
       await tester.pump(const Duration(milliseconds: 400));
