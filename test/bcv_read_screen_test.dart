@@ -201,6 +201,20 @@ void main() {
     }
   }
 
+  /// Waits until [sectionEvents] contains an event with [verseIndex], or timeout.
+  Future<void> waitForSectionVerseIndex(
+    WidgetTester tester,
+    List<({String path, Set<int> indices, int verseIndex})> sectionEvents,
+    int verseIndex, {
+    Duration timeout = const Duration(seconds: 4),
+  }) async {
+    final deadline = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(deadline)) {
+      if (sectionEvents.any((e) => e.verseIndex == verseIndex)) return;
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+  }
+
   Future<void> pressArrowUntilLength(
     WidgetTester tester,
     LogicalKeyboardKey key,
@@ -454,10 +468,21 @@ void main() {
         capturedFirstRef = firstRef;
       }
 
+      final sectionEvents =
+          <({String path, Set<int> indices, int verseIndex})>[];
       await pumpBcvReadScreen(
         tester,
         scrollToVerseIndex: verseIndex632,
         onSectionNavigateForTest: onNavigate,
+        onSectionStateForTest: (path, indices, verseIndex) {
+          sectionEvents.add(
+            (
+              path: path,
+              indices: Set<int>.from(indices),
+              verseIndex: verseIndex,
+            ),
+          );
+        },
       );
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pump(const Duration(seconds: 2));
@@ -473,8 +498,8 @@ void main() {
       await tester.tap(find.textContaining('There is no error in this'),
           warnIfMissed: false);
       await tester.pump();
-      // Allow visibility/section state to settle so arrow-down uses 6.32 (CI can be slower).
-      await tester.pump(const Duration(milliseconds: 600));
+      // Wait until the widget reports 6.32 as current section (avoids CI timing flakiness).
+      await waitForSectionVerseIndex(tester, sectionEvents, verseIndex632);
 
       await simulateKeyTap(tester, LogicalKeyboardKey.arrowDown);
       await tester.pump(const Duration(milliseconds: 400));
